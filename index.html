@@ -12,14 +12,14 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "status": "COHERENT",
-        "invariants_preserved": true,
-        "hash": "8f92a1"
+        "status": "INTEGRITY_VERIFIED",
+        "hash": "9c11f4",
+        "diff_base": "v1.1.0"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V8 (REFLECTIVE ARTIFACT) */
+        /* THEME: INSTITUTE STANDARD V9 (INTEGRITY SYSTEM) */
         :root {
             --bg-color: #ffffff;
             --text-main: #0a0a0a;
@@ -27,7 +27,6 @@
             --border-color: #e0e0e0;
             --sidebar-width: 280px;
             --mobile-bar-height: 50px;
-            --accent-audit: #0044ff; /* A deep, technical blue for "Active" states */
             
             /* TYPE STACK */
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -51,6 +50,8 @@
         /* --- UTILITIES --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .hidden { display: none; }
+        
+        /* Permalinks */
         .permalink {
             text-decoration: none; color: #ccc; margin-left: 0.5rem; 
             font-family: var(--font-mono); font-weight: 400; font-size: 0.9em;
@@ -96,12 +97,14 @@
             display: block; margin-top: 4px; font-weight: 500; font-size: 0.75rem; letter-spacing: 0.05em; color: var(--text-muted);
         }
 
-        .mode-toggle {
-            margin-bottom: 2rem; display: flex; gap: 1rem;
-            font-family: var(--font-mono); font-size: 0.7rem;
-            border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;
+        .mode-group {
+            display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem;
         }
-        .toggle-btn { cursor: pointer; color: #999; transition: color 0.2s; }
+        .toggle-btn {
+            font-family: var(--font-mono); font-size: 0.7rem; color: #999; 
+            cursor: pointer; transition: color 0.2s; display: flex; justify-content: space-between;
+        }
         .toggle-btn:hover { color: #000; }
         .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 
@@ -132,23 +135,13 @@
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
 
-        /* THE STABILITY BADGE */
-        .stability-badge {
-            display: none; /* Hidden in Reader Mode */
-            margin-left: auto; /* Push to right */
-            color: #008800; /* Coherence Green */
-            border: 1px solid #008800;
-            padding: 4px 8px;
-            border-radius: 4px;
-            background: rgba(0, 136, 0, 0.05);
-            animation: pulse-green 4s infinite;
+        /* INTEGRITY SEAL */
+        .integrity-seal {
+            margin-left: auto; display: flex; align-items: center; gap: 8px;
+            font-family: var(--font-mono); font-size: 0.7rem; color: #000;
         }
-        @keyframes pulse-green {
-            0% { opacity: 0.8; }
-            50% { opacity: 1; }
-            100% { opacity: 0.8; }
-        }
-
+        .status-dot { width: 8px; height: 8px; background: #00cc00; border-radius: 50%; display: block; }
+        
         section {
             margin-bottom: 5rem; scroll-margin-top: 5rem;
             display: grid; grid-template-columns: 1fr; gap: 0; position: relative;
@@ -167,30 +160,42 @@
         p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
         .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
 
-        /* --- INTERNAL STATE (THE "MIND BLOWING" FEATURE) --- */
-        .internal-state {
-            display: none; /* Hidden by default */
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: #555;
-            background: #f4f4f4;
-            padding: 1rem;
-            border-left: 2px solid #ccc;
-            margin: 1.5rem 0;
-            max-width: 65ch;
+        /* --- PROVENANCE HOVER --- */
+        .provenance-term {
+            border-bottom: 1px dashed #999; cursor: help; position: relative;
         }
-        .state-label {
-            display: block; font-weight: 700; color: #000; margin-bottom: 0.5rem;
-            font-size: 0.65rem; letter-spacing: 0.1em;
+        .provenance-term:hover { background: rgba(0,0,0,0.05); color: #000; }
+        
+        .tooltip {
+            visibility: hidden; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
+            background: #111; color: #fff; padding: 8px 12px; border-radius: 2px;
+            font-family: var(--font-mono); font-size: 0.65rem; white-space: nowrap;
+            z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.2s;
         }
-        .code-line { display: block; margin-bottom: 0.25rem; }
+        .tooltip::after {
+            content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+            border-width: 5px; border-style: solid; border-color: #111 transparent transparent transparent;
+        }
+        .provenance-term:hover .tooltip { visibility: visible; opacity: 1; }
 
-        /* --- AUDIT MODE STYLES --- */
+        /* --- CLAIM DIFF VIEWER --- */
+        del { 
+            display: none; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 2px;
+        }
+        ins { 
+            text-decoration: none; 
+        }
+        
+        /* Diff Mode Active */
+        body[data-mode="diff"] del { display: inline; }
+        body[data-mode="diff"] ins { background: #e6ffec; color: #006600; border-bottom: 1px solid #00cc00; }
+        body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; } /* Dimmed rail in diff mode */
+
+        /* --- AUDIT MODE --- */
         .audit-rail {
             display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color);
             font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);
         }
-        
         .claim-box {
             margin-bottom: 1.5rem; padding: 0.75rem; background: #fafafa; border: 1px solid #eee; position: relative;
         }
@@ -212,13 +217,21 @@
         }
         .cite-btn:active { background: #000; color: #fff; }
 
-        /* ACTIVATING AUDIT MODE */
+        /* Internal State Trace */
+        .internal-state {
+            display: none; font-family: var(--font-mono); font-size: 0.75rem; color: #555;
+            background: #f4f4f4; padding: 1rem; border-left: 2px solid #ccc; margin: 1.5rem 0; max-width: 65ch;
+        }
+        .state-label { display: block; font-weight: 700; color: #000; margin-bottom: 0.5rem; font-size: 0.65rem; letter-spacing: 0.1em; }
+        .code-line { display: block; margin-bottom: 0.25rem; }
+
+        /* Active Logic */
         body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="audit"] .audit-rail { display: block; }
         body[data-mode="audit"] .section-ledger { display: flex; }
-        body[data-mode="audit"] .stability-badge { display: block; } /* Show Badge */
-        body[data-mode="audit"] .internal-state { display: block; } /* Reveal "Mind" */
-        body[data-mode="audit"] .fact-hook { background-color: rgba(0,0,0,0.04); border-bottom: 1px solid #999; cursor: help; }
+        body[data-mode="audit"] .internal-state { display: block; }
+        
+        body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
 
         /* --- RESPONSIVE --- */
         @media (max-width: 900px) {
@@ -230,12 +243,11 @@
             }
             aside.open { transform: translateX(0); }
             main { padding: 2rem 1.5rem; }
-            
             .doc-header { gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
-            .stability-badge { width: 100%; margin-top: 1rem; text-align: center; }
+            .integrity-seal { width: 100%; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #eee; }
             
-            body[data-mode="audit"] section { grid-template-columns: 1fr; gap: 1rem; }
-            body[data-mode="audit"] .audit-rail { 
+            body[data-mode="audit"] section, body[data-mode="diff"] section { grid-template-columns: 1fr; gap: 1rem; }
+            body[data-mode="audit"] .audit-rail, body[data-mode="diff"] .audit-rail { 
                 border-left: none; border-top: 1px solid #eee; padding-left: 0; padding-top: 1.5rem;
                 background: #f9f9f9; padding: 1rem; margin-top: 0;
             }
@@ -243,7 +255,7 @@
             .permalink { display: none; }
         }
         
-        /* CMDK & PRINT Styles (Kept Minimal) */
+        /* CMDK Style */
         #cmdk { display:none; position:fixed; inset:0; background:rgba(255,255,255,0.8); backdrop-filter:blur(5px); z-index:2000; }
         .cmdk-container { max-width:640px; margin: 15vh auto; background:#fff; border:1px solid #000; box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
         .cmdk-header { padding:12px 16px; border-bottom:1px solid #eee; font-family:var(--font-mono); font-size:11px; color:#999; display:flex; justify-content:space-between; }
@@ -252,12 +264,23 @@
         .cmdk-item { padding:12px 16px; border-bottom:1px solid #fcfcfc; cursor:pointer; display: flex; justify-content: space-between; }
         .cmdk-item:hover { background: #f4f4f4; }
         
+        /* PRINT EXPORT STYLE (The "Record") */
         @media print {
             .mobile-bar, aside, .mode-toggle, .cite-btn, #cmdk, .permalink { display: none !important; }
-            main { padding: 0 !important; }
-            .doc-header { border-bottom: 2px solid #000; }
-            section { margin-bottom: 30px; }
-            .audit-rail { display: block !important; border: 1px solid #000; padding: 10px; margin-top: 10px; }
+            main { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+            .doc-header { border-bottom: 2px solid #000; margin-bottom: 30px; }
+            section { margin-bottom: 30px; page-break-inside: avoid; }
+            .audit-rail { display: block !important; border: 1px solid #000; padding: 10px; margin-top: 10px; font-size: 8pt; }
+            .claim-box { border: 1px solid #000; background: none; }
+            
+            /* Legal Footer generation */
+            body::after {
+                content: "RENDERED FROM LIVE ARTIFACT EAI-2026-001 // GENERATED: " attr(data-date);
+                position: fixed; bottom: 0; left: 0; right: 0;
+                border-top: 1px solid #000; padding: 10px;
+                font-family: "JetBrains Mono", monospace; font-size: 8pt; text-align: center;
+                background: #fff;
+            }
         }
     </style>
 </head>
@@ -286,9 +309,16 @@
             <span>EST. 2026 // MONTREAL</span>
         </div>
 
-        <div class="mode-toggle">
-            <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader')">[ READER ]</span>
-            <span class="toggle-btn" id="btn-audit" onclick="setMode('audit')">[ AUDIT ]</span>
+        <div class="mode-group">
+            <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader')">
+                [ READER ] <span>•</span>
+            </span>
+            <span class="toggle-btn" id="btn-audit" onclick="setMode('audit')">
+                [ AUDIT ] <span>•</span>
+            </span>
+            <span class="toggle-btn" id="btn-diff" onclick="setMode('diff')">
+                [ DIFF LOG ] <span>Δ</span>
+            </span>
         </div>
         
         <nav>
@@ -301,9 +331,9 @@
             </ul>
         </nav>
         
-        <div style="margin-top: auto; font-family: var(--font-mono); font-size: 0.6rem; color: #999;">
-            PRESS ⌘K FOR PALETTE
-        </div>
+        <button class="cite-btn" style="margin-top: auto; width: 100%; text-align: center;" onclick="window.print()">
+            EXPORT RECORD
+        </button>
     </aside>
 
     <main>
@@ -317,8 +347,9 @@
                 <span class="doc-val">PUBLIC</span>
             </div>
             
-            <div class="stability-badge">
-                STATUS: COHERENT // DRIFT: 0.0%
+            <div class="integrity-seal">
+                <span class="status-dot"></span>
+                INTEGRITY: VERIFIED
             </div>
         </div>
 
@@ -326,20 +357,24 @@
             <div class="content-col">
                 <h1>Mission <a onclick="copyLink('mission')" class="permalink">¶</a></h1>
                 <p class="abstract">
-                    We advance the science of <span class="fact-hook" title="M1.0">reflective alignment</span> and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.
+                    We advance the science of 
+                    <span class="provenance-term">
+                        reflective alignment
+                        <span class="tooltip">LEXICON: R-ALIGN -> DATASET: GOV-GAP</span>
+                    </span> 
+                    and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions.
                 </p>
 
                 <div class="internal-state">
                     <span class="state-label">INTERNAL_STATE_TRACE // T=0.04s</span>
                     <span class="code-line">> Verifying definition consistency [M1.0]... PASS</span>
                     <span class="code-line">> Checking alignment invariants... STABLE</span>
-                    <span class="code-line">> Linkage to Empirical Model... ESTABLISHED</span>
                 </div>
                 
                 <ul style="list-style: none; padding: 0; margin-top: 2rem;"> 
                     <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
                         <span style="position: absolute; left: 0; color: #999;">—</span>
-                        Bridge the gap between theoretical safety guarantees and empirical model behavior.
+                        Bridge the gap between theoretical safety guarantees and <del>real-world</del> <ins>empirical model</ins> behavior.
                     </li>
                     <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
                         <span style="position: absolute; left: 0; color: #999;">—</span>
@@ -366,12 +401,11 @@
         <section id="theory">
             <div class="content-col">
                 <h2 data-num="01 //">Theory <a onclick="copyLink('theory')" class="permalink">¶</a></h2>
-                <p>Our research investigates the <span class="fact-hook">normative foundations</span> of reflective equilibrium in artificial agents. We focus on defining the mathematical bounds of self-modifying systems.</p>
+                <p>Our research investigates the <span class="fact-hook">normative foundations</span> of reflective equilibrium in artificial agents. We focus on defining the <ins>verifiable</ins> mathematical bounds of self-modifying systems.</p>
                 
                 <div class="internal-state">
                     <span class="state-label">INTERNAL_STATE_TRACE // T=0.12s</span>
                     <span class="code-line">> Theorem_B check: No contradiction found.</span>
-                    <span class="code-line">> Recursion depth: 4</span>
                     <span class="code-line">> Epistemic status: FORMAL_PROOF</span>
                 </div>
             </div>
@@ -407,10 +441,13 @@
     </main>
 
     <script>
+        // Set Date for Print Footer
+        document.body.setAttribute('data-date', new Date().toISOString().split('T')[0]);
+
         function setMode(mode) {
             document.body.setAttribute('data-mode', mode);
-            document.getElementById('btn-reader').classList.toggle('active', mode === 'reader');
-            document.getElementById('btn-audit').classList.toggle('active', mode === 'audit');
+            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${mode}`).classList.add('active');
         }
         function toggleDrawer() { document.getElementById('sidebar').classList.toggle('open'); }
         function closeDrawer() { if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open'); }
