@@ -8,10 +8,10 @@
         /* RESET & BASE */
         :root {
             --bg-color: #ffffff;
-            --text-main: #111111;
-            --text-muted: #777777; /* Lighter for high contrast hierarchy */
+            --text-main: #0f0f0f; /* Slightly sharper black */
+            --text-muted: #666666; 
             --sidebar-width: 280px;
-            --border-light: #eeeeee;
+            --border-light: #e6e6e6;
         }
 
         html {
@@ -25,11 +25,13 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            /* THE SYSTEM UI STACK - OPTION 1 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            line-height: 1.6;
+            line-height: 1.5; /* Slightly tighter than 1.6 for a technical feel */
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale; /* Sharp text on MacOS */
             display: flex;
             min-height: 100vh;
         }
@@ -40,22 +42,22 @@
             height: 100vh;
             position: sticky;
             top: 0;
-            /* No background color - it shares the page paper */
             border-right: 1px solid var(--border-light); 
-            padding: 4rem 2rem; /* Vertical breathing room */
+            padding: 4rem 2rem; 
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
+            background: #fff;
         }
 
         /* The Masthead */
         .brand {
-            font-size: 1.1rem;
-            font-weight: 800; /* Heavy weight */
+            font-size: 0.95rem; /* Reduced size for technical humility */
+            font-weight: 700; 
             text-transform: uppercase;
-            letter-spacing: 0.2em; /* Editorial tracking */
-            line-height: 1.5;
-            margin-bottom: 5rem; /* Separates identity from content */
+            letter-spacing: 0.05em; /* Tighter, like a label */
+            line-height: 1.4;
+            margin-bottom: 4rem; 
             color: #000;
         }
 
@@ -67,20 +69,20 @@
         }
 
         nav li {
-            margin-bottom: 1rem; /* Distinct separation */
+            margin-bottom: 0.75rem; /* Compact spacing */
         }
 
         nav a {
             display: block;
             text-decoration: none;
             color: var(--text-muted);
-            font-size: 0.8rem; /* Small, utility text */
-            transition: color 0.2s;
+            font-size: 0.85rem; 
+            font-weight: 500; /* Medium weight for readability */
+            transition: color 0.1s;
             position: relative;
-            padding-left: 1.5rem; /* Room for the dot */
+            padding-left: 1.5rem; 
         }
 
-        /* Hover: Darken only */
         nav a:hover {
             color: #000;
         }
@@ -95,24 +97,23 @@
             content: "";
             position: absolute;
             left: 0;
-            top: 8px; /* Center with text */
+            top: 7px; 
             width: 4px;
             height: 4px;
             background-color: #000;
-            border-radius: 50%; /* The Dot */
+            border-radius: 0; /* Square dot = more technical */
         }
 
         /* MAIN CONTENT */
         main {
             flex-grow: 1;
-            padding: 4rem 6rem; /* Wide margins */
-            max-width: 1100px;
+            padding: 4rem 6rem; 
+            max-width: 1050px;
         }
 
         section {
-            padding-bottom: 5rem;
-            margin-bottom: 5rem;
-            /* Minimal divider */
+            padding-bottom: 4rem;
+            margin-bottom: 4rem;
             border-bottom: 1px solid var(--border-light);
         }
 
@@ -120,37 +121,49 @@
 
         /* SCIENTIFIC TYPOGRAPHY */
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-top: 0;
             margin-bottom: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
+            font-weight: 600; /* Not bold, just strong */
+            letter-spacing: -0.02em;
+            color: #000;
         }
 
         h2 {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             margin-top: 0;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
             font-weight: 600;
-            letter-spacing: -0.01em;
-            text-transform: uppercase; /* Section headers */
+            text-transform: uppercase; 
+            letter-spacing: 0.05em;
+            color: #000;
         }
 
         h3 {
             font-size: 1rem;
-            font-weight: 700;
+            font-weight: 600;
             margin-bottom: 0.5rem;
             margin-top: 0;
+            color: #111;
         }
 
         p {
             margin-bottom: 1.5rem;
-            color: #222;
-            max-width: 65ch; /* Strict reading width */
-            font-size: 1.05rem;
+            color: #333;
+            max-width: 68ch; 
+            font-size: 1rem;
         }
 
         /* COMPONENTS */
+        .mission-text {
+            font-size: 1.25rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #111;
+            margin-bottom: 2.5rem;
+            max-width: 800px;
+        }
+
         .why-list {
             list-style: none;
             padding: 0;
@@ -160,39 +173,56 @@
         .why-list li {
             padding-left: 1.5rem;
             position: relative;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             font-size: 1rem;
             color: #333;
         }
 
         .why-list li::before {
-            content: "—"; /* Em dash instead of bullet */
+            content: "→"; /* Arrow implies process/logic */
             position: absolute;
             left: 0;
+            font-family: monospace; /* Mix in monospace for symbols */
             color: var(--text-muted);
+            font-size: 1.1rem;
+            top: -2px;
         }
 
         .stack-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
             margin-top: 2rem;
         }
 
         .card {
             border: 1px solid var(--border-light);
-            padding: 2rem;
-            /* No background color */
+            padding: 1.5rem;
+            background: #fff;
+            transition: border-color 0.2s;
+        }
+        
+        .card:hover {
+            border-color: #999;
         }
 
         .pub-item {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
             padding: 1rem 0;
             border-bottom: 1px solid var(--border-light);
         }
-        .pub-title { font-weight: 500; }
-        .pub-meta { font-family: monospace; font-size: 0.8rem; color: var(--text-muted); }
+        .pub-title { font-weight: 500; font-size: 1rem; }
+        .pub-meta { 
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+            font-size: 0.8rem; 
+            color: var(--text-muted); 
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 2px;
+            margin-left: 1rem;
+        }
 
         /* RESPONSIVE */
         @media (max-width: 900px) {
@@ -203,11 +233,11 @@
                 position: relative; 
                 border-right: none; 
                 border-bottom: 1px solid var(--border-light);
-                padding: 2rem 2rem;
-                margin-bottom: 2rem;
+                padding: 2rem;
+                margin-bottom: 0;
             }
-            .brand { margin-bottom: 2rem; }
-            main { padding: 0 2rem; }
+            .brand { margin-bottom: 1.5rem; }
+            main { padding: 3rem 2rem; }
             section { padding-bottom: 3rem; margin-bottom: 3rem; }
         }
     </style>
@@ -236,7 +266,7 @@
 
         <section id="mission">
             <h1>Mission</h1>
-            <p style="font-size: 1.4rem; font-weight: 300; line-height: 1.4; color: #111; margin-bottom: 3rem;">
+            <p class="mission-text">
                 We advance the science of reflective alignment and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.
             </p>
             
@@ -280,15 +310,15 @@
             <div class="pub-list">
                 <div class="pub-item">
                     <span class="pub-title">Reasoning Stability in Large-Scale Systems</span>
-                    <span class="pub-meta">Preprint 2024</span>
+                    <span class="pub-meta">PREPRINT 2024</span>
                 </div>
                 <div class="pub-item">
                     <span class="pub-title">The Reflective Alignment Lexicon: v1.0</span>
-                    <span class="pub-meta">Technical Report</span>
+                    <span class="pub-meta">TECH REPORT</span>
                 </div>
                 <div class="pub-item">
                     <span class="pub-title">Diagnostics for Governance: A Framework</span>
-                    <span class="pub-meta">Whitepaper</span>
+                    <span class="pub-meta">WHITEPAPER</span>
                 </div>
             </div>
         </section>
@@ -298,34 +328,14 @@
             <p>Visualizations of reasoning topologies, process graphs for diagnostic workflows, and schematics demonstrating the internal state transitions of reflective systems under adversarial stress.</p>
         </section>
 
-        <footer style="margin-top: 2rem; font-size: 0.8rem; color: #999;">
+        <footer style="margin-top: 4rem; font-size: 0.85rem; color: #999; border-top: 1px solid #eee; padding-top: 2rem;">
             &copy; 2025 Enlightened AI Research Lab. All rights reserved.
         </footer>
 
     </main>
 
     <script>
-        // Simple logic to move the "active" class based on scroll position
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-link');
 
-        window.addEventListener('scroll', () => {
-            let current = '';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= (sectionTop - 150)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+        window.
