@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "2.1.0",
+        "version": "2.2.0",
         "status": "VERIFIED_STATIC"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V21 (AGGRESSIVE + STABLE) */
+        /* THEME: INSTITUTE STANDARD V22 (SPACED ARTIFACT) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -45,26 +45,13 @@
             min-height: 100vh;
         }
 
-        /* --- AGGRESSIVE CURSORS (RESTORED) --- */
-        
-        /* 1. The Seal: "Immutable" (Stop Sign) - BUT STAYS GREEN */
+        /* --- AGGRESSIVE CURSORS --- */
         .integrity-seal { cursor: not-allowed !important; }
-
-        /* 2. The Brand: "Precision" (Crosshair) */
         .brand, .brand * { cursor: crosshair !important; }
-
-        /* 3. Logic/Code: "Data Cell" (The Thick Cross you liked) */
         .logic-block, .logic-block * { cursor: cell !important; }
-
-        /* 4. Metadata: "Info" (Question Mark) */
         .fact-hook, .provenance-term, .claim-box, .doc-header { cursor: help !important; }
-
-        /* 5. Prose: "Read Only" (Standard Arrow) */
         p, .abstract, h1, h2, h3, li { cursor: default !important; }
-
-        /* 6. Interaction: Standard Pointer */
         a, button, .toggle-btn, .nav-link { cursor: pointer !important; }
-
 
         /* --- UTILITIES --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -99,11 +86,13 @@
             background: #fff; z-index: 999;
         }
 
+        /* BRAND (THE FIX IS HERE: margin-bottom increased) */
         .brand {
             font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; text-transform: uppercase;
-            letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 3.5rem; color: #000;
-            /* Reactive Physics on Brand */
-            transition: all 0.1s; border: 1px dashed transparent; margin: -1px; padding: 1px;
+            letter-spacing: -0.04em; line-height: 1.0; 
+            margin-bottom: 6rem; /* INCREASED FROM 3.5rem TO 6rem */
+            color: #000;
+            transition: all 0.1s; border: 1px dashed transparent; margin-left: -1px; padding: 1px;
         }
         .brand:hover { border-color: #000; background: rgba(0,0,0,0.02); }
         
@@ -141,7 +130,6 @@
             background: linear-gradient(90deg, #f9f9f9 0%, #ffffff 100%);
         }
 
-        /* EXPORT BUTTON (RESTORED) */
         .export-container { margin-top: auto; padding-top: 2rem; }
         .export-btn {
             width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px;
@@ -168,8 +156,6 @@
             border: 1px solid transparent; padding: 4px 8px; border-radius: 4px;
         }
         .status-dot { width: 8px; height: 8px; background: #ccc; border-radius: 50%; display: block; }
-        
-        /* ALWAYS GREEN, BUT STOP CURSOR */
         .integrity-seal.verified { border-color: var(--status-verified); color: #005500; background: rgba(0,204,0,0.05); }
         .integrity-seal.verified .status-dot { background: var(--status-verified); }
 
@@ -190,7 +176,7 @@
         p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
         .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
 
-        /* LOGIC MODE (The Cross Cursor) */
+        /* LOGIC MODE */
         .logic-block {
             display: none;
             font-family: var(--font-mono); font-size: 0.85rem; color: #333;
@@ -401,8 +387,8 @@
             </div>
 
             <div class="section-ledger">
-                <span>VER: 1.9.0 | SHA: 8f92a1</span>
-                <button class="cite-btn" onclick="copyCite('Mission Statement v1.9, EAI Lab')">COPY CITATION</button>
+                <span>VER: 2.2.0 | SHA: 8f92a1</span>
+                <button class="cite-btn" onclick="copyCite('Mission Statement v2.2, EAI Lab')">COPY CITATION</button>
             </div>
         </section>
 
