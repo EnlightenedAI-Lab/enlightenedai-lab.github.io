@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Enlightened AI Research Lab</title>
+  <meta name="description" content="Building the scientific infrastructure for reflective alignment, reasoning stability, and governance-grade AI diagnostics." />
+
+  <style>
+    :root{
+      --bg:#0b0d10;
+      --panel:#0f1318;
+      --text:#e8eef6;
+      --muted:#a9b4c2;
+      --line:rgba(232,238,246,.12);
+      --accent:#78a6ff;
+      --accent2:#5de4c7;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --radius:16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --max: 1100px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background: radial-gradient(1200px 800px at 20% 0%, rgba(120,166,255,.08), transparent 55%),
+                  radial-gradient(900px 700px at 80% 20%, rgba(93,228,199,.06), transparent 50%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .topbar{
+      position:sticky; top:0; z-index:10;
+      background: rgba(0,0,0,.65);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-weight:650;
+      letter-spacing:.2px;
+    }
+    .mark{
+      width:34px; height:34px; border-radius:10px;
+      border:1px solid var(--line);
+      background: linear-gradient(145deg, rgba(120,166,255,.18), rgba(93,228,199,.10));
+      box-shadow: var(--shadow);
+    }
+    nav{display:flex; gap:14px; flex-wrap:wrap}
+    nav a{color:var(--text); opacity:.86; font-size:14px}
+    nav a:hover{opacity:1; text-decoration:none}
+    .wrap{max-width:var(--max); margin:0 auto; padding:26px 18px 60px}
+    .hero{
+      padding:26px 0 10px;
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 920px){
+      .hero{grid-template-columns:1fr}
+    }
+    .headline{
+      border:1px solid var(--line);
+      background: rgba(15,19,24,.55);
+      border-radius: var(--radius);
+      padding:22px;
+      box-shadow: var(--shadow);
+    }
+    h1{
+      margin:0 0 10px;
+      font-size:34px;
+      letter-spacing:.2px;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:15.5px;
+      max-width:70ch;
+    }
+    .badges{
+      margin-top:16px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:var(--muted);
+      background: rgba(0,0,0,.25);
+      font-family:var(--mono);
+    }
+    .card{
+      border:1px solid var(--line);
+      background: rgba(15,19,24,.55);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+    }
+    .card h3{margin:0 0 10px; font-size:14px; letter-spacing:.3px; text-transform:uppercase; color:var(--muted)}
+    .list{margin:0; padding-left:18px; color:var(--text); opacity:.95}
+    .list li{margin:8px 0}
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 920px){
+      .grid{grid-template-columns:1fr}
+    }
+    .tile{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding:16px;
+      background: rgba(0,0,0,.22);
+    }
+    .tile .k{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.4px;
+      margin-bottom:8px;
+    }
+    .tile .v{
+      margin:0;
+      font-size:14.5px;
+      color:var(--text);
+      opacity:.95;
+    }
+    .section{
+      margin-top:22px;
+      border-top:1px solid var(--line);
+      padding-top:18px;
+    }
+    .section h2{
+      margin:0 0 10px;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .mono{
+      font-family:var(--mono);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .cta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.25);
+      color:var(--text);
+      font-size:13.5px;
+      text-decoration:none;
+    }
+    .btn:hover{border-color:rgba(120,166,255,.35)}
+    .btn.primary{
+      background: linear-gradient(145deg, rgba(120,166,255,.20), rgba(93,228,199,.10));
+      border-color: rgba(120,166,255,.28);
+    }
+    footer{
+      margin-top:26px;
+      color:var(--muted);
+      font-size:12.5px;
+      border-top:1px solid var(--line);
+      padding-top:16px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>Enlightened AI Research Lab</div>
+      </div>
+      <nav>
+        <a href="#stack">Stack</a>
+        <a href="#outputs">Outputs</a>
+        <a href="#systems">Systems</a>
+        <a href="#publications">Publications</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <div class="headline">
+        <h1>Scientific infrastructure for reflective alignment</h1>
+        <p class="sub">
+          Building the scientific infrastructure for reflective alignment, reasoning stability, and governance-grade AI diagnostics.
+        </p>
+
+        <div class="badges">
+          <span class="badge">evidence-first</span>
+          <span class="badge">deterministic</span>
+          <span class="badge">audit-ready</span>
+          <span class="badge">spec-separated</span>
+        </div>
+
+        <div class="cta">
+          <a class="btn primary" href="#stack">Read the stack</a>
+          <a class="btn" href="https://github.com/EnlightenedAI-Lab/reflective-alignment-lexicon">Lexicon repo</a>
+          <a class="btn" href="https://github.com/EnlightenedAI-Lab/reflective-diagnostics">Reflective Diagnostics repo</a>
+        </div>
+
+        <div class="section" id="stack">
+          <h2>The Stack</h2>
+          <p class="sub">
+            A vertically integrated research stack — theory → specification → instrumentation → evidence.
+          </p>
+
+          <div class="grid">
+            <div class="tile">
+              <div class="k">Reflective Alignment Theory</div>
+              <p class="v">Formal alignment as reflective stability, coherence, and state transitions over time.</p>
+            </div>
+            <div class="tile">
+              <div class="k">Reflective Alignment Lexicon</div>
+              <p class="v">Machine-operational specification for terms, schemas, identifiers, and governance surfaces.</p>
+            </div>
+            <div class="tile">
+              <div class="k">Reflective Diagnostics Platform</div>
+              <p class="v">Evidence-first diagnostics for stability, drift, and failure dynamics via deterministic records.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" id="outputs">
+          <h2>Why this is different</h2>
+          <ul class="list">
+            <li>We do not publish benchmark scores or policy compliance claims.</li>
+            <li>We measure structural stability, failure onset dynamics, and reflective state transitions.</li>
+            <li>We separate measurement from judgment, specification from implementation, governance from control.</li>
+          </ul>
+          <p class="mono" style="margin-top:10px">
+            We are not optimizing models. We are building the instruments that make optimization accountable.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Quick links</h3>
+        <ul class="list">
+          <li><a href="https://github.com/EnlightenedAI-Lab/reflective-alignment-lexicon">Reflective Alignment Lexicon</a></li>
+          <li><a href="https://github.com/EnlightenedAI-Lab/reflective-diagnostics">Reflective Diagnostics</a></li>
+          <li><a href="#publications">Publications</a> (add links below)</li>
+        </ul>
+
+        <div class="section" id="systems">
+          <h2 style="font-size:16px;margin:0 0 8px">Systems</h2>
+          <p class="sub" style="font-size:14px">
+            Deterministic, non-learning, evaluative systems designed for auditability and reproducibility.
+          </p>
+        </div>
+
+        <div class="section" id="publications">
+          <h2 style="font-size:16px;margin:0 0 8px">Publications</h2>
+          <p class="sub" style="font-size:14px">
+            Add your whitepapers / reports / books here as links.
+          </p>
+          <ul class="list">
+            <li><span class="mono">[add]</span> RAA / RDL report</li>
+            <li><span class="mono">[add]</span> Reflective Alignment Lexicon spec</li>
+            <li><span class="mono">[add]</span> The Little Book of Alignment</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      © 2025 Enlightened AI Research Lab. Internal / public scientific materials as linked.
+    </footer>
+  </div>
+</body>
+</html>
