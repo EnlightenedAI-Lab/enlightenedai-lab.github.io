@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enlightened AI Research Lab</title>
     <style>
-        /* RESET & BASE */
+        /* SCIENTIFIC INSTITUTION THEME 
+           Design Principles: High contrast, system typography, strict grid, data density.
+        */
         :root {
             --bg-color: #ffffff;
-            --text-main: #0f0f0f;
-            --text-muted: #666666;
-            --sidebar-width: 280px;
-            --border-light: #e6e6e6;
-            --mobile-bar-height: 50px;
+            --text-main: #050505; /* Near black, high contrast */
+            --text-muted: #5c5c5c; /* Distinct secondary tier */
+            --sidebar-width: 260px;
+            --border-light: #e0e0e0;
+            --mobile-bar-height: 48px;
+            --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
         }
 
         html {
@@ -26,19 +30,19 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: var(--font-main);
             background-color: var(--bg-color);
             color: var(--text-main);
-            line-height: 1.5;
+            line-height: 1.55;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             display: flex;
             min-height: 100vh;
         }
 
-        /* MOBILE TOP BAR (Sticky Controller) */
+        /* --- MOBILE CONTROLLER (Sticky Top Bar) --- */
         .mobile-bar {
-            display: none; /* Desktop default: hidden */
+            display: none; /* Hidden on desktop */
             position: sticky;
             top: 0;
             left: 0;
@@ -49,54 +53,59 @@
             z-index: 1000;
             align-items: center;
             justify-content: space-between;
-            padding: 0 1.5rem;
+            padding: 0 1.25rem;
         }
 
         .mobile-brand {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
         .mobile-index-btn {
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-family: var(--font-mono); /* Technical feel */
+            font-size: 0.75rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
             cursor: pointer;
             user-select: none;
             color: #000;
+            border: 1px solid #ddd;
+            padding: 2px 8px;
+            border-radius: 2px;
+            background: #fcfcfc;
         }
 
-        /* SIDEBAR / DRAWER */
+        /* --- SIDEBAR / INDEX (The "Manifest") --- */
         aside {
             width: var(--sidebar-width);
             height: 100vh;
             position: sticky;
             top: 0;
             border-right: 1px solid var(--border-light);
-            /* Tightened padding */
-            padding: 3rem 2rem; 
+            padding: 3.5rem 2rem; 
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
             background: #fff;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
             z-index: 999;
         }
 
+        /* Lab Masthead */
         .brand {
-            font-size: 0.9rem;
-            font-weight: 700;
+            font-size: 0.85rem;
+            font-weight: 800; 
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
             line-height: 1.4;
-            margin-bottom: 2.5rem; /* Reduced from 4rem */
+            margin-bottom: 3rem; 
             color: #000;
+            border-bottom: 1px solid transparent; /* Alignment aid */
         }
 
-        /* NAVIGATION - CLEANED UP */
+        /* The Index List */
         nav ul {
             list-style: none;
             padding: 0;
@@ -104,7 +113,7 @@
         }
 
         nav li {
-            margin-bottom: 0.5rem; /* Compact spacing */
+            margin-bottom: 0.25rem; /* TIGHT spacing for index feel */
         }
 
         nav a {
@@ -113,68 +122,158 @@
             color: var(--text-muted);
             font-size: 0.85rem;
             font-weight: 500;
-            transition: all 0.2s;
-            /* Border setup for active state */
-            border-left: 2px solid transparent; 
-            padding-left: 1rem;
-            margin-left: -2px; /* Pull back to align visually */
+            transition: all 0.1s ease-in-out;
+            border-left: 2px solid transparent; /* The Orientation Marker */
+            padding: 0.35rem 0 0.35rem 1rem;
+            margin-left: -2px; /* Pull back to align with border */
         }
 
         nav a:hover {
             color: #000;
         }
 
-        /* ACTIVE STATE - The "Institution Stripe" */
+        /* --- ACTIVE STATE (The "You Are Here" Marker) --- */
         nav a.active {
             color: #000;
-            font-weight: 600;
-            border-left: 2px solid #000;
+            font-weight: 700;
+            border-left: 2px solid #000; /* Hard structural signal */
+            background: linear-gradient(90deg, #fafafa 0%, #ffffff 100%);
         }
 
-        /* No pseudo-elements needed now */
-        nav a::before {
-            content: none; 
-        }
-
-        /* MAIN CONTENT */
+        /* --- MAIN CONTENT --- */
         main {
             flex-grow: 1;
-            padding: 4rem 6rem;
-            max-width: 1050px;
+            padding: 3.5rem 5rem;
+            max-width: 960px;
         }
 
         section {
             padding-bottom: 4rem;
             margin-bottom: 4rem;
             border-bottom: 1px solid var(--border-light);
-            scroll-margin-top: 5rem; 
+            scroll-margin-top: 4rem; 
         }
 
         section:last-child { border-bottom: none; }
 
-        /* TYPOGRAPHY */
-        h1 { font-size: 2rem; margin-top: 0; margin-bottom: 1.5rem; font-weight: 600; letter-spacing: -0.02em; color: #000; }
-        h2 { font-size: 1.1rem; margin-top: 0; margin-bottom: 1.25rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #000; }
-        h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 0; color: #111; }
-        p { margin-bottom: 1.5rem; color: #333; max-width: 68ch; font-size: 1rem; }
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-size: 1.85rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: #000;
+        }
 
-        .mission-text { font-size: 1.25rem; font-weight: 400; line-height: 1.5; color: #111; margin-bottom: 2.5rem; max-width: 800px; }
+        /* Section Headers: Caps, small, structural */
+        h2 {
+            font-size: 0.95rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #000;
+            display: inline-block;
+            border-bottom: 1px solid #000; /* Short heavy underline */
+            padding-bottom: 4px;
+        }
 
-        .why-list { list-style: none; padding: 0; margin-top: 2rem; }
-        .why-list li { padding-left: 1.5rem; position: relative; margin-bottom: 0.75rem; font-size: 1rem; color: #333; }
-        .why-list li::before { content: "→"; position: absolute; left: 0; font-family: monospace; color: var(--text-muted); font-size: 1.1rem; top: -2px; }
+        h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            margin-top: 0;
+            color: #111;
+        }
 
-        .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .card { border: 1px solid var(--border-light); padding: 1.5rem; background: #fff; transition: border-color 0.2s; }
+        p {
+            margin-bottom: 1.5rem;
+            color: #333;
+            max-width: 65ch; 
+            font-size: 1rem;
+        }
+
+        /* Specialized Text Styles */
+        .abstract-text {
+            font-size: 1.25rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #111;
+            margin-bottom: 2rem;
+            max-width: 800px;
+        }
+
+        .why-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 2rem;
+        }
+
+        .why-list li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .why-list li::before {
+            content: "—"; /* The Editorial Dash */
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* --- COMPONENTS --- */
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            border: 1px solid var(--border-light);
+            padding: 1.5rem;
+            background: #fff;
+            transition: border-color 0.2s;
+        }
         .card:hover { border-color: #999; }
+        .card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0; line-height: 1.5; }
 
-        .pub-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 1rem 0; border-bottom: 1px solid var(--border-light); }
+        /* Publications List */
+        .pub-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
         .pub-title { font-weight: 500; font-size: 1rem; }
-        .pub-meta { font-family: monospace; font-size: 0.8rem; color: var(--text-muted); background: #f4f4f4; padding: 2px 6px; border-radius: 2px; margin-left: 1rem; }
         
-        footer { margin-top: 4rem; font-size: 0.85rem; color: #999; border-top: 1px solid #eee; padding-top: 2rem; }
+        .pub-meta { 
+            font-family: var(--font-mono); /* Scientific Credibility */
+            font-size: 0.75rem; 
+            color: var(--text-muted); 
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-left: 1.5rem;
+            white-space: nowrap;
+        }
 
-        /* RESPONSIVE RULES */
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-light);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        /* --- RESPONSIVE / MOBILE DRAWER --- */
         @media (max-width: 900px) {
             body { 
                 flex-direction: column; 
@@ -192,28 +291,28 @@
                 transform: translateX(-100%);
                 border-right: none;
                 overflow-y: auto;
-                /* Mobile specific padding overrides */
-                padding: 2rem 2rem; 
+                padding: 1.5rem 1.5rem; /* Compact padding */
             }
 
-            /* Reduced spacing for mobile drawer header */
+            aside.open { transform: translateX(0); }
+
+            /* Mobile Typography Adjustments */
             .brand {
                 margin-bottom: 1.5rem; 
-                font-size: 0.85rem;
-                opacity: 0.8; /* Slightly muted to let Nav take focus */
-            }
-
-            aside.open {
-                transform: translateX(0);
+                font-size: 0.8rem;
+                opacity: 0.7; /* Recede slightly to let Nav pop */
             }
 
             main {
-                padding: 3rem 1.5rem;
+                padding: 2.5rem 1.5rem;
                 margin-top: 0;
             }
             
-            h1 { font-size: 1.75rem; }
-            .mission-text { font-size: 1.1rem; }
+            h1 { font-size: 1.6rem; }
+            .abstract-text { font-size: 1.1rem; }
+            
+            .pub-item { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+            .pub-meta { margin-left: 0; color: #888; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -221,7 +320,7 @@
 
     <header class="mobile-bar">
         <div class="mobile-brand">Enlightened AI</div>
-        <div class="mobile-index-btn" onclick="toggleDrawer()">[ Index ]</div>
+        <div class="mobile-index-btn" onclick="toggleDrawer()">Index</div>
     </header>
 
     <aside id="sidebar">
@@ -245,7 +344,7 @@
     <main>
         <section id="mission">
             <h1>Mission</h1>
-            <p class="mission-text">
+            <p class="abstract-text">
                 We advance the science of reflective alignment and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.
             </p>
             
@@ -289,15 +388,15 @@
             <div class="pub-list">
                 <div class="pub-item">
                     <span class="pub-title">Reasoning Stability in Large-Scale Systems</span>
-                    <span class="pub-meta">PREPRINT 2024</span>
+                    <span class="pub-meta">[PREPRINT 2024]</span>
                 </div>
                 <div class="pub-item">
                     <span class="pub-title">The Reflective Alignment Lexicon: v1.0</span>
-                    <span class="pub-meta">TECH REPORT</span>
+                    <span class="pub-meta">[TECH REPORT]</span>
                 </div>
                 <div class="pub-item">
                     <span class="pub-title">Diagnostics for Governance: A Framework</span>
-                    <span class="pub-meta">WHITEPAPER</span>
+                    <span class="pub-meta">[WHITEPAPER]</span>
                 </div>
             </div>
         </section>
@@ -322,9 +421,15 @@
         function toggleDrawer() {
             sidebar.classList.toggle('open');
             if (sidebar.classList.contains('open')) {
-                btn.textContent = "[ Close ]";
+                btn.textContent = "Close";
+                btn.style.background = "#000";
+                btn.style.color = "#fff";
+                btn.style.borderColor = "#000";
             } else {
-                btn.textContent = "[ Index ]";
+                btn.textContent = "Index";
+                btn.style.background = "#fcfcfc";
+                btn.style.color = "#000";
+                btn.style.borderColor = "#ddd";
             }
         }
 
@@ -332,19 +437,22 @@
         function closeDrawer() {
             if (window.innerWidth <= 900) {
                 sidebar.classList.remove('open');
-                btn.textContent = "[ Index ]";
+                btn.textContent = "Index";
+                btn.style.background = "#fcfcfc";
+                btn.style.color = "#000";
+                btn.style.borderColor = "#ddd";
             }
         }
 
-        // Scroll Logic with Offset
+        // Active State Logic
         window.addEventListener('scroll', () => {
             let current = '';
+            const scrollPos = window.pageYOffset;
+            
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                // Offset matches CSS scroll-margin
                 const offset = window.innerWidth <= 900 ? 120 : 180;
-                
-                if (pageYOffset >= (sectionTop - offset)) {
+                if (scrollPos >= (sectionTop - offset)) {
                     current = section.getAttribute('id');
                 }
             });
