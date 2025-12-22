@@ -9,16 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <script type="application/json" id="audit-manifest">
-    {
-        "doc_id": "EAI-2026-001",
-        "version": "1.8.0",
-        "status": "VERIFIED_STATIC"
-    }
-    </script>
-
     <style>
-        /* THEME: INSTITUTE STANDARD V18 (REACTIVE SYSTEM) */
+        /* THEME: INSTITUTE STANDARD V20 (THE HONEST ARTIFACT) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -29,7 +21,6 @@
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             --status-verified: #00cc00;
-            --status-locked: #cc0000;
         }
 
         html { scroll-behavior: smooth; }
@@ -46,85 +37,39 @@
             min-height: 100vh;
         }
 
-        /* --- REACTIVE CURSOR SYSTEM (VISIBLE FEEDBACK) --- */
-        
-        /* 1. THE SEAL: "IMMUTABLE" */
-        /* Normal state */
-        .integrity-seal { 
-            cursor: not-allowed !important; 
-            transition: all 0.2s ease;
+        /* --- REACTIVE PHYSICS (THE USER PATTERN) --- */
+        /* Applied ONLY to things you can click/trigger */
+        .interactive {
+            cursor: pointer;
+            position: relative;
+            transition: background-color .12s ease, outline-color .12s ease, transform .08s ease;
+            border-radius: 4px; /* Slight softening */
         }
-        /* Hover state: Flash RED to signal "Don't Touch" */
-        .integrity-seal:hover {
-            border-color: var(--status-locked) !important;
-            background: rgba(204,0,0,0.05) !important;
-            color: var(--status-locked) !important;
+        .interactive:hover {
+            background: rgba(0,0,0,0.03);
+            outline: 1px dashed rgba(0,0,0,0.35);
+            outline-offset: 4px;
         }
-        .integrity-seal:hover .status-dot { background: var(--status-locked) !important; }
-
-        /* 2. THE BRAND: "PRECISION" */
-        .brand { 
-            cursor: crosshair !important; 
-            display: inline-block;
-            transition: all 0.1s;
-            border: 1px dashed transparent; /* Placeholder for layout stability */
-            margin: -1px; /* Offset the border */
-            padding: 1px;
+        .interactive:active {
+            transform: translateY(1px);
+            background: rgba(0,0,0,0.06);
         }
-        /* Hover state: Show Technical Blueprint Box */
-        .brand:hover {
-            border-color: #000;
-            background: rgba(0,0,0,0.02);
+        .interactive:focus-visible {
+            outline: 2px solid #000;
+            outline-offset: 4px;
         }
-
-        /* 3. LOGIC BLOCK: "DATA CELL" */
-        .logic-block { 
-            cursor: cell !important; 
-            transition: background-color 0.1s;
-        }
-        .logic-block:hover {
-            background-color: #f0f2f5; /* Slightly darker to show selection readiness */
-            border-color: #ccc;
-        }
-
-        /* 4. METADATA: "INFO" */
-        .fact-hook, .provenance-term, .claim-box { 
-            cursor: help !important; 
-        }
-        .fact-hook:hover {
-            background-color: #ffffdd !important; /* Highlight yellow on hover */
-            border-bottom-color: #000 !important;
-        }
-
-        /* 5. PROSE: "READ ONLY" */
-        p, .abstract, h1, h2, h3, li { cursor: default !important; }
-
-        /* 6. INTERACTION: POINTER */
-        a, button, .toggle-btn, .nav-link { cursor: pointer !important; }
-
 
         /* --- UTILITIES --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .hidden { display: none; }
+        
+        /* Permalinks (Now Interactive) */
         .permalink {
             text-decoration: none; color: #ccc; margin-left: 0.5rem; 
             font-family: var(--font-mono); font-weight: 400; font-size: 0.9em;
-            opacity: 0; transition: opacity 0.2s; cursor: pointer;
+            opacity: 0; transition: opacity 0.2s; padding: 0 4px;
         }
         h1:hover .permalink, h2:hover .permalink { opacity: 1; }
-
-        /* --- MOBILE BAR --- */
-        .mobile-bar {
-            display: none; position: sticky; top: 0; left: 0; width: 100%; height: var(--mobile-bar-height);
-            background: rgba(255, 255, 255, 0.98); border-bottom: 1px solid var(--border-color);
-            z-index: 1000; align-items: center; justify-content: space-between; padding: 0 1.25rem;
-        }
-        .mobile-brand { font-weight: 800; font-size: 0.85rem; letter-spacing: -0.02em; text-transform: uppercase; }
-        .mobile-btn {
-            font-family: var(--font-mono); font-size: 0.75rem; padding: 4px 10px;
-            border: 1px solid #ccc; border-radius: 4px; background: #fff;
-            color: #000; text-transform: uppercase; cursor: pointer;
-        }
 
         /* --- SIDEBAR --- */
         aside {
@@ -136,15 +81,15 @@
             background: #fff; z-index: 999;
         }
 
-        .brand-text {
+        .brand {
             font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; text-transform: uppercase;
-            letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 0.5rem; color: #000;
+            letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 3.5rem; color: #000;
+            cursor: default; /* Static */
         }
         .brand span {
             display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; 
             letter-spacing: 0.05em; color: var(--text-muted);
         }
-        .brand-container { margin-bottom: 3.5rem; }
 
         .mode-group {
             display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem;
@@ -152,14 +97,10 @@
         }
         .toggle-btn {
             font-family: var(--font-mono); font-size: 0.7rem; color: #999; 
-            cursor: pointer; display: flex; justify-content: space-between;
+            display: flex; justify-content: space-between; padding: 4px 8px; /* Room for physics hover */
         }
         .toggle-btn:hover { color: #000; }
-        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
-        
-        #btn-diff.active { color: #006600; }
-        #btn-logic.active { color: #0000aa; }
-        #btn-audit.active { color: #550000; }
+        .toggle-btn.active { color: #000; font-weight: 700; background: rgba(0,0,0,0.03); } /* Active state bg */
 
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { margin-bottom: 2px; }
@@ -175,14 +116,20 @@
             background: linear-gradient(90deg, #f9f9f9 0%, #ffffff 100%);
         }
 
-        .export-container { margin-top: auto; padding-top: 2rem; }
-        .export-btn {
-            width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px;
-            font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; 
-            font-weight: 600; cursor: pointer; transition: all 0.2s;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+        /* CITATION STRIP (Bottom Sidebar) */
+        .citation-strip {
+            margin-top: auto; padding-top: 2rem; border-top: 1px solid var(--border-color);
         }
-        .export-btn:hover { background: #000; color: #fff; border-color: #000; }
+        .citation-box {
+            font-family: var(--font-mono); font-size: 0.65rem; color: #666;
+            padding: 8px; border: 1px dashed #ccc; margin-bottom: 10px;
+            word-break: break-all;
+        }
+        .action-btn {
+            width: 100%; background: #fff; border: 1px solid #ccc; padding: 8px;
+            font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; 
+            font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
 
         /* --- MAIN CONTENT --- */
         main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; }
@@ -195,18 +142,21 @@
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
 
+        /* STATIC SEAL (Always Green, No Interaction) */
         .integrity-seal {
             margin-left: auto; display: flex; align-items: center; gap: 8px;
-            font-family: var(--font-mono); font-size: 0.7rem; color: #000;
-            border: 1px solid transparent; padding: 4px 8px; border-radius: 4px;
+            font-family: var(--font-mono); font-size: 0.7rem; color: #005500;
+            border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
+            background: rgba(0,204,0,0.05); cursor: default;
         }
-        .status-dot { width: 8px; height: 8px; background: #ccc; border-radius: 50%; display: block; }
-        .integrity-seal.verified { border-color: var(--status-verified); color: #005500; background: rgba(0,204,0,0.05); }
-        .integrity-seal.verified .status-dot { background: var(--status-verified); }
+        .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
 
+        /* GRID LAYOUT */
         section {
             margin-bottom: 5rem; scroll-margin-top: 5rem;
-            display: grid; grid-template-columns: 1fr; gap: 0; position: relative;
+            display: grid; 
+            grid-template-columns: 1fr 280px; /* Always allocate space for the rail */
+            gap: 3rem; position: relative;
         }
 
         h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; }
@@ -221,158 +171,125 @@
         p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
         .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
 
-        /* LOGIC MODE */
-        .logic-block {
-            display: none;
-            font-family: var(--font-mono); font-size: 0.85rem; color: #333;
-            background: #f8f9fa; padding: 1.5rem; border: 1px solid #e0e0e0;
-            margin-bottom: 2rem; line-height: 1.7; white-space: pre-wrap; overflow-x: auto;
+        /* --- PAPER FEATURES --- */
+
+        /* 1. Glossary Tooltips */
+        .glossary-term {
+            border-bottom: 1px dotted #999; cursor: help; position: relative;
         }
-        .logic-keyword { color: #0000aa; font-weight: 700; }
-        .logic-type { color: #007700; }
-        .logic-comment { color: #888; font-style: italic; }
+        .glossary-term:hover { background: rgba(0,0,0,0.05); color: #000; }
+        .glossary-term::after {
+            content: attr(data-def);
+            visibility: hidden; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
+            background: #111; color: #fff; padding: 8px 12px; border-radius: 2px;
+            font-family: var(--font-stack); font-size: 0.75rem; line-height: 1.3; white-space: normal; width: 240px;
+            z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.2s; pointer-events: none;
+        }
+        .glossary-term:hover::after { visibility: visible; opacity: 1; }
 
-        /* DIFF STYLES */
-        del { display: none; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; font-size: 0.9em; opacity: 0.8; }
-        ins { text-decoration: none; }
-        body[data-mode="diff"] del { display: inline; }
-        body[data-mode="diff"] ins { background: #e6ffec; color: #006600; border-bottom: 1px solid #00cc00; }
+        /* 2. Sidenotes (Reader Mode) */
+        .sidenote {
+            font-family: var(--font-stack); font-size: 0.8rem; color: #666; line-height: 1.4;
+            margin-bottom: 1.5rem; display: none; /* Hidden by default, shown in reader mode */
+        }
+        .sidenote strong { font-weight: 600; color: #000; display: block; margin-bottom: 4px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        /* AUDIT RAIL */
+        /* 3. Collapsible Proofs */
+        details.proof-block {
+            border: 1px solid #e0e0e0; margin-bottom: 1.5rem; max-width: 65ch;
+        }
+        details.proof-block summary {
+            padding: 10px 14px; background: #fafafa; cursor: pointer; font-family: var(--font-mono); font-size: 0.75rem; 
+            font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px;
+        }
+        details.proof-block summary::-webkit-details-marker { display: none; }
+        details.proof-block summary::before { content: "+"; display: inline-block; width: 12px; }
+        details.proof-block[open] summary::before { content: "-"; }
+        
+        .proof-content {
+            padding: 14px; border-top: 1px solid #e0e0e0; background: #fff; 
+            font-family: var(--font-mono); font-size: 0.8rem; color: #333; white-space: pre-wrap;
+        }
+
+        /* --- AUDIT / RAIL LOGIC --- */
         .audit-rail {
-            display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color);
+            border-left: 1px solid var(--border-color); padding-left: 1.5rem;
             font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);
         }
+        
+        /* Rail Content Switching */
+        .rail-audit-content { display: none; }
+        .rail-sidenote-content { display: none; }
+
+        /* Claim Box (Audit) */
         .claim-box { margin-bottom: 1.5rem; padding: 0.75rem; background: #fafafa; border: 1px solid #eee; position: relative; }
         .claim-box::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #e0e0e0; }
         .claim-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
         .claim-id { font-weight: 700; color: #000; }
-        .meta-row { display: flex; gap: 1rem; margin-bottom: 0.5rem; opacity: 0.8; }
-        .claim-link { display: block; color: #555; text-decoration: none; margin-top: 0.5rem; }
-        .claim-link:hover { color: #000; text-decoration: underline; }
 
-        .section-ledger {
-            display: none; grid-column: 1 / -1; margin-top: 2rem; padding: 1rem;
-            background: #fcfcfc; border: 1px solid var(--border-color);
-            font-family: var(--font-mono); font-size: 0.7rem; justify-content: space-between; align-items: center;
-        }
-        .cite-btn {
-            background: #fff; border: 1px solid #ccc; padding: 4px 10px;
-            cursor: pointer; font-family: inherit; text-transform: uppercase; font-weight: 500;
-        }
-        .cite-btn:active { background: #000; color: #fff; }
-
-        /* Internal State Trace */
-        .internal-state {
-            display: none; font-family: var(--font-mono); font-size: 0.75rem; color: #555;
-            background: #f4f4f4; padding: 1rem; border-left: 2px solid #ccc; margin: 1.5rem 0; max-width: 65ch;
-            cursor: text;
-        }
-        .state-label { display: block; font-weight: 700; color: #000; margin-bottom: 0.5rem; font-size: 0.65rem; letter-spacing: 0.1em; }
-        .code-line { display: block; margin-bottom: 0.25rem; }
-
-        /* MODE ACTIVATION */
-        body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
-        body[data-mode="audit"] .audit-rail { display: block; }
-        body[data-mode="audit"] .section-ledger { display: flex; }
-        body[data-mode="audit"] .internal-state { display: block; }
+        /* --- MODE DISPLAY LOGIC --- */
         
-        body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
-        body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; }
-
-        body[data-mode="logic"] .prose-content { display: none; }
-        body[data-mode="logic"] .logic-block { display: block; }
-        body[data-mode="logic"] .abstract { display: none; }
-        body[data-mode="logic"] section { grid-template-columns: 1fr; }
-
-        /* --- RESPONSIVE --- */
+        /* READER MODE: Show Sidenotes in Rail */
+        body[data-mode="reader"] .rail-sidenote-content { display: block; }
+        
+        /* AUDIT MODE: Show Audit Data in Rail */
+        body[data-mode="audit"] .rail-audit-content { display: block; }
+        
+        /* --- MOBILE --- */
+        .mobile-bar { display: none; }
         @media (max-width: 900px) {
             body { flex-direction: column; }
-            .mobile-bar { display: flex; }
-            aside {
-                position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px);
-                transform: translateX(-100%); border-right: none; padding: 2rem;
-            }
+            .mobile-bar { display: flex; position: sticky; top: 0; background: rgba(255,255,255,0.98); border-bottom: 1px solid #e5e5e5; padding: 0 1.25rem; height: 50px; align-items: center; justify-content: space-between; z-index: 1000; }
+            aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); border-right: none; transition: transform 0.1s; }
             aside.open { transform: translateX(0); }
             main { padding: 2rem 1.5rem; }
-            .doc-header { gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
-            
-            body[data-mode="audit"] section, body[data-mode="diff"] section { grid-template-columns: 1fr; gap: 1rem; }
-            body[data-mode="audit"] .audit-rail { border-left: none; border-top: 1px solid #eee; padding-left: 0; padding-top: 1.5rem; }
-            .section-ledger { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
-            .permalink { display: none; }
-        }
-        
-        /* PRINT */
-        @media print {
-            .mobile-bar, aside, .mode-group, .export-btn, #cmdk, .permalink, .export-container { display: none !important; }
-            main { padding: 0 !important; }
-            .doc-header { border-bottom: 2px solid #000; }
-            .audit-rail { display: block !important; border: 1px solid #000; padding: 10px; margin-top: 10px; }
-            body::after { content: "RENDERED FROM LIVE ARTIFACT EAI-2026-001"; position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid #000; padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 8pt; text-align: center; background: #fff; }
+            section { grid-template-columns: 1fr; gap: 1rem; }
+            .audit-rail { border-left: none; border-top: 1px solid #eee; padding-left: 0; padding-top: 1.5rem; margin-top: 1rem; }
+            /* On mobile, sidenotes move inline or bottom? Let's just stack them in the rail for simplicity */
         }
     </style>
 </head>
 <body data-mode="reader">
 
-    <div id="cmdk" onclick="if(event.target === this) closeCmdk()" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.8); backdrop-filter:blur(5px); z-index:2000;">
-        <div style="max-width:640px; margin: 15vh auto; background:#fff; border:1px solid #000; box-shadow: 0 20px 50px rgba(0,0,0,0.15);">
-            <div style="padding:12px 16px; border-bottom:1px solid #eee; font-family:var(--font-mono); font-size:11px; color:#999; display:flex; justify-content:space-between;"><span>COMMAND PALETTE</span><span>ESC TO CLOSE</span></div>
-            <input id="cmdkInput" placeholder="Search..." style="width:100%; padding:16px; border:none; outline:none; font-family:var(--font-stack); font-size:16px;" autocomplete="off">
-            <div id="cmdkResults" style="max-height:320px; overflow:auto; border-top:1px solid #f2f2f2;"></div>
-        </div>
-    </div>
-
     <header class="mobile-bar">
-        <div class="mobile-brand">ENLIGHTENED AI</div>
-        <div style="display: flex; gap: 10px;">
-            <button class="mobile-btn" onclick="openCmdk()">CMD+K</button>
-            <button class="mobile-btn" onclick="toggleDrawer()">Index</button>
-        </div>
+        <div class="mobile-brand" style="font-weight: 800; font-size: 0.85rem; letter-spacing: -0.02em; text-transform: uppercase;">ENLIGHTENED AI</div>
+        <button class="interactive" style="border: 1px solid #ccc; padding: 4px 10px; background:#fff; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase;" onclick="document.getElementById('sidebar').classList.toggle('open')">Index</button>
     </header>
 
     <aside id="sidebar">
-        <div class="brand-container">
-            <div class="brand">
-                Enlightened AI<br>Research Lab
-            </div>
-            <div class="brand">
-                <span>EST. 2026 // MONTREAL</span>
-            </div>
+        <div class="brand">
+            Enlightened AI<br>
+            Research Lab
+            <span>EST. 2026 // MONTREAL</span>
         </div>
 
         <div class="mode-group">
-            <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader')">
-                [ READER ] <span>•</span>
+            <span class="toggle-btn interactive active" id="btn-reader" onclick="setMode('reader')">
+                [ READER ]
             </span>
-            <span class="toggle-btn" id="btn-audit" onclick="setMode('audit')">
-                [ AUDIT ] <span>•</span>
-            </span>
-            <span class="toggle-btn" id="btn-diff" onclick="setMode('diff')">
-                [ DIFF LOG ] <span>Δ</span>
-            </span>
-            <span class="toggle-btn" id="btn-logic" onclick="setMode('logic')">
-                [ LOGIC ] <span>λ</span>
+            <span class="toggle-btn interactive" id="btn-audit" onclick="setMode('audit')">
+                [ AUDIT ]
             </span>
         </div>
         
         <nav>
             <ul>
-                <li><a href="#mission" class="nav-link" onclick="closeDrawer()">Mission</a></li>
-                <li><a href="#theory" class="nav-link" onclick="closeDrawer()">Theory</a></li>
-                <li><a href="#outputs" class="nav-link" onclick="closeDrawer()">Outputs</a></li>
+                <li><a href="#mission" class="nav-link interactive" onclick="closeDrawer()">Mission</a></li>
+                <li><a href="#theory" class="nav-link interactive" onclick="closeDrawer()">Theory</a></li>
+                <li><a href="#outputs" class="nav-link interactive" onclick="closeDrawer()">Outputs</a></li>
             </ul>
         </nav>
         
-        <div class="export-container">
-            <button class="export-btn" onclick="window.print()">
-                <span>🖨</span> Export Record
+        <div class="citation-strip">
+            <div class="citation-box">EAI-2026-001 (v1.9.0)</div>
+            <button class="action-btn interactive" onclick="copyCite()">
+                Copy Citation
             </button>
         </div>
     </aside>
 
     <main>
-        <div class="doc-header mono">
+        <div class="doc-header mono interactive" onclick="copyLink('doc-header')">
             <div class="doc-meta">
                 <span class="doc-label">DOC_ID</span>
                 <span class="doc-val">EAI-2026-001</span>
@@ -381,7 +298,7 @@
                 <span class="doc-label">CLASSIFICATION</span>
                 <span class="doc-val">PUBLIC</span>
             </div>
-            <div class="integrity-seal verified">
+            <div class="integrity-seal">
                 <span class="status-dot"></span>
                 <span>INTEGRITY: VERIFIED</span>
             </div>
@@ -389,99 +306,85 @@
 
         <section id="mission">
             <div class="content-col">
-                <h1>Mission <a onclick="copyLink('mission')" class="permalink">¶</a></h1>
-                
-                <div class="prose-content">
-                    <p class="abstract" id="mission-text">
-                        We advance the science of <span class="fact-hook" title="M1.0">reflective alignment</span> and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions.
-                    </p>
-                    <ul style="list-style: none; padding: 0; margin-top: 2rem;"> 
-                        <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">—</span>
-                            Bridge the gap between theoretical safety guarantees and <del>real-world</del> <ins>empirical model</ins> behavior.
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="logic-block">
-<span class="logic-comment"># Formal Definition: Mission Objective Function (v1.6)</span>
-<span class="logic-keyword">def</span> maximize_alignment_stability(agent: <span class="logic-type">CognitiveSystem</span>) -> <span class="logic-type">Proof</span>:
-    <span class="logic-keyword">assert</span> agent.has_capability(<span class="logic-type">"REFLECTIVE_MONITORING"</span>)
-    
-    <span class="logic-keyword">for</span> t <span class="logic-keyword">in</span> agent.trajectory:
-        drift = calculate_drift(agent.state[t], agent.base_values)
-        <span class="logic-keyword">if</span> drift > <span class="logic-type">EPSILON_THRESHOLD</span>:
-            <span class="logic-keyword">raise</span> AlignmentException(<span class="logic-type">"Reasoning Collapse Detected"</span>)
-            
-    <span class="logic-keyword">return</span> <span class="logic-type">VerifiedProof</span>(agent)
-                </div>
-
-                <div class="internal-state">
-                    <span class="state-label">INTERNAL_STATE_TRACE // T=0.04s</span>
-                    <span class="code-line">> Verifying definition consistency [M1.0]... PASS</span>
-                    <span class="code-line">> Checking alignment invariants... STABLE</span>
-                </div>
+                <h1>Mission <a onclick="copyLink('mission')" class="permalink interactive">¶</a></h1>
+                <p class="abstract">
+                    We advance the science of <span class="glossary-term" data-def="A state where an AI system's reasoning process is consistent with its stated objective function across recursive self-modifications.">reflective alignment</span> and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.
+                </p>
+                <ul style="list-style: none; padding: 0; margin-top: 2rem;"> 
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: #999;">—</span>
+                        Bridge the gap between theoretical safety guarantees and empirical model behavior.
+                    </li>
+                </ul>
             </div>
 
             <div class="audit-rail">
-                <div class="claim-box">
-                    <div class="claim-header"><span class="claim-id">CLAIM [M1.0]</span></div>
-                    <div class="meta-row"><span>SCOPE: CONCEPT</span><span>CONF: HIGH</span></div>
-                    <a href="#" class="claim-link">→ Lexicon: R-Align (Def 2.1)</a>
-                    <a href="#" class="claim-link">→ Dataset: Gov-Gap-24</a>
+                <div class="rail-sidenote-content">
+                    <aside class="sidenote">
+                        <strong>Context</strong>
+                        First established in the 2024 "Safety Bounds" paper, this definition has become the ISO standard for high-assurance systems.
+                    </aside>
                 </div>
-            </div>
 
-            <div class="section-ledger">
-                <span>VER: 1.8.0 | SHA: 8f92a1</span>
-                <button class="cite-btn" onclick="copyCite('Mission Statement v1.8, EAI Lab')">COPY CITATION</button>
+                <div class="rail-audit-content">
+                    <div class="claim-box interactive">
+                        <div class="claim-header"><span class="claim-id">CLAIM [M1.0]</span></div>
+                        <div style="margin-top:0.5rem; opacity:0.8;">Reflective Alignment Definition</div>
+                        <a href="#" style="display:block; margin-top:0.5rem; text-decoration:underline;">→ Source Hash</a>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section id="theory">
             <div class="content-col">
-                <h2 data-num="01 //">Theory <a onclick="copyLink('theory')" class="permalink">¶</a></h2>
-                <div class="prose-content">
-                    <p>Our research investigates the <span class="fact-hook">normative foundations</span> of reflective equilibrium in artificial agents. We focus on defining the <ins>verifiable</ins> mathematical bounds of self-modifying systems.</p>
-                </div>
+                <h2 data-num="01 //">Theory <a onclick="copyLink('theory')" class="permalink interactive">¶</a></h2>
+                <p>Our research investigates the normative foundations of reflective equilibrium. We focus on defining the mathematical bounds of self-modifying systems.</p>
                 
-                <div class="logic-block">
-<span class="logic-comment"># Theorem T-01: Invariant Preservation</span>
-<span class="logic-keyword">Theorem</span> Invariant_B:
-    <span class="logic-keyword">forall</span> s <span class="logic-keyword">in</span> States:
-        <span class="logic-keyword">if</span> IsReflective(s) <span class="logic-keyword">and</span> IsAligned(s):
-            NextState(s) <span class="logic-keyword">implies</span> IsAligned(NextState(s))
-                </div>
-                
-                <div class="internal-state">
-                    <span class="state-label">INTERNAL_STATE_TRACE // T=0.12s</span>
-                    <span class="code-line">> Theorem_B check: No contradiction found.</span>
-                    <span class="code-line">> Epistemic status: FORMAL_PROOF</span>
-                </div>
+                <details class="proof-block interactive">
+                    <summary>Theorem T-01: Invariant Preservation</summary>
+                    <div class="proof-content">
+Theorem Invariant_B:
+  forall s in States:
+    if IsReflective(s) and IsAligned(s):
+      NextState(s) implies IsAligned(NextState(s))
+                    </div>
+                </details>
             </div>
+
             <div class="audit-rail">
-                <div class="claim-box">
-                    <div class="claim-header"><span class="claim-id">PROOF [T-01]</span></div>
-                    <div class="meta-row"><span>SCOPE: FORMAL</span><span>CONF: ABSOLUTE</span></div>
-                    <a href="#" class="claim-link">→ Theorem: Invariant_B</a>
+                <div class="rail-sidenote-content">
+                    <aside class="sidenote">
+                        <strong>Note</strong>
+                        This theorem assumes a closed compute environment. Open environments introduce entropy not accounted for in T-01.
+                    </aside>
+                </div>
+                
+                <div class="rail-audit-content">
+                    <div class="claim-box interactive">
+                        <div class="claim-header"><span class="claim-id">PROOF [T-01]</span></div>
+                        <div>Status: FORMALIZED</div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="outputs">
             <div class="content-col">
-                <h2 data-num="04 //">Outputs <a onclick="copyLink('outputs')" class="permalink">¶</a></h2>
+                <h2 data-num="04 //">Outputs <a onclick="copyLink('outputs')" class="permalink interactive">¶</a></h2>
                 <div style="border-top: 1px solid var(--border-color);">
-                    <div style="padding: 1.25rem 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+                    <div class="interactive" style="padding: 1.25rem 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-weight: 500;">Reasoning Stability in Large-Scale Systems</span>
                         <span class="mono" style="background: #f5f5f5; padding: 2px 6px;">PREPRINT 2024</span>
                     </div>
                 </div>
             </div>
              <div class="audit-rail">
-                <div class="claim-box">
-                    <div class="claim-header"><span class="claim-id">REPO STATUS</span></div>
-                    <span style="color: #008800; font-size: 0.7rem; display:block; margin-top:0.5rem; font-weight: 600;">● PASSING (CI/CD)</span>
+                <div class="rail-audit-content">
+                    <div class="claim-box">
+                        <div class="claim-header"><span class="claim-id">REPO STATUS</span></div>
+                        <span style="color: #008800; font-weight: 600;">● PASSING (CI/CD)</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -495,33 +398,15 @@
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${mode}`).classList.add('active');
         }
-        function toggleDrawer() { document.getElementById('sidebar').classList.toggle('open'); }
-        function closeDrawer() { if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open'); }
-        function copyCite(text) { navigator.clipboard.writeText(text).then(() => alert("Citation copied.")); }
-        function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`).then(() => alert("Link copied.")); }
-        
-        const cmdk = document.getElementById('cmdk');
-        const cmdkInput = document.getElementById('cmdkInput');
-        const cmdkResults = document.getElementById('cmdkResults');
-        const cmdkIndex = [{ label: "Mission", id: "mission" }, { label: "Theory", id: "theory" }, { label: "Outputs", id: "outputs" }];
-        function openCmdk() { cmdk.style.display="block"; cmdkInput.value=""; renderCmdk(""); setTimeout(()=>cmdkInput.focus(),50); }
-        function closeCmdk() { cmdk.style.display="none"; }
-        function renderCmdk(q) {
-            const hits = cmdkIndex.filter(x => x.label.toLowerCase().includes(q.toLowerCase()));
-            cmdkResults.innerHTML = hits.map(h => `<div style="padding:10px; border-bottom:1px solid #eee; cursor:pointer;" onclick="location.hash='#${h.id}';closeCmdk()"><span style="font-size:0.9rem; font-weight:500">${h.label}</span></div>`).join("");
+        function closeDrawer() { 
+            if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open'); 
         }
-        document.addEventListener("keydown", e => { if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openCmdk();} if(e.key==="Escape")closeCmdk(); });
-        cmdkInput.addEventListener("input", e => renderCmdk(e.target.value));
-        
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section');
-            let current = '';
-            sections.forEach(section => { if (window.pageYOffset >= section.offsetTop - 150) current = section.getAttribute('id'); });
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) link.classList.add('active');
-            });
-        });
+        function copyCite() { 
+            navigator.clipboard.writeText("Enlightened AI Research Lab (2026). Artifact EAI-2026-001 v1.9.0.").then(() => alert("Citation Copied")); 
+        }
+        function copyLink(id) {
+            navigator.clipboard.writeText(window.location.origin + window.location.pathname + "#" + id).then(() => alert("Link Copied"));
+        }
     </script>
 </body>
 </html>
