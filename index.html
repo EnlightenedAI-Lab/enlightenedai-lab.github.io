@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "1.6.0",
+        "version": "1.7.0",
         "status": "VERIFIED_STATIC"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V14 (RESPONSIVE ARTIFACT) */
+        /* THEME: INSTITUTE STANDARD V15 (AGGRESSIVE CURSORS) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -31,7 +31,6 @@
             --status-verified: #00cc00;
         }
 
-        /* RESET & BASE */
         html { scroll-behavior: smooth; }
         * { box-sizing: border-box; }
 
@@ -46,27 +45,31 @@
             min-height: 100vh;
         }
 
-        /* --- SEMANTIC CURSORS (THE KEY FEATURE) --- */
+        /* --- AGGRESSIVE CURSOR OVERRIDES (THE V15 UPDATE) --- */
         
-        /* Default Prose: Standard reading cursor */
-        p, .abstract, h1, h2, li { cursor: default; }
+        /* 1. The Seal: "Immutable / Locked" (Red Circle Slash) */
+        .integrity-seal { cursor: not-allowed !important; }
 
-        /* Logic Mode: Text selection cursor (implies code) */
-        .logic-block, .logic-block * { cursor: text; }
+        /* 2. The Brand: "Precision Instrument" (Crosshair) */
+        .brand, .brand * { cursor: crosshair !important; }
 
-        /* Audit/Metadata: Help cursor (implies info available) */
-        .fact-hook, .provenance-term, .claim-box, .doc-header { cursor: help; }
-        
-        /* Links: Pointer (standard) */
-        a { cursor: pointer; }
-        
-        /* Static Seal: Default (it's not clickable) */
-        .integrity-seal { cursor: default; }
+        /* 3. Logic/Code: "Data Entry" (Cell) */
+        .logic-block { cursor: cell !important; }
+
+        /* 4. Metadata/Hooks: "Query Info" (Question Mark) */
+        .fact-hook, .provenance-term, .claim-box, .doc-header { cursor: help !important; }
+
+        /* 5. Prose: "Read Only PDF" (Force Arrow, KILL I-Beam) */
+        p, .abstract, h1, h2, h3, li { cursor: default !important; }
+
+        /* 6. Interaction: Standard Pointer */
+        a, button, .toggle-btn, .nav-link { cursor: pointer !important; }
 
 
         /* --- UTILITIES --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .hidden { display: none; }
+        
         .permalink {
             text-decoration: none; color: #ccc; margin-left: 0.5rem; 
             font-family: var(--font-mono); font-weight: 400; font-size: 0.9em;
@@ -95,7 +98,6 @@
             padding: 3rem 2rem;
             display: flex; flex-direction: column; flex-shrink: 0;
             background: #fff; z-index: 999;
-            /* No transition: Instant Snap */
         }
 
         .brand {
@@ -107,7 +109,6 @@
             letter-spacing: 0.05em; color: var(--text-muted);
         }
 
-        /* MODE BUTTONS: SUBTLE STATE CHANGE */
         .mode-group {
             display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem;
             border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem;
@@ -115,14 +116,10 @@
         .toggle-btn {
             font-family: var(--font-mono); font-size: 0.7rem; color: #999; 
             cursor: pointer; display: flex; justify-content: space-between;
-            /* Instant color change, no fade */
         }
         .toggle-btn:hover { color: #000; }
+        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
         
-        /* Active State: Bold + Color Shift (No Motion) */
-        .toggle-btn.active { color: #000; font-weight: 700; }
-        
-        /* Context Colors for Active States */
         #btn-diff.active { color: #006600; }
         #btn-logic.active { color: #0000aa; }
         #btn-audit.active { color: #550000; }
@@ -141,7 +138,6 @@
             background: linear-gradient(90deg, #f9f9f9 0%, #ffffff 100%);
         }
 
-        /* EXPORT BUTTON */
         .export-container { margin-top: auto; padding-top: 2rem; }
         .export-btn {
             width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px;
@@ -162,7 +158,6 @@
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
 
-        /* STATIC SEAL (No Animation) */
         .integrity-seal {
             margin-left: auto; display: flex; align-items: center; gap: 8px;
             font-family: var(--font-mono); font-size: 0.7rem; color: #000;
@@ -189,7 +184,7 @@
         p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
         .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
 
-        /* --- LOGIC MODE --- */
+        /* LOGIC MODE */
         .logic-block {
             display: none;
             font-family: var(--font-mono); font-size: 0.85rem; color: #333;
@@ -200,13 +195,13 @@
         .logic-type { color: #007700; }
         .logic-comment { color: #888; font-style: italic; }
 
-        /* --- DIFF STYLES --- */
+        /* DIFF STYLES */
         del { display: none; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; font-size: 0.9em; opacity: 0.8; }
         ins { text-decoration: none; }
         body[data-mode="diff"] del { display: inline; }
         body[data-mode="diff"] ins { background: #e6ffec; color: #006600; border-bottom: 1px solid #00cc00; }
 
-        /* --- AUDIT RAIL --- */
+        /* AUDIT RAIL */
         .audit-rail {
             display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color);
             font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);
@@ -224,17 +219,21 @@
             background: #fcfcfc; border: 1px solid var(--border-color);
             font-family: var(--font-mono); font-size: 0.7rem; justify-content: space-between; align-items: center;
         }
-        
+        .cite-btn {
+            background: #fff; border: 1px solid #ccc; padding: 4px 10px;
+            cursor: pointer; font-family: inherit; text-transform: uppercase; font-weight: 500;
+        }
+        .cite-btn:active { background: #000; color: #fff; }
+
         /* Internal State Trace */
         .internal-state {
             display: none; font-family: var(--font-mono); font-size: 0.75rem; color: #555;
             background: #f4f4f4; padding: 1rem; border-left: 2px solid #ccc; margin: 1.5rem 0; max-width: 65ch;
-            cursor: text; /* Implies machine logs */
         }
         .state-label { display: block; font-weight: 700; color: #000; margin-bottom: 0.5rem; font-size: 0.65rem; letter-spacing: 0.1em; }
         .code-line { display: block; margin-bottom: 0.25rem; }
 
-        /* --- MODE LOGIC (Instant Snaps) --- */
+        /* MODE ACTIVATION */
         body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="audit"] .audit-rail { display: block; }
         body[data-mode="audit"] .section-ledger { display: flex; }
@@ -393,8 +392,8 @@
             </div>
 
             <div class="section-ledger">
-                <span>VER: 1.6.0 | SHA: 8f92a1</span>
-                <button class="cite-btn" onclick="copyCite('Mission Statement v1.6, EAI Lab')">COPY CITATION</button>
+                <span>VER: 1.7.0 | SHA: 8f92a1</span>
+                <button class="cite-btn" onclick="copyCite('Mission Statement v1.7, EAI Lab')">COPY CITATION</button>
             </div>
         </section>
 
