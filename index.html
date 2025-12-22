@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "1.9.0",
+        "version": "1.8.0",
         "status": "VERIFIED_STATIC"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V17 (AGGRESSIVE CURSORS RESTORED) */
+        /* THEME: INSTITUTE STANDARD V18 (REACTIVE SYSTEM) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -29,6 +29,7 @@
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             --status-verified: #00cc00;
+            --status-locked: #cc0000;
         }
 
         html { scroll-behavior: smooth; }
@@ -45,24 +46,60 @@
             min-height: 100vh;
         }
 
-        /* --- AGGRESSIVE CURSOR SYSTEM (RESTORED) --- */
+        /* --- REACTIVE CURSOR SYSTEM (VISIBLE FEEDBACK) --- */
         
-        /* 1. Logic/Code: The "Cell" Cross (Spreadsheet feel) */
-        .logic-block, .logic-block * { cursor: cell !important; }
+        /* 1. THE SEAL: "IMMUTABLE" */
+        /* Normal state */
+        .integrity-seal { 
+            cursor: not-allowed !important; 
+            transition: all 0.2s ease;
+        }
+        /* Hover state: Flash RED to signal "Don't Touch" */
+        .integrity-seal:hover {
+            border-color: var(--status-locked) !important;
+            background: rgba(204,0,0,0.05) !important;
+            color: var(--status-locked) !important;
+        }
+        .integrity-seal:hover .status-dot { background: var(--status-locked) !important; }
 
-        /* 2. The Seal: "Immutable" (Stop Sign) */
-        .integrity-seal { cursor: not-allowed !important; }
+        /* 2. THE BRAND: "PRECISION" */
+        .brand { 
+            cursor: crosshair !important; 
+            display: inline-block;
+            transition: all 0.1s;
+            border: 1px dashed transparent; /* Placeholder for layout stability */
+            margin: -1px; /* Offset the border */
+            padding: 1px;
+        }
+        /* Hover state: Show Technical Blueprint Box */
+        .brand:hover {
+            border-color: #000;
+            background: rgba(0,0,0,0.02);
+        }
 
-        /* 3. The Brand: "Precision" (Crosshair) */
-        .brand, .brand * { cursor: crosshair !important; }
+        /* 3. LOGIC BLOCK: "DATA CELL" */
+        .logic-block { 
+            cursor: cell !important; 
+            transition: background-color 0.1s;
+        }
+        .logic-block:hover {
+            background-color: #f0f2f5; /* Slightly darker to show selection readiness */
+            border-color: #ccc;
+        }
 
-        /* 4. Metadata: "Info" (Question Mark) */
-        .fact-hook, .provenance-term, .claim-box, .doc-header { cursor: help !important; }
+        /* 4. METADATA: "INFO" */
+        .fact-hook, .provenance-term, .claim-box { 
+            cursor: help !important; 
+        }
+        .fact-hook:hover {
+            background-color: #ffffdd !important; /* Highlight yellow on hover */
+            border-bottom-color: #000 !important;
+        }
 
-        /* 5. Prose: "Read Only" (Arrow) */
+        /* 5. PROSE: "READ ONLY" */
         p, .abstract, h1, h2, h3, li { cursor: default !important; }
 
-        /* 6. Interaction: Standard Pointer */
+        /* 6. INTERACTION: POINTER */
         a, button, .toggle-btn, .nav-link { cursor: pointer !important; }
 
 
@@ -99,14 +136,15 @@
             background: #fff; z-index: 999;
         }
 
-        .brand {
+        .brand-text {
             font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; text-transform: uppercase;
-            letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 3.5rem; color: #000;
+            letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 0.5rem; color: #000;
         }
         .brand span {
             display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; 
             letter-spacing: 0.05em; color: var(--text-muted);
         }
+        .brand-container { margin-bottom: 3.5rem; }
 
         .mode-group {
             display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem;
@@ -294,10 +332,13 @@
     </header>
 
     <aside id="sidebar">
-        <div class="brand">
-            Enlightened AI<br>
-            Research Lab
-            <span>EST. 2026 // MONTREAL</span>
+        <div class="brand-container">
+            <div class="brand">
+                Enlightened AI<br>Research Lab
+            </div>
+            <div class="brand">
+                <span>EST. 2026 // MONTREAL</span>
+            </div>
         </div>
 
         <div class="mode-group">
@@ -392,8 +433,8 @@
             </div>
 
             <div class="section-ledger">
-                <span>VER: 1.9.0 | SHA: 8f92a1</span>
-                <button class="cite-btn" onclick="copyCite('Mission Statement v1.9, EAI Lab')">COPY CITATION</button>
+                <span>VER: 1.8.0 | SHA: 8f92a1</span>
+                <button class="cite-btn" onclick="copyCite('Mission Statement v1.8, EAI Lab')">COPY CITATION</button>
             </div>
         </section>
 
