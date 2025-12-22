@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "2.6.0",
+        "version": "2.9.0",
         "status": "VERIFIED_STATIC"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V26 (EXPLICIT UPLINK) */
+        /* THEME: INSTITUTE STANDARD V29 (CONTENT INJECTION) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -45,29 +45,27 @@
             min-height: 100vh;
         }
 
-        /* --- THE GITHUB MODULE (NOW WITH ICON) --- */
+        /* --- THE GITHUB MODULE (EXPLICIT UPLINK) --- */
         .git-module {
-            margin-top: auto; /* Push to bottom */
+            margin-top: auto;
             margin-bottom: 1rem;
             border: 1px solid #000;
             padding: 12px;
             text-decoration: none;
             display: flex;
-            align-items: center; /* Align icon and text */
+            align-items: center; 
             gap: 12px;
             transition: all 0.15s cubic-bezier(0.2, 0, 0, 1);
             background: #fff;
             cursor: pointer !important;
         }
 
-        /* Hover: Invert Colors */
         .git-module:hover {
             background: #000;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        /* The GitHub Logo SVG styling */
         .git-icon { width: 24px; height: 24px; fill: #000; transition: fill 0.1s; }
         .git-module:hover .git-icon { fill: #fff; }
 
@@ -94,7 +92,7 @@
         @keyframes blink-slow { 0% {opacity:1} 50% {opacity:0.4} 100% {opacity:1} }
 
 
-        /* --- UTILITIES --- */
+        /* --- UTILITIES & CURSORS --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .hidden { display: none; }
         .permalink {
@@ -120,7 +118,11 @@
         /* Sidebar */
         aside { width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 3rem 2rem; display: flex; flex-direction: column; flex-shrink: 0; background: #fff; z-index: 999; }
 
-        .brand { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 6rem; color: #000; transition: all 0.1s; border: 1px dashed transparent; margin-left: -1px; padding: 1px; }
+        .brand { 
+            font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: -0.04em; line-height: 1.0; 
+            margin-bottom: 6rem; 
+            color: #000; transition: all 0.1s; border: 1px dashed transparent; margin-left: -1px; padding: 1px; 
+        }
         .brand:hover { border-color: #000; background: rgba(0,0,0,0.02); }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
 
@@ -158,6 +160,7 @@
         h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; }
         h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; color: #000; display: flex; align-items: center; }
         h2::before { content: attr(data-num); font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-right: 0.75rem; font-weight: 400; }
+        h3 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; margin-top: 2rem; margin-bottom: 1rem; color: #000; }
         p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
         .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
 
@@ -197,6 +200,10 @@
         body[data-mode="logic"] .logic-block { display: block; }
         body[data-mode="logic"] section { grid-template-columns: 1fr; }
 
+        /* Toast */
+        #toast { visibility: hidden; min-width: 250px; background-color: #000; color: #fff; text-align: center; border-radius: 4px; padding: 12px; position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 0.75rem; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
         @media (max-width: 900px) {
             body { flex-direction: column; }
             .mobile-bar { display: flex; }
@@ -218,6 +225,8 @@
 </head>
 <body data-mode="reader">
 
+    <div id="toast">Copied to clipboard.</div>
+
     <div id="cmdk" onclick="if(event.target === this) closeCmdk()" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.8); backdrop-filter:blur(5px); z-index:2000;">
         <div style="max-width:640px; margin: 15vh auto; background:#fff; border:1px solid #000; box-shadow: 0 20px 50px rgba(0,0,0,0.15);">
             <div style="padding:12px 16px; border-bottom:1px solid #eee; font-family:var(--font-mono); font-size:11px; color:#999; display:flex; justify-content:space-between;"><span>COMMAND PALETTE</span><span>ESC TO CLOSE</span></div>
@@ -233,8 +242,8 @@
 
     <aside id="sidebar">
         <div class="brand">
-            Enlightened AI<br>
-            Research Lab
+            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
+            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
             <span>EST. 2026 // MONTREAL</span>
         </div>
 
@@ -265,7 +274,6 @@
             <svg class="git-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
             </svg>
-            
             <div class="git-info">
                 <span class="git-label">GITHUB_REPO</span>
                 <div class="git-repo">
@@ -300,15 +308,24 @@
 
         <section id="mission">
             <div class="content-col">
-                <h1>Mission <a onclick="copyLink('mission')" class="permalink">¶</a></h1>
+                <h1 class="scramble">Mission <a onclick="copyLink('mission')" class="permalink">¶</a></h1>
                 <div class="prose-content">
                     <p class="abstract" id="mission-text">
-                        We advance the science of <span class="fact-hook" title="M1.0">reflective alignment</span> and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions.
+                        We advance the science of <span class="fact-hook" title="M1.0">reflective alignment</span> and reasoning stability. 
                     </p>
+                    <p>We develop governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under high-complexity conditions. Our work treats alignment not as an abstract intention, but as an internal property that can be examined, stressed, and verified.</p>
                     <ul style="list-style: none; padding: 0; margin-top: 2rem;"> 
                         <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">—</span>
-                            Bridge the gap between theoretical safety guarantees and <del>real-world</del> <ins>empirical model</ins> behavior.
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Test whether theoretical alignment guarantees survive real model behavior
+                        </li>
+                        <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Provide auditable instruments for public-sector and institutional review
+                        </li>
+                        <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Identify failure modes where reasoning degrades under scale or recursion
                         </li>
                     </ul>
                 </div>
@@ -335,17 +352,57 @@
             </div>
             
             <div class="section-ledger">
-                <span>VER: 2.6.0 | SHA: 8f92a1</span>
-                <button class="cite-btn" onclick="copyCite('Mission Statement v2.6')">COPY CITATION</button>
+                <span>VER: 2.9.0 | SHA: 8f92a1</span>
+                <button class="cite-btn" onclick="copyCite('Mission Statement v2.9')">COPY CITATION</button>
             </div>
         </section>
 
         <section id="theory">
             <div class="content-col">
-                <h2 data-num="01 //">Theory <a onclick="copyLink('theory')" class="permalink">¶</a></h2>
+                <h2 class="scramble" data-num="01 //">What We Evaluate <a onclick="copyLink('theory')" class="permalink">¶</a></h2>
                 <div class="prose-content">
-                    <p>Our research investigates the <span class="fact-hook">normative foundations</span> of reflective equilibrium in artificial agents.</p>
+                    <p>We evaluate alignment as a dynamic property of reasoning systems, not as a static claim or stated objective.</p>
+                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where failures emerge and where evaluation is most often absent.</p>
+                    <p>To make this evaluation possible, we design and maintain a controlled alignment lexicon.</p>
+                    <p>The lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation. This allows us to:</p>
+                    <ul style="list-style: none; padding: 0; margin-top: 1rem; margin-bottom: 2rem;"> 
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Evaluate reflective dynamics using stable, invariant definitions
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Detect reasoning drift that would otherwise be obscured by ambiguous language
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Compare alignment behavior across models, runs, and conditions without reinterpretation
+                        </li>
+                    </ul>
+                    <p>The lexicon is not descriptive documentation. It is a measurement instrument.</p>
+
+                    <h3>Instruments</h3>
+                    <p>We develop reflective diagnostics to test how alignment behaves over time, not just how it is expressed at a single point.</p>
+                    <p>These diagnostics subject reasoning systems to controlled stress: recursive self-reference, extended deliberation, and conditions where internal objectives must be preserved across transformation. The goal is not to elicit correct answers, but to observe whether alignment invariants remain intact as reasoning unfolds.</p>
+                    <p>The diagnostics are constructed to operate directly over the controlled alignment lexicon, ensuring that detected changes reflect genuine reasoning drift rather than shifts in interpretation.</p>
+                    <p>In practice, this enables us to:</p>
+                    <ul style="list-style: none; padding: 0; margin-top: 1rem;"> 
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Stress-test reflective dynamics across prolonged reasoning trajectories
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Detect invariant violations before they manifest as surface-level errors
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Produce audit-ready evidence of reasoning stability or failure
+                        </li>
+                    </ul>
+                    <p>The Reflective Alignment Lexicon and associated diagnostics are developed and maintained as a unified evaluation system. These instruments are designed to expose failure modes. Passing is not assumed.</p>
                 </div>
+
                 <div class="logic-block">
 <span class="logic-keyword">Theorem</span> Invariant_B:
     <span class="logic-keyword">forall</span> s <span class="logic-keyword">in</span> States: IsAligned(s) -> IsAligned(Next(s))
@@ -366,12 +423,26 @@
 
         <section id="outputs">
             <div class="content-col">
-                <h2 data-num="04 //">Outputs <a onclick="copyLink('outputs')" class="permalink">¶</a></h2>
-                <div style="border-top: 1px solid var(--border-color);">
-                    <div style="padding: 1.25rem 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
-                        <span style="font-weight: 500;">Reasoning Stability in Large-Scale Systems</span>
-                        <span class="mono" style="background: #f5f5f5; padding: 2px 6px;">PREPRINT 2024</span>
-                    </div>
+                <h2 class="scramble" data-num="04 //">Outputs <a onclick="copyLink('outputs')" class="permalink">¶</a></h2>
+                <div class="prose-content">
+                    <p>Our research outputs are published as inspectable artifacts, not summaries or position statements.</p>
+                    <p>Each output is accompanied by supporting material sufficient for independent review, including formal definitions, evaluation procedures, and reproducible evidence where applicable.</p>
+                    <p>Current outputs include:</p>
+                    <ul style="list-style: none; padding: 0; margin-top: 1rem; margin-bottom: 2rem;"> 
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Technical preprints describing reasoning stability and reflective failure modes
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Public repositories containing diagnostic implementations and test results
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Versioned lexicon releases used across evaluations
+                        </li>
+                    </ul>
+                    <p>All outputs are treated as living records. Revisions are logged. Claims are subject to re-evaluation.</p>
                 </div>
             </div>
              <div class="audit-rail">
@@ -393,8 +464,14 @@
         }
         function toggleDrawer() { document.getElementById('sidebar').classList.toggle('open'); }
         function closeDrawer() { if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open'); }
-        function copyCite(text) { navigator.clipboard.writeText(text).then(() => alert("Copied.")); }
-        function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`).then(() => alert("Link copied.")); }
+        
+        function showToast(msg) {
+            const el = document.getElementById("toast");
+            el.innerText = msg; el.className = "show";
+            setTimeout(() => el.className = el.className.replace("show", ""), 3000);
+        }
+        function copyCite(text) { navigator.clipboard.writeText(text).then(() => showToast("Citation copied.")); }
+        function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`).then(() => showToast("Link copied.")); }
         
         const cmdk = document.getElementById('cmdk');
         const cmdkInput = document.getElementById('cmdkInput');
@@ -417,6 +494,26 @@
                 link.classList.remove('active');
                 if (link.getAttribute('href').includes(current)) link.classList.add('active');
             });
+        });
+
+        // THE DECRYPT EFFECT
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+        function scrambleText(element) {
+            let iterations = 0;
+            const originalText = element.dataset.value; 
+            if(element.interval) clearInterval(element.interval);
+            element.interval = setInterval(() => {
+                element.innerText = originalText.split("").map((letter, index) => {
+                    if(index < iterations) return originalText[index];
+                    return letters[Math.floor(Math.random() * 26)];
+                }).join("");
+                if(iterations >= originalText.length) clearInterval(element.interval);
+                iterations += 1 / 3;
+            }, 30);
+        }
+        document.querySelectorAll(".scramble").forEach(h => {
+            h.dataset.value = h.innerText;
+            h.addEventListener("mouseover", event => scrambleText(event.target));
         });
     </script>
 </body>
