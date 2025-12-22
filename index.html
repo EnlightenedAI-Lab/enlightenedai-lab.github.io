@@ -9,10 +9,9 @@
         :root {
             --bg-color: #ffffff;
             --text-main: #111111;
-            --text-muted: #555555;
-            --accent: #000000;
-            --border: #e0e0e0;
-            --max-width: 960px; 
+            --text-muted: #777777; /* Lighter for high contrast hierarchy */
+            --sidebar-width: 280px;
+            --border-light: #eeeeee;
         }
 
         html {
@@ -31,212 +30,215 @@
             color: var(--text-main);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            display: flex;
+            min-height: 100vh;
         }
 
-        /* UTILITIES */
-        .container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* HEADER - MASTHEAD STYLE */
-        header {
-            background-color: var(--accent);
-            color: white;
-            padding: 0.6rem 0; /* Tighter vertical rhythm */
-            margin-bottom: 3.5rem;
+        /* 1. MASTHEAD SIDEBAR (The "Index" feel) */
+        aside {
+            width: var(--sidebar-width);
+            height: 100vh;
             position: sticky;
             top: 0;
-            z-index: 100;
-        }
-
-        .header-inner {
+            /* No background color - it shares the page paper */
+            border-right: 1px solid var(--border-light); 
+            padding: 4rem 2rem; /* Vertical breathing room */
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: nowrap;
+            flex-direction: column;
+            flex-shrink: 0;
         }
 
-        .lab-name {
-            font-weight: 700;
-            font-size: 1rem;
-            letter-spacing: 0.12em; /* Increased tracking for authority */
-            line-height: 1.2;
+        /* The Masthead */
+        .brand {
+            font-size: 1.1rem;
+            font-weight: 800; /* Heavy weight */
             text-transform: uppercase;
-            white-space: nowrap;
+            letter-spacing: 0.2em; /* Editorial tracking */
+            line-height: 1.5;
+            margin-bottom: 5rem; /* Separates identity from content */
+            color: #000;
         }
 
-        nav {
-            display: flex;
-            align-items: center;
+        /* The Index (Table of Contents) */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li {
+            margin-bottom: 1rem; /* Distinct separation */
         }
 
         nav a {
-            color: #bbb; /* Reduced contrast for secondary feel */
-            text-decoration: none;
-            font-size: 0.8rem; /* Smaller font size */
-            margin-left: 1.25rem;
-            white-space: nowrap;
-            transition: color 0.2s;
-        }
-
-        nav a:hover { color: #fff; }
-
-        /* TYPOGRAPHY */
-        h1, h2, h3 {
-            font-weight: 600;
-            line-height: 1.2;
-            margin-top: 0;
-            letter-spacing: -0.02em;
-        }
-
-        h1 { 
-            font-size: 1.75rem; 
-            margin-bottom: 1.5rem;
-        }
-
-        h2 { 
-            font-size: 1.35rem; 
-            margin-top: 0; 
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        /* Lab-style short underline */
-        h2::after {
-            content: "";
             display: block;
-            width: 60px; 
-            border-bottom: 2px solid var(--text-main);
-            margin-top: 0.5rem;
-        }
-
-        h3 { 
-            font-size: 1.1rem; 
-            margin-bottom: 0.5rem; 
-        }
-
-        p { 
-            margin-bottom: 1rem; 
-            color: #222; 
-        }
-
-        /* SECTIONS */
-        section {
-            padding: 2.5rem 0;
-            scroll-margin-top: 3rem; 
-        }
-
-        /* MISSION */
-        .mission-statement {
-            font-size: 1.15rem;
+            text-decoration: none;
             color: var(--text-muted);
-            font-weight: 300;
-            max-width: 800px;
-            margin-bottom: 1.5rem;
+            font-size: 0.8rem; /* Small, utility text */
+            transition: color 0.2s;
+            position: relative;
+            padding-left: 1.5rem; /* Room for the dot */
         }
 
+        /* Hover: Darken only */
+        nav a:hover {
+            color: #000;
+        }
+
+        /* 3. "YOU ARE HERE" SIGNAL */
+        nav a.active {
+            color: #000;
+            font-weight: 600;
+        }
+
+        nav a.active::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px; /* Center with text */
+            width: 4px;
+            height: 4px;
+            background-color: #000;
+            border-radius: 50%; /* The Dot */
+        }
+
+        /* MAIN CONTENT */
+        main {
+            flex-grow: 1;
+            padding: 4rem 6rem; /* Wide margins */
+            max-width: 1100px;
+        }
+
+        section {
+            padding-bottom: 5rem;
+            margin-bottom: 5rem;
+            /* Minimal divider */
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        section:last-child { border-bottom: none; }
+
+        /* SCIENTIFIC TYPOGRAPHY */
+        h1 {
+            font-size: 2.5rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            text-transform: uppercase; /* Section headers */
+        }
+
+        h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            margin-top: 0;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: #222;
+            max-width: 65ch; /* Strict reading width */
+            font-size: 1.05rem;
+        }
+
+        /* COMPONENTS */
         .why-list {
             list-style: none;
             padding: 0;
-            margin-top: 1rem;
-            max-width: 750px;
+            margin-top: 2rem;
         }
 
         .why-list li {
-            padding-left: 1.1rem;
+            padding-left: 1.5rem;
             position: relative;
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            line-height: 1.5;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #333;
         }
 
         .why-list li::before {
-            content: "■";
+            content: "—"; /* Em dash instead of bullet */
             position: absolute;
             left: 0;
-            top: 7px;
-            font-size: 0.5rem;
-            opacity: 0.7;
+            color: var(--text-muted);
         }
 
-        /* GRID SYSTEM */
         .stack-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .card {
-            border: 1px solid var(--border);
-            padding: 1.5rem;
-            background: #fafafa;
+            border: 1px solid var(--border-light);
+            padding: 2rem;
+            /* No background color */
         }
 
-        .card h3 {
-            margin-top: 0;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.5rem;
-        }
-
-        .card p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 0;
-        }
-
-        /* OUTPUTS */
         .pub-item {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
-            border-bottom: 1px solid #eee;
-            padding: 0.6rem 0;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-light);
         }
-        .pub-item:last-child { border-bottom: none; }
-        .pub-title { font-weight: 500; font-size: 0.95rem; }
-        .pub-meta { font-family: monospace; color: var(--text-muted); font-size: 0.8rem; }
-
-        /* FOOTER */
-        footer {
-            margin-top: 4rem;
-            padding: 2rem 0;
-            border-top: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
+        .pub-title { font-weight: 500; }
+        .pub-meta { font-family: monospace; font-size: 0.8rem; color: var(--text-muted); }
 
         /* RESPONSIVE */
-        @media (max-width: 850px) {
-            .header-inner { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-            nav { flex-wrap: wrap; gap: 0rem; width: 100%; }
-            nav a { margin-left: 0; margin-right: 1.25rem; }
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            aside { 
+                width: 100%; 
+                height: auto; 
+                position: relative; 
+                border-right: none; 
+                border-bottom: 1px solid var(--border-light);
+                padding: 2rem 2rem;
+                margin-bottom: 2rem;
+            }
+            .brand { margin-bottom: 2rem; }
+            main { padding: 0 2rem; }
+            section { padding-bottom: 3rem; margin-bottom: 3rem; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container header-inner">
-            <div class="lab-name">Enlightened AI Research Lab</div>
-            <nav>
-                <a href="#mission">Mission</a>
-                <a href="#theory">Theory</a>
-                <a href="#specs">Specifications</a>
-                <a href="#instruments">Instruments</a>
-                <a href="#outputs">Outputs</a>
-                <a href="#gallery">Gallery</a>
-            </nav>
+    <aside>
+        <div class="brand">
+            Enlightened AI<br>
+            Research Lab
         </div>
-    </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#mission" class="nav-link">Mission</a></li>
+                <li><a href="#theory" class="nav-link">Theory</a></li>
+                <li><a href="#specs" class="nav-link">Specifications</a></li>
+                <li><a href="#instruments" class="nav-link">Instruments</a></li>
+                <li><a href="#outputs" class="nav-link">Outputs</a></li>
+                <li><a href="#gallery" class="nav-link">Gallery</a></li>
+            </ul>
+        </nav>
+    </aside>
 
-    <main class="container">
+    <main>
 
         <section id="mission">
             <h1>Mission</h1>
-            <p class="mission-statement">We advance the science of reflective alignment and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent, stable, and aligned under high-complexity conditions.</p>
+            <p style="font-size: 1.4rem; font-weight: 300; line-height: 1.4; color: #111; margin-bottom: 3rem;">
+                We advance the science of reflective alignment and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.
+            </p>
             
             <ul class="why-list">
                 <li>Bridge the gap between theoretical safety guarantees and empirical model behavior.</li>
@@ -296,12 +298,34 @@
             <p>Visualizations of reasoning topologies, process graphs for diagnostic workflows, and schematics demonstrating the internal state transitions of reflective systems under adversarial stress.</p>
         </section>
 
+        <footer style="margin-top: 2rem; font-size: 0.8rem; color: #999;">
+            &copy; 2025 Enlightened AI Research Lab. All rights reserved.
+        </footer>
+
     </main>
 
-    <footer class="container">
-        <p>&copy; 2025 Enlightened AI Research Lab. <br>
-        All rights reserved.</p>
-    </footer>
+    <script>
+        // Simple logic to move the "active" class based on scroll position
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
 
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
