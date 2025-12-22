@@ -9,11 +9,25 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+    <script type="application/json" id="audit-manifest">
+    {
+        "doc_id": "EAI-2025-001",
+        "classification": "PUBLIC",
+        "version": "1.2.0",
+        "hash": "8f92a1",
+        "last_audit": "2025-12-20T14:00:00Z",
+        "claims": [
+            { "id": "M1.0", "scope": "CONCEPTUAL", "confidence": "HIGH" },
+            { "id": "T-01", "scope": "FORMAL", "confidence": "ABSOLUTE" }
+        ]
+    }
+    </script>
+
     <style>
-        /* THEME: INSTITUTE STANDARD V6 (THE AUDIT PROTOCOL) */
+        /* THEME: INSTITUTE STANDARD V7 (SYSTEM ARTIFACT) */
         :root {
             --bg-color: #ffffff;
-            --text-main: #0a0a0a; /* Deepest Black */
+            --text-main: #0a0a0a;
             --text-muted: #666666;
             --border-color: #e0e0e0;
             --sidebar-width: 280px;
@@ -41,6 +55,15 @@
         /* --- UTILITIES --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .hidden { display: none; }
+        
+        /* Permalink Anchor */
+        .permalink {
+            text-decoration: none; color: #ccc; margin-left: 0.5rem; 
+            font-family: var(--font-mono); font-weight: 400; font-size: 0.9em;
+            opacity: 0; transition: opacity 0.2s; cursor: pointer;
+        }
+        h1:hover .permalink, h2:hover .permalink { opacity: 1; }
+        .permalink:hover { color: #000; }
 
         /* --- MOBILE TOP BAR --- */
         .mobile-bar {
@@ -71,42 +94,24 @@
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* MASTHEAD REFACTOR: HEAVY & INDUSTRIAL */
         .brand {
             font-family: var(--font-stack);
-            font-weight: 800; /* Extra Bold */
-            font-size: 0.9rem; 
-            text-transform: uppercase;
-            letter-spacing: -0.04em; /* Very tight Swiss tracking */
-            line-height: 1.1; 
-            margin-bottom: 3.5rem;
-            color: #000;
+            font-weight: 800; font-size: 0.9rem; text-transform: uppercase;
+            letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 3.5rem; color: #000;
         }
-        
         .brand span {
-            display: block;
-            margin-top: 4px;
-            font-weight: 500;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
+            display: block; margin-top: 4px; font-weight: 500; font-size: 0.75rem; letter-spacing: 0.05em; color: var(--text-muted);
         }
 
-        /* MODE TOGGLE */
         .mode-toggle {
-            margin-bottom: 2rem;
-            display: flex; gap: 1rem;
+            margin-bottom: 2rem; display: flex; gap: 1rem;
             font-family: var(--font-mono); font-size: 0.7rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;
         }
-        .toggle-btn {
-            cursor: pointer; color: #999; transition: color 0.2s;
-        }
+        .toggle-btn { cursor: pointer; color: #999; transition: color 0.2s; }
         .toggle-btn:hover { color: #000; }
         .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 
-        /* Navigation */
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { margin-bottom: 2px; }
         nav a {
@@ -124,7 +129,6 @@
         /* --- MAIN CONTENT --- */
         main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; }
 
-        /* DOCUMENT CONTROL HEADER (ISO Style) */
         .doc-header {
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 1rem; margin-bottom: 3rem;
@@ -135,20 +139,12 @@
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
 
-        /* GRID SYSTEM */
         section {
             margin-bottom: 5rem; scroll-margin-top: 5rem;
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 0;
-            position: relative;
+            display: grid; grid-template-columns: 1fr; gap: 0; position: relative;
         }
 
-        /* Typography */
-        h1 { 
-            font-size: 2rem; font-weight: 600; 
-            letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; 
-        }
+        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; }
         h2 {
             font-size: 1rem; font-weight: 700; text-transform: uppercase;
             letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0;
@@ -156,66 +152,45 @@
         }
         h2::before {
             content: attr(data-num); font-family: var(--font-mono);
-            font-size: 0.75rem; color: var(--text-muted);
-            margin-right: 0.75rem; font-weight: 400;
+            font-size: 0.75rem; color: var(--text-muted); margin-right: 0.75rem; font-weight: 400;
         }
         p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
         .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
 
-        /* --- AUDIT MODE (Formerly Evidence) --- */
+        /* --- AUDIT MODE --- */
         .audit-rail {
-            display: none; 
-            padding-left: 1.5rem;
-            border-left: 1px solid var(--border-color);
+            display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color);
             font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);
         }
         
-        /* The Epistemic Claim Box */
         .claim-box {
-            margin-bottom: 1.5rem; padding: 0.75rem;
-            background: #fafafa; border: 1px solid #eee;
-            position: relative;
+            margin-bottom: 1.5rem; padding: 0.75rem; background: #fafafa; border: 1px solid #eee; position: relative;
         }
-        .claim-box::before {
-            content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #e0e0e0;
-        }
-        .claim-header {
-            display: flex; justify-content: space-between; margin-bottom: 0.5rem;
-            border-bottom: 1px solid #eee; padding-bottom: 4px;
-        }
+        .claim-box::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #e0e0e0; }
+        .claim-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
         .claim-id { font-weight: 700; color: #000; }
         
-        /* New Metadata */
         .meta-row { display: flex; gap: 1rem; margin-bottom: 0.5rem; opacity: 0.8; }
         .claim-link { display: block; color: #555; text-decoration: none; margin-top: 0.5rem; }
         .claim-link:hover { color: #000; text-decoration: underline; }
 
-        /* Audit Footer */
         .section-ledger {
-            display: none; grid-column: 1 / -1;
-            margin-top: 2rem; padding: 1rem;
+            display: none; grid-column: 1 / -1; margin-top: 2rem; padding: 1rem;
             background: #fcfcfc; border: 1px solid var(--border-color);
-            font-family: var(--font-mono); font-size: 0.7rem;
-            justify-content: space-between; align-items: center;
+            font-family: var(--font-mono); font-size: 0.7rem; justify-content: space-between; align-items: center;
         }
         .cite-btn {
-            background: #fff; border: 1px solid #ccc;
-            padding: 4px 10px; cursor: pointer; font-family: inherit;
-            text-transform: uppercase; font-weight: 500;
+            background: #fff; border: 1px solid #ccc; padding: 4px 10px;
+            cursor: pointer; font-family: inherit; text-transform: uppercase; font-weight: 500;
         }
         .cite-btn:active { background: #000; color: #fff; }
 
-        /* Mode Activation */
         body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="audit"] .audit-rail { display: block; }
         body[data-mode="audit"] .section-ledger { display: flex; }
-        
-        /* Falsifiability Hooks */
-        body[data-mode="audit"] .fact-hook {
-            background-color: rgba(0,0,0,0.04); border-bottom: 1px solid #999; cursor: help;
-        }
+        body[data-mode="audit"] .fact-hook { background-color: rgba(0,0,0,0.04); border-bottom: 1px solid #999; cursor: help; }
 
-        /* Publications */
+        /* --- PUBLICATIONS --- */
         .pub-list { border-top: 1px solid var(--border-color); }
         .pub-item {
             padding: 1.25rem 0; border-bottom: 1px solid var(--border-color);
@@ -224,14 +199,56 @@
         .pub-title { font-weight: 500; }
         .pub-meta {
             font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);
-            background: #f5f5f5; padding: 3px 6px; border-radius: 3px;
-            margin-left: 1rem; white-space: nowrap;
+            background: #f5f5f5; padding: 3px 6px; border-radius: 3px; margin-left: 1rem; white-space: nowrap;
         }
 
         footer {
-            margin-top: 5rem; padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
+            margin-top: 5rem; padding-top: 2rem; border-top: 1px solid var(--border-color);
             font-family: var(--font-mono); font-size: 0.7rem; color: #888;
+        }
+
+        /* --- COMMAND PALETTE STYLES --- */
+        #cmdk { display:none; position:fixed; inset:0; background:rgba(255,255,255,0.7); backdrop-filter: blur(5px); z-index:2000; }
+        .cmdk-container {
+            max-width:640px; margin: 15vh auto; background:#fff; 
+            border:1px solid #000; box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+        }
+        .cmdk-header {
+            padding:12px 16px; border-bottom:1px solid #eee; 
+            font-family:var(--font-mono); font-size:11px; color:#999; display:flex; justify-content:space-between;
+        }
+        .cmdk-body { padding: 0; }
+        #cmdkInput {
+            width:100%; padding:16px; border:none; outline:none;
+            font-family:var(--font-stack); font-size:16px; font-weight: 500;
+        }
+        #cmdkResults { max-height:320px; overflow:auto; border-top:1px solid #f2f2f2; }
+        .cmdk-item {
+            padding:12px 16px; border-bottom:1px solid #fcfcfc; cursor:pointer; display: flex; justify-content: space-between; align-items: center;
+        }
+        .cmdk-item:hover { background: #f4f4f4; }
+        .cmdk-item-label { font-weight:500; font-size: 0.9rem; }
+        .cmdk-item-meta { font-family: var(--font-mono); font-size: 0.7rem; color: #999; }
+        
+        .cmdk-footer {
+            padding: 10px 16px; background: #fafafa; border-top: 1px solid #eee; display: flex; gap: 10px;
+        }
+        .shortcut-hint {
+            font-family: var(--font-mono); font-size: 0.65rem; color: #999; margin-top: 2rem; display: block;
+        }
+
+        /* --- PRINT STYLES --- */
+        @media print {
+            .mobile-bar, aside, .mode-toggle, .cite-btn, #cmdk, .permalink { display: none !important; }
+            body { display: block; padding: 0; margin: 0; font-size: 11pt; }
+            main { padding: 0 !important; max-width: 100% !important; }
+            .doc-header { margin-bottom: 20px !important; border-bottom: 2px solid #000; }
+            section { break-inside: avoid; page-break-inside: avoid; margin-bottom: 30px; }
+            a { color: #000; text-decoration: none; }
+            .audit-rail { 
+                display: block !important; border: 1px solid #ccc; padding: 10px; margin-top: 10px; break-inside: avoid;
+            }
+            .claim-box { background: #fff; border: 1px solid #000; margin-bottom: 10px; }
         }
 
         /* --- RESPONSIVE --- */
@@ -245,26 +262,43 @@
             aside.open { transform: translateX(0); }
             main { padding: 2rem 1.5rem; }
             
-            /* Mobile Header simplifies */
             .doc-header { gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
             
-            /* Mobile Audit: Stack vertically as a Log */
             body[data-mode="audit"] section { grid-template-columns: 1fr; gap: 1rem; }
             body[data-mode="audit"] .audit-rail { 
                 border-left: none; border-top: 1px solid #eee; 
                 padding-left: 0; padding-top: 1.5rem; margin-top: 0;
-                background: #f9f9f9; padding: 1rem; /* Card style for rail on mobile */
+                background: #f9f9f9; padding: 1rem; 
             }
             .section-ledger { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+            .permalink { display: none; } /* No hover on mobile */
         }
     </style>
 </head>
 <body data-mode="reader">
 
+    <div id="cmdk" onclick="if(event.target === this) closeCmdk()">
+        <div class="cmdk-container">
+            <div class="cmdk-header">
+                <span>COMMAND PALETTE</span>
+                <span>ESC TO CLOSE</span>
+            </div>
+            <div class="cmdk-body">
+                <input id="cmdkInput" placeholder="Search sections, claims, artifacts..." autocomplete="off">
+                <div id="cmdkResults"></div>
+                <div class="cmdk-footer">
+                    <button class="cite-btn" onclick="setMode('reader'); closeCmdk();">Switch to Reader</button>
+                    <button class="cite-btn" onclick="setMode('audit'); closeCmdk();">Switch to Audit</button>
+                    <button class="cite-btn" onclick="window.print(); closeCmdk();">Print / PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <header class="mobile-bar">
         <div class="mobile-brand">ENLIGHTENED AI</div>
         <div style="display: flex; gap: 10px;">
-            <button class="mobile-btn" onclick="toggleMode()">Reader</button>
+            <button class="mobile-btn" onclick="openCmdk()">CMD+K</button>
             <button class="mobile-btn" onclick="toggleDrawer()">Index</button>
         </div>
     </header>
@@ -290,6 +324,8 @@
                 <li><a href="#outputs" class="nav-link" onclick="closeDrawer()">Outputs</a></li>
             </ul>
         </nav>
+        
+        <span class="shortcut-hint">PRESS ⌘K FOR PALETTE</span>
     </aside>
 
     <main>
@@ -310,7 +346,7 @@
 
         <section id="mission">
             <div class="content-col">
-                <h1>Mission</h1>
+                <h1>Mission <a onclick="copyLink('mission')" class="permalink">¶</a></h1>
                 <p class="abstract">
                     We advance the science of <span class="fact-hook" title="M1.0">reflective alignment</span> and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.
                 </p>
@@ -349,7 +385,7 @@
 
         <section id="theory">
             <div class="content-col">
-                <h2 data-num="01 //">Theory</h2>
+                <h2 data-num="01 //">Theory <a onclick="copyLink('theory')" class="permalink">¶</a></h2>
                 <p>Our research investigates the <span class="fact-hook">normative foundations</span> of reflective equilibrium in artificial agents. We focus on defining the mathematical bounds of self-modifying systems.</p>
             </div>
 
@@ -375,7 +411,7 @@
 
         <section id="outputs">
             <div class="content-col">
-                <h2 data-num="04 //">Outputs</h2>
+                <h2 data-num="04 //">Outputs <a onclick="copyLink('outputs')" class="permalink">¶</a></h2>
                 <div class="pub-list">
                     <div class="pub-item">
                         <span class="pub-title">Reasoning Stability in Large-Scale Systems</span>
@@ -397,7 +433,6 @@
                         <span class="claim-id">REPO STATUS</span>
                     </div>
                     <span style="color: #009900; font-weight: 500; font-size: 0.7rem; display:block; margin-top:0.5rem;">● PASSING (CI/CD)</span>
-                    <span style="display:block; margin-top:0.25rem; color:#999; font-size: 0.65rem;">Last build: 14 mins ago</span>
                 </div>
             </div>
             
@@ -413,46 +448,74 @@
     </main>
 
     <script>
-        // TOGGLE LOGIC
+        // --- CORE TOGGLES ---
         function setMode(mode) {
             document.body.setAttribute('data-mode', mode);
-            
-            // Update buttons
             document.getElementById('btn-reader').classList.toggle('active', mode === 'reader');
             document.getElementById('btn-audit').classList.toggle('active', mode === 'audit');
-            
-            // Update mobile button text
-            const mobileBtn = document.querySelector('.mobile-btn[onclick="toggleMode()"]');
-            if(mobileBtn) mobileBtn.textContent = mode === 'reader' ? 'Reader' : 'Audit';
         }
 
-        function toggleMode() {
-            const current = document.body.getAttribute('data-mode');
-            setMode(current === 'reader' ? 'audit' : 'reader');
-        }
-
-        // COPY CITE LOGIC
+        // --- CLIPBOARD ---
         function copyCite(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = "COPIED";
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                }, 1500);
-            });
-        }
-
-        // DRAWER LOGIC
-        const sidebar = document.getElementById('sidebar');
-        function toggleDrawer() {
-            sidebar.classList.toggle('open');
-        }
-        function closeDrawer() {
-            if (window.innerWidth <= 900) sidebar.classList.remove('open');
+            navigator.clipboard.writeText(text).then(() => { alert("Citation copied."); });
         }
         
-        // SCROLL HIGHLIGHT
+        function copyLink(id) {
+            const url = `${location.origin}${location.pathname}#${id}`;
+            navigator.clipboard.writeText(url).then(() => { alert("Section link copied."); });
+        }
+
+        // --- MOBILE DRAWER ---
+        const sidebar = document.getElementById('sidebar');
+        function toggleDrawer() { sidebar.classList.toggle('open'); }
+        function closeDrawer() { if (window.innerWidth <= 900) sidebar.classList.remove('open'); }
+
+        // --- CMDK LOGIC ---
+        const cmdk = document.getElementById('cmdk');
+        const cmdkInput = document.getElementById('cmdkInput');
+        const cmdkResults = document.getElementById('cmdkResults');
+        
+        const cmdkIndex = [
+            { label: "Mission Statement", id: "mission", meta: "Section" },
+            { label: "Reflective Theory", id: "theory", meta: "Section" },
+            { label: "Outputs / Publications", id: "outputs", meta: "Section" },
+            { label: "CLAIM [M1.0] - Reflective Alignment", id: "mission", meta: "Claim" },
+            { label: "PROOF [T-01] - Invariant B", id: "theory", meta: "Proof" },
+        ];
+
+        function openCmdk() {
+            cmdk.style.display = "block";
+            cmdkInput.value = "";
+            renderCmdk("");
+            setTimeout(() => cmdkInput.focus(), 50);
+        }
+
+        function closeCmdk() { cmdk.style.display = "none"; }
+
+        function renderCmdk(q) {
+            const query = q.trim().toLowerCase();
+            const hits = cmdkIndex.filter(x => x.label.toLowerCase().includes(query) || x.meta.toLowerCase().includes(query));
+            
+            cmdkResults.innerHTML = hits.map(h => `
+                <div class="cmdk-item" onclick="location.hash='#${h.id}'; closeCmdk();">
+                    <span class="cmdk-item-label">${h.label}</span>
+                    <span class="cmdk-item-meta">${h.meta}</span>
+                </div>
+            `).join("") || `<div style="padding:16px; color:#999; text-align:center;">No artifacts found</div>`;
+        }
+
+        // Keyboard Listener
+        document.addEventListener("keydown", (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+                e.preventDefault();
+                openCmdk();
+            }
+            if (e.key === "Escape") closeCmdk();
+        });
+        
+        cmdkInput.addEventListener("input", (e) => renderCmdk(e.target.value));
+
+        // --- SCROLL SPY ---
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('section');
         window.addEventListener('scroll', () => {
