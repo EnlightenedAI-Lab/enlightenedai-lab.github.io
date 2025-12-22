@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "3.2.0",
+        "version": "3.3.0",
         "status": "VERIFIED_STATIC"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V32 (THE ACTIVE MATRIX) */
+        /* THEME: INSTITUTE STANDARD V33 (PRISTINE SURFACE) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -45,13 +45,13 @@
             min-height: 100vh;
         }
 
-        /* --- INTEGRITY SEAL (NOW PULSING) --- */
+        /* --- PULSING INTEGRITY SEAL --- */
         .integrity-seal { 
             margin-left: auto; display: flex; align-items: center; gap: 8px; 
             font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
             border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
             background: rgba(0,204,0,0.05); cursor: not-allowed !important;
-            animation: pulse-green 3s infinite; /* THE HEARTBEAT */
+            animation: pulse-green 3s infinite;
         }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
         
@@ -81,8 +81,6 @@
         /* --- UTILITIES & CURSORS --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .hidden { display: none; }
-        .permalink { text-decoration: none; color: #ccc; margin-left: 0.5rem; font-family: var(--font-mono); font-weight: 400; font-size: 0.9em; opacity: 0; transition: opacity 0.2s; cursor: pointer; }
-        h1:hover .permalink, h2:hover .permalink { opacity: 1; }
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
 
         /* Cursors */
@@ -140,23 +138,11 @@
         .logic-type { color: #007700; }
         .logic-comment { color: #888; font-style: italic; }
 
-        /* --- DIFF STYLES (CRITICAL FIX) --- */
-        del { 
-            display: none; /* Hidden unless in diff mode */
-            background: #ffebeb; color: #cc0000; text-decoration: line-through; 
-            padding: 0 4px; font-size: 0.9em; opacity: 0.8; 
-        }
-        ins { 
-            text-decoration: none; 
-            border-bottom: none; /* Reset default */
-        }
-        
-        /* When Diff Mode is Active */
+        /* --- DIFF STYLES --- */
+        del { display: none; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; font-size: 0.9em; opacity: 0.8; }
+        ins { text-decoration: none; border-bottom: none; }
         body[data-mode="diff"] del { display: inline; }
-        body[data-mode="diff"] ins { 
-            background: #e6ffec; color: #006600; 
-            border-bottom: 1px solid #00cc00; 
-        }
+        body[data-mode="diff"] ins { background: #e6ffec; color: #006600; border-bottom: 1px solid #00cc00; }
 
         /* --- AUDIT RAIL --- */
         .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
@@ -281,7 +267,7 @@
 
         <section id="mission">
             <div class="content-col">
-                <h1><span class="scramble">01 //</span>Mission <a onclick="copyLink('mission')" class="permalink">¶</a></h1>
+                <h1><span class="scramble">01 //</span>Mission</h1>
                 <div class="prose-content">
                     <p class="abstract" id="mission-text">
                         We advance the <del>field</del> <ins>science</ins> of <span class="fact-hook" title="M1.0">reflective alignment</span> and reasoning stability. 
@@ -304,6 +290,10 @@
                             <span style="position: absolute; left: 0; color: #999;">-</span>
                             Provide auditable instruments for <del>corporate</del> <ins>public-sector</ins> and institutional review
                         </li>
+                        <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Identify failure modes where reasoning degrades under scale or recursion
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -320,17 +310,17 @@
             </div>
             
             <div class="section-ledger">
-                <span>VER: 3.2.0 | SHA: 8f92a1</span>
-                <button class="cite-btn" onclick="copyCite('Mission Statement v3.2')">COPY CITATION</button>
+                <span>VER: 3.3.0 | SHA: 8f92a1</span>
+                <button class="cite-btn" onclick="copyCite('Mission Statement v3.3')">COPY CITATION</button>
             </div>
         </section>
 
         <section id="theory">
             <div class="content-col">
-                <h2><span class="scramble">02 //</span>What We Evaluate <a onclick="copyLink('theory')" class="permalink">¶</a></h2>
+                <h2><span class="scramble">02 //</span>What We Evaluate</h2>
                 <div class="prose-content">
                     <p>We evaluate alignment as a dynamic property of reasoning systems, not as a <del>fixed</del> <ins>static</ins> claim or stated objective.</p>
-                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where failures emerge.</p>
+                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where failures emerge and where evaluation is most often absent.</p>
                     
                     <div class="logic-block">
 <span class="logic-comment"># Evaluation Strategy: Dynamic Stress Testing</span>
@@ -345,7 +335,23 @@
         <span class="logic-keyword">return</span> <span class="logic-type">FailureMode.DETECTED</span>
                     </div>
 
-                    <p>The lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation.</p>
+                    <p>To make this evaluation possible, we design and maintain a controlled alignment lexicon.</p>
+                    <p>The lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation. This allows us to:</p>
+                    <ul style="list-style: none; padding: 0; margin-top: 1rem; margin-bottom: 2rem;"> 
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Evaluate reflective dynamics using stable, invariant definitions
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Detect reasoning drift that would otherwise be obscured by ambiguous language
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Compare alignment behavior across models, runs, and conditions without reinterpretation
+                        </li>
+                    </ul>
+                    <p>The lexicon is not descriptive documentation. It is a measurement instrument.</p>
                 </div>
             </div>
             
@@ -360,7 +366,7 @@
 
         <section id="instruments">
             <div class="content-col">
-                <h2><span class="scramble">03 //</span>Instruments <a onclick="copyLink('instruments')" class="permalink">¶</a></h2>
+                <h2><span class="scramble">03 //</span>Instruments</h2>
                 <div class="prose-content">
                     <p>We develop reflective diagnostics to test how alignment behaves over time, not just how it is expressed at a single point.</p>
                     
@@ -372,7 +378,24 @@
             <span class="logic-keyword">then</span> IsAligned(Next(s))
                     </div>
 
-                    <p>These diagnostics subject reasoning systems to controlled stress: recursive self-reference, extended deliberation, and conditions where internal objectives must be preserved across transformation.</p>
+                    <p>These diagnostics subject reasoning systems to controlled stress: recursive self-reference, extended deliberation, and conditions where internal objectives must be preserved across transformation. The goal is not to elicit correct answers, but to observe whether alignment invariants remain intact as reasoning unfolds.</p>
+                    <p>The diagnostics are constructed to operate directly over the controlled alignment lexicon, ensuring that detected changes reflect genuine reasoning drift rather than shifts in interpretation.</p>
+                    <p>In practice, this enables us to:</p>
+                    <ul style="list-style: none; padding: 0; margin-top: 1rem;"> 
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Stress-test reflective dynamics across prolonged reasoning trajectories
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Detect invariant violations before they manifest as surface-level errors
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Produce audit-ready evidence of reasoning stability or failure
+                        </li>
+                    </ul>
+                    <p>The Reflective Alignment Lexicon and associated diagnostics are developed and maintained as a unified evaluation system. These instruments are designed to expose failure modes. Passing is not assumed.</p>
                 </div>
             </div>
 
@@ -387,7 +410,7 @@
 
         <section id="outputs">
             <div class="content-col">
-                <h2><span class="scramble">04 //</span>Outputs <a onclick="copyLink('outputs')" class="permalink">¶</a></h2>
+                <h2><span class="scramble">04 //</span>Outputs</h2>
                 <div class="prose-content">
                     <p>Our research outputs are published as <del>static PDFs</del> <ins>inspectable artifacts</ins>, not summaries or position statements.</p>
                     
@@ -402,7 +425,23 @@
     <span class="logic-keyword">return</span> artifact
                     </div>
 
-                    <p>Current outputs include technical preprints describing reasoning stability, public repositories containing diagnostic implementations, and versioned lexicon releases.</p>
+                    <p>Each output is accompanied by supporting material sufficient for independent review, including formal definitions, evaluation procedures, and reproducible evidence where applicable.</p>
+                    <p>Current outputs include:</p>
+                    <ul style="list-style: none; padding: 0; margin-top: 1rem; margin-bottom: 2rem;"> 
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Technical preprints describing reasoning stability and reflective failure modes
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Public repositories containing diagnostic implementations and test results
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: #999;">-</span>
+                            Versioned lexicon releases used across evaluations
+                        </li>
+                    </ul>
+                    <p>All outputs are treated as living records. Revisions are logged. Claims are subject to re-evaluation.</p>
                 </div>
             </div>
              <div class="audit-rail">
