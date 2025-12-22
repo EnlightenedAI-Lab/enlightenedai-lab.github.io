@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "1.7.0",
+        "version": "1.8.0",
         "status": "VERIFIED_STATIC"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V15 (AGGRESSIVE CURSORS) */
+        /* THEME: INSTITUTE STANDARD V16 (TEXT CURSOR FIX) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -45,31 +45,30 @@
             min-height: 100vh;
         }
 
-        /* --- AGGRESSIVE CURSOR OVERRIDES (THE V15 UPDATE) --- */
+        /* --- CURSOR BEHAVIOR (FIXED) --- */
         
-        /* 1. The Seal: "Immutable / Locked" (Red Circle Slash) */
+        /* 1. Logic/Code: Now standard "I-Beam" text selection */
+        .logic-block, .logic-block * { cursor: text !important; }
+
+        /* 2. The Seal: "Immutable" (Stop Sign) */
         .integrity-seal { cursor: not-allowed !important; }
 
-        /* 2. The Brand: "Precision Instrument" (Crosshair) */
+        /* 3. The Brand: "Precision" (Crosshair) */
         .brand, .brand * { cursor: crosshair !important; }
 
-        /* 3. Logic/Code: "Data Entry" (Cell) */
-        .logic-block { cursor: cell !important; }
-
-        /* 4. Metadata/Hooks: "Query Info" (Question Mark) */
+        /* 4. Metadata: "Info" (Question Mark) */
         .fact-hook, .provenance-term, .claim-box, .doc-header { cursor: help !important; }
 
-        /* 5. Prose: "Read Only PDF" (Force Arrow, KILL I-Beam) */
+        /* 5. Prose: "Read Only" (Arrow) */
         p, .abstract, h1, h2, h3, li { cursor: default !important; }
 
-        /* 6. Interaction: Standard Pointer */
+        /* 6. Links/Buttons: Pointer */
         a, button, .toggle-btn, .nav-link { cursor: pointer !important; }
 
 
         /* --- UTILITIES --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .hidden { display: none; }
-        
         .permalink {
             text-decoration: none; color: #ccc; margin-left: 0.5rem; 
             font-family: var(--font-mono); font-weight: 400; font-size: 0.9em;
@@ -229,6 +228,7 @@
         .internal-state {
             display: none; font-family: var(--font-mono); font-size: 0.75rem; color: #555;
             background: #f4f4f4; padding: 1rem; border-left: 2px solid #ccc; margin: 1.5rem 0; max-width: 65ch;
+            cursor: text;
         }
         .state-label { display: block; font-weight: 700; color: #000; margin-bottom: 0.5rem; font-size: 0.65rem; letter-spacing: 0.1em; }
         .code-line { display: block; margin-bottom: 0.25rem; }
@@ -392,8 +392,8 @@
             </div>
 
             <div class="section-ledger">
-                <span>VER: 1.7.0 | SHA: 8f92a1</span>
-                <button class="cite-btn" onclick="copyCite('Mission Statement v1.7, EAI Lab')">COPY CITATION</button>
+                <span>VER: 1.8.0 | SHA: 8f92a1</span>
+                <button class="cite-btn" onclick="copyCite('Mission Statement v1.8, EAI Lab')">COPY CITATION</button>
             </div>
         </section>
 
