@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enlightened AI Research Lab</title>
     <style>
-        /* THEME: INSTITUTE STANDARD (NIST / RFC / ISO)
-           Design Logic:
-           - No decorative fonts.
-           - System stack for maximum "native tool" credibility.
-           - Strict separation between "Label" (Nav/Headers) and "Content" (Body).
-        */
+        /* THEME: INSTITUTE STANDARD V4 (EVIDENCE EDITION) */
         :root {
             --bg-color: #ffffff;
             --text-main: #111111;
@@ -18,23 +13,16 @@
             --border-color: #e5e5e5;
             --sidebar-width: 280px;
             --mobile-bar-height: 50px;
-            
-            /* TYPE STACK: System UI (Tier 1 Credibility) */
             --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+            --highlight-color: #f4f4f4;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
+        html { scroll-behavior: smooth; }
+        * { box-sizing: border-box; }
 
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: var(--font-stack);
             background-color: var(--bg-color);
             color: var(--text-main);
@@ -44,309 +32,207 @@
             min-height: 100vh;
         }
 
-        /* --- TYPOGRAPHY UTILITIES --- */
-        .mono {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+        /* --- UTILITIES --- */
+        .mono { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .hidden { display: none; }
 
-        /* --- MOBILE TOP BAR (Sticky) --- */
+        /* --- MOBILE TOP BAR --- */
         .mobile-bar {
-            display: none; /* Desktop: Hidden */
-            position: sticky;
-            top: 0;
-            left: 0;
-            width: 100%;
+            display: none;
+            position: sticky; top: 0; left: 0; width: 100%;
             height: var(--mobile-bar-height);
             background: rgba(255, 255, 255, 0.96);
             border-bottom: 1px solid var(--border-color);
             z-index: 1000;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1.5rem;
-            backdrop-filter: blur(8px);
+            align-items: center; justify-content: space-between;
+            padding: 0 1.5rem; backdrop-filter: blur(8px);
         }
-
-        .mobile-brand {
-            font-weight: 700;
-            font-size: 0.9rem;
-            letter-spacing: 0.02em;
-        }
-
+        .mobile-brand { font-weight: 700; font-size: 0.9rem; letter-spacing: 0.02em; }
         .mobile-btn {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: #fff;
-            color: #000;
-            text-transform: uppercase;
-            cursor: pointer;
+            font-family: var(--font-mono); font-size: 0.75rem; padding: 4px 10px;
+            border: 1px solid #ccc; border-radius: 4px; background: #fff;
+            color: #000; text-transform: uppercase; cursor: pointer;
         }
 
-        /* --- SIDEBAR (Desktop & Mobile Drawer) --- */
+        /* --- SIDEBAR --- */
         aside {
-            width: var(--sidebar-width);
-            height: 100vh;
-            position: sticky;
-            top: 0;
+            width: var(--sidebar-width); height: 100vh;
+            position: sticky; top: 0;
             border-right: 1px solid var(--border-color);
             padding: 3rem 2rem;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            background: #fff;
-            z-index: 999;
+            display: flex; flex-direction: column; flex-shrink: 0;
+            background: #fff; z-index: 999;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Lab Masthead */
         .brand {
-            font-weight: 800; /* Heavy */
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em; /* Tighter tracking for "Brand" feel */
-            line-height: 1.3;
-            margin-bottom: 3rem;
-            color: #000;
+            font-weight: 800; font-size: 0.9rem; text-transform: uppercase;
+            letter-spacing: 0.05em; line-height: 1.3; margin-bottom: 3rem; color: #000;
         }
 
-        /* Nav List */
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        /* MODE TOGGLE (Desktop) */
+        .mode-toggle {
+            margin-bottom: 2rem;
+            display: flex; gap: 1rem;
+            font-family: var(--font-mono); font-size: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
         }
-
-        nav li {
-            margin-bottom: 2px; /* Very tight vertical rhythm */
+        .toggle-btn {
+            cursor: pointer; color: var(--text-muted); transition: color 0.2s;
         }
+        .toggle-btn:hover { color: #000; }
+        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; }
 
+        /* Navigation */
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { margin-bottom: 2px; }
         nav a {
-            display: block;
-            text-decoration: none;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 500;
-            padding: 0.5rem 0 0.5rem 1rem; /* Indent for the border */
-            border-left: 2px solid transparent; /* The Invisible Marker */
-            transition: all 0.1s ease;
-            margin-left: -2px; /* Align with container edge */
+            display: block; text-decoration: none; color: var(--text-muted);
+            font-size: 0.85rem; font-weight: 500;
+            padding: 0.5rem 0 0.5rem 1rem; border-left: 2px solid transparent;
+            transition: all 0.1s ease; margin-left: -2px;
         }
-
-        nav a:hover {
-            color: #000;
-        }
-
-        /* ACTIVE STATE (Desktop & Mobile) */
+        nav a:hover { color: #000; }
         nav a.active {
-            color: #000;
-            font-weight: 700;
-            border-left: 3px solid #000; /* The "Bookmarker" */
+            color: #000; font-weight: 700; border-left: 3px solid #000;
             background: linear-gradient(90deg, #f9f9f9 0%, #ffffff 100%);
         }
 
         /* --- MAIN CONTENT --- */
-        main {
-            flex-grow: 1;
-            padding: 3rem 5rem;
-            max-width: 980px;
-        }
+        main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; /* Wider for Evidence */ }
 
-        /* Scientific Document Header */
+        /* Document Header */
         .doc-header {
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-            margin-bottom: 3rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding-bottom: 1rem; margin-bottom: 3rem;
+            display: flex; justify-content: space-between; align-items: center;
             color: var(--text-muted);
         }
 
+        /* GRID SYSTEM FOR EVIDENCE MODE */
         section {
-            margin-bottom: 5rem;
-            scroll-margin-top: 5rem;
+            margin-bottom: 5rem; scroll-margin-top: 5rem;
+            display: grid; 
+            /* Default Reader Mode: Single Column */
+            grid-template-columns: 1fr; 
+            gap: 0;
         }
 
-        /* --- TYPOGRAPHY HIERARCHY --- */
-        h1 {
-            font-size: 2rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-bottom: 1.5rem;
-            color: #000;
-        }
-
+        /* Typography */
+        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; color: #000; }
         h2 {
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1.5rem;
-            margin-top: 0;
-            color: #000;
-            display: flex;
+            font-size: 1rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; margin-bottom: 1.5rem; margin-top: 0;
+            color: #000; display: flex; align-items: center;
+        }
+        h2::before {
+            content: attr(data-num); font-family: var(--font-mono);
+            font-size: 0.75rem; color: var(--text-muted);
+            margin-right: 0.75rem; font-weight: 400;
+        }
+        p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
+        .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
+
+        /* --- EVIDENCE MODE STYLES --- */
+        
+        /* The Margin Rail */
+        .evidence-rail {
+            display: none; /* Hidden in Reader Mode */
+            padding-left: 1rem;
+            border-left: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .claim-box {
+            margin-bottom: 2rem;
+            padding: 0.5rem;
+            background: #fafafa;
+            border: 1px solid #eee;
+        }
+
+        .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.25rem; }
+        .claim-link { display: block; color: #666; text-decoration: none; margin-bottom: 0.25rem; }
+        .claim-link:hover { color: #000; text-decoration: underline; }
+        
+        /* Audit Footer */
+        .audit-footer {
+            display: none; /* Hidden in Reader Mode */
+            grid-column: 1 / -1; /* Span full width */
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #fcfcfc;
+            border: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            justify-content: space-between;
             align-items: center;
         }
-
-        /* Section Numbers (01 //) */
-        h2::before {
-            content: attr(data-num);
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-right: 0.75rem;
-            font-weight: 400;
-        }
-
-        h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: #111;
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-            max-width: 65ch; /* Optimal reading width */
-            color: #222;
-        }
-
-        /* Abstract Style */
-        .abstract {
-            font-size: 1.25rem;
-            line-height: 1.5;
-            font-weight: 400;
-            color: #111;
-            margin-bottom: 2rem;
-            max-width: 800px;
-        }
-
-        /* --- COMPONENTS --- */
         
-        /* List with Editorial Dash */
-        .spec-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 2rem;
+        .cite-btn {
+            background: #fff; border: 1px solid #ccc;
+            padding: 2px 8px; cursor: pointer; font-family: inherit;
         }
-        .spec-list li {
-            padding-left: 1.5rem;
-            position: relative;
-            margin-bottom: 1rem;
-        }
-        .spec-list li::before {
-            content: "—";
-            position: absolute;
-            left: 0;
-            color: var(--text-muted);
+        .cite-btn:active { background: #000; color: #fff; }
+
+        /* ACTIVATING EVIDENCE MODE via Body Attribute */
+        body[data-mode="evidence"] section {
+            /* Switch to 2-Column Grid */
+            grid-template-columns: 1fr 240px; 
+            gap: 2rem;
         }
 
-        /* Technical Grid */
-        .stack-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        .card {
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-            background: #fff;
-        }
-        .card h3 {
-            margin-top: 0;
-            font-size: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .card p {
-            font-size: 0.9rem;
-            color: #444;
-            margin-bottom: 0;
+        body[data-mode="evidence"] .evidence-rail { display: block; }
+        body[data-mode="evidence"] .audit-footer { display: flex; }
+        
+        /* Highlight text hooks in evidence mode */
+        body[data-mode="evidence"] .fact-hook {
+            background-color: rgba(0,0,0,0.05); /* Subtle highlight */
+            border-bottom: 1px solid #ccc;
+            cursor: help;
         }
 
-        /* Bibliography Style Publications */
-        .pub-list {
-            border-top: 1px solid var(--border-color);
-        }
-        .pub-item {
-            padding: 1.25rem 0;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-        .pub-title {
-            font-weight: 500;
-        }
-        .pub-meta {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            background: #f5f5f5;
-            padding: 2px 6px;
-            border-radius: 3px;
-            margin-left: 1rem;
-            white-space: nowrap;
-        }
-
-        footer {
-            margin-top: 5rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: #888;
-        }
-
-        /* --- RESPONSIVE LOGIC --- */
+        /* --- RESPONSIVE --- */
         @media (max-width: 900px) {
             body { flex-direction: column; }
             .mobile-bar { display: flex; }
-
             aside {
-                position: fixed;
-                top: var(--mobile-bar-height);
-                left: 0;
-                width: 100%;
-                height: calc(100vh - var(--mobile-bar-height));
-                transform: translateX(-100%);
-                border-right: none;
-                padding: 2rem;
+                position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px);
+                transform: translateX(-100%); border-right: none; padding: 2rem;
             }
             aside.open { transform: translateX(0); }
-
-            /* Mobile Typography Tweaks */
-            .brand { margin-bottom: 2rem; opacity: 0.6; font-size: 0.8rem; }
+            main { padding: 2rem 1.5rem; }
+            .doc-header { display: none; }
             
-            main { padding: 2rem 1.5rem; margin-top: 0; }
-            .doc-header { display: none; } /* Hide technical header on mobile to save space */
-            
-            h1 { font-size: 1.75rem; }
-            .abstract { font-size: 1.1rem; }
-            
-            .pub-item { flex-direction: column; gap: 0.5rem; }
-            .pub-meta { margin-left: 0; }
+            /* Mobile Evidence Mode: Stack vertically instead of grid */
+            body[data-mode="evidence"] section { grid-template-columns: 1fr; }
+            body[data-mode="evidence"] .evidence-rail { 
+                border-left: none; border-top: 1px solid #eee; 
+                padding-left: 0; padding-top: 1rem; margin-top: 1rem;
+            }
+            .audit-footer { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
         }
     </style>
 </head>
-<body>
-
-    <header class="mobile-bar">
+<body data-mode="reader"> <header class="mobile-bar">
         <div class="mobile-brand">ENLIGHTENED AI</div>
-        <button class="mobile-btn" onclick="toggleDrawer()">Index</button>
+        <div style="display: flex; gap: 10px;">
+            <button class="mobile-btn" onclick="toggleMode()">Mode: Reader</button>
+            <button class="mobile-btn" onclick="toggleDrawer()">Index</button>
+        </div>
     </header>
 
     <aside id="sidebar">
         <div class="brand">
             Enlightened AI<br>
             Research Lab
+        </div>
+
+        <div class="mode-toggle">
+            <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader')">[ Reader ]</span>
+            <span class="toggle-btn" id="btn-evidence" onclick="setMode('evidence')">[ Evidence ]</span>
         </div>
         
         <nav>
@@ -356,79 +242,92 @@
                 <li><a href="#specs" class="nav-link" onclick="closeDrawer()">Specifications</a></li>
                 <li><a href="#instruments" class="nav-link" onclick="closeDrawer()">Instruments</a></li>
                 <li><a href="#outputs" class="nav-link" onclick="closeDrawer()">Outputs</a></li>
-                <li><a href="#gallery" class="nav-link" onclick="closeDrawer()">Gallery</a></li>
             </ul>
         </nav>
     </aside>
 
     <main>
         <div class="doc-header mono">
-            <span>STATUS: PUBLIC</span>
-            <span>UPDATED: DEC 2025</span>
+            <span>STATUS: PUBLIC_DRAFT</span>
+            <span>LAST_COMMIT: 7a8f9b</span>
         </div>
 
         <section id="mission">
-            <h1>Mission</h1>
-            <p class="abstract">
-                We advance the science of reflective alignment and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.
-            </p>
-            
-            <ul class="spec-list">
-                <li>Bridge the gap between theoretical safety guarantees and empirical model behavior.</li>
-                <li>Provide public-sector reviewers with rigorous tools for assessing AI reliability.</li>
-                <li>Solve the "governance gap" where capability outpaces evaluation metrics.</li>
-            </ul>
+            <div class="content-col">
+                <h1>Mission</h1>
+                <p class="abstract">
+                    We advance the science of <span class="fact-hook" title="Definition: Reflective Alignment">reflective alignment</span> and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.
+                </p>
+                
+                <ul class="spec-list">
+                    <li>Bridge the gap between theoretical safety guarantees and empirical model behavior.</li>
+                    <li>Provide public-sector reviewers with rigorous tools for assessing AI reliability.</li>
+                    <li>Solve the "governance gap" where capability outpaces evaluation metrics.</li>
+                </ul>
+            </div>
+
+            <div class="evidence-rail">
+                <div class="claim-box">
+                    <span class="claim-id">CLAIM [M1.0]</span>
+                    <a href="#" class="claim-link">→ Lexicon: R-Align</a>
+                    <a href="#" class="claim-link">→ Dataset: Gov-Gap-24</a>
+                </div>
+                <div class="claim-box">
+                    <span class="claim-id">CLAIM [M1.2]</span>
+                    <a href="#" class="claim-link">→ DOI: 10.5281/zenodo</a>
+                </div>
+            </div>
+
+            <div class="audit-footer">
+                <span>VER: 1.2.0 | HASH: 8f92a1</span>
+                <button class="cite-btn" onclick="copyCite('Mission Statement v1.2, Enlightened AI Lab')">COPY CITATION</button>
+            </div>
         </section>
 
         <section id="theory">
-            <h2 data-num="01 //">Theory</h2>
-            <p>Our research investigates the normative foundations of reflective equilibrium in artificial agents. We focus on defining the mathematical bounds of self-modifying systems, ensuring that reasoning trajectories preserve alignment invariants during recursive cognitive steps.</p>
-        </section>
+            <div class="content-col">
+                <h2 data-num="01 //">Theory</h2>
+                <p>Our research investigates the <span class="fact-hook">normative foundations</span> of reflective equilibrium in artificial agents. We focus on defining the mathematical bounds of self-modifying systems, ensuring that reasoning trajectories preserve alignment invariants.</p>
+            </div>
 
-        <section id="specs">
-            <h2 data-num="02 //">Specifications</h2>
-            <p>We maintain rigorous technical specifications for diagnostic tooling. These standards define the necessary granularity, interpretability, and falsifiability required for reasoning traces to meet auditability standards for high-stakes public sector deployment.</p>
-        </section>
+            <div class="evidence-rail">
+                <div class="claim-box">
+                    <span class="claim-id">PROOF [T-01]</span>
+                    <a href="#" class="claim-link">→ Theorem: Invariant_B</a>
+                    <a href="#" class="claim-link">→ GitHub: /proofs/core</a>
+                </div>
+            </div>
 
-        <section id="instruments">
-            <h2 data-num="03 //">Instruments</h2>
-            <div class="stack-grid">
-                <article class="card">
-                    <h3>Reflective Alignment Theory</h3>
-                    <p>Formalizing the mechanisms by which systems can self-monitor and correct reasoning trajectories without degradation of core alignment constraints.</p>
-                </article>
-                <article class="card">
-                    <h3>Reflective Alignment Lexicon</h3>
-                    <p>A standardized ontology for discussing high-order cognition, eliminating ambiguity in safety-critical definitions.</p>
-                </article>
-                <article class="card">
-                    <h3>Reflective Diagnostics Platform</h3>
-                    <p>Technical tooling for the evaluation of model outputs, designed for auditors requiring verifiable evidence.</p>
-                </article>
+            <div class="audit-footer">
+                <span>VER: 0.9.4 | HASH: 3b11c9</span>
+                <button class="cite-btn" onclick="copyCite('Reflective Theory Proofs, Enlightened AI Lab')">COPY CITATION</button>
             </div>
         </section>
 
         <section id="outputs">
-            <h2 data-num="04 //">Outputs</h2>
-            <div class="pub-list">
-                <div class="pub-item">
-                    <span class="pub-title">Reasoning Stability in Large-Scale Systems</span>
-                    <span class="pub-meta">PREPRINT 2024</span>
-                </div>
-                <div class="pub-item">
-                    <span class="pub-title">The Reflective Alignment Lexicon: v1.0</span>
-                    <span class="pub-meta">TECH REPORT</span>
-                </div>
-                <div class="pub-item">
-                    <span class="pub-title">Diagnostics for Governance: A Framework</span>
-                    <span class="pub-meta">WHITEPAPER</span>
+            <div class="content-col">
+                <h2 data-num="04 //">Outputs</h2>
+                <div class="pub-list">
+                    <div class="pub-item">
+                        <span class="pub-title">Reasoning Stability in Large-Scale Systems</span>
+                        <span class="pub-meta">PREPRINT 2024</span>
+                    </div>
+                    <div class="evidence-rail" style="padding:0; border:none; margin-top:0.5rem;">
+                         <span class="mono" style="color:#000;">↳ ARTIFACTS: [CODE] [DATASET] [LOGS]</span>
+                    </div>
+
+                    <div class="pub-item">
+                        <span class="pub-title">The Reflective Alignment Lexicon: v1.0</span>
+                        <span class="pub-meta">TECH REPORT</span>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <section id="gallery">
-            <h2 data-num="05 //">Gallery</h2>
-            <p>Visualizations of reasoning topologies, process graphs for diagnostic workflows, and schematics demonstrating the internal state transitions of reflective systems under adversarial stress.</p>
+             <div class="evidence-rail">
+                 <div class="claim-box">
+                    <span class="claim-id">REPO STATUS</span>
+                    <span style="color:green">● PASSING (CI/CD)</span>
+                </div>
+            </div>
         </section>
 
         <footer>
@@ -437,39 +336,54 @@
     </main>
 
     <script>
-        const sidebar = document.getElementById('sidebar');
-        const btn = document.querySelector('.mobile-btn');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('section');
+        // TOGGLE LOGIC
+        function setMode(mode) {
+            document.body.setAttribute('data-mode', mode);
+            
+            // Update buttons
+            document.getElementById('btn-reader').classList.toggle('active', mode === 'reader');
+            document.getElementById('btn-evidence').classList.toggle('active', mode === 'evidence');
+            
+            // Update mobile button text
+            const mobileBtn = document.querySelector('.mobile-btn[onclick="toggleMode()"]');
+            if(mobileBtn) mobileBtn.textContent = `Mode: ${mode.charAt(0).toUpperCase() + mode.slice(1)}`;
+        }
 
+        function toggleMode() {
+            const current = document.body.getAttribute('data-mode');
+            setMode(current === 'reader' ? 'evidence' : 'reader');
+        }
+
+        // COPY CITE LOGIC
+        function copyCite(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Citation copied to clipboard: " + text);
+            });
+        }
+
+        // DRAWER LOGIC (Mobile)
+        const sidebar = document.getElementById('sidebar');
         function toggleDrawer() {
             sidebar.classList.toggle('open');
-            btn.textContent = sidebar.classList.contains('open') ? "Close" : "Index";
         }
-
         function closeDrawer() {
-            if (window.innerWidth <= 900) {
-                sidebar.classList.remove('open');
-                btn.textContent = "Index";
-            }
+            if (window.innerWidth <= 900) sidebar.classList.remove('open');
         }
-
+        
+        // SCROLL HIGHLIGHT
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
         window.addEventListener('scroll', () => {
             let current = '';
-            const scrollPos = window.pageYOffset;
             const offset = window.innerWidth <= 900 ? 100 : 150;
-
             sections.forEach(section => {
-                if (scrollPos >= (section.offsetTop - offset)) {
+                if (window.pageYOffset >= (section.offsetTop - offset)) {
                     current = section.getAttribute('id');
                 }
             });
-
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active');
-                }
+                if (link.getAttribute('href').includes(current)) link.classList.add('active');
             });
         });
     </script>
