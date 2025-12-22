@@ -7,30 +7,36 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <script type="application/json" id="audit-manifest">
+    <script type="application/json" id="trusted-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "status": "INTEGRITY_VERIFIED",
-        "hash": "9c11f4",
-        "diff_base": "v1.1.0"
+        "version": "1.3.0",
+        "claims": {
+            "M1.0": "e5b6c8a9..." 
+        },
+        "signatures": {
+            "mission-text": "2f61205197825591e604f79434857731737e9373200a7b489725f75e954c2929"
+        }
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V9 (INTEGRITY SYSTEM) */
+        /* THEME: INSTITUTE STANDARD V10 (SELF-VERIFYING) */
         :root {
             --bg-color: #ffffff;
-            --text-main: #0a0a0a;
-            --text-muted: #666666;
-            --border-color: #e0e0e0;
+            --text-main: #050505;
+            --text-muted: #5e5e5e;
+            --border-color: #e5e5e5;
             --sidebar-width: 280px;
             --mobile-bar-height: 50px;
-            
-            /* TYPE STACK */
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            
+            /* Integrity States */
+            --status-verified: #00cc00;
+            --status-tampered: #cc0000;
         }
 
         html { scroll-behavior: smooth; }
@@ -51,7 +57,6 @@
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .hidden { display: none; }
         
-        /* Permalinks */
         .permalink {
             text-decoration: none; color: #ccc; margin-left: 0.5rem; 
             font-family: var(--font-mono); font-weight: 400; font-size: 0.9em;
@@ -88,13 +93,21 @@
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* MASTHEAD: THE "HARD" LOOK */
         .brand {
             font-family: var(--font-stack);
-            font-weight: 800; font-size: 0.9rem; text-transform: uppercase;
-            letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 3.5rem; color: #000;
+            font-weight: 800; /* Extra Bold */
+            font-size: 0.95rem; 
+            text-transform: uppercase;
+            letter-spacing: -0.04em; /* Maximum Swiss Tightness */
+            line-height: 1.0; 
+            margin-bottom: 3.5rem;
+            color: #000;
+            font-feature-settings: "ss02", "zero"; /* Sharper glyphs */
         }
         .brand span {
-            display: block; margin-top: 4px; font-weight: 500; font-size: 0.75rem; letter-spacing: 0.05em; color: var(--text-muted);
+            display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; 
+            letter-spacing: 0.05em; color: var(--text-muted);
         }
 
         .mode-group {
@@ -135,13 +148,24 @@
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
 
-        /* INTEGRITY SEAL */
+        /* ACTIVE INTEGRITY SEAL */
         .integrity-seal {
             margin-left: auto; display: flex; align-items: center; gap: 8px;
             font-family: var(--font-mono); font-size: 0.7rem; color: #000;
+            border: 1px solid transparent; padding: 4px 8px; border-radius: 4px;
+            transition: all 0.5s;
         }
-        .status-dot { width: 8px; height: 8px; background: #00cc00; border-radius: 50%; display: block; }
+        .status-dot { width: 8px; height: 8px; background: #ccc; border-radius: 50%; display: block; }
         
+        /* Verification States */
+        .integrity-seal.verified { border-color: var(--status-verified); color: #005500; background: rgba(0,204,0,0.05); }
+        .integrity-seal.verified .status-dot { background: var(--status-verified); }
+        
+        .integrity-seal.tampered { border-color: var(--status-tampered); color: var(--status-tampered); background: rgba(204,0,0,0.05); }
+        .integrity-seal.tampered .status-dot { background: var(--status-tampered); animation: blink 0.5s infinite; }
+
+        @keyframes blink { 0% {opacity:1;} 50% {opacity:0.4;} 100% {opacity:1;} }
+
         section {
             margin-bottom: 5rem; scroll-margin-top: 5rem;
             display: grid; grid-template-columns: 1fr; gap: 0; position: relative;
@@ -157,41 +181,15 @@
             content: attr(data-num); font-family: var(--font-mono);
             font-size: 0.75rem; color: var(--text-muted); margin-right: 0.75rem; font-weight: 400;
         }
-        p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
+        
+        /* The Text Block We Will Verify */
+        .verifiable-text {
+            margin-bottom: 1.5rem; max-width: 65ch; color: #222;
+        }
+        
         .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
 
-        /* --- PROVENANCE HOVER --- */
-        .provenance-term {
-            border-bottom: 1px dashed #999; cursor: help; position: relative;
-        }
-        .provenance-term:hover { background: rgba(0,0,0,0.05); color: #000; }
-        
-        .tooltip {
-            visibility: hidden; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
-            background: #111; color: #fff; padding: 8px 12px; border-radius: 2px;
-            font-family: var(--font-mono); font-size: 0.65rem; white-space: nowrap;
-            z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.2s;
-        }
-        .tooltip::after {
-            content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
-            border-width: 5px; border-style: solid; border-color: #111 transparent transparent transparent;
-        }
-        .provenance-term:hover .tooltip { visibility: visible; opacity: 1; }
-
-        /* --- CLAIM DIFF VIEWER --- */
-        del { 
-            display: none; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 2px;
-        }
-        ins { 
-            text-decoration: none; 
-        }
-        
-        /* Diff Mode Active */
-        body[data-mode="diff"] del { display: inline; }
-        body[data-mode="diff"] ins { background: #e6ffec; color: #006600; border-bottom: 1px solid #00cc00; }
-        body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; } /* Dimmed rail in diff mode */
-
-        /* --- AUDIT MODE --- */
+        /* --- AUDIT MODE & RAIL --- */
         .audit-rail {
             display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color);
             font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);
@@ -225,13 +223,12 @@
         .state-label { display: block; font-weight: 700; color: #000; margin-bottom: 0.5rem; font-size: 0.65rem; letter-spacing: 0.1em; }
         .code-line { display: block; margin-bottom: 0.25rem; }
 
-        /* Active Logic */
+        /* Mode Activation */
         body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="audit"] .audit-rail { display: block; }
         body[data-mode="audit"] .section-ledger { display: flex; }
         body[data-mode="audit"] .internal-state { display: block; }
-        
-        body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
+        body[data-mode="audit"] .fact-hook { background-color: rgba(0,0,0,0.04); border-bottom: 1px solid #999; cursor: help; }
 
         /* --- RESPONSIVE --- */
         @media (max-width: 900px) {
@@ -244,10 +241,9 @@
             aside.open { transform: translateX(0); }
             main { padding: 2rem 1.5rem; }
             .doc-header { gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
-            .integrity-seal { width: 100%; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #eee; }
             
-            body[data-mode="audit"] section, body[data-mode="diff"] section { grid-template-columns: 1fr; gap: 1rem; }
-            body[data-mode="audit"] .audit-rail, body[data-mode="diff"] .audit-rail { 
+            body[data-mode="audit"] section { grid-template-columns: 1fr; gap: 1rem; }
+            body[data-mode="audit"] .audit-rail { 
                 border-left: none; border-top: 1px solid #eee; padding-left: 0; padding-top: 1.5rem;
                 background: #f9f9f9; padding: 1rem; margin-top: 0;
             }
@@ -255,7 +251,7 @@
             .permalink { display: none; }
         }
         
-        /* CMDK Style */
+        /* CMDK & PRINT (Kept from V9) */
         #cmdk { display:none; position:fixed; inset:0; background:rgba(255,255,255,0.8); backdrop-filter:blur(5px); z-index:2000; }
         .cmdk-container { max-width:640px; margin: 15vh auto; background:#fff; border:1px solid #000; box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
         .cmdk-header { padding:12px 16px; border-bottom:1px solid #eee; font-family:var(--font-mono); font-size:11px; color:#999; display:flex; justify-content:space-between; }
@@ -264,27 +260,16 @@
         .cmdk-item { padding:12px 16px; border-bottom:1px solid #fcfcfc; cursor:pointer; display: flex; justify-content: space-between; }
         .cmdk-item:hover { background: #f4f4f4; }
         
-        /* PRINT EXPORT STYLE (The "Record") */
         @media print {
             .mobile-bar, aside, .mode-toggle, .cite-btn, #cmdk, .permalink { display: none !important; }
-            main { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
-            .doc-header { border-bottom: 2px solid #000; margin-bottom: 30px; }
-            section { margin-bottom: 30px; page-break-inside: avoid; }
-            .audit-rail { display: block !important; border: 1px solid #000; padding: 10px; margin-top: 10px; font-size: 8pt; }
-            .claim-box { border: 1px solid #000; background: none; }
-            
-            /* Legal Footer generation */
-            body::after {
-                content: "RENDERED FROM LIVE ARTIFACT EAI-2026-001 // GENERATED: " attr(data-date);
-                position: fixed; bottom: 0; left: 0; right: 0;
-                border-top: 1px solid #000; padding: 10px;
-                font-family: "JetBrains Mono", monospace; font-size: 8pt; text-align: center;
-                background: #fff;
-            }
+            main { padding: 0 !important; }
+            .doc-header { border-bottom: 2px solid #000; }
+            section { margin-bottom: 30px; }
+            .audit-rail { display: block !important; border: 1px solid #000; padding: 10px; margin-top: 10px; }
         }
     </style>
 </head>
-<body data-mode="reader">
+<body data-mode="reader" onload="verifyIntegrity()">
 
     <div id="cmdk" onclick="if(event.target === this) closeCmdk()">
         <div class="cmdk-container">
@@ -316,24 +301,19 @@
             <span class="toggle-btn" id="btn-audit" onclick="setMode('audit')">
                 [ AUDIT ] <span>•</span>
             </span>
-            <span class="toggle-btn" id="btn-diff" onclick="setMode('diff')">
-                [ DIFF LOG ] <span>Δ</span>
-            </span>
         </div>
         
         <nav>
             <ul>
                 <li><a href="#mission" class="nav-link" onclick="closeDrawer()">Mission</a></li>
                 <li><a href="#theory" class="nav-link" onclick="closeDrawer()">Theory</a></li>
-                <li><a href="#specs" class="nav-link" onclick="closeDrawer()">Specifications</a></li>
-                <li><a href="#instruments" class="nav-link" onclick="closeDrawer()">Instruments</a></li>
                 <li><a href="#outputs" class="nav-link" onclick="closeDrawer()">Outputs</a></li>
             </ul>
         </nav>
         
-        <button class="cite-btn" style="margin-top: auto; width: 100%; text-align: center;" onclick="window.print()">
-            EXPORT RECORD
-        </button>
+        <div style="margin-top: auto; font-family: var(--font-mono); font-size: 0.6rem; color: #999;">
+            PRESS ⌘K FOR PALETTE
+        </div>
     </aside>
 
     <main>
@@ -347,23 +327,17 @@
                 <span class="doc-val">PUBLIC</span>
             </div>
             
-            <div class="integrity-seal">
+            <div class="integrity-seal" id="seal">
                 <span class="status-dot"></span>
-                INTEGRITY: VERIFIED
+                <span id="seal-text">VERIFYING...</span>
             </div>
         </div>
 
         <section id="mission">
             <div class="content-col">
                 <h1>Mission <a onclick="copyLink('mission')" class="permalink">¶</a></h1>
-                <p class="abstract">
-                    We advance the science of 
-                    <span class="provenance-term">
-                        reflective alignment
-                        <span class="tooltip">LEXICON: R-ALIGN -> DATASET: GOV-GAP</span>
-                    </span> 
-                    and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions.
-                </p>
+                
+                <p class="abstract verifiable-text" id="mission-text">We advance the science of reflective alignment and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.</p>
 
                 <div class="internal-state">
                     <span class="state-label">INTERNAL_STATE_TRACE // T=0.04s</span>
@@ -374,11 +348,7 @@
                 <ul style="list-style: none; padding: 0; margin-top: 2rem;"> 
                     <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
                         <span style="position: absolute; left: 0; color: #999;">—</span>
-                        Bridge the gap between theoretical safety guarantees and <del>real-world</del> <ins>empirical model</ins> behavior.
-                    </li>
-                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #999;">—</span>
-                        Provide public-sector reviewers with rigorous tools for assessing AI reliability.
+                        Bridge the gap between theoretical safety guarantees and empirical model behavior.
                     </li>
                 </ul>
             </div>
@@ -393,7 +363,7 @@
             </div>
 
             <div class="section-ledger">
-                <span>VER: 1.2.0 | SHA: 8f92a1</span>
+                <span>VER: 1.3.0 | SHA: <span class="mono" id="mission-hash-display">...</span></span>
                 <button class="cite-btn" onclick="copyCite('Mission Statement v1.2, EAI Lab')">COPY CITATION</button>
             </div>
         </section>
@@ -401,15 +371,8 @@
         <section id="theory">
             <div class="content-col">
                 <h2 data-num="01 //">Theory <a onclick="copyLink('theory')" class="permalink">¶</a></h2>
-                <p>Our research investigates the <span class="fact-hook">normative foundations</span> of reflective equilibrium in artificial agents. We focus on defining the <ins>verifiable</ins> mathematical bounds of self-modifying systems.</p>
-                
-                <div class="internal-state">
-                    <span class="state-label">INTERNAL_STATE_TRACE // T=0.12s</span>
-                    <span class="code-line">> Theorem_B check: No contradiction found.</span>
-                    <span class="code-line">> Epistemic status: FORMAL_PROOF</span>
-                </div>
+                <p>Our research investigates the <span class="fact-hook">normative foundations</span> of reflective equilibrium in artificial agents.</p>
             </div>
-
             <div class="audit-rail">
                 <div class="claim-box">
                     <div class="claim-header"><span class="claim-id">PROOF [T-01]</span></div>
@@ -419,31 +382,51 @@
             </div>
         </section>
 
-        <section id="outputs">
-            <div class="content-col">
-                <h2 data-num="04 //">Outputs <a onclick="copyLink('outputs')" class="permalink">¶</a></h2>
-                <div style="border-top: 1px solid var(--border-color);">
-                    <div style="padding: 1.25rem 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
-                        <span style="font-weight: 500;">Reasoning Stability in Large-Scale Systems</span>
-                        <span class="mono" style="background: #f5f5f5; padding: 2px 6px;">PREPRINT 2024</span>
-                    </div>
-                </div>
-            </div>
-             <div class="audit-rail">
-                <div class="claim-box">
-                    <div class="claim-header"><span class="claim-id">REPO STATUS</span></div>
-                    <span style="color: #008800; font-size: 0.7rem; display:block; margin-top:0.5rem; font-weight: 600;">● PASSING (CI/CD)</span>
-                </div>
-            </div>
-        </section>
-
         <footer>&copy; 2026 Enlightened AI Research Lab. All rights reserved.</footer>
     </main>
 
     <script>
-        // Set Date for Print Footer
-        document.body.setAttribute('data-date', new Date().toISOString().split('T')[0]);
+        // --- 1. CLIENT-SIDE CRYPTO VERIFICATION (THE REAL DEAL) ---
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
 
+        async function verifyIntegrity() {
+            const seal = document.getElementById('seal');
+            const sealText = document.getElementById('seal-text');
+            const manifestScript = document.getElementById('trusted-manifest');
+            
+            if(!manifestScript) return;
+            const manifest = JSON.parse(manifestScript.textContent);
+            
+            // Get the text we want to verify (Mission Text)
+            // Note: In a real system, we'd verify every section.
+            const targetText = document.getElementById('mission-text').innerText.trim();
+            const calculatedHash = await sha256(targetText);
+            
+            // Display hash in ledger
+            document.getElementById('mission-hash-display').innerText = calculatedHash.substring(0,8);
+            
+            // COMPARE
+            const trustedHash = manifest.signatures["mission-text"];
+            
+            if (calculatedHash === trustedHash) {
+                // MATCH: GREEN SEAL
+                seal.classList.add('verified');
+                sealText.innerText = "INTEGRITY: VERIFIED";
+                console.log("%c INTEGRITY CHECK PASSED ", "background: #00cc00; color: #fff");
+            } else {
+                // MISMATCH: RED SEAL
+                seal.classList.add('tampered');
+                sealText.innerText = "TAMPER DETECTED";
+                console.error("Integrity Mismatch!", { calculated: calculatedHash, trusted: trustedHash });
+            }
+        }
+
+        // --- 2. STANDARD UI LOGIC ---
         function setMode(mode) {
             document.body.setAttribute('data-mode', mode);
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
@@ -451,7 +434,7 @@
         }
         function toggleDrawer() { document.getElementById('sidebar').classList.toggle('open'); }
         function closeDrawer() { if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open'); }
-        function copyCite(text) { navigator.clipboard.writeText(text).then(() => alert("Copied.")); }
+        function copyCite(text) { navigator.clipboard.writeText(text).then(() => alert("Citation copied.")); }
         function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`).then(() => alert("Link copied.")); }
         
         // CMDK Logic
@@ -470,6 +453,17 @@
         }
         document.addEventListener("keydown", e => { if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openCmdk();} if(e.key==="Escape")closeCmdk(); });
         cmdkInput.addEventListener("input", e => renderCmdk(e.target.value));
+        
+        // Scroll Spy
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            let current = '';
+            sections.forEach(section => { if (window.pageYOffset >= section.offsetTop - 150) current = section.getAttribute('id'); });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) link.classList.add('active');
+            });
+        });
     </script>
 </body>
 </html>
