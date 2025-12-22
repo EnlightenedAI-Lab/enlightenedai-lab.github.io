@@ -9,8 +9,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+    <script type="application/json" id="audit-manifest">
+    {
+        "doc_id": "EAI-2026-001",
+        "version": "2.6.0",
+        "status": "VERIFIED_STATIC"
+    }
+    </script>
+
     <style>
-        /* THEME: INSTITUTE STANDARD V24 (THE NEURAL UPLINK) */
+        /* THEME: INSTITUTE STANDARD V26 (EXPLICIT UPLINK) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -37,58 +45,56 @@
             min-height: 100vh;
         }
 
-        /* --- THE "NEURAL UPLINK" (GITHUB MODULE) --- */
+        /* --- THE GITHUB MODULE (NOW WITH ICON) --- */
         .git-module {
-            margin-top: auto; /* Pushes to bottom of sidebar */
+            margin-top: auto; /* Push to bottom */
             margin-bottom: 1rem;
             border: 1px solid #000;
-            padding: 10px 12px;
+            padding: 12px;
             text-decoration: none;
-            display: flex; /* Visible by default */
-            flex-direction: column;
+            display: flex;
+            align-items: center; /* Align icon and text */
+            gap: 12px;
             transition: all 0.15s cubic-bezier(0.2, 0, 0, 1);
             background: #fff;
-            position: relative;
             cursor: pointer !important;
         }
 
-        /* Hover: The "Invert" Effect */
+        /* Hover: Invert Colors */
         .git-module:hover {
             background: #000;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        /* Top Label: "SOURCE_CORE" */
+        /* The GitHub Logo SVG styling */
+        .git-icon { width: 24px; height: 24px; fill: #000; transition: fill 0.1s; }
+        .git-module:hover .git-icon { fill: #fff; }
+
+        .git-info { display: flex; flex-direction: column; flex-grow: 1; }
+
         .git-label {
-            font-family: var(--font-mono); font-size: 0.6rem; color: #666; 
-            letter-spacing: 0.05em; margin-bottom: 4px; text-transform: uppercase;
+            font-family: var(--font-mono); font-size: 0.55rem; color: #666; 
+            letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 2px;
             transition: color 0.1s;
         }
-        .git-module:hover .git-label { color: #888; }
+        .git-module:hover .git-label { color: #aaa; }
 
-        /* Repo Name */
         .git-repo {
-            display: flex; justify-content: space-between; align-items: center;
             font-family: var(--font-mono); font-weight: 700; font-size: 0.75rem; color: #000;
+            display: flex; justify-content: space-between; align-items: center;
             transition: color 0.1s;
         }
         .git-module:hover .git-repo { color: #fff; }
 
-        /* The "Live" Pulse Dot */
         .git-status-dot {
             height: 6px; width: 6px; background-color: #00cc00; border-radius: 50%;
-            display: inline-block; animation: blink-slow 2s infinite;
+            display: inline-block; animation: blink-slow 2s infinite; margin-left: auto;
         }
         @keyframes blink-slow { 0% {opacity:1} 50% {opacity:0.4} 100% {opacity:1} }
 
-        /* VISIBILITY LOGIC: HIDE IN READER MODE */
-        body[data-mode="reader"] .git-module {
-            display: none !important;
-        }
 
-
-        /* --- REST OF CSS (PRESERVED V22) --- */
+        /* --- UTILITIES --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .hidden { display: none; }
         .permalink {
@@ -98,6 +104,14 @@
         }
         h1:hover .permalink, h2:hover .permalink { opacity: 1; }
 
+        /* Cursors */
+        .integrity-seal { cursor: not-allowed !important; }
+        .brand, .brand * { cursor: crosshair !important; }
+        .logic-block, .logic-block * { cursor: cell !important; }
+        .fact-hook, .provenance-term, .claim-box, .doc-header { cursor: help !important; }
+        p, .abstract, h1, h2, h3, li { cursor: default !important; }
+        a, button, .toggle-btn, .nav-link, .git-module { cursor: pointer !important; }
+
         /* Mobile Bar */
         .mobile-bar { display: none; position: sticky; top: 0; left: 0; width: 100%; height: var(--mobile-bar-height); background: rgba(255, 255, 255, 0.98); border-bottom: 1px solid var(--border-color); z-index: 1000; align-items: center; justify-content: space-between; padding: 0 1.25rem; }
         .mobile-brand { font-weight: 800; font-size: 0.85rem; letter-spacing: -0.02em; text-transform: uppercase; }
@@ -106,7 +120,7 @@
         /* Sidebar */
         aside { width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 3rem 2rem; display: flex; flex-direction: column; flex-shrink: 0; background: #fff; z-index: 999; }
 
-        .brand { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 6rem; color: #000; transition: all 0.1s; border: 1px dashed transparent; margin-left: -1px; padding: 1px; cursor: crosshair !important; }
+        .brand { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 6rem; color: #000; transition: all 0.1s; border: 1px dashed transparent; margin-left: -1px; padding: 1px; }
         .brand:hover { border-color: #000; background: rgba(0,0,0,0.02); }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
 
@@ -120,7 +134,7 @@
 
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { margin-bottom: 2px; }
-        nav a { display: block; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0 0.5rem 1rem; border-left: 2px solid transparent; margin-left: -2px; cursor: pointer !important; }
+        nav a { display: block; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0 0.5rem 1rem; border-left: 2px solid transparent; margin-left: -2px; }
         nav a:hover { color: #000; }
         nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9 0%, #ffffff 100%); }
 
@@ -135,20 +149,19 @@
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
 
-        .integrity-seal { margin-left: auto; display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #000; border: 1px solid transparent; padding: 4px 8px; border-radius: 4px; cursor: not-allowed !important; }
+        .integrity-seal { margin-left: auto; display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #000; border: 1px solid transparent; padding: 4px 8px; border-radius: 4px; }
         .status-dot { width: 8px; height: 8px; background: #ccc; border-radius: 50%; display: block; }
         .integrity-seal.verified { border-color: var(--status-verified); color: #005500; background: rgba(0,204,0,0.05); }
         .integrity-seal.verified .status-dot { background: var(--status-verified); }
 
         section { margin-bottom: 5rem; scroll-margin-top: 5rem; display: grid; grid-template-columns: 1fr; gap: 0; position: relative; }
-        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; cursor: default !important; }
-        h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; color: #000; display: flex; align-items: center; cursor: default !important; }
+        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; }
+        h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; color: #000; display: flex; align-items: center; }
         h2::before { content: attr(data-num); font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-right: 0.75rem; font-weight: 400; }
-        p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; cursor: default !important; }
+        p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
         .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
 
-        /* Logic/Diff/Audit Elements */
-        .logic-block { display: none; font-family: var(--font-mono); font-size: 0.85rem; color: #333; background: #f8f9fa; padding: 1.5rem; border: 1px solid #e0e0e0; margin-bottom: 2rem; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; transition: background-color 0.1s; cursor: cell !important; }
+        .logic-block { display: none; font-family: var(--font-mono); font-size: 0.85rem; color: #333; background: #f8f9fa; padding: 1.5rem; border: 1px solid #e0e0e0; margin-bottom: 2rem; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; transition: background-color 0.1s; }
         .logic-block:hover { background-color: #f0f2f5; }
         .logic-keyword { color: #0000aa; font-weight: 700; }
         .logic-type { color: #007700; }
@@ -160,7 +173,7 @@
         body[data-mode="diff"] ins { background: #e6ffec; color: #006600; border-bottom: 1px solid #00cc00; }
 
         .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
-        .claim-box { margin-bottom: 1.5rem; padding: 0.75rem; background: #fafafa; border: 1px solid #eee; position: relative; cursor: help !important; }
+        .claim-box { margin-bottom: 1.5rem; padding: 0.75rem; background: #fafafa; border: 1px solid #eee; position: relative; }
         .claim-box::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #e0e0e0; }
         .claim-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
         .claim-id { font-weight: 700; color: #000; }
@@ -170,13 +183,12 @@
 
         .section-ledger { display: none; grid-column: 1 / -1; margin-top: 2rem; padding: 1rem; background: #fcfcfc; border: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; justify-content: space-between; align-items: center; }
         .cite-btn { background: #fff; border: 1px solid #ccc; padding: 4px 10px; cursor: pointer; font-family: inherit; text-transform: uppercase; font-weight: 500; }
-        
+        .cite-btn:active { background: #000; color: #fff; }
+
         .internal-state { display: none; font-family: var(--font-mono); font-size: 0.75rem; color: #555; background: #f4f4f4; padding: 1rem; border-left: 2px solid #ccc; margin: 1.5rem 0; max-width: 65ch; cursor: text; }
         .state-label { display: block; font-weight: 700; color: #000; margin-bottom: 0.5rem; font-size: 0.65rem; letter-spacing: 0.1em; }
         .code-line { display: block; margin-bottom: 0.25rem; }
-        .fact-hook, .provenance-term { cursor: help !important; }
 
-        /* Mode Activation */
         body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="audit"] .audit-rail, body[data-mode="audit"] .section-ledger, body[data-mode="audit"] .internal-state { display: block; }
         body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
@@ -193,7 +205,14 @@
             main { padding: 2rem 1.5rem; }
             body[data-mode="audit"] section, body[data-mode="diff"] section { grid-template-columns: 1fr; gap: 1rem; }
             .audit-rail { border-left: none; border-top: 1px solid #eee; padding-left: 0; padding-top: 1.5rem; }
-            .git-module { margin-bottom: 3rem; } /* Extra space on mobile */
+            .git-module { margin-bottom: 3rem; }
+        }
+        @media print {
+            .mobile-bar, aside, .mode-group, .export-btn, #cmdk, .permalink, .export-container { display: none !important; }
+            main { padding: 0 !important; }
+            .doc-header { border-bottom: 2px solid #000; }
+            .audit-rail { display: block !important; border: 1px solid #000; padding: 10px; margin-top: 10px; }
+            body::after { content: "RENDERED FROM LIVE ARTIFACT EAI-2026-001"; position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid #000; padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 8pt; text-align: center; background: #fff; }
         }
     </style>
 </head>
@@ -243,10 +262,16 @@
         </nav>
         
         <a href="https://github.com/EnlightenedAI-Lab" target="_blank" class="git-module">
-            <span class="git-label">SOURCE_CORE</span>
-            <div class="git-repo">
-                enlightened/core
-                <span class="git-status-dot"></span>
+            <svg class="git-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            
+            <div class="git-info">
+                <span class="git-label">GITHUB_REPO</span>
+                <div class="git-repo">
+                    enlightened/core
+                    <span class="git-status-dot"></span>
+                </div>
             </div>
         </a>
 
@@ -310,8 +335,8 @@
             </div>
             
             <div class="section-ledger">
-                <span>VER: 2.3.0 | SHA: 8f92a1</span>
-                <button class="cite-btn" onclick="copyCite('Mission Statement v2.3')">COPY CITATION</button>
+                <span>VER: 2.6.0 | SHA: 8f92a1</span>
+                <button class="cite-btn" onclick="copyCite('Mission Statement v2.6')">COPY CITATION</button>
             </div>
         </section>
 
