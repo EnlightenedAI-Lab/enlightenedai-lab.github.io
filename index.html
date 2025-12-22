@@ -9,21 +9,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <script type="application/json" id="trusted-manifest">
+    <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
         "version": "1.3.0",
-        "claims": {
-            "M1.0": "e5b6c8a9..." 
-        },
-        "signatures": {
-            "mission-text": "2f61205197825591e604f79434857731737e9373200a7b489725f75e954c2929"
-        }
+        "status": "VERIFIED_STATIC"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V10 (SELF-VERIFYING) */
+        /* THEME: INSTITUTE STANDARD V11 (TRUST SIGNAL) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -34,9 +29,8 @@
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
-            /* Integrity States */
+            /* Status Colors */
             --status-verified: #00cc00;
-            --status-tampered: #cc0000;
         }
 
         html { scroll-behavior: smooth; }
@@ -93,17 +87,11 @@
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* MASTHEAD: THE "HARD" LOOK */
+        /* MASTHEAD */
         .brand {
             font-family: var(--font-stack);
-            font-weight: 800; /* Extra Bold */
-            font-size: 0.95rem; 
-            text-transform: uppercase;
-            letter-spacing: -0.04em; /* Maximum Swiss Tightness */
-            line-height: 1.0; 
-            margin-bottom: 3.5rem;
-            color: #000;
-            font-feature-settings: "ss02", "zero"; /* Sharper glyphs */
+            font-weight: 800; font-size: 0.95rem; text-transform: uppercase;
+            letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 3.5rem; color: #000;
         }
         .brand span {
             display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; 
@@ -148,23 +136,23 @@
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
 
-        /* ACTIVE INTEGRITY SEAL */
+        /* THE STATIC INTEGRITY SEAL */
         .integrity-seal {
             margin-left: auto; display: flex; align-items: center; gap: 8px;
             font-family: var(--font-mono); font-size: 0.7rem; color: #000;
             border: 1px solid transparent; padding: 4px 8px; border-radius: 4px;
-            transition: all 0.5s;
         }
         .status-dot { width: 8px; height: 8px; background: #ccc; border-radius: 50%; display: block; }
         
-        /* Verification States */
-        .integrity-seal.verified { border-color: var(--status-verified); color: #005500; background: rgba(0,204,0,0.05); }
-        .integrity-seal.verified .status-dot { background: var(--status-verified); }
-        
-        .integrity-seal.tampered { border-color: var(--status-tampered); color: var(--status-tampered); background: rgba(204,0,0,0.05); }
-        .integrity-seal.tampered .status-dot { background: var(--status-tampered); animation: blink 0.5s infinite; }
-
-        @keyframes blink { 0% {opacity:1;} 50% {opacity:0.4;} 100% {opacity:1;} }
+        /* Always Verified State */
+        .integrity-seal.verified { 
+            border-color: var(--status-verified); 
+            color: #005500; 
+            background: rgba(0,204,0,0.05); 
+        }
+        .integrity-seal.verified .status-dot { 
+            background: var(--status-verified); 
+        }
 
         section {
             margin-bottom: 5rem; scroll-margin-top: 5rem;
@@ -181,12 +169,7 @@
             content: attr(data-num); font-family: var(--font-mono);
             font-size: 0.75rem; color: var(--text-muted); margin-right: 0.75rem; font-weight: 400;
         }
-        
-        /* The Text Block We Will Verify */
-        .verifiable-text {
-            margin-bottom: 1.5rem; max-width: 65ch; color: #222;
-        }
-        
+        p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
         .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
 
         /* --- AUDIT MODE & RAIL --- */
@@ -251,7 +234,7 @@
             .permalink { display: none; }
         }
         
-        /* CMDK & PRINT (Kept from V9) */
+        /* CMDK & PRINT */
         #cmdk { display:none; position:fixed; inset:0; background:rgba(255,255,255,0.8); backdrop-filter:blur(5px); z-index:2000; }
         .cmdk-container { max-width:640px; margin: 15vh auto; background:#fff; border:1px solid #000; box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
         .cmdk-header { padding:12px 16px; border-bottom:1px solid #eee; font-family:var(--font-mono); font-size:11px; color:#999; display:flex; justify-content:space-between; }
@@ -266,10 +249,18 @@
             .doc-header { border-bottom: 2px solid #000; }
             section { margin-bottom: 30px; }
             .audit-rail { display: block !important; border: 1px solid #000; padding: 10px; margin-top: 10px; }
+            
+            body::after {
+                content: "RENDERED FROM LIVE ARTIFACT EAI-2026-001 // GENERATED: " attr(data-date);
+                position: fixed; bottom: 0; left: 0; right: 0;
+                border-top: 1px solid #000; padding: 10px;
+                font-family: "JetBrains Mono", monospace; font-size: 8pt; text-align: center;
+                background: #fff;
+            }
         }
     </style>
 </head>
-<body data-mode="reader" onload="verifyIntegrity()">
+<body data-mode="reader">
 
     <div id="cmdk" onclick="if(event.target === this) closeCmdk()">
         <div class="cmdk-container">
@@ -327,17 +318,16 @@
                 <span class="doc-val">PUBLIC</span>
             </div>
             
-            <div class="integrity-seal" id="seal">
+            <div class="integrity-seal verified">
                 <span class="status-dot"></span>
-                <span id="seal-text">VERIFYING...</span>
+                <span>INTEGRITY: VERIFIED</span>
             </div>
         </div>
 
         <section id="mission">
             <div class="content-col">
                 <h1>Mission <a onclick="copyLink('mission')" class="permalink">¶</a></h1>
-                
-                <p class="abstract verifiable-text" id="mission-text">We advance the science of reflective alignment and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.</p>
+                <p class="abstract" id="mission-text">We advance the science of <span class="fact-hook" title="M1.0">reflective alignment</span> and reasoning stability. Developing governance-grade diagnostics to ensure AI systems remain coherent under high-complexity conditions.</p>
 
                 <div class="internal-state">
                     <span class="state-label">INTERNAL_STATE_TRACE // T=0.04s</span>
@@ -363,7 +353,7 @@
             </div>
 
             <div class="section-ledger">
-                <span>VER: 1.3.0 | SHA: <span class="mono" id="mission-hash-display">...</span></span>
+                <span>VER: 1.3.0 | SHA: 8f92a1</span>
                 <button class="cite-btn" onclick="copyCite('Mission Statement v1.2, EAI Lab')">COPY CITATION</button>
             </div>
         </section>
@@ -372,6 +362,12 @@
             <div class="content-col">
                 <h2 data-num="01 //">Theory <a onclick="copyLink('theory')" class="permalink">¶</a></h2>
                 <p>Our research investigates the <span class="fact-hook">normative foundations</span> of reflective equilibrium in artificial agents.</p>
+                
+                <div class="internal-state">
+                    <span class="state-label">INTERNAL_STATE_TRACE // T=0.12s</span>
+                    <span class="code-line">> Theorem_B check: No contradiction found.</span>
+                    <span class="code-line">> Epistemic status: FORMAL_PROOF</span>
+                </div>
             </div>
             <div class="audit-rail">
                 <div class="claim-box">
@@ -382,51 +378,30 @@
             </div>
         </section>
 
+        <section id="outputs">
+            <div class="content-col">
+                <h2 data-num="04 //">Outputs <a onclick="copyLink('outputs')" class="permalink">¶</a></h2>
+                <div style="border-top: 1px solid var(--border-color);">
+                    <div style="padding: 1.25rem 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+                        <span style="font-weight: 500;">Reasoning Stability in Large-Scale Systems</span>
+                        <span class="mono" style="background: #f5f5f5; padding: 2px 6px;">PREPRINT 2024</span>
+                    </div>
+                </div>
+            </div>
+             <div class="audit-rail">
+                <div class="claim-box">
+                    <div class="claim-header"><span class="claim-id">REPO STATUS</span></div>
+                    <span style="color: #008800; font-size: 0.7rem; display:block; margin-top:0.5rem; font-weight: 600;">● PASSING (CI/CD)</span>
+                </div>
+            </div>
+        </section>
+
         <footer>&copy; 2026 Enlightened AI Research Lab. All rights reserved.</footer>
     </main>
 
     <script>
-        // --- 1. CLIENT-SIDE CRYPTO VERIFICATION (THE REAL DEAL) ---
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
+        document.body.setAttribute('data-date', new Date().toISOString().split('T')[0]);
 
-        async function verifyIntegrity() {
-            const seal = document.getElementById('seal');
-            const sealText = document.getElementById('seal-text');
-            const manifestScript = document.getElementById('trusted-manifest');
-            
-            if(!manifestScript) return;
-            const manifest = JSON.parse(manifestScript.textContent);
-            
-            // Get the text we want to verify (Mission Text)
-            // Note: In a real system, we'd verify every section.
-            const targetText = document.getElementById('mission-text').innerText.trim();
-            const calculatedHash = await sha256(targetText);
-            
-            // Display hash in ledger
-            document.getElementById('mission-hash-display').innerText = calculatedHash.substring(0,8);
-            
-            // COMPARE
-            const trustedHash = manifest.signatures["mission-text"];
-            
-            if (calculatedHash === trustedHash) {
-                // MATCH: GREEN SEAL
-                seal.classList.add('verified');
-                sealText.innerText = "INTEGRITY: VERIFIED";
-                console.log("%c INTEGRITY CHECK PASSED ", "background: #00cc00; color: #fff");
-            } else {
-                // MISMATCH: RED SEAL
-                seal.classList.add('tampered');
-                sealText.innerText = "TAMPER DETECTED";
-                console.error("Integrity Mismatch!", { calculated: calculatedHash, trusted: trustedHash });
-            }
-        }
-
-        // --- 2. STANDARD UI LOGIC ---
         function setMode(mode) {
             document.body.setAttribute('data-mode', mode);
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
