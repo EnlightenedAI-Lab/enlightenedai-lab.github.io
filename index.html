@@ -12,13 +12,14 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "3.3.0",
-        "status": "VERIFIED_STATIC"
+        "version": "1.0.0",
+        "status": "CANONICAL_RELEASE",
+        "hash": "8f92a1-LOCKED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V33 (PRISTINE SURFACE) */
+        /* THEME: INSTITUTE STANDARD V34 (CANONICAL) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -81,9 +82,12 @@
         /* --- UTILITIES & CURSORS --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .hidden { display: none; }
+        .permalink { text-decoration: none; color: #ccc; margin-left: 0.5rem; font-family: var(--font-mono); font-weight: 400; font-size: 0.9em; opacity: 0; transition: opacity 0.2s; cursor: pointer; }
+        h1:hover .permalink, h2:hover .permalink { opacity: 1; }
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
 
         /* Cursors */
+        .integrity-seal { cursor: not-allowed !important; }
         .brand, .brand * { cursor: crosshair !important; }
         .logic-block, .logic-block * { cursor: cell !important; }
         .fact-hook, .provenance-term, .claim-box, .doc-header { cursor: help !important; }
@@ -118,7 +122,9 @@
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
         
-        section { margin-bottom: 5rem; scroll-margin-top: 5rem; display: grid; grid-template-columns: 1fr; gap: 0; position: relative; }
+        /* SPACING INCREASED (8rem) */
+        section { margin-bottom: 8rem; scroll-margin-top: 5rem; display: grid; grid-template-columns: 1fr; gap: 0; position: relative; }
+        
         h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; display: flex; align-items: center; }
         h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; color: #000; display: flex; align-items: center; }
         h3 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; margin-top: 2rem; margin-bottom: 1rem; color: #000; }
@@ -138,9 +144,10 @@
         .logic-type { color: #007700; }
         .logic-comment { color: #888; font-style: italic; }
 
-        /* --- DIFF STYLES --- */
+        /* --- DIFF STYLES (STRICT) --- */
         del { display: none; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; font-size: 0.9em; opacity: 0.8; }
         ins { text-decoration: none; border-bottom: none; }
+        
         body[data-mode="diff"] del { display: inline; }
         body[data-mode="diff"] ins { background: #e6ffec; color: #006600; border-bottom: 1px solid #00cc00; }
 
@@ -267,7 +274,7 @@
 
         <section id="mission">
             <div class="content-col">
-                <h1><span class="scramble">01 //</span>Mission</h1>
+                <h1><span class="scramble">01 //</span>Mission <a onclick="copyLink('mission')" class="permalink"></a></h1>
                 <div class="prose-content">
                     <p class="abstract" id="mission-text">
                         We advance the <del>field</del> <ins>science</ins> of <span class="fact-hook" title="M1.0">reflective alignment</span> and reasoning stability. 
@@ -301,23 +308,20 @@
             <div class="audit-rail">
                 <div class="claim-box">
                     <div class="claim-header"><span class="claim-id">CLAIM [M1.0]</span></div>
-                    <div class="meta-row"><span>SCOPE: CONCEPT</span><span>CONF: HIGH</span></div>
-                    <a href="#" class="claim-link">→ Lexicon: R-Align</a>
-                </div>
-                <div class="logic-block" style="border:none; background:transparent; padding:0; margin:0; color:#999; font-size:0.6rem;">
-                    >> Function validated
+                    <div class="meta-row"><span>SCOPE: CONCEPT</span></div>
+                    <span style="font-size: 0.7rem; color: #000;">“Alignment is evaluated as an internal system property”</span>
                 </div>
             </div>
             
             <div class="section-ledger">
-                <span>VER: 3.3.0 | SHA: 8f92a1</span>
-                <button class="cite-btn" onclick="copyCite('Mission Statement v3.3')">COPY CITATION</button>
+                <span>VER: 1.0.0 | SHA: 8f92a1</span>
+                <button class="cite-btn" onclick="copyCite('Mission Statement v1.0')">COPY CITATION</button>
             </div>
         </section>
 
         <section id="theory">
             <div class="content-col">
-                <h2><span class="scramble">02 //</span>What We Evaluate</h2>
+                <h2><span class="scramble">02 //</span>What We Evaluate <a onclick="copyLink('theory')" class="permalink"></a></h2>
                 <div class="prose-content">
                     <p>We evaluate alignment as a dynamic property of reasoning systems, not as a <del>fixed</del> <ins>static</ins> claim or stated objective.</p>
                     <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where failures emerge and where evaluation is most often absent.</p>
@@ -359,14 +363,14 @@
                 <div class="claim-box">
                     <div class="claim-header"><span class="claim-id">METHOD [E-04]</span></div>
                     <div class="meta-row"><span>TYPE: STRESS_TEST</span></div>
-                    <a href="#" class="claim-link">→ Protocol: 88-B</a>
+                    <span style="font-size: 0.7rem; color: #000;">“Dynamic stress testing”</span>
                 </div>
             </div>
         </section>
 
         <section id="instruments">
             <div class="content-col">
-                <h2><span class="scramble">03 //</span>Instruments</h2>
+                <h2><span class="scramble">03 //</span>Instruments <a onclick="copyLink('instruments')" class="permalink"></a></h2>
                 <div class="prose-content">
                     <p>We develop reflective diagnostics to test how alignment behaves over time, not just how it is expressed at a single point.</p>
                     
@@ -403,14 +407,14 @@
                 <div class="claim-box">
                     <div class="claim-header"><span class="claim-id">TOOL [D-09]</span></div>
                     <div class="meta-row"><span>STATUS: DEPLOYED</span></div>
-                    <a href="#" class="claim-link">→ Repo: /diagnostics</a>
+                    <span style="font-size: 0.7rem; color: #000;">“Reflective diagnostics”</span>
                 </div>
             </div>
         </section>
 
         <section id="outputs">
             <div class="content-col">
-                <h2><span class="scramble">04 //</span>Outputs</h2>
+                <h2><span class="scramble">04 //</span>Outputs <a onclick="copyLink('outputs')" class="permalink"></a></h2>
                 <div class="prose-content">
                     <p>Our research outputs are published as <del>static PDFs</del> <ins>inspectable artifacts</ins>, not summaries or position statements.</p>
                     
