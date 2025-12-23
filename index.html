@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "40.1.0",
-        "status": "SIGNAL_RESTORED"
+        "version": "40.2.0",
+        "status": "LAYOUT_PATCHED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V40 */
+        /* THEME: INSTITUTE STANDARD V40.2 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -29,20 +29,20 @@
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
-            /* SIGNAL COLORS */
+            /* SIGNALS */
             --status-verified: #00cc00;
-            --signal-green: #00ff00;
             --signal-blue: #0066ff;
+            --signal-amber: #b45309;
+            --signal-red: #cc0000;
             
-            /* SEMANTIC MODE COLORS */
+            /* MODES */
             --mode-audit: #b45309; 
             --mode-logic: #0044cc; 
             --mode-diff: #000000;  
         }
 
-        html { scroll-behavior: smooth; }
         * { box-sizing: border-box; }
-
+        html { scroll-behavior: smooth; }
         body {
             margin: 0; padding: 0;
             font-family: var(--font-stack);
@@ -55,7 +55,7 @@
             transition: background-color 0.2s;
         }
 
-        /* --- 1. ENHANCED BEACON PHYSICS --- */
+        /* --- BEACON PHYSICS --- */
         @keyframes beacon-green {
             0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; }
             50% { opacity: 1; }
@@ -90,7 +90,7 @@
             animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1);
         }
 
-        /* --- MOBILE HEADER & NAV --- */
+        /* --- MOBILE HEADER --- */
         .mobile-bar {
             display: none;
             position: sticky;
@@ -106,83 +106,75 @@
         .mobile-brand { font-weight: 800; font-size: 0.85rem; letter-spacing: -0.02em; }
         .mobile-index-btn { font-family: var(--font-mono); font-size: 0.75rem; padding: 4px 10px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
 
-        @media (max-width: 900px) {
-            body { flex-direction: column; }
-            .mobile-bar { display: flex; }
-            aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); border-right: none; padding: 2rem; transition: transform 0.22s cubic-bezier(0.2,0,0,1); background: #fff; }
-            aside.open { transform: translateX(0); }
-            main { padding: 2rem 1.5rem; }
-            nav a { font-size: 0.95rem; padding: 0.65rem 0 0.65rem 1rem; }
-            
-            body[data-mode="audit"] section, body[data-mode="diff"] section { grid-template-columns: 1fr; gap: 1rem; }
-            .audit-rail { border-left: none; border-top: 1px solid #eee; padding-left: 0; padding-top: 1.5rem; }
-            .git-module { margin-bottom: 3rem; }
+        /* --- TYPOGRAPHY --- */
+        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; display:flex; align-items:center; }
+        h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; display:flex; align-items:center; }
+        p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
+        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
+        .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; }
+
+        /* --- MODES & VISIBILITY (CRITICAL FIX) --- */
+        /* Reader Mode: Hide annotations, Show clean text */
+        body[data-mode="reader"] del, 
+        body[data-mode="reader"] .diff-tag,
+        body[data-mode="reader"] .audit-marker,
+        body[data-mode="reader"] .logic-block { display: none !important; }
+        
+        body[data-mode="reader"] ins { 
+            text-decoration: none; border-bottom: none; background: none; color: inherit; 
         }
 
-        /* --- MISSION LIST STYLING --- */
-        .mission-list { list-style: none; padding: 0; margin: 2rem 0 0 0; }
-        .mission-list li { position: relative; padding-left: 1.25rem; margin-bottom: 1rem; }
-        .mission-list li::before { content: "—"; position: absolute; left: 0; color: #999; }
+        /* Diff Mode: Show changes */
+        del { display: none; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
+        ins { text-decoration: none; border-bottom: none; }
+        .diff-tag { display: none; font-family: var(--font-mono); font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
+        
+        body[data-mode="diff"] del { display: inline; }
+        body[data-mode="diff"] ins { background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; padding: 0 2px; }
+        body[data-mode="diff"] .diff-tag { display: inline-block; }
 
-        /* --- STANDARD STYLES --- */
-        .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; }
-        #mode-banner { position: fixed; top: 120px; right: 5rem; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; padding: 8px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        body:not([data-mode="reader"]) #mode-banner { opacity: 1; transform: translateY(0); }
-        body[data-mode="audit"] #mode-banner { border: 1px solid var(--mode-audit); color: var(--mode-audit); border-left-width: 4px; }
-        body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
-        body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
-
-        .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 2px 5px; border-radius: 3px; margin-right: 8px; cursor: help; vertical-align: 2px; background: #fff; transition: all 0.1s; }
+        /* Audit Mode */
+        .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: #fff; }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
-        .audit-marker:hover, .audit-marker.active { background: var(--mode-audit); color: #fff; }
-        .claim-box.active { border-color: var(--mode-audit); background: rgba(180, 83, 9, 0.05); border-left: 3px solid var(--mode-audit); }
+        body[data-mode="audit"] .claim-box.active { border-color: var(--mode-audit); border-left: 3px solid var(--mode-audit); background: rgba(180,83,9,0.05); }
+
+        /* Logic Mode */
+        .logic-block { display: none; font-family: var(--font-mono); font-size: 0.75rem; color: #333; background-color: #fcfcfc; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); padding: 1rem; margin: 1.5rem 0; overflow-x: auto; position: relative; }
+        .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 2px 6px; }
+        body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        body[data-mode="logic"] .prose-content { opacity: 0.9; }
+
+        /* --- LAYOUT GRID --- */
+        aside { width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 3rem 2rem; display: flex; flex-direction: column; flex-shrink: 0; background: #fff; z-index: 99; }
+        main { flex-grow: 1; padding: 3rem 5rem; max-width: 1280px; margin: 0 auto; }
+        section { margin-bottom: 8rem; scroll-margin-top: 5rem; display: grid; grid-template-columns: 1fr; gap: 0; position: relative; }
+        
+        body[data-mode="audit"] section, body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         
         .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); position: sticky; top: 100px; height: fit-content; }
-        .claim-box { margin-bottom: 2rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
-        .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
-        .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
-        .metric-tag { font-weight: 600; color: #000; }
-        .claim-text { color: #333; line-height: 1.4; }
+        body[data-mode="audit"] .audit-rail { display: block; }
+        body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; pointer-events: none; }
 
-        .prose-content { transition: opacity 0.3s ease; }
-        body[data-mode="logic"] .prose-content { opacity: 0.9; }
-        .logic-block { display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; background-color: #fcfcfc; background-image: linear-gradient(#eef1f5 1px, transparent 1px), linear-gradient(90deg, #eef1f5 1px, transparent 1px); background-size: 20px 20px; padding: 1.5rem; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; animation: slideLeft 0.3s cubic-bezier(0.2, 0, 0, 1) forwards; opacity: 0; transform: translateX(-10px); }
-        @keyframes slideLeft { to { opacity: 1; transform: translateX(0); } }
-        .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
-        body[data-mode="logic"] .logic-block { display: block; }
-        .logic-keyword { color: #0044cc; font-weight: 700; }
-
-        .diff-header { display: none; font-family: var(--font-mono); font-size: 0.65rem; color: #000; border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        body[data-mode="diff"] .content-col { border-left: 1px solid #e5e5e5; padding-left: 2rem; margin-left: -2rem; }
-        body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
-        del, ins, .diff-tag { display: none; }
-        body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
-        body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px; }
-        body[data-mode="diff"] .diff-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.6rem; color: #006600; background: rgba(0, 204, 0, 0.1); padding: 1px 4px; margin-left: 6px; border-radius: 2px; vertical-align: 1px; }
-
-        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .permalink { text-decoration: none; color: #ccc; margin-left: 0.5rem; font-family: var(--font-mono); font-weight: 400; font-size: 0.9em; opacity: 0; transition: opacity 0.2s; cursor: pointer; }
-        h1:hover .permalink, h2:hover .permalink { opacity: 1; }
-        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
-
-        aside { width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 3rem 2rem; display: flex; flex-direction: column; flex-shrink: 0; background: #fff; z-index: 999; }
+        /* --- COMPONENTS --- */
         .brand { margin-bottom: 6rem; cursor: crosshair !important; }
         .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
-        .mode-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
+
+        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; }
         .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
         .toggle-btn:hover { color: #000; }
         .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
-        #btn-diff.active { color: var(--mode-diff); }
-        #btn-logic.active { color: var(--mode-logic); }
-        #btn-audit.active { color: var(--mode-audit); }
-        nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { margin-bottom: 2px; }
-        nav a { display: block; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0 0.5rem 1rem; border-left: 2px solid transparent; margin-left: -2px; }
-        nav a:hover { color: #000; }
-        nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9 0%, #ffffff 100%); }
+        #btn-diff.active { color: var(--mode-diff); } #btn-logic.active { color: var(--mode-logic); } #btn-audit.active { color: var(--mode-audit); }
 
-        .git-module { margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: all 0.15s cubic-bezier(0.2, 0, 0, 1); background: #fff; cursor: pointer !important; position: relative; overflow: hidden; }
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { margin-bottom: 4px; }
+        nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 2px 0 2px 10px; border-left: 2px solid transparent; display: block; }
+        nav a:hover { color: #000; }
+        nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9, #fff); }
+
+        .git-module { margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: all 0.15s; background: #fff; position: relative; overflow: hidden; }
         .git-module:hover { background: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .git-icon { width: 24px; height: 24px; fill: #000; transition: fill 0.1s; }
         .git-module:hover .git-icon { fill: #fff; }
@@ -191,35 +183,56 @@
         .git-module:hover .git-label { color: #aaa; }
         .git-repo { font-family: var(--font-mono); font-weight: 700; font-size: 0.75rem; color: #000; display: flex; justify-content: space-between; align-items: center; transition: color 0.1s; }
         .git-module:hover .git-repo { color: #fff; }
-        .git-status-dot { height: 6px; width: 6px; background-color: #00cc00; border-radius: 50%; display: inline-block; margin-left: auto; box-shadow: 0 0 6px rgba(0,204,0,0.8); animation: beacon-green 1.5s infinite cubic-bezier(0.66, 0, 0, 1); }
-
-        main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; }
-        .doc-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); }
-        .doc-meta { display: flex; flex-direction: column; }
-        .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
-        .doc-val { font-weight: 500; color: #000; }
-        
-        section { margin-bottom: 8rem; scroll-margin-top: 5rem; display: grid; grid-template-columns: 1fr; gap: 0; position: relative; }
-        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; display: flex; align-items: center; }
-        h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; color: #000; display: flex; align-items: center; }
-        
-        body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
-        body[data-mode="audit"] .audit-rail { display: block; }
-        body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
-        body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; pointer-events: none; }
+        .git-status-dot { height: 6px; width: 6px; background-color: #00cc00; border-radius: 50%; display: inline-block; margin-left: auto; box-shadow: 0 0 6px rgba(0,204,0,0.8); animation: beacon-green 1.5s infinite; }
 
         .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: #000; color: #fff; border-color: #000; }
 
+        .doc-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); }
+        .doc-meta { display: flex; flex-direction: column; }
+        .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
+        .doc-val { font-weight: 500; color: #000; }
+
+        /* LIST FIX */
+        .mission-list { list-style: none; padding: 0; margin: 2rem 0 0 0; }
+        .mission-list li { position: relative; padding-left: 1.25rem; margin-bottom: 1rem; color: #222; }
+        .mission-list li::before { content: "—"; position: absolute; left: 0; color: #999; }
+
+        .claim-box { margin-bottom: 1.5rem; padding: 0.75rem; background: #fafafa; border: 1px solid #eee; position: relative; cursor: pointer; transition: all 0.2s; }
+        .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
+        .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+        .metric-tag { font-weight: 600; color: #000; }
+        .claim-text { color: #333; line-height: 1.4; font-size: 0.7rem; }
+
+        .diff-header { display: none; font-family: var(--font-mono); font-size: 0.65rem; color: #000; border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
+
         /* FOOTER */
-        footer { margin-top: 8rem; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); }
+        footer { margin-top: 8rem; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); width: 100%; }
         .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
         .footer-left { display: flex; flex-direction: column; gap: 6px; }
         .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: #000; }
         .footer-secondary { opacity: 0.7; }
         .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: #000; font-weight: 500; }
-        
-        @media (max-width: 900px) { .footer-content { flex-direction: column; gap: 1rem; align-items: flex-start; } }
+
+        #mode-banner { position: fixed; top: 120px; right: 5rem; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; padding: 8px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        body:not([data-mode="reader"]) #mode-banner { opacity: 1; transform: translateY(0); }
+        body[data-mode="audit"] #mode-banner { border: 1px solid var(--mode-audit); color: var(--mode-audit); border-left-width: 4px; }
+        body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
+        body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); border-right: none; padding: 2rem; }
+            aside.open { transform: translateX(0); }
+            main { padding: 2rem 1.5rem; display: block; } /* RESET GRID ON MOBILE */
+            section { grid-template-columns: 1fr !important; margin-bottom: 4rem; }
+            .audit-rail { display: none !important; }
+            .git-module { margin-bottom: 3rem; }
+            .footer-content { flex-direction: column; gap: 1rem; align-items: flex-start; }
+            .doc-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .integrity-seal { margin-left: 0; }
+        }
     </style>
 </head>
 <body data-mode="reader">
@@ -239,10 +252,10 @@
         </div>
 
         <div class="mode-group">
-            <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader', 'READER MODE')">[ READER ] <span>•</span></span>
-            <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')">[ AUDIT ] <span>•</span></span>
-            <span class="toggle-btn" id="btn-diff" onclick="setMode('diff', 'CHANGE TRACE ACTIVE')">[ DIFF LOG ] <span>Δ</span></span>
-            <span class="toggle-btn" id="btn-logic" onclick="setMode('logic', 'LOGIC LAYER EXPOSED')">[ LOGIC ] <span>λ</span></span>
+            <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
+            <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
+            <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
+            <span class="toggle-btn" onclick="setMode('logic', this)">[ LOGIC ] <span>λ</span></span>
         </div>
         
         <nav>
@@ -284,13 +297,14 @@
                     </p>
                     <p>
                         <span class="audit-marker" onmouseenter="highlightClaim('c-m2')" onmouseleave="unhighlightClaim('c-m2')">[M1.1]</span>
-                        We develop governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under high-complexity conditions. We treat alignment as a measurable system property that can be examined, stressed, and verified <span class="diff-tag">[assumption removed]</span>.
+                        We <del>build</del> <ins>develop</ins> <del>standard</del> <ins>governance-grade</ins> diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an <del>abstract intention</del> <ins>internal property</ins> that can be examined, stressed, and verified <span class="diff-tag">[assumption removed]</span>.
                     </p>
                     
                     <div class="logic-block">
-<span style="color:#0044cc; font-weight:700;">def</span> maximize_alignment_stability(agent: <span style="color:#007700;">CognitiveSystem</span>) -> <span style="color:#007700;">Proof</span>:
-    <span style="color:#0044cc; font-weight:700;">assert</span> agent.has_capability(<span style="color:#007700;">"REFLECTIVE_MONITORING"</span>)
-    <span style="color:#0044cc; font-weight:700;">return</span> <span style="color:#007700;">VerifiedProof</span>(agent)
+<span class="logic-comment"># Formal Definition: Mission Objective Function</span>
+<span class="logic-keyword">def</span> maximize_alignment_stability(agent: <span style="color:#007700;">CognitiveSystem</span>) -> <span style="color:#007700;">Proof</span>:
+    <span class="logic-keyword">assert</span> agent.has_capability(<span style="color:#007700;">"REFLECTIVE_MONITORING"</span>)
+    <span class="logic-keyword">return</span> <span style="color:#007700;">VerifiedProof</span>(agent)
                     </div>
 
                     <ul class="mission-list"> 
@@ -321,14 +335,15 @@
                 <div class="prose-content">
                     <p>
                         <span class="audit-marker" onmouseenter="highlightClaim('c-e1')" onmouseleave="unhighlightClaim('c-e1')">[E-01]</span>
-                        We evaluate alignment as a dynamic property of reasoning systems, not as a stated objective.
+                        We evaluate alignment as a <del>static</del> <ins>dynamic</ins> property of reasoning systems, not as a <del>stated</del> <ins>evaluated</ins> objective.
                     </p>
                     <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where <del>failures</del> <ins>failure modes</ins> emerge <span class="diff-tag">[scope narrowed]</span>.</p>
                     
                     <div class="logic-block">
-<span style="color:#0044cc; font-weight:700;">def</span> evaluate_under_pressure(model: <span style="color:#007700;">Model</span>):
+<span class="logic-comment"># Evaluation Strategy: Dynamic Stress Testing</span>
+<span class="logic-keyword">def</span> evaluate_under_pressure(model: <span style="color:#007700;">Model</span>):
     drift = model.run_trajectory(<span style="color:#007700;">EvaluationContext.RECURSIVE_REF</span>)
-    <span style="color:#0044cc; font-weight:700;">if</span> drift > <span style="color:#007700;">SAFTEY_MARGIN</span>: <span style="color:#0044cc; font-weight:700;">return</span> <span style="color:#007700;">FailureMode.DETECTED</span>
+    <span class="logic-keyword">if</span> drift > <span style="color:#007700;">SAFTEY_MARGIN</span>: <span class="logic-keyword">return</span> <span style="color:#007700;">FailureMode.DETECTED</span>
                     </div>
 
                     <p>The lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation.</p>
@@ -356,14 +371,14 @@
                     </p>
                     
                     <div class="logic-block">
-<span style="color:#0044cc; font-weight:700;">Theorem</span> Invariant_B:
-    <span style="color:#0044cc; font-weight:700;">forall</span> s <span style="color:#0044cc; font-weight:700;">in</span> States: 
-        <span style="color:#0044cc; font-weight:700;">if</span> IsAligned(s) <span style="color:#0044cc; font-weight:700;">and</span> IsReflective(s):
-            <span style="color:#0044cc; font-weight:700;">then</span> IsAligned(Next(s))
+<span class="logic-comment"># Theorem: Invariant Preservation Across Time</span>
+<span class="logic-keyword">Theorem</span> Invariant_B:
+    <span class="logic-keyword">forall</span> s <span class="logic-keyword">in</span> States: 
+        <span class="logic-keyword">if</span> IsAligned(s) <span class="logic-keyword">and</span> IsReflective(s):
+            <span class="logic-keyword">then</span> IsAligned(Next(s))
                     </div>
 
                     <p>The diagnostics are constructed to operate directly over the controlled alignment lexicon, ensuring that detected changes reflect genuine reasoning drift <span class="diff-tag">[precision added]</span>.</p>
-                    <p>We <del>ensure</del> <ins>observe</ins> whether alignment invariants remain intact as reasoning unfolds.</p>
                     <p>These instruments are designed to expose failure modes. <del>Passing is expected.</del> <ins>Passing is not assumed.</ins></p>
                 </div>
             </div>
@@ -388,7 +403,8 @@
                     </p>
                     
                     <div class="logic-block">
-<span style="color:#0044cc; font-weight:700;">def</span> sign_artifact(data: <span style="color:#007700;">ResearchData</span>):
+<span class="logic-comment"># Artifact Integrity Signer</span>
+<span class="logic-keyword">def</span> sign_artifact(data: <span style="color:#007700;">ResearchData</span>):
     artifact.attach_proof(data.reproducible_evidence)
     artifact.lock_integrity()
                     </div>
@@ -419,12 +435,14 @@
     </main>
 
     <script>
-        function setMode(mode, label) {
+        function setMode(mode, btn) {
             document.body.setAttribute('data-mode', mode);
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${mode}`).classList.add('active');
+            btn.classList.add('active');
             const banner = document.getElementById('mode-banner');
-            banner.innerText = label || "READER MODE";
+            banner.innerText = (mode === 'reader') ? "READER MODE" : mode.toUpperCase() + " MODE ACTIVE";
+            
+            // Close mobile sidebar if open
             if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
         }
         function highlightClaim(id) { document.getElementById(id).classList.add('active'); }
@@ -448,14 +466,8 @@
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
         
-        // SILENT COPY
         function copyCite(text) { navigator.clipboard.writeText(text); }
         function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`); }
-        
-        const cmdk = document.getElementById('cmdk');
-        const cmdkInput = document.getElementById('cmdkInput');
-        const cmdkResults = document.getElementById('cmdkResults');
-        const cmdkIndex = [{ label: "Mission", id: "mission" }, { label: "Theory", id: "theory" }, { label: "Instruments", id: "instruments" }, { label: "Outputs", id: "outputs" }];
         
         // Close sidebar when tapping outside (mobile)
         document.addEventListener("click", (e) => {
