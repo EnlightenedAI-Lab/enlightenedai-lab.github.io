@@ -13,19 +13,19 @@
     {
         "doc_id": "RAL-LEX-0001",
         "version": "1.7.0",
-        "status": "LIVE_WIRE"
+        "status": "LIVE_INSTRUMENT"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V48 */
+        /* THEME: INSTITUTE STANDARD V49 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
-            --sidebar-width: 240px; /* Slimmer Sidebar */
-            --rail-width: 300px;    /* Tighter Rail */
+            --sidebar-width: 240px;
+            --rail-width: 320px;
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
@@ -53,7 +53,7 @@
             min-height: 100vh;
         }
 
-        /* --- LAYOUT GRID (TIGHTENED) --- */
+        /* --- LAYOUT GRID --- */
         aside#sidebar { 
             width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; 
             border-right: 1px solid var(--border-color); padding: 2rem; 
@@ -65,8 +65,8 @@
             flex-grow: 1; 
             display: grid; 
             grid-template-columns: 1fr var(--rail-width); 
-            max-width: 1280px; /* TIGHTER MAX WIDTH */
-            margin: 0 auto;    /* CENTERED */
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
@@ -83,7 +83,7 @@
             height: 100vh;
             overflow-y: auto;
             padding: 1rem;
-            display: flex; flex-direction: column; gap: 12px;
+            display: flex; flex-direction: column; gap: 8px;
             scrollbar-width: none;
         }
         .rail-sticky::-webkit-scrollbar { display: none; }
@@ -274,7 +274,7 @@
                 <div><span style="color:#999; display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0001</div>
                 <div><span style="color:#999; display:block; font-size:0.6rem;">CLASSIFICATION</span>PUBLIC</div>
                 <div id="last-update" style="color:#000;">LAST UPDATE: ...</div>
-                <div style="margin-left:auto;" class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
+                <div style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.65rem; color:#005500; border:1px solid #00cc00; padding:3px 6px; border-radius:3px; background:rgba(0,204,0,0.03);"><span style="width:6px; height:6px; background:#00cc00; border-radius:50%; box-shadow:0 0 6px rgba(0,204,0,0.4); animation:beacon-green 2s infinite;"></span>INTEGRITY: VERIFIED</div>
             </div>
 
             <div class="view-bar">
@@ -527,7 +527,7 @@
             if(target) runScramble(target);
         }
 
-        // 3. CANVAS ANIMATIONS (Immediate Init)
+        // 3. CANVAS ANIMATIONS
         const initCanvas = (id, drawFn) => {
             const canvas = document.getElementById(id);
             if(!canvas) return;
