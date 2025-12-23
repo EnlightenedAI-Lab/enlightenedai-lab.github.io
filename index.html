@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "43.0.0",
-        "status": "STABLE"
+        "version": "44.0.0",
+        "status": "TEXT_VERIFIED"
     }
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V43 --- */
+        /* --- THEME: INSTITUTE STANDARD V44 --- */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -115,9 +115,9 @@
         nav a:hover { color: #000; }
         nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9, #fff); }
 
-        /* --- SIDEBAR MODULES (RESTORED LEFT) --- */
+        /* --- SIDEBAR MODULES (LEFT) --- */
         .git-module { 
-            margin-top: auto; /* Push to bottom */
+            margin-top: auto; 
             margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; 
             display: flex; align-items: center; gap: 12px; transition: all 0.15s; background: #fff; 
             cursor: pointer !important; position: relative; overflow: hidden; 
@@ -152,7 +152,7 @@
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
         .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; }
 
-        /* --- MODE VISIBILITY RULES (CRITICAL) --- */
+        /* --- MODE VISIBILITY RULES --- */
         
         /* 1. READER MODE: Hide markers, diffs, logic */
         body[data-mode="reader"] .audit-marker,
@@ -166,7 +166,7 @@
         body[data-mode="reader"] ins { text-decoration: none; border-bottom: none; background: transparent; color: inherit; }
 
         /* 2. DIFF MODE: Show edits */
-        del, ins, .diff-tag { display: none; } /* Hidden by default */
+        del, ins, .diff-tag { display: none; }
         
         body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
         body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px; }
@@ -219,7 +219,7 @@
         body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
         body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
 
-        /* --- MOBILE ADJUSTMENTS (CRITICAL FIXES) --- */
+        /* --- MOBILE ADJUSTMENTS --- */
         @media (max-width: 900px) {
             body { flex-direction: column; }
             .mobile-bar { display: flex; }
@@ -237,7 +237,6 @@
             .doc-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
             .integrity-seal { margin-left: 0; }
             
-            /* Logic Mode Banner on Mobile: Position safely */
             #mode-banner { top: 60px; right: 20px; z-index: 900; }
             
             .footer-content { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
@@ -302,11 +301,11 @@
                 <h1><span class="scramble">01 //</span>Mission <a onclick="copyLink('mission')" class="permalink"></a></h1>
                 <div class="prose-content">
                     <p class="abstract" id="mission-text">
-                        <span class="audit-marker" onmouseenter="highlightClaim('c-m1')" onmouseleave="unhighlightClaim('c-m1')">[M1.0]</span>
+                        <span class="audit-marker">[M1.0]</span>
                         We advance the <del>field</del> <ins>science</ins> of reflective alignment and reasoning stability.
                     </p>
                     <p>
-                        <span class="audit-marker" onmouseenter="highlightClaim('c-m2')" onmouseleave="unhighlightClaim('c-m2')">[M1.1]</span>
+                        <span class="audit-marker">[M1.1]</span>
                         We <del>build</del> <ins>develop</ins> governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an <del>abstract intention</del> <ins>internal system property</ins> that can be examined, stressed, and verified.
                     </p>
                     
@@ -341,7 +340,7 @@
                 <h2><span class="scramble">02 //</span>What We Evaluate <a onclick="copyLink('theory')" class="permalink"></a></h2>
                 <div class="prose-content">
                     <p>
-                        <span class="audit-marker" onmouseenter="highlightClaim('c-e1')" onmouseleave="unhighlightClaim('c-e1')">[E-01]</span>
+                        <span class="audit-marker">[E-01]</span>
                         We evaluate alignment as a <del>static</del> <ins>dynamic</ins> property of reasoning systems, not as a <del>stated</del> <ins>stated</ins> objective.
                     </p>
                     <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where <del>failures</del> <ins>failure modes</ins> emerge <span class="diff-tag">[scope narrowed]</span>.</p>
@@ -373,7 +372,7 @@
                 <h2><span class="scramble">03 //</span>Instruments <a onclick="copyLink('instruments')" class="permalink"></a></h2>
                 <div class="prose-content">
                     <p>
-                        <span class="audit-marker" onmouseenter="highlightClaim('c-d1')" onmouseleave="unhighlightClaim('c-d1')">[D-09]</span>
+                        <span class="audit-marker">[D-09]</span>
                         We develop reflective diagnostics to <del>check</del> <ins>test</ins> how alignment behaves over time, not only how it is expressed at a single point.
                     </p>
                     
@@ -386,7 +385,7 @@
                     </div>
 
                     <p>These diagnostics operate directly over the controlled alignment lexicon, ensuring that detected changes correspond to genuine reasoning drift rather than interpretive ambiguity <span class="diff-tag">[precision added]</span>.</p>
-                    <p>The instruments are designed to expose failure modes. Passing is not assumed.</p>
+                    <p>The instruments are designed to expose failure modes. <del>Passing is expected.</del> <ins>Passing is not assumed.</ins></p>
                 </div>
             </div>
 
@@ -405,7 +404,7 @@
                 <h2><span class="scramble">04 //</span>Outputs <a onclick="copyLink('outputs')" class="permalink"></a></h2>
                 <div class="prose-content">
                     <p>
-                        <span class="audit-marker" onmouseenter="highlightClaim('c-o1')" onmouseleave="unhighlightClaim('c-o1')">[A-01]</span>
+                        <span class="audit-marker">[A-01]</span>
                         Our research outputs are published as <del>summaries</del> <ins>inspectable artifacts</ins>.
                     </p>
                     
@@ -447,7 +446,7 @@
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${mode}`).classList.add('active');
             const banner = document.getElementById('mode-banner');
-            banner.innerText = label || "READER MODE";
+            banner.innerText = (mode === 'reader') ? "READER MODE" : mode.toUpperCase() + " MODE ACTIVE";
             if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
         }
         function highlightClaim(id) { document.getElementById(id).classList.add('active'); }
@@ -480,7 +479,7 @@
           const sidebar = document.getElementById("sidebar");
           const isOpen = sidebar.classList.contains("open");
           if (!isOpen) return;
-          const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
+          const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar");
           if (!clickedInside) sidebar.classList.remove("open");
         });
     </script>
