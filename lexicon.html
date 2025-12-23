@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0001",
-        "version": "1.2.0",
-        "status": "MACHINE_STACK_ACTIVE"
+        "version": "1.3.0",
+        "status": "PERMANENT_RAIL"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V43 (MACHINE LAYER) */
+        /* THEME: INSTITUTE STANDARD V44 (PERMANENT RAIL) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -81,15 +81,36 @@
             animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1);
         }
 
-        /* --- MACHINE STACK (NEW) --- */
+        /* --- PERMANENT RAIL LAYOUT --- */
+        main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; }
+        
+        /* The Grid is now PERMANENT across all modes */
+        section { 
+            margin-bottom: 8rem; scroll-margin-top: 5rem; 
+            display: grid; grid-template-columns: 1fr 280px; gap: 3rem; 
+            position: relative; 
+        }
+
+        /* The Rail is now PERMANENT across all modes */
+        .audit-rail { 
+            display: block; /* Always visible */
+            padding-left: 1.5rem; border-left: 1px solid var(--border-color); 
+            font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); 
+            position: sticky; top: 100px; height: fit-content; 
+        }
+
+        /* --- MACHINE STACK (EXPANSION LOGIC) --- */
         .machine-only { display:none; }
-        body.view-machine .machine-only, body.mode-logic .machine-only { display:block; }
+        
+        /* Expand stack only in Machine or Logic views */
+        body.view-machine .machine-only, 
+        body.mode-logic .machine-only { display:block; }
 
         .rail-grid { display:grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
         
         /* Rail Card Base */
         .rail-card--mini { padding:12px; background: #fafafa; border: 1px solid #eee; position: relative; overflow: hidden; }
-        .rail-card--field { overflow: hidden; margin-bottom: 0; }
+        .rail-card--field { overflow: hidden; margin-bottom: 0; display: block; /* Always visible */ }
         
         .rail-card__hdr { 
             display: flex; justify-content: space-between; border-bottom: 1px solid #e0e0e0; 
@@ -100,8 +121,6 @@
         @keyframes blink-slow { 0%,100% {opacity:1} 50% {opacity:0.5} }
 
         .rail-card--mini canvas { display:block; width:100%; height:auto; }
-        
-        /* Field Tag */
         .field-tag {
             position:absolute; right:10px; bottom:8px;
             font-family: var(--font-mono); font-size: 9px; letter-spacing: .06em;
@@ -109,61 +128,48 @@
             padding: 2px 6px; border: 1px solid #eee; pointer-events: none;
         }
 
-        /* Monitor KV */
+        /* KV, Pre, Stream, Console */
         .kv { display:grid; gap:6px; font-size:10px; font-family: var(--font-stack); }
         .kv > div { display:flex; justify-content:space-between; border-bottom:1px solid #f0f0f0; padding-bottom:4px; }
         .kv b { font-weight:700; font-family: var(--font-mono); }
-        .ok { color:#1a7f37; }
-        .warn { color:#b36b00; }
-
-        /* Mini Pre */
-        .mini-pre {
-            margin:0; padding:8px; background:#fff; border:1px solid #eee;
-            overflow:auto; font-size:10px; line-height:1.35; font-family: var(--font-mono); color: #333;
-        }
-
-        /* Stream */
+        .ok { color:#1a7f37; } .warn { color:#b36b00; }
+        .mini-pre { margin:0; padding:8px; background:#fff; border:1px solid #eee; overflow:auto; font-size:10px; line-height:1.35; font-family: var(--font-mono); color: #333; }
         .stream { font-size:10px; border:1px solid #eee; background:#fff; padding:8px; max-height:100px; overflow:hidden; }
         .stream .row { display:flex; justify-content:space-between; gap:8px; padding:4px 0; border-bottom:1px solid #f5f5f5; animation: fadeIn 0.3s; }
         .stream .row:last-child { border-bottom:none; }
         .stream .tag { font-family: var(--font-mono); color:#000; font-weight: 600; }
         .stream .delta { color:#777; font-family: var(--font-mono); }
         @keyframes fadeIn { from { opacity:0; transform: translateY(-5px); } to { opacity:1; transform: translateY(0); } }
-
-        /* Query Console */
         .mini-console { display:flex; gap:8px; align-items:center; border:1px solid #eee; background:#fff; padding:6px; margin-bottom: 6px; }
         .mini-console .prompt { font-family: var(--font-mono); color:#666; font-size: 10px; }
         .mini-console input { width:100%; border:none; outline:none; font-family: var(--font-mono); font-size:10px; color: #000; }
         #lexQueryOut { white-space: pre-wrap; word-break: break-all; }
-
-        /* Field Wrap */
         .field-wrap { position: relative; border: 1px solid #eee; background: #fafafa; }
         #numericFieldCanvas { display:block; width:100%; height:auto; }
-
+        
         @media (prefers-reduced-motion: reduce){ .rail-card--mini canvas, #numericFieldCanvas { display:none !important; } }
 
+        /* --- AUDIT GROUPS (Always Visible Logic) --- */
+        .audit-group { display: none; }
+        .audit-group.active { display: block; }
+        /* In Audit Mode, show cards. In Reader Mode, show cards too? */
+        /* DECISION: Always show the active audit group (System Notes) because the page needs mass. */
+        .audit-group.active { display: block; }
 
         /* --- VIEW TOGGLE --- */
         .view-controls { margin-bottom: 3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; display: flex; gap: 1rem; }
-        .view-btn { 
-            background: none; border: none; font-family: var(--font-mono); font-size: 0.75rem; 
-            cursor: pointer; padding: 4px 8px; opacity: 0.5; transition: all 0.2s;
-            text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
-        }
+        .view-btn { background: none; border: none; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer; padding: 4px 8px; opacity: 0.5; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
         .view-btn.active { opacity: 1; border-bottom: 2px solid #000; color: #000; }
         .view-btn:hover { opacity: 1; }
 
         /* --- CONTENT VISIBILITY --- */
+        .machine-only { display: none; }
         .human-only { display: block; }
+        body.view-machine .machine-only { display: block; }
         body.view-machine .human-only { display: none; }
 
         /* --- MACHINE CARD STYLES --- */
-        .machine-card {
-            background: #fafafa; border: 1px solid #eee; padding: 1.5rem; margin-bottom: 1.5rem;
-            font-family: var(--font-mono); font-size: 0.75rem;
-            display: grid; grid-template-columns: 120px 1fr; gap: 1rem;
-            border-left: 2px solid #ccc; transition: border-color 0.2s;
-        }
+        .machine-card { background: #fafafa; border: 1px solid #eee; padding: 1.5rem; margin-bottom: 1.5rem; font-family: var(--font-mono); font-size: 0.75rem; display: grid; grid-template-columns: 120px 1fr; gap: 1rem; border-left: 2px solid #ccc; transition: border-color 0.2s; }
         .machine-card:hover { border-left-color: #000; background: #f4f4f4; }
         .mc-label { color: #999; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.65rem; }
         .mc-value { color: #000; font-weight: 500; }
@@ -222,13 +228,11 @@
         .lex-btn { width: 100%; border: 1px solid #ccc; background: #fff; padding: 6px; font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; cursor: pointer; text-align: center; font-weight: 600; }
         .lex-btn:hover { background: #000; color: #fff; border-color: #000; }
 
-        main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; }
         .doc-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); }
         .doc-meta { display: flex; flex-direction: column; }
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
         
-        section { margin-bottom: 8rem; scroll-margin-top: 5rem; display: grid; grid-template-columns: 1fr; gap: 0; position: relative; }
         h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; display: flex; align-items: center; }
         h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; color: #000; display: flex; align-items: center; }
         p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
@@ -236,15 +240,7 @@
         .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 2px 5px; border-radius: 3px; margin-right: 8px; cursor: help; vertical-align: 2px; background: #fff; transition: all 0.1s; }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         
-        .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); position: sticky; top: 100px; height: fit-content; }
-        body[data-mode="audit"] .audit-rail, body[data-mode="logic"] .audit-rail, body.view-machine .audit-rail { display: block; }
-        body:not([data-mode="audit"]) .audit-group { display: none !important; }
-        .audit-group { display: none; }
-        body[data-mode="audit"] .audit-group.active { display: block; }
-        
-        body[data-mode="audit"] section, body[data-mode="logic"] section, body.view-machine section { grid-template-columns: 1fr 280px; gap: 3rem; }
-
-        .claim-box { margin-bottom: 1rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
+        .claim-box { margin-bottom: 2rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
         .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
         .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
         .metric-tag { font-weight: 600; color: #000; }
@@ -373,17 +369,6 @@
                 
                 <div class="rail-stack machine-only" id="machineRailStack">
                     <div class="rail-grid">
-                        <div class="rail-card rail-card--field" id="numericFieldCard" aria-label="Numeric Field">
-                          <div class="rail-card__hdr">
-                            <div class="rail-k">FIELD [N-01]</div>
-                            <div class="rail-v">STATE: LIVE</div>
-                          </div>
-                          <div class="field-wrap">
-                            <canvas id="numericFieldCanvas" width="360" height="220"></canvas>
-                            <div class="field-tag">numeric lattice · non-semantic</div>
-                          </div>
-                        </div>
-
                         <div class="rail-card rail-card--mini" id="termGraphCard">
                           <div class="rail-card__hdr">
                             <div class="rail-k">GRAPH [G-02]</div><div class="rail-v">TERMS</div>
@@ -405,28 +390,12 @@
                           <div class="field-tag">state · thresholds</div>
                         </div>
 
-                        <div class="rail-card rail-card--mini" id="schemaValCard">
-                          <div class="rail-card__hdr">
-                            <div class="rail-k">VALIDATE [S-04]</div><div class="rail-v">SCHEMA</div>
-                          </div>
-                          <pre class="mini-pre"><code id="schemaValOut">Schema.validate(entry) → OK</code></pre>
-                          <div class="field-tag">shape · required keys</div>
-                        </div>
-
                         <div class="rail-card rail-card--mini" id="changeStreamCard">
                           <div class="rail-card__hdr">
                             <div class="rail-k">STREAM [C-05]</div><div class="rail-v">REVISIONS</div>
                           </div>
                           <div class="stream" id="changeStream"></div>
                           <div class="field-tag">diff · commit trace</div>
-                        </div>
-
-                        <div class="rail-card rail-card--mini" id="tokenHeatCard">
-                          <div class="rail-card__hdr">
-                            <div class="rail-k">HEAT [T-06]</div><div class="rail-v">TOKENS</div>
-                          </div>
-                          <canvas id="tokenHeatCanvas" width="360" height="120"></canvas>
-                          <div class="field-tag">density · attention proxy</div>
                         </div>
 
                         <div class="rail-card rail-card--mini" id="queryConsoleCard">
@@ -440,6 +409,17 @@
                           <pre class="mini-pre"><code id="lexQueryOut">{ "term_id":"RA-001", "label":"Reflective Alignment", "access":"PUBLIC" }</code></pre>
                         </div>
                     </div>
+                </div>
+
+                <div class="rail-card rail-card--field" id="numericFieldCard" aria-label="Numeric Field">
+                  <div class="rail-card__hdr">
+                    <div class="rail-k">FIELD [N-01]</div>
+                    <div class="rail-v">STATE: LIVE</div>
+                  </div>
+                  <div class="field-wrap">
+                    <canvas id="numericFieldCanvas" width="360" height="220"></canvas>
+                    <div class="field-tag">numeric lattice · non-semantic</div>
+                  </div>
                 </div>
 
                 <div class="audit-group active" id="audit-overview">
@@ -662,7 +642,6 @@
         function checkFieldVisibility() {
             const stack = document.getElementById('machineRailStack');
             if(!stack) return;
-            // Logic: Show stack if Logic Mode OR Machine View is active
             const logicOn = currentMode === 'logic';
             const machineOn = currentView === 'machine';
             
@@ -750,7 +729,7 @@
           const isMachine = () => document.body.classList.contains("view-machine") || document.body.classList.contains("mode-logic");
           const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-          // 1. NUMERIC FIELD
+          // 1. NUMERIC FIELD - ALWAYS RUNNING (Unless Reduced Motion)
           const canvas = document.getElementById("numericFieldCanvas");
           if(canvas && !reduce){
               const ctx = canvas.getContext("2d", { alpha: true });
@@ -764,7 +743,7 @@
               for(let r=0;r<rows;r++){ for(let c=0;c<cols;c++){ grid.push(Math.floor(rand()*10)); } }
               let t = 0;
               function drawField(){
-                if(!isMachine()){ requestAnimationFrame(drawField); return; }
+                // Removed the visibility check so it runs in Reader mode too
                 t += 0.016;
                 ctx.clearRect(0,0,W,H);
                 const grad = ctx.createLinearGradient(0,0,W,H);
@@ -798,7 +777,7 @@
               requestAnimationFrame(drawField);
           }
 
-          // 2. TERM GRAPH
+          // 2. TERM GRAPH (Machine/Logic Only)
           const tg = document.getElementById("termGraphCanvas");
           if(tg && !reduce){
             const ctx = tg.getContext("2d");
@@ -831,7 +810,7 @@
             requestAnimationFrame(drawGraph);
           }
 
-          // 3. HEATMAP
+          // 3. HEATMAP (Machine/Logic Only)
           const th = document.getElementById("tokenHeatCanvas");
           if(th && !reduce){
             const ctx = th.getContext("2d");
@@ -852,7 +831,7 @@
             requestAnimationFrame(drawHeat);
           }
 
-          // 4. STREAM
+          // 4. STREAM (Machine/Logic Only)
           const stream = document.getElementById("changeStream");
           if(stream){
             const rows = [["RA-001", "+clarify", "v1.0→v1.1"], ["INV-002", "+bound", "v1.1→v1.2"], ["SCHEMA", "+key", "v1.2→v1.3"], ["DRIFT", "-ambig", "v1.3→v1.4"], ["RS-001", "+test", "v1.4→v1.5"]];
@@ -868,7 +847,7 @@
             }, 2200);
           }
 
-          // 5. QUERY
+          // 5. QUERY (Machine/Logic Only)
           const q = document.getElementById("lexQuery");
           const out = document.getElementById("lexQueryOut");
           if(q && out){
