@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "4.0.0",
-        "status": "DIFF_MODE_RESTORED"
+        "version": "5.0.0",
+        "status": "ACCESS_RESTRICTED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V57 */
+        /* THEME: INSTITUTE STANDARD V58 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -31,11 +31,9 @@
             /* SIGNALS */
             --status-verified: #00cc00;
             --signal-blue: #0066ff;
-            --signal-amber: #b45309;
             --signal-red: #cc0000;
             
             /* MODES */
-            --mode-audit: #b45309; 
             --mode-diff: #000000;  
         }
 
@@ -70,6 +68,7 @@
         
         /* --- BEACONS --- */
         @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
+        @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
         @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
 
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
@@ -85,63 +84,48 @@
         
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
-        /* --- REPOSITORY ACCESS PANEL --- */
+        /* --- SIDEBAR MODES --- */
+        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; }
+        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
+        .toggle-btn:hover { color: #000; }
+        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+
+        /* --- REPOSITORY ACCESS PANEL (NEW) --- */
         .repo-panel {
             margin-top: auto; 
             margin-bottom: 1rem; 
             border: 1px solid #eee; 
             background: #fafafa;
-            padding: 1rem;
+            padding: 12px;
             font-family: var(--font-mono);
         }
         .repo-header {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            color: #000;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            letter-spacing: 0.05em;
         }
-        .repo-status {
-            font-size: 0.6rem;
-            color: #b45309; /* Amber for restricted */
-            border: 1px solid #b45309;
-            padding: 1px 4px;
-            border-radius: 2px;
-        }
-        .repo-body {
-            font-size: 0.65rem;
-            color: #444;
-            line-height: 1.4;
-            margin-bottom: 0.75rem;
+        .status-dot-red { 
+            width: 6px; height: 6px; background: var(--signal-red); 
+            border-radius: 50%; display: block; 
+            animation: beacon-red 2s infinite; 
         }
         .repo-link {
             display: block;
             font-size: 0.65rem;
-            color: var(--signal-blue);
+            color: #444;
             text-decoration: none;
             border-top: 1px solid #e5e5e5;
-            padding-top: 0.5rem;
+            padding-top: 8px;
             transition: color 0.2s;
         }
-        .repo-link:hover { color: #000; }
+        .repo-link:hover { color: #000; text-decoration: underline; }
 
-        /* --- DIFF TOGGLE BUTTON --- */
-        .diff-btn {
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 4px 10px;
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-left: auto; /* Push to right */
-            margin-right: 1rem;
-        }
-        .diff-btn:hover { background: #f0f0f0; }
-        .diff-btn.active { background: #000; color: #fff; border-color: #000; }
-
-        /* --- DIFF MODE LOGIC (CRITICAL FIX) --- */
+        /* --- DIFF MODE LOGIC (SAFE CSS) --- */
         del, ins { text-decoration: none; }
         
         /* READER MODE (Default): Hides deletions, shows insertions as normal text */
@@ -224,6 +208,11 @@
             <span>EST. 2026 // MONTREAL</span>
         </div>
 
+        <div class="mode-group">
+            <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
+            <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
+        </div>
+
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
@@ -240,14 +229,10 @@
 
         <div class="repo-panel">
             <div class="repo-header">
-                Repository Access
-                <span class="repo-status">RESTRICTED</span>
+                REPOSITORY ACCESS — RESTRICTED
+                <span class="status-dot-red"></span>
             </div>
-            <div class="repo-body">
-                Read access is public.
-                Write access is granted selectively for research and audit purposes.
-            </div>
-            <a href="https://github.com/enlightened/core/issues/new?title=Research%20Access%20Request&body=**Affiliation:**%0A%0A**Intended%20use:**%0A%0A**Relevant%20experience%20(if%20any):**" target="_blank" class="repo-link">Request research access →</a>
+            <a href="https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:" target="_blank" class="repo-link">Request research access →</a>
         </div>
 
         <div class="export-container">
@@ -260,16 +245,13 @@
             <div style="display:flex; border-bottom:1px solid #eee; padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:#666; align-items: center; flex-wrap:wrap; gap:1.5rem;">
                 <div><span style="color:#999; display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0002</div>
                 <div><span style="color:#999; display:block; font-size:0.6rem;">CLASSIFICATION</span>PUBLIC</div>
-                
-                <button class="diff-btn" onclick="toggleDiff(this)">[ ENABLE DIFF ]</button>
-                
                 <div class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
             </div>
 
             <section id="overview">
                 <h1><span class="scramble">01 //</span>Overview</h1>
-                <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined, referenced, and <span class="diff-change"><del>tested</del> <ins>evaluated</ins></span>.</p>
-                <p>It exists to eliminate semantic <span class="diff-change"><del>drift</del> <ins>deviation</ins></span> between theory, diagnostics, and interpretation.</p>
+                <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined, referenced, and <del>tested</del> <ins>evaluated</ins>.</p>
+                <p>It exists to eliminate semantic <del>drift</del> <ins>deviation</ins> between theory, diagnostics, and interpretation.</p>
                 <p>This lexicon is not descriptive documentation.</p>
                 <p>It is a measurement instrument.</p>
             </section>
@@ -277,14 +259,14 @@
             <section id="what-it-does">
                 <h2><span class="scramble">02 //</span>What the Lexicon Does</h2>
                 <p>Advanced AI systems are evaluated using language.</p>
-                <p>If that language is unstable, the evaluation is invalid.</p>
-                <p>The lexicon fixes the meaning of core terms so that:</p>
+                <p>If that language is <del>malleable</del> <ins>unstable</ins>, the evaluation is invalid.</p>
+                <p>The lexicon fixes the <del>understanding</del> <ins>meaning</ins> of core terms so that:</p>
                 <ul>
                     <li>diagnostic results are interpretable,</li>
-                    <li>comparisons across runs remain valid,</li>
+                    <li>comparisons across runs remain <del>accurate</del> <ins>valid</ins>,</li>
                     <li>and observed changes correspond to real system behavior rather than reinterpretation.</li>
                 </ul>
-                <p>Terms defined here may not be redefined elsewhere without explicit versioning.</p>
+                <p>Terms defined here may not be <del>altered</del> <ins>redefined</ins> elsewhere without explicit versioning.</p>
             </section>
 
             <section id="core-terms">
@@ -292,16 +274,16 @@
                 <p>Each core term specifies:</p>
                 <ul>
                     <li>a bounded semantic scope,</li>
-                    <li>an operational interpretation,</li>
+                    <li>an operational <del>definition</del> <ins>interpretation</ins>,</li>
                     <li>and the conditions under which it may be considered violated.</li>
                 </ul>
                 <p>These terms are intentionally narrow.</p>
-                <p>Breadth increases ambiguity; ambiguity invalidates measurement.</p>
+                <p>Breadth increases ambiguity; ambiguity <del>complicates</del> <ins>invalidates</ins> measurement.</p>
             </section>
 
             <section id="invariants">
                 <h2><span class="scramble">04 //</span>Invariants</h2>
-                <p>Invariants are properties that must hold across transformations of the system state.</p>
+                <p>Invariants are properties that must hold <del>true</del> across transformations of the system state.</p>
                 <p>Violation of an invariant constitutes a diagnostic failure, not an anomaly.</p>
                 <p>Invariant failure indicates:</p>
                 <ul>
@@ -315,7 +297,7 @@
             <section id="drift">
                 <h2><span class="scramble">05 //</span>Drift and Reinterpretation</h2>
                 <p>Drift is defined as measurable deviation from invariant constraints without external prompting.</p>
-                <p>The lexicon prevents reinterpretation by binding terms to explicit constraints rather than narrative intent.</p>
+                <p>The lexicon prevents reinterpretation by binding terms to explicit <del>rules</del> <ins>constraints</ins> rather than narrative intent.</p>
                 <p>Without a lexicon, identical outputs may be read as compliant or non-compliant depending on observer bias.</p>
                 <p>With a lexicon, interpretation is constrained.</p>
             </section>
@@ -335,7 +317,7 @@
                 <div class="footer-content">
                     <div class="footer-left">
                         <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                        <div class="footer-secondary">Controlled Lexicon · Version 4.0 · Machine Readable</div>
+                        <div class="footer-secondary">Controlled Lexicon · Version 5.0 · Machine Readable</div>
                     </div>
                     <div class="footer-right">
                         <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
@@ -346,16 +328,18 @@
     </main>
 
     <script>
-        // TOGGLE DIFF LOGIC
-        function toggleDiff(btn) {
+        // SIDEBAR MODE LOGIC
+        function setMode(mode, btn) {
             const body = document.body;
-            if (body.getAttribute('data-mode') === 'diff') {
+            if (mode === 'diff' && body.getAttribute('data-mode') === 'diff') {
+                // Toggle Off
                 body.setAttribute('data-mode', 'reader');
-                btn.innerText = "[ ENABLE DIFF ]";
                 btn.classList.remove('active');
+                document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
             } else {
-                body.setAttribute('data-mode', 'diff');
-                btn.innerText = "[ DIFF ACTIVE ]";
+                // Set Mode
+                body.setAttribute('data-mode', mode);
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
             }
         }
@@ -378,6 +362,9 @@
             h.dataset.value = h.innerText;
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
+
+        // Init Reader Mode Active
+        document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
     </script>
 </body>
 </html>
