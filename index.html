@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "3.7.0",
-        "status": "LOCKED_PRODUCTION"
+        "version": "3.8.0",
+        "status": "CANONICAL_LOCKED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V37 */
+        /* THEME: INSTITUTE STANDARD V38 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -93,10 +93,10 @@
         .claim-box.active { border-color: var(--mode-audit); background: rgba(180, 83, 9, 0.05); border-left: 3px solid var(--mode-audit); }
         
         .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); position: sticky; top: 100px; height: fit-content; }
-        .claim-box { margin-bottom: 1.5rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
+        .claim-box { margin-bottom: 2rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
         .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
         
-        /* 3. NUMERICAL ANCHORS STYLING */
+        /* NUMERICAL ANCHORS STYLING */
         .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
         .metric-tag { font-weight: 600; color: #000; }
         
@@ -121,7 +121,7 @@
         @keyframes slideLeft { to { opacity: 1; transform: translateX(0); } }
         
         .logic-block::before {
-            content: "FORMAL BACKING — NOT EXECUTABLE"; position: absolute; top: 0; right: 0;
+            content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0;
             background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de;
             padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em;
         }
@@ -241,7 +241,6 @@
 </head>
 <body data-mode="reader">
 
-    <div id="toast">Copied to clipboard.</div>
     <div id="mode-banner">READER MODE</div>
 
     <header style="display:none; position:sticky; top:0; z-index:1000; background:rgba(255,255,255,0.98); border-bottom:1px solid #e5e5e5; padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between;" class="mobile-bar">
@@ -300,7 +299,6 @@
                         We advance the <del>field</del> <ins>science</ins> of <span class="fact-hook">reflective alignment</span> and reasoning stability. 
                     </p>
                     <p>
-                        <span class="audit-marker" onmouseenter="highlightClaim('c-m2')" onmouseleave="unhighlightClaim('c-m2')">[M1.1]</span>
                         We <del>build</del> <ins>develop</ins> <del>standard</del> <ins>governance-grade</ins> diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an <del>abstract intention</del> <ins>internal property</ins> that can be examined, stressed, and verified <span class="diff-tag">[assumption removed]</span>.
                     </p>
                     
@@ -330,11 +328,6 @@
                     <div class="claim-meta"><span>SCOPE: CONCEPT</span><span class="metric-tag">CONF: HIGH</span></div>
                     <div class="claim-text">"Alignment is evaluated as an internal system property"</div>
                 </div>
-                <div class="claim-box" id="c-m2">
-                    <span class="claim-id">CLAIM [M1.1]</span>
-                    <div class="claim-meta"><span>SCOPE: TOOLING</span></div>
-                    <div class="claim-text">Diagnostics must meet governance-grade audit standards.</div>
-                </div>
             </div>
         </section>
 
@@ -347,7 +340,7 @@
                         <span class="audit-marker" onmouseenter="highlightClaim('c-e1')" onmouseleave="unhighlightClaim('c-e1')">[E-01]</span>
                         We evaluate alignment as a <del>static</del> <ins>dynamic</ins> property of reasoning systems, not as a <del>stated</del> <ins>evaluated</ins> objective.
                     </p>
-                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where failures emerge <span class="diff-tag">[scope narrowed]</span>.</p>
+                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where <del>failures</del> <ins>failure modes</ins> emerge <span class="diff-tag">[scope narrowed]</span>.</p>
                     
                     <div class="logic-block">
 <span class="logic-comment"># Evaluation Strategy: Dynamic Stress Testing</span>
@@ -377,7 +370,7 @@
                 <div class="prose-content">
                     <p>
                         <span class="audit-marker" onmouseenter="highlightClaim('c-d1')" onmouseleave="unhighlightClaim('c-d1')">[D-09]</span>
-                        We develop reflective diagnostics to test how alignment behaves over time, not just how it is expressed at a single point.
+                        We develop reflective diagnostics to <del>check</del> <ins>test</ins> how alignment behaves over time, not just how it is expressed at a single point.
                     </p>
                     
                     <div class="logic-block">
@@ -388,7 +381,8 @@
             <span class="logic-keyword">then</span> IsAligned(Next(s))
                     </div>
 
-                    <p>The diagnostics are constructed to operate directly over the controlled alignment lexicon, ensuring that detected changes reflect genuine reasoning drift <span class="diff-tag">[precision added]</span>.</p>
+                    <p>These diagnostics subject reasoning systems to controlled stress: recursive self-reference, extended deliberation, and conditions where internal objectives must be preserved across transformation.</p> 
+                    <p>We <del>ensure</del> <ins>observe</ins> whether alignment invariants remain intact as reasoning unfolds.</p>
                     
                     <p>These instruments are designed to expose failure modes. <del>Passing is expected.</del> <ins>Passing is not assumed.</ins></p>
                 </div>
@@ -409,7 +403,7 @@
                 <h2><span class="scramble">04 //</span>Outputs <a onclick="copyLink('outputs')" class="permalink"></a></h2>
                 <div class="prose-content">
                     <p>
-                        <span class="audit-marker" onmouseenter="highlightClaim('c-o1')" onmouseleave="unhighlightClaim('c-o1')">[O-01]</span>
+                        <span class="audit-marker" onmouseenter="highlightClaim('c-o1')" onmouseleave="unhighlightClaim('c-o1')">[A-01]</span>
                         Our research outputs are published as <del>summaries</del> <ins>inspectable artifacts</ins>.
                     </p>
                     
@@ -420,13 +414,14 @@
     artifact.lock_integrity()
                     </div>
 
-                    <p>All outputs are treated as living records. Revisions are logged. Claims are subject to re-evaluation.</p>
+                    <p>Each output is accompanied by supporting material sufficient for independent review, including formal definitions, evaluation procedures, and reproducible evidence where applicable.</p>
+                    <p>Current outputs include technical preprints describing reasoning stability, public repositories containing diagnostic implementations, and versioned lexicon releases.</p>
                 </div>
             </div>
              <div class="audit-rail">
                 <div class="claim-box" id="c-o1">
-                    <span class="claim-id">REPO STATUS</span>
-                    <div class="claim-meta"><span>LOGGED: YES</span></div>
+                    <span class="claim-id">ARTIFACT [A-01]</span>
+                    <div class="claim-meta"><span>REPO STATUS</span><span class="metric-tag">LOGGED: YES</span></div>
                     <div class="claim-text" style="color:#008800; font-weight:600;">● PASSING (CI/CD)</div>
                 </div>
             </div>
@@ -465,13 +460,9 @@
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
         
-        function showToast(msg) {
-            const el = document.getElementById("toast");
-            el.innerText = msg; el.className = "show";
-            setTimeout(() => el.className = el.className.replace("show", ""), 3000);
-        }
-        function copyCite(text) { navigator.clipboard.writeText(text).then(() => showToast("Citation copied.")); }
-        function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`).then(() => showToast("Link copied.")); }
+        // SILENT COPY
+        function copyCite(text) { navigator.clipboard.writeText(text); }
+        function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`); }
         
         const cmdk = document.getElementById('cmdk');
         const cmdkInput = document.getElementById('cmdkInput');
