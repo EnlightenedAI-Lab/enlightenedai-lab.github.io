@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "50.0.0",
-        "status": "DIFF_ACTIVE_TEXT_CLEAN"
+        "version": "51.0.0",
+        "status": "TEXT_SPACING_FIXED"
     }
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V50 --- */
+        /* --- THEME: INSTITUTE STANDARD V51 --- */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -81,7 +81,7 @@
         .mobile-bar {
             display: none;
             position: fixed; top: 0; left: 0; right: 0;
-            z-index: 10001; /* NUCLEAR Z-INDEX */
+            z-index: 10001; 
             background: rgba(255,255,255,0.98);
             border-bottom: 1px solid #e5e5e5;
             padding: 0 1.25rem;
@@ -115,7 +115,7 @@
         nav a:hover { color: #000; }
         nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9, #fff); }
 
-        /* --- SIDEBAR MODULES (LEFT) --- */
+        /* --- SIDEBAR MODULES --- */
         .git-module { 
             margin-top: auto; 
             margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; 
@@ -152,10 +152,9 @@
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
         .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; }
 
-        /* --- VISIBILITY RULES (CRITICAL FIX) --- */
+        /* --- VISIBILITY RULES (SPACING FIXED) --- */
         
-        /* 1. READER MODE: The "Clean" View */
-        /* Hides Audit markers, Logic blocks, Diffs */
+        /* 1. READER MODE */
         body[data-mode="reader"] .audit-marker,
         body[data-mode="reader"] .logic-block,
         body[data-mode="reader"] .diff-del,
@@ -163,14 +162,14 @@
         body[data-mode="reader"] .audit-rail,
         body[data-mode="reader"] .diff-header { display: none !important; }
         
-        /* Reader: Make inserted text look normal (no green) */
+        /* Reader: Make insertions look like normal text */
         body[data-mode="reader"] ins { 
             text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0;
         }
-        /* Reader: Hides deleted text completely */
+        /* Reader: Hide deletions */
         body[data-mode="reader"] del { display: none; }
 
-        /* 2. DIFF MODE: The "History" View */
+        /* 2. DIFF MODE */
         del, ins, .diff-tag { display: none; } /* Hidden by default */
         
         body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
@@ -182,11 +181,10 @@
         body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; pointer-events: none; }
 
-        /* 3. AUDIT MODE: The "Claims" View */
+        /* 3. AUDIT MODE */
         .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: #fff; }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         
-        /* Audit: Text looks normal */
         body[data-mode="audit"] ins { text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="audit"] del { display: none; }
 
@@ -200,12 +198,11 @@
         .metric-tag { font-weight: 600; color: #000; }
         .claim-text { color: #333; line-height: 1.4; }
 
-        /* 4. LOGIC MODE: The "Code" View */
+        /* 4. LOGIC MODE */
         .logic-block { display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; background-color: #fcfcfc; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
         .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
         
-        /* Logic: Text looks normal */
         body[data-mode="logic"] ins { text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="logic"] del { display: none; }
 
@@ -234,7 +231,7 @@
         body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
         body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
 
-        /* --- MOBILE ADJUSTMENTS (CRITICAL FIXES) --- */
+        /* --- MOBILE ADJUSTMENTS --- */
         @media (max-width: 900px) {
             body { flex-direction: column; overflow-x: hidden; }
             .mobile-bar { display: flex; }
@@ -256,7 +253,6 @@
             
             .footer-content { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
             
-            /* FIX LOGIC BLOCK MOBILE */
             .logic-block { 
                 max-width: 100%; 
                 overflow-x: auto; 
@@ -326,7 +322,7 @@
                 <div class="prose-content">
                     <p class="abstract" id="mission-text">
                         <span class="audit-marker">[M1.0]</span>
-                        We advance the science of reflective alignment and reasoning stability.
+                        We advance the <del>field</del> <ins>science</ins> of reflective alignment and reasoning stability.
                     </p>
                     <p>
                         <span class="audit-marker">[M1.1]</span>
