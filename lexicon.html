@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "19.0.0",
-        "status": "INSTRUMENT_LIVE"
+        "version": "20.0.0",
+        "status": "TELEMETRY_ONLINE"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V72 */
+        /* THEME: INSTITUTE STANDARD V73 */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -171,8 +171,10 @@
         .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--text-main); }
         .footer-secondary { opacity: 0.7; }
         .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 500; }
+        .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
+        @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
-        /* --- V72: LIVE INSTRUMENT SIGNALS --- */
+        /* --- V73: LIVE INSTRUMENT SIGNALS --- */
         .machine-overlay::before {
             content: ""; position: fixed; inset: 0; z-index: 20005; pointer-events: none;
             background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 2px, rgba(255, 255, 255, 0.03) 3px, rgba(0, 0, 0, 0) 4px);
@@ -185,7 +187,6 @@
         }
         .status-live { animation: terminal-breathe 4s infinite ease-in-out; font-weight: 700; letter-spacing: 0.05em; }
 
-        /* HEARTBEAT LED */
         @keyframes machine-pulse {
             0%, 100% { transform: scale(1); opacity: 0.35; }
             50% { transform: scale(1.35); opacity: 1; }
@@ -196,7 +197,12 @@
             animation: machine-pulse 2.2s ease-in-out infinite;
         }
 
-        /* BOOT ANIMATION */
+        /* EVENT TICKER */
+        .event-ticker { margin-right: 15px; color: #666; font-size: 0.7rem; font-family: var(--font-mono); display: flex; align-items: center; gap: 6px; }
+        .event-text { transition: opacity 0.25s ease; }
+        .event-text.fade-out { opacity: 0; }
+        .event-dot { width: 4px; height: 4px; background: #00cc00; border-radius: 50%; display: block; opacity: 0.7; }
+
         @keyframes terminal-boot { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
         @media (prefers-reduced-motion: no-preference) {
             .machine-overlay:not(.hidden) .m-card { animation: terminal-boot 0.4s ease-out forwards; opacity: 0; }
@@ -262,7 +268,7 @@
             .mo-content { padding: 1rem; }
             .card-grid { grid-template-columns: 1fr; } 
             .mc-section-title { grid-column: span 1; }
-            .uptime-counter { display: none; } /* Hide uptime on mobile to save space */
+            .uptime-counter, .event-ticker { display: none; } /* Hide telemetry on mobile */
         }
     </style>
 </head>
@@ -330,6 +336,7 @@
                 </div>
             </div>
             <div class="mo-controls">
+                <span id="event-ticker" class="event-ticker"><span class="event-dot"></span><span id="event-text" class="event-text">READY</span></span>
                 <span id="sys-uptime" class="uptime-counter">T+ 00:00:00</span>
                 <span style="color:#666; font-size:0.6rem; margin-right:10px;">TERMINAL MODE (FIXED)</span>
                 <button onclick="exportRecord()" id="btn-export">EXPORT FILE</button>
@@ -427,7 +434,7 @@
     <script>
         // DATA RECORD
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "19.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "RAL-LEX-0002", version: "20.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
                 { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
@@ -496,18 +503,57 @@
         let currentFormat = 'json';
         let machineMode = 'cards';
 
+        // EVENTS
+        const EVENTS = [
+            "EVENT: validate(RA-001) → OK",
+            "EVENT: diff(signature) → STABLE",
+            "EVENT: audit(invariants) → ENFORCED",
+            "EVENT: serialize(record) → READY"
+        ];
+        let eventInterval;
+        let eventIdx = 0;
+
+        function startEventTicker() {
+            if (eventInterval) clearInterval(eventInterval);
+            const tickerText = document.getElementById('event-text');
+            if(!tickerText) return;
+            
+            // Check Reduced Motion
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            eventInterval = setInterval(() => {
+                eventIdx = (eventIdx + 1) % EVENTS.length;
+                
+                if (reduceMotion) {
+                    tickerText.innerText = EVENTS[eventIdx];
+                } else {
+                    tickerText.classList.add('fade-out');
+                    setTimeout(() => {
+                        tickerText.innerText = EVENTS[eventIdx];
+                        tickerText.classList.remove('fade-out');
+                    }, 250);
+                }
+            }, 5500);
+        }
+
+        function stopEventTicker() {
+            if (eventInterval) clearInterval(eventInterval);
+        }
+
         function openMachineOverlay() {
             document.getElementById('machineOverlay').classList.remove('hidden');
             const savedMode = localStorage.getItem('lex_machine_mode');
             if (savedMode) machineMode = savedMode;
             switchMachineMode(machineMode);
             document.body.style.overflow = 'hidden';
+            startEventTicker();
         }
 
         function closeMachineOverlay() {
             document.getElementById('machineOverlay').classList.add('hidden');
             localStorage.setItem('lex_machine_dismissed', '1');
             document.body.style.overflow = '';
+            stopEventTicker();
         }
 
         function switchMachineMode(mode) {
@@ -569,7 +615,6 @@
 
         // --- SESSION UPTIME COUNTER ---
         let startTime = Date.now();
-        // Check for reduced motion preference
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             setInterval(() => {
                 let delta = Math.floor((Date.now() - startTime) / 1000);
@@ -580,7 +625,6 @@
                 if (uptimeEl) uptimeEl.innerText = `T+ ${h}:${m}:${s}`;
             }, 1000);
         } else {
-            // Static fallback for reduced motion
             const uptimeEl = document.getElementById('sys-uptime');
             if (uptimeEl) uptimeEl.innerText = `T+ --:--:--`;
         }
