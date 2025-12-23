@@ -12,19 +12,18 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "7.0.0",
-        "status": "LAYOUT_NORMALIZED"
+        "version": "8.0.0",
+        "status": "LAYOUT_ENGINE_SEGREGATED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V60 */
+        /* THEME: INSTITUTE STANDARD V61 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
-            --sidebar-width: 240px;
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
@@ -46,27 +45,19 @@
             background: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
-            display: flex; /* Desktop Default */
-            min-height: 100vh;
+            /* Note: Layout display (Flex vs Block) is now handled in Media Queries below */
         }
 
-        /* --- LAYOUT GRID --- */
-        aside#sidebar { 
-            width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; 
-            border-right: 1px solid var(--border-color); padding: 2rem; 
-            display: flex; flex-direction: column; z-index: 99; background: #fff;
-            flex-shrink: 0;
-        }
+        /* --- TYPOGRAPHY & SHARED ELEMENTS --- */
+        h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; display:flex; align-items:center; }
+        h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; display:flex; align-items:center; }
+        p { font-size: 0.95rem; margin-bottom: 1.2rem; color: #222; max-width: 65ch; }
+        ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: #444; }
+        li { margin-bottom: 0.5rem; font-size: 0.95rem; }
         
-        main { 
-            flex-grow: 1; 
-            display: block; 
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
-        .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
-        
         /* --- BEACONS --- */
         @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
         @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
@@ -75,65 +66,23 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
-        /* --- TYPOGRAPHY --- */
-        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; display:flex; align-items:center; }
-        h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; display:flex; align-items:center; }
-        p { font-size: 0.95rem; margin-bottom: 1.2rem; color: #222; max-width: 65ch; }
-        ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: #444; }
-        li { margin-bottom: 0.5rem; font-size: 0.95rem; }
-        
-        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
-
-        /* --- SIDEBAR MODES --- */
-        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
-        .toggle-btn:hover { color: #000; }
-        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
-
-        /* --- REPOSITORY ACCESS PANEL --- */
+        /* --- REPO PANEL --- */
         .repo-panel {
-            margin-top: auto; 
-            margin-bottom: 1rem; 
-            border: 1px solid #eee; 
-            background: #fafafa;
-            padding: 12px;
-            font-family: var(--font-mono);
+            margin-top: auto; margin-bottom: 1rem; border: 1px solid #eee; background: #fafafa; padding: 12px; font-family: var(--font-mono);
         }
         .repo-header {
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #000;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            letter-spacing: 0.05em;
+            font-size: 0.65rem; font-weight: 700; color: #000; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em;
         }
-        .status-dot-red { 
-            width: 6px; height: 6px; background: var(--signal-red); 
-            border-radius: 50%; display: block; 
-            animation: beacon-red 2s infinite; 
-        }
-        .repo-link {
-            display: block;
-            font-size: 0.65rem;
-            color: #444;
-            text-decoration: none;
-            border-top: 1px solid #e5e5e5;
-            padding-top: 8px;
-            transition: color 0.2s;
-        }
+        .status-dot-red { width: 6px; height: 6px; background: var(--signal-red); border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
+        .repo-link { display: block; font-size: 0.65rem; color: #444; text-decoration: none; border-top: 1px solid #e5e5e5; padding-top: 8px; transition: color 0.2s; }
         .repo-link:hover { color: #000; text-decoration: underline; }
 
-        /* --- DIFF MODE LOGIC --- */
+        /* --- DIFF MODE LOGIC (SAFE) --- */
         del, ins { text-decoration: none; }
-        
-        /* READER MODE */
+        /* READER */
         body:not([data-mode="diff"]) del { display: none; }
         body:not([data-mode="diff"]) ins { display: inline; background: transparent; color: inherit; text-decoration: none; }
-
-        /* DIFF MODE */
+        /* DIFF */
         body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
         body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px; }
 
@@ -147,6 +96,11 @@
         .brand { margin-bottom: 6rem; cursor: crosshair !important; }
         .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
+        
+        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; }
+        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
+        .toggle-btn:hover { color: #000; }
+        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 
         .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: #000; color: #fff; border-color: #000; }
@@ -161,21 +115,49 @@
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
-        /* --- RESPONSIVE FIX V60 (CRITICAL) --- */
+        /* =========================================
+           LAYOUT ENGINE: SEGREGATED
+           ========================================= */
+
+        /* DESKTOP ENGINE (Width > 900px) */
+        @media (min-width: 901px) {
+            body { 
+                display: flex; 
+                min-height: 100vh; 
+            }
+            aside#sidebar { 
+                width: 240px; 
+                height: 100vh; 
+                position: sticky; 
+                top: 0; 
+                border-right: 1px solid var(--border-color); 
+                padding: 2rem; 
+                display: flex; 
+                flex-direction: column; 
+                z-index: 99; 
+                background: #fff; 
+                flex-shrink: 0;
+            }
+            main { 
+                flex-grow: 1; 
+                display: block; 
+                max-width: 900px; 
+                margin: 0 auto; 
+            }
+            .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
+        }
+
+        /* MOBILE ENGINE (Width <= 900px) */
         @media (max-width: 900px) {
-            /* 1. FORCE BLOCK LAYOUT */
             body { 
                 display: block; 
                 overflow-x: hidden; 
-                position: relative;
             }
-            
-            /* 2. SIDEBAR OFF-CANVAS (Fixes White Gap) */
-            aside { 
+            /* Sidebar hidden off-canvas, FIXED positioning removes it from flow */
+            aside#sidebar { 
                 position: fixed; 
                 top: 50px; left: 0; bottom: 0; 
                 width: 100%; 
-                height: calc(100% - 50px);
                 transform: translateX(-100%); 
                 transition: transform 0.25s ease;
                 border-right: none; 
@@ -183,16 +165,17 @@
                 background: #fff; 
                 overflow-y: auto; 
                 z-index: 10000;
+                display: flex; 
+                flex-direction: column;
             }
-            aside.open { transform: translateX(0); }
+            aside#sidebar.open { transform: translateX(0); }
             
-            /* 3. MAIN CONTENT RESET */
+            /* Main content sits immediately below header */
             main { 
-                margin-top: 50px !important; 
+                margin-top: 50px; 
                 padding: 1.5rem; 
                 width: 100%; 
-                max-width: 100vw;
-                min-height: auto; 
+                max-width: 100vw; 
             }
             .content-col { padding: 0; }
         }
@@ -322,7 +305,7 @@
                 <div class="footer-content">
                     <div class="footer-left">
                         <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                        <div class="footer-secondary">Controlled Lexicon · Version 7.0 · Machine Readable</div>
+                        <div class="footer-secondary">Controlled Lexicon · Version 8.0 · Machine Readable</div>
                     </div>
                     <div class="footer-right">
                         <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
