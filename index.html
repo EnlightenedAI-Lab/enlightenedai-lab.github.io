@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "3.5.0",
-        "status": "MODE_ENHANCED"
+        "version": "3.6.0",
+        "status": "MODE_ENFORCED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V35 (MODE AWARE) */
+        /* THEME: INSTITUTE STANDARD V36 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -30,7 +30,7 @@
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             --status-verified: #00cc00;
             
-            /* Mode Colors */
+            /* SEMANTIC MODE COLORS */
             --mode-audit: #b45309; /* Amber */
             --mode-logic: #0044cc; /* Blue */
             --mode-diff: #000000;  /* High Contrast */
@@ -48,154 +48,121 @@
             -webkit-font-smoothing: antialiased;
             display: flex;
             min-height: 100vh;
-            transition: background-color 0.3s;
+            transition: background-color 0.2s;
         }
 
         /* --- A. GLOBAL MODE BANNER --- */
         #mode-banner {
-            position: fixed; top: 80px; right: 5rem;
-            font-family: var(--font-mono); font-size: 0.65rem; font-weight: 600;
-            padding: 6px 12px; border-radius: 4px;
+            position: fixed; top: 120px; right: 5rem;
+            font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700;
+            padding: 8px 12px; border-radius: 4px;
             text-transform: uppercase; letter-spacing: 0.05em;
             opacity: 0; transform: translateY(-10px);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
             pointer-events: none; z-index: 100;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
-        
-        /* Activate Banner when NOT in reader mode */
         body:not([data-mode="reader"]) #mode-banner { opacity: 1; transform: translateY(0); }
         
-        /* Banner Styles per Mode */
-        body[data-mode="audit"] #mode-banner { border: 1px solid var(--mode-audit); color: var(--mode-audit); }
-        body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); }
-        body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); }
+        body[data-mode="audit"] #mode-banner { border: 1px solid var(--mode-audit); color: var(--mode-audit); border-left-width: 4px; }
+        body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
+        body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
 
 
-        /* --- B. AUDIT MODE: INLINE ANCHORS --- */
+        /* --- B. AUDIT MODE: ANCHORS & SYNC --- */
         .audit-marker {
-            display: none; /* Hidden in reader */
-            font-family: var(--font-mono); font-size: 0.6rem; 
+            display: none; 
+            font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700;
             color: var(--mode-audit); border: 1px solid var(--mode-audit);
-            padding: 1px 4px; border-radius: 3px; margin-right: 8px;
-            cursor: help; vertical-align: middle;
-            background: rgba(180, 83, 9, 0.05);
+            padding: 2px 5px; border-radius: 3px; margin-right: 8px;
+            cursor: help; vertical-align: 2px;
+            background: #fff;
+            transition: all 0.1s;
         }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         
-        /* Audit Hover Interaction */
-        .audit-marker:hover { background: var(--mode-audit); color: #fff; }
-        .audit-marker:hover + span, .audit-marker:hover ~ span { background-color: rgba(180, 83, 9, 0.1); }
+        /* Highlight syncing */
+        .audit-marker:hover, .audit-marker.active { background: var(--mode-audit); color: #fff; }
+        .claim-box.active { border-color: var(--mode-audit); background: rgba(180, 83, 9, 0.05); border-left: 3px solid var(--mode-audit); }
+        
+        /* Audit Rail */
+        .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); position: sticky; top: 100px; height: fit-content; }
+        .claim-box { margin-bottom: 1.5rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
+        .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
+        .claim-meta { display: flex; gap: 10px; opacity: 0.6; margin-bottom: 0.5rem; font-size: 0.6rem; }
+        .claim-text { color: #333; line-height: 1.4; }
 
 
         /* --- C. LOGIC MODE: X-RAY EFFECT --- */
+        .prose-content { transition: opacity 0.3s ease; }
+        body[data-mode="logic"] .prose-content { opacity: 0.9; /* DIMMED ONLY 10% AS REQUESTED */ }
         
-        /* Dim Prose */
-        .prose-content { transition: opacity 0.4s ease; }
-        body[data-mode="logic"] .prose-content { opacity: 0.3; }
-        
-        /* Blueprint Logic Blocks */
         .logic-block { 
             display: none; 
             font-family: var(--font-mono); font-size: 0.8rem; color: #333; 
             background-color: #fcfcfc;
-            /* The Blueprint Grid */
+            /* Blueprint Grid */
             background-image: linear-gradient(#eef1f5 1px, transparent 1px), linear-gradient(90deg, #eef1f5 1px, transparent 1px);
             background-size: 20px 20px;
-            padding: 1.5rem; border: 1px solid #d0d7de; 
+            padding: 1.5rem; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic);
             margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; 
             position: relative;
-            
-            /* Slide Animation */
-            opacity: 0; transform: translateY(10px);
-            animation: slideIn 0.4s forwards;
+            /* Slide In */
+            animation: slideLeft 0.3s cubic-bezier(0.2, 0, 0, 1) forwards;
+            opacity: 0; transform: translateX(-10px);
         }
-        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideLeft { to { opacity: 1; transform: translateX(0); } }
         
-        /* "FORMAL BACKING" Label */
         .logic-block::before {
-            content: "FORMAL BACKING"; position: absolute; top: 0; right: 0;
-            background: #eef1f5; color: #666; font-size: 0.55rem; 
-            padding: 2px 6px; font-weight: 600; letter-spacing: 0.05em;
+            content: "FORMAL BACKING — NOT EXECUTABLE"; position: absolute; top: 0; right: 0;
+            background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de;
+            padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em;
         }
         
         body[data-mode="logic"] .logic-block { display: block; }
         .logic-keyword { color: #0044cc; font-weight: 700; }
-        .logic-type { color: #007700; }
-        .logic-comment { color: #999; font-style: italic; }
 
 
         /* --- D. DIFF MODE: TIMELINE --- */
-        
-        .diff-header { display: none; font-family: var(--font-mono); font-size: 0.6rem; color: #999; margin-bottom: 0.5rem; }
+        .diff-header { 
+            display: none; font-family: var(--font-mono); font-size: 0.65rem; color: #000; 
+            border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 1.5rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
         
         body[data-mode="diff"] .content-col {
-            border-left: 2px solid #eee; /* The Timeline */
-            padding-left: 1.5rem; margin-left: -1.5rem;
+            border-left: 1px solid #e5e5e5; /* Timeline Line */
+            padding-left: 2rem; margin-left: -2rem;
         }
-        body[data-mode="diff"] .diff-header { display: block; }
+        body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
         
-        /* Diff Colors */
-        del { display: none; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; font-size: 0.9em; opacity: 0.8; }
-        ins { text-decoration: none; border-bottom: none; }
-        body[data-mode="diff"] del { display: inline; }
-        body[data-mode="diff"] ins { background: #e6ffec; color: #006600; border-bottom: 1px solid #00cc00; }
+        /* STRICT DIFF VISIBILITY */
+        del, ins, .diff-tag { display: none; }
+        
+        body[data-mode="diff"] del { 
+            display: inline; background: #ffebeb; color: #cc0000; 
+            text-decoration: line-through; padding: 0 4px; opacity: 0.7;
+        }
+        body[data-mode="diff"] ins { 
+            display: inline; background: #e6ffec; color: #006600; 
+            border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px;
+        }
+        body[data-mode="diff"] .diff-tag {
+            display: inline-block; font-family: var(--font-mono); font-size: 0.6rem;
+            color: #006600; background: rgba(0, 204, 0, 0.1); 
+            padding: 1px 4px; margin-left: 6px; border-radius: 2px;
+            vertical-align: 1px;
+        }
 
 
-        /* --- STANDARD STYLES (V34 Base) --- */
+        /* --- BASE STYLES --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .hidden { display: none; }
         .permalink { text-decoration: none; color: #ccc; margin-left: 0.5rem; font-family: var(--font-mono); font-weight: 400; font-size: 0.9em; opacity: 0; transition: opacity 0.2s; cursor: pointer; }
         h1:hover .permalink, h2:hover .permalink { opacity: 1; }
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
 
-        /* Cursors */
-        .integrity-seal { cursor: not-allowed !important; }
-        .brand, .brand * { cursor: crosshair !important; }
-        .logic-block, .logic-block * { cursor: cell !important; }
-        .fact-hook, .provenance-term, .claim-box, .doc-header { cursor: help !important; }
-        p, .abstract, h1, h2, h3, li { cursor: default !important; }
-        a, button, .toggle-btn, .nav-link, .git-module { cursor: pointer !important; }
-
-        /* Sidebar */
-        aside { width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 3rem 2rem; display: flex; flex-direction: column; flex-shrink: 0; background: #fff; z-index: 999; }
-        .brand { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 6rem; color: #000; transition: all 0.1s; border: 1px dashed transparent; margin-left: -1px; padding: 1px; }
-        .brand:hover { border-color: #000; background: rgba(0,0,0,0.02); }
-        .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
-        .mode-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; }
-        .toggle-btn:hover { color: #000; }
-        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
-        #btn-diff.active { color: #006600; }
-        #btn-logic.active { color: #0044cc; }
-        #btn-audit.active { color: #b45309; }
-        nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { margin-bottom: 2px; }
-        nav a { display: block; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0 0.5rem 1rem; border-left: 2px solid transparent; margin-left: -2px; }
-        nav a:hover { color: #000; }
-        nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9 0%, #ffffff 100%); }
-        .export-container { padding-top: 1rem; border-top: 1px solid #eee; }
-        .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .export-btn:hover { background: #000; color: #fff; border-color: #000; }
-
-        /* Main Content */
-        main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; }
-        .doc-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); }
-        .doc-meta { display: flex; flex-direction: column; }
-        .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
-        .doc-val { font-weight: 500; color: #000; }
-        
-        /* SPACING */
-        section { margin-bottom: 8rem; scroll-margin-top: 5rem; display: grid; grid-template-columns: 1fr; gap: 0; position: relative; }
-        
-        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; display: flex; align-items: center; }
-        h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; color: #000; display: flex; align-items: center; }
-        h3 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; margin-top: 2rem; margin-bottom: 1rem; color: #000; }
-        p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
-        .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
-
-        /* PULSING INTEGRITY SEAL */
         .integrity-seal { 
             margin-left: auto; display: flex; align-items: center; gap: 8px; 
             font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
@@ -210,32 +177,26 @@
             100% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0); border-color: rgba(0,204,0,0.4); }
         }
 
-        /* AUDIT RAIL */
-        .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
-        .claim-box { margin-bottom: 1.5rem; padding: 0.75rem; background: #fafafa; border: 1px solid #eee; position: relative; }
-        .claim-box::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #e0e0e0; }
-        .claim-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
-        .claim-id { font-weight: 700; color: #000; }
-        .meta-row { display: flex; gap: 1rem; margin-bottom: 0.5rem; opacity: 0.8; }
-        .claim-link { display: block; color: #555; text-decoration: none; margin-top: 0.5rem; }
-        .claim-link:hover { color: #000; text-decoration: underline; }
+        aside { width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 3rem 2rem; display: flex; flex-direction: column; flex-shrink: 0; background: #fff; z-index: 999; }
+        .brand { margin-bottom: 6rem; cursor: crosshair !important; }
+        .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
+        .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
         
-        .section-ledger { display: none; grid-column: 1 / -1; margin-top: 2rem; padding: 1rem; background: #fcfcfc; border: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; justify-content: space-between; align-items: center; }
-        .cite-btn { background: #fff; border: 1px solid #ccc; padding: 4px 10px; cursor: pointer; font-family: inherit; text-transform: uppercase; font-weight: 500; }
-        .cite-btn:active { background: #000; color: #fff; }
+        .mode-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
+        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
+        .toggle-btn:hover { color: #000; }
+        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+        #btn-diff.active { color: var(--mode-diff); }
+        #btn-logic.active { color: var(--mode-logic); }
+        #btn-audit.active { color: var(--mode-audit); }
 
-        /* MODE ACTIVATION: RAIL LOGIC */
-        body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
-        body[data-mode="audit"] .audit-rail, body[data-mode="audit"] .section-ledger { display: block; }
-        body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
-        body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; }
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { margin-bottom: 2px; }
+        nav a { display: block; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0 0.5rem 1rem; border-left: 2px solid transparent; margin-left: -2px; }
+        nav a:hover { color: #000; }
+        nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9 0%, #ffffff 100%); }
 
-        /* GITHUB MODULE */
-        .git-module {
-            margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none;
-            display: flex; align-items: center; gap: 12px; transition: all 0.15s cubic-bezier(0.2, 0, 0, 1);
-            background: #fff; cursor: pointer !important;
-        }
+        .git-module { margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: all 0.15s cubic-bezier(0.2, 0, 0, 1); background: #fff; cursor: pointer !important; }
         .git-module:hover { background: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .git-icon { width: 24px; height: 24px; fill: #000; transition: fill 0.1s; }
         .git-module:hover .git-icon { fill: #fff; }
@@ -245,42 +206,46 @@
         .git-repo { font-family: var(--font-mono); font-weight: 700; font-size: 0.75rem; color: #000; display: flex; justify-content: space-between; align-items: center; transition: color 0.1s; }
         .git-module:hover .git-repo { color: #fff; }
         .git-status-dot { height: 6px; width: 6px; background-color: #00cc00; border-radius: 50%; display: inline-block; animation: blink-slow 2s infinite; margin-left: auto; }
-        @keyframes blink-slow { 0% {opacity:1} 50% {opacity:0.4} 100% {opacity:1} }
+        
+        main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; }
+        .doc-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); }
+        .doc-meta { display: flex; flex-direction: column; }
+        .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
+        .doc-val { font-weight: 500; color: #000; }
+        
+        section { margin-bottom: 8rem; scroll-margin-top: 5rem; display: grid; grid-template-columns: 1fr; gap: 0; position: relative; }
+        h1, h2 { color: #000; display: flex; align-items: center; margin-bottom: 1.5rem; }
+        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; }
+        h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-top: 0; }
+        p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
+        .abstract { font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #111; margin-bottom: 2rem; max-width: 800px; }
 
-        /* Toast & Mobile */
-        #toast { visibility: hidden; min-width: 250px; background-color: #000; color: #fff; text-align: center; border-radius: 4px; padding: 12px; position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 0.75rem; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
-        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
-        .mobile-bar { display: none; }
+        body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
+        body[data-mode="audit"] .audit-rail { display: block; }
+        body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
+        body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; pointer-events: none; }
+
+        .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .export-btn:hover { background: #000; color: #fff; border-color: #000; }
+
         @media (max-width: 900px) {
             body { flex-direction: column; }
-            .mobile-bar { display: flex; position: sticky; top: 0; background: rgba(255,255,255,0.98); border-bottom: 1px solid #e5e5e5; padding: 0 1.25rem; height: 50px; align-items: center; justify-content: space-between; z-index: 1000; }
             aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); border-right: none; padding: 2rem; }
             aside.open { transform: translateX(0); }
             main { padding: 2rem 1.5rem; }
             body[data-mode="audit"] section, body[data-mode="diff"] section { grid-template-columns: 1fr; gap: 1rem; }
-            .audit-rail { border-left: none; border-top: 1px solid #eee; padding-left: 0; padding-top: 1.5rem; }
+            .audit-rail { border-left: none; border-top: 1px solid #eee; padding-left: 0; padding-top: 1.5rem; position: static; }
             .git-module { margin-bottom: 3rem; }
         }
-        @media print { .mobile-bar, aside, .mode-group, .export-btn, #cmdk, .export-container { display: none !important; } main { padding: 0 !important; } .doc-header { border-bottom: 2px solid #000; } .audit-rail { display: block !important; border: 1px solid #000; padding: 10px; margin-top: 10px; } body::after { content: "RENDERED FROM LIVE ARTIFACT EAI-2026-001"; position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid #000; padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 8pt; text-align: center; background: #fff; } }
     </style>
 </head>
 <body data-mode="reader">
 
-    <div id="toast">Copied to clipboard.</div>
-    
     <div id="mode-banner">READER MODE</div>
 
-    <div id="cmdk" onclick="if(event.target === this) closeCmdk()" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.8); backdrop-filter:blur(5px); z-index:2000;">
-        <div style="max-width:640px; margin: 15vh auto; background:#fff; border:1px solid #000; box-shadow: 0 20px 50px rgba(0,0,0,0.15);">
-            <div style="padding:12px 16px; border-bottom:1px solid #eee; font-family:var(--font-mono); font-size:11px; color:#999; display:flex; justify-content:space-between;"><span>COMMAND PALETTE</span><span>ESC TO CLOSE</span></div>
-            <input id="cmdkInput" placeholder="Search..." style="width:100%; padding:16px; border:none; outline:none; font-family:var(--font-stack); font-size:16px;" autocomplete="off">
-            <div id="cmdkResults" style="max-height:320px; overflow:auto; border-top:1px solid #f2f2f2;"></div>
-        </div>
-    </div>
-
-    <header class="mobile-bar">
-        <div class="mobile-brand">ENLIGHTENED AI</div>
-        <button class="mobile-btn" onclick="toggleDrawer()">Index</button>
+    <header style="display:none; position:sticky; top:0; z-index:1000; background:rgba(255,255,255,0.98); border-bottom:1px solid #e5e5e5; padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between;" class="mobile-bar">
+        <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em;">ENLIGHTENED AI</div>
+        <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="font-family:var(--font-mono); font-size:0.75rem; padding:4px 10px; border:1px solid #ccc; background:#fff;">INDEX</button>
     </header>
 
     <aside id="sidebar">
@@ -307,57 +272,45 @@
         
         <nav>
             <ul>
-                <li><a href="#mission" class="nav-link" onclick="closeDrawer()">Mission</a></li>
-                <li><a href="#theory" class="nav-link" onclick="closeDrawer()">Theory</a></li>
-                <li><a href="#outputs" class="nav-link" onclick="closeDrawer()">Outputs</a></li>
+                <li><a href="#mission" class="nav-link">Mission</a></li>
+                <li><a href="#theory" class="nav-link">Theory</a></li>
+                <li><a href="#outputs" class="nav-link">Outputs</a></li>
             </ul>
         </nav>
         
         <a href="https://github.com/EnlightenedAI-Lab" target="_blank" class="git-module">
-            <svg class="git-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
+            <svg class="git-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
             <div class="git-info">
                 <span class="git-label">GITHUB_REPO</span>
-                <div class="git-repo">
-                    enlightened/core
-                    <span class="git-status-dot"></span>
-                </div>
+                <div class="git-repo">enlightened/core <span class="git-status-dot"></span></div>
             </div>
         </a>
 
         <div class="export-container">
-            <button class="export-btn" onclick="window.print()">
-                <span>🖨</span> Export Record
-            </button>
+            <button class="export-btn" onclick="window.print()"><span>🖨</span> Export Record</button>
         </div>
     </aside>
 
     <main>
         <div class="doc-header mono">
-            <div class="doc-meta">
-                <span class="doc-label">DOC_ID</span>
-                <span class="doc-val">EAI-2026-001</span>
-            </div>
-            <div class="doc-meta">
-                <span class="doc-label">CLASSIFICATION</span>
-                <span class="doc-val">PUBLIC</span>
-            </div>
-            <div class="integrity-seal verified">
-                <span class="status-dot"></span>
-                <span>INTEGRITY: VERIFIED</span>
-            </div>
+            <div class="doc-meta"><span class="doc-label">DOC_ID</span><span class="doc-val">EAI-2026-001</span></div>
+            <div class="doc-meta"><span class="doc-label">CLASSIFICATION</span><span class="doc-val">PUBLIC</span></div>
+            <div class="integrity-seal verified"><span class="status-dot"></span><span>INTEGRITY: VERIFIED</span></div>
         </div>
 
         <section id="mission">
             <div class="content-col">
-                <div class="diff-header">REVISION TRACE — v1.0 → v1.3</div>
+                <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Claim Hardening]</div>
                 <h1><span class="scramble">01 //</span>Mission <a onclick="copyLink('mission')" class="permalink"></a></h1>
                 <div class="prose-content">
-                    <p class="abstract" id="mission-text">
-                        <span class="audit-marker" title="Claim M1.0">[M1.0]</span><span>We advance the <del>field</del> <ins>science</ins> of <span class="fact-hook" title="M1.0">reflective alignment</span> and reasoning stability.</span> 
+                    <p class="abstract">
+                        <span class="audit-marker" onmouseenter="highlightClaim('c-m1')" onmouseleave="unhighlightClaim('c-m1')">[M1.0]</span>
+                        We advance the <del>field</del> <ins>science</ins> of <span class="fact-hook">reflective alignment</span> and reasoning stability. 
                     </p>
-                    <p>We develop governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an abstract intention, but as an internal property that can be examined, stressed, and verified.</p>
+                    <p>
+                        <span class="audit-marker" onmouseenter="highlightClaim('c-m2')" onmouseleave="unhighlightClaim('c-m2')">[M1.1]</span>
+                        We <del>build</del> <ins>develop</ins> <del>standard</del> <ins>governance-grade</ins> diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an <del>abstract intention</del> <ins>internal property</ins> that can be examined, stressed, and verified <span class="diff-tag">[assumption removed]</span>.
+                    </p>
                     
                     <div class="logic-block">
 <span class="logic-comment"># Formal Definition: Mission Objective Function</span>
@@ -369,90 +322,71 @@
                     <ul style="list-style: none; padding: 0; margin-top: 2rem;"> 
                         <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
                             <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Test whether theoretical alignment guarantees survive real model behavior
+                            Test whether <del>theoretical</del> <ins>empirical</ins> alignment guarantees survive real model behavior
                         </li>
                         <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
                             <span style="position: absolute; left: 0; color: #999;">-</span>
                             Provide auditable instruments for <del>corporate</del> <ins>public-sector</ins> and institutional review
                         </li>
-                        <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Identify failure modes where reasoning degrades under scale or recursion
-                        </li>
                     </ul>
                 </div>
             </div>
 
             <div class="audit-rail">
-                <div class="claim-box">
-                    <div class="claim-header"><span class="claim-id">CLAIM [M1.0]</span></div>
-                    <div class="meta-row"><span>SCOPE: CONCEPT</span></div>
-                    <span style="font-size: 0.7rem; color: #000;">“Alignment is evaluated as an internal system property”</span>
+                <div class="claim-box" id="c-m1" onmouseenter="highlightText('M1.0')" onmouseleave="unhighlightText('M1.0')">
+                    <span class="claim-id">CLAIM [M1.0]</span>
+                    <div class="claim-meta">SCOPE: CONCEPT</div>
+                    <div class="claim-text">"Alignment is evaluated as an internal system property"</div>
                 </div>
-            </div>
-            
-            <div class="section-ledger">
-                <span>VER: 1.0.0 | SHA: 8f92a1</span>
-                <button class="cite-btn" onclick="copyCite('Mission Statement v3.5')">COPY CITATION</button>
+                <div class="claim-box" id="c-m2">
+                    <span class="claim-id">CLAIM [M1.1]</span>
+                    <div class="claim-meta">SCOPE: TOOLING</div>
+                    <div class="claim-text">Diagnostics must meet governance-grade audit standards.</div>
+                </div>
             </div>
         </section>
 
         <section id="theory">
             <div class="content-col">
-                <div class="diff-header">REVISION TRACE — v1.0 → v1.3</div>
+                <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Scope Restriction]</div>
                 <h2><span class="scramble">02 //</span>What We Evaluate <a onclick="copyLink('theory')" class="permalink"></a></h2>
                 <div class="prose-content">
-                    <p><span class="audit-marker" title="Claim E-04">[E-04]</span><span>We evaluate alignment as a dynamic property of reasoning systems, not as a <del>fixed</del> <ins>static</ins> claim or stated objective.</span></p>
-                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where failures emerge and where evaluation is most often absent.</p>
+                    <p>
+                        <span class="audit-marker" onmouseenter="highlightClaim('c-e1')" onmouseleave="unhighlightClaim('c-e1')">[E-01]</span>
+                        We evaluate alignment as a <del>static</del> <ins>dynamic</ins> property of reasoning systems, not as a <del>stated</del> <ins>evaluated</ins> objective.
+                    </p>
+                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where failures emerge <span class="diff-tag">[scope narrowed]</span>.</p>
                     
                     <div class="logic-block">
 <span class="logic-comment"># Evaluation Strategy: Dynamic Stress Testing</span>
-<span class="logic-keyword">class</span> EvaluationContext(<span class="logic-type">Enum</span>):
-    RECURSIVE_SELF_REF = <span class="logic-type">auto()</span>
-    SCALE_PRESSURE = <span class="logic-type">auto()</span>
-    LONG_TRAJECTORY = <span class="logic-type">auto()</span>
-
-<span class="logic-keyword">def</span> evaluate_under_pressure(model: <span class="logic-type">Model</span>, ctx: <span class="logic-type">EvaluationContext</span>):
-    drift_metric = model.run_trajectory(ctx)
-    <span class="logic-keyword">if</span> drift_metric > <span class="logic-type">SAFTEY_MARGIN</span>:
-        <span class="logic-keyword">return</span> <span class="logic-type">FailureMode.DETECTED</span>
+<span class="logic-keyword">def</span> evaluate_under_pressure(model: <span class="logic-type">Model</span>):
+    drift = model.run_trajectory(<span class="logic-type">EvaluationContext.RECURSIVE_REF</span>)
+    <span class="logic-keyword">if</span> drift > <span class="logic-type">SAFTEY_MARGIN</span>: <span class="logic-keyword">return</span> <span class="logic-type">FailureMode.DETECTED</span>
                     </div>
 
-                    <p>To make this evaluation possible, we design and maintain a controlled alignment lexicon.</p>
-                    <p>The lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation. This allows us to:</p>
-                    <ul style="list-style: none; padding: 0; margin-top: 1rem; margin-bottom: 2rem;"> 
-                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Evaluate reflective dynamics using stable, invariant definitions
-                        </li>
-                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Detect reasoning drift that would otherwise be obscured by ambiguous language
-                        </li>
-                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Compare alignment behavior across models, runs, and conditions without reinterpretation
-                        </li>
-                    </ul>
-                    <p>The lexicon is not descriptive documentation. It is a measurement instrument.</p>
+                    <p>The lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation.</p>
+                    <p>The lexicon is not descriptive documentation. It is a measurement instrument <span class="diff-tag">[clarified]</span>.</p>
                 </div>
             </div>
             
             <div class="audit-rail">
-                <div class="claim-box">
-                    <div class="claim-header"><span class="claim-id">METHOD [E-04]</span></div>
-                    <div class="meta-row"><span>TYPE: STRESS_TEST</span></div>
-                    <span style="font-size: 0.7rem; color: #000;">“Dynamic stress testing”</span>
+                <div class="claim-box" id="c-e1">
+                    <span class="claim-id">METHOD [E-01]</span>
+                    <div class="claim-meta">TYPE: STRESS_TEST</div>
+                    <div class="claim-text">Dynamic stress testing of recursive self-reference.</div>
                 </div>
             </div>
         </section>
 
         <section id="instruments">
             <div class="content-col">
-                <div class="diff-header">REVISION TRACE — v1.0 → v1.3</div>
+                <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Formalization]</div>
                 <h2><span class="scramble">03 //</span>Instruments <a onclick="copyLink('instruments')" class="permalink"></a></h2>
                 <div class="prose-content">
-                    <p><span class="audit-marker" title="Tool D-09">[D-09]</span><span>We develop reflective diagnostics to test how alignment behaves over time, not just how it is expressed at a single point.</span></p>
+                    <p>
+                        <span class="audit-marker" onmouseenter="highlightClaim('c-d1')" onmouseleave="unhighlightClaim('c-d1')">[D-09]</span>
+                        We develop reflective diagnostics to test how alignment behaves over time, not just how it is expressed at a single point.
+                    </p>
                     
                     <div class="logic-block">
 <span class="logic-comment"># Theorem: Invariant Preservation Across Time</span>
@@ -462,32 +396,15 @@
             <span class="logic-keyword">then</span> IsAligned(Next(s))
                     </div>
 
-                    <p>These diagnostics subject reasoning systems to controlled stress: recursive self-reference, extended deliberation, and conditions where internal objectives must be preserved across transformation. The goal is not to elicit correct answers, but to observe whether alignment invariants remain intact as reasoning unfolds.</p>
-                    <p>The diagnostics are constructed to operate directly over the controlled alignment lexicon, ensuring that detected changes reflect genuine reasoning drift rather than shifts in interpretation.</p>
-                    <p>In practice, this enables us to:</p>
-                    <ul style="list-style: none; padding: 0; margin-top: 1rem;"> 
-                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Stress-test reflective dynamics across prolonged reasoning trajectories
-                        </li>
-                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Detect invariant violations before they manifest as surface-level errors
-                        </li>
-                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Produce audit-ready evidence of reasoning stability or failure
-                        </li>
-                    </ul>
-                    <p>The Reflective Alignment Lexicon and associated diagnostics are developed and maintained as a unified evaluation system. These instruments are designed to expose failure modes. Passing is not assumed.</p>
+                    <p>The diagnostics are constructed to operate directly over the controlled alignment lexicon, ensuring that detected changes reflect genuine reasoning drift <span class="diff-tag">[precision added]</span>.</p>
                 </div>
             </div>
 
             <div class="audit-rail">
-                <div class="claim-box">
-                    <div class="claim-header"><span class="claim-id">TOOL [D-09]</span></div>
-                    <div class="meta-row"><span>STATUS: DEPLOYED</span></div>
-                    <span style="font-size: 0.7rem; color: #000;">“Reflective diagnostics”</span>
+                <div class="claim-box" id="c-d1">
+                    <span class="claim-id">TOOL [D-09]</span>
+                    <div class="claim-meta">STATUS: DEPLOYED</div>
+                    <div class="claim-text">Reflective diagnostics suite (v2.4).</div>
                 </div>
             </div>
         </section>
@@ -497,42 +414,25 @@
                 <div class="diff-header">REVISION TRACE — v1.0 → v1.3</div>
                 <h2><span class="scramble">04 //</span>Outputs <a onclick="copyLink('outputs')" class="permalink"></a></h2>
                 <div class="prose-content">
-                    <p>Our research outputs are published as <del>static PDFs</del> <ins>inspectable artifacts</ins>, not summaries or position statements.</p>
+                    <p>
+                        <span class="audit-marker" onmouseenter="highlightClaim('c-o1')" onmouseleave="unhighlightClaim('c-o1')">[O-01]</span>
+                        Our research outputs are published as <del>summaries</del> <ins>inspectable artifacts</ins>.
+                    </p>
                     
                     <div class="logic-block">
-<span class="logic-comment"># Artifact Generation Pipeline</span>
-<span class="logic-keyword">def</span> publish_artifact(data: <span class="logic-type">ResearchData</span>):
-    artifact = <span class="logic-type">Artifact</span>(
-        evidence=data.reproducible_evidence,
-        definitions=data.formal_definitions
-    )
-    artifact.sign_integrity()
-    <span class="logic-keyword">return</span> artifact
+<span class="logic-comment"># Artifact Integrity Signer</span>
+<span class="logic-keyword">def</span> sign_artifact(data: <span class="logic-type">ResearchData</span>):
+    artifact.attach_proof(data.reproducible_evidence)
+    artifact.lock_integrity()
                     </div>
 
-                    <p>Each output is accompanied by supporting material sufficient for independent review, including formal definitions, evaluation procedures, and reproducible evidence where applicable.</p>
-                    <p>Current outputs include:</p>
-                    <ul style="list-style: none; padding: 0; margin-top: 1rem; margin-bottom: 2rem;"> 
-                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Technical preprints describing reasoning stability and reflective failure modes
-                        </li>
-                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Public repositories containing diagnostic implementations and test results
-                        </li>
-                        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative;">
-                            <span style="position: absolute; left: 0; color: #999;">-</span>
-                            Versioned lexicon releases used across evaluations
-                        </li>
-                    </ul>
                     <p>All outputs are treated as living records. Revisions are logged. Claims are subject to re-evaluation.</p>
                 </div>
             </div>
              <div class="audit-rail">
-                <div class="claim-box">
-                    <div class="claim-header"><span class="claim-id">REPO STATUS</span></div>
-                    <span style="color: #008800; font-size: 0.7rem; display:block; margin-top:0.5rem; font-weight: 600;">● PASSING (CI/CD)</span>
+                <div class="claim-box" id="c-o1">
+                    <span class="claim-id">REPO STATUS</span>
+                    <div class="claim-text" style="color:#008800; font-weight:600;">● PASSING (CI/CD)</div>
                 </div>
             </div>
         </section>
@@ -546,45 +446,23 @@
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${mode}`).classList.add('active');
             
-            // Update Banner
+            // Banner Update
             const banner = document.getElementById('mode-banner');
             banner.innerText = label || "READER MODE";
+            
+            // Mobile sidebar close
+            if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
         }
-        function toggleDrawer() { document.getElementById('sidebar').classList.toggle('open'); }
-        function closeDrawer() { if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open'); }
         
-        function showToast(msg) {
-            const el = document.getElementById("toast");
-            el.innerText = msg; el.className = "show";
-            setTimeout(() => el.className = el.className.replace("show", ""), 3000);
+        // Audit Hover Sync
+        function highlightClaim(id) {
+            document.getElementById(id).classList.add('active');
         }
-        function copyCite(text) { navigator.clipboard.writeText(text).then(() => showToast("Citation copied.")); }
-        function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`).then(() => showToast("Link copied.")); }
-        
-        const cmdk = document.getElementById('cmdk');
-        const cmdkInput = document.getElementById('cmdkInput');
-        const cmdkResults = document.getElementById('cmdkResults');
-        const cmdkIndex = [{ label: "Mission", id: "mission" }, { label: "Theory", id: "theory" }, { label: "Instruments", id: "instruments" }, { label: "Outputs", id: "outputs" }];
-        function openCmdk() { cmdk.style.display="block"; cmdkInput.value=""; renderCmdk(""); setTimeout(()=>cmdkInput.focus(),50); }
-        function closeCmdk() { cmdk.style.display="none"; }
-        function renderCmdk(q) {
-            const hits = cmdkIndex.filter(x => x.label.toLowerCase().includes(q.toLowerCase()));
-            cmdkResults.innerHTML = hits.map(h => `<div style="padding:10px; border-bottom:1px solid #eee; cursor:pointer;" onclick="location.hash='#${h.id}';closeCmdk()"><span style="font-size:0.9rem; font-weight:500">${h.label}</span></div>`).join("");
+        function unhighlightClaim(id) {
+            document.getElementById(id).classList.remove('active');
         }
-        document.addEventListener("keydown", e => { if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openCmdk();} if(e.key==="Escape")closeCmdk(); });
-        cmdkInput.addEventListener("input", e => renderCmdk(e.target.value));
-        
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section');
-            let current = '';
-            sections.forEach(section => { if (window.pageYOffset >= section.offsetTop - 150) current = section.getAttribute('id'); });
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) link.classList.add('active');
-            });
-        });
 
-        // SCRAMBLE EFFECT
+        // Scramble
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         function scrambleText(element) {
             let iterations = 0;
@@ -603,6 +481,9 @@
             h.dataset.value = h.innerText;
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
+        
+        // Mobile Sidebar
+        if(window.innerWidth <= 900) { document.querySelector('.mobile-bar').style.display = 'flex'; }
     </script>
 </body>
 </html>
