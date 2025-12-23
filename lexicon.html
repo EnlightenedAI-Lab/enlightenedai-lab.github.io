@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "20.0.0",
-        "status": "TELEMETRY_ONLINE"
+        "version": "22.0.0",
+        "status": "ENTROPY_ENGINE_ONLINE"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V73 */
+        /* THEME: INSTITUTE STANDARD V75 */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -174,34 +174,26 @@
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
-        /* --- V73: LIVE INSTRUMENT SIGNALS --- */
+        /* --- V75: THE ENTROPY ENGINE --- */
         .machine-overlay::before {
             content: ""; position: fixed; inset: 0; z-index: 20005; pointer-events: none;
             background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 2px, rgba(255, 255, 255, 0.03) 3px, rgba(0, 0, 0, 0) 4px);
             mix-blend-mode: overlay; opacity: 0.6;
         }
         
-        @keyframes terminal-breathe {
-            0%, 100% { color: #eee; text-shadow: 0 0 0 rgba(255,255,255,0); }
-            50% { color: #fff; text-shadow: 0 0 4px rgba(255,255,255,0.3); }
-        }
+        @keyframes terminal-breathe { 0%, 100% { color: #eee; text-shadow: 0 0 0 rgba(255,255,255,0); } 50% { color: #fff; text-shadow: 0 0 4px rgba(255,255,255,0.3); } }
         .status-live { animation: terminal-breathe 4s infinite ease-in-out; font-weight: 700; letter-spacing: 0.05em; }
 
-        @keyframes machine-pulse {
-            0%, 100% { transform: scale(1); opacity: 0.35; }
-            50% { transform: scale(1.35); opacity: 1; }
-        }
-        .machine-led {
-            width: 6px; height: 6px; border-radius: 50%; background: #00cc00; 
-            display: inline-block; margin-left: 8px;
-            animation: machine-pulse 2.2s ease-in-out infinite;
-        }
+        @keyframes machine-pulse { 0%, 100% { transform: scale(1); opacity: 0.35; } 50% { transform: scale(1.35); opacity: 1; } }
+        .machine-led { width: 6px; height: 6px; border-radius: 50%; background: #00cc00; display: inline-block; margin-left: 8px; animation: machine-pulse 2.2s ease-in-out infinite; }
 
-        /* EVENT TICKER */
         .event-ticker { margin-right: 15px; color: #666; font-size: 0.7rem; font-family: var(--font-mono); display: flex; align-items: center; gap: 6px; }
         .event-text { transition: opacity 0.25s ease; }
         .event-text.fade-out { opacity: 0; }
         .event-dot { width: 4px; height: 4px; background: #00cc00; border-radius: 50%; display: block; opacity: 0.7; }
+
+        /* ENTROPY & CORRECTION */
+        .status-corrected { color: #00cc00 !important; font-weight: 700; text-shadow: 0 0 5px rgba(0,204,0,0.5); transition: color 0.1s ease; }
 
         @keyframes terminal-boot { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
         @media (prefers-reduced-motion: no-preference) {
@@ -217,9 +209,10 @@
             .machine-led { animation: none; opacity: 1; }
         }
 
-        .m-card { transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease; }
+        .m-card { transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease; }
         .m-card:hover { border-color: #666; background: #1f1f1f; transform: translateY(-1px); }
         .m-card:hover .mc-header { color: #999; }
+        .m-card.scan-active { border-color: #fff !important; box-shadow: 0 0 10px rgba(255,255,255,0.1); background: #222; }
 
         /* --- MACHINE OVERLAY --- */
         .machine-overlay { position: fixed; inset: 0; z-index: 20000; background: #0b0b0c; color: #eaeaea; font-family: var(--font-mono); font-size: 0.75rem; display: flex; flex-direction: column; transition: opacity 0.2s ease; }
@@ -268,7 +261,7 @@
             .mo-content { padding: 1rem; }
             .card-grid { grid-template-columns: 1fr; } 
             .mc-section-title { grid-column: span 1; }
-            .uptime-counter, .event-ticker { display: none; } /* Hide telemetry on mobile */
+            .uptime-counter, .event-ticker { display: none; } 
         }
     </style>
 </head>
@@ -432,9 +425,8 @@
     </main>
 
     <script>
-        // DATA RECORD
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "20.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "RAL-LEX-0002", version: "22.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
                 { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
@@ -452,7 +444,6 @@
             ]
         };
 
-        // --- THEME ENGINE ---
         function toggleTheme() {
             const body = document.body;
             const current = body.getAttribute('data-theme');
@@ -460,12 +451,9 @@
             body.setAttribute('data-theme', next);
             localStorage.setItem('enlightened_theme', next);
         }
-        
-        // Init Theme
         const savedTheme = localStorage.getItem('enlightened_theme');
         if (savedTheme) document.body.setAttribute('data-theme', savedTheme);
 
-        // MODE SWITCHER
         function setMode(mode, btn) {
             const body = document.body;
             if ((mode === 'diff' || mode === 'audit' || mode === 'logic') && body.getAttribute('data-mode') === mode) {
@@ -479,7 +467,6 @@
             }
         }
 
-        // SCRAMBLE
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         function scrambleText(element) {
             let iterations = 0; const originalText = element.dataset.value; 
@@ -499,11 +486,8 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- MACHINE OVERLAY LOGIC ---
         let currentFormat = 'json';
         let machineMode = 'cards';
-
-        // EVENTS
         const EVENTS = [
             "EVENT: validate(RA-001) → OK",
             "EVENT: diff(signature) → STABLE",
@@ -512,25 +496,73 @@
         ];
         let eventInterval;
         let eventIdx = 0;
+        
+        // ENTROPY STATE
+        let raConfidence = 100.00;
+        let entropyInterval;
+
+        function startEntropy() {
+            if(entropyInterval) clearInterval(entropyInterval);
+            entropyInterval = setInterval(() => {
+                raConfidence -= 0.01;
+                const el = document.getElementById('val-confidence');
+                if(el && !el.classList.contains('status-corrected')) {
+                    el.innerText = raConfidence.toFixed(2) + "%";
+                }
+            }, 4000); // 4 seconds decay
+        }
+
+        function triggerScan(text) {
+            if(!machineMode === 'cards') return;
+            let targetId = null;
+            let targetClass = null;
+
+            if (text.includes("RA-001")) {
+                targetId = "card-RA-001";
+                // CORRECT ENTROPY
+                raConfidence = 100.00;
+                const confEl = document.getElementById('val-confidence');
+                if(confEl) {
+                    confEl.innerText = "100.00%";
+                    confEl.classList.add('status-corrected');
+                    setTimeout(() => confEl.classList.remove('status-corrected'), 600);
+                }
+            }
+            else if (text.includes("record")) targetId = "card-meta";
+            else if (text.includes("invariants")) targetClass = "card-inv"; 
+            else if (text.includes("signature")) targetClass = "card-fail";
+
+            if (targetId) {
+                const el = document.getElementById(targetId);
+                if(el) {
+                    el.classList.add('scan-active');
+                    setTimeout(() => el.classList.remove('scan-active'), 300);
+                }
+            } else if (targetClass) {
+                document.querySelectorAll('.' + targetClass).forEach(el => {
+                    el.classList.add('scan-active');
+                    setTimeout(() => el.classList.remove('scan-active'), 300);
+                });
+            }
+        }
 
         function startEventTicker() {
             if (eventInterval) clearInterval(eventInterval);
             const tickerText = document.getElementById('event-text');
             if(!tickerText) return;
-            
-            // Check Reduced Motion
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
             eventInterval = setInterval(() => {
                 eventIdx = (eventIdx + 1) % EVENTS.length;
-                
+                const newText = EVENTS[eventIdx];
                 if (reduceMotion) {
-                    tickerText.innerText = EVENTS[eventIdx];
+                    tickerText.innerText = newText;
                 } else {
                     tickerText.classList.add('fade-out');
                     setTimeout(() => {
-                        tickerText.innerText = EVENTS[eventIdx];
+                        tickerText.innerText = newText;
                         tickerText.classList.remove('fade-out');
+                        triggerScan(newText);
                     }, 250);
                 }
             }, 5500);
@@ -538,6 +570,7 @@
 
         function stopEventTicker() {
             if (eventInterval) clearInterval(eventInterval);
+            if (entropyInterval) clearInterval(entropyInterval);
         }
 
         function openMachineOverlay() {
@@ -547,6 +580,7 @@
             switchMachineMode(machineMode);
             document.body.style.overflow = 'hidden';
             startEventTicker();
+            startEntropy(); // START DECAY
         }
 
         function closeMachineOverlay() {
@@ -577,11 +611,20 @@
         function renderCards() {
             const container = document.getElementById('machineCards');
             let html = '';
-            html += `<div class="m-card"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON_RECORD.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON_RECORD.meta.classification}</div></div></div>`;
+            html += `<div class="m-card" id="card-meta"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON_RECORD.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON_RECORD.meta.classification}</div></div></div>`;
             html += `<div class="mc-section-title">CORE TERMS</div>`;
-            LEXICON_RECORD.core_terms.forEach(t => { html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>${t.type || 'TERM'}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div></div>`; });
+            LEXICON_RECORD.core_terms.forEach(t => { 
+                // ENTROPY ROW INJECTION FOR RA-001
+                let extraRow = '';
+                if(t.id === 'RA-001') {
+                    extraRow = `<div class="mc-row"><div class="mc-label">CONFIDENCE</div><div class="mc-val" id="val-confidence" style="font-family:var(--font-mono);">${raConfidence.toFixed(2)}%</div></div>`;
+                }
+                html += `<div class="m-card" id="card-${t.id}"><div class="mc-header"><div>${t.id}</div><div>${t.type || 'TERM'}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>${extraRow}</div>`; 
+            });
             html += `<div class="mc-section-title">INVARIANTS</div>`;
-            LEXICON_RECORD.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
+            LEXICON_RECORD.invariants.forEach(i => { html += `<div class="m-card card-inv" id="card-${i.id}"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
+            html += `<div class="mc-section-title">FAILURE SIGNATURES</div>`;
+            LEXICON_RECORD.failure_signatures.forEach(f => { html += `<div class="m-card card-fail"><div class="mc-header"><div>${f.signature}</div><div style="color:var(--signal-red)">${f.severity}</div></div><div class="mc-row"><div class="mc-label">TRIGGER</div><div class="mc-val">${f.condition}</div></div></div>`; });
             container.innerHTML = html;
         }
 
@@ -613,7 +656,6 @@
             codeEl.innerText = output;
         }
 
-        // --- SESSION UPTIME COUNTER ---
         let startTime = Date.now();
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             setInterval(() => {
