@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "53.0.0",
-        "status": "ALL_WORDS_VISIBLE"
+        "version": "54.0.0",
+        "status": "SEMANTIC_INTEGRITY_VERIFIED"
     }
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V53 --- */
+        /* --- THEME: INSTITUTE STANDARD V54 --- */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -152,9 +152,7 @@
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
         .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; }
 
-        /* --- VISIBILITY RULES (FIXED) --- */
-        
-        /* Global Hidden Default */
+        /* --- VISIBILITY RULES --- */
         del, ins, .diff-tag { display: none; } 
 
         /* 1. READER MODE: Show Ins, Hide Del */
@@ -166,7 +164,7 @@
         body[data-mode="reader"] .diff-header { display: none !important; }
         
         body[data-mode="reader"] ins { 
-            display: inline; /* <--- THE FIX */
+            display: inline; 
             text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0;
         }
         body[data-mode="reader"] del { display: none; }
@@ -186,7 +184,7 @@
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         
         body[data-mode="audit"] ins { 
-            display: inline; /* <--- THE FIX */
+            display: inline;
             text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; 
         }
         body[data-mode="audit"] del { display: none; }
@@ -207,7 +205,7 @@
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
         
         body[data-mode="logic"] ins { 
-            display: inline; /* <--- THE FIX */
+            display: inline;
             text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; 
         }
         body[data-mode="logic"] del { display: none; }
@@ -332,7 +330,7 @@
                     </p>
                     <p>
                         <span class="audit-marker">[M1.1]</span>
-                        We <del>build</del> <ins>develop</ins> governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an <del>abstract intention</del> <ins>internal system property</ins> that can be examined, stressed, and verified <span class="diff-tag">[assumption removed]</span>.
+                        We <del>build</del> <ins>develop</ins> governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an <del>abstract intention</del> <ins>abstract intention, but as an internal system property</ins> that can be examined, stressed, and verified.
                     </p>
                     
                     <div class="logic-block">
@@ -369,7 +367,7 @@
                         <span class="audit-marker">[E-01]</span>
                         We evaluate alignment as a <del>static</del> <ins>dynamic</ins> property of reasoning systems, not as a <del>stated</del> <ins>stated</ins> objective.
                     </p>
-                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where <del>failures</del> <ins>failure modes</ins> emerge <span class="diff-tag">[scope narrowed]</span>.</p>
+                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where <del>failures</del> <ins>failure modes</ins> emerge. <span class="diff-tag">[scope narrowed]</span></p>
                     
                     <div class="logic-block">
 <span class="logic-comment"># Evaluation Strategy: Dynamic Stress Testing</span>
@@ -379,7 +377,7 @@
                     </div>
 
                     <p>The alignment lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation.</p>
-                    <p>The lexicon is not descriptive documentation. It is a measurement instrument <span class="diff-tag">[clarified]</span>.</p>
+                    <p>The lexicon is not descriptive documentation. It is a measurement instrument. <span class="diff-tag">[clarified]</span></p>
                 </div>
             </div>
             
@@ -410,7 +408,7 @@
             <span class="logic-keyword">then</span> IsAligned(Next(s))
                     </div>
 
-                    <p>These diagnostics operate directly over the controlled alignment lexicon, ensuring that detected changes correspond to genuine reasoning drift rather than interpretive ambiguity <span class="diff-tag">[precision added]</span>.</p>
+                    <p>These diagnostics operate directly over the controlled alignment lexicon, ensuring that detected changes correspond to genuine reasoning drift rather than interpretive ambiguity. <span class="diff-tag">[precision added]</span></p>
                     <p>The instruments are designed to expose failure modes. <del>Passing is expected.</del> <ins>Passing is not assumed.</ins></p>
                 </div>
             </div>
