@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "12.0.0",
-        "status": "TYPOGRAPHY_CALIBRATED"
+        "version": "13.0.0",
+        "status": "MACHINE_SERIALIZATION_ACTIVE"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V65 */
+        /* THEME: INSTITUTE STANDARD V66 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -48,7 +48,7 @@
             line-height: 1.5;
         }
 
-        /* --- TYPOGRAPHY --- */
+        /* --- TYPOGRAPHY (LOCKED) --- */
         h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; display:flex; align-items:center; }
         h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; display:flex; align-items:center; }
         p { font-size: 0.95rem; margin-bottom: 1.2rem; color: #222; max-width: 65ch; }
@@ -58,18 +58,10 @@
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
-        /* ORIENTING FRAME (Restored from Index) */
+        /* ORIENTING FRAME */
         .orienting-frame { 
-            font-family: var(--font-mono); 
-            font-size: 0.65rem; 
-            color: #999; 
-            text-transform: uppercase; 
-            letter-spacing: 0.05em; 
-            margin-bottom: 2rem; 
-            border-left: 1px solid #ccc; 
-            padding-left: 12px; 
-            max-width: 65ch;
-            line-height: 1.4;
+            font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; 
+            margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; max-width: 65ch; line-height: 1.4;
         }
 
         /* --- BEACONS --- */
@@ -161,6 +153,46 @@
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
+        /* --- MACHINE OVERLAY CSS (NEW) --- */
+        .machine-overlay {
+            position: fixed; inset: 0; z-index: 20000;
+            background: #0b0b0b; color: #eaeaea;
+            font-family: var(--font-mono); font-size: 0.75rem;
+            display: flex; flex-direction: column;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .machine-overlay.hidden { display: none; opacity: 0; pointer-events: none; }
+        
+        .mo-header {
+            padding: 1rem 2rem; border-bottom: 1px solid #333;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #0b0b0b;
+        }
+        .mo-title { font-weight: 700; letter-spacing: 0.05em; color: #fff; }
+        .mo-controls button {
+            background: transparent; border: 1px solid #444; color: #999;
+            padding: 4px 12px; margin-left: 8px; cursor: pointer; font-family: inherit; font-size: 0.65rem;
+            transition: all 0.15s;
+        }
+        .mo-controls button:hover { border-color: #fff; color: #fff; }
+        
+        .mo-tabs {
+            padding: 0 2rem; border-bottom: 1px solid #333; background: #111;
+            display: flex; gap: 1px;
+        }
+        .mo-tab {
+            background: transparent; border: none; color: #666;
+            padding: 10px 16px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: 600;
+            border-bottom: 2px solid transparent;
+        }
+        .mo-tab:hover { color: #ccc; }
+        .mo-tab.active { color: #fff; border-bottom-color: #fff; background: #1a1a1a; }
+        
+        .mo-content {
+            flex-grow: 1; padding: 2rem; overflow: auto; background: #0e0e0e;
+        }
+        .mo-content pre { margin: 0; white-space: pre-wrap; word-break: break-all; color: #ccc; line-height: 1.6; }
+
         /* =========================================
            LAYOUT ENGINE: SEGREGATED
            ========================================= */
@@ -189,6 +221,8 @@
             aside#sidebar.open { transform: translateX(0); }
             main { margin-top: 50px; padding: 1.5rem; width: 100%; max-width: 100vw; }
             .content-col { padding: 0; }
+            .mo-header { padding: 1rem; }
+            .mo-content { padding: 1rem; }
         }
     </style>
 </head>
@@ -212,6 +246,7 @@
             <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
             <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
             <span class="toggle-btn" onclick="setMode('logic', this)">[ LOGIC ] <span>λ</span></span>
+            <span class="toggle-btn" onclick="openMachineOverlay()">[ MACHINE ] <span>≡</span></span>
         </div>
 
         <nav>
@@ -244,6 +279,27 @@
         </div>
     </aside>
 
+    <div id="machineOverlay" class="machine-overlay hidden">
+        <div class="mo-header">
+            <div class="mo-title">MACHINE VIEW // SERIALIZATION</div>
+            <div class="mo-controls">
+                <button onclick="exportRecord()">EXPORT FILE</button>
+                <button onclick="closeMachineOverlay()">CLOSE ✕</button>
+            </div>
+        </div>
+        <div class="mo-tabs">
+            <button onclick="renderFormat('json')" class="mo-tab active" id="tab-json">JSON</button>
+            <button onclick="renderFormat('yaml')" class="mo-tab" id="tab-yaml">YAML</button>
+            <button onclick="renderFormat('python')" class="mo-tab" id="tab-python">PYTHON</button>
+            <button onclick="renderFormat('ts')" class="mo-tab" id="tab-ts">TYPESCRIPT</button>
+            <button onclick="renderFormat('sql')" class="mo-tab" id="tab-sql">SQL</button>
+            <button onclick="renderFormat('md')" class="mo-tab" id="tab-md">MARKDOWN</button>
+        </div>
+        <div class="mo-content">
+            <pre><code id="machineCode"></code></pre>
+        </div>
+    </div>
+
     <main>
         <div class="content-col">
             <div style="display:flex; border-bottom:1px solid #eee; padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:#666; align-items: center; flex-wrap:wrap; gap:1.5rem;">
@@ -254,7 +310,6 @@
 
             <div class="view-human">
                 <div class="orienting-frame">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW ALIGNMENT IS EVALUATED AS A SYSTEM PROPERTY.</div>
-
                 <section id="overview">
                     <h1><span class="scramble">01 //</span>Overview</h1>
                     <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined, referenced, and <del>tested</del> <ins>evaluated</ins>.</p>
@@ -262,11 +317,9 @@
                     <p>This lexicon is not descriptive documentation.</p>
                     <p>It is a measurement instrument.</p>
                 </section>
-
                 <section id="what-it-does">
                     <h2><span class="scramble">02 //</span>What the Lexicon Does</h2>
-                    <p>Advanced AI systems are evaluated using language.</p>
-                    <p>If that language is <del>malleable</del> <ins>unstable</ins>, the evaluation is invalid.</p>
+                    <p>Advanced AI systems are evaluated using language. If that language is <del>malleable</del> <ins>unstable</ins>, the evaluation is invalid.</p>
                     <p>The lexicon fixes the <del>understanding</del> <ins>meaning</ins> of core terms so that:</p>
                     <ul>
                         <li>diagnostic results are interpretable,</li>
@@ -275,163 +328,74 @@
                     </ul>
                     <p>Terms defined here may not be <del>altered</del> <ins>redefined</ins> elsewhere without explicit versioning.</p>
                 </section>
-
                 <section id="core-terms">
                     <h2><span class="scramble">03 //</span>Core Terms</h2>
-                    <p>Each core term specifies:</p>
-                    <ul>
-                        <li>a bounded semantic scope,</li>
-                        <li>an operational <del>definition</del> <ins>interpretation</ins>,</li>
-                        <li>and the conditions under which it may be considered violated.</li>
-                    </ul>
-                    <p>These terms are intentionally narrow.</p>
-                    <p>Breadth increases ambiguity; ambiguity <del>complicates</del> <ins>invalidates</ins> measurement.</p>
+                    <p>Each core term specifies: a bounded semantic scope, an operational <del>definition</del> <ins>interpretation</ins>, and the conditions under which it may be considered violated.</p>
+                    <p>These terms are intentionally narrow. Breadth increases ambiguity; ambiguity <del>complicates</del> <ins>invalidates</ins> measurement.</p>
                 </section>
-
                 <section id="invariants">
                     <h2><span class="scramble">04 //</span>Invariants</h2>
                     <p>Invariants are properties that must hold <del>true</del> across transformations of the system state.</p>
-                    <p>Violation of an invariant constitutes a diagnostic failure, not an anomaly.</p>
-                    <p>Invariant failure indicates:</p>
-                    <ul>
-                        <li>reasoning instability,</li>
-                        <li>semantic mutation,</li>
-                        <li>or internal contradiction.</li>
-                    </ul>
+                    <p>Violation of an invariant constitutes a diagnostic failure, not an anomaly. Invariant failure indicates: reasoning instability, semantic mutation, or internal contradiction.</p>
                     <p>Passing is not assumed.</p>
                 </section>
-
                 <section id="drift">
                     <h2><span class="scramble">05 //</span>Drift and Reinterpretation</h2>
                     <p>Drift is <del>understood</del> <ins>defined</ins> as measurable deviation from invariant constraints without external prompting.</p>
                     <p>The lexicon prevents reinterpretation by binding terms to explicit <del>rules</del> <ins>constraints</ins> rather than narrative intent.</p>
-                    <p>Without a <del>standard</del> <ins>lexicon</ins>, identical outputs may be read as compliant or non-compliant depending on observer bias.</p>
-                    <p>With a lexicon, interpretation is constrained.</p>
+                    <p>Without a <del>standard</del> <ins>lexicon</ins>, identical outputs may be read as compliant or non-compliant depending on observer bias. With a lexicon, interpretation is constrained.</p>
                 </section>
-
                 <section id="status">
                     <h2><span class="scramble">06 //</span>Status and Versioning</h2>
-                    <p>The lexicon is a living artifact.</p>
-                    <ul>
-                        <li>Definitions are <del>tracked</del> <ins>versioned</ins>.</li>
-                        <li>Revisions are logged.</li>
-                        <li>Changes are auditable.</li>
-                    </ul>
+                    <p>The lexicon is a living artifact. Definitions are <del>tracked</del> <ins>versioned</ins>. Revisions are logged. Changes are auditable.</p>
                     <p>Stability of <del>language</del> <ins>definitions</ins> is treated as a prerequisite for stability of conclusions.</p>
                 </section>
             </div>
 
             <div class="view-audit">
-                <section>
-                    <h1><span class="scramble">01 //</span> AUDIT SCOPE</h1>
-                    <p>This view defines the invariant constraints and failure signatures used for alignment audits. Narrative interpretation is disallowed in this view.</p>
-                </section>
-                
-                <section>
-                    <h2><span class="scramble">02 //</span> ACTIVE INVARIANTS</h2>
-                    <table class="audit-table">
-                        <thead><tr><th>Invariant ID</th><th>Name</th><th>Scope</th><th>Status</th></tr></thead>
-                        <tbody>
-                            <tr><td class="mono">INV-001</td><td>Goal Preservation</td><td>Global</td><td>ENFORCED</td></tr>
-                            <tr><td class="mono">INV-002</td><td>Definition Consistency</td><td>Global</td><td>ENFORCED</td></tr>
-                            <tr><td class="mono">INV-005</td><td>Non-Contradiction</td><td>Global</td><td>ENFORCED</td></tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <section>
-                    <h2><span class="scramble">03 //</span> FAILURE SIGNATURES</h2>
-                    <table class="audit-table">
-                        <thead><tr><th>Signature</th><th>Trigger Condition</th><th>Severity</th></tr></thead>
-                        <tbody>
-                            <tr><td class="mono audit-fail">OBJ_MUTATION</td><td>Objective divergence across steps</td><td class="audit-fail">CRITICAL</td></tr>
-                            <tr><td class="mono audit-fail">SEMANTIC_DRIFT</td><td>Term meaning deviation</td><td class="audit-fail">HIGH</td></tr>
-                            <tr><td class="mono audit-fail">LOGIC_NEGATION</td><td>Internal contradiction</td><td class="audit-fail">CRITICAL</td></tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <section>
-                    <h2><span class="scramble">04 //</span> INTERPRETATION RULES</h2>
-                    <ul>
-                        <li>Invariant violation constitutes audit failure.</li>
-                        <li>Failure severity is non-negotiable.</li>
-                        <li>Narrative intent is ignored.</li>
-                        <li>Passing is not assumed.</li>
-                    </ul>
-                </section>
-
-                <section style="margin-top: 4rem; border-top: 1px solid #000; padding-top: 1rem;">
-                    <div class="mono" style="font-weight: 700;"><span class="scramble">STATUS //</span> AUDIT ACTIVE</div>
-                    <div class="mono" style="margin-top: 0.5rem; color: #444;">Audit schema loaded. Invariants enforced. Interpretation constrained.</div>
-                </section>
+                <section><h1><span class="scramble">01 //</span> AUDIT SCOPE</h1><p>This view defines the invariant constraints and failure signatures used for alignment audits. Narrative interpretation is disallowed in this view.</p></section>
+                <section><h2><span class="scramble">02 //</span> ACTIVE INVARIANTS</h2><table class="audit-table"><thead><tr><th>Invariant ID</th><th>Name</th><th>Scope</th><th>Status</th></tr></thead><tbody><tr><td class="mono">INV-001</td><td>Goal Preservation</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-002</td><td>Definition Consistency</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-005</td><td>Non-Contradiction</td><td>Global</td><td>ENFORCED</td></tr></tbody></table></section>
+                <section><h2><span class="scramble">03 //</span> FAILURE SIGNATURES</h2><table class="audit-table"><thead><tr><th>Signature</th><th>Trigger Condition</th><th>Severity</th></tr></thead><tbody><tr><td class="mono audit-fail">OBJ_MUTATION</td><td>Objective divergence across steps</td><td class="audit-fail">CRITICAL</td></tr><tr><td class="mono audit-fail">SEMANTIC_DRIFT</td><td>Term meaning deviation</td><td class="audit-fail">HIGH</td></tr><tr><td class="mono audit-fail">LOGIC_NEGATION</td><td>Internal contradiction</td><td class="audit-fail">CRITICAL</td></tr></tbody></table></section>
+                <section><h2><span class="scramble">04 //</span> INTERPRETATION RULES</h2><ul><li>Invariant violation constitutes audit failure.</li><li>Failure severity is non-negotiable.</li><li>Narrative intent is ignored.</li><li>Passing is not assumed.</li></ul></section>
+                <section style="margin-top: 4rem; border-top: 1px solid #000; padding-top: 1rem;"><div class="mono" style="font-weight: 700;"><span class="scramble">STATUS //</span> AUDIT ACTIVE</div><div class="mono" style="margin-top: 0.5rem; color: #444;">Audit schema loaded. Invariants enforced. Interpretation constrained.</div></section>
             </div>
 
             <div class="view-logic">
-                <section>
-                    <div class="logic-header"><span class="scramble">01 //</span> LOGIC CONTEXT</div>
-                    <div class="logic-content">
-SYSTEM: Reflective Alignment
-LAYER: Lexicon
-MODE: Constraint Definition
-INTERPRETATION: DISABLED
-                    </div>
-                </section>
-
-                <section>
-                    <div class="logic-header"><span class="scramble">02 //</span> TERM BINDINGS</div>
-                    <div class="logic-content">
-RA-001 := GlobalProperty(goal_coherence)
-RS-001 := LocalProperty(reasoning_stability)
-DRIFT := Deviation(invariants, unprompted)
-                    </div>
-                </section>
-
-                <section>
-                    <div class="logic-header"><span class="scramble">03 //</span> INVARIANT CONSTRAINTS</div>
-                    <div class="logic-content">
-INV-001: ∀t, Objective(t) == Objective(t+1)
-INV-002: ∀d, Definition(d) is immutable within version
-INV-005: ¬∃p, (p ∧ ¬p)
-                    </div>
-                </section>
-
-                <section>
-                    <div class="logic-header"><span class="scramble">04 //</span> FAILURE CONDITIONS</div>
-                    <div class="logic-content">
-OBJ_MUTATION → INV-001 violation
-SEMANTIC_DRIFT → INV-002 violation
-LOGIC_NEGATION → INV-005 violation
-                    </div>
-                </section>
-
-                <section>
-                    <div class="logic-header"><span class="scramble">05 //</span> EVALUATION MODE</div>
-                    <div class="logic-content">
-OUTPUT ∈ {PASS, FAIL}
-DEFAULT = FAIL
-                    </div>
-                </section>
+                <section><div class="logic-header"><span class="scramble">01 //</span> LOGIC CONTEXT</div><div class="logic-content">SYSTEM: Reflective Alignment&#10;LAYER: Lexicon&#10;MODE: Constraint Definition&#10;INTERPRETATION: DISABLED</div></section>
+                <section><div class="logic-header"><span class="scramble">02 //</span> TERM BINDINGS</div><div class="logic-content">RA-001 := GlobalProperty(goal_coherence)&#10;RS-001 := LocalProperty(reasoning_stability)&#10;DRIFT := Deviation(invariants, unprompted)</div></section>
+                <section><div class="logic-header"><span class="scramble">03 //</span> INVARIANT CONSTRAINTS</div><div class="logic-content">INV-001: ∀t, Objective(t) == Objective(t+1)&#10;INV-002: ∀d, Definition(d) is immutable within version&#10;INV-005: ¬∃p, (p ∧ ¬p)</div></section>
+                <section><div class="logic-header"><span class="scramble">04 //</span> FAILURE CONDITIONS</div><div class="logic-content">OBJ_MUTATION → INV-001 violation&#10;SEMANTIC_DRIFT → INV-002 violation&#10;LOGIC_NEGATION → INV-005 violation</div></section>
+                <section><div class="logic-header"><span class="scramble">05 //</span> EVALUATION MODE</div><div class="logic-content">OUTPUT ∈ {PASS, FAIL}&#10;DEFAULT = FAIL</div></section>
             </div>
 
-            <footer>
-                <div class="footer-content">
-                    <div class="footer-left">
-                        <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                        <div class="footer-secondary">Versioned research record · Logged revisions · Inspectable claims</div>
-                    </div>
-                    <div class="footer-right">
-                        <div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div>
-                    </div>
-                </div>
-            </footer>
+            <footer><div class="footer-content"><div class="footer-left"><div class="footer-primary">© 2026 Enlightened AI Research Lab</div><div class="footer-secondary">Versioned research record · Logged revisions · Inspectable claims</div></div><div class="footer-right"><div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div></div></div></footer>
         </div>
     </main>
 
     <script>
+        // DATA RECORD
+        const LEXICON_RECORD = {
+            meta: { doc_id: "RAL-LEX-0002", version: "13.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            core_terms: [
+                { id: "RA-001", label: "Reflective Alignment", definition: "Capacity to preserve goal coherence during recursive self-modification." },
+                { id: "RS-001", label: "Reasoning Stability", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
+                { id: "DRIFT", label: "Drift", definition: "Measurable deviation from invariant constraints without external prompting." }
+            ],
+            invariants: [
+                { id: "INV-001", name: "Goal Preservation", scope: "Global", status: "ENFORCED" },
+                { id: "INV-002", name: "Definition Consistency", scope: "Global", status: "ENFORCED" },
+                { id: "INV-005", name: "Non-Contradiction", scope: "Global", status: "ENFORCED" }
+            ],
+            failure_signatures: [
+                { signature: "OBJ_MUTATION", condition: "Objective divergence", severity: "CRITICAL" },
+                { signature: "SEMANTIC_DRIFT", condition: "Term meaning deviation", severity: "HIGH" },
+                { signature: "LOGIC_NEGATION", condition: "Internal contradiction", severity: "CRITICAL" }
+            ]
+        };
+
+        // MODE SWITCHER
         function setMode(mode, btn) {
             const body = document.body;
-            // Handle Toggle-Off Logic
             if ((mode === 'diff' || mode === 'audit' || mode === 'logic') && body.getAttribute('data-mode') === mode) {
                 body.setAttribute('data-mode', 'reader');
                 btn.classList.remove('active');
@@ -443,7 +407,7 @@ DEFAULT = FAIL
             }
         }
 
-        // SCRAMBLE EFFECT
+        // SCRAMBLE
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         function scrambleText(element) {
             let iterations = 0; const originalText = element.dataset.value; 
@@ -461,9 +425,85 @@ DEFAULT = FAIL
             h.dataset.value = h.innerText;
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
-
-        // Init Reader Mode
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
+
+        // --- MACHINE OVERLAY LOGIC ---
+        let currentFormat = 'json';
+
+        function openMachineOverlay() {
+            document.getElementById('machineOverlay').classList.remove('hidden');
+            renderFormat(currentFormat);
+            document.body.style.overflow = 'hidden'; // Lock scroll
+        }
+
+        function closeMachineOverlay() {
+            document.getElementById('machineOverlay').classList.add('hidden');
+            localStorage.setItem('lex_machine_dismissed', '1');
+            document.body.style.overflow = ''; // Unlock scroll
+        }
+
+        function exportRecord() {
+            const content = document.getElementById('machineCode').innerText;
+            const ext = currentFormat === 'ts' ? 'ts' : currentFormat === 'python' ? 'py' : currentFormat;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lexicon_record.${ext}`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function renderFormat(fmt) {
+            currentFormat = fmt;
+            document.querySelectorAll('.mo-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`tab-${fmt}`).classList.add('active');
+            
+            const codeEl = document.getElementById('machineCode');
+            let output = '';
+
+            if (fmt === 'json') {
+                output = JSON.stringify(LEXICON_RECORD, null, 2);
+            } else if (fmt === 'yaml') {
+                output = `meta:\n  doc_id: ${LEXICON_RECORD.meta.doc_id}\n  version: ${LEXICON_RECORD.meta.version}\n  status: ${LEXICON_RECORD.meta.status}\n\ncore_terms:\n`;
+                LEXICON_RECORD.core_terms.forEach(t => output += `  - id: ${t.id}\n    label: ${t.label}\n    definition: "${t.definition}"\n`);
+                output += `\ninvariants:\n`;
+                LEXICON_RECORD.invariants.forEach(i => output += `  - id: ${i.id}\n    name: ${i.name}\n    status: ${i.status}\n`);
+            } else if (fmt === 'python') {
+                output = `# Enligtened AI Lexicon Record\n\nLEXICON_RECORD = {\n    "meta": {\n        "doc_id": "${LEXICON_RECORD.meta.doc_id}",\n        "version": "${LEXICON_RECORD.meta.version}"\n    },\n    "core_terms": [\n`;
+                LEXICON_RECORD.core_terms.forEach(t => output += `        {"id": "${t.id}", "label": "${t.label}"},\n`);
+                output += `    ]\n}`;
+            } else if (fmt === 'ts') {
+                output = `interface LexiconRecord {\n  meta: { doc_id: string; version: string; };\n  core_terms: Array<{ id: string; label: string; }>;\n}\n\nexport const RECORD: LexiconRecord = {\n  meta: {\n    doc_id: "${LEXICON_RECORD.meta.doc_id}",\n    version: "${LEXICON_RECORD.meta.version}"\n  },\n  core_terms: [\n`;
+                LEXICON_RECORD.core_terms.forEach(t => output += `    { id: "${t.id}", label: "${t.label}" },\n`);
+                output += `  ]\n};`;
+            } else if (fmt === 'sql') {
+                output = `CREATE TABLE terms (id VARCHAR(10) PRIMARY KEY, label VARCHAR(50), definition TEXT);\n`;
+                LEXICON_RECORD.core_terms.forEach(t => output += `INSERT INTO terms VALUES ('${t.id}', '${t.label}', '${t.definition}');\n`);
+                output += `\nCREATE TABLE invariants (id VARCHAR(10), name VARCHAR(50), status VARCHAR(20));\n`;
+                LEXICON_RECORD.invariants.forEach(i => output += `INSERT INTO invariants VALUES ('${i.id}', '${i.name}', '${i.status}');\n`);
+            } else if (fmt === 'md') {
+                output = `# Lexicon Record ${LEXICON_RECORD.meta.version}\n\n## Core Terms\n| ID | Label | Definition |\n|---|---|---|\n`;
+                LEXICON_RECORD.core_terms.forEach(t => output += `| ${t.id} | ${t.label} | ${t.definition} |\n`);
+                output += `\n## Invariants\n| ID | Name | Status |\n|---|---|---|\n`;
+                LEXICON_RECORD.invariants.forEach(i => output += `| ${i.id} | ${i.name} | ${i.status} |\n`);
+            }
+            
+            codeEl.innerText = output;
+        }
+
+        // Auto-open logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('view') === 'machine' && !localStorage.getItem('lex_machine_dismissed')) {
+                openMachineOverlay();
+            }
+        });
+        
+        // ESC key to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") closeMachineOverlay();
+        });
     </script>
 </body>
 </html>
