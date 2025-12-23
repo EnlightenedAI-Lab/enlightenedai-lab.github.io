@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "22.0.0",
-        "status": "ENTROPY_ENGINE_ONLINE"
+        "version": "23.0.0",
+        "status": "FOCUS_ISOLATION_ACTIVE"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V75 */
+        /* THEME: INSTITUTE STANDARD V76 */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -174,7 +174,7 @@
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
-        /* --- V75: THE ENTROPY ENGINE --- */
+        /* --- V76: FOCUS ISOLATION & TELEMETRY --- */
         .machine-overlay::before {
             content: ""; position: fixed; inset: 0; z-index: 20005; pointer-events: none;
             background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 2px, rgba(255, 255, 255, 0.03) 3px, rgba(0, 0, 0, 0) 4px);
@@ -192,7 +192,6 @@
         .event-text.fade-out { opacity: 0; }
         .event-dot { width: 4px; height: 4px; background: #00cc00; border-radius: 50%; display: block; opacity: 0.7; }
 
-        /* ENTROPY & CORRECTION */
         .status-corrected { color: #00cc00 !important; font-weight: 700; text-shadow: 0 0 5px rgba(0,204,0,0.5); transition: color 0.1s ease; }
 
         @keyframes terminal-boot { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -209,10 +208,23 @@
             .machine-led { animation: none; opacity: 1; }
         }
 
-        .m-card { transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease; }
-        .m-card:hover { border-color: #666; background: #1f1f1f; transform: translateY(-1px); }
-        .m-card:hover .mc-header { color: #999; }
-        .m-card.scan-active { border-color: #fff !important; box-shadow: 0 0 10px rgba(255,255,255,0.1); background: #222; }
+        /* CARD HOVER PHYSICS (FOCUS ISOLATION) */
+        .m-card { transition: all 0.3s ease; }
+        
+        /* The Dim: When grid is hovered, dim ALL cards */
+        .card-grid:hover .m-card { opacity: 0.35; filter: grayscale(0.8); }
+        
+        /* The Focus: Restore hovered card */
+        .card-grid:hover .m-card:hover { 
+            opacity: 1; filter: grayscale(0); 
+            border-color: #777; background: #1f1f1f; transform: translateY(-2px); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 10;
+        }
+        /* Keep header bright on focus */
+        .card-grid:hover .m-card:hover .mc-header { color: #fff; }
+
+        /* Scan Highlight Override (Neural Link) */
+        .m-card.scan-active { opacity: 1 !important; filter: grayscale(0) !important; border-color: #fff !important; box-shadow: 0 0 10px rgba(255,255,255,0.15); background: #222; z-index: 20; }
 
         /* --- MACHINE OVERLAY --- */
         .machine-overlay { position: fixed; inset: 0; z-index: 20000; background: #0b0b0c; color: #eaeaea; font-family: var(--font-mono); font-size: 0.75rem; display: flex; flex-direction: column; transition: opacity 0.2s ease; }
@@ -426,7 +438,7 @@
 
     <script>
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "22.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "RAL-LEX-0002", version: "23.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
                 { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
@@ -509,7 +521,7 @@
                 if(el && !el.classList.contains('status-corrected')) {
                     el.innerText = raConfidence.toFixed(2) + "%";
                 }
-            }, 4000); // 4 seconds decay
+            }, 4000); 
         }
 
         function triggerScan(text) {
@@ -580,7 +592,7 @@
             switchMachineMode(machineMode);
             document.body.style.overflow = 'hidden';
             startEventTicker();
-            startEntropy(); // START DECAY
+            startEntropy(); 
         }
 
         function closeMachineOverlay() {
@@ -614,7 +626,6 @@
             html += `<div class="m-card" id="card-meta"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON_RECORD.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON_RECORD.meta.classification}</div></div></div>`;
             html += `<div class="mc-section-title">CORE TERMS</div>`;
             LEXICON_RECORD.core_terms.forEach(t => { 
-                // ENTROPY ROW INJECTION FOR RA-001
                 let extraRow = '';
                 if(t.id === 'RA-001') {
                     extraRow = `<div class="mc-row"><div class="mc-label">CONFIDENCE</div><div class="mc-val" id="val-confidence" style="font-family:var(--font-mono);">${raConfidence.toFixed(2)}%</div></div>`;
