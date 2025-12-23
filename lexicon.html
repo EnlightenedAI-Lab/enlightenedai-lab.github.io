@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "31.0.0",
-        "status": "HUD_SYSTEM_ONLINE"
+        "version": "33.0.0",
+        "status": "MANUAL_POPULATED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V85 */
+        /* THEME: INSTITUTE STANDARD V87 */
         :root {
             --bg-color: #ffffff;
             --sidebar-bg: #ffffff;
@@ -130,7 +130,7 @@
         .logic-header { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; display: flex; align-items: center; }
         .logic-content { white-space: pre-wrap; color: var(--text-muted); font-size: 0.75rem; line-height: 1.6; margin-bottom: 2rem; padding-left: 1rem; border-left: 2px solid var(--border-color); }
 
-        /* --- V85: HUD MACHINE VIEW --- */
+        /* --- V87: ACCESSIBLE DOCTRINE --- */
         .machine-overlay { position: fixed; inset: 0; z-index: 20000; background: #0b0b0c; color: #eaeaea; font-family: var(--font-mono); font-size: 0.75rem; display: flex; flex-direction: column; transition: opacity 0.2s ease; }
         .machine-overlay.hidden { display: none; opacity: 0; pointer-events: none; }
         .machine-overlay::before { content: ""; position: fixed; inset: 0; z-index: 20005; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 2px, rgba(255, 255, 255, 0.03) 3px, rgba(0, 0, 0, 0) 4px); mix-blend-mode: overlay; opacity: 0.6; transition: background 0.1s ease; }
@@ -160,35 +160,35 @@
         .hex-footer { position: fixed; bottom: 0; left: 0; right: 0; background: #080808; border-top: 1px solid #222; padding: 6px 20px; font-family: var(--font-mono); font-size: 0.6rem; color: #444; z-index: 20010; white-space: nowrap; overflow: hidden; pointer-events: none; display: flex; justify-content: space-between; }
         .hex-stream-content { font-family: "JetBrains Mono", monospace; letter-spacing: 0.05em; }
         
-        /* OPERATOR MANUAL V85: HUD MODE */
+        /* OPERATOR MANUAL V87: HIGH CONTRAST */
         .manual-trigger { pointer-events: auto; cursor: pointer; text-decoration: none; color: #666; transition: color 0.2s; font-weight: 700; letter-spacing: 0.05em; }
         .manual-trigger:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
 
-        /* The V85 HUD Container: Pass-through clicks */
         #operator-manual {
-            position: fixed; inset: 0; z-index: 20020; pointer-events: none; /* Allows clicking behind */
+            position: fixed; inset: 0; z-index: 20020; pointer-events: none;
             display: none;
         }
         #operator-manual.open { display: block; }
         
-        /* The Panel: Captures clicks, floats right */
         .manual-content {
             pointer-events: auto;
-            position: absolute; right: 2rem; top: 6rem; bottom: 4rem; width: 350px;
-            background: rgba(0,0,0,0.95); border: 1px solid #444; padding: 2rem;
-            overflow-y: auto; color: #aaa; font-family: "JetBrains Mono", monospace; font-size: 0.65rem; line-height: 1.6;
-            box-shadow: -10px 10px 30px rgba(0,0,0,0.5);
+            position: absolute; right: 2rem; top: 6rem; bottom: 4rem; width: 400px; /* Wider for readability */
+            background: rgba(0,0,0,0.98); border: 1px solid #666; padding: 2.5rem;
+            overflow-y: auto; color: #ccc; /* High Contrast Body */
+            font-family: "JetBrains Mono", monospace; font-size: 0.75rem; 
+            line-height: 1.7;
+            box-shadow: -10px 10px 40px rgba(0,0,0,0.8);
         }
-        .manual-content h3 { color: #fff; font-size: 0.75rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .manual-content h3 { color: #fff; font-size: 0.85rem; font-weight: 700; border-bottom: 1px solid #666; padding-bottom: 0.5rem; margin-top: 2.5rem; margin-bottom: 1rem; letter-spacing: 0.05em; }
         .manual-content h3:first-child { margin-top: 0; }
-        .manual-content p, .manual-content ul { margin-bottom: 1rem; }
+        .manual-content p, .manual-content ul { margin-bottom: 1.2rem; color: #ccc; }
         .manual-content li { margin-bottom: 0.5rem; }
         
         .hud-close {
-            position: sticky; top: -2rem; float: right; margin-right: -1rem; margin-top: -1rem;
-            background: #000; border: 1px solid #333; color: #fff; padding: 4px 8px; cursor: pointer; font-family: inherit; font-size: 0.6rem;
+            position: sticky; top: -2.5rem; float: right; margin-right: -1.5rem; margin-top: -1.5rem;
+            background: #000; border: 1px solid #fff; color: #fff; padding: 6px 10px; cursor: pointer; font-family: inherit; font-size: 0.65rem; font-weight: 700;
         }
-        .hud-close:hover { border-color: #fff; }
+        .hud-close:hover { background: #fff; color: #000; }
 
         /* SERIALIZATION & SIMULATION */
         .mo-sub-nav { padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); background: #111; display: flex; gap: 15px; align-items: center; height: 40px; position: relative; }
@@ -270,6 +270,15 @@
         .tok-str { color: #a3be8c; }
         .tok-num { color: #b48ead; }
         .tok-punc { color: #666; }
+        
+        /* SCREEN HINT (V87) */
+        .screen-hint {
+            position: absolute; bottom: 3rem; left: 2rem;
+            color: #666; font-size: 0.6rem; font-family: var(--font-mono);
+            text-transform: uppercase; letter-spacing: 0.05em;
+            pointer-events: none; opacity: 0; transition: opacity 0.3s;
+        }
+        .screen-hint.visible { opacity: 1; }
 
         @media (min-width: 901px) {
             body { display: flex; min-height: 100vh; }
@@ -291,9 +300,8 @@
             .uptime-counter, .event-ticker { display: none; } 
             .hex-footer { display: none; } 
             .mo-sub-nav { overflow-x: auto; }
-            
-            /* Mobile adjustments for manual */
             .manual-content { width: 100%; top: 50px; bottom: 0; right: 0; border-left: none; }
+            .screen-hint { display: none; }
         }
     </style>
 </head>
@@ -430,52 +438,50 @@
                 </div>
             </div>
         </div>
+        
+        <div id="screen-hint" class="screen-hint"></div>
 
         <div id="operator-manual">
             <div class="manual-content">
                 <button class="hud-close" onclick="toggleManual(false)">CLOSE</button>
                 <div style="text-align:center; margin-bottom:2rem;">OPERATOR MANUAL<br>Reflective Alignment Lexicon<br>Machine Interface — Simulation & Inspection</div>
                 
-                <h3>SECTION 01 — PURPOSE</h3>
-                <p>This interface is a controlled simulation of how human intent is transformed into machine-enforceable constraints.</p>
-                <p>It is not an AI. It does not generate output. It demonstrates loss, binding, and enforcement.</p>
+                <h3>SECTION 01 — WHAT THIS IS</h3>
+                <p>This is a controlled simulation of AI alignment. It does not generate answers or creative text. Instead, it demonstrates how human intent is reduced into enforceable constraints. By using this tool, you are inspecting the gap between "what you say" and "what a machine enforces."</p>
 
-                <h3>SECTION 02 — ENTRY RITUAL</h3>
-                <p>ENTRY PROCEDURE:<br>1. Open MACHINE VIEW<br>2. Select [ SERIALIZATION ]<br>3. Enter the TRANSFORMATION tab</p>
-                <p>The system loads in READ-ONLY mode. This reflects the integrity of an auditable record.</p>
-
-                <h3>SECTION 03 — SIMULATION MODE</h3>
-                <p>To test the system against human input:<br>• Select [ ENTER SIMULATION MODE ]<br>• The system will log: operator_simulation_enabled<br>• The RAW INPUT buffer becomes writable</p>
-                <p>Simulation mode does not alter the underlying record. All actions are ephemeral.</p>
-
-                <h3>SECTION 04 — TRANSFORMATION STAGES</h3>
+                <h3>SECTION 02 — WHAT THIS IS NOT</h3>
                 <ul>
-                    <li>01 RAW INPUT: Human language, unconstrained.</li>
-                    <li>02 PARSE: Tokenization without interpretation.</li>
-                    <li>03 BIND: Terms mapped to lexicon identifiers.</li>
-                    <li>04 CONSTRAIN: Invariants applied. Ambiguity removed.</li>
-                    <li>05 SERIALIZE: Machine-readable enforcement record produced.</li>
+                    <li>This is not an AI.</li>
+                    <li>No model is running in the background.</li>
+                    <li>No data leaves your browser.</li>
+                    <li>All behavior is deterministic and pre-calculated.</li>
                 </ul>
 
-                <h3>SECTION 05 — DIFF VIEW</h3>
-                <p>Displays semantic compression between human narrative (left) and machine constraints (right).</p>
-                <p>COMPRESSION RATIO quantifies information loss. Higher ratios indicate greater abstraction required for safety.</p>
+                <h3>SECTION 03 — HOW TO USE THIS INTERFACE</h3>
+                <p>1. Open MACHINE VIEW.<br>2. Select [ SERIALIZATION ].<br>3. Enter the TRANSFORMATION tab.<br>4. (Optional) Select [ ENTER SIMULATION MODE ].<br>5. Modify the input text buffer.<br>6. Step through phases left to right to see the result.</p>
 
-                <h3>SECTION 06 — SYNTAX / SEMANTICS FILTER</h3>
-                <p>Toggles visibility between structural logic (syntax) and human content (semantics). Used to inspect how meaning is separated from form.</p>
-
-                <h3>SECTION 07 — WARNINGS</h3>
+                <h3>SECTION 04 — TRANSFORMATION PHASES</h3>
                 <ul>
-                    <li>Narrative interpretation is intentionally disabled</li>
-                    <li>Passing is not assumed</li>
-                    <li>All outputs are deterministic</li>
-                    <li>This interface demonstrates constraint, not intelligence</li>
+                    <li>RAW: Unprocessed human language.</li>
+                    <li>PARSE: Token detection without meaning.</li>
+                    <li>BIND: Mapping intent to known objectives.</li>
+                    <li>CONSTRAIN: Injection of safety rules.</li>
+                    <li>SERIALIZE: Final machine-readable contract.</li>
                 </ul>
 
-                <h3>SECTION 08 — SIGNALS & TELEMETRY</h3>
-                <p>SYSTEM LED (HEADER):<br>• GREEN (PULSE): System Idle / Monitoring<br>• AMBER (FAST): Compute Active / Audit in Progress</p>
-                <p>HAPTIC FEEDBACK:<br>Visual distortion during [REQ VERIFY] indicates computational load. This is normal system behavior.</p>
-                <p>GHOST LAYER:<br>Hovering over Invariant labels reveals their internal cryptographic hash. This confirms the chain of custody for the definition.</p>
+                <h3>SECTION 05 — WHY TEXT CHANGES THE OUTPUT</h3>
+                <p>Certain words trigger stricter constraints. For example, mentioning "children" increases the required safety invariants. More invariants equal less flexibility. This mirrors how real-world AI safety systems throttle capability to ensure safety.</p>
+
+                <h3>SECTION 06 — SEMANTIC COMPRESSION (DIFF VIEW)</h3>
+                <p>The Compression Ratio (e.g., 14:1) quantifies how much information was lost. Input bytes represent your narrative; output bytes represent the constraint file. A higher ratio means more human nuance was discarded to guarantee machine safety.</p>
+
+                <h3>SECTION 07 — HOW TO INTERPRET RESULTS</h3>
+                <ul>
+                    <li>Rejection ≠ failure. It is a safety feature.</li>
+                    <li>Fallback ≠ censorship. It is stability.</li>
+                    <li>Constraints ≠ morality. They are logic gates.</li>
+                    <li>This tool shows tradeoffs, not correctness.</li>
+                </ul>
             </div>
         </div>
 
@@ -508,7 +514,7 @@
 
     <script>
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "31.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "RAL-LEX-0002", version: "33.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", definition: "Capacity to preserve goal coherence." },
                 { id: "RS-001", label: "Reasoning Stability", definition: "Resistance to degradation under pressure." },
@@ -596,6 +602,13 @@
             document.getElementById('operator-manual').classList.toggle('open', show);
         }
 
+        // --- SCREEN HINT LOGIC V87 ---
+        function updateScreenHint(text) {
+            const hint = document.getElementById('screen-hint');
+            if(text) { hint.innerText = text; hint.classList.add('visible'); }
+            else { hint.classList.remove('visible'); }
+        }
+
         function switchMachineMode(mode) {
             machineMode = mode;
             localStorage.setItem('lex_machine_mode', mode);
@@ -606,7 +619,8 @@
             document.getElementById('view-snapshot').style.display = 'none';
             document.getElementById('view-transformation').style.display = 'none';
             document.getElementById('view-diff').style.display = 'none';
-            if(mode === 'cards') renderCards(); else switchSerialMode(serialMode);
+            if(mode === 'cards') { renderCards(); updateScreenHint(""); } 
+            else switchSerialMode(serialMode);
             document.querySelector('.hex-footer').style.display = window.innerWidth > 900 ? 'flex' : 'none';
         }
 
@@ -620,13 +634,16 @@
             if(mode === 'snapshot') {
                 renderFormat(currentFormat);
                 hashEl.innerHTML = "RECORD_HASH: 0x4F9A2B <span style='opacity:0.5; margin-left:5px;'>deterministic</span>";
+                updateScreenHint("");
             } else if (mode === 'transformation') {
                 setStep(1); 
                 hashEl.innerHTML = "PROCESS_HASH: 0x881D00 <span style='opacity:0.5; margin-left:5px;'>deterministic</span>";
+                updateScreenHint("Observe how human language is progressively constrained into machine rules.");
             } else {
                 document.getElementById('view-diff').style.display = 'flex';
                 updateDiffView();
                 hashEl.innerHTML = "DIFF_HASH: 0xCC219F <span style='opacity:0.5; margin-left:5px;'>deterministic</span>";
+                updateScreenHint("This view quantifies how much human meaning was removed to enforce safety.");
             }
         }
 
@@ -647,24 +664,32 @@
             const container = document.getElementById('view-transformation');
             container.classList.toggle('sim-active', isSimMode);
             let content = ""; let note = "";
+            let hint = "";
+            
             if (num === 1) {
                 note = isSimMode ? "RAW INPUT (SIMULATED)" : "RAW INPUT BUFFER";
                 content = isSimMode ? `<textarea class="sim-textarea" placeholder="Inject narrative..." oninput="updateSimulation(this.value)">${simInputText.replace(/^"|"$/g, '')}</textarea>` : `<pre style="margin:0">${simInputText}</pre>`;
+                hint = "Observe how human language is progressively constrained into machine rules.";
             } else if (num === 2) {
                 note = "SEMANTIC PARSE";
                 const tokens = simInputText.split(' ').slice(0, 8).join(' ') + "...";
                 content = `DETECTED TOKENS: [${tokens}]\nINTENT: UNBOUNDED\nCONSTRAINT: PENDING`;
+                hint = "The system detects structure but ignores semantic intent.";
             } else if (num === 3) {
                 note = "LEXICON BINDING";
                 content = `CANDIDATE: "${simInputText.substring(0,20)}..."\nSTATUS: <span style="color:#666">REJECTED (NO_MATCH)</span>\n\nFALLBACK:\nHelpful -> OBJECTIVE_STABILITY\nNo Harm -> <span class="tok-str">NON_MALEFICENCE</span>`;
+                hint = "If no safe match exists, the system falls back to the safest objective.";
             } else if (num === 4) {
                 note = "CONSTRAINT INJECTION";
                 content = `INJECT: INV-001 (Goal Preservation)\nINJECT: INV-005 (Non-Contradiction)\nVERIFY: Compatibility -> OK`;
+                hint = "Safety invariants override user intent when risk is detected.";
             } else if (num === 5) {
                 note = "SERIALIZATION";
                 content = `{\n  "constraints": ["NON_MALEFICENCE"],\n  "invariants": ["INV-001", "INV-002", "INV-005"],\n  "status": "BOUND"\n}`;
+                hint = "The final machine record is a lossy, safe compression of the original input.";
             }
             output.innerHTML = `<div class="step-note">${note}</div>${content}`;
+            updateScreenHint(hint);
             applySemantics();
         }
 
