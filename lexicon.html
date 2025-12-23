@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "3.0.0",
-        "status": "CONTENT_RESET_VERBATIM"
+        "version": "4.0.0",
+        "status": "DIFF_MODE_RESTORED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V56 */
+        /* THEME: INSTITUTE STANDARD V57 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -36,7 +36,6 @@
             
             /* MODES */
             --mode-audit: #b45309; 
-            --mode-logic: #0044cc; 
             --mode-diff: #000000;  
         }
 
@@ -73,7 +72,7 @@
         @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
         @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
 
-        .integrity-seal { margin-left: auto; display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: not-allowed !important; animation: border-pulse 3s infinite; }
+        .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
         /* --- TYPOGRAPHY --- */
@@ -86,23 +85,91 @@
         
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
-        /* --- MODES --- */
-        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
-        .toggle-btn:hover { color: #000; }
-        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+        /* --- REPOSITORY ACCESS PANEL --- */
+        .repo-panel {
+            margin-top: auto; 
+            margin-bottom: 1rem; 
+            border: 1px solid #eee; 
+            background: #fafafa;
+            padding: 1rem;
+            font-family: var(--font-mono);
+        }
+        .repo-header {
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .repo-status {
+            font-size: 0.6rem;
+            color: #b45309; /* Amber for restricted */
+            border: 1px solid #b45309;
+            padding: 1px 4px;
+            border-radius: 2px;
+        }
+        .repo-body {
+            font-size: 0.65rem;
+            color: #444;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+        }
+        .repo-link {
+            display: block;
+            font-size: 0.65rem;
+            color: var(--signal-blue);
+            text-decoration: none;
+            border-top: 1px solid #e5e5e5;
+            padding-top: 0.5rem;
+            transition: color 0.2s;
+        }
+        .repo-link:hover { color: #000; }
+
+        /* --- DIFF TOGGLE BUTTON --- */
+        .diff-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 4px 10px;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: auto; /* Push to right */
+            margin-right: 1rem;
+        }
+        .diff-btn:hover { background: #f0f0f0; }
+        .diff-btn.active { background: #000; color: #fff; border-color: #000; }
+
+        /* --- DIFF MODE LOGIC (CRITICAL FIX) --- */
+        del, ins { text-decoration: none; }
         
-        body[data-mode="reader"] .audit-marker, body[data-mode="reader"] .logic-block, body[data-mode="reader"] .diff-del, body[data-mode="reader"] .diff-ins, body[data-mode="reader"] .diff-tag { display: none !important; }
-        .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: #fff; }
-        body[data-mode="audit"] .audit-marker { display: inline-block; }
-        .diff-del { display: none; text-decoration: line-through; color: var(--signal-red); background: #ffebeb; padding: 0 2px; }
-        .diff-ins { display: none; text-decoration: none; color: #006600; background: #e6ffec; border-bottom: 1px solid #00cc00; padding: 0 2px; }
-        .diff-tag { display: none; font-family: var(--font-mono); font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
-        body[data-mode="diff"] .diff-del, body[data-mode="diff"] .diff-ins, body[data-mode="diff"] .diff-tag { display: inline; }
-        .logic-block { display: none; font-family: var(--font-mono); font-size: 0.75rem; color: #333; background-color: #fcfcfc; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); padding: 1rem; margin: 1.5rem 0; overflow-x: auto; position: relative; }
-        .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 2px 6px; }
-        body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        /* READER MODE (Default): Hides deletions, shows insertions as normal text */
+        body:not([data-mode="diff"]) del { display: none; }
+        body:not([data-mode="diff"]) ins { 
+            display: inline; 
+            background: transparent; 
+            color: inherit; 
+            text-decoration: none;
+        }
+
+        /* DIFF MODE: Shows deletions (red) and insertions (green) */
+        body[data-mode="diff"] del { 
+            display: inline; 
+            background: #ffebeb; 
+            color: #cc0000; 
+            text-decoration: line-through; 
+            padding: 0 4px; 
+            opacity: 0.7; 
+        }
+        body[data-mode="diff"] ins { 
+            display: inline; 
+            background: #e6ffec; 
+            color: #006600; 
+            border-bottom: 2px solid #00cc00; 
+            text-decoration: none; 
+            padding: 0 2px; 
+        }
 
         /* --- NAVIGATION --- */
         nav ul { list-style: none; padding: 0; margin: 0; }
@@ -115,17 +182,6 @@
         .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
 
-        .git-module { margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: all 0.15s; background: #fff; }
-        .git-module:hover { background: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .git-icon { width: 24px; height: 24px; fill: #000; transition: fill 0.1s; }
-        .git-module:hover .git-icon { fill: #fff; }
-        .git-info { display: flex; flex-direction: column; flex-grow: 1; }
-        .git-label { font-family: var(--font-mono); font-size: 0.55rem; color: #666; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 2px; transition: color 0.1s; }
-        .git-module:hover .git-label { color: #aaa; }
-        .git-repo { font-family: var(--font-mono); font-weight: 700; font-size: 0.75rem; color: #000; display: flex; justify-content: space-between; align-items: center; transition: color 0.1s; }
-        .git-module:hover .git-repo { color: #fff; }
-        .git-status-dot { height: 6px; width: 6px; background-color: #00cc00; border-radius: 50%; display: inline-block; margin-left: auto; box-shadow: 0 0 6px rgba(0,204,0,0.8); animation: beacon-green 1.5s infinite; }
-        
         .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: #000; color: #fff; border-color: #000; }
 
@@ -153,7 +209,7 @@
         }
     </style>
 </head>
-<body data-mode="reader" class="view-human">
+<body data-mode="reader">
 
     <header style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:rgba(255,255,255,0.98); border-bottom:1px solid #e5e5e5; padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);" id="mobile-bar">
         <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em;">ENLIGHTENED AI</div>
@@ -166,13 +222,6 @@
             <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
             <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
             <span>EST. 2026 // MONTREAL</span>
-        </div>
-
-        <div class="mode-group">
-            <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
-            <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
-            <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
-            <span class="toggle-btn" onclick="setMode('logic', this)">[ LOGIC ] <span>λ</span></span>
         </div>
 
         <nav>
@@ -189,10 +238,17 @@
             </ul>
         </nav>
 
-        <a href="https://github.com/EnlightenedAI-Lab" target="_blank" class="git-module">
-            <svg class="git-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            <div class="git-info"><span class="git-label">GITHUB_REPO</span><div class="git-repo">enlightened/core <span class="git-status-dot"></span></div></div>
-        </a>
+        <div class="repo-panel">
+            <div class="repo-header">
+                Repository Access
+                <span class="repo-status">RESTRICTED</span>
+            </div>
+            <div class="repo-body">
+                Read access is public.
+                Write access is granted selectively for research and audit purposes.
+            </div>
+            <a href="https://github.com/enlightened/core/issues/new?title=Research%20Access%20Request&body=**Affiliation:**%0A%0A**Intended%20use:**%0A%0A**Relevant%20experience%20(if%20any):**" target="_blank" class="repo-link">Request research access →</a>
+        </div>
 
         <div class="export-container">
             <button class="export-btn" onclick="window.print()"><span>🖨</span> EXPORT RECORD</button>
@@ -201,17 +257,19 @@
 
     <main>
         <div class="content-col">
-            <div style="display:flex; gap:2rem; border-bottom:1px solid #eee; padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:#666; align-items: center;">
+            <div style="display:flex; border-bottom:1px solid #eee; padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:#666; align-items: center; flex-wrap:wrap; gap:1.5rem;">
                 <div><span style="color:#999; display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0002</div>
                 <div><span style="color:#999; display:block; font-size:0.6rem;">CLASSIFICATION</span>PUBLIC</div>
-                <div id="last-update" style="color:#000;">LAST UPDATE: ...</div>
-                <div style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.65rem; color:#005500; border:1px solid #00cc00; padding:3px 6px; border-radius:3px; background:rgba(0,204,0,0.03);"><span style="width:6px; height:6px; background:#00cc00; border-radius:50%; box-shadow:0 0 6px rgba(0,204,0,0.4); animation:beacon-green 2s infinite;"></span>INTEGRITY: VERIFIED</div>
+                
+                <button class="diff-btn" onclick="toggleDiff(this)">[ ENABLE DIFF ]</button>
+                
+                <div class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
             </div>
 
             <section id="overview">
                 <h1><span class="scramble">01 //</span>Overview</h1>
-                <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined, referenced, and evaluated.</p>
-                <p>It exists to eliminate semantic drift between theory, diagnostics, and interpretation.</p>
+                <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined, referenced, and <span class="diff-change"><del>tested</del> <ins>evaluated</ins></span>.</p>
+                <p>It exists to eliminate semantic <span class="diff-change"><del>drift</del> <ins>deviation</ins></span> between theory, diagnostics, and interpretation.</p>
                 <p>This lexicon is not descriptive documentation.</p>
                 <p>It is a measurement instrument.</p>
             </section>
@@ -277,7 +335,7 @@
                 <div class="footer-content">
                     <div class="footer-left">
                         <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                        <div class="footer-secondary">Controlled Lexicon · Version 3.0 · Machine Readable</div>
+                        <div class="footer-secondary">Controlled Lexicon · Version 4.0 · Machine Readable</div>
                     </div>
                     <div class="footer-right">
                         <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
@@ -288,14 +346,21 @@
     </main>
 
     <script>
-        // 1. MODES
-        function setMode(mode, btn) {
-            document.body.setAttribute('data-mode', mode);
-            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        // TOGGLE DIFF LOGIC
+        function toggleDiff(btn) {
+            const body = document.body;
+            if (body.getAttribute('data-mode') === 'diff') {
+                body.setAttribute('data-mode', 'reader');
+                btn.innerText = "[ ENABLE DIFF ]";
+                btn.classList.remove('active');
+            } else {
+                body.setAttribute('data-mode', 'diff');
+                btn.innerText = "[ DIFF ACTIVE ]";
+                btn.classList.add('active');
+            }
         }
 
-        // 2. SCRAMBLE EFFECT
+        // SCRAMBLE EFFECT
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         function scrambleText(element) {
             let iterations = 0; const originalText = element.dataset.value; 
@@ -313,12 +378,6 @@
             h.dataset.value = h.innerText;
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
-
-        // 3. TELEMETRY
-        document.getElementById('last-update').innerText = "LAST UPDATE: " + document.lastModified;
-
-        // Init
-        setMode('reader', document.querySelector('.toggle-btn.active'));
     </script>
 </body>
 </html>
