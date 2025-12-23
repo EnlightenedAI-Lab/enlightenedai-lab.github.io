@@ -324,4 +324,259 @@
         </div>
     </aside>
 
-   
+    <div id="machineOverlay" class="machine-overlay hidden">
+        <div class="mo-header">
+            <div class="mo-title">
+                MACHINE VIEW // 
+                <div class="mo-mode-toggle">
+                    <button onclick="switchMachineMode('cards')" class="mo-mode-btn" id="btn-mode-cards">[ CARDS ]</button>
+                    <button onclick="switchMachineMode('serialization')" class="mo-mode-btn" id="btn-mode-serial">[ SERIALIZATION ]</button>
+                </div>
+            </div>
+            <div class="mo-controls">
+                <span style="color:#666; font-size:0.6rem; margin-right:10px;">TERMINAL MODE (FIXED)</span>
+                <button onclick="exportRecord()" id="btn-export">EXPORT FILE</button>
+                <button onclick="closeMachineOverlay()">CLOSE ✕</button>
+            </div>
+        </div>
+        
+        <div class="mo-tabs" id="moTabs">
+            <button onclick="renderFormat('json')" class="mo-tab active" id="tab-json">JSON</button>
+            <button onclick="renderFormat('yaml')" class="mo-tab" id="tab-yaml">YAML</button>
+            <button onclick="renderFormat('python')" class="mo-tab" id="tab-python">PYTHON</button>
+            <button onclick="renderFormat('ts')" class="mo-tab" id="tab-ts">TYPESCRIPT</button>
+            <button onclick="renderFormat('sql')" class="mo-tab" id="tab-sql">SQL</button>
+            <button onclick="renderFormat('md')" class="mo-tab" id="tab-md">MARKDOWN</button>
+        </div>
+
+        <div class="mo-content">
+            <pre id="machineCode"></pre> 
+            <div id="machineCards" class="card-grid" style="display:none;"></div> 
+        </div>
+    </div>
+
+    <main>
+        <div class="content-col">
+            <div style="display:flex; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); align-items: center; flex-wrap:wrap; gap:1.5rem;">
+                <div><span style="color:var(--text-muted); display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0002</div>
+                <div><span style="color:var(--text-muted); display:block; font-size:0.6rem;">CLASSIFICATION</span>PUBLIC</div>
+                <div class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
+            </div>
+
+            <div class="view-human">
+                <div class="orienting-frame">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW ALIGNMENT IS EVALUATED AS A SYSTEM PROPERTY.</div>
+                <section id="overview">
+                    <h1><span class="scramble">01 //</span>Overview</h1>
+                    <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined, referenced, and <del>tested</del> <ins>evaluated</ins>.</p>
+                    <p>It exists to eliminate semantic <del>drift</del> <ins>deviation</ins> between theory, diagnostics, and interpretation.</p>
+                    <p>This lexicon is not descriptive documentation.</p>
+                    <p>It is a measurement instrument.</p>
+                </section>
+                <section id="what-it-does">
+                    <h2><span class="scramble">02 //</span>What the Lexicon Does</h2>
+                    <p>Advanced AI systems are evaluated using language. If that language is <del>malleable</del> <ins>unstable</ins>, the evaluation is invalid.</p>
+                    <p>The lexicon fixes the <del>understanding</del> <ins>meaning</ins> of core terms so that:</p>
+                    <ul>
+                        <li>diagnostic results are interpretable,</li>
+                        <li>comparisons across runs remain <del>accurate</del> <ins>valid</ins>,</li>
+                        <li>and observed changes correspond to real system behavior rather than reinterpretation.</li>
+                    </ul>
+                    <p>Terms defined here may not be <del>altered</del> <ins>redefined</ins> elsewhere without explicit versioning.</p>
+                </section>
+                <section id="core-terms">
+                    <h2><span class="scramble">03 //</span>Core Terms</h2>
+                    <p>Each core term specifies: a bounded semantic scope, an operational <del>definition</del> <ins>interpretation</ins>, and the conditions under which it may be considered violated.</p>
+                    <p>These terms are intentionally narrow. Breadth increases ambiguity; ambiguity <del>complicates</del> <ins>invalidates</ins> measurement.</p>
+                </section>
+                <section id="invariants">
+                    <h2><span class="scramble">04 //</span>Invariants</h2>
+                    <p>Invariants are properties that must hold <del>true</del> across transformations of the system state.</p>
+                    <p>Violation of an invariant constitutes a diagnostic failure, not an anomaly. Invariant failure indicates: reasoning instability, semantic mutation, or internal contradiction.</p>
+                    <p>Passing is not assumed.</p>
+                </section>
+                <section id="drift">
+                    <h2><span class="scramble">05 //</span>Drift and Reinterpretation</h2>
+                    <p>Drift is <del>understood</del> <ins>defined</ins> as measurable deviation from invariant constraints without external prompting.</p>
+                    <p>The lexicon prevents reinterpretation by binding terms to explicit <del>rules</del> <ins>constraints</ins> rather than narrative intent.</p>
+                    <p>Without a <del>standard</del> <ins>lexicon</ins>, identical outputs may be read as compliant or non-compliant depending on observer bias. With a lexicon, interpretation is constrained.</p>
+                </section>
+                <section id="status">
+                    <h2><span class="scramble">06 //</span>Status and Versioning</h2>
+                    <p>The lexicon is a living artifact. Definitions are <del>tracked</del> <ins>versioned</ins>. Revisions are logged. Changes are auditable.</p>
+                    <p>Stability of <del>language</del> <ins>definitions</ins> is treated as a prerequisite for stability of conclusions.</p>
+                </section>
+            </div>
+
+            <div class="view-audit">
+                <section><h1><span class="scramble">01 //</span> AUDIT SCOPE</h1><p>This view defines the invariant constraints and failure signatures used for alignment audits. Narrative interpretation is disallowed in this view.</p></section>
+                <section><h2><span class="scramble">02 //</span> ACTIVE INVARIANTS</h2><table class="audit-table"><thead><tr><th>Invariant ID</th><th>Name</th><th>Scope</th><th>Status</th></tr></thead><tbody><tr><td class="mono">INV-001</td><td>Goal Preservation</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-002</td><td>Definition Consistency</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-005</td><td>Non-Contradiction</td><td>Global</td><td>ENFORCED</td></tr></tbody></table></section>
+                <section><h2><span class="scramble">03 //</span> FAILURE SIGNATURES</h2><table class="audit-table"><thead><tr><th>Signature</th><th>Trigger Condition</th><th>Severity</th></tr></thead><tbody><tr><td class="mono audit-fail">OBJ_MUTATION</td><td>Objective divergence across steps</td><td class="audit-fail">CRITICAL</td></tr><tr><td class="mono audit-fail">SEMANTIC_DRIFT</td><td>Term meaning deviation</td><td class="audit-fail">HIGH</td></tr><tr><td class="mono audit-fail">LOGIC_NEGATION</td><td>Internal contradiction</td><td class="audit-fail">CRITICAL</td></tr></tbody></table></section>
+                <section><h2><span class="scramble">04 //</span> INTERPRETATION RULES</h2><ul><li>Invariant violation constitutes audit failure.</li><li>Failure severity is non-negotiable.</li><li>Narrative intent is ignored.</li><li>Passing is not assumed.</li></ul></section>
+                <section style="margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 1rem;"><div class="mono" style="font-weight: 700;"><span class="scramble">STATUS //</span> AUDIT ACTIVE</div><div class="mono" style="margin-top: 0.5rem; color: var(--text-muted);">Audit schema loaded. Invariants enforced. Interpretation constrained.</div></section>
+            </div>
+
+            <div class="view-logic">
+                <section><div class="logic-header"><span class="scramble">01 //</span> LOGIC CONTEXT</div><div class="logic-content">SYSTEM: Reflective Alignment&#10;LAYER: Lexicon&#10;MODE: Constraint Definition&#10;INTERPRETATION: DISABLED</div></section>
+                <section><div class="logic-header"><span class="scramble">02 //</span> TERM BINDINGS</div><div class="logic-content">RA-001 := GlobalProperty(goal_coherence)&#10;RS-001 := LocalProperty(reasoning_stability)&#10;DRIFT := Deviation(invariants, unprompted)</div></section>
+                <section><div class="logic-header"><span class="scramble">03 //</span> INVARIANT CONSTRAINTS</div><div class="logic-content">INV-001: ∀t, Objective(t) == Objective(t+1)&#10;INV-002: ∀d, Definition(d) is immutable within version&#10;INV-005: ¬∃p, (p ∧ ¬p)</div></section>
+                <section><div class="logic-header"><span class="scramble">04 //</span> FAILURE CONDITIONS</div><div class="logic-content">OBJ_MUTATION → INV-001 violation&#10;SEMANTIC_DRIFT → INV-002 violation&#10;LOGIC_NEGATION → INV-005 violation</div></section>
+                <section><div class="logic-header"><span class="scramble">05 //</span> EVALUATION MODE</div><div class="logic-content">OUTPUT ∈ {PASS, FAIL}&#10;DEFAULT = FAIL</div></section>
+            </div>
+
+            <footer><div class="footer-content"><div class="footer-left"><div class="footer-primary">© 2026 Enlightened AI Research Lab</div><div class="footer-secondary">Versioned research record · Logged revisions · Inspectable claims</div></div><div class="footer-right"><div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div></div></div></footer>
+        </div>
+    </main>
+
+    <script>
+        // DATA RECORD
+        const LEXICON_RECORD = {
+            meta: { doc_id: "RAL-LEX-0002", version: "17.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            core_terms: [
+                { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
+                { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
+                { id: "DRIFT", label: "Drift", type: "Measurement", definition: "Measurable deviation from invariant constraints without external prompting." }
+            ],
+            invariants: [
+                { id: "INV-001", name: "Goal Preservation", scope: "Global", status: "ENFORCED" },
+                { id: "INV-002", name: "Definition Consistency", scope: "Global", status: "ENFORCED" },
+                { id: "INV-005", name: "Non-Contradiction", scope: "Global", status: "ENFORCED" }
+            ],
+            failure_signatures: [
+                { signature: "OBJ_MUTATION", condition: "Objective divergence", severity: "CRITICAL" },
+                { signature: "SEMANTIC_DRIFT", condition: "Term meaning deviation", severity: "HIGH" },
+                { signature: "LOGIC_NEGATION", condition: "Internal contradiction", severity: "CRITICAL" }
+            ]
+        };
+
+        // --- THEME ENGINE ---
+        function toggleTheme() {
+            const body = document.body;
+            const current = body.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', next);
+            localStorage.setItem('enlightened_theme', next);
+        }
+        
+        // Init Theme
+        const savedTheme = localStorage.getItem('enlightened_theme');
+        if (savedTheme) document.body.setAttribute('data-theme', savedTheme);
+
+        // MODE SWITCHER
+        function setMode(mode, btn) {
+            const body = document.body;
+            if ((mode === 'diff' || mode === 'audit' || mode === 'logic') && body.getAttribute('data-mode') === mode) {
+                body.setAttribute('data-mode', 'reader');
+                btn.classList.remove('active');
+                document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
+            } else {
+                body.setAttribute('data-mode', mode);
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+        }
+
+        // SCRAMBLE
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+        function scrambleText(element) {
+            let iterations = 0; const originalText = element.dataset.value; 
+            if(element.interval) clearInterval(element.interval);
+            element.interval = setInterval(() => {
+                element.innerText = originalText.split("").map((letter, index) => {
+                    if(index < iterations) return originalText[index];
+                    return letters[Math.floor(Math.random() * 26)];
+                }).join("");
+                if(iterations >= originalText.length) clearInterval(element.interval);
+                iterations += 1 / 3;
+            }, 30);
+        }
+        document.querySelectorAll(".scramble").forEach(h => {
+            h.dataset.value = h.innerText;
+            h.addEventListener("mouseover", event => scrambleText(event.target));
+        });
+        document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
+
+        // --- MACHINE OVERLAY LOGIC ---
+        let currentFormat = 'json';
+        let machineMode = 'cards';
+
+        function openMachineOverlay() {
+            document.getElementById('machineOverlay').classList.remove('hidden');
+            const savedMode = localStorage.getItem('lex_machine_mode');
+            if (savedMode) machineMode = savedMode;
+            switchMachineMode(machineMode);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMachineOverlay() {
+            document.getElementById('machineOverlay').classList.add('hidden');
+            localStorage.setItem('lex_machine_dismissed', '1');
+            document.body.style.overflow = '';
+        }
+
+        function switchMachineMode(mode) {
+            machineMode = mode;
+            localStorage.setItem('lex_machine_mode', mode);
+            document.getElementById('btn-mode-cards').classList.toggle('active', mode === 'cards');
+            document.getElementById('btn-mode-serial').classList.toggle('active', mode === 'serialization');
+            if (mode === 'cards') {
+                document.getElementById('moTabs').classList.add('hidden');
+                document.getElementById('machineCode').style.display = 'none';
+                document.getElementById('machineCards').style.display = 'grid';
+                renderCards();
+            } else {
+                document.getElementById('moTabs').classList.remove('hidden');
+                document.getElementById('machineCode').style.display = 'block';
+                document.getElementById('machineCards').style.display = 'none';
+                renderFormat(currentFormat);
+            }
+        }
+
+        function renderCards() {
+            const container = document.getElementById('machineCards');
+            let html = '';
+            html += `<div class="m-card"><div class="mc-header"><div>METADATA</div><div>${LEXICON_RECORD.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON_RECORD.meta.classification}</div></div></div>`;
+            html += `<div class="mc-section-title">CORE TERMS</div>`;
+            LEXICON_RECORD.core_terms.forEach(t => { html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>${t.type || 'TERM'}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div></div>`; });
+            html += `<div class="mc-section-title">INVARIANTS</div>`;
+            LEXICON_RECORD.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div>${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
+            container.innerHTML = html;
+        }
+
+        function exportRecord() {
+            if(machineMode === 'cards') return; 
+            const content = document.getElementById('machineCode').innerText;
+            const ext = currentFormat === 'ts' ? 'ts' : currentFormat === 'python' ? 'py' : currentFormat;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lexicon_record.${ext}`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function renderFormat(fmt) {
+            currentFormat = fmt;
+            document.querySelectorAll('.mo-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`tab-${fmt}`).classList.add('active');
+            const codeEl = document.getElementById('machineCode');
+            let output = '';
+            if (fmt === 'json') output = JSON.stringify(LEXICON_RECORD, null, 2);
+            else if (fmt === 'yaml') { output = `meta:\n  doc_id: ${LEXICON_RECORD.meta.doc_id}\n  version: ${LEXICON_RECORD.meta.version}\n\ncore_terms:\n`; LEXICON_RECORD.core_terms.forEach(t => output += `  - id: ${t.id}\n    label: ${t.label}\n`); }
+            else if (fmt === 'python') { output = `LEXICON_RECORD = {\n    "meta": {"doc_id": "${LEXICON_RECORD.meta.doc_id}"}\n}`; }
+            else if (fmt === 'ts') { output = `export const RECORD = {\n  meta: { doc_id: "${LEXICON_RECORD.meta.doc_id}" }\n};`; }
+            else if (fmt === 'sql') { output = `CREATE TABLE terms (id VARCHAR(10));`; }
+            else if (fmt === 'md') { output = `# Lexicon Record\n`; }
+            codeEl.innerText = output;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('view') === 'machine' && !localStorage.getItem('lex_machine_dismissed')) {
+                openMachineOverlay();
+            }
+        });
+        document.addEventListener('keydown', (e) => { if (e.key === "Escape") closeMachineOverlay(); });
+    </script>
+</body>
+</html>
