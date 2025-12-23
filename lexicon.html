@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "6.0.0",
-        "status": "MOBILE_LAYOUT_FIXED"
+        "version": "7.0.0",
+        "status": "LAYOUT_NORMALIZED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V59 */
+        /* THEME: INSTITUTE STANDARD V60 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -46,7 +46,7 @@
             background: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
-            display: flex; /* Desktop: Flex layout */
+            display: flex; /* Desktop Default */
             min-height: 100vh;
         }
 
@@ -161,26 +161,38 @@
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
-        /* --- RESPONSIVE FIX V59 --- */
+        /* --- RESPONSIVE FIX V60 (CRITICAL) --- */
         @media (max-width: 900px) {
-            /* 1. SWITCH TO BLOCK LAYOUT (Fixes ghost height) */
-            body { display: block; overflow-x: hidden; }
+            /* 1. FORCE BLOCK LAYOUT */
+            body { 
+                display: block; 
+                overflow-x: hidden; 
+                position: relative;
+            }
             
-            /* 2. SIDEBAR BEHAVIOR */
+            /* 2. SIDEBAR OFF-CANVAS (Fixes White Gap) */
             aside { 
-                position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); 
-                transform: translateX(-100%); transition: transform 0.25s ease;
-                border-right: none; padding: 2rem; background: #fff; overflow-y: auto; z-index: 10000;
+                position: fixed; 
+                top: 50px; left: 0; bottom: 0; 
+                width: 100%; 
+                height: calc(100% - 50px);
+                transform: translateX(-100%); 
+                transition: transform 0.25s ease;
+                border-right: none; 
+                padding: 2rem; 
+                background: #fff; 
+                overflow-y: auto; 
+                z-index: 10000;
             }
             aside.open { transform: translateX(0); }
             
-            /* 3. MAIN CONTENT SPACING */
+            /* 3. MAIN CONTENT RESET */
             main { 
-                display: block;
                 margin-top: 50px !important; 
                 padding: 1.5rem; 
                 width: 100%; 
-                max-width: 100vw; 
+                max-width: 100vw;
+                min-height: auto; 
             }
             .content-col { padding: 0; }
         }
@@ -289,9 +301,9 @@
 
             <section id="drift">
                 <h2><span class="scramble">05 //</span>Drift and Reinterpretation</h2>
-                <p>Drift is defined as measurable deviation from invariant constraints without external prompting.</p>
+                <p>Drift is <del>understood</del> <ins>defined</ins> as measurable deviation from invariant constraints without external prompting.</p>
                 <p>The lexicon prevents reinterpretation by binding terms to explicit <del>rules</del> <ins>constraints</ins> rather than narrative intent.</p>
-                <p>Without a lexicon, identical outputs may be read as compliant or non-compliant depending on observer bias.</p>
+                <p>Without a <del>standard</del> <ins>lexicon</ins>, identical outputs may be read as compliant or non-compliant depending on observer bias.</p>
                 <p>With a lexicon, interpretation is constrained.</p>
             </section>
 
@@ -299,18 +311,18 @@
                 <h2><span class="scramble">06 //</span>Status and Versioning</h2>
                 <p>The lexicon is a living artifact.</p>
                 <ul>
-                    <li>Definitions are versioned.</li>
+                    <li>Definitions are <del>tracked</del> <ins>versioned</ins>.</li>
                     <li>Revisions are logged.</li>
                     <li>Changes are auditable.</li>
                 </ul>
-                <p>Stability of definitions is treated as a prerequisite for stability of conclusions.</p>
+                <p>Stability of <del>language</del> <ins>definitions</ins> is treated as a prerequisite for stability of conclusions.</p>
             </section>
 
             <footer>
                 <div class="footer-content">
                     <div class="footer-left">
                         <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                        <div class="footer-secondary">Controlled Lexicon · Version 6.0 · Machine Readable</div>
+                        <div class="footer-secondary">Controlled Lexicon · Version 7.0 · Machine Readable</div>
                     </div>
                     <div class="footer-right">
                         <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
