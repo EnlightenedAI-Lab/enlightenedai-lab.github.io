@@ -13,7 +13,7 @@
     {
         "doc_id": "EAI-2026-001",
         "version": "3.9.0",
-        "status": "SYSTEM_FOOTER_ACTIVE"
+        "status": "ACTIVE_MONITOR"
     }
     </script>
 
@@ -31,9 +31,9 @@
             --status-verified: #00cc00;
             
             /* SEMANTIC MODE COLORS */
-            --mode-audit: #b45309;
-            --mode-logic: #0044cc;
-            --mode-diff: #000000;
+            --mode-audit: #b45309; /* Amber */
+            --mode-logic: #0044cc; /* Blue */
+            --mode-diff: #000000;  /* High Contrast */
         }
 
         html { scroll-behavior: smooth; }
@@ -50,53 +50,6 @@
             min-height: 100vh;
             transition: background-color 0.2s;
         }
-
-        /* --- FOOTER: SYSTEM METADATA --- */
-        footer {
-            margin-top: 8rem;
-            border-top: 1px solid var(--border-color); /* The Hairline Divider */
-            padding: 2rem 0;
-            font-family: var(--font-mono);
-            font-size: 0.6rem;
-            color: var(--text-muted);
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        .footer-left {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .footer-primary {
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 600;
-            color: #000;
-        }
-
-        .footer-secondary {
-            opacity: 0.7;
-        }
-
-        .record-status {
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            opacity: 0.5;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .status-dot-small {
-            width: 4px; height: 4px; background-color: #666; border-radius: 50%;
-        }
-
 
         /* --- 1. ORIENTING SENTENCE --- */
         .orienting-frame {
@@ -142,8 +95,11 @@
         .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); position: sticky; top: 100px; height: fit-content; }
         .claim-box { margin-bottom: 2rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
         .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
+        
+        /* NUMERICAL ANCHORS STYLING */
         .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
         .metric-tag { font-weight: 600; color: #000; }
+        
         .claim-text { color: #333; line-height: 1.4; }
 
 
@@ -271,6 +227,18 @@
 
         .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: #000; color: #fff; border-color: #000; }
+
+        /* FOOTER */
+        footer { margin-top: 8rem; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); }
+        .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
+        .footer-left { display: flex; flex-direction: column; gap: 6px; }
+        .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: #000; }
+        .footer-secondary { opacity: 0.7; }
+        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: #000; font-weight: 500; }
+        
+        /* THE BLUE PULSE */
+        .status-dot-small { width: 6px; height: 6px; background-color: #0066ff; border-radius: 50%; box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); animation: pulse-blue 2s infinite cubic-bezier(0.66, 0, 0, 1); }
+        @keyframes pulse-blue { to { box-shadow: 0 0 0 5px rgba(0, 102, 255, 0); } }
 
         @media (max-width: 900px) {
             body { flex-direction: column; }
@@ -520,6 +488,7 @@
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
         
+        // SILENT COPY
         function copyCite(text) { navigator.clipboard.writeText(text); }
         function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`); }
         
