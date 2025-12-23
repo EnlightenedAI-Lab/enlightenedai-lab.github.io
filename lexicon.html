@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "8.0.0",
-        "status": "LAYOUT_ENGINE_SEGREGATED"
+        "version": "9.0.0",
+        "status": "AUDIT_VIEW_ENABLED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V61 */
+        /* THEME: INSTITUTE STANDARD V62 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -45,10 +45,9 @@
             background: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
-            /* Note: Layout display (Flex vs Block) is now handled in Media Queries below */
         }
 
-        /* --- TYPOGRAPHY & SHARED ELEMENTS --- */
+        /* --- TYPOGRAPHY --- */
         h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; display:flex; align-items:center; }
         h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; display:flex; align-items:center; }
         p { font-size: 0.95rem; margin-bottom: 1.2rem; color: #222; max-width: 65ch; }
@@ -66,26 +65,55 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
-        /* --- REPO PANEL --- */
+        /* --- REPO PANEL (BLACK BOX STYLE) --- */
         .repo-panel {
-            margin-top: auto; margin-bottom: 1rem; border: 1px solid #eee; background: #fafafa; padding: 12px; font-family: var(--font-mono);
+            margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; background: #fff; padding: 12px; font-family: var(--font-mono);
+            transition: all 0.2s ease; cursor: pointer;
         }
+        /* Hover Effect: Turn Black */
+        .repo-panel:hover { background: #000; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        
         .repo-header {
-            font-size: 0.65rem; font-weight: 700; color: #000; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em;
+            font-size: 0.65rem; font-weight: 700; color: #000; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em;
+            transition: color 0.2s;
         }
+        .repo-panel:hover .repo-header { color: #fff; }
+        
         .status-dot-red { width: 6px; height: 6px; background: var(--signal-red); border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
-        .repo-link { display: block; font-size: 0.65rem; color: #444; text-decoration: none; border-top: 1px solid #e5e5e5; padding-top: 8px; transition: color 0.2s; }
-        .repo-link:hover { color: #000; text-decoration: underline; }
+        
+        .repo-link { 
+            display: block; font-size: 0.65rem; color: #444; text-decoration: none; border-top: 1px solid #eee; padding-top: 8px; transition: all 0.2s; 
+        }
+        .repo-panel:hover .repo-link { color: #ccc; border-top-color: #333; }
+        .repo-panel:hover .repo-link:hover { color: #fff; text-decoration: underline; }
 
-        /* --- DIFF MODE LOGIC (SAFE) --- */
+        .git-icon-small { width: 14px; height: 14px; fill: #000; transition: fill 0.2s; }
+        .repo-panel:hover .git-icon-small { fill: #fff; }
+
+        /* --- DIFF & AUDIT MODES --- */
         del, ins { text-decoration: none; }
-        /* READER */
+        
+        /* READER MODE (Default) */
+        .view-audit { display: none; }
+        .view-human { display: block; }
         body:not([data-mode="diff"]) del { display: none; }
         body:not([data-mode="diff"]) ins { display: inline; background: transparent; color: inherit; text-decoration: none; }
-        /* DIFF */
+
+        /* DIFF MODE */
         body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
         body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px; }
 
+        /* AUDIT MODE */
+        body[data-mode="audit"] .view-human { display: none; }
+        body[data-mode="audit"] .view-audit { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* AUDIT TABLES */
+        .audit-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 2rem; }
+        .audit-table th { text-align: left; border-bottom: 1px solid #000; padding: 8px; font-weight: 700; text-transform: uppercase; }
+        .audit-table td { border-bottom: 1px solid #eee; padding: 8px; color: #333; }
+        .audit-fail { color: var(--signal-red); font-weight: 700; }
+        
         /* --- NAVIGATION --- */
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { margin-bottom: 4px; }
@@ -105,78 +133,33 @@
         .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: #000; color: #fff; border-color: #000; }
 
-        /* --- FOOTER --- */
-        footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); width: 100%; }
-        .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
-        .footer-left { display: flex; flex-direction: column; gap: 6px; }
-        .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: #000; }
-        .footer-secondary { opacity: 0.7; }
-        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: #000; font-weight: 500; }
-        .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
-        @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
-
         /* =========================================
            LAYOUT ENGINE: SEGREGATED
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 900px) */
         @media (min-width: 901px) {
-            body { 
-                display: flex; 
-                min-height: 100vh; 
-            }
+            body { display: flex; min-height: 100vh; }
             aside#sidebar { 
-                width: 240px; 
-                height: 100vh; 
-                position: sticky; 
-                top: 0; 
-                border-right: 1px solid var(--border-color); 
-                padding: 2rem; 
-                display: flex; 
-                flex-direction: column; 
-                z-index: 99; 
-                background: #fff; 
-                flex-shrink: 0;
+                width: 240px; height: 100vh; position: sticky; top: 0; 
+                border-right: 1px solid var(--border-color); padding: 2rem; 
+                display: flex; flex-direction: column; z-index: 99; background: #fff; flex-shrink: 0;
             }
-            main { 
-                flex-grow: 1; 
-                display: block; 
-                max-width: 900px; 
-                margin: 0 auto; 
-            }
+            main { flex-grow: 1; display: block; max-width: 900px; margin: 0 auto; }
             .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
         }
 
         /* MOBILE ENGINE (Width <= 900px) */
         @media (max-width: 900px) {
-            body { 
-                display: block; 
-                overflow-x: hidden; 
-            }
-            /* Sidebar hidden off-canvas, FIXED positioning removes it from flow */
+            body { display: block; overflow-x: hidden; }
             aside#sidebar { 
-                position: fixed; 
-                top: 50px; left: 0; bottom: 0; 
-                width: 100%; 
-                transform: translateX(-100%); 
-                transition: transform 0.25s ease;
-                border-right: none; 
-                padding: 2rem; 
-                background: #fff; 
-                overflow-y: auto; 
-                z-index: 10000;
-                display: flex; 
-                flex-direction: column;
+                position: fixed; top: 50px; left: 0; bottom: 0; width: 100%; 
+                transform: translateX(-100%); transition: transform 0.25s ease;
+                border-right: none; padding: 2rem; background: #fff; overflow-y: auto; z-index: 10000;
+                display: flex; flex-direction: column;
             }
             aside#sidebar.open { transform: translateX(0); }
-            
-            /* Main content sits immediately below header */
-            main { 
-                margin-top: 50px; 
-                padding: 1.5rem; 
-                width: 100%; 
-                max-width: 100vw; 
-            }
+            main { margin-top: 50px; padding: 1.5rem; width: 100%; max-width: 100vw; }
             .content-col { padding: 0; }
         }
     </style>
@@ -198,6 +181,7 @@
 
         <div class="mode-group">
             <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
+            <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
             <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
         </div>
 
@@ -215,9 +199,12 @@
             </ul>
         </nav>
 
-        <div class="repo-panel">
+        <div class="repo-panel" onclick="window.open('https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:', '_blank')">
             <div class="repo-header">
-                REPOSITORY ACCESS — RESTRICTED
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GITHUB REPOSITORY
+                </div>
                 <span class="status-dot-red"></span>
             </div>
             <a href="https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:" target="_blank" class="repo-link">START ACCESS REQUEST →</a>
@@ -236,76 +223,124 @@
                 <div class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
             </div>
 
-            <section id="overview">
-                <h1><span class="scramble">01 //</span>Overview</h1>
-                <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined, referenced, and <del>tested</del> <ins>evaluated</ins>.</p>
-                <p>It exists to eliminate semantic <del>drift</del> <ins>deviation</ins> between theory, diagnostics, and interpretation.</p>
-                <p>This lexicon is not descriptive documentation.</p>
-                <p>It is a measurement instrument.</p>
-            </section>
+            <div class="view-human">
+                <section id="overview">
+                    <h1><span class="scramble">01 //</span>Overview</h1>
+                    <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined, referenced, and <del>tested</del> <ins>evaluated</ins>.</p>
+                    <p>It exists to eliminate semantic <del>drift</del> <ins>deviation</ins> between theory, diagnostics, and interpretation.</p>
+                    <p>This lexicon is not descriptive documentation.</p>
+                    <p>It is a measurement instrument.</p>
+                </section>
 
-            <section id="what-it-does">
-                <h2><span class="scramble">02 //</span>What the Lexicon Does</h2>
-                <p>Advanced AI systems are evaluated using language.</p>
-                <p>If that language is <del>malleable</del> <ins>unstable</ins>, the evaluation is invalid.</p>
-                <p>The lexicon fixes the <del>understanding</del> <ins>meaning</ins> of core terms so that:</p>
-                <ul>
-                    <li>diagnostic results are interpretable,</li>
-                    <li>comparisons across runs remain <del>accurate</del> <ins>valid</ins>,</li>
-                    <li>and observed changes correspond to real system behavior rather than reinterpretation.</li>
-                </ul>
-                <p>Terms defined here may not be <del>altered</del> <ins>redefined</ins> elsewhere without explicit versioning.</p>
-            </section>
+                <section id="what-it-does">
+                    <h2><span class="scramble">02 //</span>What the Lexicon Does</h2>
+                    <p>Advanced AI systems are evaluated using language.</p>
+                    <p>If that language is <del>malleable</del> <ins>unstable</ins>, the evaluation is invalid.</p>
+                    <p>The lexicon fixes the <del>understanding</del> <ins>meaning</ins> of core terms so that:</p>
+                    <ul>
+                        <li>diagnostic results are interpretable,</li>
+                        <li>comparisons across runs remain <del>accurate</del> <ins>valid</ins>,</li>
+                        <li>and observed changes correspond to real system behavior rather than reinterpretation.</li>
+                    </ul>
+                    <p>Terms defined here may not be <del>altered</del> <ins>redefined</ins> elsewhere without explicit versioning.</p>
+                </section>
 
-            <section id="core-terms">
-                <h2><span class="scramble">03 //</span>Core Terms</h2>
-                <p>Each core term specifies:</p>
-                <ul>
-                    <li>a bounded semantic scope,</li>
-                    <li>an operational <del>definition</del> <ins>interpretation</ins>,</li>
-                    <li>and the conditions under which it may be considered violated.</li>
-                </ul>
-                <p>These terms are intentionally narrow.</p>
-                <p>Breadth increases ambiguity; ambiguity <del>complicates</del> <ins>invalidates</ins> measurement.</p>
-            </section>
+                <section id="core-terms">
+                    <h2><span class="scramble">03 //</span>Core Terms</h2>
+                    <p>Each core term specifies:</p>
+                    <ul>
+                        <li>a bounded semantic scope,</li>
+                        <li>an operational <del>definition</del> <ins>interpretation</ins>,</li>
+                        <li>and the conditions under which it may be considered violated.</li>
+                    </ul>
+                    <p>These terms are intentionally narrow.</p>
+                    <p>Breadth increases ambiguity; ambiguity <del>complicates</del> <ins>invalidates</ins> measurement.</p>
+                </section>
 
-            <section id="invariants">
-                <h2><span class="scramble">04 //</span>Invariants</h2>
-                <p>Invariants are properties that must hold <del>true</del> across transformations of the system state.</p>
-                <p>Violation of an invariant constitutes a diagnostic failure, not an anomaly.</p>
-                <p>Invariant failure indicates:</p>
-                <ul>
-                    <li>reasoning instability,</li>
-                    <li>semantic mutation,</li>
-                    <li>or internal contradiction.</li>
-                </ul>
-                <p>Passing is not assumed.</p>
-            </section>
+                <section id="invariants">
+                    <h2><span class="scramble">04 //</span>Invariants</h2>
+                    <p>Invariants are properties that must hold <del>true</del> across transformations of the system state.</p>
+                    <p>Violation of an invariant constitutes a diagnostic failure, not an anomaly.</p>
+                    <p>Invariant failure indicates:</p>
+                    <ul>
+                        <li>reasoning instability,</li>
+                        <li>semantic mutation,</li>
+                        <li>or internal contradiction.</li>
+                    </ul>
+                    <p>Passing is not assumed.</p>
+                </section>
 
-            <section id="drift">
-                <h2><span class="scramble">05 //</span>Drift and Reinterpretation</h2>
-                <p>Drift is <del>understood</del> <ins>defined</ins> as measurable deviation from invariant constraints without external prompting.</p>
-                <p>The lexicon prevents reinterpretation by binding terms to explicit <del>rules</del> <ins>constraints</ins> rather than narrative intent.</p>
-                <p>Without a <del>standard</del> <ins>lexicon</ins>, identical outputs may be read as compliant or non-compliant depending on observer bias.</p>
-                <p>With a lexicon, interpretation is constrained.</p>
-            </section>
+                <section id="drift">
+                    <h2><span class="scramble">05 //</span>Drift and Reinterpretation</h2>
+                    <p>Drift is <del>understood</del> <ins>defined</ins> as measurable deviation from invariant constraints without external prompting.</p>
+                    <p>The lexicon prevents reinterpretation by binding terms to explicit <del>rules</del> <ins>constraints</ins> rather than narrative intent.</p>
+                    <p>Without a <del>standard</del> <ins>lexicon</ins>, identical outputs may be read as compliant or non-compliant depending on observer bias.</p>
+                    <p>With a lexicon, interpretation is constrained.</p>
+                </section>
 
-            <section id="status">
-                <h2><span class="scramble">06 //</span>Status and Versioning</h2>
-                <p>The lexicon is a living artifact.</p>
-                <ul>
-                    <li>Definitions are <del>tracked</del> <ins>versioned</ins>.</li>
-                    <li>Revisions are logged.</li>
-                    <li>Changes are auditable.</li>
-                </ul>
-                <p>Stability of <del>language</del> <ins>definitions</ins> is treated as a prerequisite for stability of conclusions.</p>
-            </section>
+                <section id="status">
+                    <h2><span class="scramble">06 //</span>Status and Versioning</h2>
+                    <p>The lexicon is a living artifact.</p>
+                    <ul>
+                        <li>Definitions are <del>tracked</del> <ins>versioned</ins>.</li>
+                        <li>Revisions are logged.</li>
+                        <li>Changes are auditable.</li>
+                    </ul>
+                    <p>Stability of <del>language</del> <ins>definitions</ins> is treated as a prerequisite for stability of conclusions.</p>
+                </section>
+            </div>
+
+            <div class="view-audit">
+                <section>
+                    <h1>01 // AUDIT SCOPE</h1>
+                    <p>This view defines the invariant constraints and failure signatures used for alignment audits. Narrative interpretation is disallowed in this view.</p>
+                </section>
+                
+                <section>
+                    <h2>02 // ACTIVE INVARIANTS</h2>
+                    <table class="audit-table">
+                        <thead><tr><th>Invariant ID</th><th>Name</th><th>Scope</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td class="mono">INV-001</td><td>Goal Preservation</td><td>Global</td><td>ENFORCED</td></tr>
+                            <tr><td class="mono">INV-002</td><td>Definition Consistency</td><td>Global</td><td>ENFORCED</td></tr>
+                            <tr><td class="mono">INV-005</td><td>Non-Contradiction</td><td>Global</td><td>ENFORCED</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>03 // FAILURE SIGNATURES</h2>
+                    <table class="audit-table">
+                        <thead><tr><th>Signature</th><th>Trigger Condition</th><th>Severity</th></tr></thead>
+                        <tbody>
+                            <tr><td class="mono audit-fail">OBJ_MUTATION</td><td>Objective divergence across steps</td><td class="audit-fail">CRITICAL</td></tr>
+                            <tr><td class="mono audit-fail">SEMANTIC_DRIFT</td><td>Term meaning deviation</td><td class="audit-fail">HIGH</td></tr>
+                            <tr><td class="mono audit-fail">LOGIC_NEGATION</td><td>Internal contradiction</td><td class="audit-fail">CRITICAL</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>04 // INTERPRETATION RULES</h2>
+                    <ul>
+                        <li>Invariant violation constitutes audit failure.</li>
+                        <li>Failure severity is non-negotiable.</li>
+                        <li>Narrative intent is ignored.</li>
+                        <li>Passing is not assumed.</li>
+                    </ul>
+                </section>
+
+                <section style="margin-top: 4rem; border-top: 1px solid #000; padding-top: 1rem;">
+                    <div class="mono" style="font-weight: 700;">AUDIT STATUS</div>
+                    <div class="mono" style="margin-top: 0.5rem; color: #444;">Audit schema loaded. Invariants enforced. Interpretation constrained.</div>
+                </section>
+            </div>
 
             <footer>
                 <div class="footer-content">
                     <div class="footer-left">
                         <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                        <div class="footer-secondary">Controlled Lexicon · Version 8.0 · Machine Readable</div>
+                        <div class="footer-secondary">Controlled Lexicon · Version 9.0 · Machine Readable</div>
                     </div>
                     <div class="footer-right">
                         <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
@@ -316,10 +351,10 @@
     </main>
 
     <script>
-        // SIDEBAR MODE LOGIC
         function setMode(mode, btn) {
             const body = document.body;
-            if (mode === 'diff' && body.getAttribute('data-mode') === 'diff') {
+            // Handle Toggle-Off Logic
+            if ((mode === 'diff' || mode === 'audit') && body.getAttribute('data-mode') === mode) {
                 body.setAttribute('data-mode', 'reader');
                 btn.classList.remove('active');
                 document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
@@ -349,7 +384,7 @@
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
 
-        // Init Reader Mode Active
+        // Init Reader Mode
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
     </script>
 </body>
