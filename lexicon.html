@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "23.0.0",
-        "status": "FOCUS_ISOLATION_ACTIVE"
+        "version": "24.0.0",
+        "status": "OPERATOR_INTERACTION_ENABLED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V76 */
+        /* THEME: INSTITUTE STANDARD V77 */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -174,7 +174,7 @@
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
-        /* --- V76: FOCUS ISOLATION & TELEMETRY --- */
+        /* --- V77: INTERACTIVE LAYER --- */
         .machine-overlay::before {
             content: ""; position: fixed; inset: 0; z-index: 20005; pointer-events: none;
             background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 2px, rgba(255, 255, 255, 0.03) 3px, rgba(0, 0, 0, 0) 4px);
@@ -192,7 +192,16 @@
         .event-text.fade-out { opacity: 0; }
         .event-dot { width: 4px; height: 4px; background: #00cc00; border-radius: 50%; display: block; opacity: 0.7; }
 
+        /* ENTROPY & GHOST LAYER STYLES */
         .status-corrected { color: #00cc00 !important; font-weight: 700; text-shadow: 0 0 5px rgba(0,204,0,0.5); transition: color 0.1s ease; }
+        
+        .interactive-row { cursor: pointer; transition: background 0.2s; border-radius: 2px; }
+        .interactive-row:hover { background: rgba(255,255,255,0.05); }
+        .interactive-row:hover .mc-label { color: #fff; }
+        
+        /* GHOST LAYER HOVER EFFECT */
+        .ghost-target { cursor: help; position: relative; }
+        .ghost-hash { font-family: var(--font-mono); color: #00cc00; letter-spacing: -0.02em; font-size: 0.7rem; }
 
         @keyframes terminal-boot { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
         @media (prefers-reduced-motion: no-preference) {
@@ -208,22 +217,10 @@
             .machine-led { animation: none; opacity: 1; }
         }
 
-        /* CARD HOVER PHYSICS (FOCUS ISOLATION) */
         .m-card { transition: all 0.3s ease; }
-        
-        /* The Dim: When grid is hovered, dim ALL cards */
         .card-grid:hover .m-card { opacity: 0.35; filter: grayscale(0.8); }
-        
-        /* The Focus: Restore hovered card */
-        .card-grid:hover .m-card:hover { 
-            opacity: 1; filter: grayscale(0); 
-            border-color: #777; background: #1f1f1f; transform: translateY(-2px); 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 10;
-        }
-        /* Keep header bright on focus */
+        .card-grid:hover .m-card:hover { opacity: 1; filter: grayscale(0); border-color: #777; background: #1f1f1f; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 10; }
         .card-grid:hover .m-card:hover .mc-header { color: #fff; }
-
-        /* Scan Highlight Override (Neural Link) */
         .m-card.scan-active { opacity: 1 !important; filter: grayscale(0) !important; border-color: #fff !important; box-shadow: 0 0 10px rgba(255,255,255,0.15); background: #222; z-index: 20; }
 
         /* --- MACHINE OVERLAY --- */
@@ -438,7 +435,7 @@
 
     <script>
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "23.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "RAL-LEX-0002", version: "24.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
                 { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
@@ -512,14 +509,16 @@
         // ENTROPY STATE
         let raConfidence = 100.00;
         let entropyInterval;
+        let isVerifying = false;
 
         function startEntropy() {
             if(entropyInterval) clearInterval(entropyInterval);
             entropyInterval = setInterval(() => {
-                raConfidence -= 0.01;
-                const el = document.getElementById('val-confidence');
-                if(el && !el.classList.contains('status-corrected')) {
-                    el.innerText = raConfidence.toFixed(2) + "%";
+                if(!isVerifying) {
+                    raConfidence -= 0.01;
+                    const el = document.getElementById('val-confidence');
+                    const elLabel = document.getElementById('label-confidence');
+                    if(el) el.innerText = raConfidence.toFixed(2) + "%";
                 }
             }, 4000); 
         }
@@ -529,17 +528,7 @@
             let targetId = null;
             let targetClass = null;
 
-            if (text.includes("RA-001")) {
-                targetId = "card-RA-001";
-                // CORRECT ENTROPY
-                raConfidence = 100.00;
-                const confEl = document.getElementById('val-confidence');
-                if(confEl) {
-                    confEl.innerText = "100.00%";
-                    confEl.classList.add('status-corrected');
-                    setTimeout(() => confEl.classList.remove('status-corrected'), 600);
-                }
-            }
+            if (text.includes("RA-001")) targetId = "card-RA-001";
             else if (text.includes("record")) targetId = "card-meta";
             else if (text.includes("invariants")) targetClass = "card-inv"; 
             else if (text.includes("signature")) targetClass = "card-fail";
@@ -558,6 +547,77 @@
             }
         }
 
+        function requestManualVerification() {
+            if(isVerifying) return;
+            isVerifying = true;
+            
+            const confEl = document.getElementById('val-confidence');
+            const labelEl = document.getElementById('label-confidence');
+            
+            if(confEl) {
+                confEl.innerText = "VERIFYING...";
+                confEl.style.color = "#ffcc00"; // Yellow for processing
+            }
+            if(labelEl) labelEl.innerText = "STATUS";
+
+            // SHOW IMMEDIATE EVENT
+            const tickerText = document.getElementById('event-text');
+            if(tickerText) {
+                tickerText.innerText = "EVENT: manual_audit(user) → PENDING";
+                tickerText.style.color = "#ffcc00";
+            }
+
+            // SIMULATE COMPUTE DELAY
+            setTimeout(() => {
+                isVerifying = false;
+                raConfidence = 100.00;
+                
+                if(confEl) {
+                    confEl.innerText = "100.00%";
+                    confEl.style.color = ""; // Reset
+                    confEl.classList.add('status-corrected');
+                    setTimeout(() => confEl.classList.remove('status-corrected'), 600);
+                }
+                if(labelEl) labelEl.innerText = "CONFIDENCE";
+                
+                // LOG SUCCESS
+                if(tickerText) {
+                    tickerText.innerText = "EVENT: manual_audit(user) → VERIFIED";
+                    tickerText.style.color = ""; // Reset
+                }
+                triggerScan("RA-001"); // Flash the card
+                
+            }, 1200);
+        }
+
+        // HOVER LOGIC FOR OPERATOR OVERRIDE
+        function onConfidenceHover(isHovering) {
+            if(isVerifying) return;
+            const labelEl = document.getElementById('label-confidence');
+            if(labelEl) {
+                labelEl.innerText = isHovering ? "[ REQ VERIFY ]" : "CONFIDENCE";
+                labelEl.style.color = isHovering ? "#fff" : "#666";
+            }
+        }
+
+        // GHOST LAYER (HASH REVEAL)
+        function toggleGhost(el, show) {
+            if(show) {
+                el.dataset.originalText = el.innerText;
+                // Deterministic pseudo-hash based on length
+                const map = {
+                    "Goal Preservation": "0x7F2A...B1",
+                    "Definition Consistency": "0x9C11...4A",
+                    "Non-Contradiction": "0xE002...9F"
+                };
+                el.innerText = map[el.innerText] || "0x......";
+                el.classList.add('ghost-hash');
+            } else {
+                el.innerText = el.dataset.originalText;
+                el.classList.remove('ghost-hash');
+            }
+        }
+
         function startEventTicker() {
             if (eventInterval) clearInterval(eventInterval);
             const tickerText = document.getElementById('event-text');
@@ -565,6 +625,8 @@
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
             eventInterval = setInterval(() => {
+                if(isVerifying) return; // Don't interrupt manual audit
+                
                 eventIdx = (eventIdx + 1) % EVENTS.length;
                 const newText = EVENTS[eventIdx];
                 if (reduceMotion) {
@@ -627,13 +689,15 @@
             html += `<div class="mc-section-title">CORE TERMS</div>`;
             LEXICON_RECORD.core_terms.forEach(t => { 
                 let extraRow = '';
+                // RA-001 INTERACTIVE ROW
                 if(t.id === 'RA-001') {
-                    extraRow = `<div class="mc-row"><div class="mc-label">CONFIDENCE</div><div class="mc-val" id="val-confidence" style="font-family:var(--font-mono);">${raConfidence.toFixed(2)}%</div></div>`;
+                    extraRow = `<div class="mc-row interactive-row" onclick="requestManualVerification()" onmouseenter="onConfidenceHover(true)" onmouseleave="onConfidenceHover(false)"><div class="mc-label" id="label-confidence">CONFIDENCE</div><div class="mc-val" id="val-confidence" style="font-family:var(--font-mono);">${raConfidence.toFixed(2)}%</div></div>`;
                 }
                 html += `<div class="m-card" id="card-${t.id}"><div class="mc-header"><div>${t.id}</div><div>${t.type || 'TERM'}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>${extraRow}</div>`; 
             });
             html += `<div class="mc-section-title">INVARIANTS</div>`;
-            LEXICON_RECORD.invariants.forEach(i => { html += `<div class="m-card card-inv" id="card-${i.id}"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
+            // GHOST LAYER APPLIED TO INVARIANTS
+            LEXICON_RECORD.invariants.forEach(i => { html += `<div class="m-card card-inv" id="card-${i.id}"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val ghost-target" onmouseenter="toggleGhost(this, true)" onmouseleave="toggleGhost(this, false)">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
             html += `<div class="mc-section-title">FAILURE SIGNATURES</div>`;
             LEXICON_RECORD.failure_signatures.forEach(f => { html += `<div class="m-card card-fail"><div class="mc-header"><div>${f.signature}</div><div style="color:var(--signal-red)">${f.severity}</div></div><div class="mc-row"><div class="mc-label">TRIGGER</div><div class="mc-val">${f.condition}</div></div></div>`; });
             container.innerHTML = html;
