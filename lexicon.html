@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "16.0.0",
-        "status": "TERMINAL_ISOLATION_ACTIVE"
+        "version": "17.0.0",
+        "status": "ALIGNMENT_STANDARDIZED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V69 */
+        /* THEME: INSTITUTE STANDARD V70 */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -49,7 +49,7 @@
             --mode-diff-ins-text: #006600;
         }
 
-        /* DARK MODE OVERRIDES (Applies to Reader/Audit/Diff/Logic) */
+        /* DARK MODE OVERRIDES */
         [data-theme="dark"] {
             --bg-color: #050505;
             --sidebar-bg: #050505;
@@ -118,6 +118,7 @@
         }
         .repo-panel:hover { 
             background: var(--panel-hover-bg); 
+            color: var(--panel-text-hover); 
             border-color: var(--panel-hover-bg);
             transform: translateY(-2px); 
             box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
@@ -127,13 +128,11 @@
         }
         .repo-panel:hover .repo-header { color: var(--panel-hover-text); }
         .status-dot-red { width: 6px; height: 6px; background: var(--signal-red); border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
-        
         .repo-link { 
             display: block; font-size: 0.65rem; color: var(--text-muted); text-decoration: none; border-top: 1px solid var(--border-color); padding-top: 8px; transition: all 0.2s; 
         }
         .repo-panel:hover .repo-link { color: var(--panel-hover-text); border-top-color: rgba(125,125,125,0.5); opacity: 0.8; }
         .repo-panel:hover .repo-link:hover { opacity: 1; text-decoration: underline; }
-        
         .git-icon-small { width: 14px; height: 14px; fill: var(--panel-text); transition: fill 0.2s; }
         .repo-panel:hover .git-icon-small { fill: var(--panel-hover-text); }
 
@@ -157,7 +156,6 @@
         /* LOGIC MODE */
         body[data-mode="logic"] .view-human, body[data-mode="logic"] .view-audit { display: none; }
         body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: var(--font-mono); color: var(--text-main); }
-        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* AUDIT TABLES */
@@ -199,65 +197,34 @@
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
-        /* --- MACHINE OVERLAY (IMMUTABLE TERMINAL) --- */
+        /* --- MACHINE OVERLAY (FIXED TERMINAL) --- */
         .machine-overlay {
             position: fixed; inset: 0; z-index: 20000;
-            /* FORCED TERMINAL COLORS */
-            background: #0b0b0c; 
-            color: #e8e8e8;
+            background: #0b0b0c; color: #eaeaea;
             font-family: var(--font-mono); font-size: 0.75rem;
             display: flex; flex-direction: column;
             transition: opacity 0.2s ease;
         }
         .machine-overlay.hidden { display: none; opacity: 0; pointer-events: none; }
         
-        .mo-header {
-            padding: 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.15);
-            display: flex; justify-content: space-between; align-items: center;
-            background: #0b0b0c;
-        }
+        .mo-header { padding: 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: space-between; align-items: center; background: #0b0b0c; }
         .mo-title { font-weight: 700; letter-spacing: 0.05em; color: #fff; display: flex; align-items: center; gap: 1rem; }
-        
         .mo-mode-toggle { display: flex; gap: 4px; }
-        .mo-mode-btn { 
-            background: transparent; border: none; color: #888; font-family: inherit; font-size: 0.7rem; font-weight: 600; cursor: pointer; 
-        }
+        .mo-mode-btn { background: transparent; border: none; color: #888; font-family: inherit; font-size: 0.7rem; font-weight: 600; cursor: pointer; }
         .mo-mode-btn.active { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
         .mo-mode-btn:hover { color: #ccc; }
-
-        .mo-controls button {
-            background: transparent; border: 1px solid #444; color: #999;
-            padding: 4px 12px; margin-left: 8px; cursor: pointer; font-family: inherit; font-size: 0.65rem;
-            transition: all 0.15s;
-        }
+        .mo-controls button { background: transparent; border: 1px solid #444; color: #999; padding: 4px 12px; margin-left: 8px; cursor: pointer; font-family: inherit; font-size: 0.65rem; transition: all 0.15s; }
         .mo-controls button:hover { border-color: #fff; color: #fff; }
-        
-        .mo-tabs {
-            padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.15); background: #111;
-            display: flex; gap: 1px;
-        }
+        .mo-tabs { padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.15); background: #111; display: flex; gap: 1px; }
         .mo-tabs.hidden { display: none; }
-        
-        .mo-tab {
-            background: transparent; border: none; color: #666;
-            padding: 10px 16px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: 600;
-            border-bottom: 2px solid transparent;
-        }
+        .mo-tab { background: transparent; border: none; color: #666; padding: 10px 16px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: 600; border-bottom: 2px solid transparent; }
         .mo-tab:hover { color: #ccc; }
         .mo-tab.active { color: #fff; border-bottom-color: #fff; background: #1a1a1a; }
-        
-        .mo-content {
-            flex-grow: 1; padding: 2rem; overflow: auto; background: #0e0e0e;
-        }
+        .mo-content { flex-grow: 1; padding: 2rem; overflow: auto; background: #0e0e0e; }
         .mo-content pre { margin: 0; white-space: pre-wrap; word-break: break-all; color: #ccc; line-height: 1.6; }
-
-        /* CARDS GRID (TERMINAL STYLE) */
         .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
         .m-card { background: #1a1a1a; border: 1px solid #333; padding: 1.25rem; }
-        .mc-header { 
-            color: #666; font-size: 0.65rem; font-weight: 700; border-bottom: 1px solid #333; 
-            padding-bottom: 0.5rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between;
-        }
+        .mc-header { color: #666; font-size: 0.65rem; font-weight: 700; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; }
         .mc-row { margin-bottom: 0.5rem; display: grid; grid-template-columns: 100px 1fr; gap: 1rem; }
         .mc-label { color: #666; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .mc-val { color: #eee; font-size: 0.75rem; }
@@ -275,7 +242,12 @@
                 border-right: 1px solid var(--border-color); padding: 2rem; 
                 display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0;
             }
-            main { flex-grow: 1; display: block; max-width: 900px; margin: 0 auto; }
+            main { 
+                flex-grow: 1; 
+                display: block; 
+                max-width: 900px; 
+                margin: 0; /* ALIGNMENT FIXED HERE */
+            }
             .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
         }
 
@@ -458,7 +430,7 @@
     <script>
         // DATA RECORD
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "16.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "RAL-LEX-0002", version: "17.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
                 { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
