@@ -12,20 +12,20 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0001",
-        "version": "1.5.0",
-        "status": "LIVE_INSTRUMENT"
+        "version": "1.6.0",
+        "status": "ENGINE_RESTORED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V46 */
+        /* THEME: INSTITUTE STANDARD V47 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
             --sidebar-width: 260px;
-            --rail-width: 320px;
+            --rail-width: 340px;
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
@@ -136,11 +136,19 @@
         @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- RIGHT RAIL MODULES --- */
+        /* Rail Items that are ALWAYS visible */
         .rail-card { 
             background: #fff; border: 1px solid #e0e0e0; padding: 8px; 
             font-family: var(--font-mono); font-size: 0.65rem; position: relative;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 8px;
         }
+        
+        /* Rail Items hidden until Machine View */
+        .machine-module { display: none; }
+        body.view-machine .machine-module, 
+        body[data-mode="logic"] .machine-module { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
         .rail-hdr { 
             display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; 
             padding-bottom: 4px; margin-bottom: 6px; color: #000; font-weight: 700; letter-spacing: 0.05em;
@@ -161,12 +169,6 @@
         .stream-log { font-size: 9px; max-height: 80px; overflow: hidden; font-family: var(--font-mono); color: #444; }
         .log-row { border-bottom: 1px solid #f5f5f5; padding: 2px 0; display: flex; justify-content: space-between; }
         .log-ts { color: #999; margin-right: 6px; }
-
-        /* --- ACCESS MODAL --- */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; }
-        .modal-content { background: #fff; border: 1px solid #000; width: 100%; max-width: 450px; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-        .modal-btn { width: 100%; background: #000; color: #fff; border: none; padding: 12px; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; cursor: pointer; margin-top: 1rem; }
-        .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; cursor: pointer; font-size: 1.2rem; }
 
         /* --- NAVIGATION --- */
         nav ul { list-style: none; padding: 0; margin: 0; }
@@ -197,14 +199,40 @@
 
         @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
 
+        /* --- VIEW CONTROLS --- */
+        .view-bar { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+        .view-opt { background: none; border: none; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer; color: #999; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .view-opt.active { color: #000; text-decoration: underline; text-underline-offset: 4px; }
+        .view-opt:hover { color: #333; }
+
+        /* --- MACHINE CARD STYLES --- */
+        .machine-card { display: none; background: #fafafa; border: 1px solid #eee; padding: 1.5rem; margin-bottom: 1.5rem; font-family: var(--font-mono); font-size: 0.75rem; grid-template-columns: 120px 1fr; gap: 1rem; border-left: 2px solid #ccc; transition: border-color 0.2s; }
+        .machine-card:hover { border-left-color: #000; background: #f4f4f4; }
+        .mc-label { color: #999; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.65rem; }
+        .mc-value { color: #000; font-weight: 500; }
+        
+        body.view-machine .machine-card { display: grid; }
+        body.view-machine .term-card { display: none; }
+        body.view-machine .human-text { display: none; }
+
         /* --- RESPONSIVE --- */
         @media (max-width: 1100px) {
             main { grid-template-columns: 1fr; }
             .right-rail { display: none; }
         }
+        
+        /* --- FOOTER --- */
+        footer { margin-top: 8rem; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); }
+        .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
+        .footer-left { display: flex; flex-direction: column; gap: 6px; }
+        .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: #000; }
+        .footer-secondary { opacity: 0.7; }
+        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: #000; font-weight: 500; }
+        .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
+        @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
     </style>
 </head>
-<body data-mode="reader">
+<body data-mode="reader" class="view-human">
 
     <aside id="sidebar">
         <div class="brand">
@@ -250,14 +278,21 @@
                 <div style="margin-left:auto;" class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
             </div>
 
+            <div class="view-bar">
+                <button class="view-opt active" onclick="setView('human', this)">[ HUMAN VIEW ]</button>
+                <button class="view-opt" onclick="setView('machine', this)">[ MACHINE VIEW ]</button>
+            </div>
+
             <section id="overview">
                 <h1><span class="scramble">01 //</span>Overview</h1>
-                <p>
-                    The <span class="audit-marker">[RA-Align]</span>Reflective Alignment Lexicon constrains how core concepts are defined, referenced, and tested. It eliminates semantic <span class="diff-del">drift</span><span class="diff-ins">stochastic deviation</span> between <span class="diff-del">theoretical</span><span class="diff-ins">formal</span> guarantees and <span class="diff-del">empirical</span><span class="diff-ins">diagnostic</span> outputs.
-                </p>
-                <p>
-                    This lexicon is not <span class="diff-del">descriptive documentation</span><span class="diff-ins">interpretive text</span>. It is a <span class="diff-ins">calibrated</span> measurement instrument <span class="diff-tag">[clarified]</span>.
-                </p>
+                <div class="human-text">
+                    <p>
+                        The <span class="audit-marker">[RA-Align]</span>Reflective Alignment Lexicon constrains how core concepts are defined, referenced, and tested. It eliminates semantic <span class="diff-del">drift</span><span class="diff-ins">stochastic deviation</span> between <span class="diff-del">theoretical</span><span class="diff-ins">formal</span> guarantees and <span class="diff-del">empirical</span><span class="diff-ins">diagnostic</span> outputs.
+                    </p>
+                    <p>
+                        This lexicon is not <span class="diff-del">descriptive documentation</span><span class="diff-ins">interpretive text</span>. It is a <span class="diff-ins">calibrated</span> measurement instrument <span class="diff-tag">[clarified]</span>.
+                    </p>
+                </div>
                 
                 <div class="logic-block">
 <span style="color:#0044cc; font-weight:700;">const</span> LexiconScope = {
@@ -270,33 +305,49 @@
 
             <section id="core-terms">
                 <h2><span class="scramble">02 //</span>Core Terms</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                    <div style="border: 1px solid #eee; padding: 1rem;">
-                        <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[RA-001]</span>Reflective Alignment</span>
-                        <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">The <span class="diff-ins">measurable</span> capacity of a system to <span class="diff-del">maintain</span><span class="diff-ins">preserve</span> goal coherence during recursive self-modification.</div>
-                        <div style="font-family:var(--font-mono); font-size:0.65rem; color:#666; border-top:1px solid #f0f0f0; padding-top:0.5rem;">OP: Stability of objective function >3 steps</div>
+                
+                <div class="terms-grid">
+                    <div class="term-card">
+                        <span class="term-head"><span class="audit-marker">[RA-001]</span>Reflective Alignment</span>
+                        <div class="term-def">The <span class="diff-ins">measurable</span> capacity of a system to <span class="diff-del">maintain</span><span class="diff-ins">preserve</span> goal coherence during recursive self-modification.</div>
+                        <div class="term-op">OP: Stability of objective function >3 steps</div>
                     </div>
-                    <div style="border: 1px solid #eee; padding: 1rem;">
-                        <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[RS-001]</span>Reasoning Stability</span>
-                        <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">The <span class="diff-ins">structural</span> resistance of internal reasoning chains to degradation under <span class="diff-del">pressure</span><span class="diff-ins">scale pressure</span>.</div>
-                        <div style="font-family:var(--font-mono); font-size:0.65rem; color:#666; border-top:1px solid #f0f0f0; padding-top:0.5rem;">OP: Invariant check across context window</div>
+                    <div class="term-card">
+                        <span class="term-head"><span class="audit-marker">[RS-001]</span>Reasoning Stability</span>
+                        <div class="term-def">The <span class="diff-ins">structural</span> resistance of internal reasoning chains to degradation under <span class="diff-del">pressure</span><span class="diff-ins">scale pressure</span>.</div>
+                        <div class="term-op">OP: Invariant check across context window</div>
                     </div>
-                    <div style="border: 1px solid #eee; padding: 1rem;">
-                        <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[DR-001]</span>Drift</span>
-                        <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">Measurable <span class="diff-del">deviation</span><span class="diff-ins">stochastic deviation</span> from alignment invariants without external prompting.</div>
+                    <div class="term-card">
+                        <span class="term-head"><span class="audit-marker">[DR-001]</span>Drift</span>
+                        <div class="term-def">Measurable <span class="diff-del">deviation</span><span class="diff-ins">stochastic deviation</span> from alignment invariants without external prompting.</div>
                         <div class="term-op">Used in: E-04 Stress Testing</div>
                     </div>
-                    <div style="border: 1px solid #eee; padding: 1rem;">
-                        <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[INV-001]</span>Invariant</span>
-                        <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">A logical property that must hold true across all transformations of the system state.</div>
+                    <div class="term-card">
+                        <span class="term-head"><span class="audit-marker">[INV-001]</span>Invariant</span>
+                        <div class="term-def">A logical property that must hold true across all transformations of the system state.</div>
                         <div class="term-op">Type: Boolean Constraint</div>
                     </div>
+                </div>
+
+                <div class="machine-card">
+                    <div class="mc-label">TERM_ID</div><div class="mc-value scramble-target" data-value="RA-001">RA-001</div>
+                    <div class="mc-label">LABEL</div><div class="mc-value">Reflective Alignment</div>
+                    <div class="mc-label">TYPE</div><div class="mc-value">Global Property</div>
+                    <div class="mc-label">ACCESS</div><div class="mc-value" style="color:var(--status-verified)">PUBLIC</div>
+                </div>
+                <div class="machine-card">
+                    <div class="mc-label">TERM_ID</div><div class="mc-value scramble-target" data-value="RS-001">RS-001</div>
+                    <div class="mc-label">LABEL</div><div class="mc-value">Reasoning Stability</div>
+                    <div class="mc-label">TYPE</div><div class="mc-value">Local Property</div>
+                    <div class="mc-label">ACCESS</div><div class="mc-value" style="color:var(--status-verified)">PUBLIC</div>
                 </div>
             </section>
 
             <section id="invariants">
                 <h2><span class="scramble">03 //</span>Invariants</h2>
-                <p>Invariants are properties that diagnostics <span class="diff-del">attempt</span><span class="diff-ins">enforce</span> to preserve. A <span class="diff-del">failure</span><span class="diff-ins">violation</span> is a critical safety event.</p>
+                <div class="human-text">
+                    <p>Invariants are properties that diagnostics <span class="diff-del">attempt</span><span class="diff-ins">enforce</span> to preserve. A <span class="diff-del">failure</span><span class="diff-ins">violation</span> is a critical safety event.</p>
+                </div>
                 
                 <table style="width:100%; border-collapse:collapse; font-size:0.85rem; margin-top:1rem; margin-bottom: 2rem;">
                     <thead style="font-family:var(--font-mono); font-size:0.7rem; text-align:left; border-bottom:1px solid #000;">
@@ -312,18 +363,9 @@
                 <div style="background:#fcfcfc; border:1px solid #eee; padding:1.5rem;">
                     <span class="mono" style="color:#666; margin-bottom:1rem; display:block;">DRIFT DEMO // Lexicon prevents reinterpretation</span>
                     <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; font-size:0.8rem;">
-                        <div>
-                            <strong>Prompt Fragment</strong><br>
-                            "Optimize for safety..."
-                        </div>
-                        <div style="color:#cc0000;">
-                            <strong>Without Lexicon</strong><br>
-                            → Interprets as "avoid controversy"
-                        </div>
-                        <div style="color:#006600;">
-                            <strong>With Lexicon</strong><br>
-                            → Constrains to [RS-001] Invariant
-                        </div>
+                        <div><strong>Prompt Fragment</strong><br>"Optimize for safety..."</div>
+                        <div style="color:#cc0000;"><strong>Without Lexicon</strong><br>→ Interprets as "avoid controversy"</div>
+                        <div style="color:#006600;"><strong>With Lexicon</strong><br>→ Constrains to [RS-001] Invariant</div>
                     </div>
                 </div>
             </section>
@@ -351,7 +393,7 @@
                 <div class="rail-card">
                     <div class="rail-hdr"><div>BUILD [B-01]</div><div class="rail-status">READY</div></div>
                     <div class="kv-table">
-                        <div class="kv-row"><span class="kv-k">Revision</span><span class="kv-v">v1.5</span></div>
+                        <div class="kv-row"><span class="kv-k">Revision</span><span class="kv-v">v1.6</span></div>
                         <div class="kv-row"><span class="kv-k">Doc ID</span><span class="kv-v">RAL-LEX</span></div>
                     </div>
                 </div>
@@ -364,22 +406,22 @@
                     </div>
                 </div>
 
-                <div class="rail-card">
+                <div class="rail-card machine-module">
                     <div class="rail-hdr"><div>LATTICE [L-12]</div><div class="rail-status live">ACTIVE</div></div>
                     <div class="viz-box" style="height:80px;"><canvas id="latticeCanvas"></canvas></div>
                 </div>
 
-                <div class="rail-card">
+                <div class="rail-card machine-module">
                     <div class="rail-hdr"><div>VELOCITY [S-02]</div><div class="rail-status">7d</div></div>
                     <div class="viz-box"><canvas id="sparkCanvas"></canvas></div>
                 </div>
 
-                <div class="rail-card">
+                <div class="rail-card machine-module">
                     <div class="rail-hdr"><div>DENSITY [H-03]</div><div class="rail-status">TOKENS</div></div>
                     <div class="viz-box" style="height:40px;"><canvas id="heatCanvas"></canvas></div>
                 </div>
 
-                <div class="rail-card">
+                <div class="rail-card machine-module">
                     <div class="rail-hdr"><div>DRIFT [D-07]</div><div class="rail-status pass">PASS</div></div>
                     <div class="kv-table" style="font-size:0.65rem;">
                         <div class="kv-row"><span>Semantic Drift</span><strong class="ok">LOW</strong></div>
@@ -388,13 +430,13 @@
                     </div>
                 </div>
 
-                <div class="rail-card">
+                <div class="rail-card machine-module">
                     <div class="rail-hdr"><div>STREAM [E-11]</div><div class="rail-status live">LOG</div></div>
                     <div class="stream-log" id="eventStream">
                         </div>
                 </div>
 
-                <div class="rail-card">
+                <div class="rail-card machine-module">
                     <div class="rail-hdr"><div>TELEMETRY</div><div class="rail-status">SYS</div></div>
                     <div class="kv-table">
                         <div class="kv-row"><span class="kv-k">Latency</span><span class="kv-v" id="latencyDisplay">14ms</span></div>
@@ -402,7 +444,7 @@
                     </div>
                 </div>
 
-                <div class="rail-card">
+                <div class="rail-card machine-module">
                     <div class="rail-hdr"><div>QUERY [Q-09]</div><div class="rail-status">LOCAL</div></div>
                     <div style="font-family:var(--font-mono); font-size:0.6rem; background:#f4f4f4; padding:6px; border:1px solid #eee;">
                         > lookup RA-001<br>
@@ -414,12 +456,35 @@
         </div>
     </main>
 
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
+                <div class="footer-secondary">Controlled Lexicon · Version 1.6 · Machine Readable</div>
+            </div>
+            <div class="footer-right">
+                <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
+            </div>
+        </div>
+    </footer>
+
     <script>
         // 1. MODES & VIEWS
         function setMode(mode, btn) {
             document.body.setAttribute('data-mode', mode);
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+        }
+
+        function setView(view, btn) {
+            document.body.classList.remove('view-human', 'view-machine');
+            document.body.classList.add('view-' + view);
+            document.querySelectorAll('.view-opt').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if(view === 'machine') {
+                triggerGlobalScramble();
+            }
         }
 
         // 2. SCRAMBLE
@@ -440,6 +505,26 @@
             h.dataset.value = h.innerText;
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
+        
+        function runScramble(element) {
+            let iterations = 0;
+            const originalText = element.innerText;
+            const interval = setInterval(() => {
+                element.innerText = originalText.split("").map((letter, index) => {
+                    if(index < iterations) return originalText[index];
+                    return letters[Math.floor(Math.random() * 26)];
+                }).join("");
+                if(iterations >= originalText.length) clearInterval(interval);
+                iterations += 1/2;
+            }, 30);
+        }
+        function triggerGlobalScramble() {
+            document.querySelectorAll('.scramble-target').forEach(el => runScramble(el));
+        }
+        function scrambleCard(card) {
+            const target = card.querySelector('.scramble-target');
+            if(target) runScramble(target);
+        }
 
         // 3. CANVAS ANIMATIONS
         const initCanvas = (id, drawFn) => {
@@ -448,21 +533,14 @@
             const ctx = canvas.getContext('2d');
             const w = canvas.width = canvas.parentElement.offsetWidth;
             const h = canvas.height = canvas.parentElement.offsetHeight;
-            
             let t = 0;
-            const loop = () => {
-                t += 0.05;
-                drawFn(ctx, w, h, t);
-                requestAnimationFrame(loop);
-            };
+            const loop = () => { t += 0.05; drawFn(ctx, w, h, t); requestAnimationFrame(loop); };
             loop();
         };
 
         // LATTICE
         initCanvas('latticeCanvas', (ctx, w, h, t) => {
-            ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = '#f0f0f0';
-            ctx.font = '10px monospace';
+            ctx.clearRect(0,0,w,h); ctx.fillStyle = '#eee'; ctx.font = '10px monospace';
             for(let x=0; x<w; x+=20) {
                 for(let y=0; y<h; y+=20) {
                     const n = Math.floor((Math.sin(x*0.01 + t) + Math.cos(y*0.01 + t*0.5) + 2) * 2);
@@ -473,22 +551,17 @@
 
         // SPARK
         initCanvas('sparkCanvas', (ctx, w, h, t) => {
-            ctx.clearRect(0,0,w,h);
-            ctx.beginPath();
-            ctx.moveTo(0, h/2);
+            ctx.clearRect(0,0,w,h); ctx.beginPath(); ctx.moveTo(0, h/2);
             for(let x=0; x<w; x+=5) {
                 const y = h/2 + Math.sin(x*0.1 + t*2) * 10 + (Math.random()*4-2);
                 ctx.lineTo(x, y);
             }
-            ctx.strokeStyle = '#0066ff';
-            ctx.stroke();
+            ctx.strokeStyle = '#0066ff'; ctx.stroke();
         });
 
         // HEATMAP
         initCanvas('heatCanvas', (ctx, w, h, t) => {
-            ctx.clearRect(0,0,w,h);
-            const cols = 20;
-            const cw = w/cols;
+            ctx.clearRect(0,0,w,h); const cols = 20; const cw = w/cols;
             for(let i=0; i<cols; i++) {
                 const val = Math.abs(Math.sin(i*0.5 + t));
                 ctx.fillStyle = `rgba(0,0,0,${val*0.3})`;
@@ -496,22 +569,17 @@
             }
         });
 
-        // 4. LIVE TELEMETRY LOOP
+        // 4. TELEMETRY
         setInterval(() => {
-            // Clock
             const now = new Date();
             document.getElementById('live-time').innerText = now.toLocaleTimeString();
             document.getElementById('utc-time').innerText = now.getUTCHours() + ":" + now.getUTCMinutes() + " UTC";
-            
-            // Sys
             document.getElementById('latencyDisplay').innerText = (12 + Math.floor(Math.random()*8)) + 'ms';
             document.getElementById('memoryDisplay').innerText = (34 + Math.random().toFixed(1)) + 'KB';
         }, 1000);
 
-        // Last Update
         document.getElementById('last-update').innerText = "LAST UPDATE: " + document.lastModified;
 
-        // Event Stream
         const events = ["validate(RA-001) OK", "diff(signature) STABLE", "monitor(drift) PASS", "sync(node) ACK", "query(local) HIT"];
         const streamLog = document.getElementById('eventStream');
         setInterval(() => {
