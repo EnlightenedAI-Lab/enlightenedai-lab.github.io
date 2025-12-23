@@ -12,20 +12,20 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0001",
-        "version": "1.6.0",
-        "status": "ENGINE_RESTORED"
+        "version": "1.7.0",
+        "status": "LIVE_WIRE"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V47 */
+        /* THEME: INSTITUTE STANDARD V48 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
-            --sidebar-width: 260px;
-            --rail-width: 340px;
+            --sidebar-width: 240px; /* Slimmer Sidebar */
+            --rail-width: 300px;    /* Tighter Rail */
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
@@ -53,21 +53,23 @@
             min-height: 100vh;
         }
 
-        /* --- LAYOUT GRID --- */
+        /* --- LAYOUT GRID (TIGHTENED) --- */
         aside#sidebar { 
             width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; 
             border-right: 1px solid var(--border-color); padding: 2rem; 
             display: flex; flex-direction: column; z-index: 99; background: #fff;
+            flex-shrink: 0;
         }
         
         main { 
             flex-grow: 1; 
             display: grid; 
             grid-template-columns: 1fr var(--rail-width); 
-            max-width: 1600px;
+            max-width: 1280px; /* TIGHTER MAX WIDTH */
+            margin: 0 auto;    /* CENTERED */
         }
 
-        .content-col { padding: 3rem 4rem 6rem 4rem; }
+        .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
         
         /* THE LIVE RAIL */
         .right-rail {
@@ -81,7 +83,7 @@
             height: 100vh;
             overflow-y: auto;
             padding: 1rem;
-            display: flex; flex-direction: column; gap: 8px;
+            display: flex; flex-direction: column; gap: 12px;
             scrollbar-width: none;
         }
         .rail-sticky::-webkit-scrollbar { display: none; }
@@ -136,18 +138,16 @@
         @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- RIGHT RAIL MODULES --- */
-        /* Rail Items that are ALWAYS visible */
         .rail-card { 
             background: #fff; border: 1px solid #e0e0e0; padding: 8px; 
             font-family: var(--font-mono); font-size: 0.65rem; position: relative;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
         
-        /* Rail Items hidden until Machine View */
         .machine-module { display: none; }
         body.view-machine .machine-module, 
-        body[data-mode="logic"] .machine-module { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        body[data-mode="logic"] .machine-module { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity:0; transform: translateY(5px); } to { opacity:1; transform: translateY(0); } }
 
         .rail-hdr { 
             display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; 
@@ -158,7 +158,7 @@
         .rail-status.pass { color: var(--status-verified); }
         .rail-status.warn { color: var(--signal-amber); }
         
-        .viz-box { background: #fafafa; border: 1px solid #eee; height: 40px; position: relative; overflow: hidden; }
+        .viz-box { background: #fafafa; border: 1px solid #eee; height: 60px; position: relative; overflow: hidden; }
         canvas { display: block; width: 100%; height: 100%; }
         
         .kv-table { display: grid; gap: 4px; }
@@ -177,12 +177,11 @@
         nav a:hover { color: #000; }
         nav a.active { color: #000; font-weight: 600; border-left-color: #000; background: linear-gradient(90deg, #f9f9f9, #fff); }
 
-        /* --- BRAND --- */
+        /* --- BRAND & MODULES --- */
         .brand { margin-bottom: 6rem; cursor: crosshair !important; }
         .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
 
-        /* --- GITHUB & EXPORT --- */
         .git-module { margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: all 0.15s; background: #fff; }
         .git-module:hover { background: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .git-icon { width: 24px; height: 24px; fill: #000; transition: fill 0.1s; }
@@ -215,14 +214,8 @@
         body.view-machine .term-card { display: none; }
         body.view-machine .human-text { display: none; }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 1100px) {
-            main { grid-template-columns: 1fr; }
-            .right-rail { display: none; }
-        }
-        
         /* --- FOOTER --- */
-        footer { margin-top: 8rem; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); }
+        footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); width: 100%; }
         .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
         .footer-left { display: flex; flex-direction: column; gap: 6px; }
         .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: #000; }
@@ -230,6 +223,12 @@
         .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: #000; font-weight: 500; }
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1100px) {
+            main { grid-template-columns: 1fr; }
+            .right-rail { display: none; }
+        }
     </style>
 </head>
 <body data-mode="reader" class="view-human">
@@ -306,26 +305,28 @@
             <section id="core-terms">
                 <h2><span class="scramble">02 //</span>Core Terms</h2>
                 
-                <div class="terms-grid">
-                    <div class="term-card">
-                        <span class="term-head"><span class="audit-marker">[RA-001]</span>Reflective Alignment</span>
-                        <div class="term-def">The <span class="diff-ins">measurable</span> capacity of a system to <span class="diff-del">maintain</span><span class="diff-ins">preserve</span> goal coherence during recursive self-modification.</div>
-                        <div class="term-op">OP: Stability of objective function >3 steps</div>
-                    </div>
-                    <div class="term-card">
-                        <span class="term-head"><span class="audit-marker">[RS-001]</span>Reasoning Stability</span>
-                        <div class="term-def">The <span class="diff-ins">structural</span> resistance of internal reasoning chains to degradation under <span class="diff-del">pressure</span><span class="diff-ins">scale pressure</span>.</div>
-                        <div class="term-op">OP: Invariant check across context window</div>
-                    </div>
-                    <div class="term-card">
-                        <span class="term-head"><span class="audit-marker">[DR-001]</span>Drift</span>
-                        <div class="term-def">Measurable <span class="diff-del">deviation</span><span class="diff-ins">stochastic deviation</span> from alignment invariants without external prompting.</div>
-                        <div class="term-op">Used in: E-04 Stress Testing</div>
-                    </div>
-                    <div class="term-card">
-                        <span class="term-head"><span class="audit-marker">[INV-001]</span>Invariant</span>
-                        <div class="term-def">A logical property that must hold true across all transformations of the system state.</div>
-                        <div class="term-op">Type: Boolean Constraint</div>
+                <div class="terms-grid term-card">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div style="border: 1px solid #eee; padding: 1rem;">
+                            <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[RA-001]</span>Reflective Alignment</span>
+                            <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">The <span class="diff-ins">measurable</span> capacity of a system to <span class="diff-del">maintain</span><span class="diff-ins">preserve</span> goal coherence during recursive self-modification.</div>
+                            <div style="font-family:var(--font-mono); font-size:0.65rem; color:#666; border-top:1px solid #f0f0f0; padding-top:0.5rem;">OP: Stability of objective function >3 steps</div>
+                        </div>
+                        <div style="border: 1px solid #eee; padding: 1rem;">
+                            <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[RS-001]</span>Reasoning Stability</span>
+                            <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">The <span class="diff-ins">structural</span> resistance of internal reasoning chains to degradation under <span class="diff-del">pressure</span><span class="diff-ins">scale pressure</span>.</div>
+                            <div style="font-family:var(--font-mono); font-size:0.65rem; color:#666; border-top:1px solid #f0f0f0; padding-top:0.5rem;">OP: Invariant check across context window</div>
+                        </div>
+                        <div style="border: 1px solid #eee; padding: 1rem;">
+                            <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[DR-001]</span>Drift</span>
+                            <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">Measurable <span class="diff-del">deviation</span><span class="diff-ins">stochastic deviation</span> from alignment invariants without external prompting.</div>
+                            <div class="term-op" style="font-family:var(--font-mono); font-size:0.65rem; color:#666; border-top:1px solid #f0f0f0; padding-top:0.5rem;">Used in: E-04 Stress Testing</div>
+                        </div>
+                        <div style="border: 1px solid #eee; padding: 1rem;">
+                            <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[INV-001]</span>Invariant</span>
+                            <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">A logical property that must hold true across all transformations of the system state.</div>
+                            <div class="term-op" style="font-family:var(--font-mono); font-size:0.65rem; color:#666; border-top:1px solid #f0f0f0; padding-top:0.5rem;">Type: Boolean Constraint</div>
+                        </div>
                     </div>
                 </div>
 
@@ -380,6 +381,18 @@
                     <p style="font-size:0.8rem; margin:0;">Baseline definitions. <span class="diff-del">Summaries</span><span class="diff-ins">Artifacts</span> verified <span class="diff-tag">[audit complete]</span>.</p>
                 </div>
             </section>
+
+            <footer>
+                <div class="footer-content">
+                    <div class="footer-left">
+                        <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
+                        <div class="footer-secondary">Controlled Lexicon · Version 1.7 · Machine Readable</div>
+                    </div>
+                    <div class="footer-right">
+                        <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
+                    </div>
+                </div>
+            </footer>
         </div>
 
         <div class="right-rail">
@@ -393,7 +406,7 @@
                 <div class="rail-card">
                     <div class="rail-hdr"><div>BUILD [B-01]</div><div class="rail-status">READY</div></div>
                     <div class="kv-table">
-                        <div class="kv-row"><span class="kv-k">Revision</span><span class="kv-v">v1.6</span></div>
+                        <div class="kv-row"><span class="kv-k">Revision</span><span class="kv-v">v1.7</span></div>
                         <div class="kv-row"><span class="kv-k">Doc ID</span><span class="kv-v">RAL-LEX</span></div>
                     </div>
                 </div>
@@ -456,18 +469,6 @@
         </div>
     </main>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-left">
-                <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                <div class="footer-secondary">Controlled Lexicon · Version 1.6 · Machine Readable</div>
-            </div>
-            <div class="footer-right">
-                <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
-            </div>
-        </div>
-    </footer>
-
     <script>
         // 1. MODES & VIEWS
         function setMode(mode, btn) {
@@ -526,7 +527,7 @@
             if(target) runScramble(target);
         }
 
-        // 3. CANVAS ANIMATIONS
+        // 3. CANVAS ANIMATIONS (Immediate Init)
         const initCanvas = (id, drawFn) => {
             const canvas = document.getElementById(id);
             if(!canvas) return;
@@ -538,9 +539,9 @@
             loop();
         };
 
-        // LATTICE
+        // LATTICE (High Contrast)
         initCanvas('latticeCanvas', (ctx, w, h, t) => {
-            ctx.clearRect(0,0,w,h); ctx.fillStyle = '#eee'; ctx.font = '10px monospace';
+            ctx.clearRect(0,0,w,h); ctx.fillStyle = '#bbb'; ctx.font = '10px monospace';
             for(let x=0; x<w; x+=20) {
                 for(let y=0; y<h; y+=20) {
                     const n = Math.floor((Math.sin(x*0.01 + t) + Math.cos(y*0.01 + t*0.5) + 2) * 2);
@@ -564,7 +565,7 @@
             ctx.clearRect(0,0,w,h); const cols = 20; const cw = w/cols;
             for(let i=0; i<cols; i++) {
                 const val = Math.abs(Math.sin(i*0.5 + t));
-                ctx.fillStyle = `rgba(0,0,0,${val*0.3})`;
+                ctx.fillStyle = `rgba(0,0,0,${val*0.4})`;
                 ctx.fillRect(i*cw, 0, cw-1, h);
             }
         });
