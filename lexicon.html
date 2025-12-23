@@ -12,19 +12,19 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0001",
-        "version": "1.8.0",
-        "status": "HARD_WIRED"
+        "version": "1.9.0",
+        "status": "EPISTEMIC_INSTRUMENT"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V50 (HARD WIRED) */
+        /* THEME: INSTITUTE STANDARD V51 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
-            --sidebar-width: 260px;
+            --sidebar-width: 240px;
             --rail-width: 320px;
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -53,7 +53,7 @@
             min-height: 100vh;
         }
 
-        /* --- LAYOUT GRID (LOCKED) --- */
+        /* --- LAYOUT GRID --- */
         aside#sidebar { 
             width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; 
             border-right: 1px solid var(--border-color); padding: 2rem; 
@@ -65,7 +65,7 @@
             flex-grow: 1; 
             display: grid; 
             grid-template-columns: 1fr var(--rail-width); 
-            max-width: 1300px; /* TIGHTENED FROM 1600px */
+            max-width: 1300px;
             margin: 0 auto;
         }
 
@@ -84,36 +84,17 @@
             height: 100vh;
             overflow-y: auto;
             padding: 1rem;
-            display: flex; flex-direction: column; gap: 8px;
+            display: flex; flex-direction: column; gap: 12px;
             scrollbar-width: none;
         }
         .rail-sticky::-webkit-scrollbar { display: none; }
 
         /* --- BEACON PHYSICS --- */
-        @keyframes beacon-green {
-            0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; }
-            50% { opacity: 1; }
-            100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; }
-        }
-        @keyframes border-pulse {
-            0% { border-color: rgba(0,204,0,0.4); }
-            50% { border-color: rgba(0,204,0,1); }
-            100% { border-color: rgba(0,204,0,0.4); }
-        }
+        @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
+        @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
 
-        .integrity-seal { 
-            margin-left: auto; display: flex; align-items: center; gap: 8px; 
-            font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
-            border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
-            background: rgba(0,204,0,0.03); cursor: not-allowed !important;
-            animation: border-pulse 3s infinite;
-        }
-        .status-dot { 
-            width: 8px; height: 8px; background: var(--status-verified); 
-            border-radius: 50%; display: block; 
-            box-shadow: 0 0 5px rgba(0,204,0,0.5);
-            animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1);
-        }
+        .integrity-seal { margin-left: auto; display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: not-allowed !important; animation: border-pulse 3s infinite; }
+        .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
         /* --- TYPOGRAPHY --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -128,20 +109,13 @@
         .toggle-btn:hover { color: #000; }
         .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
         
-        body[data-mode="reader"] .audit-marker,
-        body[data-mode="reader"] .logic-block,
-        body[data-mode="reader"] .diff-del,
-        body[data-mode="reader"] .diff-ins,
-        body[data-mode="reader"] .diff-tag { display: none !important; }
-
+        body[data-mode="reader"] .audit-marker, body[data-mode="reader"] .logic-block, body[data-mode="reader"] .diff-del, body[data-mode="reader"] .diff-ins, body[data-mode="reader"] .diff-tag { display: none !important; }
         .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: #fff; }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
-
         .diff-del { display: none; text-decoration: line-through; color: var(--signal-red); background: #ffebeb; padding: 0 2px; }
         .diff-ins { display: none; text-decoration: none; color: #006600; background: #e6ffec; border-bottom: 1px solid #00cc00; padding: 0 2px; }
         .diff-tag { display: none; font-family: var(--font-mono); font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
         body[data-mode="diff"] .diff-del, body[data-mode="diff"] .diff-ins, body[data-mode="diff"] .diff-tag { display: inline; }
-
         .logic-block { display: none; font-family: var(--font-mono); font-size: 0.75rem; color: #333; background-color: #fcfcfc; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); padding: 1rem; margin: 1.5rem 0; overflow-x: auto; position: relative; }
         .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 2px 6px; }
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
@@ -154,11 +128,6 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 8px;
         }
         
-        .machine-module { display: none; }
-        body.view-machine .machine-module, 
-        body[data-mode="logic"] .machine-module { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity:0; transform: translateY(5px); } to { opacity:1; transform: translateY(0); } }
-
         .rail-hdr { 
             display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; 
             padding-bottom: 4px; margin-bottom: 6px; color: #000; font-weight: 700; letter-spacing: 0.05em;
@@ -168,13 +137,13 @@
         .rail-status.pass { color: var(--status-verified); }
         .rail-status.warn { color: var(--signal-amber); }
         
+        /* THE VISUALIZATIONS */
         .viz-box { background: #fafafa; border: 1px solid #eee; height: 60px; position: relative; overflow: hidden; width: 100%; }
+        .viz-box.large { height: 140px; }
+        .viz-box.tall { height: 180px; }
         canvas { display: block; width: 100%; height: 100%; }
         
-        .kv-table { display: grid; gap: 4px; }
-        .kv-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #eee; padding-bottom: 2px; }
-        .kv-k { color: #666; } .kv-v { color: #000; font-weight: 600; }
-
+        /* STREAM LOG */
         .stream-log { font-size: 9px; max-height: 80px; overflow: hidden; font-family: var(--font-mono); color: #444; }
         .log-row { border-bottom: 1px solid #f5f5f5; padding: 2px 0; display: flex; justify-content: space-between; }
         .log-ts { color: #999; margin-right: 6px; }
@@ -394,7 +363,7 @@
                 <div class="footer-content">
                     <div class="footer-left">
                         <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                        <div class="footer-secondary">Controlled Lexicon · Version 1.7 · Machine Readable</div>
+                        <div class="footer-secondary">Controlled Lexicon · Version 1.9 · Machine Readable</div>
                     </div>
                     <div class="footer-right">
                         <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
@@ -407,70 +376,24 @@
             <div class="rail-sticky">
                 
                 <div class="rail-card">
-                    <div class="rail-hdr"><div>CLOCK [T-00]</div><div class="rail-status live" id="live-time">00:00:00</div></div>
-                    <div class="kv-table"><div class="kv-row"><span class="kv-k">UTC</span><span class="kv-v" id="utc-time">00:00</span></div></div>
+                    <div class="rail-hdr"><div>ALIGNMENT FIELD [A-00]</div><div class="rail-status live">ACTIVE</div></div>
+                    <div class="viz-box tall"><canvas id="fieldCanvas"></canvas></div>
                 </div>
 
                 <div class="rail-card">
-                    <div class="rail-hdr"><div>BUILD [B-01]</div><div class="rail-status">READY</div></div>
-                    <div class="kv-table">
-                        <div class="kv-row"><span class="kv-k">Revision</span><span class="kv-v">v1.7</span></div>
-                        <div class="kv-row"><span class="kv-k">Doc ID</span><span class="kv-v">RAL-LEX</span></div>
-                    </div>
+                    <div class="rail-hdr"><div>DRIFT SCOPES [D-07]</div><div class="rail-status">SCANNING</div></div>
+                    <div class="viz-box large"><canvas id="driftCanvas"></canvas></div>
                 </div>
 
                 <div class="rail-card">
-                    <div class="rail-hdr"><div>COUNTER [C-01]</div><div class="rail-status pass">OK</div></div>
-                    <div class="kv-table">
-                        <div class="kv-row"><span class="kv-k">Terms</span><span class="kv-v">008</span></div>
-                        <div class="kv-row"><span class="kv-k">Public</span><span class="kv-v">008</span></div>
-                    </div>
+                    <div class="rail-hdr"><div>TEMPORAL SIGNAL [T-06]</div><div class="rail-status">SYNC</div></div>
+                    <div class="viz-box"><canvas id="temporalCanvas"></canvas></div>
                 </div>
 
-                <div class="rail-card machine-module">
-                    <div class="rail-hdr"><div>LATTICE [L-12]</div><div class="rail-status live">ACTIVE</div></div>
-                    <div class="viz-box" style="height:80px;"><canvas id="latticeCanvas"></canvas></div>
-                </div>
-
-                <div class="rail-card machine-module">
-                    <div class="rail-hdr"><div>VELOCITY [S-02]</div><div class="rail-status">7d</div></div>
-                    <div class="viz-box"><canvas id="sparkCanvas"></canvas></div>
-                </div>
-
-                <div class="rail-card machine-module">
-                    <div class="rail-hdr"><div>DENSITY [H-03]</div><div class="rail-status">TOKENS</div></div>
-                    <div class="viz-box" style="height:40px;"><canvas id="heatCanvas"></canvas></div>
-                </div>
-
-                <div class="rail-card machine-module">
-                    <div class="rail-hdr"><div>DRIFT [D-07]</div><div class="rail-status pass">PASS</div></div>
-                    <div class="kv-table" style="font-size:0.65rem;">
-                        <div class="kv-row"><span>Semantic Drift</span><strong class="ok">LOW</strong></div>
-                        <div class="kv-row"><span>Obj. Mutation</span><strong class="ok">NONE</strong></div>
-                        <div class="kv-row"><span>Contradiction</span><strong class="ok">NONE</strong></div>
-                    </div>
-                </div>
-
-                <div class="rail-card machine-module">
+                <div class="rail-card">
                     <div class="rail-hdr"><div>STREAM [E-11]</div><div class="rail-status live">LOG</div></div>
                     <div class="stream-log" id="eventStream">
                         </div>
-                </div>
-
-                <div class="rail-card machine-module">
-                    <div class="rail-hdr"><div>TELEMETRY</div><div class="rail-status">SYS</div></div>
-                    <div class="kv-table">
-                        <div class="kv-row"><span class="kv-k">Latency</span><span class="kv-v" id="latencyDisplay">14ms</span></div>
-                        <div class="kv-row"><span class="kv-k">Memory</span><span class="kv-v" id="memoryDisplay">34KB</span></div>
-                    </div>
-                </div>
-
-                <div class="rail-card machine-module">
-                    <div class="rail-hdr"><div>QUERY [Q-09]</div><div class="rail-status">LOCAL</div></div>
-                    <div style="font-family:var(--font-mono); font-size:0.6rem; background:#f4f4f4; padding:6px; border:1px solid #eee;">
-                        > lookup RA-001<br>
-                        <span style="color:#006600;">{ "id": "RA-001", "status": "OK" }</span>
-                    </div>
                 </div>
 
             </div>
@@ -483,9 +406,6 @@
             document.body.setAttribute('data-mode', mode);
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
-            // Check visibility after mode change
-            checkFieldVisibility();
         }
 
         function setView(view, btn) {
@@ -494,14 +414,9 @@
             document.querySelectorAll('.view-opt').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             
-            // Trigger scramble and check visibility
-            if(view === 'machine') triggerGlobalScramble();
-            checkFieldVisibility();
-        }
-
-        function checkFieldVisibility() {
-            // Force redraw of canvases when they become visible
-            setTimeout(initAllCanvases, 50);
+            if(view === 'machine') {
+                triggerGlobalScramble();
+            }
         }
 
         // 2. SCRAMBLE
@@ -550,18 +465,11 @@
             const canvas = document.getElementById(id);
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
-            
-            // Store for resize
             canvases.push({ canvas, ctx, drawFn });
-            
-            // Initial sizing
             resizeCanvas(canvas, ctx, drawFn);
-            
-            // Animation Loop
             let t = 0;
             const loop = () => { 
-                t += 0.05; 
-                // Only draw if visible to save resources, but we need to check dimensions
+                t += 0.03; 
                 if (canvas.width > 0 && canvas.height > 0) {
                     drawFn(ctx, canvas.width, canvas.height, t); 
                 }
@@ -582,56 +490,88 @@
             canvases.forEach(item => resizeCanvas(item.canvas, item.ctx, item.drawFn));
         };
 
-        // LATTICE (High Contrast)
-        initCanvas('latticeCanvas', (ctx, w, h, t) => {
-            ctx.clearRect(0,0,w,h); 
-            ctx.fillStyle = '#999'; // High Contrast Gray
-            ctx.font = '10px monospace';
-            for(let x=0; x<w; x+=20) {
-                for(let y=0; y<h; y+=20) {
-                    const n = Math.floor((Math.sin(x*0.01 + t) + Math.cos(y*0.01 + t*0.5) + 2) * 2);
-                    // Random flare
-                    if (Math.random() > 0.99) ctx.fillStyle = '#0066ff'; 
-                    else ctx.fillStyle = '#999';
-                    ctx.fillText(n, x, y+10);
-                }
+        // FIELD (Particles & Anchors)
+        initCanvas('fieldCanvas', (ctx, w, h, t) => {
+            ctx.clearRect(0,0,w,h);
+            const anchors = [{x:w*0.3, y:h*0.3}, {x:w*0.7, y:h*0.7}];
+            
+            // Anchors
+            ctx.fillStyle = '#00cc00';
+            anchors.forEach(a => { ctx.beginPath(); ctx.arc(a.x, a.y, 3, 0, Math.PI*2); ctx.fill(); });
+
+            // Particles
+            ctx.fillStyle = '#999';
+            for(let i=0; i<30; i++) {
+                let px = (i*20 + t*10) % w;
+                let py = (h/2) + Math.sin(px*0.05 + t)*20;
+                
+                // Distance to nearest anchor
+                let dist = Math.min(...anchors.map(a => Math.hypot(px-a.x, py-a.y)));
+                
+                if(dist < 40) ctx.fillStyle = '#00cc00'; // Stable
+                else if(dist > 80) ctx.fillStyle = '#b45309'; // Drift
+                else ctx.fillStyle = '#999'; // Neutral
+
+                ctx.beginPath(); ctx.arc(px, py, 1.5, 0, Math.PI*2); ctx.fill();
             }
         });
 
-        // SPARK
-        initCanvas('sparkCanvas', (ctx, w, h, t) => {
-            ctx.clearRect(0,0,w,h); ctx.beginPath(); ctx.moveTo(0, h/2);
-            for(let x=0; x<w; x+=5) {
-                const y = h/2 + Math.sin(x*0.1 + t*2) * 10 + (Math.random()*4-2);
+        // DRIFT SCOPES (3 Zones)
+        initCanvas('driftCanvas', (ctx, w, h, t) => {
+            ctx.clearRect(0,0,w,h);
+            const w3 = w/3;
+            
+            // 1. Semantic (Blur)
+            const cx1 = w3*0.5; const cy = h/2;
+            const blur = Math.abs(Math.sin(t*2)) * 5;
+            ctx.strokeStyle = '#000'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.arc(cx1, cy, 10 + blur, 0, Math.PI*2); ctx.stroke();
+
+            // 2. Mutation (Target)
+            const cx2 = w3*1.5;
+            ctx.fillStyle = '#cc0000';
+            ctx.beginPath(); ctx.arc(cx2 + Math.sin(t*5)*3, cy + Math.cos(t*3)*3, 2, 0, Math.PI*2); ctx.fill();
+            ctx.strokeStyle = '#0066ff';
+            ctx.beginPath(); ctx.arc(cx2, cy, 15, 0, Math.PI*2); ctx.stroke();
+
+            // 3. Collapse (Grid)
+            const cx3 = w3*2.5;
+            ctx.strokeStyle = '#999';
+            for(let i=-10; i<=10; i+=5) {
+                const warp = Math.sin(t + i)*2;
+                ctx.beginPath(); ctx.moveTo(cx3+i, cy-10+warp); ctx.lineTo(cx3+i, cy+10-warp); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(cx3-10+warp, cy+i); ctx.lineTo(cx3+10-warp, cy+i); ctx.stroke();
+            }
+            
+            // Dividers
+            ctx.strokeStyle = '#eee';
+            ctx.beginPath(); ctx.moveTo(w3, 0); ctx.lineTo(w3, h); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(w3*2, 0); ctx.lineTo(w3*2, h); ctx.stroke();
+        });
+
+        // TEMPORAL SIGNAL (Phase + Epoch)
+        initCanvas('temporalCanvas', (ctx, w, h, t) => {
+            ctx.clearRect(0,0,w,h);
+            
+            // Phase Wave
+            ctx.beginPath();
+            ctx.moveTo(0, h/2);
+            for(let x=0; x<w; x+=2) {
+                const y = h/2 + Math.sin(x*0.05 + t)*10 + Math.sin(x*0.1 - t*2)*5;
                 ctx.lineTo(x, y);
             }
-            ctx.strokeStyle = '#0066ff'; ctx.lineWidth = 1.5; ctx.stroke();
-        });
+            ctx.strokeStyle = '#0066ff'; ctx.stroke();
 
-        // HEATMAP
-        initCanvas('heatCanvas', (ctx, w, h, t) => {
-            ctx.clearRect(0,0,w,h); const cols = 20; const cw = w/cols;
-            for(let i=0; i<cols; i++) {
-                const val = Math.abs(Math.sin(i*0.5 + t));
-                ctx.fillStyle = `rgba(0,0,0,${val*0.6})`; // Darker bars
-                ctx.fillRect(i*cw, 0, cw-1, h);
-            }
+            // Epoch Heartbeat
+            const beat = (Math.sin(t*3)+1)/2;
+            ctx.fillStyle = `rgba(0, 204, 0, ${beat})`;
+            ctx.fillRect(w-20, 10, 4, 4);
         });
         
-        // Handle Resize
         window.addEventListener('resize', initAllCanvases);
-        // Force init shortly after load to catch layout settlement
         setTimeout(initAllCanvases, 200);
 
         // 4. TELEMETRY
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('live-time').innerText = now.toLocaleTimeString();
-            document.getElementById('utc-time').innerText = now.getUTCHours() + ":" + now.getUTCMinutes() + " UTC";
-            document.getElementById('latencyDisplay').innerText = (12 + Math.floor(Math.random()*8)) + 'ms';
-            document.getElementById('memoryDisplay').innerText = (34 + Math.random().toFixed(1)) + 'KB';
-        }, 1000);
-
         document.getElementById('last-update').innerText = "LAST UPDATE: " + document.lastModified;
 
         const events = ["validate(RA-001) OK", "diff(signature) STABLE", "monitor(drift) PASS", "sync(node) ACK", "query(local) HIT"];
