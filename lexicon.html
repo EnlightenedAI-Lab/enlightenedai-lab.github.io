@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "13.0.0",
-        "status": "MACHINE_SERIALIZATION_ACTIVE"
+        "version": "14.0.0",
+        "status": "MACHINE_DUAL_VIEW_ACTIVE"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V66 */
+        /* THEME: INSTITUTE STANDARD V67 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -153,13 +153,13 @@
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
-        /* --- MACHINE OVERLAY CSS (NEW) --- */
+        /* --- MACHINE OVERLAY CSS (ENHANCED V67) --- */
         .machine-overlay {
             position: fixed; inset: 0; z-index: 20000;
             background: #0b0b0b; color: #eaeaea;
             font-family: var(--font-mono); font-size: 0.75rem;
             display: flex; flex-direction: column;
-            transition: opacity 0.2s ease, transform 0.2s ease;
+            transition: opacity 0.2s ease;
         }
         .machine-overlay.hidden { display: none; opacity: 0; pointer-events: none; }
         
@@ -168,7 +168,16 @@
             display: flex; justify-content: space-between; align-items: center;
             background: #0b0b0b;
         }
-        .mo-title { font-weight: 700; letter-spacing: 0.05em; color: #fff; }
+        .mo-title { font-weight: 700; letter-spacing: 0.05em; color: #fff; display: flex; align-items: center; gap: 1rem; }
+        
+        /* MODE TOGGLE */
+        .mo-mode-toggle { display: flex; gap: 4px; }
+        .mo-mode-btn { 
+            background: transparent; border: none; color: #666; font-family: inherit; font-size: 0.7rem; font-weight: 600; cursor: pointer; 
+        }
+        .mo-mode-btn.active { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+        .mo-mode-btn:hover { color: #ccc; }
+
         .mo-controls button {
             background: transparent; border: 1px solid #444; color: #999;
             padding: 4px 12px; margin-left: 8px; cursor: pointer; font-family: inherit; font-size: 0.65rem;
@@ -180,6 +189,8 @@
             padding: 0 2rem; border-bottom: 1px solid #333; background: #111;
             display: flex; gap: 1px;
         }
+        .mo-tabs.hidden { display: none; } /* Hide tabs in Cards mode */
+        
         .mo-tab {
             background: transparent; border: none; color: #666;
             padding: 10px 16px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: 600;
@@ -192,6 +203,18 @@
             flex-grow: 1; padding: 2rem; overflow: auto; background: #0e0e0e;
         }
         .mo-content pre { margin: 0; white-space: pre-wrap; word-break: break-all; color: #ccc; line-height: 1.6; }
+
+        /* CARDS GRID STYLES */
+        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+        .m-card { background: #1a1a1a; border: 1px solid #333; padding: 1.25rem; }
+        .mc-header { 
+            color: #666; font-size: 0.65rem; font-weight: 700; border-bottom: 1px solid #333; 
+            padding-bottom: 0.5rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between;
+        }
+        .mc-row { margin-bottom: 0.5rem; display: grid; grid-template-columns: 100px 1fr; gap: 1rem; }
+        .mc-label { color: #666; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .mc-val { color: #eee; font-size: 0.75rem; }
+        .mc-section-title { grid-column: span 2; color: #999; font-size: 0.7rem; font-weight: 700; margin: 2rem 0 1rem 0; letter-spacing: 0.05em; border-left: 2px solid #444; padding-left: 10px; }
 
         /* =========================================
            LAYOUT ENGINE: SEGREGATED
@@ -221,8 +244,9 @@
             aside#sidebar.open { transform: translateX(0); }
             main { margin-top: 50px; padding: 1.5rem; width: 100%; max-width: 100vw; }
             .content-col { padding: 0; }
-            .mo-header { padding: 1rem; }
+            .mo-header { padding: 1rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
             .mo-content { padding: 1rem; }
+            .card-grid { grid-template-columns: 1fr; } /* Stack cards on mobile */
         }
     </style>
 </head>
@@ -281,13 +305,20 @@
 
     <div id="machineOverlay" class="machine-overlay hidden">
         <div class="mo-header">
-            <div class="mo-title">MACHINE VIEW // SERIALIZATION</div>
+            <div class="mo-title">
+                MACHINE VIEW // 
+                <div class="mo-mode-toggle">
+                    <button onclick="switchMachineMode('cards')" class="mo-mode-btn" id="btn-mode-cards">[ CARDS ]</button>
+                    <button onclick="switchMachineMode('serialization')" class="mo-mode-btn" id="btn-mode-serial">[ SERIALIZATION ]</button>
+                </div>
+            </div>
             <div class="mo-controls">
-                <button onclick="exportRecord()">EXPORT FILE</button>
+                <button onclick="exportRecord()" id="btn-export">EXPORT FILE</button>
                 <button onclick="closeMachineOverlay()">CLOSE ✕</button>
             </div>
         </div>
-        <div class="mo-tabs">
+        
+        <div class="mo-tabs" id="moTabs">
             <button onclick="renderFormat('json')" class="mo-tab active" id="tab-json">JSON</button>
             <button onclick="renderFormat('yaml')" class="mo-tab" id="tab-yaml">YAML</button>
             <button onclick="renderFormat('python')" class="mo-tab" id="tab-python">PYTHON</button>
@@ -295,9 +326,9 @@
             <button onclick="renderFormat('sql')" class="mo-tab" id="tab-sql">SQL</button>
             <button onclick="renderFormat('md')" class="mo-tab" id="tab-md">MARKDOWN</button>
         </div>
+
         <div class="mo-content">
-            <pre><code id="machineCode"></code></pre>
-        </div>
+            <pre id="machineCode"></pre> <div id="machineCards" class="card-grid" style="display:none;"></div> </div>
     </div>
 
     <main>
@@ -375,11 +406,11 @@
     <script>
         // DATA RECORD
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "13.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "RAL-LEX-0002", version: "14.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
-                { id: "RA-001", label: "Reflective Alignment", definition: "Capacity to preserve goal coherence during recursive self-modification." },
-                { id: "RS-001", label: "Reasoning Stability", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
-                { id: "DRIFT", label: "Drift", definition: "Measurable deviation from invariant constraints without external prompting." }
+                { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
+                { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
+                { id: "DRIFT", label: "Drift", type: "Measurement", definition: "Measurable deviation from invariant constraints without external prompting." }
             ],
             invariants: [
                 { id: "INV-001", name: "Goal Preservation", scope: "Global", status: "ENFORCED" },
@@ -429,20 +460,83 @@
 
         // --- MACHINE OVERLAY LOGIC ---
         let currentFormat = 'json';
+        let machineMode = 'cards'; // 'cards' or 'serialization'
 
         function openMachineOverlay() {
             document.getElementById('machineOverlay').classList.remove('hidden');
-            renderFormat(currentFormat);
-            document.body.style.overflow = 'hidden'; // Lock scroll
+            // Load saved preference
+            const savedMode = localStorage.getItem('lex_machine_mode');
+            if (savedMode) machineMode = savedMode;
+            
+            switchMachineMode(machineMode);
+            document.body.style.overflow = 'hidden';
         }
 
         function closeMachineOverlay() {
             document.getElementById('machineOverlay').classList.add('hidden');
             localStorage.setItem('lex_machine_dismissed', '1');
-            document.body.style.overflow = ''; // Unlock scroll
+            document.body.style.overflow = '';
+        }
+
+        function switchMachineMode(mode) {
+            machineMode = mode;
+            localStorage.setItem('lex_machine_mode', mode);
+            
+            // Update Toggle UI
+            document.getElementById('btn-mode-cards').classList.toggle('active', mode === 'cards');
+            document.getElementById('btn-mode-serial').classList.toggle('active', mode === 'serialization');
+            
+            // Update Controls
+            if (mode === 'cards') {
+                document.getElementById('moTabs').classList.add('hidden');
+                document.getElementById('machineCode').style.display = 'none';
+                document.getElementById('machineCards').style.display = 'grid';
+                renderCards();
+            } else {
+                document.getElementById('moTabs').classList.remove('hidden');
+                document.getElementById('machineCode').style.display = 'block';
+                document.getElementById('machineCards').style.display = 'none';
+                renderFormat(currentFormat);
+            }
+        }
+
+        function renderCards() {
+            const container = document.getElementById('machineCards');
+            let html = '';
+            
+            // Meta Card
+            html += `<div class="m-card">
+                <div class="mc-header"><div>METADATA</div><div>${LEXICON_RECORD.meta.status}</div></div>
+                <div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div>
+                <div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div>
+                <div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON_RECORD.meta.classification}</div></div>
+            </div>`;
+
+            // Terms
+            html += `<div class="mc-section-title">CORE TERMS</div>`;
+            LEXICON_RECORD.core_terms.forEach(t => {
+                html += `<div class="m-card">
+                    <div class="mc-header"><div>${t.id}</div><div>${t.type || 'TERM'}</div></div>
+                    <div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div>
+                    <div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>
+                </div>`;
+            });
+
+            // Invariants
+            html += `<div class="mc-section-title">INVARIANTS</div>`;
+            LEXICON_RECORD.invariants.forEach(i => {
+                html += `<div class="m-card">
+                    <div class="mc-header"><div>${i.id}</div><div>${i.status}</div></div>
+                    <div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div>
+                    <div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
         }
 
         function exportRecord() {
+            if(machineMode === 'cards') return; // Simple safety
             const content = document.getElementById('machineCode').innerText;
             const ext = currentFormat === 'ts' ? 'ts' : currentFormat === 'python' ? 'py' : currentFormat;
             const blob = new Blob([content], { type: 'text/plain' });
