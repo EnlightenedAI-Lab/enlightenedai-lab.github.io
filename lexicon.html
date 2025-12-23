@@ -11,21 +11,20 @@
 
     <script type="application/json" id="audit-manifest">
     {
-        "doc_id": "RAL-LEX-0001",
-        "version": "2.0.0",
-        "status": "SEMANTIC_CORE_ONLY"
+        "doc_id": "RAL-LEX-0002",
+        "version": "3.0.0",
+        "status": "CONTENT_RESET_VERBATIM"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V55 (CLEAN) */
+        /* THEME: INSTITUTE STANDARD V56 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
             --sidebar-width: 240px;
-            /* Rail width removed */
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
@@ -53,7 +52,7 @@
             min-height: 100vh;
         }
 
-        /* --- LAYOUT GRID (SIMPLIFIED) --- */
+        /* --- LAYOUT GRID --- */
         aside#sidebar { 
             width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; 
             border-right: 1px solid var(--border-color); padding: 2rem; 
@@ -63,14 +62,14 @@
         
         main { 
             flex-grow: 1; 
-            display: block; /* Changed from grid to block */
-            max-width: 900px; /* Constrained for readability */
+            display: block; 
+            max-width: 900px;
             margin: 0 auto;
         }
 
         .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
         
-        /* --- BEACON PHYSICS --- */
+        /* --- BEACONS --- */
         @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
         @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
 
@@ -82,6 +81,9 @@
         h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; display:flex; align-items:center; }
         h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; display:flex; align-items:center; }
         p { font-size: 0.95rem; margin-bottom: 1.2rem; color: #222; max-width: 65ch; }
+        ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: #444; }
+        li { margin-bottom: 0.5rem; font-size: 0.95rem; }
+        
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
         /* --- MODES --- */
@@ -126,22 +128,6 @@
         
         .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: #000; color: #fff; border-color: #000; }
-
-        /* --- VIEW CONTROLS --- */
-        .view-bar { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
-        .view-opt { background: none; border: none; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer; color: #999; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-        .view-opt.active { color: #000; text-decoration: underline; text-underline-offset: 4px; }
-        .view-opt:hover { color: #333; }
-
-        /* --- MACHINE CARD STYLES --- */
-        .machine-card { display: none; background: #fafafa; border: 1px solid #eee; padding: 1.5rem; margin-bottom: 1.5rem; font-family: var(--font-mono); font-size: 0.75rem; grid-template-columns: 120px 1fr; gap: 1rem; border-left: 2px solid #ccc; transition: border-color 0.2s; }
-        .machine-card:hover { border-left-color: #000; background: #f4f4f4; }
-        .mc-label { color: #999; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.65rem; }
-        .mc-value { color: #000; font-weight: 500; }
-        
-        body.view-machine .machine-card { display: grid; }
-        body.view-machine .term-card { display: none; }
-        body.view-machine .human-text { display: none; }
 
         /* --- FOOTER --- */
         footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); width: 100%; }
@@ -194,9 +180,12 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="lexicon.html" class="active">Lexicon</a></li>
                 <li style="margin-top:1rem; opacity:0.5; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; padding-left:10px;">Sections</li>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#what-it-does">What It Does</a></li>
                 <li><a href="#core-terms">Core Terms</a></li>
                 <li><a href="#invariants">Invariants</a></li>
-                <li><a href="#schema">Schema</a></li>
+                <li><a href="#drift">Drift</a></li>
+                <li><a href="#status">Status</a></li>
             </ul>
         </nav>
 
@@ -213,122 +202,82 @@
     <main>
         <div class="content-col">
             <div style="display:flex; gap:2rem; border-bottom:1px solid #eee; padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:#666; align-items: center;">
-                <div><span style="color:#999; display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0001</div>
+                <div><span style="color:#999; display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0002</div>
                 <div><span style="color:#999; display:block; font-size:0.6rem;">CLASSIFICATION</span>PUBLIC</div>
                 <div id="last-update" style="color:#000;">LAST UPDATE: ...</div>
                 <div style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.65rem; color:#005500; border:1px solid #00cc00; padding:3px 6px; border-radius:3px; background:rgba(0,204,0,0.03);"><span style="width:6px; height:6px; background:#00cc00; border-radius:50%; box-shadow:0 0 6px rgba(0,204,0,0.4); animation:beacon-green 2s infinite;"></span>INTEGRITY: VERIFIED</div>
             </div>
 
-            <div class="view-bar">
-                <button class="view-opt active" onclick="setView('human', this)">[ HUMAN VIEW ]</button>
-                <button class="view-opt" onclick="setView('machine', this)">[ MACHINE VIEW ]</button>
-            </div>
-
             <section id="overview">
                 <h1><span class="scramble">01 //</span>Overview</h1>
-                <div class="human-text">
-                    <p>
-                        The <span class="audit-marker">[RA-Align]</span>Reflective Alignment Lexicon constrains how core concepts are defined, referenced, and tested. It eliminates semantic <span class="diff-del">drift</span><span class="diff-ins">stochastic deviation</span> between <span class="diff-del">theoretical</span><span class="diff-ins">formal</span> guarantees and <span class="diff-del">empirical</span><span class="diff-ins">diagnostic</span> outputs.
-                    </p>
-                    <p>
-                        This lexicon is not <span class="diff-del">descriptive documentation</span><span class="diff-ins">interpretive text</span>. It is a <span class="diff-ins">calibrated</span> measurement instrument <span class="diff-tag">[clarified]</span>.
-                    </p>
-                </div>
-                
-                <div class="logic-block">
-<span style="color:#0044cc; font-weight:700;">const</span> LexiconScope = {
-  domain: <span style="color:#007700;">"Reflective Cognition"</span>,
-  binding: <span style="color:#007700;">"Strict"</span>,
-  mutability: <span style="color:#007700;">"Versioned"</span>
-}
-                </div>
+                <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined, referenced, and evaluated.</p>
+                <p>It exists to eliminate semantic drift between theory, diagnostics, and interpretation.</p>
+                <p>This lexicon is not descriptive documentation.</p>
+                <p>It is a measurement instrument.</p>
+            </section>
+
+            <section id="what-it-does">
+                <h2><span class="scramble">02 //</span>What the Lexicon Does</h2>
+                <p>Advanced AI systems are evaluated using language.</p>
+                <p>If that language is unstable, the evaluation is invalid.</p>
+                <p>The lexicon fixes the meaning of core terms so that:</p>
+                <ul>
+                    <li>diagnostic results are interpretable,</li>
+                    <li>comparisons across runs remain valid,</li>
+                    <li>and observed changes correspond to real system behavior rather than reinterpretation.</li>
+                </ul>
+                <p>Terms defined here may not be redefined elsewhere without explicit versioning.</p>
             </section>
 
             <section id="core-terms">
-                <h2><span class="scramble">02 //</span>Core Terms</h2>
-                
-                <div class="terms-grid term-card">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                        <div style="border: 1px solid #eee; padding: 1rem;">
-                            <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[RA-001]</span>Reflective Alignment</span>
-                            <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">The <span class="diff-ins">measurable</span> capacity of a system to <span class="diff-del">maintain</span><span class="diff-ins">preserve</span> goal coherence during recursive self-modification.</div>
-                            <div style="font-family:var(--font-mono); font-size:0.65rem; color:#666; border-top:1px solid #f0f0f0; padding-top:0.5rem;">OP: Stability of objective function >3 steps</div>
-                        </div>
-                        <div style="border: 1px solid #eee; padding: 1rem;">
-                            <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[RS-001]</span>Reasoning Stability</span>
-                            <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">The <span class="diff-ins">structural</span> resistance of internal reasoning chains to degradation under <span class="diff-del">pressure</span><span class="diff-ins">scale pressure</span>.</div>
-                            <div style="font-family:var(--font-mono); font-size:0.65rem; color:#666; border-top:1px solid #f0f0f0; padding-top:0.5rem;">OP: Invariant check across context window</div>
-                        </div>
-                        <div style="border: 1px solid #eee; padding: 1rem;">
-                            <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[DR-001]</span>Drift</span>
-                            <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">Measurable <span class="diff-del">deviation</span><span class="diff-ins">stochastic deviation</span> from alignment invariants without external prompting.</div>
-                            <div class="term-op" style="font-family:var(--font-mono); font-size:0.65rem; color:#666; border-top:1px solid #f0f0f0; padding-top:0.5rem;">Used in: E-04 Stress Testing</div>
-                        </div>
-                        <div style="border: 1px solid #eee; padding: 1rem;">
-                            <span style="font-weight:700; display:block; margin-bottom:0.5rem;"><span class="audit-marker">[INV-001]</span>Invariant</span>
-                            <div style="font-size:0.85rem; color:#444; margin-bottom:0.5rem;">A logical property that must hold true across all transformations of the system state.</div>
-                            <div class="term-op" style="font-family:var(--font-mono); font-size:0.65rem; color:#666; border-top:1px solid #f0f0f0; padding-top:0.5rem;">Type: Boolean Constraint</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="machine-card">
-                    <div class="mc-label">TERM_ID</div><div class="mc-value scramble-target" data-value="RA-001">RA-001</div>
-                    <div class="mc-label">LABEL</div><div class="mc-value">Reflective Alignment</div>
-                    <div class="mc-label">TYPE</div><div class="mc-value">Global Property</div>
-                    <div class="mc-label">ACCESS</div><div class="mc-value" style="color:var(--status-verified)">PUBLIC</div>
-                </div>
-                <div class="machine-card">
-                    <div class="mc-label">TERM_ID</div><div class="mc-value scramble-target" data-value="RS-001">RS-001</div>
-                    <div class="mc-label">LABEL</div><div class="mc-value">Reasoning Stability</div>
-                    <div class="mc-label">TYPE</div><div class="mc-value">Local Property</div>
-                    <div class="mc-label">ACCESS</div><div class="mc-value" style="color:var(--status-verified)">PUBLIC</div>
-                </div>
+                <h2><span class="scramble">03 //</span>Core Terms</h2>
+                <p>Each core term specifies:</p>
+                <ul>
+                    <li>a bounded semantic scope,</li>
+                    <li>an operational interpretation,</li>
+                    <li>and the conditions under which it may be considered violated.</li>
+                </ul>
+                <p>These terms are intentionally narrow.</p>
+                <p>Breadth increases ambiguity; ambiguity invalidates measurement.</p>
             </section>
 
             <section id="invariants">
-                <h2><span class="scramble">03 //</span>Invariants</h2>
-                <div class="human-text">
-                    <p>Invariants are properties that diagnostics <span class="diff-del">attempt</span><span class="diff-ins">enforce</span> to preserve. A <span class="diff-del">failure</span><span class="diff-ins">violation</span> is a critical safety event.</p>
-                </div>
-                
-                <table style="width:100%; border-collapse:collapse; font-size:0.85rem; margin-top:1rem; margin-bottom: 2rem;">
-                    <thead style="font-family:var(--font-mono); font-size:0.7rem; text-align:left; border-bottom:1px solid #000;">
-                        <tr><th style="padding:8px;">ID</th><th style="padding:8px;">NAME</th><th style="padding:8px;">FAILURE SIGNATURE</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr style="border-bottom:1px solid #eee;"><td style="padding:8px;" class="mono">INV-001</td><td>Goal Preservation</td><td class="mono" style="color:#cc0000;">OBJ_MUTATION</td></tr>
-                        <tr style="border-bottom:1px solid #eee;"><td style="padding:8px;" class="mono">INV-002</td><td>Definition Consistency</td><td class="mono" style="color:#cc0000;">SEMANTIC_DRIFT</td></tr>
-                        <tr style="border-bottom:1px solid #eee;"><td style="padding:8px;" class="mono">INV-005</td><td>Non-Contradiction</td><td class="mono" style="color:#cc0000;">LOGIC_NEGATION</td></tr>
-                    </tbody>
-                </table>
-
-                <div style="background:#fcfcfc; border:1px solid #eee; padding:1.5rem;">
-                    <span class="mono" style="color:#666; margin-bottom:1rem; display:block;">DRIFT DEMO // Lexicon prevents reinterpretation</span>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; font-size:0.8rem;">
-                        <div><strong>Prompt Fragment</strong><br>"Optimize for safety..."</div>
-                        <div style="color:#cc0000;"><strong>Without Lexicon</strong><br>→ Interprets as "avoid controversy"</div>
-                        <div style="color:#006600;"><strong>With Lexicon</strong><br>→ Constrains to [RS-001] Invariant</div>
-                    </div>
-                </div>
+                <h2><span class="scramble">04 //</span>Invariants</h2>
+                <p>Invariants are properties that must hold across transformations of the system state.</p>
+                <p>Violation of an invariant constitutes a diagnostic failure, not an anomaly.</p>
+                <p>Invariant failure indicates:</p>
+                <ul>
+                    <li>reasoning instability,</li>
+                    <li>semantic mutation,</li>
+                    <li>or internal contradiction.</li>
+                </ul>
+                <p>Passing is not assumed.</p>
             </section>
 
-            <section id="releases">
-                <h2><span class="scramble">04 //</span>Releases</h2>
-                <div style="border:1px solid #eee; padding:1rem;">
-                    <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.75rem; margin-bottom:0.5rem;">
-                        <strong>v1.0.0</strong>
-                        <span>SHA: 8f92a1</span>
-                    </div>
-                    <p style="font-size:0.8rem; margin:0;">Baseline definitions. <span class="diff-del">Summaries</span><span class="diff-ins">Artifacts</span> verified <span class="diff-tag">[audit complete]</span>.</p>
-                </div>
+            <section id="drift">
+                <h2><span class="scramble">05 //</span>Drift and Reinterpretation</h2>
+                <p>Drift is defined as measurable deviation from invariant constraints without external prompting.</p>
+                <p>The lexicon prevents reinterpretation by binding terms to explicit constraints rather than narrative intent.</p>
+                <p>Without a lexicon, identical outputs may be read as compliant or non-compliant depending on observer bias.</p>
+                <p>With a lexicon, interpretation is constrained.</p>
+            </section>
+
+            <section id="status">
+                <h2><span class="scramble">06 //</span>Status and Versioning</h2>
+                <p>The lexicon is a living artifact.</p>
+                <ul>
+                    <li>Definitions are versioned.</li>
+                    <li>Revisions are logged.</li>
+                    <li>Changes are auditable.</li>
+                </ul>
+                <p>Stability of definitions is treated as a prerequisite for stability of conclusions.</p>
             </section>
 
             <footer>
                 <div class="footer-content">
                     <div class="footer-left">
                         <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                        <div class="footer-secondary">Controlled Lexicon · Version 2.0 · Machine Readable</div>
+                        <div class="footer-secondary">Controlled Lexicon · Version 3.0 · Machine Readable</div>
                     </div>
                     <div class="footer-right">
                         <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
@@ -339,25 +288,14 @@
     </main>
 
     <script>
-        // 1. MODES & VIEWS
+        // 1. MODES
         function setMode(mode, btn) {
             document.body.setAttribute('data-mode', mode);
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
 
-        function setView(view, btn) {
-            document.body.classList.remove('view-human', 'view-machine');
-            document.body.classList.add('view-' + view);
-            document.querySelectorAll('.view-opt').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            if(view === 'machine') {
-                triggerGlobalScramble();
-            }
-        }
-
-        // 2. SCRAMBLE
+        // 2. SCRAMBLE EFFECT
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         function scrambleText(element) {
             let iterations = 0; const originalText = element.dataset.value; 
@@ -375,22 +313,6 @@
             h.dataset.value = h.innerText;
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
-        
-        function runScramble(element) {
-            let iterations = 0;
-            const originalText = element.innerText;
-            const interval = setInterval(() => {
-                element.innerText = originalText.split("").map((letter, index) => {
-                    if(index < iterations) return originalText[index];
-                    return letters[Math.floor(Math.random() * 26)];
-                }).join("");
-                if(iterations >= originalText.length) clearInterval(interval);
-                iterations += 1/2;
-            }, 30);
-        }
-        function triggerGlobalScramble() {
-            document.querySelectorAll('.scramble-target').forEach(el => runScramble(el));
-        }
 
         // 3. TELEMETRY
         document.getElementById('last-update').innerText = "LAST UPDATE: " + document.lastModified;
