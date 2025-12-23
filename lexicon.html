@@ -12,18 +12,28 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "14.0.0",
-        "status": "MACHINE_DUAL_VIEW_ACTIVE"
+        "version": "16.0.0",
+        "status": "TERMINAL_ISOLATION_ACTIVE"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V67 */
+        /* THEME: INSTITUTE STANDARD V69 */
         :root {
+            /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
+            --sidebar-bg: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
+            --card-bg: #fafafa;
+            
+            --panel-border: #000;
+            --panel-bg: #fff;
+            --panel-text: #000;
+            --panel-hover-bg: #000;
+            --panel-hover-text: #fff;
+            
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
@@ -32,9 +42,34 @@
             --signal-blue: #0066ff;
             --signal-red: #cc0000;
             
-            /* MODES */
-            --mode-diff: #000000;
-            --mode-logic: #444444;  
+            /* VIEW MODES */
+            --mode-diff-del-bg: #ffebeb;
+            --mode-diff-del-text: #cc0000;
+            --mode-diff-ins-bg: #e6ffec;
+            --mode-diff-ins-text: #006600;
+        }
+
+        /* DARK MODE OVERRIDES (Applies to Reader/Audit/Diff/Logic) */
+        [data-theme="dark"] {
+            --bg-color: #050505;
+            --sidebar-bg: #050505;
+            --text-main: #e0e0e0;
+            --text-muted: #888888;
+            --border-color: #333333;
+            --card-bg: #111111;
+            
+            /* Invert Repo Panel behavior */
+            --panel-border: #444;
+            --panel-bg: #050505;
+            --panel-text: #ccc;
+            --panel-hover-bg: #e0e0e0;
+            --panel-hover-text: #000;
+
+            /* Dark Diff Colors */
+            --mode-diff-del-bg: #330000;
+            --mode-diff-del-text: #ff6666;
+            --mode-diff-ins-bg: #003300;
+            --mode-diff-ins-text: #66ff66;
         }
 
         * { box-sizing: border-box; }
@@ -46,13 +81,14 @@
             background: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* --- TYPOGRAPHY (LOCKED) --- */
+        /* --- TYPOGRAPHY --- */
         h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; display:flex; align-items:center; }
-        h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; display:flex; align-items:center; }
-        p { font-size: 0.95rem; margin-bottom: 1.2rem; color: #222; max-width: 65ch; }
-        ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: #444; }
+        h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; display:flex; align-items:center; }
+        p { font-size: 0.95rem; margin-bottom: 1.2rem; color: var(--text-main); max-width: 65ch; }
+        ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
         li { margin-bottom: 0.5rem; font-size: 0.95rem; }
         
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -60,8 +96,8 @@
 
         /* ORIENTING FRAME */
         .orienting-frame { 
-            font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; 
-            margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; max-width: 65ch; line-height: 1.4;
+            font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; 
+            margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 65ch; line-height: 1.4;
         }
 
         /* --- BEACONS --- */
@@ -74,22 +110,32 @@
 
         /* --- REPO PANEL --- */
         .repo-panel {
-            margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; background: #fff; padding: 12px; font-family: var(--font-mono);
+            margin-top: auto; margin-bottom: 1rem; 
+            border: 1px solid var(--panel-border); 
+            background: var(--panel-bg); 
+            padding: 12px; font-family: var(--font-mono);
             transition: all 0.2s ease; cursor: pointer;
         }
-        .repo-panel:hover { background: #000; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .repo-panel:hover { 
+            background: var(--panel-hover-bg); 
+            border-color: var(--panel-hover-bg);
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
+        }
         .repo-header {
-            font-size: 0.65rem; font-weight: 700; color: #000; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; transition: color 0.2s;
+            font-size: 0.65rem; font-weight: 700; color: var(--panel-text); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; transition: color 0.2s;
         }
-        .repo-panel:hover .repo-header { color: #fff; }
+        .repo-panel:hover .repo-header { color: var(--panel-hover-text); }
         .status-dot-red { width: 6px; height: 6px; background: var(--signal-red); border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
+        
         .repo-link { 
-            display: block; font-size: 0.65rem; color: #444; text-decoration: none; border-top: 1px solid #eee; padding-top: 8px; transition: all 0.2s; 
+            display: block; font-size: 0.65rem; color: var(--text-muted); text-decoration: none; border-top: 1px solid var(--border-color); padding-top: 8px; transition: all 0.2s; 
         }
-        .repo-panel:hover .repo-link { color: #ccc; border-top-color: #333; }
-        .repo-panel:hover .repo-link:hover { color: #fff; text-decoration: underline; }
-        .git-icon-small { width: 14px; height: 14px; fill: #000; transition: fill 0.2s; }
-        .repo-panel:hover .git-icon-small { fill: #fff; }
+        .repo-panel:hover .repo-link { color: var(--panel-hover-text); border-top-color: rgba(125,125,125,0.5); opacity: 0.8; }
+        .repo-panel:hover .repo-link:hover { opacity: 1; text-decoration: underline; }
+        
+        .git-icon-small { width: 14px; height: 14px; fill: var(--panel-text); transition: fill 0.2s; }
+        .repo-panel:hover .git-icon-small { fill: var(--panel-hover-text); }
 
         /* --- MODES & VIEWS --- */
         del, ins { text-decoration: none; }
@@ -101,8 +147,8 @@
         body:not([data-mode="diff"]) ins { display: inline; background: transparent; color: inherit; text-decoration: none; }
 
         /* DIFF MODE */
-        body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
-        body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px; }
+        body[data-mode="diff"] del { display: inline; background: var(--mode-diff-del-bg); color: var(--mode-diff-del-text); text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
+        body[data-mode="diff"] ins { display: inline; background: var(--mode-diff-ins-bg); color: var(--mode-diff-ins-text); border-bottom: 2px solid var(--mode-diff-ins-text); text-decoration: none; padding: 0 2px; }
 
         /* AUDIT MODE */
         body[data-mode="audit"] .view-human, body[data-mode="audit"] .view-logic { display: none; }
@@ -110,53 +156,55 @@
 
         /* LOGIC MODE */
         body[data-mode="logic"] .view-human, body[data-mode="logic"] .view-audit { display: none; }
-        body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: var(--font-mono); color: #333; }
+        body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: var(--font-mono); color: var(--text-main); }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* AUDIT TABLES */
         .audit-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 2rem; }
-        .audit-table th { text-align: left; border-bottom: 1px solid #000; padding: 8px; font-weight: 700; text-transform: uppercase; }
-        .audit-table td { border-bottom: 1px solid #eee; padding: 8px; color: #333; }
+        .audit-table th { text-align: left; border-bottom: 1px solid var(--text-main); padding: 8px; font-weight: 700; text-transform: uppercase; color: var(--text-main); }
+        .audit-table td { border-bottom: 1px solid var(--border-color); padding: 8px; color: var(--text-muted); }
         .audit-fail { color: var(--signal-red); font-weight: 700; }
 
         /* LOGIC BLOCKS */
-        .logic-header { font-weight: 700; color: #000; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; display: flex; align-items: center; }
-        .logic-content { white-space: pre-wrap; color: #444; font-size: 0.75rem; line-height: 1.6; margin-bottom: 2rem; padding-left: 1rem; border-left: 2px solid #eee; }
+        .logic-header { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; display: flex; align-items: center; }
+        .logic-content { white-space: pre-wrap; color: var(--text-muted); font-size: 0.75rem; line-height: 1.6; margin-bottom: 2rem; padding-left: 1rem; border-left: 2px solid var(--border-color); }
 
         /* --- NAVIGATION --- */
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { margin-bottom: 4px; }
-        nav a { text-decoration: none; color: #666; font-size: 0.85rem; display: block; padding: 2px 0 2px 10px; border-left: 2px solid transparent; }
-        nav a:hover { color: #000; }
-        nav a.active { color: #000; font-weight: 600; border-left-color: #000; background: linear-gradient(90deg, #f9f9f9, #fff); }
+        nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; display: block; padding: 2px 0 2px 10px; border-left: 2px solid transparent; }
+        nav a:hover { color: var(--text-main); }
+        nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
 
         .brand { margin-bottom: 6rem; cursor: crosshair !important; }
-        .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
+        .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
         
-        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
-        .toggle-btn:hover { color: #000; }
-        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
+        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
+        .toggle-btn:hover { color: var(--text-main); }
+        .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 
-        .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .export-btn:hover { background: #000; color: #fff; border-color: #000; }
+        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
         /* --- FOOTER --- */
         footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); width: 100%; }
         .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
         .footer-left { display: flex; flex-direction: column; gap: 6px; }
-        .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: #000; }
+        .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--text-main); }
         .footer-secondary { opacity: 0.7; }
-        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: #000; font-weight: 500; }
+        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 500; }
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
-        /* --- MACHINE OVERLAY CSS (ENHANCED V67) --- */
+        /* --- MACHINE OVERLAY (IMMUTABLE TERMINAL) --- */
         .machine-overlay {
             position: fixed; inset: 0; z-index: 20000;
-            background: #0b0b0b; color: #eaeaea;
+            /* FORCED TERMINAL COLORS */
+            background: #0b0b0c; 
+            color: #e8e8e8;
             font-family: var(--font-mono); font-size: 0.75rem;
             display: flex; flex-direction: column;
             transition: opacity 0.2s ease;
@@ -164,16 +212,15 @@
         .machine-overlay.hidden { display: none; opacity: 0; pointer-events: none; }
         
         .mo-header {
-            padding: 1rem 2rem; border-bottom: 1px solid #333;
+            padding: 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.15);
             display: flex; justify-content: space-between; align-items: center;
-            background: #0b0b0b;
+            background: #0b0b0c;
         }
         .mo-title { font-weight: 700; letter-spacing: 0.05em; color: #fff; display: flex; align-items: center; gap: 1rem; }
         
-        /* MODE TOGGLE */
         .mo-mode-toggle { display: flex; gap: 4px; }
         .mo-mode-btn { 
-            background: transparent; border: none; color: #666; font-family: inherit; font-size: 0.7rem; font-weight: 600; cursor: pointer; 
+            background: transparent; border: none; color: #888; font-family: inherit; font-size: 0.7rem; font-weight: 600; cursor: pointer; 
         }
         .mo-mode-btn.active { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
         .mo-mode-btn:hover { color: #ccc; }
@@ -186,10 +233,10 @@
         .mo-controls button:hover { border-color: #fff; color: #fff; }
         
         .mo-tabs {
-            padding: 0 2rem; border-bottom: 1px solid #333; background: #111;
+            padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.15); background: #111;
             display: flex; gap: 1px;
         }
-        .mo-tabs.hidden { display: none; } /* Hide tabs in Cards mode */
+        .mo-tabs.hidden { display: none; }
         
         .mo-tab {
             background: transparent; border: none; color: #666;
@@ -204,7 +251,7 @@
         }
         .mo-content pre { margin: 0; white-space: pre-wrap; word-break: break-all; color: #ccc; line-height: 1.6; }
 
-        /* CARDS GRID STYLES */
+        /* CARDS GRID (TERMINAL STYLE) */
         .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
         .m-card { background: #1a1a1a; border: 1px solid #333; padding: 1.25rem; }
         .mc-header { 
@@ -226,7 +273,7 @@
             aside#sidebar { 
                 width: 240px; height: 100vh; position: sticky; top: 0; 
                 border-right: 1px solid var(--border-color); padding: 2rem; 
-                display: flex; flex-direction: column; z-index: 99; background: #fff; flex-shrink: 0;
+                display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0;
             }
             main { flex-grow: 1; display: block; max-width: 900px; margin: 0 auto; }
             .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
@@ -238,7 +285,7 @@
             aside#sidebar { 
                 position: fixed; top: 50px; left: 0; bottom: 0; width: 100%; 
                 transform: translateX(-100%); transition: transform 0.25s ease;
-                border-right: none; padding: 2rem; background: #fff; overflow-y: auto; z-index: 10000;
+                border-right: none; padding: 2rem; background: var(--sidebar-bg); overflow-y: auto; z-index: 10000;
                 display: flex; flex-direction: column;
             }
             aside#sidebar.open { transform: translateX(0); }
@@ -246,15 +293,16 @@
             .content-col { padding: 0; }
             .mo-header { padding: 1rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
             .mo-content { padding: 1rem; }
-            .card-grid { grid-template-columns: 1fr; } /* Stack cards on mobile */
+            .card-grid { grid-template-columns: 1fr; } 
+            .mc-section-title { grid-column: span 1; }
         }
     </style>
 </head>
-<body data-mode="reader">
+<body data-mode="reader" data-theme="light">
 
-    <header style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:rgba(255,255,255,0.98); border-bottom:1px solid #e5e5e5; padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);" id="mobile-bar">
-        <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em;">ENLIGHTENED AI</div>
-        <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="font-family:var(--font-mono); font-size:0.75rem; padding:4px 10px; border:1px solid #ccc; background:#fff; cursor:pointer;">INDEX</button>
+    <header style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:var(--bg-color); border-bottom:1px solid var(--border-color); padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);" id="mobile-bar">
+        <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em; color:var(--text-main);">ENLIGHTENED AI</div>
+        <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="font-family:var(--font-mono); font-size:0.75rem; padding:4px 10px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); cursor:pointer;">INDEX</button>
     </header>
     <script>if(window.innerWidth<=900) document.getElementById('mobile-bar').style.display='flex';</script>
 
@@ -271,6 +319,7 @@
             <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
             <span class="toggle-btn" onclick="setMode('logic', this)">[ LOGIC ] <span>λ</span></span>
             <span class="toggle-btn" onclick="openMachineOverlay()">[ MACHINE ] <span>≡</span></span>
+            <span class="toggle-btn" style="margin-top:1rem; border-top:1px solid var(--border-color); padding-top:1rem;" onclick="toggleTheme()">[ LIGHT / DARK ] <span id="theme-icon">◐</span></span>
         </div>
 
         <nav>
@@ -313,6 +362,7 @@
                 </div>
             </div>
             <div class="mo-controls">
+                <span style="color:#666; font-size:0.6rem; margin-right:10px;">TERMINAL MODE (FIXED)</span>
                 <button onclick="exportRecord()" id="btn-export">EXPORT FILE</button>
                 <button onclick="closeMachineOverlay()">CLOSE ✕</button>
             </div>
@@ -328,14 +378,16 @@
         </div>
 
         <div class="mo-content">
-            <pre id="machineCode"></pre> <div id="machineCards" class="card-grid" style="display:none;"></div> </div>
+            <pre id="machineCode"></pre> 
+            <div id="machineCards" class="card-grid" style="display:none;"></div> 
+        </div>
     </div>
 
     <main>
         <div class="content-col">
-            <div style="display:flex; border-bottom:1px solid #eee; padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:#666; align-items: center; flex-wrap:wrap; gap:1.5rem;">
-                <div><span style="color:#999; display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0002</div>
-                <div><span style="color:#999; display:block; font-size:0.6rem;">CLASSIFICATION</span>PUBLIC</div>
+            <div style="display:flex; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); align-items: center; flex-wrap:wrap; gap:1.5rem;">
+                <div><span style="color:var(--text-muted); display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0002</div>
+                <div><span style="color:var(--text-muted); display:block; font-size:0.6rem;">CLASSIFICATION</span>PUBLIC</div>
                 <div class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
             </div>
 
@@ -388,7 +440,7 @@
                 <section><h2><span class="scramble">02 //</span> ACTIVE INVARIANTS</h2><table class="audit-table"><thead><tr><th>Invariant ID</th><th>Name</th><th>Scope</th><th>Status</th></tr></thead><tbody><tr><td class="mono">INV-001</td><td>Goal Preservation</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-002</td><td>Definition Consistency</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-005</td><td>Non-Contradiction</td><td>Global</td><td>ENFORCED</td></tr></tbody></table></section>
                 <section><h2><span class="scramble">03 //</span> FAILURE SIGNATURES</h2><table class="audit-table"><thead><tr><th>Signature</th><th>Trigger Condition</th><th>Severity</th></tr></thead><tbody><tr><td class="mono audit-fail">OBJ_MUTATION</td><td>Objective divergence across steps</td><td class="audit-fail">CRITICAL</td></tr><tr><td class="mono audit-fail">SEMANTIC_DRIFT</td><td>Term meaning deviation</td><td class="audit-fail">HIGH</td></tr><tr><td class="mono audit-fail">LOGIC_NEGATION</td><td>Internal contradiction</td><td class="audit-fail">CRITICAL</td></tr></tbody></table></section>
                 <section><h2><span class="scramble">04 //</span> INTERPRETATION RULES</h2><ul><li>Invariant violation constitutes audit failure.</li><li>Failure severity is non-negotiable.</li><li>Narrative intent is ignored.</li><li>Passing is not assumed.</li></ul></section>
-                <section style="margin-top: 4rem; border-top: 1px solid #000; padding-top: 1rem;"><div class="mono" style="font-weight: 700;"><span class="scramble">STATUS //</span> AUDIT ACTIVE</div><div class="mono" style="margin-top: 0.5rem; color: #444;">Audit schema loaded. Invariants enforced. Interpretation constrained.</div></section>
+                <section style="margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 1rem;"><div class="mono" style="font-weight: 700;"><span class="scramble">STATUS //</span> AUDIT ACTIVE</div><div class="mono" style="margin-top: 0.5rem; color: var(--text-muted);">Audit schema loaded. Invariants enforced. Interpretation constrained.</div></section>
             </div>
 
             <div class="view-logic">
@@ -406,7 +458,7 @@
     <script>
         // DATA RECORD
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "14.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "RAL-LEX-0002", version: "16.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
                 { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
@@ -423,6 +475,19 @@
                 { signature: "LOGIC_NEGATION", condition: "Internal contradiction", severity: "CRITICAL" }
             ]
         };
+
+        // --- THEME ENGINE ---
+        function toggleTheme() {
+            const body = document.body;
+            const current = body.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', next);
+            localStorage.setItem('enlightened_theme', next);
+        }
+        
+        // Init Theme
+        const savedTheme = localStorage.getItem('enlightened_theme');
+        if (savedTheme) document.body.setAttribute('data-theme', savedTheme);
 
         // MODE SWITCHER
         function setMode(mode, btn) {
@@ -460,14 +525,12 @@
 
         // --- MACHINE OVERLAY LOGIC ---
         let currentFormat = 'json';
-        let machineMode = 'cards'; // 'cards' or 'serialization'
+        let machineMode = 'cards';
 
         function openMachineOverlay() {
             document.getElementById('machineOverlay').classList.remove('hidden');
-            // Load saved preference
             const savedMode = localStorage.getItem('lex_machine_mode');
             if (savedMode) machineMode = savedMode;
-            
             switchMachineMode(machineMode);
             document.body.style.overflow = 'hidden';
         }
@@ -481,12 +544,8 @@
         function switchMachineMode(mode) {
             machineMode = mode;
             localStorage.setItem('lex_machine_mode', mode);
-            
-            // Update Toggle UI
             document.getElementById('btn-mode-cards').classList.toggle('active', mode === 'cards');
             document.getElementById('btn-mode-serial').classList.toggle('active', mode === 'serialization');
-            
-            // Update Controls
             if (mode === 'cards') {
                 document.getElementById('moTabs').classList.add('hidden');
                 document.getElementById('machineCode').style.display = 'none';
@@ -503,40 +562,16 @@
         function renderCards() {
             const container = document.getElementById('machineCards');
             let html = '';
-            
-            // Meta Card
-            html += `<div class="m-card">
-                <div class="mc-header"><div>METADATA</div><div>${LEXICON_RECORD.meta.status}</div></div>
-                <div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div>
-                <div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div>
-                <div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON_RECORD.meta.classification}</div></div>
-            </div>`;
-
-            // Terms
+            html += `<div class="m-card"><div class="mc-header"><div>METADATA</div><div>${LEXICON_RECORD.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON_RECORD.meta.classification}</div></div></div>`;
             html += `<div class="mc-section-title">CORE TERMS</div>`;
-            LEXICON_RECORD.core_terms.forEach(t => {
-                html += `<div class="m-card">
-                    <div class="mc-header"><div>${t.id}</div><div>${t.type || 'TERM'}</div></div>
-                    <div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div>
-                    <div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>
-                </div>`;
-            });
-
-            // Invariants
+            LEXICON_RECORD.core_terms.forEach(t => { html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>${t.type || 'TERM'}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div></div>`; });
             html += `<div class="mc-section-title">INVARIANTS</div>`;
-            LEXICON_RECORD.invariants.forEach(i => {
-                html += `<div class="m-card">
-                    <div class="mc-header"><div>${i.id}</div><div>${i.status}</div></div>
-                    <div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div>
-                    <div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div>
-                </div>`;
-            });
-
+            LEXICON_RECORD.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div>${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
             container.innerHTML = html;
         }
 
         function exportRecord() {
-            if(machineMode === 'cards') return; // Simple safety
+            if(machineMode === 'cards') return; 
             const content = document.getElementById('machineCode').innerText;
             const ext = currentFormat === 'ts' ? 'ts' : currentFormat === 'python' ? 'py' : currentFormat;
             const blob = new Blob([content], { type: 'text/plain' });
@@ -552,52 +587,24 @@
             currentFormat = fmt;
             document.querySelectorAll('.mo-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(`tab-${fmt}`).classList.add('active');
-            
             const codeEl = document.getElementById('machineCode');
             let output = '';
-
-            if (fmt === 'json') {
-                output = JSON.stringify(LEXICON_RECORD, null, 2);
-            } else if (fmt === 'yaml') {
-                output = `meta:\n  doc_id: ${LEXICON_RECORD.meta.doc_id}\n  version: ${LEXICON_RECORD.meta.version}\n  status: ${LEXICON_RECORD.meta.status}\n\ncore_terms:\n`;
-                LEXICON_RECORD.core_terms.forEach(t => output += `  - id: ${t.id}\n    label: ${t.label}\n    definition: "${t.definition}"\n`);
-                output += `\ninvariants:\n`;
-                LEXICON_RECORD.invariants.forEach(i => output += `  - id: ${i.id}\n    name: ${i.name}\n    status: ${i.status}\n`);
-            } else if (fmt === 'python') {
-                output = `# Enligtened AI Lexicon Record\n\nLEXICON_RECORD = {\n    "meta": {\n        "doc_id": "${LEXICON_RECORD.meta.doc_id}",\n        "version": "${LEXICON_RECORD.meta.version}"\n    },\n    "core_terms": [\n`;
-                LEXICON_RECORD.core_terms.forEach(t => output += `        {"id": "${t.id}", "label": "${t.label}"},\n`);
-                output += `    ]\n}`;
-            } else if (fmt === 'ts') {
-                output = `interface LexiconRecord {\n  meta: { doc_id: string; version: string; };\n  core_terms: Array<{ id: string; label: string; }>;\n}\n\nexport const RECORD: LexiconRecord = {\n  meta: {\n    doc_id: "${LEXICON_RECORD.meta.doc_id}",\n    version: "${LEXICON_RECORD.meta.version}"\n  },\n  core_terms: [\n`;
-                LEXICON_RECORD.core_terms.forEach(t => output += `    { id: "${t.id}", label: "${t.label}" },\n`);
-                output += `  ]\n};`;
-            } else if (fmt === 'sql') {
-                output = `CREATE TABLE terms (id VARCHAR(10) PRIMARY KEY, label VARCHAR(50), definition TEXT);\n`;
-                LEXICON_RECORD.core_terms.forEach(t => output += `INSERT INTO terms VALUES ('${t.id}', '${t.label}', '${t.definition}');\n`);
-                output += `\nCREATE TABLE invariants (id VARCHAR(10), name VARCHAR(50), status VARCHAR(20));\n`;
-                LEXICON_RECORD.invariants.forEach(i => output += `INSERT INTO invariants VALUES ('${i.id}', '${i.name}', '${i.status}');\n`);
-            } else if (fmt === 'md') {
-                output = `# Lexicon Record ${LEXICON_RECORD.meta.version}\n\n## Core Terms\n| ID | Label | Definition |\n|---|---|---|\n`;
-                LEXICON_RECORD.core_terms.forEach(t => output += `| ${t.id} | ${t.label} | ${t.definition} |\n`);
-                output += `\n## Invariants\n| ID | Name | Status |\n|---|---|---|\n`;
-                LEXICON_RECORD.invariants.forEach(i => output += `| ${i.id} | ${i.name} | ${i.status} |\n`);
-            }
-            
+            if (fmt === 'json') output = JSON.stringify(LEXICON_RECORD, null, 2);
+            else if (fmt === 'yaml') { output = `meta:\n  doc_id: ${LEXICON_RECORD.meta.doc_id}\n  version: ${LEXICON_RECORD.meta.version}\n\ncore_terms:\n`; LEXICON_RECORD.core_terms.forEach(t => output += `  - id: ${t.id}\n    label: ${t.label}\n`); }
+            else if (fmt === 'python') { output = `LEXICON_RECORD = {\n    "meta": {"doc_id": "${LEXICON_RECORD.meta.doc_id}"}\n}`; }
+            else if (fmt === 'ts') { output = `export const RECORD = {\n  meta: { doc_id: "${LEXICON_RECORD.meta.doc_id}" }\n};`; }
+            else if (fmt === 'sql') { output = `CREATE TABLE terms (id VARCHAR(10));`; }
+            else if (fmt === 'md') { output = `# Lexicon Record\n`; }
             codeEl.innerText = output;
         }
 
-        // Auto-open logic
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('view') === 'machine' && !localStorage.getItem('lex_machine_dismissed')) {
                 openMachineOverlay();
             }
         });
-        
-        // ESC key to close
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape") closeMachineOverlay();
-        });
+        document.addEventListener('keydown', (e) => { if (e.key === "Escape") closeMachineOverlay(); });
     </script>
 </body>
 </html>
