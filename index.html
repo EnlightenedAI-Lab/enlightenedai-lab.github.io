@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "3.9.0",
-        "status": "ACTIVE_MONITOR"
+        "version": "4.0.0",
+        "status": "SIGNAL_AMPLIFIED"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V39 */
+        /* THEME: INSTITUTE STANDARD V40 */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -28,12 +28,16 @@
             --mobile-bar-height: 50px;
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            
+            /* SIGNAL COLORS */
             --status-verified: #00cc00;
+            --signal-green: #00ff00;
+            --signal-blue: #0066ff;
             
             /* SEMANTIC MODE COLORS */
-            --mode-audit: #b45309; /* Amber */
-            --mode-logic: #0044cc; /* Blue */
-            --mode-diff: #000000;  /* High Contrast */
+            --mode-audit: #b45309; 
+            --mode-logic: #0044cc; 
+            --mode-diff: #000000;  
         }
 
         html { scroll-behavior: smooth; }
@@ -51,133 +55,121 @@
             transition: background-color 0.2s;
         }
 
-        /* --- 1. ORIENTING SENTENCE --- */
-        .orienting-frame {
-            font-family: var(--font-mono); font-size: 0.65rem; color: #999;
-            text-transform: uppercase; letter-spacing: 0.05em;
-            margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px;
-        }
-
-        /* --- GLOBAL MODE BANNER --- */
-        #mode-banner {
-            position: fixed; top: 120px; right: 5rem;
-            font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700;
-            padding: 8px 12px; border-radius: 4px;
-            text-transform: uppercase; letter-spacing: 0.05em;
-            opacity: 0; transform: translateY(-10px);
-            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
-            pointer-events: none; z-index: 100;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        }
-        body:not([data-mode="reader"]) #mode-banner { opacity: 1; transform: translateY(0); }
+        /* --- 1. ENHANCED BEACON PHYSICS --- */
         
-        body[data-mode="audit"] #mode-banner { border: 1px solid var(--mode-audit); color: var(--mode-audit); border-left-width: 4px; }
-        body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
-        body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
-
-
-        /* --- AUDIT MODE --- */
-        .audit-marker {
-            display: none; 
-            font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700;
-            color: var(--mode-audit); border: 1px solid var(--mode-audit);
-            padding: 2px 5px; border-radius: 3px; margin-right: 8px;
-            cursor: help; vertical-align: 2px;
-            background: #fff; transition: all 0.1s;
-        }
-        body[data-mode="audit"] .audit-marker { display: inline-block; }
-        
-        .audit-marker:hover, .audit-marker.active { background: var(--mode-audit); color: #fff; }
-        .claim-box.active { border-color: var(--mode-audit); background: rgba(180, 83, 9, 0.05); border-left: 3px solid var(--mode-audit); }
-        
-        .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); position: sticky; top: 100px; height: fit-content; }
-        .claim-box { margin-bottom: 2rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
-        .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
-        
-        /* NUMERICAL ANCHORS STYLING */
-        .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
-        .metric-tag { font-weight: 600; color: #000; }
-        
-        .claim-text { color: #333; line-height: 1.4; }
-
-
-        /* --- LOGIC MODE --- */
-        .prose-content { transition: opacity 0.3s ease; }
-        body[data-mode="logic"] .prose-content { opacity: 0.9; }
-        
-        .logic-block { 
-            display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; 
-            background-color: #fcfcfc;
-            background-image: linear-gradient(#eef1f5 1px, transparent 1px), linear-gradient(90deg, #eef1f5 1px, transparent 1px);
-            background-size: 20px 20px;
-            padding: 1.5rem; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic);
-            margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; 
-            position: relative;
-            animation: slideLeft 0.3s cubic-bezier(0.2, 0, 0, 1) forwards;
-            opacity: 0; transform: translateX(-10px);
-        }
-        @keyframes slideLeft { to { opacity: 1; transform: translateX(0); } }
-        
-        .logic-block::before {
-            content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0;
-            background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de;
-            padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em;
-        }
-        body[data-mode="logic"] .logic-block { display: block; }
-        .logic-keyword { color: #0044cc; font-weight: 700; }
-
-
-        /* --- DIFF MODE --- */
-        .diff-header { 
-            display: none; font-family: var(--font-mono); font-size: 0.65rem; color: #000; 
-            border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 1.5rem;
-            text-transform: uppercase; letter-spacing: 0.05em;
+        /* The Green Signal (Integrity & GitHub) */
+        @keyframes beacon-green {
+            0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; }
+            50% { opacity: 1; }
+            100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; }
         }
         
-        body[data-mode="diff"] .content-col {
-            border-left: 1px solid #e5e5e5; padding-left: 2rem; margin-left: -2rem;
-        }
-        body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
-        
-        del, ins, .diff-tag { display: none; }
-        
-        body[data-mode="diff"] del { 
-            display: inline; background: #ffebeb; color: #cc0000; 
-            text-decoration: line-through; padding: 0 4px; opacity: 0.7;
-        }
-        body[data-mode="diff"] ins { 
-            display: inline; background: #e6ffec; color: #006600; 
-            border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px;
-        }
-        body[data-mode="diff"] .diff-tag {
-            display: inline-block; font-family: var(--font-mono); font-size: 0.6rem;
-            color: #006600; background: rgba(0, 204, 0, 0.1); 
-            padding: 1px 4px; margin-left: 6px; border-radius: 2px;
-            vertical-align: 1px;
+        /* The Blue Signal (Footer Status) */
+        @keyframes beacon-blue {
+            0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); }
+            100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); }
         }
 
-
-        /* --- BASE STYLES --- */
-        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .permalink { text-decoration: none; color: #ccc; margin-left: 0.5rem; font-family: var(--font-mono); font-weight: 400; font-size: 0.9em; opacity: 0; transition: opacity 0.2s; cursor: pointer; }
-        h1:hover .permalink, h2:hover .permalink { opacity: 1; }
-        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
-
+        /* --- INTEGRITY SEAL (AMPLIFIED) --- */
         .integrity-seal { 
             margin-left: auto; display: flex; align-items: center; gap: 8px; 
             font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
             border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
-            background: rgba(0,204,0,0.05); cursor: not-allowed !important;
-            animation: pulse-green 3s infinite;
+            background: rgba(0,204,0,0.03); cursor: not-allowed !important;
+            /* Subtle border pulse */
+            animation: border-pulse 3s infinite;
         }
-        .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
-        @keyframes pulse-green {
-            0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.4); border-color: rgba(0,204,0,0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(0, 204, 0, 0); border-color: rgba(0,204,0,1); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0); border-color: rgba(0,204,0,0.4); }
+        
+        @keyframes border-pulse {
+            0% { border-color: rgba(0,204,0,0.4); }
+            50% { border-color: rgba(0,204,0,1); }
+            100% { border-color: rgba(0,204,0,0.4); }
         }
+
+        .status-dot { 
+            width: 8px; height: 8px; 
+            background: var(--status-verified); 
+            border-radius: 50%; display: block; 
+            /* THE NEW BEACON: */
+            box-shadow: 0 0 5px rgba(0,204,0,0.5); /* Permanent Glow */
+            animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1);
+        }
+
+        /* --- FOOTER BEACON (BLUE) --- */
+        .status-dot-small { 
+            width: 6px; height: 6px; 
+            background-color: var(--signal-blue); 
+            border-radius: 50%; 
+            /* THE BLUE BEACON: */
+            box-shadow: 0 0 4px rgba(0, 102, 255, 0.6);
+            animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1);
+        }
+
+
+        /* --- GITHUB MODULE (LINKED & AMPLIFIED) --- */
+        .git-module {
+            margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none;
+            display: flex; align-items: center; gap: 12px; transition: all 0.15s cubic-bezier(0.2, 0, 0, 1);
+            background: #fff; cursor: pointer !important; position: relative; overflow: hidden;
+        }
+        .git-module:hover { background: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .git-icon { width: 24px; height: 24px; fill: #000; transition: fill 0.1s; }
+        .git-module:hover .git-icon { fill: #fff; }
+        .git-info { display: flex; flex-direction: column; flex-grow: 1; }
+        .git-label { font-family: var(--font-mono); font-size: 0.55rem; color: #666; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 2px; transition: color 0.1s; }
+        .git-module:hover .git-label { color: #aaa; }
+        .git-repo { font-family: var(--font-mono); font-weight: 700; font-size: 0.75rem; color: #000; display: flex; justify-content: space-between; align-items: center; transition: color 0.1s; }
+        .git-module:hover .git-repo { color: #fff; }
+        
+        .git-status-dot { 
+            height: 6px; width: 6px; 
+            background-color: #00cc00; 
+            border-radius: 50%; display: inline-block; margin-left: auto;
+            /* THE BEACON SYNC */
+            box-shadow: 0 0 6px rgba(0,204,0,0.8);
+            animation: beacon-green 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+        }
+
+
+        /* --- STANDARD STYLES (PRESERVED) --- */
+        .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; }
+        #mode-banner { position: fixed; top: 120px; right: 5rem; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; padding: 8px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        body:not([data-mode="reader"]) #mode-banner { opacity: 1; transform: translateY(0); }
+        body[data-mode="audit"] #mode-banner { border: 1px solid var(--mode-audit); color: var(--mode-audit); border-left-width: 4px; }
+        body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
+        body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
+
+        .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 2px 5px; border-radius: 3px; margin-right: 8px; cursor: help; vertical-align: 2px; background: #fff; transition: all 0.1s; }
+        body[data-mode="audit"] .audit-marker { display: inline-block; }
+        .audit-marker:hover, .audit-marker.active { background: var(--mode-audit); color: #fff; }
+        .claim-box.active { border-color: var(--mode-audit); background: rgba(180, 83, 9, 0.05); border-left: 3px solid var(--mode-audit); }
+        .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); position: sticky; top: 100px; height: fit-content; }
+        .claim-box { margin-bottom: 2rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
+        .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
+        .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+        .metric-tag { font-weight: 600; color: #000; }
+        .claim-text { color: #333; line-height: 1.4; }
+
+        .prose-content { transition: opacity 0.3s ease; }
+        body[data-mode="logic"] .prose-content { opacity: 0.9; }
+        .logic-block { display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; background-color: #fcfcfc; background-image: linear-gradient(#eef1f5 1px, transparent 1px), linear-gradient(90deg, #eef1f5 1px, transparent 1px); background-size: 20px 20px; padding: 1.5rem; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; animation: slideLeft 0.3s cubic-bezier(0.2, 0, 0, 1) forwards; opacity: 0; transform: translateX(-10px); }
+        @keyframes slideLeft { to { opacity: 1; transform: translateX(0); } }
+        .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
+        body[data-mode="logic"] .logic-block { display: block; }
+        .logic-keyword { color: #0044cc; font-weight: 700; }
+
+        .diff-header { display: none; font-family: var(--font-mono); font-size: 0.65rem; color: #000; border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        body[data-mode="diff"] .content-col { border-left: 1px solid #e5e5e5; padding-left: 2rem; margin-left: -2rem; }
+        body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
+        del, ins, .diff-tag { display: none; }
+        body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
+        body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px; }
+        body[data-mode="diff"] .diff-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.6rem; color: #006600; background: rgba(0, 204, 0, 0.1); padding: 1px 4px; margin-left: 6px; border-radius: 2px; vertical-align: 1px; }
+
+        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .permalink { text-decoration: none; color: #ccc; margin-left: 0.5rem; font-family: var(--font-mono); font-weight: 400; font-size: 0.9em; opacity: 0; transition: opacity 0.2s; cursor: pointer; }
+        h1:hover .permalink, h2:hover .permalink { opacity: 1; }
+        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
 
         aside { width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 3rem 2rem; display: flex; flex-direction: column; flex-shrink: 0; background: #fff; z-index: 999; }
         .brand { margin-bottom: 6rem; cursor: crosshair !important; }
@@ -196,17 +188,6 @@
         nav a:hover { color: #000; }
         nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9 0%, #ffffff 100%); }
 
-        .git-module { margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: all 0.15s cubic-bezier(0.2, 0, 0, 1); background: #fff; cursor: pointer !important; }
-        .git-module:hover { background: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .git-icon { width: 24px; height: 24px; fill: #000; transition: fill 0.1s; }
-        .git-module:hover .git-icon { fill: #fff; }
-        .git-info { display: flex; flex-direction: column; flex-grow: 1; }
-        .git-label { font-family: var(--font-mono); font-size: 0.55rem; color: #666; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 2px; transition: color 0.1s; }
-        .git-module:hover .git-label { color: #aaa; }
-        .git-repo { font-family: var(--font-mono); font-weight: 700; font-size: 0.75rem; color: #000; display: flex; justify-content: space-between; align-items: center; transition: color 0.1s; }
-        .git-module:hover .git-repo { color: #fff; }
-        .git-status-dot { height: 6px; width: 6px; background-color: #00cc00; border-radius: 50%; display: inline-block; animation: blink-slow 2s infinite; margin-left: auto; }
-        
         main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; }
         .doc-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); }
         .doc-meta { display: flex; flex-direction: column; }
@@ -228,17 +209,12 @@
         .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: #000; color: #fff; border-color: #000; }
 
-        /* FOOTER */
         footer { margin-top: 8rem; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); }
         .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
         .footer-left { display: flex; flex-direction: column; gap: 6px; }
         .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: #000; }
         .footer-secondary { opacity: 0.7; }
         .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: #000; font-weight: 500; }
-        
-        /* THE BLUE PULSE */
-        .status-dot-small { width: 6px; height: 6px; background-color: #0066ff; border-radius: 50%; box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); animation: pulse-blue 2s infinite cubic-bezier(0.66, 0, 0, 1); }
-        @keyframes pulse-blue { to { box-shadow: 0 0 0 5px rgba(0, 102, 255, 0); } }
 
         @media (max-width: 900px) {
             body { flex-direction: column; }
