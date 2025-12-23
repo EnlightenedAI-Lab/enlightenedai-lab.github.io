@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "17.0.0",
-        "status": "ALIGNMENT_STANDARDIZED"
+        "version": "18.0.0",
+        "status": "TERMINAL_ALIVE_SIGNALS_ACTIVE"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V70 */
+        /* THEME: INSTITUTE STANDARD V71 */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -197,6 +197,41 @@
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
+        /* --- V71: TERMINAL AMBIENCE & LIFE SIGNALS --- */
+
+        /* 1. Scanline Overlay (The CRT Effect) */
+        .machine-overlay::before {
+            content: ""; position: fixed; inset: 0; z-index: 20005; pointer-events: none;
+            background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 2px, rgba(255, 255, 255, 0.03) 3px, rgba(0, 0, 0, 0) 4px);
+            mix-blend-mode: overlay; opacity: 0.6;
+        }
+
+        /* 2. Status Pulse (The "Breathing" Signal) */
+        @keyframes terminal-breathe {
+            0%, 100% { color: #eee; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            50% { color: #fff; text-shadow: 0 0 4px rgba(255,255,255,0.3); }
+        }
+        .status-live { animation: terminal-breathe 4s infinite ease-in-out; font-weight: 700; letter-spacing: 0.05em; }
+
+        /* 3. Hover Inspect (User-Driven Focus) */
+        .m-card { transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease; }
+        .m-card:hover { border-color: #666; background: #1f1f1f; transform: translateY(-1px); }
+        .m-card:hover .mc-header { color: #999; }
+
+        /* 4. Boot-in Animation (Staggered Load) */
+        @keyframes terminal-boot { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* Only animate if user hasn't requested reduced motion */
+        @media (prefers-reduced-motion: no-preference) {
+            .machine-overlay:not(.hidden) .m-card { animation: terminal-boot 0.4s ease-out forwards; opacity: 0; }
+            .machine-overlay:not(.hidden) .mc-section-title { animation: terminal-boot 0.4s ease-out forwards 0.1s; opacity: 0; }
+            .m-card:nth-child(1) { animation-delay: 0.05s; } .m-card:nth-child(2) { animation-delay: 0.1s; }
+            .m-card:nth-child(3) { animation-delay: 0.15s; } .m-card:nth-child(4) { animation-delay: 0.2s; }
+            .m-card:nth-child(5) { animation-delay: 0.25s; } .m-card:nth-child(6) { animation-delay: 0.3s; }
+            .m-card:nth-child(7) { animation-delay: 0.35s; } .m-card:nth-child(8) { animation-delay: 0.4s; }
+            .m-card:nth-child(n+9) { animation-delay: 0.45s; }
+        }
+
         /* --- MACHINE OVERLAY (FIXED TERMINAL) --- */
         .machine-overlay {
             position: fixed; inset: 0; z-index: 20000;
@@ -242,12 +277,7 @@
                 border-right: 1px solid var(--border-color); padding: 2rem; 
                 display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0;
             }
-            main { 
-                flex-grow: 1; 
-                display: block; 
-                max-width: 900px; 
-                margin: 0; /* ALIGNMENT FIXED HERE */
-            }
+            main { flex-grow: 1; display: block; max-width: 900px; margin: 0; }
             .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
         }
 
@@ -430,7 +460,7 @@
     <script>
         // DATA RECORD
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "17.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "RAL-LEX-0002", version: "18.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
                 { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
@@ -534,11 +564,13 @@
         function renderCards() {
             const container = document.getElementById('machineCards');
             let html = '';
-            html += `<div class="m-card"><div class="mc-header"><div>METADATA</div><div>${LEXICON_RECORD.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON_RECORD.meta.classification}</div></div></div>`;
+            // Added 'status-live' class for breathing effect
+            html += `<div class="m-card"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON_RECORD.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON_RECORD.meta.classification}</div></div></div>`;
             html += `<div class="mc-section-title">CORE TERMS</div>`;
             LEXICON_RECORD.core_terms.forEach(t => { html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>${t.type || 'TERM'}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div></div>`; });
             html += `<div class="mc-section-title">INVARIANTS</div>`;
-            LEXICON_RECORD.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div>${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
+            // Added 'status-live' class for breathing effect
+            LEXICON_RECORD.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
             container.innerHTML = html;
         }
 
