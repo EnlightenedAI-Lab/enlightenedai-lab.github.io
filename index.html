@@ -12,19 +12,19 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "41.0.0",
-        "status": "FINAL_AUDIT"
+        "version": "42.0.0",
+        "status": "AESTHETIC_RESTORED"
     }
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V41 --- */
+        /* --- THEME: INSTITUTE STANDARD V42 --- */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
-            --sidebar-width: 280px;
+            --sidebar-width: 260px;
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
@@ -52,16 +52,15 @@
             min-height: 100vh;
         }
 
-        /* --- BEACON ANIMATIONS (REPAIRED) --- */
+        /* --- BEACONS & ANIMATIONS --- */
         @keyframes beacon-pulse-green {
-            0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); }
-            70% { box-shadow: 0 0 0 6px rgba(0, 204, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; }
+            50% { opacity: 1; }
+            100% { box-shadow: 0 0 0 6px rgba(0, 204, 0, 0); opacity: 1; }
         }
         @keyframes beacon-pulse-blue {
             0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); }
-            70% { box-shadow: 0 0 0 6px rgba(0, 102, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0); }
+            100% { box-shadow: 0 0 0 6px rgba(0, 102, 255, 0); }
         }
 
         .integrity-seal { 
@@ -81,12 +80,12 @@
             animation: beacon-pulse-blue 2s infinite;
         }
 
-        /* --- MOBILE BAR (FIXED) --- */
+        /* --- MOBILE HEADER (FIXED) --- */
         .mobile-bar {
             display: none;
-            position: fixed; /* Fixed to stick to top */
+            position: fixed; 
             top: 0; left: 0; right: 0;
-            z-index: 2000;
+            z-index: 9999; /* Highest priority */
             background: rgba(255,255,255,0.98);
             border-bottom: 1px solid #e5e5e5;
             padding: 0 1.25rem;
@@ -103,7 +102,7 @@
             width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; 
             border-right: 1px solid var(--border-color); padding: 3rem 2rem; 
             display: flex; flex-direction: column; flex-shrink: 0; 
-            background: #fff; z-index: 1500; 
+            background: #fff; z-index: 1000; 
         }
         .brand { margin-bottom: 6rem; }
         .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
@@ -121,9 +120,14 @@
         nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9, #fff); }
 
         /* --- MAIN CONTENT --- */
-        main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; margin: 0 auto; }
+        /* Reduced padding left to 3rem as requested */
+        main { flex-grow: 1; padding: 3rem 3rem 3rem 4rem; max-width: 1200px; margin: 0 auto; position: relative; }
         
-        .doc-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); }
+        .doc-header { 
+            border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; 
+            display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); 
+            position: relative;
+        }
         .doc-meta { display: flex; flex-direction: column; }
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
@@ -138,7 +142,6 @@
         .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; }
 
         /* --- MODE VISIBILITY RULES --- */
-        /* Reader: Hide everything technical */
         body[data-mode="reader"] .audit-marker,
         body[data-mode="reader"] .logic-block,
         body[data-mode="reader"] .diff-del,
@@ -146,8 +149,8 @@
         body[data-mode="reader"] .diff-tag,
         body[data-mode="reader"] .audit-rail { display: none !important; }
 
-        /* Audit: Show markers and rail */
-        .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: #fff; }
+        /* Audit Mode */
+        .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: #fff; transition: all 0.1s; }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         
@@ -159,13 +162,13 @@
         .metric-tag { font-weight: 600; color: #000; }
         .claim-text { color: #333; line-height: 1.4; }
 
-        /* Logic: Show blocks */
+        /* Logic Mode */
         .logic-block { display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; background-color: #fcfcfc; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
         .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
         body[data-mode="logic"] .logic-block { display: block; }
         .logic-keyword { color: #0044cc; font-weight: 700; }
 
-        /* Diff: Show changes */
+        /* Diff Mode */
         .diff-header { display: none; font-family: var(--font-mono); font-size: 0.65rem; color: #000; border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
         body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
         body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
@@ -177,53 +180,82 @@
         body[data-mode="diff"] ins { background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; padding: 0 2px; }
         body[data-mode="diff"] .diff-tag { display: inline-block; }
 
-        /* --- FOOTER (INTEGRATED) --- */
-        footer { margin-top: 8rem; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); }
-        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem; }
+        /* --- THE COOLER FOOTER MODULES (RESTORED) --- */
+        footer { margin-top: 8rem; border-top: 1px solid var(--border-color); padding: 3rem 0; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); }
+        .footer-content { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem; }
         
         .footer-col { display: flex; flex-direction: column; gap: 4px; }
         .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: #000; }
         .footer-secondary { opacity: 0.7; }
         
+        /* The "Cool" Card Style */
         .footer-actions { display: flex; gap: 1rem; align-items: center; }
-        .footer-link { text-decoration: none; color: #000; border: 1px solid #ccc; padding: 6px 12px; border-radius: 4px; display: flex; align-items: center; gap: 8px; transition: all 0.2s; background: #fff; }
-        .footer-link:hover { background: #000; color: #fff; border-color: #000; }
-        .footer-icon { width: 14px; height: 14px; fill: currentColor; }
         
+        .cool-card {
+            display: flex; flex-direction: column;
+            border: 1px solid #000;
+            background: #fff;
+            padding: 8px 12px;
+            width: 140px;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+            position: relative;
+            cursor: pointer;
+        }
+        .cool-card:hover { background: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .cool-card:hover * { color: #fff !important; fill: #fff !important; }
+        
+        .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+        .card-icon { width: 14px; height: 14px; fill: #000; transition: fill 0.1s; }
+        .micro-label { font-size: 0.55rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; transition: color 0.1s; }
+        
+        .card-bot { font-size: 0.7rem; font-weight: 700; color: #000; display: flex; align-items: center; justify-content: space-between; transition: color 0.1s; }
+        .flash-dot { width: 6px; height: 6px; background-color: #00cc00; border-radius: 50%; box-shadow: 0 0 6px rgba(0,204,0,0.8); animation: beacon-pulse-green 1.5s infinite; }
+
         .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; display: flex; align-items: center; gap: 8px; color: #000; font-weight: 500; }
+
+        /* --- MODE BANNER (REALIGNED) --- */
+        #mode-banner { 
+            position: absolute; 
+            top: 2rem; right: 0; /* Aligned relative to content */
+            font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; 
+            padding: 6px 10px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; 
+            background: #fff; border: 1px solid #000; color: #000;
+            display: none;
+        }
+        body:not([data-mode="reader"]) #mode-banner { display: block; }
+        body[data-mode="audit"] #mode-banner { border-color: var(--mode-audit); color: var(--mode-audit); }
+        body[data-mode="logic"] #mode-banner { border-color: var(--mode-logic); color: var(--mode-logic); }
+        body[data-mode="diff"] #mode-banner { border-color: var(--mode-diff); color: var(--mode-diff); }
 
         /* --- MOBILE ADJUSTMENTS (CRITICAL FIXES) --- */
         @media (max-width: 900px) {
             body { flex-direction: column; }
+            .mobile-bar { display: flex; }
             
             aside { 
                 position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); 
                 transform: translateX(-100%); transition: transform 0.25s ease;
-                border-right: none; padding: 2rem; background: #fff; overflow-y: auto; z-index: 1900;
+                border-right: none; padding: 2rem; background: #fff; overflow-y: auto; z-index: 1500;
             }
             aside.open { transform: translateX(0); }
             
-            main { padding: 1.5rem; margin-top: 50px; /* Offset fixed header */ }
+            main { padding: 1.5rem; margin-top: 50px; }
             section { margin-bottom: 4rem; grid-template-columns: 1fr !important; }
             .audit-rail { display: none !important; }
-            .doc-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .doc-header { flex-direction: column; align-items: flex-start; gap: 1rem; padding-bottom: 2rem; }
             .integrity-seal { margin-left: 0; }
             
-            .footer-content { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-            .footer-actions { width: 100%; }
-            .footer-link { flex-grow: 1; justify-content: center; }
+            /* Realign banner on mobile */
+            #mode-banner { top: 0; right: 0; position: relative; margin-top: 10px; display: inline-block; }
+            
+            .footer-content { flex-direction: column; align-items: flex-start; gap: 2rem; }
+            .footer-actions { width: 100%; flex-wrap: wrap; }
+            .cool-card { flex-grow: 1; }
         }
-        
-        #mode-banner { position: fixed; top: 120px; right: 5rem; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; padding: 8px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        body:not([data-mode="reader"]) #mode-banner { opacity: 1; transform: translateY(0); }
-        body[data-mode="audit"] #mode-banner { border: 1px solid var(--mode-audit); color: var(--mode-audit); border-left-width: 4px; }
-        body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
-        body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
     </style>
 </head>
 <body data-mode="reader">
-
-    <div id="mode-banner">READER MODE</div>
 
     <header class="mobile-bar">
         <div class="mobile-brand">ENLIGHTENED AI</div>
@@ -260,6 +292,8 @@
             <div class="doc-meta"><span class="doc-label">DOC_ID</span><span class="doc-val">EAI-2026-001</span></div>
             <div class="doc-meta"><span class="doc-label">CLASSIFICATION</span><span class="doc-val">PUBLIC</span></div>
             <div class="integrity-seal verified"><span class="status-dot"></span><span>INTEGRITY: VERIFIED</span></div>
+            
+            <div id="mode-banner">READER MODE</div>
         </div>
 
         <section id="mission">
@@ -271,11 +305,11 @@
                 <div class="prose-content">
                     <p class="abstract" id="mission-text">
                         <span class="audit-marker">[M1.0]</span>
-                        We advance the <del>field</del> <ins>science</ins> of <span class="fact-hook">reflective alignment</span> and reasoning stability. 
+                        We advance the science of reflective alignment and reasoning stability.
                     </p>
                     <p>
                         <span class="audit-marker">[M1.1]</span>
-                        We <del>build</del> <ins>develop</ins> <del>standard</del> <ins>governance-grade</ins> diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an <del>abstract intention</del> <ins>internal system property</ins> that can be examined, stressed, and verified <span class="diff-tag">[assumption removed]</span>.
+                        We develop governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under high-complexity conditions. Our work treats alignment not as an abstract intention, but as an internal system property that can be examined, stressed, and verified.
                     </p>
                     
                     <div class="logic-block">
@@ -285,7 +319,7 @@
     <span class="logic-keyword">return</span> <span class="logic-type">VerifiedProof</span>(agent)
                     </div>
 
-                    <p>Our research tests whether <del>theoretical</del> <ins>empirical</ins> alignment guarantees survive real model behavior and provides auditable instruments suitable for <del>corporate</del> <ins>public-sector</ins> and institutional review.</p>
+                    <p>Our research tests whether empirical alignment guarantees survive real model behavior and provides auditable instruments suitable for public-sector and institutional review.</p>
                 </div>
             </div>
 
@@ -310,9 +344,9 @@
                 <div class="prose-content">
                     <p>
                         <span class="audit-marker">[E-01]</span>
-                        We evaluate alignment as a <del>static</del> <ins>dynamic</ins> property of reasoning systems, not as a <del>stated</del> <ins>stated</ins> objective.
+                        We evaluate alignment as a dynamic property of reasoning systems, not as a stated objective.
                     </p>
-                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where <del>failures</del> <ins>failure modes</ins> emerge <span class="diff-tag">[scope narrowed]</span>.</p>
+                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where failure modes emerge.</p>
                     
                     <div class="logic-block">
 <span class="logic-comment"># Evaluation Strategy: Dynamic Stress Testing</span>
@@ -322,7 +356,7 @@
                     </div>
 
                     <p>The alignment lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation.</p>
-                    <p>The lexicon is not descriptive documentation. It is a measurement instrument <span class="diff-tag">[clarified]</span>.</p>
+                    <p>The lexicon is not descriptive documentation. It is a measurement instrument.</p>
                 </div>
             </div>
             
@@ -342,7 +376,7 @@
                 <div class="prose-content">
                     <p>
                         <span class="audit-marker">[D-09]</span>
-                        We develop reflective diagnostics to <del>check</del> <ins>test</ins> how alignment behaves over time, not only how it is expressed at a single point.
+                        We develop reflective diagnostics to test how alignment behaves over time, not only how it is expressed at a single point.
                     </p>
                     
                     <div class="logic-block">
@@ -353,8 +387,8 @@
             <span class="logic-keyword">then</span> IsAligned(Next(s))
                     </div>
 
-                    <p>These diagnostics operate directly over the controlled alignment lexicon, ensuring that detected changes correspond to genuine reasoning drift rather than interpretive ambiguity <span class="diff-tag">[precision added]</span>.</p>
-                    <p>The instruments are designed to expose failure modes. <del>Passing is expected.</del> <ins>Passing is not assumed.</ins></p>
+                    <p>These diagnostics operate directly over the controlled alignment lexicon, ensuring that detected changes correspond to genuine reasoning drift rather than interpretive ambiguity.</p>
+                    <p>The instruments are designed to expose failure modes. Passing is not assumed.</p>
                 </div>
             </div>
 
@@ -374,7 +408,7 @@
                 <div class="prose-content">
                     <p>
                         <span class="audit-marker">[A-01]</span>
-                        Our research outputs are published as <del>summaries</del> <ins>inspectable artifacts</ins>.
+                        Our research outputs are published as inspectable artifacts.
                     </p>
                     
                     <div class="logic-block">
@@ -404,13 +438,27 @@
                 </div>
                 
                 <div class="footer-actions">
-                    <a href="https://github.com/EnlightenedAI-Lab" target="_blank" class="footer-link">
-                        <svg class="footer-icon" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                        <span>GITHUB</span>
+                    <a href="https://github.com/EnlightenedAI-Lab" target="_blank" class="cool-card">
+                        <div class="card-top">
+                            <svg class="card-icon" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            <span class="micro-label">GITHUB_REPO</span>
+                        </div>
+                        <div class="card-bot">
+                            enlightened/core
+                            <span class="flash-dot"></span>
+                        </div>
                     </a>
-                    <button class="footer-link" onclick="window.print()">
-                        <span>EXPORT</span>
-                    </button>
+
+                    <a href="#" onclick="window.print()" class="cool-card">
+                        <div class="card-top">
+                            <span style="font-size:12px;">🖨</span>
+                            <span class="micro-label">ARCHIVE_STATUS</span>
+                        </div>
+                        <div class="card-bot">
+                            EXPORT RECORD
+                            <span class="flash-dot" style="background-color: var(--signal-blue); animation-name: beacon-pulse-blue;"></span>
+                        </div>
+                    </a>
                 </div>
 
                 <div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div>
@@ -448,16 +496,13 @@
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
         
-        function copyCite(text) { navigator.clipboard.writeText(text); }
-        function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`); }
-        
         // Close sidebar when tapping outside (mobile)
         document.addEventListener("click", (e) => {
           if (window.innerWidth > 900) return;
           const sidebar = document.getElementById("sidebar");
           const isOpen = sidebar.classList.contains("open");
           if (!isOpen) return;
-          const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar");
+          const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
           if (!clickedInside) sidebar.classList.remove("open");
         });
     </script>
