@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0002",
-        "version": "30.0.0",
-        "status": "OPERATING_DOCTRINE_ESTABLISHED"
+        "version": "31.0.0",
+        "status": "HUD_SYSTEM_ONLINE"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V84 */
+        /* THEME: INSTITUTE STANDARD V85 */
         :root {
             --bg-color: #ffffff;
             --sidebar-bg: #ffffff;
@@ -36,12 +36,10 @@
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
-            /* SIGNALS */
             --status-verified: #00cc00;
             --signal-blue: #0066ff;
             --signal-red: #cc0000;
             
-            /* VIEW MODES */
             --mode-diff-del-bg: #ffebeb;
             --mode-diff-del-text: #cc0000;
             --mode-diff-ins-bg: #e6ffec;
@@ -132,7 +130,7 @@
         .logic-header { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; display: flex; align-items: center; }
         .logic-content { white-space: pre-wrap; color: var(--text-muted); font-size: 0.75rem; line-height: 1.6; margin-bottom: 2rem; padding-left: 1rem; border-left: 2px solid var(--border-color); }
 
-        /* --- V84: OPERATING DOCTRINE --- */
+        /* --- V85: HUD MACHINE VIEW --- */
         .machine-overlay { position: fixed; inset: 0; z-index: 20000; background: #0b0b0c; color: #eaeaea; font-family: var(--font-mono); font-size: 0.75rem; display: flex; flex-direction: column; transition: opacity 0.2s ease; }
         .machine-overlay.hidden { display: none; opacity: 0; pointer-events: none; }
         .machine-overlay::before { content: ""; position: fixed; inset: 0; z-index: 20005; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 2px, rgba(255, 255, 255, 0.03) 3px, rgba(0, 0, 0, 0) 4px); mix-blend-mode: overlay; opacity: 0.6; transition: background 0.1s ease; }
@@ -159,29 +157,38 @@
         .event-text.fade-out { opacity: 0; }
         .event-dot { width: 4px; height: 4px; background: #00cc00; border-radius: 50%; display: block; opacity: 0.7; }
         .uptime-counter { color: #666; font-size: 0.7rem; margin-right: 12px; letter-spacing: 0.05em; }
-        
         .hex-footer { position: fixed; bottom: 0; left: 0; right: 0; background: #080808; border-top: 1px solid #222; padding: 6px 20px; font-family: var(--font-mono); font-size: 0.6rem; color: #444; z-index: 20010; white-space: nowrap; overflow: hidden; pointer-events: none; display: flex; justify-content: space-between; }
         .hex-stream-content { font-family: "JetBrains Mono", monospace; letter-spacing: 0.05em; }
         
-        /* OPERATOR MANUAL LINK V84 */
+        /* OPERATOR MANUAL V85: HUD MODE */
         .manual-trigger { pointer-events: auto; cursor: pointer; text-decoration: none; color: #666; transition: color 0.2s; font-weight: 700; letter-spacing: 0.05em; }
         .manual-trigger:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
 
-        /* MANUAL OVERLAY V84 */
+        /* The V85 HUD Container: Pass-through clicks */
         #operator-manual {
-            position: fixed; inset: 0; z-index: 20020; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
-            display: none; align-items: center; justify-content: center;
+            position: fixed; inset: 0; z-index: 20020; pointer-events: none; /* Allows clicking behind */
+            display: none;
         }
-        #operator-manual.open { display: flex; }
+        #operator-manual.open { display: block; }
+        
+        /* The Panel: Captures clicks, floats right */
         .manual-content {
-            width: 90%; max-width: 600px; height: 80vh; background: #000; border: 1px solid #333; padding: 2rem;
-            overflow-y: auto; color: #aaa; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; line-height: 1.6;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            pointer-events: auto;
+            position: absolute; right: 2rem; top: 6rem; bottom: 4rem; width: 350px;
+            background: rgba(0,0,0,0.95); border: 1px solid #444; padding: 2rem;
+            overflow-y: auto; color: #aaa; font-family: "JetBrains Mono", monospace; font-size: 0.65rem; line-height: 1.6;
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.5);
         }
-        .manual-content h3 { color: #fff; font-size: 0.8rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .manual-content h3 { color: #fff; font-size: 0.75rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
         .manual-content h3:first-child { margin-top: 0; }
         .manual-content p, .manual-content ul { margin-bottom: 1rem; }
         .manual-content li { margin-bottom: 0.5rem; }
+        
+        .hud-close {
+            position: sticky; top: -2rem; float: right; margin-right: -1rem; margin-top: -1rem;
+            background: #000; border: 1px solid #333; color: #fff; padding: 4px 8px; cursor: pointer; font-family: inherit; font-size: 0.6rem;
+        }
+        .hud-close:hover { border-color: #fff; }
 
         /* SERIALIZATION & SIMULATION */
         .mo-sub-nav { padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); background: #111; display: flex; gap: 15px; align-items: center; height: 40px; position: relative; }
@@ -284,6 +291,9 @@
             .uptime-counter, .event-ticker { display: none; } 
             .hex-footer { display: none; } 
             .mo-sub-nav { overflow-x: auto; }
+            
+            /* Mobile adjustments for manual */
+            .manual-content { width: 100%; top: 50px; bottom: 0; right: 0; border-left: none; }
         }
     </style>
 </head>
@@ -421,8 +431,9 @@
             </div>
         </div>
 
-        <div id="operator-manual" onclick="toggleManual(false)">
-            <div class="manual-content" onclick="event.stopPropagation()">
+        <div id="operator-manual">
+            <div class="manual-content">
+                <button class="hud-close" onclick="toggleManual(false)">CLOSE</button>
                 <div style="text-align:center; margin-bottom:2rem;">OPERATOR MANUAL<br>Reflective Alignment Lexicon<br>Machine Interface — Simulation & Inspection</div>
                 
                 <h3>SECTION 01 — PURPOSE</h3>
@@ -465,8 +476,6 @@
                 <p>SYSTEM LED (HEADER):<br>• GREEN (PULSE): System Idle / Monitoring<br>• AMBER (FAST): Compute Active / Audit in Progress</p>
                 <p>HAPTIC FEEDBACK:<br>Visual distortion during [REQ VERIFY] indicates computational load. This is normal system behavior.</p>
                 <p>GHOST LAYER:<br>Hovering over Invariant labels reveals their internal cryptographic hash. This confirms the chain of custody for the definition.</p>
-                
-                <div style="margin-top:3rem; text-align:center; font-size:0.6rem; opacity:0.5;">[ CLICK OUTSIDE TO CLOSE ]</div>
             </div>
         </div>
 
@@ -499,7 +508,7 @@
 
     <script>
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "30.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "RAL-LEX-0002", version: "31.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", definition: "Capacity to preserve goal coherence." },
                 { id: "RS-001", label: "Reasoning Stability", definition: "Resistance to degradation under pressure." },
