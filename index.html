@@ -12,13 +12,13 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "EAI-2026-001",
-        "version": "49.0.0",
-        "status": "TEXT_LOCKED_MOBILE_FIXED"
+        "version": "50.0.0",
+        "status": "DIFF_ACTIVE_TEXT_CLEAN"
     }
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V49 --- */
+        /* --- THEME: INSTITUTE STANDARD V50 --- */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -81,7 +81,7 @@
         .mobile-bar {
             display: none;
             position: fixed; top: 0; left: 0; right: 0;
-            z-index: 9999; /* Highest Z-Index */
+            z-index: 10001; /* NUCLEAR Z-INDEX */
             background: rgba(255,255,255,0.98);
             border-bottom: 1px solid #e5e5e5;
             padding: 0 1.25rem;
@@ -115,7 +115,7 @@
         nav a:hover { color: #000; }
         nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9, #fff); }
 
-        /* --- SIDEBAR MODULES (LEFT RESTORED) --- */
+        /* --- SIDEBAR MODULES (LEFT) --- */
         .git-module { 
             margin-top: auto; 
             margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; 
@@ -152,16 +152,44 @@
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
         .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; }
 
-        /* --- VISIBILITY RULES (CLEAN TEXT) --- */
+        /* --- VISIBILITY RULES (CRITICAL FIX) --- */
         
-        /* Reader Mode: Hide annotations */
+        /* 1. READER MODE: The "Clean" View */
+        /* Hides Audit markers, Logic blocks, Diffs */
         body[data-mode="reader"] .audit-marker,
         body[data-mode="reader"] .logic-block,
-        body[data-mode="reader"] .audit-rail { display: none !important; }
+        body[data-mode="reader"] .diff-del,
+        body[data-mode="reader"] .diff-tag,
+        body[data-mode="reader"] .audit-rail,
+        body[data-mode="reader"] .diff-header { display: none !important; }
+        
+        /* Reader: Make inserted text look normal (no green) */
+        body[data-mode="reader"] ins { 
+            text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0;
+        }
+        /* Reader: Hides deleted text completely */
+        body[data-mode="reader"] del { display: none; }
 
-        /* Audit Mode */
+        /* 2. DIFF MODE: The "History" View */
+        del, ins, .diff-tag { display: none; } /* Hidden by default */
+        
+        body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
+        body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px; }
+        body[data-mode="diff"] .diff-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
+        
+        .diff-header { display: none; font-family: var(--font-mono); font-size: 0.65rem; color: #000; border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
+        body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
+        body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; pointer-events: none; }
+
+        /* 3. AUDIT MODE: The "Claims" View */
         .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: #fff; }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
+        
+        /* Audit: Text looks normal */
+        body[data-mode="audit"] ins { text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
+        body[data-mode="audit"] del { display: none; }
+
         body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="audit"] .audit-rail { display: block; }
         
@@ -172,10 +200,15 @@
         .metric-tag { font-weight: 600; color: #000; }
         .claim-text { color: #333; line-height: 1.4; }
 
-        /* Logic Mode */
+        /* 4. LOGIC MODE: The "Code" View */
         .logic-block { display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; background-color: #fcfcfc; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
         .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
+        
+        /* Logic: Text looks normal */
+        body[data-mode="logic"] ins { text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
+        body[data-mode="logic"] del { display: none; }
+
         @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- FOOTER --- */
@@ -201,7 +234,7 @@
         body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
         body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
 
-        /* --- MOBILE ADJUSTMENTS (FIXED) --- */
+        /* --- MOBILE ADJUSTMENTS (CRITICAL FIXES) --- */
         @media (max-width: 900px) {
             body { flex-direction: column; overflow-x: hidden; }
             .mobile-bar { display: flex; }
@@ -288,15 +321,16 @@
             <div class="content-col">
                 <div class="orienting-frame">This site is an inspectable record of how we evaluate alignment as a system property.</div>
                 
+                <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Claim Hardening]</div>
                 <h1><span class="scramble">01 //</span>Mission <a onclick="copyLink('mission')" class="permalink"></a></h1>
                 <div class="prose-content">
                     <p class="abstract" id="mission-text">
                         <span class="audit-marker">[M1.0]</span>
-                        We advance the science of reflective alignment and reasoning stability.
+                        We advance the <del>field</del> <ins>science</ins> of reflective alignment and reasoning stability.
                     </p>
                     <p>
                         <span class="audit-marker">[M1.1]</span>
-                        We develop governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under high-complexity conditions. Our work treats alignment not as an abstract intention, but as an internal system property that can be examined, stressed, and verified.
+                        We <del>build</del> <ins>develop</ins> governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an <del>abstract intention</del> <ins>internal system property</ins> that can be examined, stressed, and verified <span class="diff-tag">[assumption removed]</span>.
                     </p>
                     
                     <div class="logic-block">
@@ -306,7 +340,7 @@
     <span class="logic-keyword">return</span> <span class="logic-type">VerifiedProof</span>(agent)
                     </div>
 
-                    <p>Our research tests whether empirical alignment guarantees survive real model behavior and provides auditable instruments suitable for public-sector and institutional review.</p>
+                    <p>Our research tests whether <del>theoretical</del> <ins>empirical</ins> alignment guarantees survive real model behavior and provides auditable instruments suitable for <del>corporate</del> <ins>public-sector</ins> and institutional review.</p>
                 </div>
             </div>
 
@@ -326,13 +360,14 @@
 
         <section id="theory">
             <div class="content-col">
+                <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Scope Restriction]</div>
                 <h2><span class="scramble">02 //</span>What We Evaluate <a onclick="copyLink('theory')" class="permalink"></a></h2>
                 <div class="prose-content">
                     <p>
                         <span class="audit-marker">[E-01]</span>
-                        We evaluate alignment as a dynamic property of reasoning systems, not as a stated objective.
+                        We evaluate alignment as a <del>static</del> <ins>dynamic</ins> property of reasoning systems, not as a <del>stated</del> <ins>stated</ins> objective.
                     </p>
-                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where failure modes emerge.</p>
+                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where <del>failures</del> <ins>failure modes</ins> emerge <span class="diff-tag">[scope narrowed]</span>.</p>
                     
                     <div class="logic-block">
 <span class="logic-comment"># Evaluation Strategy: Dynamic Stress Testing</span>
@@ -342,7 +377,7 @@
                     </div>
 
                     <p>The alignment lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation.</p>
-                    <p>The lexicon is not descriptive documentation. It is a measurement instrument.</p>
+                    <p>The lexicon is not descriptive documentation. It is a measurement instrument <span class="diff-tag">[clarified]</span>.</p>
                 </div>
             </div>
             
@@ -357,11 +392,12 @@
 
         <section id="instruments">
             <div class="content-col">
+                <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Formalization]</div>
                 <h2><span class="scramble">03 //</span>Instruments <a onclick="copyLink('instruments')" class="permalink"></a></h2>
                 <div class="prose-content">
                     <p>
                         <span class="audit-marker">[D-09]</span>
-                        We develop reflective diagnostics to test how alignment behaves over time, not only how it is expressed at a single point.
+                        We develop reflective diagnostics to <del>check</del> <ins>test</ins> how alignment behaves over time, not only how it is expressed at a single point.
                     </p>
                     
                     <div class="logic-block">
@@ -372,8 +408,8 @@
             <span class="logic-keyword">then</span> IsAligned(Next(s))
                     </div>
 
-                    <p>These diagnostics operate directly over the controlled alignment lexicon, ensuring that detected changes correspond to genuine reasoning drift rather than interpretive ambiguity.</p>
-                    <p>The instruments are designed to expose failure modes. Passing is not assumed.</p>
+                    <p>These diagnostics operate directly over the controlled alignment lexicon, ensuring that detected changes correspond to genuine reasoning drift rather than interpretive ambiguity <span class="diff-tag">[precision added]</span>.</p>
+                    <p>The instruments are designed to expose failure modes. <del>Passing is expected.</del> <ins>Passing is not assumed.</ins></p>
                 </div>
             </div>
 
@@ -388,11 +424,12 @@
 
         <section id="outputs">
             <div class="content-col">
+                <div class="diff-header">REVISION TRACE — v1.0 → v1.3</div>
                 <h2><span class="scramble">04 //</span>Outputs <a onclick="copyLink('outputs')" class="permalink"></a></h2>
                 <div class="prose-content">
                     <p>
                         <span class="audit-marker">[A-01]</span>
-                        Our research outputs are published as inspectable artifacts.
+                        Our research outputs are published as <del>summaries</del> <ins>inspectable artifacts</ins>.
                     </p>
                     
                     <div class="logic-block">
