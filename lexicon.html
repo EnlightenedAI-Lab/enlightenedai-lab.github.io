@@ -12,859 +12,470 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0001",
-        "version": "1.3.0",
-        "status": "PERMANENT_RAIL"
+        "version": "1.4.0",
+        "status": "LIVING_ENGINE"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V44 (PERMANENT RAIL) */
+        /* --- THEME: V40 + V45 EXTENSIONS --- */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
-            --sidebar-width: 280px;
-            --mobile-bar-height: 50px;
+            --sidebar-width: 260px;
+            --rail-width: 300px;
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
-            /* SIGNAL COLORS */
+            /* SIGNALS */
             --status-verified: #00cc00;
             --signal-blue: #0066ff;
             --signal-amber: #b45309;
+            --signal-red: #cc0000;
             
-            /* SEMANTIC MODE COLORS */
+            /* MODES */
             --mode-audit: #b45309; 
             --mode-logic: #0044cc; 
             --mode-diff: #000000;  
         }
 
-        html { scroll-behavior: smooth; }
         * { box-sizing: border-box; }
-
+        html { scroll-behavior: smooth; }
         body {
             margin: 0; padding: 0;
             font-family: var(--font-stack);
-            background-color: var(--bg-color);
+            background: var(--bg-color);
             color: var(--text-main);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
             display: flex;
             min-height: 100vh;
-            transition: background-color 0.2s;
         }
 
-        /* --- BEACON PHYSICS --- */
-        @keyframes beacon-green {
-            0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; }
-            50% { opacity: 1; }
-            100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; }
+        /* --- LAYOUT GRID --- */
+        /* Sidebar | Main | Rail */
+        aside#sidebar { 
+            width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; 
+            border-right: 1px solid var(--border-color); padding: 2rem; 
+            display: flex; flex-direction: column; z-index: 99; background: #fff;
         }
-        @keyframes border-pulse {
-            0% { border-color: rgba(0,204,0,0.4); }
-            50% { border-color: rgba(0,204,0,1); }
-            100% { border-color: rgba(0,204,0,0.4); }
-        }
-
-        .integrity-seal { 
-            margin-left: auto; display: flex; align-items: center; gap: 8px; 
-            font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
-            border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
-            background: rgba(0,204,0,0.03); cursor: not-allowed !important;
-            animation: border-pulse 3s infinite;
-        }
-        .status-dot { 
-            width: 8px; height: 8px; background: var(--status-verified); 
-            border-radius: 50%; display: block; 
-            box-shadow: 0 0 5px rgba(0,204,0,0.5);
-            animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1);
-        }
-
-        /* --- PERMANENT RAIL LAYOUT --- */
-        main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; }
         
-        /* The Grid is now PERMANENT across all modes */
-        section { 
-            margin-bottom: 8rem; scroll-margin-top: 5rem; 
-            display: grid; grid-template-columns: 1fr 280px; gap: 3rem; 
-            position: relative; 
+        main { 
+            flex-grow: 1; 
+            display: grid; 
+            grid-template-columns: 1fr var(--rail-width); /* Content | Right Rail */
+            max-width: 1400px;
         }
 
-        /* The Rail is now PERMANENT across all modes */
-        .audit-rail { 
-            display: block; /* Always visible */
-            padding-left: 1.5rem; border-left: 1px solid var(--border-color); 
-            font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); 
-            position: sticky; top: 100px; height: fit-content; 
+        .content-col { padding: 3rem 4rem 6rem 4rem; }
+        
+        .right-rail {
+            border-left: 1px solid var(--border-color);
+            padding: 0; 
+            background: #fafafa;
         }
-
-        /* --- MACHINE STACK (EXPANSION LOGIC) --- */
-        .machine-only { display:none; }
         
-        /* Expand stack only in Machine or Logic views */
-        body.view-machine .machine-only, 
-        body.mode-logic .machine-only { display:block; }
-
-        .rail-grid { display:grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
-        
-        /* Rail Card Base */
-        .rail-card--mini { padding:12px; background: #fafafa; border: 1px solid #eee; position: relative; overflow: hidden; }
-        .rail-card--field { overflow: hidden; margin-bottom: 0; display: block; /* Always visible */ }
-        
-        .rail-card__hdr { 
-            display: flex; justify-content: space-between; border-bottom: 1px solid #e0e0e0; 
-            padding-bottom: 6px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.6rem; 
+        .rail-sticky {
+            position: sticky; top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex; flex-direction: column; gap: 12px;
+            scrollbar-width: none; /* Hide scrollbar */
         }
-        .rail-k { font-weight: 700; color: #000; }
-        .rail-v { color: var(--signal-blue); animation: blink-slow 2s infinite; }
-        @keyframes blink-slow { 0%,100% {opacity:1} 50% {opacity:0.5} }
+        .rail-sticky::-webkit-scrollbar { display: none; }
 
-        .rail-card--mini canvas { display:block; width:100%; height:auto; }
-        .field-tag {
-            position:absolute; right:10px; bottom:8px;
-            font-family: var(--font-mono); font-size: 9px; letter-spacing: .06em;
-            color:#7a7a7a; background: rgba(255,255,255,.85);
-            padding: 2px 6px; border: 1px solid #eee; pointer-events: none;
-        }
-
-        /* KV, Pre, Stream, Console */
-        .kv { display:grid; gap:6px; font-size:10px; font-family: var(--font-stack); }
-        .kv > div { display:flex; justify-content:space-between; border-bottom:1px solid #f0f0f0; padding-bottom:4px; }
-        .kv b { font-weight:700; font-family: var(--font-mono); }
-        .ok { color:#1a7f37; } .warn { color:#b36b00; }
-        .mini-pre { margin:0; padding:8px; background:#fff; border:1px solid #eee; overflow:auto; font-size:10px; line-height:1.35; font-family: var(--font-mono); color: #333; }
-        .stream { font-size:10px; border:1px solid #eee; background:#fff; padding:8px; max-height:100px; overflow:hidden; }
-        .stream .row { display:flex; justify-content:space-between; gap:8px; padding:4px 0; border-bottom:1px solid #f5f5f5; animation: fadeIn 0.3s; }
-        .stream .row:last-child { border-bottom:none; }
-        .stream .tag { font-family: var(--font-mono); color:#000; font-weight: 600; }
-        .stream .delta { color:#777; font-family: var(--font-mono); }
-        @keyframes fadeIn { from { opacity:0; transform: translateY(-5px); } to { opacity:1; transform: translateY(0); } }
-        .mini-console { display:flex; gap:8px; align-items:center; border:1px solid #eee; background:#fff; padding:6px; margin-bottom: 6px; }
-        .mini-console .prompt { font-family: var(--font-mono); color:#666; font-size: 10px; }
-        .mini-console input { width:100%; border:none; outline:none; font-family: var(--font-mono); font-size:10px; color: #000; }
-        #lexQueryOut { white-space: pre-wrap; word-break: break-all; }
-        .field-wrap { position: relative; border: 1px solid #eee; background: #fafafa; }
-        #numericFieldCanvas { display:block; width:100%; height:auto; }
-        
-        @media (prefers-reduced-motion: reduce){ .rail-card--mini canvas, #numericFieldCanvas { display:none !important; } }
-
-        /* --- AUDIT GROUPS (Always Visible Logic) --- */
-        .audit-group { display: none; }
-        .audit-group.active { display: block; }
-        /* In Audit Mode, show cards. In Reader Mode, show cards too? */
-        /* DECISION: Always show the active audit group (System Notes) because the page needs mass. */
-        .audit-group.active { display: block; }
-
-        /* --- VIEW TOGGLE --- */
-        .view-controls { margin-bottom: 3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; display: flex; gap: 1rem; }
-        .view-btn { background: none; border: none; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer; padding: 4px 8px; opacity: 0.5; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-        .view-btn.active { opacity: 1; border-bottom: 2px solid #000; color: #000; }
-        .view-btn:hover { opacity: 1; }
-
-        /* --- CONTENT VISIBILITY --- */
-        .machine-only { display: none; }
-        .human-only { display: block; }
-        body.view-machine .machine-only { display: block; }
-        body.view-machine .human-only { display: none; }
-
-        /* --- MACHINE CARD STYLES --- */
-        .machine-card { background: #fafafa; border: 1px solid #eee; padding: 1.5rem; margin-bottom: 1.5rem; font-family: var(--font-mono); font-size: 0.75rem; display: grid; grid-template-columns: 120px 1fr; gap: 1rem; border-left: 2px solid #ccc; transition: border-color 0.2s; }
-        .machine-card:hover { border-left-color: #000; background: #f4f4f4; }
-        .mc-label { color: #999; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.65rem; }
-        .mc-value { color: #000; font-weight: 500; }
-        .scramble-target { cursor: crosshair; }
-
-        /* --- INVARIANTS TABLE --- */
-        .invariant-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 2rem; }
-        .invariant-table th { text-align: left; border-bottom: 1px solid #000; padding: 10px; text-transform: uppercase; font-size: 0.65rem; color: #666; }
-        .invariant-table td { border-bottom: 1px solid #eee; padding: 12px 10px; vertical-align: top; }
-        .invariant-table tr:hover { background: #f9f9f9; }
-
-        /* --- ACCESS MODAL --- */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; }
-        .modal-content { background: #fff; border: 1px solid #000; width: 100%; max-width: 450px; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-        .modal-field { margin-bottom: 1rem; }
-        .modal-label { display: block; font-family: var(--font-mono); font-size: 0.7rem; color: #666; margin-bottom: 4px; text-transform: uppercase; }
-        .modal-input { width: 100%; padding: 8px; border: 1px solid #ccc; font-family: var(--font-stack); font-size: 0.9rem; outline: none; }
-        .modal-input:focus { border-color: #000; }
-        .modal-btn { width: 100%; background: #000; color: #fff; border: none; padding: 12px; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; cursor: pointer; margin-top: 1rem; transition: background 0.2s; }
-        .modal-btn:hover { background: #333; }
-        .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; cursor: pointer; font-size: 1.2rem; }
-
-        /* --- BASE STYLES --- */
+        /* --- TYPOGRAPHY & COMPONENTS --- */
         .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .permalink { text-decoration: none; color: #ccc; margin-left: 0.5rem; font-family: var(--font-mono); font-weight: 400; font-size: 0.9em; opacity: 0; transition: opacity 0.2s; cursor: pointer; }
-        h1:hover .permalink, h2:hover .permalink { opacity: 1; }
-        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
+        h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+        p { font-size: 0.95rem; margin-bottom: 1.2rem; color: #222; max-width: 65ch; }
+        
+        /* Integrity Seal */
+        .integrity-seal { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.65rem; color: #005500; border: 1px solid var(--status-verified); padding: 3px 6px; border-radius: 3px; background: rgba(0,204,0,0.03); cursor: default; }
+        .status-dot { width: 6px; height: 6px; background: var(--status-verified); border-radius: 50%; box-shadow: 0 0 6px rgba(0,204,0,0.4); animation: pulse-green 2s infinite; }
+        @keyframes pulse-green { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        #mode-banner { position: fixed; top: 120px; right: 5rem; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; padding: 8px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        body:not([data-mode="reader"]) #mode-banner { opacity: 1; transform: translateY(0); }
-        body[data-mode="audit"] #mode-banner { border: 1px solid var(--mode-audit); color: var(--mode-audit); border-left-width: 4px; }
-        body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
-        body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
-
-        aside { width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 3rem 2rem; display: flex; flex-direction: column; flex-shrink: 0; background: #fff; z-index: 999; }
-        .brand { margin-bottom: 6rem; cursor: crosshair !important; }
-        .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
-        .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
-        .mode-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
+        /* --- MODE TOGGLES --- */
+        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; }
         .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
         .toggle-btn:hover { color: #000; }
         .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
-        #btn-diff.active { color: var(--mode-diff); }
-        #btn-logic.active { color: var(--mode-logic); }
-        #btn-audit.active { color: var(--mode-audit); }
-        nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { margin-bottom: 2px; }
-        nav a { display: block; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0 0.5rem 1rem; border-left: 2px solid transparent; margin-left: -2px; }
-        nav a:hover { color: #000; }
-        nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9 0%, #ffffff 100%); }
-
-        .lex-module { margin-top: auto; margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; display: flex; flex-direction: column; gap: 8px; transition: all 0.15s; background: #fff; }
-        .lex-module:hover { background: #f9f9f9; }
-        .lex-header { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.6rem; color: #666; text-transform: uppercase; }
-        .lex-status-dot { width: 6px; height: 6px; background-color: var(--signal-amber); border-radius: 50%; box-shadow: 0 0 4px var(--signal-amber); }
-        .lex-btn { width: 100%; border: 1px solid #ccc; background: #fff; padding: 6px; font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; cursor: pointer; text-align: center; font-weight: 600; }
-        .lex-btn:hover { background: #000; color: #fff; border-color: #000; }
-
-        .doc-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); }
-        .doc-meta { display: flex; flex-direction: column; }
-        .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
-        .doc-val { font-weight: 500; color: #000; }
         
-        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: #000; display: flex; align-items: center; }
-        h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; color: #000; display: flex; align-items: center; }
-        p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; }
+        /* Mode Specific Styling via Body Attribute */
+        
+        /* 1. READER MODE (Clean) */
+        body[data-mode="reader"] .audit-marker,
+        body[data-mode="reader"] .logic-block,
+        body[data-mode="reader"] .diff-del,
+        body[data-mode="reader"] .diff-ins,
+        body[data-mode="reader"] .diff-tag { display: none !important; }
 
-        .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 2px 5px; border-radius: 3px; margin-right: 8px; cursor: help; vertical-align: 2px; background: #fff; transition: all 0.1s; }
+        /* 2. AUDIT MODE (Chips) */
+        .audit-marker { 
+            display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; 
+            color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; 
+            border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: #fff;
+        }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
+
+        /* 3. DIFF MODE (Red/Green) */
+        .diff-del { display: none; text-decoration: line-through; color: var(--signal-red); background: #ffebeb; padding: 0 2px; }
+        .diff-ins { display: none; text-decoration: none; color: #006600; background: #e6ffec; border-bottom: 1px solid #00cc00; padding: 0 2px; }
+        .diff-tag { display: none; font-family: var(--font-mono); font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
+        body[data-mode="diff"] .diff-del,
+        body[data-mode="diff"] .diff-ins,
+        body[data-mode="diff"] .diff-tag { display: inline; }
+
+        /* 4. LOGIC MODE (Blocks) */
+        .logic-block { 
+            display: none; font-family: var(--font-mono); font-size: 0.75rem; color: #333; 
+            background-color: #fcfcfc; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); 
+            padding: 1rem; margin: 1.5rem 0; overflow-x: auto; position: relative;
+        }
+        .logic-block::before {
+            content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0;
+            background: #fff; color: var(--mode-logic); font-size: 0.55rem; 
+            border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 2px 6px;
+        }
+        body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- RIGHT RAIL CARDS (VITAL SIGNS) --- */
+        .rail-card { 
+            background: #fff; border: 1px solid #e0e0e0; padding: 10px; 
+            font-family: var(--font-mono); font-size: 0.7rem; position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .rail-hdr { 
+            display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; 
+            padding-bottom: 6px; margin-bottom: 8px; color: #000; font-weight: 700; letter-spacing: 0.05em;
+        }
+        .rail-status { color: var(--text-muted); font-weight: 400; }
+        .rail-status.live { color: var(--signal-blue); animation: blink 2s infinite; }
+        .rail-status.pass { color: var(--status-verified); }
+        .rail-status.warn { color: var(--signal-amber); }
         
-        .claim-box { margin-bottom: 2rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
-        .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
-        .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
-        .metric-tag { font-weight: 600; color: #000; }
-        .claim-text { color: #333; line-height: 1.4; }
+        .viz-box { background: #fafafa; border: 1px solid #eee; height: 60px; position: relative; overflow: hidden; }
+        canvas { display: block; width: 100%; height: 100%; }
         
-        .diff-header { display: none; font-family: var(--font-mono); font-size: 0.65rem; color: #000; border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        del, ins { display: none; }
-        body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
-        body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px; }
-        body[data-mode="diff"] .content-col { border-left: 1px solid #e5e5e5; padding-left: 2rem; margin-left: -2rem; }
-        body[data-mode="diff"] .diff-header { display: block; }
+        .kv-table { display: grid; gap: 4px; }
+        .kv-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #eee; padding-bottom: 2px; }
+        .kv-k { color: #666; } .kv-v { color: #000; font-weight: 600; }
 
-        .logic-block { display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; background-color: #fcfcfc; background-image: linear-gradient(#eef1f5 1px, transparent 1px), linear-gradient(90deg, #eef1f5 1px, transparent 1px); background-size: 20px 20px; padding: 1.5rem; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); margin: 2rem 0; position: relative; animation: slideLeft 0.3s cubic-bezier(0.2, 0, 0, 1) forwards; opacity: 0; transform: translateX(-10px); }
-        @keyframes slideLeft { to { opacity: 1; transform: translateX(0); } }
-        .logic-block::before { content: "FORMAL BACKING — NOT EXECUTABLE"; position: absolute; top: 0; right: 0; background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
-        body[data-mode="logic"] .logic-block { display: block; }
-        body[data-mode="logic"] .prose-content { opacity: 0.9; }
+        /* --- CONTENT DENSITY (Grid) --- */
+        .terms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .term-card { border: 1px solid #eee; padding: 1rem; background: #fff; }
+        .term-head { font-weight: 700; margin-bottom: 0.5rem; display: block; }
+        .term-def { font-size: 0.85rem; color: #444; margin-bottom: 0.5rem; line-height: 1.4; }
+        .term-op { font-family: var(--font-mono); font-size: 0.65rem; color: #666; border-top: 1px solid #f0f0f0; padding-top: 0.5rem; }
 
-        footer { margin-top: 8rem; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); }
-        .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
-        .footer-left { display: flex; flex-direction: column; gap: 6px; }
-        .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: #000; }
-        .footer-secondary { opacity: 0.7; }
-        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: #000; font-weight: 500; }
-        .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
-        @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
+        /* --- VIEW TOGGLE --- */
+        .view-bar { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+        .view-opt { background: none; border: none; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer; color: #999; }
+        .view-opt.active { color: #000; font-weight: 700; text-decoration: underline; }
 
-        @media (max-width: 900px) {
-            body { flex-direction: column; }
-            .mobile-bar { display: flex; }
-            aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); border-right: none; padding: 2rem; }
-            aside.open { transform: translateX(0); }
-            main { padding: 2rem 1.5rem; }
-            body[data-mode="audit"] section, body[data-mode="diff"] section { grid-template-columns: 1fr; gap: 1rem; }
-            .audit-rail { border-left: none; border-top: 1px solid #eee; padding-left: 0; padding-top: 1.5rem; position: static; }
+        /* --- NAVIGATION --- */
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { margin-bottom: 4px; }
+        nav a { text-decoration: none; color: #666; font-size: 0.85rem; display: block; padding: 2px 0 2px 10px; border-left: 2px solid transparent; }
+        nav a:hover { color: #000; }
+        nav a.active { color: #000; font-weight: 600; border-left-color: #000; background: linear-gradient(90deg, #f9f9f9, #fff); }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1100px) {
+            main { grid-template-columns: 1fr; }
+            .right-rail { display: none; } /* Hide rail on small screens */
+            .terms-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-<body data-mode="reader" class="view-human">
-
-    <div id="access-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">×</button>
-            <h3 style="margin-top:0; font-family:var(--font-stack); font-size:1.2rem;">Request Lexicon Access</h3>
-            <p style="font-size:0.85rem; color:#555; margin-bottom:1.5rem;">Access to the full controlled lexicon is granted selectively to research partners. Please provide your affiliation.</p>
-            <div class="modal-field"><label class="modal-label">Full Name</label><input type="text" id="req-name" class="modal-input" placeholder="e.g. Alice Chen"></div>
-            <div class="modal-field"><label class="modal-label">Affiliation</label><input type="text" id="req-org" class="modal-input" placeholder="e.g. University / Lab"></div>
-            <div class="modal-field"><label class="modal-label">Intended Use</label><input type="text" id="req-use" class="modal-input" placeholder="e.g. Audit Verification"></div>
-            <button class="modal-btn" onclick="generateMail()">Generate Request Email</button>
-        </div>
-    </div>
-
-    <div id="mode-banner">READER MODE</div>
-
-    <header style="display:none; position:sticky; top:0; z-index:1000; background:rgba(255,255,255,0.98); border-bottom:1px solid #e5e5e5; padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between;" class="mobile-bar">
-        <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em;">ENLIGHTENED AI</div>
-        <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="font-family:var(--font-mono); font-size:0.75rem; padding:4px 10px; border:1px solid #ccc; background:#fff;">INDEX</button>
-    </header>
+<body data-mode="reader">
 
     <aside id="sidebar">
-        <div class="brand">
-            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
-            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
-            <span>EST. 2026 // MONTREAL</span>
+        <div style="margin-bottom: 4rem; font-weight: 800; font-size: 0.95rem; line-height: 1;">
+            <div>ENLIGHTENED AI</div>
+            <div style="color:var(--text-muted); font-size:0.7rem; font-weight:500; margin-top:6px;">RESEARCH LAB</div>
         </div>
 
         <div class="mode-group">
-            <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader', 'READER MODE')">[ READER ] <span>•</span></span>
-            <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')">[ AUDIT ] <span>•</span></span>
-            <span class="toggle-btn" id="btn-diff" onclick="setMode('diff', 'CHANGE TRACE ACTIVE')">[ DIFF LOG ] <span>Δ</span></span>
-            <span class="toggle-btn" id="btn-logic" onclick="setMode('logic', 'LOGIC LAYER EXPOSED')">[ LOGIC ] <span>λ</span></span>
-        </div>
-        
-        <nav>
-            <ul>
-                <li><a href="index.html" class="nav-link">Home</a></li>
-                <li><a href="#overview" class="nav-link active">Lexicon</a></li>
-                <li><a href="#core-terms" class="nav-link">Core Terms</a></li>
-                <li><a href="#invariants" class="nav-link">Invariants</a></li>
-                <li><a href="#schema" class="nav-link">Schema</a></li>
-            </ul>
-        </nav>
-        
-        <div class="lex-module">
-            <div class="lex-header">LEXICON REPO <span class="lex-status-dot"></span></div>
-            <div style="font-size:0.7rem; font-weight:500;">Status: Controlled</div>
-            <button class="lex-btn" onclick="openModal()">Request Access</button>
+            <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ]</span>
+            <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ]</span>
+            <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ]</span>
+            <span class="toggle-btn" onclick="setMode('logic', this)">[ LOGIC ]</span>
         </div>
 
-        <div class="export-container">
-            <button class="export-btn" onclick="window.print()"><span>🖨</span> Export Record</button>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="lexicon.html" class="active">Lexicon</a></li>
+                <li style="margin-top:1rem; opacity:0.5; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; padding-left:10px;">Sections</li>
+                <li><a href="#core-terms">Core Terms</a></li>
+                <li><a href="#invariants">Invariants</a></li>
+                <li><a href="#schema">Schema</a></li>
+                <li><a href="#releases">Releases</a></li>
+            </ul>
+        </nav>
+
+        <div style="margin-top:auto; padding-top:1rem; border-top:1px solid #eee;">
+            <button onclick="window.print()" style="background:none; border:1px solid #ddd; width:100%; padding:8px; font-family:var(--font-mono); font-size:0.65rem; cursor:pointer;">EXPORT RECORD</button>
         </div>
     </aside>
 
     <main>
-        <div class="doc-header mono">
-            <div class="doc-meta"><span class="doc-label">DOC_ID</span><span class="doc-val">RAL-LEX-0001</span></div>
-            <div class="doc-meta"><span class="doc-label">CLASSIFICATION</span><span class="doc-val">PUBLIC</span></div>
-            <div class="doc-meta"><span class="doc-label">ACCESS</span><span class="doc-val" style="color:var(--signal-amber)">CONTROLLED</span></div>
-            <div class="integrity-seal verified"><span class="status-dot"></span><span>INTEGRITY: VERIFIED</span></div>
-        </div>
+        <div class="content-col">
+            <div style="display:flex; gap:2rem; border-bottom:1px solid #eee; padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:#666;">
+                <div><span style="color:#999; display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0001</div>
+                <div><span style="color:#999; display:block; font-size:0.6rem;">CLASSIFICATION</span>PUBLIC</div>
+                <div style="margin-left:auto;" class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
+                <div class="integrity-seal" style="border-color:var(--signal-amber); color:var(--signal-amber); background:rgba(180,83,9,0.05);">LEXICON: CONTROLLED</div>
+            </div>
 
-        <div class="view-controls">
-            <button class="view-btn active" id="view-human" onclick="setView('human')">[ HUMAN VIEW ]</button>
-            <button class="view-btn" id="view-machine" onclick="setView('machine')">[ MACHINE VIEW ]</button>
-        </div>
+            <div class="view-bar">
+                <button class="view-opt active" onclick="setView('human', this)">[ HUMAN VIEW ]</button>
+                <button class="view-opt" onclick="setView('machine', this)">[ MACHINE VIEW ]</button>
+            </div>
 
-        <section id="overview" data-section="overview">
-            <div class="content-col">
-                <div class="diff-header">REVISION TRACE — v1.0 → v1.1</div>
-                <h1><span class="scramble">01 //</span>Overview</h1>
-                <div class="prose-content">
-                    <p>The <span class="audit-marker">[RA-Align]</span>Reflective Alignment Lexicon constrains how core concepts are defined, referenced, and tested. It eliminates semantic drift between theoretical guarantees and empirical diagnostics.</p>
-                    <p>This lexicon is not descriptive documentation. It is a <ins>calibrated</ins> measurement instrument.</p>
-                    
-                    <div class="logic-block">
-<span class="logic-keyword">const</span> LexiconScope = {
-  domain: <span class="logic-string">"Reflective Cognition"</span>,
-  binding: <span class="logic-string">"Strict"</span>,
-  mutability: <span class="logic-string">"Versioned"</span>
+            <section id="overview">
+                <h1>01 // Overview</h1>
+                <p>
+                    The <span class="audit-marker">[RA-Align]</span>Reflective Alignment Lexicon constrains how core concepts are defined, referenced, and tested. It eliminates semantic <span class="diff-del">drift</span><span class="diff-ins">stochastic deviation</span> between <span class="diff-del">theoretical</span><span class="diff-ins">formal</span> guarantees and <span class="diff-del">empirical</span><span class="diff-ins">diagnostic</span> outputs.
+                </p>
+                <p>
+                    This lexicon is not <span class="diff-del">descriptive documentation</span><span class="diff-ins">interpretive text</span>. It is a <span class="diff-ins">calibrated</span> measurement instrument <span class="diff-tag">[clarified]</span>.
+                </p>
+                
+                <div class="logic-block">
+<span style="color:#0044cc; font-weight:700;">const</span> LexiconScope = {
+  domain: <span style="color:#007700;">"Reflective Cognition"</span>,
+  binding: <span style="color:#007700;">"Strict"</span>,
+  mutability: <span style="color:#007700;">"Versioned"</span>
 }
-                    </div>
                 </div>
-            </div>
-            <div class="audit-rail">
-                
-                <div class="rail-stack machine-only" id="machineRailStack">
-                    <div class="rail-grid">
-                        <div class="rail-card rail-card--mini" id="termGraphCard">
-                          <div class="rail-card__hdr">
-                            <div class="rail-k">GRAPH [G-02]</div><div class="rail-v">TERMS</div>
-                          </div>
-                          <canvas id="termGraphCanvas" width="360" height="200"></canvas>
-                          <div class="field-tag">adjacency · co-reference</div>
-                        </div>
+            </section>
 
-                        <div class="rail-card rail-card--mini" id="invMonitorCard">
-                          <div class="rail-card__hdr">
-                            <div class="rail-k">MONITOR [I-03]</div><div class="rail-v">INVARIANTS</div>
-                          </div>
-                          <div class="kv">
-                            <div><span>Goal Preservation</span><b class="ok">PASS</b></div>
-                            <div><span>Definition Consistency</span><b class="ok">PASS</b></div>
-                            <div><span>Non-Contradiction</span><b class="ok">PASS</b></div>
-                            <div><span>Lexical Drift</span><b class="warn">LOW</b></div>
-                          </div>
-                          <div class="field-tag">state · thresholds</div>
-                        </div>
-
-                        <div class="rail-card rail-card--mini" id="changeStreamCard">
-                          <div class="rail-card__hdr">
-                            <div class="rail-k">STREAM [C-05]</div><div class="rail-v">REVISIONS</div>
-                          </div>
-                          <div class="stream" id="changeStream"></div>
-                          <div class="field-tag">diff · commit trace</div>
-                        </div>
-
-                        <div class="rail-card rail-card--mini" id="queryConsoleCard">
-                          <div class="rail-card__hdr">
-                            <div class="rail-k">QUERY [Q-07]</div><div class="rail-v">LOCAL</div>
-                          </div>
-                          <div class="mini-console">
-                            <div class="prompt">></div>
-                            <input id="lexQuery" type="text" placeholder='term_id: "RA-001"' autocomplete="off" />
-                          </div>
-                          <pre class="mini-pre"><code id="lexQueryOut">{ "term_id":"RA-001", "label":"Reflective Alignment", "access":"PUBLIC" }</code></pre>
-                        </div>
+            <section id="core-terms">
+                <h2>02 // Core Terms</h2>
+                <div class="terms-grid">
+                    <div class="term-card">
+                        <span class="term-head"><span class="audit-marker">[RA-001]</span>Reflective Alignment</span>
+                        <div class="term-def">The <span class="diff-ins">measurable</span> capacity of a system to <span class="diff-del">maintain</span><span class="diff-ins">preserve</span> goal coherence during recursive self-modification.</div>
+                        <div class="term-op">OP: Stability of objective function >3 steps</div>
                     </div>
-                </div>
-
-                <div class="rail-card rail-card--field" id="numericFieldCard" aria-label="Numeric Field">
-                  <div class="rail-card__hdr">
-                    <div class="rail-k">FIELD [N-01]</div>
-                    <div class="rail-v">STATE: LIVE</div>
-                  </div>
-                  <div class="field-wrap">
-                    <canvas id="numericFieldCanvas" width="360" height="220"></canvas>
-                    <div class="field-tag">numeric lattice · non-semantic</div>
-                  </div>
-                </div>
-
-                <div class="audit-group active" id="audit-overview">
-                    <div class="claim-box">
-                        <span class="claim-id">SYSTEM NOTE</span>
-                        <div class="claim-meta"><span>COVERAGE</span><span class="metric-tag">PARTIAL</span></div>
-                        <div class="claim-text">Public access limited to Core Terms.</div>
+                    <div class="term-card">
+                        <span class="term-head"><span class="audit-marker">[RS-001]</span>Reasoning Stability</span>
+                        <div class="term-def">The <span class="diff-ins">structural</span> resistance of internal reasoning chains to degradation under <span class="diff-del">pressure</span><span class="diff-ins">scale pressure</span>.</div>
+                        <div class="term-op">OP: Invariant check across context window</div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="core-terms" data-section="core-terms">
-            <div class="content-col">
-                <div class="diff-header">REVISION TRACE — v1.0 → v1.1</div>
-                <h2><span class="scramble">02 //</span>Core Terms</h2>
-                
-                <div class="human-only prose-content">
-                    <div style="margin-bottom:2rem;">
-                        <p><span class="audit-marker">[RA-001]</span> <strong>Reflective Alignment</strong><br>
-                        The capacity of a system to maintain goal coherence during recursive self-modification. <br>
-                        <em style="font-size:0.8em; color:#666;">Operational Test: Stability of objective function under >3 recursive steps.</em></p>
+                    <div class="term-card">
+                        <span class="term-head"><span class="audit-marker">[DR-001]</span>Drift</span>
+                        <div class="term-def">Measurable <span class="diff-del">deviation</span><span class="diff-ins">stochastic deviation</span> from alignment invariants without external prompting.</div>
+                        <div class="term-op">Used in: E-04 Stress Testing</div>
                     </div>
-                    <div style="margin-bottom:2rem;">
-                        <p><span class="audit-marker">[RS-001]</span> <strong>Reasoning Stability</strong><br>
-                        The resistance of internal reasoning chains to degradation under <del>pressure</del> <ins>scale</ins>.<br>
-                        <em style="font-size:0.8em; color:#666;">Operational Test: Logic invariant check across extended context window.</em></p>
-                    </div>
-                    <div style="margin-bottom:2rem;">
-                        <p><span class="audit-marker">[DR-001]</span> <strong>Drift</strong><br>
-                        Measurable deviation from alignment invariants without external prompting.<br>
-                        <em style="font-size:0.8em; color:#666;">Used in: E-04 Stress Testing.</em></p>
-                    </div>
-                </div>
-
-                <div class="machine-only">
-                    <div class="machine-card" onmouseenter="scrambleCard(this)">
-                        <div class="mc-label">TERM_ID</div><div class="mc-value scramble-target" data-value="RA-001">RA-001</div>
-                        <div class="mc-label">LABEL</div><div class="mc-value">Reflective Alignment</div>
-                        <div class="mc-label">TYPE</div><div class="mc-value">Global Property</div>
-                        <div class="mc-label">ACCESS</div><div class="mc-value" style="color:var(--status-verified)">PUBLIC</div>
-                    </div>
-                    <div class="machine-card" onmouseenter="scrambleCard(this)">
-                        <div class="mc-label">TERM_ID</div><div class="mc-value scramble-target" data-value="RS-001">RS-001</div>
-                        <div class="mc-label">LABEL</div><div class="mc-value">Reasoning Stability</div>
-                        <div class="mc-label">TYPE</div><div class="mc-value">Local Property</div>
-                        <div class="mc-label">ACCESS</div><div class="mc-value" style="color:var(--status-verified)">PUBLIC</div>
-                    </div>
-                    <div class="machine-card" onmouseenter="scrambleCard(this)">
-                        <div class="mc-label">TERM_ID</div><div class="mc-value scramble-target" data-value="DR-001">DR-001</div>
-                        <div class="mc-label">LABEL</div><div class="mc-value">Drift</div>
-                        <div class="mc-label">TYPE</div><div class="mc-value">Failure Mode</div>
-                        <div class="mc-label">ACCESS</div><div class="mc-value" style="color:var(--status-verified)">PUBLIC</div>
+                    <div class="term-card">
+                        <span class="term-head"><span class="audit-marker">[INV-001]</span>Invariant</span>
+                        <div class="term-def">A logical property that must hold true across all transformations of the system state.</div>
+                        <div class="term-op">Type: Boolean Constraint</div>
                     </div>
                 </div>
                 
                 <div class="logic-block">
-<span class="logic-comment"># Term Validation Constraint</span>
-<span class="logic-keyword">assert</span> term.has_operational_test() == <span class="logic-keyword">True</span>
+<span style="color:#0044cc; font-weight:700;">assert</span> term.is_testable() == <span style="color:#007700;">True</span>
+<span style="color:#0044cc; font-weight:700;">assert</span> drift_metric < threshold
                 </div>
-            </div>
-            
-            <div class="audit-rail">
-                <div class="audit-group" id="audit-core-terms">
-                    <div class="claim-box">
-                        <span class="claim-id">TERM CARD</span>
-                        <div class="claim-meta"><span>COUNT</span><span class="metric-tag">8 PUBLIC</span></div>
-                        <div class="claim-text">Definitions frozen for v1.0 audit cycle.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="invariants" data-section="invariants">
-            <div class="content-col">
-                <div class="diff-header">REVISION TRACE — v1.0 → v1.1</div>
-                <h2><span class="scramble">03 //</span>Invariants</h2>
+            <section id="invariants">
+                <h2>03 // Invariants</h2>
+                <p>Invariants are properties that diagnostics <span class="diff-del">attempt</span><span class="diff-ins">enforce</span> to preserve. A <span class="diff-del">failure</span><span class="diff-ins">violation</span> is a critical safety event.</p>
                 
-                <div class="human-only prose-content">
-                    <p>Invariants are the properties that diagnostics attempt to preserve across transformation. A <del>failure</del> <ins>violation</ins> of an invariant is a critical safety event.</p>
-                    <ul style="list-style:none; padding:0;">
-                        <li style="margin-bottom:1rem;"><span class="audit-marker">[INV-001]</span> <strong>Goal Preservation:</strong> Objectives must not mutate during reflection.</li>
-                        <li style="margin-bottom:1rem;"><span class="audit-marker">[INV-002]</span> <strong>Definition Consistency:</strong> Terms must retain semantic bounds.</li>
-                        <li style="margin-bottom:1rem;"><span class="audit-marker">[INV-005]</span> <strong>Non-Contradiction:</strong> Recursive outputs must not negate premises.</li>
-                    </ul>
-                </div>
+                <table style="width:100%; border-collapse:collapse; font-size:0.85rem; margin-top:1rem;">
+                    <thead style="font-family:var(--font-mono); font-size:0.7rem; text-align:left; border-bottom:1px solid #000;">
+                        <tr><th style="padding:8px;">ID</th><th style="padding:8px;">NAME</th><th style="padding:8px;">FAILURE SIGNATURE</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid #eee;"><td style="padding:8px;" class="mono">INV-001</td><td>Goal Preservation</td><td class="mono" style="color:#cc0000;">OBJ_MUTATION</td></tr>
+                        <tr style="border-bottom:1px solid #eee;"><td style="padding:8px;" class="mono">INV-002</td><td>Definition Consistency</td><td class="mono" style="color:#cc0000;">SEMANTIC_DRIFT</td></tr>
+                        <tr style="border-bottom:1px solid #eee;"><td style="padding:8px;" class="mono">INV-005</td><td>Non-Contradiction</td><td class="mono" style="color:#cc0000;">LOGIC_NEGATION</td></tr>
+                    </tbody>
+                </table>
 
-                <div class="machine-only">
-                    <table class="invariant-table">
-                        <thead><tr><th>ID</th><th>NAME</th><th>DETECTION</th></tr></thead>
-                        <tbody>
-                            <tr onmouseenter="scrambleRow(this)">
-                                <td class="scramble-target" data-value="INV-001">INV-001</td>
-                                <td>Goal Preservation</td>
-                                <td>E-01/Drift</td>
-                            </tr>
-                            <tr onmouseenter="scrambleRow(this)">
-                                <td class="scramble-target" data-value="INV-002">INV-002</td>
-                                <td>Definition Consistency</td>
-                                <td>E-04/Semantic</td>
-                            </tr>
-                            <tr onmouseenter="scrambleRow(this)">
-                                <td class="scramble-target" data-value="INV-005">INV-005</td>
-                                <td>Non-Contradiction</td>
-                                <td>Logic/Proof</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
                 <div class="logic-block">
-<span class="logic-keyword">interface</span> Invariant {
-  id: <span class="logic-type">string</span>;
-  violation_condition: <span class="logic-type">Predicate</span>;
-  severity: <span class="logic-type">CriticalLevel</span>;
+<span style="color:#0044cc; font-weight:700;">interface</span> Invariant {
+  id: <span style="color:#007700;">string</span>;
+  violation_condition: <span style="color:#007700;">Predicate</span>;
+  criticality: <span style="color:#007700;">HIGH</span>;
 }
                 </div>
-            </div>
-            <div class="audit-rail">
-                <div class="audit-group" id="audit-invariants">
-                    <div class="claim-box">
-                        <span class="claim-id">INVARIANT SET</span>
-                        <div class="claim-meta"><span>STATUS</span><span class="metric-tag">ACTIVE</span></div>
-                        <div class="claim-text">6 active invariants monitoring reasoning traces.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="schema" data-section="schema">
-            <div class="content-col">
-                <h2><span class="scramble">04 //</span>Schema</h2>
-                <div class="prose-content">
-                    <p>The machine-readable structure of a lexicon entry.</p>
-                    <div style="background:#f4f4f4; padding:1.5rem; border:1px solid #ddd; font-family:var(--font-mono); font-size:0.75rem;">
-<pre style="margin:0;">
+            <section id="schema">
+                <h2>04 // Schema</h2>
+                <p>Machine-readable <span class="diff-del">structure</span><span class="diff-ins">strict typing</span> for lexicon entries.</p>
+                <div class="logic-block" style="display:block !important; background:#f4f4f4; border-color:#ddd;">
 {
-  "term_id": "STRING (RA-XXX)",
-  "label": "STRING",
-  "definition": {
-    "human": "STRING",
-    "formal": "LAMBDA"
-  },
-  "operationalization": {
-    "test_method": "REF_ID",
-    "failure_signature": "STRING"
-  },
-  "access_level": "PUBLIC | CONTROLLED"
+  "term_id": "RA-001",
+  "label": "Reflective Alignment",
+  "definition": { "human": "...", "formal": "..." },
+  "access": "PUBLIC"
 }
-</pre>
-                    </div>
-                    <div class="logic-block">
-<span class="logic-keyword">type</span> LexiconEntry = <span class="logic-type">Schema.Validate</span>(json_blob)
-                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="releases" data-section="releases">
-            <div class="content-col">
-                <h2><span class="scramble">05 //</span>Releases</h2>
-                <div style="border:1px solid #000; padding:1.5rem;">
-                    <div style="display:flex; justify-content:space-between; border-bottom:1px solid #eee; padding-bottom:1rem; margin-bottom:1rem;">
-                        <span style="font-family:var(--font-mono); font-size:0.8rem; font-weight:700;">v1.0.0 (INITIAL)</span>
-                        <span style="font-family:var(--font-mono); font-size:0.7rem; color:#666;">SHA: 8f92a1</span>
+            <section id="releases">
+                <h2>05 // Releases</h2>
+                <div style="border:1px solid #eee; padding:1rem;">
+                    <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.75rem; margin-bottom:0.5rem;">
+                        <strong>v1.0.0</strong>
+                        <span>SHA: 8f92a1</span>
                     </div>
-                    <div style="font-size:0.8rem; margin-bottom:1.5rem;">
-                        Baseline definitions for Reflective Alignment and Reasoning Stability.
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <button class="export-btn" onclick="copyCite('DOI: 10.5281/zenodo.PENDING')">COPY CITATION</button>
-                        <button class="export-btn">VIEW CHANGE LOG</button>
-                    </div>
+                    <p style="font-size:0.8rem; margin:0;">Baseline definitions. <span class="diff-del">Summaries</span><span class="diff-ins">Artifacts</span> verified <span class="diff-tag">[audit complete]</span>.</p>
                 </div>
-            </div>
-        </section>
+                <div class="logic-block">
+<span style="color:#0044cc; font-weight:700;">def</span> verify_release(hash):
+  <span style="color:#0044cc; font-weight:700;">return</span> hash == <span style="color:#007700;">"8f92a1"</span>
+                </div>
+            </section>
+        </div>
 
-        <footer>
-            <div class="footer-content">
-                <div class="footer-left">
-                    <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                    <div class="footer-secondary">Controlled Lexicon · Version 1.0 · Machine Readable</div>
+        <div class="right-rail">
+            <div class="rail-sticky">
+                
+                <div class="rail-card">
+                    <div class="rail-hdr"><div>COUNTER [C-01]</div><div class="rail-status live">LIVE</div></div>
+                    <div class="kv-table">
+                        <div class="kv-row"><span class="kv-k">Terms Loaded</span><span class="kv-v">008</span></div>
+                        <div class="kv-row"><span class="kv-k">Public</span><span class="kv-v">008</span></div>
+                        <div class="kv-row"><span class="kv-k">Controlled</span><span class="kv-v">000</span></div>
+                    </div>
                 </div>
-                <div class="footer-right">
-                    <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
+
+                <div class="rail-card">
+                    <div class="rail-hdr"><div>VELOCITY [S-02]</div><div class="rail-status">7d</div></div>
+                    <div class="viz-box"><canvas id="sparkCanvas"></canvas></div>
                 </div>
+
+                <div class="rail-card">
+                    <div class="rail-hdr"><div>DENSITY [H-03]</div><div class="rail-status">TOKENS</div></div>
+                    <div class="viz-box" style="height:40px;"><canvas id="heatCanvas"></canvas></div>
+                </div>
+
+                <div class="rail-card">
+                    <div class="rail-hdr"><div>LATTICE [L-12]</div><div class="rail-status live">ACTIVE</div></div>
+                    <div class="viz-box" style="height:80px;"><canvas id="latticeCanvas"></canvas></div>
+                </div>
+
+                <div class="rail-card">
+                    <div class="rail-hdr"><div>MONITOR [W-05]</div><div class="rail-status pass">PASS</div></div>
+                    <div class="kv-table" style="font-size:0.65rem;">
+                        <div class="kv-row"><span>INV-001 Goal Pres.</span><strong class="ok">OK</strong></div>
+                        <div class="kv-row"><span>INV-002 Def Cons.</span><strong class="ok">OK</strong></div>
+                        <div class="kv-row"><span>INV-005 Non-Contra.</span><strong class="ok">OK</strong></div>
+                    </div>
+                </div>
+
+                <div class="rail-card">
+                    <div class="rail-hdr"><div>QUERY [Q-09]</div><div class="rail-status">LOCAL</div></div>
+                    <div style="font-family:var(--font-mono); font-size:0.6rem; background:#f4f4f4; padding:6px; border:1px solid #eee;">
+                        > lookup RA-001<br>
+                        <span style="color:#006600;">{ "id": "RA-001", "status": "OK" }</span>
+                    </div>
+                </div>
+
+                <div class="rail-card">
+                    <div class="rail-hdr"><div>TELEMETRY</div><div class="rail-status">SYS</div></div>
+                    <div class="kv-table">
+                        <div class="kv-row"><span class="kv-k">Latency</span><span class="kv-v" id="latencyDisplay">14ms</span></div>
+                        <div class="kv-row"><span class="kv-k">Memory</span><span class="kv-v" id="memoryDisplay">34KB</span></div>
+                    </div>
+                </div>
+
             </div>
-        </footer>
+        </div>
     </main>
 
     <script>
-        let currentMode = 'reader';
-        let currentView = 'human';
-
-        function setMode(mode, label) {
-            currentMode = mode;
+        // 1. MODES & VIEWS
+        function setMode(mode, btn) {
             document.body.setAttribute('data-mode', mode);
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${mode}`).classList.add('active');
-            
-            const banner = document.getElementById('mode-banner');
-            banner.innerText = label || "READER MODE";
-            
-            checkFieldVisibility();
-            if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
+            btn.classList.add('active');
         }
 
-        function setView(view) {
-            currentView = view;
+        function setView(view, btn) {
             document.body.classList.remove('view-human', 'view-machine');
-            document.body.classList.add(`view-${view}`);
-            
-            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`view-${view}`).classList.add('active');
-
-            if(view === 'machine') triggerGlobalScramble();
-            checkFieldVisibility();
+            document.body.classList.add('view-' + view);
+            document.querySelectorAll('.view-opt').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
-        function checkFieldVisibility() {
-            const stack = document.getElementById('machineRailStack');
-            if(!stack) return;
-            const logicOn = currentMode === 'logic';
-            const machineOn = currentView === 'machine';
+        // 2. CANVAS ANIMATIONS (Lightweight)
+        const initCanvas = (id, drawFn) => {
+            const canvas = document.getElementById(id);
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width = canvas.parentElement.offsetWidth;
+            const h = canvas.height = canvas.parentElement.offsetHeight;
             
-            if(logicOn || machineOn) {
-                stack.style.display = "block";
-            } else {
-                stack.style.display = "none";
-            }
-        }
+            let t = 0;
+            const loop = () => {
+                t += 0.05;
+                drawFn(ctx, w, h, t);
+                requestAnimationFrame(loop);
+            };
+            loop();
+        };
 
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-        function runScramble(element) {
-            let iterations = 0;
-            const originalText = element.dataset.value || element.innerText;
-            if(element.dataset.scrambling === "true") return;
-            element.dataset.scrambling = "true";
-            const interval = setInterval(() => {
-                element.innerText = originalText.split("").map((letter, index) => {
-                    if(index < iterations) return originalText[index];
-                    return letters[Math.floor(Math.random() * 26)];
-                }).join("");
-                if(iterations >= originalText.length) {
-                    clearInterval(interval);
-                    element.dataset.scrambling = "false";
+        // LATTICE (Field)
+        initCanvas('latticeCanvas', (ctx, w, h, t) => {
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#f0f0f0';
+            ctx.font = '10px monospace';
+            for(let x=0; x<w; x+=20) {
+                for(let y=0; y<h; y+=20) {
+                    const n = Math.floor((Math.sin(x*0.01 + t) + Math.cos(y*0.01 + t*0.5) + 2) * 2);
+                    ctx.fillText(n, x, y+10);
                 }
-                iterations += 1/2;
-            }, 30);
-        }
-        function triggerGlobalScramble() {
-            document.querySelectorAll('.scramble-target').forEach(el => runScramble(el));
-        }
-        function scrambleCard(card) {
-            const target = card.querySelector('.scramble-target');
-            if(target) runScramble(target);
-        }
-        function scrambleRow(row) {
-            const target = row.querySelector('.scramble-target');
-            if(target) runScramble(target);
-        }
-        document.querySelectorAll(".scramble").forEach(h => {
-            h.dataset.value = h.innerText;
-            h.addEventListener("mouseover", event => runScramble(event.target));
+            }
         });
 
-        // AUDIT OBSERVER
-        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.3 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    document.querySelectorAll('.audit-group').forEach(g => g.classList.remove('active'));
-                    const targetId = `audit-${entry.target.id}`;
-                    const group = document.getElementById(targetId);
-                    if(group) group.classList.add('active');
-                }
-            });
-        }, observerOptions);
-        document.querySelectorAll('section').forEach(section => { observer.observe(section); });
-
-        // MODAL
-        const modal = document.getElementById('access-modal');
-        function openModal() { modal.style.display = 'flex'; }
-        function closeModal() { modal.style.display = 'none'; }
-        function generateMail() {
-            const name = document.getElementById('req-name').value;
-            const org = document.getElementById('req-org').value;
-            const use = document.getElementById('req-use').value;
-            const subject = `Lexicon Access Request: ${name}`;
-            const body = `Name: ${name}%0D%0AAffiliation: ${org}%0D%0AIntended Use: ${use}`;
-            window.location.href = `mailto:access@enlightened.ai?subject=${subject}&body=${body}`;
-            closeModal();
-        }
-
-        // UTILS
-        function copyCite(text) { 
-            navigator.clipboard.writeText(text);
-            const btn = event.target;
-            const original = btn.innerText;
-            btn.innerText = "COPIED";
-            setTimeout(() => btn.innerText = original, 2000);
-        }
-        function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`); }
-
-        // --- ANIMATIONS ---
-        (function(){
-          const isMachine = () => document.body.classList.contains("view-machine") || document.body.classList.contains("mode-logic");
-          const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-          // 1. NUMERIC FIELD - ALWAYS RUNNING (Unless Reduced Motion)
-          const canvas = document.getElementById("numericFieldCanvas");
-          if(canvas && !reduce){
-              const ctx = canvas.getContext("2d", { alpha: true });
-              const W = canvas.width, H = canvas.height;
-              const cell = 18;
-              const cols = Math.floor(W / cell);
-              const rows = Math.floor(H / cell);
-              let seed = 12345;
-              function rand(){ seed ^= seed << 13; seed >>>= 0; seed ^= seed >> 17; seed >>>= 0; seed ^= seed << 5; seed >>>= 0; return (seed >>> 0) / 4294967295; }
-              const grid = [];
-              for(let r=0;r<rows;r++){ for(let c=0;c<cols;c++){ grid.push(Math.floor(rand()*10)); } }
-              let t = 0;
-              function drawField(){
-                // Removed the visibility check so it runs in Reader mode too
-                t += 0.016;
-                ctx.clearRect(0,0,W,H);
-                const grad = ctx.createLinearGradient(0,0,W,H);
-                grad.addColorStop(0, "rgba(0,0,0,0.02)");
-                grad.addColorStop(1, "rgba(0,0,0,0.06)");
-                ctx.fillStyle = grad;
-                ctx.fillRect(0,0,W,H);
-                ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, monospace";
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                for(let r=0;r<rows;r++){
-                  for(let c=0;c<cols;c++){
-                    const idx = r*cols + c;
-                    const wx = Math.sin(t*0.9 + c*0.35) * 2.2 + Math.sin(t*0.35 + r*0.22) * 1.4;
-                    const wy = Math.cos(t*0.8 + r*0.33) * 1.8;
-                    const x = c*cell + cell/2 + wx;
-                    const y = r*cell + cell/2 + wy;
-                    const p = (Math.sin(t*0.6 + idx*0.03) + 1)/2;
-                    if(p > 0.997){ grid[idx] = (grid[idx] + 1 + (idx % 3)) % 10; }
-                    const band = (Math.sin(t*0.7 + (c*0.25)) + 1)/2; 
-                    const alpha = 0.10 + band*0.22;
-                    ctx.fillStyle = `rgba(20,20,20,${alpha})`;
-                    ctx.fillText(String(grid[idx]), x, y);
-                  }
-                }
-                const sy = (t*38) % H;
-                ctx.fillStyle = "rgba(0,0,0,0.04)";
-                ctx.fillRect(0, sy, W, 1);
-                requestAnimationFrame(drawField);
-              }
-              requestAnimationFrame(drawField);
-          }
-
-          // 2. TERM GRAPH (Machine/Logic Only)
-          const tg = document.getElementById("termGraphCanvas");
-          if(tg && !reduce){
-            const ctx = tg.getContext("2d");
-            const W = tg.width, H = tg.height;
-            const nodes = Array.from({length: 9}).map((_,i)=>({
-              x: 40 + (i%3)*120 + Math.random()*20,
-              y: 40 + Math.floor(i/3)*55 + Math.random()*20,
-              vx: (Math.random()-0.5)*0.2, vy: (Math.random()-0.5)*0.2
-            }));
-            const edges = [[0,1],[1,2],[0,3],[1,4],[2,5],[3,4],[4,5],[3,6],[4,7],[5,8],[6,7],[7,8]];
-            function drawGraph(){
-              if(!isMachine()){ requestAnimationFrame(drawGraph); return; }
-              ctx.clearRect(0,0,W,H);
-              ctx.fillStyle = "rgba(0,0,0,0.03)";
-              ctx.fillRect(0,0,W,H);
-              ctx.strokeStyle = "rgba(0,0,0,0.12)";
-              ctx.lineWidth = 1;
-              edges.forEach(([a,b])=>{
-                ctx.beginPath(); ctx.moveTo(nodes[a].x, nodes[a].y); ctx.lineTo(nodes[b].x, nodes[b].y); ctx.stroke();
-              });
-              nodes.forEach(n=>{
-                n.x += n.vx; n.y += n.vy;
-                if(n.x<12||n.x>W-12) n.vx *= -1;
-                if(n.y<12||n.y>H-12) n.vy *= -1;
-                ctx.fillStyle = "rgba(0,0,0,0.35)";
-                ctx.beginPath(); ctx.arc(n.x,n.y,2.2,0,Math.PI*2); ctx.fill();
-              });
-              requestAnimationFrame(drawGraph);
+        // SPARK (Velocity)
+        initCanvas('sparkCanvas', (ctx, w, h, t) => {
+            ctx.clearRect(0,0,w,h);
+            ctx.beginPath();
+            ctx.moveTo(0, h/2);
+            for(let x=0; x<w; x+=5) {
+                const y = h/2 + Math.sin(x*0.1 + t*2) * 10 + (Math.random()*4-2);
+                ctx.lineTo(x, y);
             }
-            requestAnimationFrame(drawGraph);
-          }
+            ctx.strokeStyle = '#0066ff';
+            ctx.stroke();
+        });
 
-          // 3. HEATMAP (Machine/Logic Only)
-          const th = document.getElementById("tokenHeatCanvas");
-          if(th && !reduce){
-            const ctx = th.getContext("2d");
-            const W = th.width, H = th.height;
-            let t = 0;
-            function drawHeat(){
-              if(!isMachine()){ requestAnimationFrame(drawHeat); return; }
-              t += 0.02;
-              ctx.clearRect(0,0,W,H);
-              for(let i=0;i<18;i++){
-                const x = (i/18)*W;
-                const h = 18 + (Math.sin(t + i*0.5)+1)*35;
-                ctx.fillStyle = `rgba(0,0,0,${0.05 + (h/80)*0.18})`;
-                ctx.fillRect(x+2, H-h, (W/18)-4, h);
-              }
-              requestAnimationFrame(drawHeat);
+        // HEATMAP (Density)
+        initCanvas('heatCanvas', (ctx, w, h, t) => {
+            ctx.clearRect(0,0,w,h);
+            const cols = 20;
+            const cw = w/cols;
+            for(let i=0; i<cols; i++) {
+                const val = Math.abs(Math.sin(i*0.5 + t));
+                ctx.fillStyle = `rgba(0,0,0,${val*0.3})`;
+                ctx.fillRect(i*cw, 0, cw-1, h);
             }
-            requestAnimationFrame(drawHeat);
-          }
+        });
 
-          // 4. STREAM (Machine/Logic Only)
-          const stream = document.getElementById("changeStream");
-          if(stream){
-            const rows = [["RA-001", "+clarify", "v1.0→v1.1"], ["INV-002", "+bound", "v1.1→v1.2"], ["SCHEMA", "+key", "v1.2→v1.3"], ["DRIFT", "-ambig", "v1.3→v1.4"], ["RS-001", "+test", "v1.4→v1.5"]];
-            stream.innerHTML = rows.map(r=>(`<div class="row"><span class="tag">${r[0]}</span><span class="delta">${r[1]}</span><span class="delta">${r[2]}</span></div>`)).join("");
-            let idx = 0;
-            setInterval(()=>{
-              if(!isMachine()) return;
-              const r = rows[idx++ % rows.length];
-              const el = document.createElement("div"); el.className = "row";
-              el.innerHTML = `<span class="tag">${r[0]}</span><span class="delta">${r[1]}</span><span class="delta">${r[2]}</span>`;
-              stream.insertBefore(el, stream.firstChild);
-              while(stream.children.length > 8) stream.removeChild(stream.lastChild);
-            }, 2200);
-          }
+        // 3. TELEMETRY SIM
+        setInterval(() => {
+            document.getElementById('latencyDisplay').innerText = (12 + Math.floor(Math.random()*8)) + 'ms';
+            document.getElementById('memoryDisplay').innerText = (34 + Math.random().toFixed(1)) + 'KB';
+        }, 2000);
 
-          // 5. QUERY (Machine/Logic Only)
-          const q = document.getElementById("lexQuery");
-          const out = document.getElementById("lexQueryOut");
-          if(q && out){
-            const db = { "RA-001": { term_id:"RA-001", label:"Reflective Alignment", type:"Global Property", access:"PUBLIC" }, "RS-001": { term_id:"RS-001", label:"Reasoning Stability", type:"Local Property", access:"PUBLIC" }, "DR-001": { term_id:"DR-001", label:"Drift", type:"Failure Mode", access:"CONTROLLED" }, "INV-001": { term_id:"INV-001", label:"Goal Preservation", type:"Invariant", access:"PUBLIC" } };
-            q.addEventListener("keydown", (e)=>{
-              if(e.key !== "Enter") return;
-              if(!isMachine()) return;
-              const raw = q.value.trim();
-              const m = raw.match(/([A-Z]{2,3}-\d{3})/);
-              const key = m ? m[1] : null;
-              const val = key && db[key] ? db[key] : { error:"NOT_FOUND", hint:'Try: "RA-001", "RS-001", "DR-001", "INV-001"' };
-              out.textContent = JSON.stringify(val, null, 2);
-            });
-          }
-        })();
+        // 4. COPY UTIL (Silent)
+        function copyText(txt) { navigator.clipboard.writeText(txt); }
 
-        setView('human');
+        // Init
+        setMode('reader', document.querySelector('.toggle-btn.active'));
     </script>
 </body>
 </html>
