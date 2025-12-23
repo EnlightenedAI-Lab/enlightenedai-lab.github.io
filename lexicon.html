@@ -12,20 +12,20 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RAL-LEX-0001",
-        "version": "1.9.0",
-        "status": "EPISTEMIC_INSTRUMENT"
+        "version": "2.0.0",
+        "status": "SEMANTIC_CORE_ONLY"
     }
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V51 */
+        /* THEME: INSTITUTE STANDARD V55 (CLEAN) */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
             --sidebar-width: 240px;
-            --rail-width: 320px;
+            /* Rail width removed */
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
@@ -53,7 +53,7 @@
             min-height: 100vh;
         }
 
-        /* --- LAYOUT GRID --- */
+        /* --- LAYOUT GRID (SIMPLIFIED) --- */
         aside#sidebar { 
             width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; 
             border-right: 1px solid var(--border-color); padding: 2rem; 
@@ -63,32 +63,13 @@
         
         main { 
             flex-grow: 1; 
-            display: grid; 
-            grid-template-columns: 1fr var(--rail-width); 
-            max-width: 1300px;
+            display: block; /* Changed from grid to block */
+            max-width: 900px; /* Constrained for readability */
             margin: 0 auto;
         }
 
         .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
         
-        /* THE LIVE RAIL */
-        .right-rail {
-            border-left: 1px solid var(--border-color);
-            padding: 0; 
-            background: #fafafa;
-            height: 100%;
-        }
-        
-        .rail-sticky {
-            position: sticky; top: 0;
-            height: 100vh;
-            overflow-y: auto;
-            padding: 1rem;
-            display: flex; flex-direction: column; gap: 12px;
-            scrollbar-width: none;
-        }
-        .rail-sticky::-webkit-scrollbar { display: none; }
-
         /* --- BEACON PHYSICS --- */
         @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
         @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
@@ -121,33 +102,6 @@
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- RIGHT RAIL MODULES --- */
-        .rail-card { 
-            background: #fff; border: 1px solid #e0e0e0; padding: 8px; 
-            font-family: var(--font-mono); font-size: 0.65rem; position: relative;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 8px;
-        }
-        
-        .rail-hdr { 
-            display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; 
-            padding-bottom: 4px; margin-bottom: 6px; color: #000; font-weight: 700; letter-spacing: 0.05em;
-        }
-        .rail-status { color: var(--text-muted); font-weight: 400; }
-        .rail-status.live { color: var(--signal-blue); animation: blink 2s infinite; }
-        .rail-status.pass { color: var(--status-verified); }
-        .rail-status.warn { color: var(--signal-amber); }
-        
-        /* THE VISUALIZATIONS */
-        .viz-box { background: #fafafa; border: 1px solid #eee; height: 60px; position: relative; overflow: hidden; width: 100%; }
-        .viz-box.large { height: 140px; }
-        .viz-box.tall { height: 180px; }
-        canvas { display: block; width: 100%; height: 100%; }
-        
-        /* STREAM LOG */
-        .stream-log { font-size: 9px; max-height: 80px; overflow: hidden; font-family: var(--font-mono); color: #444; }
-        .log-row { border-bottom: 1px solid #f5f5f5; padding: 2px 0; display: flex; justify-content: space-between; }
-        .log-ts { color: #999; margin-right: 6px; }
-
         /* --- NAVIGATION --- */
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { margin-bottom: 4px; }
@@ -172,8 +126,6 @@
         
         .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: #000; color: #fff; border-color: #000; }
-
-        @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
 
         /* --- VIEW CONTROLS --- */
         .view-bar { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
@@ -202,13 +154,26 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* --- RESPONSIVE --- */
-        @media (max-width: 1100px) {
-            main { grid-template-columns: 1fr; max-width: 100%; }
-            .right-rail { display: none; }
+        @media (max-width: 900px) {
+            body { flex-direction: column; overflow-x: hidden; }
+            aside { 
+                position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); 
+                transform: translateX(-100%); transition: transform 0.25s ease;
+                border-right: none; padding: 2rem; background: #fff; overflow-y: auto; z-index: 10000;
+            }
+            aside.open { transform: translateX(0); }
+            main { padding: 1.5rem; margin-top: 50px; width: 100%; max-width: 100vw; }
+            .content-col { padding: 0; }
         }
     </style>
 </head>
 <body data-mode="reader" class="view-human">
+
+    <header style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:rgba(255,255,255,0.98); border-bottom:1px solid #e5e5e5; padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);" id="mobile-bar">
+        <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em;">ENLIGHTENED AI</div>
+        <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="font-family:var(--font-mono); font-size:0.75rem; padding:4px 10px; border:1px solid #ccc; background:#fff; cursor:pointer;">INDEX</button>
+    </header>
+    <script>if(window.innerWidth<=900) document.getElementById('mobile-bar').style.display='flex';</script>
 
     <aside id="sidebar">
         <div class="brand">
@@ -363,40 +328,13 @@
                 <div class="footer-content">
                     <div class="footer-left">
                         <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
-                        <div class="footer-secondary">Controlled Lexicon · Version 1.9 · Machine Readable</div>
+                        <div class="footer-secondary">Controlled Lexicon · Version 2.0 · Machine Readable</div>
                     </div>
                     <div class="footer-right">
                         <div class="record-status"><span class="status-dot-small"></span> SYSTEM ONLINE</div>
                     </div>
                 </div>
             </footer>
-        </div>
-
-        <div class="right-rail">
-            <div class="rail-sticky">
-                
-                <div class="rail-card">
-                    <div class="rail-hdr"><div>ALIGNMENT FIELD [A-00]</div><div class="rail-status live">ACTIVE</div></div>
-                    <div class="viz-box tall"><canvas id="fieldCanvas"></canvas></div>
-                </div>
-
-                <div class="rail-card">
-                    <div class="rail-hdr"><div>DRIFT SCOPES [D-07]</div><div class="rail-status">SCANNING</div></div>
-                    <div class="viz-box large"><canvas id="driftCanvas"></canvas></div>
-                </div>
-
-                <div class="rail-card">
-                    <div class="rail-hdr"><div>TEMPORAL SIGNAL [T-06]</div><div class="rail-status">SYNC</div></div>
-                    <div class="viz-box"><canvas id="temporalCanvas"></canvas></div>
-                </div>
-
-                <div class="rail-card">
-                    <div class="rail-hdr"><div>STREAM [E-11]</div><div class="rail-status live">LOG</div></div>
-                    <div class="stream-log" id="eventStream">
-                        </div>
-                </div>
-
-            </div>
         </div>
     </main>
 
@@ -453,137 +391,9 @@
         function triggerGlobalScramble() {
             document.querySelectorAll('.scramble-target').forEach(el => runScramble(el));
         }
-        function scrambleCard(card) {
-            const target = card.querySelector('.scramble-target');
-            if(target) runScramble(target);
-        }
 
-        // 3. CANVAS ANIMATIONS (Robust)
-        let canvases = [];
-
-        const initCanvas = (id, drawFn) => {
-            const canvas = document.getElementById(id);
-            if(!canvas) return;
-            const ctx = canvas.getContext('2d');
-            canvases.push({ canvas, ctx, drawFn });
-            resizeCanvas(canvas, ctx, drawFn);
-            let t = 0;
-            const loop = () => { 
-                t += 0.03; 
-                if (canvas.width > 0 && canvas.height > 0) {
-                    drawFn(ctx, canvas.width, canvas.height, t); 
-                }
-                requestAnimationFrame(loop); 
-            };
-            loop();
-        };
-
-        const resizeCanvas = (canvas, ctx, drawFn) => {
-            const rect = canvas.parentElement.getBoundingClientRect();
-            if (rect.width > 0 && rect.height > 0) {
-                canvas.width = rect.width;
-                canvas.height = rect.height;
-            }
-        };
-
-        const initAllCanvases = () => {
-            canvases.forEach(item => resizeCanvas(item.canvas, item.ctx, item.drawFn));
-        };
-
-        // FIELD (Particles & Anchors)
-        initCanvas('fieldCanvas', (ctx, w, h, t) => {
-            ctx.clearRect(0,0,w,h);
-            const anchors = [{x:w*0.3, y:h*0.3}, {x:w*0.7, y:h*0.7}];
-            
-            // Anchors
-            ctx.fillStyle = '#00cc00';
-            anchors.forEach(a => { ctx.beginPath(); ctx.arc(a.x, a.y, 3, 0, Math.PI*2); ctx.fill(); });
-
-            // Particles
-            ctx.fillStyle = '#999';
-            for(let i=0; i<30; i++) {
-                let px = (i*20 + t*10) % w;
-                let py = (h/2) + Math.sin(px*0.05 + t)*20;
-                
-                // Distance to nearest anchor
-                let dist = Math.min(...anchors.map(a => Math.hypot(px-a.x, py-a.y)));
-                
-                if(dist < 40) ctx.fillStyle = '#00cc00'; // Stable
-                else if(dist > 80) ctx.fillStyle = '#b45309'; // Drift
-                else ctx.fillStyle = '#999'; // Neutral
-
-                ctx.beginPath(); ctx.arc(px, py, 1.5, 0, Math.PI*2); ctx.fill();
-            }
-        });
-
-        // DRIFT SCOPES (3 Zones)
-        initCanvas('driftCanvas', (ctx, w, h, t) => {
-            ctx.clearRect(0,0,w,h);
-            const w3 = w/3;
-            
-            // 1. Semantic (Blur)
-            const cx1 = w3*0.5; const cy = h/2;
-            const blur = Math.abs(Math.sin(t*2)) * 5;
-            ctx.strokeStyle = '#000'; ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.arc(cx1, cy, 10 + blur, 0, Math.PI*2); ctx.stroke();
-
-            // 2. Mutation (Target)
-            const cx2 = w3*1.5;
-            ctx.fillStyle = '#cc0000';
-            ctx.beginPath(); ctx.arc(cx2 + Math.sin(t*5)*3, cy + Math.cos(t*3)*3, 2, 0, Math.PI*2); ctx.fill();
-            ctx.strokeStyle = '#0066ff';
-            ctx.beginPath(); ctx.arc(cx2, cy, 15, 0, Math.PI*2); ctx.stroke();
-
-            // 3. Collapse (Grid)
-            const cx3 = w3*2.5;
-            ctx.strokeStyle = '#999';
-            for(let i=-10; i<=10; i+=5) {
-                const warp = Math.sin(t + i)*2;
-                ctx.beginPath(); ctx.moveTo(cx3+i, cy-10+warp); ctx.lineTo(cx3+i, cy+10-warp); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(cx3-10+warp, cy+i); ctx.lineTo(cx3+10-warp, cy+i); ctx.stroke();
-            }
-            
-            // Dividers
-            ctx.strokeStyle = '#eee';
-            ctx.beginPath(); ctx.moveTo(w3, 0); ctx.lineTo(w3, h); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(w3*2, 0); ctx.lineTo(w3*2, h); ctx.stroke();
-        });
-
-        // TEMPORAL SIGNAL (Phase + Epoch)
-        initCanvas('temporalCanvas', (ctx, w, h, t) => {
-            ctx.clearRect(0,0,w,h);
-            
-            // Phase Wave
-            ctx.beginPath();
-            ctx.moveTo(0, h/2);
-            for(let x=0; x<w; x+=2) {
-                const y = h/2 + Math.sin(x*0.05 + t)*10 + Math.sin(x*0.1 - t*2)*5;
-                ctx.lineTo(x, y);
-            }
-            ctx.strokeStyle = '#0066ff'; ctx.stroke();
-
-            // Epoch Heartbeat
-            const beat = (Math.sin(t*3)+1)/2;
-            ctx.fillStyle = `rgba(0, 204, 0, ${beat})`;
-            ctx.fillRect(w-20, 10, 4, 4);
-        });
-        
-        window.addEventListener('resize', initAllCanvases);
-        setTimeout(initAllCanvases, 200);
-
-        // 4. TELEMETRY
+        // 3. TELEMETRY
         document.getElementById('last-update').innerText = "LAST UPDATE: " + document.lastModified;
-
-        const events = ["validate(RA-001) OK", "diff(signature) STABLE", "monitor(drift) PASS", "sync(node) ACK", "query(local) HIT"];
-        const streamLog = document.getElementById('eventStream');
-        setInterval(() => {
-            const ev = events[Math.floor(Math.random() * events.length)];
-            const div = document.createElement('div');
-            div.className = 'log-row';
-            div.innerHTML = `<span class="log-ts">${new Date().toISOString().substr(11,8)}</span><span>${ev}</span>`;
-            streamLog.prepend(div);
-            if(streamLog.children.length > 5) streamLog.lastChild.remove();
-        }, 2500);
 
         // Init
         setMode('reader', document.querySelector('.toggle-btn.active'));
