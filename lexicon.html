@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V109 (SIGNAL & SCALE) */
+        /* THEME: INSTITUTE STANDARD V110 (LIVING SIGNAL) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -198,7 +198,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V109)
+           LAYOUT ENGINE: SEGREGATED (V110)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -221,7 +221,7 @@
                 max-width: 900px;
             }
             .diagram-col {
-                width: 500px; /* INCREASED WIDTH FOR SCALE */
+                width: 500px; 
                 border-left: 1px solid var(--border-color);
                 background: var(--bg-color);
                 padding: 3rem 2rem;
@@ -387,7 +387,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V109 THEME ENGINE */
+                        /* V110 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -399,7 +399,7 @@
                             --diag-signal: #00cc00;
                         }
                         
-                        /* Light Mode Overrides (High Contrast) */
+                        /* Light Mode Overrides */
                         @media (prefers-color-scheme: light) {
                             [data-theme="light"] .diag-root {
                                 --diag-stroke: #222;
@@ -416,26 +416,64 @@
                         .diag-line { stroke: var(--text-muted, #666); stroke-width: 2px; fill: none; }
                         
                         /* Gate Emphasis */
-                        .diag-gate { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
+                        .diag-gate { stroke: var(--text-main, #eee); stroke-width: 2.5px; animation: gatePulse 3s ease-in-out infinite; }
                         
-                        /* Highlight & Animation Path */
-                        .signal-path {
-                            fill: none;
-                            stroke: #00cc00;
-                            stroke-width: 3px;
-                            stroke-dasharray: 10 200; /* Create the 'packet' */
-                            stroke-dashoffset: 210;
-                            opacity: 0.8;
-                            animation: pulseFlow 3s linear infinite;
+                        @keyframes gatePulse {
+                            0%, 100% { stroke-opacity: 1; }
+                            50% { stroke: #00cc00; }
+                        }
+
+                        /* INTERNAL STEP HIGHLIGHTS */
+                        .step-active { fill: rgba(0,204,0,0.1); stroke: #00cc00; }
+                        
+                        #lexicon-box { animation: stepFlash 3s linear infinite; animation-delay: 0.8s; }
+                        #serial-box { animation: stepFlash 3s linear infinite; animation-delay: 1.0s; }
+                        #state-box { animation: stepFlash 3s linear infinite; animation-delay: 1.2s; }
+                        #model-box { animation: stepFlash 3s linear infinite; animation-delay: 2.2s; }
+
+                        @keyframes stepFlash {
+                            0%, 100% { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); }
+                            10% { fill: rgba(0,204,0,0.1); stroke: #00cc00; }
+                            20% { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); }
+                        }
+
+                        /* SIGNAL PATH ANIMATION */
+                        .signal-path-1 {
+                            fill: none; stroke: #00cc00; stroke-width: 3px;
+                            stroke-dasharray: 40 1000; stroke-dashoffset: 1040;
+                            animation: flow1 3s linear infinite;
                         }
                         
-                        @keyframes pulseFlow {
-                            to { stroke-dashoffset: 0; }
+                        .signal-path-2 {
+                            fill: none; stroke: #00cc00; stroke-width: 3px;
+                            stroke-dasharray: 40 1000; stroke-dashoffset: 1040;
+                            animation: flow2 3s linear infinite;
+                        }
+
+                        @keyframes flow1 {
+                            0% { stroke-dashoffset: 1040; opacity: 0; }
+                            10% { opacity: 1; }
+                            25% { stroke-dashoffset: 960; opacity: 0; }
+                            100% { stroke-dashoffset: 960; opacity: 0; }
                         }
                         
-                        /* Reduced Motion Support */
+                        @keyframes flow2 {
+                            0% { stroke-dashoffset: 1040; opacity: 0; }
+                            60% { stroke-dashoffset: 1040; opacity: 0; }
+                            70% { opacity: 1; }
+                            85% { stroke-dashoffset: 960; opacity: 0; }
+                            100% { stroke-dashoffset: 960; opacity: 0; }
+                        }
+                        
+                        /* Reduced Motion Support: STATIC FALLBACK */
                         @media (prefers-reduced-motion: reduce) {
-                            .signal-path { animation: none; stroke-dasharray: 0; stroke-opacity: 0.5; }
+                            .signal-path-1, .signal-path-2, .diag-gate, #lexicon-box, #serial-box, #state-box, #model-box { 
+                                animation: none !important; 
+                            }
+                            /* Static High-Integrity State */
+                            .signal-path-1 { stroke-dasharray: 0; opacity: 0.3; }
+                            .signal-path-2 { stroke-dasharray: 0; opacity: 0.3; }
+                            #state-box { stroke: #00cc00; }
                         }
 
                         /* Container Dashed Box */
@@ -451,27 +489,29 @@
                             <text x="55" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
                         </g>
 
-                        <path d="M140 130 L180 130 M360 130 L400 130" class="signal-path" style="stroke-width:3px; opacity:0.6;"/>
+                        <path d="M140 130 L180 130" class="signal-path-1"/>
 
                         <g transform="translate(180, 50)">
                             <rect width="180" height="160" rx="4" class="diag-bg diag-gate"/>
                             <text x="90" y="25" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:800;">ENFORCEMENT GATE</text>
                             
-                            <rect x="30" y="40" width="120" height="28" rx="2" class="diag-bg"/>
+                            <rect id="lexicon-box" x="30" y="40" width="120" height="28" rx="2" class="diag-bg"/>
                             <text x="90" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
                             
-                            <rect x="30" y="80" width="120" height="28" rx="2" class="diag-bg"/>
+                            <rect id="serial-box" x="30" y="80" width="120" height="28" rx="2" class="diag-bg"/>
                             <text x="90" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
                             
-                            <rect x="30" y="120" width="120" height="28" rx="2" class="diag-bg" style="stroke:#00cc00; stroke-width:2px;"/>
-                            <text x="90" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; fill:#00cc00; font-weight:700;">3. ENFORCED STATE</text>
+                            <rect id="state-box" x="30" y="120" width="120" height="28" rx="2" class="diag-bg"/>
+                            <text x="90" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; font-weight:700;">3. ENFORCED STATE</text>
                             
                             <path d="M90 68 L90 80" class="diag-line" style="stroke-width:1px;"/>
                             <path d="M90 108 L90 120" class="diag-line" style="stroke-width:1px;"/>
                         </g>
 
+                        <path d="M360 130 L400 130" class="signal-path-2"/>
+
                         <g transform="translate(400, 105)">
-                            <rect width="110" height="50" rx="2" class="diag-bg"/>
+                            <rect id="model-box" width="110" height="50" rx="2" class="diag-bg"/>
                             <text x="55" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
                         </g>
 
@@ -486,7 +526,7 @@
                         </g>
 
                         <path d="M140 130 L180 130" class="diag-line" marker-end="url(#arrow)"/>
-                        <path d="M360 130 L400 130" class="diag-line" style="stroke:#00cc00; stroke-width:2px;" marker-end="url(#arrow-green)"/>
+                        <path d="M360 130 L400 130" class="diag-line" marker-end="url(#arrow)"/>
                         
                         <path d="M455 105 L455 80 L530 80" class="diag-line" style="stroke-dasharray:4 4" marker-end="url(#arrow)"/>
                         <path d="M580 100 L580 160" class="diag-line" style="stroke-dasharray:4 4" marker-end="url(#arrow)"/>
@@ -495,9 +535,6 @@
                         <defs>
                             <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
                                 <path d="M0,0 L0,6 L9,3 z" fill="var(--text-muted)" />
-                            </marker>
-                            <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-                                <path d="M0,0 L0,6 L9,3 z" fill="#00cc00" />
                             </marker>
                         </defs>
                     </g>
