@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V142 (POLISHED LAYOUT) */
+        /* THEME: INSTITUTE STANDARD V143 (LAYOUT & VISIBILITY FIX) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -38,8 +38,7 @@
             --signal-enforced: #00cc00;  /* Pure Green */
             --signal-eval: #00d7ff;      /* Bright Cyan */
             --signal-struct: #cccccc;
-            --signal-blue: #0066ff;      /* For status dot */
-            --status-verified: #00cc00;  /* For integrity seal */
+            --signal-blue: #0066ff;
             
             /* FONTS */
             --font-mono: "JetBrains Mono", monospace;
@@ -86,15 +85,23 @@
             color: var(--text-main);
             line-height: 1.5;
             transition: background 0.3s ease, color 0.3s ease;
-            display: flex;
-            flex-direction: column; /* Key for sticky footer */
+            display: flex; /* Sidebar | Main */
         }
         
-        /* Main Page Wrapper: Sidebar + Content Area */
-        .page-wrapper {
-            flex: 1 0 auto; /* Expand to fill space */
+        /* Main Column (Content + Footer) */
+        .main-column {
+            flex: 1;
             display: flex;
-            width: 100%;
+            flex-direction: column;
+            min-height: 100vh;
+            margin-left: 240px; /* Offset for fixed sidebar */
+        }
+        
+        /* The Split View Container */
+        .split-view {
+            display: flex;
+            flex: 1; /* Takes remaining height */
+            flex-wrap: wrap;
         }
 
         /* --- TYPOGRAPHY --- */
@@ -187,55 +194,49 @@
         .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
-        /* --- STATIC FOOTER (SINGLE LINE) --- */
-        .site-footer {
-            flex-shrink: 0;
-            width: 100%;
-            border-top: 1px solid var(--border-color); 
-            padding: 18px 0; 
-            font-family: "JetBrains Mono", monospace; font-size: 0.6rem; color: var(--text-muted); 
+        /* --- STATIC FOOTER (BOTTOM OF FLOW) --- */
+        footer { 
+            width: 100%; 
+            border-top: 1px solid var(--border-color); padding: 2rem 4rem; 
+            font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); 
             background: var(--bg-color); 
-            text-align: center;
-            margin-top: 24px;
+            margin-top: auto; 
         }
-        .footer-inner {
-            width: 100%; margin: 0 auto; padding: 0 24px;
-            display: flex; justify-content: center; align-items: center; gap: 22px;
-            flex-wrap: nowrap; white-space: nowrap; max-width: none;
-        }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+        .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--text-main); }
         .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 600; }
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V142)
+           LAYOUT ENGINE: SEGREGATED (V143)
            ========================================= */
 
         @media (min-width: 1101px) {
-            body { display: flex; min-height: 100vh; flex-direction: row; flex-wrap: wrap; }
-            aside#sidebar { width: 240px; height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 2rem; display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0; }
+            aside#sidebar { 
+                width: 240px; height: 100vh; position: fixed; top: 0; left: 0; 
+                border-right: 1px solid var(--border-color); padding: 2rem; 
+                display: flex; flex-direction: column; z-index: 99; 
+                background: var(--sidebar-bg); 
+            }
             
-            main { flex-grow: 1; display: flex; margin: 0; }
+            .content-col { width: 55%; padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; max-width: 900px; }
             
-            .content-col { flex: 1; padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; max-width: 900px; }
-            
+            /* DIAGRAM COLUMN - EXPANDED WIDTH */
             .diagram-col { 
-                width: 580px; 
+                width: 45%; 
                 border-left: 1px solid var(--border-color); 
                 background: var(--bg-color); 
                 padding: 1.5rem 2rem; 
                 display: flex; flex-direction: column; 
                 position: sticky; top: 0; 
-                height: auto; /* NO INTERNAL SCROLL */
-                overflow: visible; /* NO GUTTER */
-                align-items: center; justify-content: flex-start; flex-shrink: 0; 
+                height: 100vh; 
+                overflow-y: auto; 
+                align-items: center; justify-content: flex-start;
             }
             .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
             
-            /* Footer Full Width Fix */
-            footer { width: 100%; margin-left: 240px; } 
-
-            /* --- CRITICAL: SVG BASE STYLES --- */
+            /* --- CRITICAL: GLOBAL SVG STYLES (Fixes Black Box) --- */
             .diag-container { fill: none; stroke: var(--border-color); stroke-width: 1px; stroke-dasharray: 4 4; opacity: 0.9; }
             .diag-bg { fill: var(--card-bg); stroke: var(--border-color); stroke-width: 1.5px; }
             .diag-line { stroke: var(--text-muted); stroke-width: 2px; opacity: 0.35; fill: none; }
@@ -252,30 +253,25 @@
             .telemetry-data { display: flex; gap: 12px; }
             .tel-group { opacity: 1; transition: opacity 0.3s, color 0.3s; }
             
-            /* LENS HIGHLIGHT LOGIC - PURE CSS OPACITY */
-            /* Diagram Accents */
+            /* LENS HIGHLIGHT LOGIC */
             .accent-enforced, .accent-eval, .accent-struct { transition: opacity 180ms ease, filter 180ms ease; }
             
-            /* Base (Always) */
             .accent-enforced{ opacity: 1; }
             .accent-eval{ opacity: 0.18; }
             .accent-struct{ opacity: 0.28; }
 
-            /* System Mode (Default) */
             body[data-lens="system"] .accent-enforced { opacity: 1; }
             body[data-lens="system"] .accent-eval { opacity: 0.12; }
             body[data-lens="system"] .accent-struct { opacity: 0.22; }
             body[data-lens="system"] .tel-system { color: var(--text-main); font-weight: 700; opacity: 1; }
             body[data-lens="system"] .tel-mech, body[data-lens="system"] .tel-audit { opacity: 0.4; }
 
-            /* Audit Mode */
             body[data-lens="audit"] .accent-eval { opacity: 1; }
             body[data-lens="audit"] .accent-enforced { opacity: 0.12; }
             body[data-lens="audit"] .accent-struct { opacity: 0.22; }
             body[data-lens="audit"] .tel-audit { color: var(--signal-eval); font-weight: 700; opacity: 1; }
             body[data-lens="audit"] .tel-system, body[data-lens="audit"] .tel-mech { opacity: 0.4; }
 
-            /* Mechanism Mode */
             body[data-lens="mechanism"] .accent-enforced { opacity: 0.75; }
             body[data-lens="mechanism"] .accent-eval { opacity: 0.75; }
             body[data-lens="mechanism"] .accent-struct { opacity: 0.35; }
@@ -319,7 +315,7 @@
             /* SVG SPECIFIC */
             .telemetry-text { font-size: 9px; fill: var(--signal-enforced); font-family: var(--font-mono); opacity: 1; font-weight: 600; } 
             
-            /* D2 SVG STYLES */
+            /* D2 SVG STYLES - GLOBAL */
             .d2-line { stroke: var(--text-muted); stroke-width: 1px; opacity: 0.3; }
             .d2-signal { stroke: var(--signal-eval); stroke-width: 2px; fill: none; opacity: 0; animation: signalPulse 4s linear infinite; }
             .d2-boundary { stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 4 4; }
@@ -345,8 +341,6 @@
             main { margin-top: 50px; padding: 0; width: 100%; max-width: 100vw; display: block; }
             .content-col { padding: 1.5rem; max-width: none; }
             .diagram-col { display: none; } /* Mobile hides diagram */
-            footer { width: 100%; margin-left: 0; }
-            .footer-inner{ flex-wrap: wrap; white-space: normal; } /* Allow wrap on mobile */
         }
     </style>
 </head>
@@ -358,50 +352,50 @@
     </header>
     <script>if(window.innerWidth<=1100) document.getElementById('mobile-bar').style.display='flex';</script>
 
-    <div class="page-wrapper">
-        <aside id="sidebar">
-            <div class="brand">
-                <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
-                <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
-                <span style="font-size: 11px; letter-spacing: 0.10em; color: rgba(125,125,125,0.6); display: block; margin-top: 6px;">EST. 2026 // MONTREAL</span>
-            </div>
+    <aside id="sidebar">
+        <div class="brand">
+            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
+            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
+            <span style="font-size: 9px; letter-spacing: 0.10em; opacity: 0.5; display: block; margin-top: 4px;">EST. 2026 // MONTREAL</span>
+        </div>
 
-            <div class="mode-group" style="margin-top: 3rem;">
-                <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
-                <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
-                <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
-                <span class="toggle-btn" onclick="setMode('logic', this)">[ LOGIC ] <span>λ</span></span>
-               <span class="toggle-btn" onclick="window.location.href='lexicon-machine.html'">[ MACHINE ] <span>≡</span></span>
-                <span class="toggle-btn" style="margin-top:1rem; border-top:1px solid var(--border-color); padding-top:1rem;" onclick="toggleTheme()">[ LIGHT / DARK ] <span id="theme-icon">◐</span></span>
-            </div>
+        <div class="mode-group" style="margin-top: 3rem;">
+            <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
+            <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
+            <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
+            <span class="toggle-btn" onclick="setMode('logic', this)">[ LOGIC ] <span>λ</span></span>
+           <span class="toggle-btn" onclick="window.location.href='lexicon-machine.html'">[ MACHINE ] <span>≡</span></span>
+            <span class="toggle-btn" style="margin-top:1rem; border-top:1px solid var(--border-color); padding-top:1rem;" onclick="toggleTheme()">[ LIGHT / DARK ] <span id="theme-icon">◐</span></span>
+        </div>
 
-            <nav>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="lexicon.html" class="active">Lexicon</a></li>
-                    <li style="margin-top:1rem; opacity:0.5; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; padding-left:10px;">Sections</li>
-                    <li><a href="#overview">Overview</a></li>
-                    <li><a href="#what-it-does">What It Does</a></li>
-                    <li><a href="#core-terms">Core Terms</a></li>
-                    <li><a href="#invariants">Invariants</a></li>
-                    <li><a href="#drift">Drift</a></li>
-                    <li><a href="#status">Status</a></li>
-                </ul>
-            </nav>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="lexicon.html" class="active">Lexicon</a></li>
+                <li style="margin-top:1rem; opacity:0.5; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; padding-left:10px;">Sections</li>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#what-it-does">What It Does</a></li>
+                <li><a href="#core-terms">Core Terms</a></li>
+                <li><a href="#invariants">Invariants</a></li>
+                <li><a href="#drift">Drift</a></li>
+                <li><a href="#status">Status</a></li>
+            </ul>
+        </nav>
 
-            <div class="repo-panel" onclick="window.open('https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:', '_blank')">
-                 <div class="repo-header">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                        GITHUB REPOSITORY
-                    </div>
-                    <span class="status-dot-red"></span>
+        <div class="repo-panel" onclick="window.open('https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:', '_blank')">
+             <div class="repo-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GITHUB REPOSITORY
                 </div>
-                <a href="https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:" target="_blank" class="repo-link">START ACCESS REQUEST →</a>
+                <span class="status-dot-red"></span>
             </div>
-        </aside>
+            <a href="https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:" target="_blank" class="repo-link">START ACCESS REQUEST →</a>
+        </div>
+    </aside>
 
-        <main>
+    <div class="main-column">
+        <div class="split-view">
             <div class="content-col">
                 <div style="display:flex; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); align-items: center; flex-wrap:wrap; gap:1.5rem;">
                     <div><span style="color:var(--text-muted); display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0002</div>
@@ -623,16 +617,18 @@
                     <div class="cap-footer">Alignment becomes a system property when meaning is fixed before execution.</div>
                 </div>
             </div>
-        </main>
-    </div>
-
-    <footer class="site-footer">
-        <div class="footer-inner">
-            <div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div>
-            <div>© 2026 ENLIGHTENED AI RESEARCH LAB</div>
-            <div>Versioned research record · Logged revisions · Inspectable claims</div>
         </div>
-    </footer>
+
+        <footer class="site-footer">
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
+                    <div class="footer-secondary">Versioned research record · Logged revisions · Inspectable claims</div>
+                </div>
+                <div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div>
+            </div>
+        </footer>
+    </div>
 
     <script>
         // --- MODE SWITCHER LOGIC (PURE CSS OPACITY) ---
