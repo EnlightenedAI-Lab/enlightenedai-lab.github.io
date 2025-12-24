@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V122 (HIGH CONTRAST REPAIR) */
+        /* THEME: INSTITUTE STANDARD V122 (CAUSALITY REPAIR) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -244,9 +244,14 @@
                 text-align: center; letter-spacing: 0.05em;
             }
             .cycle-label {
-                font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); font-weight:700;
-                text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.8; margin-bottom: 6px;
+                font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
+                text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 4px;
             }
+            .cycle-counter {
+                font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); font-weight:700;
+                text-align: center; margin-bottom: 2rem;
+            }
+            
             /* DARK MODE TEXT FIXES */
             [data-theme="dark"] .cycle-label, 
             [data-theme="dark"] .cycle-counter,
@@ -254,18 +259,13 @@
                 color: #fff !important; opacity: 1 !important; fill: #fff !important; 
             }
             
-            .cycle-counter {
-                font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-main); font-weight:700;
-                text-align: center; margin-bottom: 2rem;
-            }
-            
             /* LEGEND */
             .diag-legend { 
-                margin-top: 2rem; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted);
-                display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600;
+                margin-top: 2rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
+                display: flex; gap: 12px; justify-content: center; text-transform: uppercase;
             }
-            .legend-item { display: flex; align-items: center; gap: 6px; }
-            .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+            .legend-item { display: flex; align-items: center; gap: 4px; }
+            .legend-dot { width: 6px; height: 6px; border-radius: 50%; }
         }
 
         /* MOBILE/TABLET ENGINE (Width <= 1100px) */
@@ -441,11 +441,7 @@
                         .diag-bg { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); stroke-width: 1.5px; vector-effect: non-scaling-stroke; transition: stroke 0.2s; }
                         .diag-text { fill: var(--text-main, #eee); font-size: 14px; font-weight: 600; }
                         .diag-text-sm { fill: var(--text-muted, #888); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
-                        
-                        /* High-Contrast Labels (Dark Mode Force) */
-                        .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
-                        [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
-
+                        .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
                         .diag-line { stroke: var(--text-muted, #666); stroke-width: 1.5px; fill: none; stroke-linecap: round; }
                         
                         /* MICRO-TELEMETRY TEXT (Restored) */
@@ -590,7 +586,7 @@
                             <text id="tel-sta" x="145" y="138" class="telemetry-text">LCK: 0x8F2A</text>
                             
                             <path d="M80 68 L80 80" class="diag-line" style="stroke-width:1px;"/>
-                            <path d="M80 108 L80 120" class="diag-line" style="stroke-width:1px;"/>
+                            <path id="packet-gate" d="M80 68 L80 80 M80 108 L80 120" style="fill:none; stroke-linecap:round;" />
                         </g>
 
                         <path d="M390 130 L430 130" class="diag-line" />
@@ -713,15 +709,16 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V122) ---
+        // --- CYCLE COUNTER & LOCK (V121) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
+        const telemetryColor = '#00cc00'; // Green Match
         
         setInterval(() => {
             // Trigger Lock at ~6.0s (end of cycle)
             setTimeout(() => {
                 cycleCount++;
-                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:#00cc00; font-weight:800;">STATE: ENFORCED</span>`;
+                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:${telemetryColor}; font-weight:800;">STATE: ENFORCED</span>`;
             }, 6000);
             
             // Reset visual state
