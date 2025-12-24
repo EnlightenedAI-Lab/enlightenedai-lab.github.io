@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V120 (HIGH VISIBILITY) */
+        /* THEME: INSTITUTE STANDARD V121 (CAUSAL INSTRUMENT) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -198,7 +198,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V120)
+           LAYOUT ENGINE: SEGREGATED (V121)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -408,7 +408,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V120 THEME ENGINE */
+                        /* V121 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -435,7 +435,7 @@
                         .diag-text { fill: var(--text-main, #eee); font-size: 14px; font-weight: 600; }
                         .diag-text-sm { fill: var(--text-muted, #888); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
                         .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
-                        .diag-line { stroke: var(--text-muted, #666); stroke-width: 2px; fill: none; stroke-linecap: round; }
+                        .diag-line { stroke: var(--text-muted, #666); stroke-width: 1.5px; fill: none; stroke-linecap: round; }
                         
                         /* MICRO-TELEMETRY TEXT */
                         .telemetry-text { 
@@ -443,68 +443,73 @@
                             opacity: 0; animation-fill-mode: forwards; 
                         }
 
-                        /* ANIMATION ENGINE (8s Loop) */
+                        /* ANIMATION ENGINE (8.5s Loop) */
                         
-                        /* 1. Intent Pulse (t=0.0) */
-                        #intent-box { animation: pulseBox 8s ease-out infinite; }
-                        
-                        /* 2. Packet 1 (t=0.5) */
+                        /* 1. Intent Wire (t=0.0 - 0.6) */
                         #packet-1 { 
-                            stroke: #00cc00; stroke-width: 4px; stroke-linecap: round;
-                            stroke-dasharray: 120 500; stroke-dashoffset: 620; /* LONG TAIL */
-                            animation: packetFlow 8s linear infinite;
-                            filter: drop-shadow(0 0 2px #00cc00);
+                            stroke: #00cc00; stroke-width: 3px; stroke-linecap: round;
+                            stroke-dasharray: 120 500; stroke-dashoffset: 460;
+                            animation: packetFlow 8.5s linear infinite;
+                            filter: drop-shadow(0 0 1px #00cc00);
+                        }
+                        #intent-box { animation: pulseBox 8.5s ease-out infinite; animation-delay: 0.5s; } /* Trigger after wire starts */
+                        
+                        /* 2. Gate Wire (t=0.6 - 1.2) */
+                        #packet-gate {
+                            stroke: #00cc00; stroke-width: 3px; stroke-linecap: round;
+                            stroke-dasharray: 40 200; stroke-dashoffset: 240;
+                            animation: packetGateFlow 8.5s linear infinite; animation-delay: 0.6s;
                         }
                         
-                        /* 3. Gate Active (t=1.5) */
-                        #gate-box { animation: gateActive 8s linear infinite; animation-delay: 1.5s; }
+                        /* 3. Gate Active (t=1.2) */
+                        #gate-box { animation: gateActive 8.5s linear infinite; animation-delay: 1.1s; }
                         
-                        /* 4. Internal Steps + Telemetry */
-                        #lexicon-box { animation: stepImpact 8s linear infinite; animation-delay: 1.7s; }
-                        #tel-lex { animation: telFlash 8s linear infinite; animation-delay: 1.7s; }
+                        /* 4. Internal Steps + Telemetry (t=1.5 - 3.0) */
+                        #lexicon-box { animation: stepImpact 8.5s linear infinite; animation-delay: 1.5s; }
+                        #tel-lex { animation: telFlash 8.5s linear infinite; animation-delay: 1.5s; }
                         
-                        #serial-box { animation: stepImpact 8s linear infinite; animation-delay: 2.2s; }
-                        #tel-ser { animation: telFlash 8s linear infinite; animation-delay: 2.2s; }
+                        #serial-box { animation: stepImpact 8.5s linear infinite; animation-delay: 2.1s; }
+                        #tel-ser { animation: telFlash 8.5s linear infinite; animation-delay: 2.1s; }
                         
-                        #state-box { animation: stepImpact 8s linear infinite; animation-delay: 2.7s; }
-                        #tel-sta { animation: telFlash 8s linear infinite; animation-delay: 2.7s; }
+                        #state-box { animation: stepImpact 8.5s linear infinite; animation-delay: 2.7s; }
+                        #tel-sta { animation: telFlash 8.5s linear infinite; animation-delay: 2.7s; }
                         
-                        /* 5. Packet 2 (t=3.0) */
+                        /* 5. Model Wire (t=3.3 - 4.0) */
                         #packet-2 { 
-                            stroke: #00cc00; stroke-width: 4px; stroke-linecap: round;
+                            stroke: #00cc00; stroke-width: 3px; stroke-linecap: round;
                             stroke-dasharray: 120 500; stroke-dashoffset: 620;
-                            animation: packetFlow 8s linear infinite; animation-delay: 3.0s;
-                            filter: drop-shadow(0 0 2px #00cc00);
+                            animation: packetFlow 8.5s linear infinite; animation-delay: 3.3s;
+                            filter: drop-shadow(0 0 1px #00cc00);
                         }
                         
-                        /* 6. Model Hold (Green) (t=3.5 - 7.0) */
-                        #model-box { animation: modelHold 8s ease-out infinite; animation-delay: 3.5s; }
+                        /* 6. Model Hold (Green) (t=3.9 - 6.0) */
+                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 3.9s; }
                         
-                        /* 7. Eval Path Packets (Cyan) */
+                        /* 7. Eval Path Packets (Cyan, Long Tail) (t=4.4+) */
                         #packet-3, #packet-4, #packet-5 {
                             stroke: #00d7ff; stroke-width: 3px; stroke-linecap: round;
-                            stroke-dasharray: 100 500; /* LONG TAIL */
+                            stroke-dasharray: 100 500;
                             stroke-dashoffset: 260;
-                            filter: drop-shadow(0 0 2px #00d7ff);
+                            filter: drop-shadow(0 0 1px #00d7ff);
                         }
-                        #packet-3 { animation: packetFlowSmall 8s linear infinite; animation-delay: 4.0s; } /* Model -> Safety */
-                        #packet-4 { animation: packetFlowSmall 8s linear infinite; animation-delay: 4.5s; } /* Safety -> Base */
-                        #packet-5 { animation: packetFlowSmall 8s linear infinite; animation-delay: 5.0s; } /* Base -> Model */
+                        #packet-3 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 4.4s; } /* Model -> Safety */
+                        #packet-4 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.0s; } /* Safety -> Base */
+                        #packet-5 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.6s; } /* Base -> Model */
 
                         /* 8. Cyan Pulse Holds (Safety & Base) */
-                        #eval-box { animation: cyanPulse 8s linear infinite; animation-delay: 4.2s; }
-                        #train-box { animation: cyanPulse 8s linear infinite; animation-delay: 5.2s; }
+                        #eval-box { animation: cyanPulse 8.5s linear infinite; animation-delay: 5.0s; }
+                        #train-box { animation: cyanPulse 8.5s linear infinite; animation-delay: 6.1s; }
 
                         /* KEYFRAMES */
                         @keyframes pulseBox {
                             0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
                             5% { stroke: #00cc00; stroke-width: 2.5px; }
-                            20% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
+                            15% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
                         }
                         @keyframes modelHold {
                             0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
-                            5% { stroke: #00cc00; stroke-width: 3px; } /* Hit */
-                            40% { stroke: #00cc00; stroke-width: 3px; } /* HOLD GREEN */
+                            5% { stroke: #00cc00; stroke-width: 2.5px; } /* Hit */
+                            40% { stroke: #00cc00; stroke-width: 2.5px; } /* HOLD GREEN */
                             45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } /* Release */
                         }
                         @keyframes cyanPulse {
@@ -516,13 +521,13 @@
                         @keyframes gateActive {
                             0% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
                             5% { stroke: #00cc00; stroke-width: 3.5px; }
-                            35% { stroke: #00cc00; stroke-width: 3.5px; }
-                            45% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
+                            30% { stroke: #00cc00; stroke-width: 3.5px; }
+                            40% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
                         }
                         @keyframes stepImpact {
                             0% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); }
-                            3% { stroke: #00cc00; fill: rgba(0,204,0,0.15); stroke-width: 2px; }
-                            15% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); stroke-width: 1.5px; }
+                            3% { stroke: #00cc00; fill: rgba(0,204,0,0.1); stroke-width: 2px; }
+                            10% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); stroke-width: 1.5px; }
                         }
                         @keyframes telFlash {
                             0% { opacity: 0; }
@@ -531,10 +536,17 @@
                             100% { opacity: 0; }
                         }
                         @keyframes packetFlow {
-                            0% { stroke-dashoffset: 620; opacity: 0; }
+                            0% { stroke-dashoffset: 460; opacity: 0; }
                             5% { opacity: 1; }
                             15% { stroke-dashoffset: 0; opacity: 1; } 
                             20% { opacity: 0; }
+                            100% { opacity: 0; }
+                        }
+                        @keyframes packetGateFlow {
+                            0% { stroke-dashoffset: 240; opacity: 0; }
+                            5% { opacity: 1; }
+                            20% { stroke-dashoffset: 0; opacity: 1; } 
+                            25% { opacity: 0; }
                             100% { opacity: 0; }
                         }
                         @keyframes packetFlowSmall {
@@ -548,7 +560,7 @@
                         @media (prefers-reduced-motion: reduce) {
                             * { animation: none !important; }
                             #state-box { stroke: #00cc00; stroke-width: 2px; }
-                            #packet-1, #packet-2, #packet-3, #packet-4, #packet-5, .telemetry-text { display: none; }
+                            #packet-1, #packet-gate, #packet-2, #packet-3, #packet-4, #packet-5, .telemetry-text { display: none; }
                         }
 
                         .diag-container { fill: none; stroke: var(--border-color, #444); stroke-width: 1px; stroke-dasharray: 4 4; }
@@ -702,23 +714,24 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V120) ---
+        // --- CYCLE COUNTER & LOCK (V121) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
+        const telemetryColor = '#00cc00'; // Green Match
         
         setInterval(() => {
-            // Trigger Lock at ~5.8s (end of cycle)
+            // Trigger Lock at ~6.0s (end of cycle)
             setTimeout(() => {
                 cycleCount++;
-                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:#00cc00; font-weight:800;">STATE: ENFORCED</span>`;
-            }, 5800);
+                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:${telemetryColor}; font-weight:800;">STATE: ENFORCED</span>`;
+            }, 6000);
             
             // Reset visual state
             setTimeout(() => {
                 counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')}`;
-            }, 8800); // 3s HOLD
+            }, 8500); // 2.5s HOLD
             
-        }, 8000); // 8s CYCLE
+        }, 8500); // 8.5s CYCLE
     </script>
 </body>
 </html>
