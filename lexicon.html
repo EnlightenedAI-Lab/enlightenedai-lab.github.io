@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V112 (SIGNAL CARRIER) */
+        /* THEME: INSTITUTE STANDARD V113 (FEEDBACK INTEGRATED) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -198,7 +198,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V112)
+           LAYOUT ENGINE: SEGREGATED (V113)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -233,6 +233,10 @@
             .diagram-label {
                 font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted);
                 margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: center;
+            }
+            .diagram-label-xs {
+                 font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
+                margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.7;
             }
             .diagram-caption {
                 font-family: var(--font-mono); font-size: 0.65rem;
@@ -392,10 +396,11 @@
 
         <div class="diagram-col">
             <div class="diagram-label">SYSTEM CONTEXT (ABSTRACTED)</div>
+            <div class="diagram-label-xs">(PRIMARY CAUSAL PATH HIGHLIGHTED)</div>
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V112 THEME ENGINE */
+                        /* V113 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -421,63 +426,56 @@
                         .diag-bg { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); stroke-width: 1.5px; vector-effect: non-scaling-stroke; transition: stroke 0.2s; }
                         .diag-text { fill: var(--text-main, #eee); font-size: 14px; font-weight: 600; }
                         .diag-text-sm { fill: var(--text-muted, #888); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+                        .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
                         .diag-line { stroke: var(--text-muted, #666); stroke-width: 2px; fill: none; stroke-linecap: round; }
                         
-                        /* --- SIGNAL PACKET ENGINE (V112) --- */
-                        
-                        /* 1. Human Intent Pulse (t=0.0) */
+                        /* --- PRIMARY SIGNAL PATH (V112) --- */
                         #intent-box { animation: pulseBox 4s ease-out infinite; }
-                        
-                        /* 2. Traveling Packet 1 (t=0.5) */
                         #packet-1 { 
                             stroke: #00cc00; stroke-width: 4px; stroke-linecap: round;
                             stroke-dasharray: 40 1000; stroke-dashoffset: 460;
                             animation: packetFlow 4s linear infinite; animation-delay: 0.5s;
                             filter: drop-shadow(0 0 2px #00cc00);
                         }
-                        
-                        /* 3. Gate Impact (t=1.0) */
                         #gate-box { animation: gateImpact 4s linear infinite; animation-delay: 1.0s; }
-                        
-                        /* 4. Internal Steps (t=1.2, 1.5, 1.8) */
                         #lexicon-box { animation: stepImpact 4s linear infinite; animation-delay: 1.2s; }
                         #serial-box { animation: stepImpact 4s linear infinite; animation-delay: 1.5s; }
                         #state-box { animation: stepImpact 4s linear infinite; animation-delay: 1.8s; }
-                        
-                        /* 5. Traveling Packet 2 (t=2.2) */
                         #packet-2 { 
                             stroke: #00cc00; stroke-width: 4px; stroke-linecap: round;
                             stroke-dasharray: 40 1000; stroke-dashoffset: 460;
                             animation: packetFlow 4s linear infinite; animation-delay: 2.2s;
                             filter: drop-shadow(0 0 2px #00cc00);
                         }
-                        
-                        /* 6. Model Impact (t=2.7) */
                         #model-box { animation: gateImpact 4s linear infinite; animation-delay: 2.7s; }
                         
-                        /* 7. Feedback Echo (t=3.2) */
-                        .feedback-path { stroke-dasharray: 20 200; stroke-dashoffset: 220; animation: feedbackFlow 4s linear infinite; animation-delay: 3.2s; opacity: 0.3; }
+                        /* --- SECONDARY FEEDBACK LOOP (V113) --- */
+                        /* Delayed, subordinate pulse */
+                        #eval-box { animation: secondaryPulse 4s linear infinite; animation-delay: 3.0s; }
+                        #train-box { animation: secondaryPulse 4s linear infinite; animation-delay: 3.3s; }
+                        
+                        /* Subtle opacity boost for feedback paths */
+                        .feedback-path { opacity: 0.3; animation: feedbackOpacity 4s linear infinite; }
+                        .feedback-delay-1 { animation-delay: 3.0s; }
+                        .feedback-delay-2 { animation-delay: 3.3s; }
 
-                        /* KEYFRAMES */
+                        /* KEYFRAMES (PRIMARY) */
                         @keyframes pulseBox {
                             0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
                             10% { stroke: #00cc00; stroke-width: 2.5px; }
                             40% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
                         }
-                        
                         @keyframes gateImpact {
                             0% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
                             5% { stroke: #00cc00; stroke-width: 3.5px; fill: rgba(0,204,0,0.05); }
                             15% { stroke: #00cc00; stroke-width: 3.5px; }
                             40% { stroke: var(--text-main, #eee); stroke-width: 2.5px; fill: var(--card-bg, #1a1a1a); }
                         }
-                        
                         @keyframes stepImpact {
                             0% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); }
                             5% { stroke: #00cc00; fill: rgba(0,204,0,0.15); stroke-width: 2px; }
                             20% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); stroke-width: 1.5px; }
                         }
-                        
                         @keyframes packetFlow {
                             0% { stroke-dashoffset: 460; opacity: 0; }
                             5% { opacity: 1; }
@@ -485,19 +483,25 @@
                             35% { opacity: 0; }
                             100% { opacity: 0; }
                         }
-                        
-                        @keyframes feedbackFlow {
-                            0% { stroke-dashoffset: 220; }
-                            100% { stroke-dashoffset: 0; }
+
+                        /* KEYFRAMES (SECONDARY V113) */
+                        @keyframes secondaryPulse {
+                            0% { stroke-opacity: 0.7; stroke-width: 1.5px; }
+                            10% { stroke-opacity: 1; stroke: #00cc00; stroke-width: 2px; }
+                            30% { stroke-opacity: 0.7; stroke: var(--border-color, #333); stroke-width: 1.5px; }
+                        }
+                        @keyframes feedbackOpacity {
+                            0%, 100% { opacity: 0.3; }
+                            10%, 30% { opacity: 0.7; stroke: #00cc00; }
                         }
 
-                        /* Reduced Motion: Static High-Integrity State */
+                        /* Reduced Motion: Static State */
                         @media (prefers-reduced-motion: reduce) {
-                            *, #intent-box, #packet-1, #gate-box, #lexicon-box, #serial-box, #state-box, #packet-2, #model-box, .feedback-path {
+                            *, #intent-box, #packet-1, #gate-box, #lexicon-box, #serial-box, #state-box, #packet-2, #model-box, #eval-box, #train-box, .feedback-path {
                                 animation: none !important;
                             }
-                            #state-box { stroke: #00cc00; stroke-width: 2px; } /* Permanent Highlight */
-                            #packet-1, #packet-2 { display: none; } /* Hide packets, show static lines */
+                            #state-box { stroke: #00cc00; stroke-width: 2px; }
+                            #packet-1, #packet-2 { display: none; }
                         }
 
                         .diag-container { fill: none; stroke: var(--border-color, #444); stroke-width: 1px; stroke-dasharray: 4 4; }
@@ -541,18 +545,19 @@
                         </g>
 
                         <g transform="translate(530, 60)">
-                            <rect width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2; opacity:0.7;"/>
+                            <rect id="eval-box" width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2; opacity:0.7;"/>
                             <text x="50" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted)">Safety Eval</text>
                         </g>
                         <g transform="translate(530, 160)">
-                            <rect width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2; opacity:0.7;"/>
+                            <rect id="train-box" width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2; opacity:0.7;"/>
                             <text x="50" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted)">Base Train</text>
                         </g>
 
-                        <path class="feedback-path" d="M455 105 L455 80 L530 80" class="diag-line" style="stroke:none; fill:none;"/>
-                        <path d="M455 105 L455 80 L530 80" class="diag-line feedback-path" />
-                        <path d="M580 100 L580 160" class="diag-line feedback-path" style="animation-delay: 3.4s;"/>
-                        <path d="M530 180 L455 180 L455 155" class="diag-line feedback-path" style="animation-delay: 3.6s;"/>
+                        <path class="feedback-path feedback-delay-1" d="M455 105 L455 80 L530 80" class="diag-line" marker-end="url(#arrow)"/>
+                        <path class="feedback-path feedback-delay-2" d="M580 100 L580 160" class="diag-line" marker-end="url(#arrow)"/>
+                        <path class="feedback-path feedback-delay-2" d="M530 180 L455 180 L455 155" class="diag-line" marker-end="url(#arrow)"/>
+                        
+                        <text x="530" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em;">SECONDARY FEEDBACK</text>
 
                         <defs>
                             <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
