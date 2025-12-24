@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V134 (DUAL INSTRUMENT) */
+        /* THEME: INSTITUTE STANDARD V135 (INTEGRATED INSTRUMENT) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -62,7 +62,7 @@
             --panel-hover-text: #000;
             
             --signal-enforced: #00cc00;
-            --signal-eval: #ffffff;      /* White Eval in Dark Mode */
+            --signal-eval: #ffffff;      /* White for Eval in Dark Mode */
             --signal-struct: #333333;
 
             /* Dark Diff Colors */
@@ -186,7 +186,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V134)
+           LAYOUT ENGINE: SEGREGATED (V135)
            ========================================= */
 
         @media (min-width: 1101px) {
@@ -197,19 +197,23 @@
             .diagram-col { width: 580px; border-left: 1px solid var(--border-color); background: var(--bg-color); padding: 1.5rem 2rem; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; align-items: center; justify-content: flex-start; }
             .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
             
-            /* INSTRUMENT LENS CONTROL - DOCKED */
-            .instrument-lens {
-                margin-top: 1rem;
-                font-family: "JetBrains Mono", monospace; font-size: 0.55rem;
-                color: var(--text-muted); display: flex; gap: 12px;
-                background: var(--bg-color); padding: 4px 8px; border: 1px solid var(--border-color); border-radius: 4px;
-                opacity: 0.8; transition: opacity 0.2s;
+            /* TELEMETRY ROW */
+            .telemetry-row {
+                width: 100%; display: flex; justify-content: space-between; align-items: flex-end;
+                margin-bottom: 0.5rem; font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted);
+                border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;
             }
-            .instrument-lens:hover { opacity: 1; }
+            .telemetry-data { color: var(--text-main); font-weight: 700; }
+            
+            /* INSTRUMENT LENS CONTROL - INTEGRATED */
+            .instrument-lens {
+                display: flex; gap: 12px;
+                background: transparent; padding: 0;
+            }
             .lens-label { font-weight: 700; letter-spacing: 0.05em; opacity: 0.5; }
-            .lens-opt { cursor: pointer; transition: color 0.2s; }
-            .lens-opt:hover { color: var(--text-main); }
-            .lens-opt.active { color: var(--text-main); font-weight: 700; }
+            .lens-opt { cursor: pointer; transition: color 0.2s; opacity: 0.5; }
+            .lens-opt:hover { opacity: 1; color: var(--text-main); }
+            .lens-opt.active { color: var(--text-main); font-weight: 700; opacity: 1; }
             
             /* COMPRESSED SPACING */
             .diagram-label { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-main); font-weight: 800; opacity: 0.9; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: center; }
@@ -217,9 +221,8 @@
             .diagram-caption { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; letter-spacing: 0.05em; }
             
             .cycle-label { font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 4px; margin-top: 0.5rem; }
-            .cycle-counter { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); font-weight:700; text-align: center; margin-bottom: 0.5rem; }
             
-            [data-theme="dark"] .cycle-label, [data-theme="dark"] .cycle-counter, [data-theme="dark"] .diagram-text-xs { color: #fff !important; opacity: 1 !important; fill: #fff !important; }
+            [data-theme="dark"] .cycle-label, [data-theme="dark"] .telemetry-data, [data-theme="dark"] .diagram-text-xs { color: #fff !important; opacity: 1 !important; fill: #fff !important; }
             .diag-legend { margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600; }
             .legend-item { display: flex; align-items: center; gap: 6px; }
             .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -228,10 +231,22 @@
             .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: 2rem 0; opacity: 0.5; }
             
             /* D2 SPECIFIC */
-            .d2-metric { font-size: 9px; fill: var(--text-muted); font-weight: 500; font-family: "JetBrains Mono", monospace; letter-spacing: 0.05em; }
-            .d2-header { font-size: 10px; fill: var(--text-main); font-weight: 700; text-transform: uppercase; font-family: "JetBrains Mono", monospace; letter-spacing: 0.05em; }
+            .d2-line { stroke: var(--text-muted); stroke-width: 1px; opacity: 0.3; }
+            .d2-signal { stroke: var(--signal-eval); stroke-width: 2px; fill: none; opacity: 0; animation: signalPulse 4s linear infinite; }
+            .d2-boundary { stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 4 4; }
+            .d2-text { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--text-main); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+            .d2-metric { font-family: "JetBrains Mono", monospace; font-size: 9px; fill: var(--text-muted); font-weight: 500; }
+            .d2-label { font-family: "JetBrains Mono", monospace; font-size: 8px; fill: var(--signal-eval); font-weight: 700; letter-spacing: 0.1em; }
             [data-theme="dark"] .d2-metric { fill: #999; }
             [data-theme="dark"] .d2-header { fill: #fff; }
+            
+            @keyframes signalPulse {
+                0% { stroke-dasharray: 0 600; stroke-dashoffset: 0; opacity: 0; }
+                10% { opacity: 0.8; }
+                40% { stroke-dasharray: 100 600; opacity: 0.8; } /* Crossing boundary */
+                70% { opacity: 0.2; } /* Fading */
+                100% { stroke-dasharray: 100 600; stroke-dashoffset: -550; opacity: 0; }
+            }
         }
 
         @media (max-width: 1100px) {
@@ -376,7 +391,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V134 THEME ENGINE */
+                        /* V135 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         :root {
                             --diag-stroke: #333; --diag-text: #eee; --diag-fill: #0b0b0c; --diag-mute: #666;
@@ -513,20 +528,20 @@
                     </g>
                 </svg>
                 
-                <div class="cycle-label">TELEMETRY</div>
-                <div id="cycle-counter" class="cycle-counter">CYCLE: 0215</div>
+                <div class="telemetry-row">
+                    <div id="cycle-counter" class="telemetry-data">CYCLE: 0215</div>
+                    <div class="instrument-lens">
+                        <span class="lens-label">LENS:</span>
+                        <span class="lens-opt active" onclick="setDiagramMode('system', this)">● SYSTEM</span>
+                        <span class="lens-opt" onclick="setDiagramMode('audit', this)">○ AUDIT</span>
+                        <span class="lens-opt" onclick="setDiagramMode('mechanism', this)">○ MECHANISM</span>
+                    </div>
+                </div>
                 
                 <div class="diag-legend">
                     <div class="legend-item"><div class="legend-dot" style="background:var(--signal-enforced);"></div>ENFORCED</div>
                     <div class="legend-item"><div class="legend-dot" style="background:var(--signal-eval);"></div>EVALUATION</div>
                     <div class="legend-item"><div class="legend-dot" style="background:#666;"></div>STRUCTURAL</div>
-                </div>
-                
-                <div class="instrument-lens">
-                    <span class="lens-label">LENS:</span>
-                    <span class="lens-opt active" onclick="setDiagramMode('system', this)">◉ SYSTEM</span>
-                    <span class="lens-opt" onclick="setDiagramMode('audit', this)">○ AUDIT</span>
-                    <span class="lens-opt" onclick="setDiagramMode('mechanism', this)">○ MECHANISM</span>
                 </div>
                 
                 <figcaption class="diagram-caption">
@@ -544,15 +559,28 @@
             <figure class="diagram-figure">
                 <svg id="diagram-stability" width="100%" viewBox="0 0 740 180" xmlns="http://www.w3.org/2000/svg">
                     <style>
+                        /* D2 SPECIFIC */
                         .d2-line { stroke: var(--text-muted); stroke-width: 1px; opacity: 0.3; }
+                        .d2-signal { stroke: var(--signal-eval); stroke-width: 2px; fill: none; opacity: 0; animation: signalPulse 4s linear infinite; }
                         .d2-boundary { stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 4 4; }
                         .d2-text { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--text-main); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
                         .d2-metric { font-family: "JetBrains Mono", monospace; font-size: 9px; fill: var(--text-muted); font-weight: 500; }
                         .d2-label { font-family: "JetBrains Mono", monospace; font-size: 8px; fill: var(--signal-eval); font-weight: 700; letter-spacing: 0.1em; }
+                        [data-theme="dark"] .d2-metric { fill: #999; }
+                        [data-theme="dark"] .d2-header { fill: #fff; }
+                        
+                        @keyframes signalPulse {
+                            0% { stroke-dasharray: 0 600; stroke-dashoffset: 0; opacity: 0; }
+                            10% { opacity: 0.8; }
+                            40% { stroke-dasharray: 100 600; opacity: 0.8; } /* Crossing boundary */
+                            70% { opacity: 0.2; } /* Fading */
+                            100% { stroke-dasharray: 100 600; stroke-dashoffset: -550; opacity: 0; }
+                        }
                     </style>
                     
                     <g transform="translate(20,0)">
                         <line x1="50" y1="50" x2="650" y2="50" class="d2-line" />
+                        <line x1="50" y1="50" x2="650" y2="50" class="d2-signal" />
                         
                         <text x="100" y="40" text-anchor="middle" class="d2-text">RAW INTENT</text>
                         <circle cx="100" cy="50" r="3" fill="#666" />
@@ -614,10 +642,10 @@
             // UI Toggle States (Lens)
             document.querySelectorAll('.lens-opt').forEach(b => {
                 b.classList.remove('active');
-                b.innerHTML = b.innerHTML.replace('◉', '○');
+                b.innerHTML = b.innerHTML.replace('●', '○');
             });
             btn.classList.add('active');
-            btn.innerHTML = btn.innerHTML.replace('○', '◉');
+            btn.innerHTML = btn.innerHTML.replace('○', '●');
             
             // Diagram Element Visibility
             const mechGroup = document.querySelector('.mode-group-mech');
