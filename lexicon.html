@@ -262,6 +262,9 @@
             .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
             
             /* --- CRITICAL: GLOBAL SVG STYLES (Fixes Black Box) --- */
+            /* GEOMETRY LOCK: Ensures diagram never shifts layout during load or resize */
+            #diagram-context { aspect-ratio: 740 / 260; width: 100%; height: auto; display: block; }
+            
             .diag-container { fill: none; stroke: var(--border-color); stroke-width: 1px; stroke-dasharray: 4 4; opacity: 0.9; }
             .diag-bg { fill: var(--card-bg); stroke: var(--border-color); stroke-width: 1.5px; }
             .diag-line { stroke: var(--text-muted); stroke-width: 2px; opacity: 0.35; fill: none; }
@@ -276,7 +279,9 @@
                 border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; letter-spacing: 0.05em;
             }
             .telemetry-data { display: flex; gap: 12px; }
-            .tel-group { opacity: 1; transition: opacity 0.3s, color 0.3s; }
+            /* Fixed width to prevent jitter when text length changes (st.empty equivalent) */
+            .tel-group { opacity: 1; transition: opacity 0.3s, color 0.3s; white-space: nowrap; }
+            .tel-system { min-width: 160px; } 
             
             /* LENS HIGHLIGHT LOGIC */
             .accent-enforced, .accent-eval, .accent-struct { transition: opacity 180ms ease, filter 180ms ease; }
