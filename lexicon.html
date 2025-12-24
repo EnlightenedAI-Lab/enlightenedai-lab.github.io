@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V111 (CAUSALITY ENGINE) */
+        /* THEME: INSTITUTE STANDARD V112 (SIGNAL CARRIER) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -198,7 +198,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V111)
+           LAYOUT ENGINE: SEGREGATED (V112)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -239,9 +239,13 @@
                 color: var(--text-muted); margin-top: 1rem;
                 text-align: center; letter-spacing: 0.05em;
             }
+            .cycle-label {
+                font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
+                text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 4px;
+            }
             .cycle-counter {
-                font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted);
-                margin-top: 0.5rem; text-align: center; opacity: 0.6;
+                font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); font-weight:700;
+                text-align: center; margin-bottom: 2rem;
             }
         }
 
@@ -391,7 +395,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V111 THEME ENGINE */
+                        /* V112 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -419,30 +423,40 @@
                         .diag-text-sm { fill: var(--text-muted, #888); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
                         .diag-line { stroke: var(--text-muted, #666); stroke-width: 2px; fill: none; stroke-linecap: round; }
                         
-                        /* SEQUENCED ANIMATION (4s LOOP) */
+                        /* --- SIGNAL PACKET ENGINE (V112) --- */
                         
                         /* 1. Human Intent Pulse (t=0.0) */
                         #intent-box { animation: pulseBox 4s ease-out infinite; }
                         
-                        /* 2. Arrow 1 Flow (t=0.5) */
-                        #arrow-1 { stroke-dasharray: 60 400; stroke-dashoffset: 460; animation: signalFlow 4s linear infinite; animation-delay: 0.5s; stroke-opacity: 0.5; }
+                        /* 2. Traveling Packet 1 (t=0.5) */
+                        #packet-1 { 
+                            stroke: #00cc00; stroke-width: 4px; stroke-linecap: round;
+                            stroke-dasharray: 40 1000; stroke-dashoffset: 460;
+                            animation: packetFlow 4s linear infinite; animation-delay: 0.5s;
+                            filter: drop-shadow(0 0 2px #00cc00);
+                        }
                         
-                        /* 3. Gate Active (t=1.0) */
-                        #gate-box { animation: gateActive 4s linear infinite; animation-delay: 1.0s; }
+                        /* 3. Gate Impact (t=1.0) */
+                        #gate-box { animation: gateImpact 4s linear infinite; animation-delay: 1.0s; }
                         
                         /* 4. Internal Steps (t=1.2, 1.5, 1.8) */
-                        #lexicon-box { animation: stepActive 4s linear infinite; animation-delay: 1.2s; }
-                        #serial-box { animation: stepActive 4s linear infinite; animation-delay: 1.5s; }
-                        #state-box { animation: stepActive 4s linear infinite; animation-delay: 1.8s; }
+                        #lexicon-box { animation: stepImpact 4s linear infinite; animation-delay: 1.2s; }
+                        #serial-box { animation: stepImpact 4s linear infinite; animation-delay: 1.5s; }
+                        #state-box { animation: stepImpact 4s linear infinite; animation-delay: 1.8s; }
                         
-                        /* 5. Arrow 2 Flow (t=2.2) */
-                        #arrow-2 { stroke-dasharray: 60 400; stroke-dashoffset: 460; animation: signalFlow 4s linear infinite; animation-delay: 2.2s; stroke-opacity: 0.5; }
+                        /* 5. Traveling Packet 2 (t=2.2) */
+                        #packet-2 { 
+                            stroke: #00cc00; stroke-width: 4px; stroke-linecap: round;
+                            stroke-dasharray: 40 1000; stroke-dashoffset: 460;
+                            animation: packetFlow 4s linear infinite; animation-delay: 2.2s;
+                            filter: drop-shadow(0 0 2px #00cc00);
+                        }
                         
-                        /* 6. Model Pulse (t=2.7) */
-                        #model-box { animation: pulseBox 4s ease-out infinite; animation-delay: 2.7s; }
+                        /* 6. Model Impact (t=2.7) */
+                        #model-box { animation: gateImpact 4s linear infinite; animation-delay: 2.7s; }
                         
-                        /* 7. Feedback Loop (t=3.2) */
-                        .feedback-path { stroke-dasharray: 20 200; stroke-dashoffset: 220; animation: feedbackFlow 4s linear infinite; animation-delay: 3.2s; opacity: 0.4; }
+                        /* 7. Feedback Echo (t=3.2) */
+                        .feedback-path { stroke-dasharray: 20 200; stroke-dashoffset: 220; animation: feedbackFlow 4s linear infinite; animation-delay: 3.2s; opacity: 0.3; }
 
                         /* KEYFRAMES */
                         @keyframes pulseBox {
@@ -451,22 +465,25 @@
                             40% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
                         }
                         
-                        @keyframes gateActive {
-                            0% { stroke: var(--text-main, #eee); stroke-opacity: 0.5; }
-                            10% { stroke: #00cc00; stroke-opacity: 1; stroke-width: 3px; }
-                            40% { stroke: var(--text-main, #eee); stroke-opacity: 0.5; stroke-width: 2.5px; }
+                        @keyframes gateImpact {
+                            0% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
+                            5% { stroke: #00cc00; stroke-width: 3.5px; fill: rgba(0,204,0,0.05); }
+                            15% { stroke: #00cc00; stroke-width: 3.5px; }
+                            40% { stroke: var(--text-main, #eee); stroke-width: 2.5px; fill: var(--card-bg, #1a1a1a); }
                         }
                         
-                        @keyframes stepActive {
+                        @keyframes stepImpact {
                             0% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); }
-                            10% { stroke: #00cc00; fill: rgba(0,204,0,0.15); }
-                            30% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); }
+                            5% { stroke: #00cc00; fill: rgba(0,204,0,0.15); stroke-width: 2px; }
+                            20% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); stroke-width: 1.5px; }
                         }
                         
-                        @keyframes signalFlow {
-                            0% { stroke-dashoffset: 460; stroke: #666; stroke-width: 2px; }
-                            20% { stroke: #00cc00; stroke-width: 4px; } 
-                            100% { stroke-dashoffset: 0; stroke: #666; stroke-width: 2px; }
+                        @keyframes packetFlow {
+                            0% { stroke-dashoffset: 460; opacity: 0; }
+                            5% { opacity: 1; }
+                            30% { stroke-dashoffset: 0; opacity: 1; } 
+                            35% { opacity: 0; }
+                            100% { opacity: 0; }
                         }
                         
                         @keyframes feedbackFlow {
@@ -476,11 +493,11 @@
 
                         /* Reduced Motion: Static High-Integrity State */
                         @media (prefers-reduced-motion: reduce) {
-                            *, #intent-box, #arrow-1, #gate-box, #lexicon-box, #serial-box, #state-box, #arrow-2, #model-box, .feedback-path {
+                            *, #intent-box, #packet-1, #gate-box, #lexicon-box, #serial-box, #state-box, #packet-2, #model-box, .feedback-path {
                                 animation: none !important;
                             }
                             #state-box { stroke: #00cc00; stroke-width: 2px; } /* Permanent Highlight */
-                            #arrow-1, #arrow-2 { stroke-dasharray: 0; stroke: #666; }
+                            #packet-1, #packet-2 { display: none; } /* Hide packets, show static lines */
                         }
 
                         .diag-container { fill: none; stroke: var(--border-color, #444); stroke-width: 1px; stroke-dasharray: 4 4; }
@@ -495,7 +512,8 @@
                             <text x="55" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
                         </g>
 
-                        <path id="arrow-1" d="M140 130 L180 130" class="diag-line" />
+                        <path d="M140 130 L180 130" class="diag-line" />
+                        <path id="packet-1" d="M140 130 L180 130" style="fill:none;" />
 
                         <g transform="translate(180, 50)">
                             <rect id="gate-box" width="180" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
@@ -514,7 +532,8 @@
                             <path d="M90 108 L90 120" class="diag-line" style="stroke-width:1px;"/>
                         </g>
 
-                        <path id="arrow-2" d="M360 130 L400 130" class="diag-line" />
+                        <path d="M360 130 L400 130" class="diag-line" />
+                        <path id="packet-2" d="M360 130 L400 130" style="fill:none;" />
 
                         <g transform="translate(400, 105)">
                             <rect id="model-box" width="110" height="50" rx="2" class="diag-bg"/>
@@ -530,7 +549,8 @@
                             <text x="50" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted)">Base Train</text>
                         </g>
 
-                        <path class="feedback-path" d="M455 105 L455 80 L530 80" class="diag-line" style="stroke:none; fill:none;"/> <path d="M455 105 L455 80 L530 80" class="diag-line feedback-path" />
+                        <path class="feedback-path" d="M455 105 L455 80 L530 80" class="diag-line" style="stroke:none; fill:none;"/>
+                        <path d="M455 105 L455 80 L530 80" class="diag-line feedback-path" />
                         <path d="M580 100 L580 160" class="diag-line feedback-path" style="animation-delay: 3.4s;"/>
                         <path d="M530 180 L455 180 L455 155" class="diag-line feedback-path" style="animation-delay: 3.6s;"/>
 
@@ -541,10 +561,9 @@
                         </defs>
                     </g>
                 </svg>
-                <figcaption class="diagram-caption">
-                    Diagram 01 — Context Loop (Institute Standard)
-                    <div id="cycle-counter" class="cycle-counter">CYCLE: 0187</div>
-                </figcaption>
+                <div class="cycle-label">TELEMETRY</div>
+                <div id="cycle-counter" class="cycle-counter">CYCLE: 0187</div>
+                <figcaption class="diagram-caption">Diagram 01 — Context Loop (Institute Standard)</figcaption>
             </figure>
         </div>
     </main>
@@ -617,7 +636,7 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER (V111) ---
+        // --- CYCLE COUNTER (V112) ---
         let cycleCount = 187;
         const counterEl = document.getElementById('cycle-counter');
         
