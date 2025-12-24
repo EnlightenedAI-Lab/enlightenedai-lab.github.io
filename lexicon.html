@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V143 (LAYOUT & VISIBILITY FIX) */
+        /* THEME: INSTITUTE STANDARD V143.1 (FOOTER CANONICAL) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -194,19 +194,44 @@
         .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
-        /* --- STATIC FOOTER (BOTTOM OF FLOW) --- */
-        footer { 
-            width: 100%; 
-            border-top: 1px solid var(--border-color); padding: 2rem 4rem; 
-            font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); 
-            background: var(--bg-color); 
-            margin-top: auto; 
+        /* --- FOOTER (CANONICAL) --- */
+        .site-footer {
+            width: 100%;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-color);
+            padding: 2rem 4rem;
+            margin-top: auto;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-muted);
         }
-        .footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
-        .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--text-main); }
-        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 600; }
-        .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
-        @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
+        .site-footer .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .site-footer .footer-primary {
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .site-footer .footer-secondary {
+            margin-top: 0.35rem;
+            opacity: 0.9;
+        }
+        .site-footer .record-status {
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+            font-weight: 600;
+        }
 
         /* =========================================
            LAYOUT ENGINE: SEGREGATED (V143)
@@ -631,32 +656,24 @@
     </div>
 
     <script>
-        // --- MODE SWITCHER LOGIC (PURE CSS OPACITY) ---
         let currentMode = 'system';
         function setDiagramMode(mode, btn) {
             currentMode = mode;
-            // Toggle Buttons
             document.querySelectorAll('.lens-opt').forEach(b => { 
                 b.classList.remove('active'); 
                 b.innerHTML = b.innerHTML.replace('●', '○'); 
             });
             btn.classList.add('active'); 
             btn.innerHTML = btn.innerHTML.replace('○', '●');
-            
-            // Set Body Attribute (CSS handles visibility)
             document.body.setAttribute('data-lens', mode);
-            
-            // No DOM manipulation or display:none here.
             updateTelemetry();
         }
         
         let cycleCount = 215;
         const telemetryColor = '#00cc00'; 
         
-        // Update function handles highlighting via CSS classes
         function updateTelemetry(isLockState = false) {
              const systemSpan = document.querySelector('.tel-system');
-             // Only update text content, never structure
              if (isLockState) { 
                  systemSpan.innerHTML = `CYCLE: ${cycleCount} STATE: ENFORCED`; 
              } else { 
