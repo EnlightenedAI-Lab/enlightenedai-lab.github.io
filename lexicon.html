@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V137 (UNIFIED INSTRUMENT) */
+        /* THEME: INSTITUTE STANDARD V138 (FIXED INSTRUMENT) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -175,33 +175,37 @@
         .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
-        /* --- FOOTER --- */
-        footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); width: 100%; }
-        .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
-        .footer-left { display: flex; flex-direction: column; gap: 6px; }
+        /* --- STICKY FOOTER --- */
+        footer { 
+            position: fixed; bottom: 0; left: 0; width: 240px; /* Aligns with Sidebar */
+            border-top: 1px solid var(--border-color); padding: 1.5rem 2rem; 
+            font-family: "JetBrains Mono", monospace; font-size: 0.6rem; color: var(--text-muted); 
+            background: var(--sidebar-bg); z-index: 100;
+        }
+        .footer-content { display: flex; flex-direction: column; gap: 8px; }
         .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--text-main); }
         .footer-secondary { opacity: 0.7; }
-        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 500; }
+        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 500; margin-top: 4px;}
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V137)
+           LAYOUT ENGINE: SEGREGATED (V138)
            ========================================= */
 
         @media (min-width: 1101px) {
             body { display: flex; min-height: 100vh; }
-            aside#sidebar { width: 240px; height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 2rem; display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0; }
+            aside#sidebar { width: 240px; height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 2rem; display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0; padding-bottom: 8rem; /* Make room for footer */ }
             main { flex-grow: 1; display: flex; margin: 0; }
             .content-col { flex: 1; padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; max-width: 900px; }
             .diagram-col { width: 580px; border-left: 1px solid var(--border-color); background: var(--bg-color); padding: 1.5rem 2rem; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; align-items: center; justify-content: flex-start; }
             .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
             
-            /* TELEMETRY ROW - GLOBAL */
+            /* TELEMETRY ROW - SCALED DOWN */
             .telemetry-row {
                 width: 100%; display: flex; justify-content: space-between; align-items: center;
-                margin-bottom: 0.5rem; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; color: var(--text-muted);
-                border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;
+                margin-bottom: 0.5rem; font-family: "JetBrains Mono", monospace; font-size: 0.55rem; color: var(--text-muted); /* Smaller Font */
+                border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; letter-spacing: 0.05em;
             }
             .telemetry-data { display: flex; gap: 12px; }
             .tel-group { opacity: 0.4; transition: opacity 0.3s; }
@@ -223,7 +227,7 @@
             .diagram-label-xs { font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.7; }
             .diagram-caption { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; letter-spacing: 0.05em; }
             
-            [data-theme="dark"] .diagram-text-xs { color: #fff !important; opacity: 1 !important; fill: #fff !important; }
+            [data-theme="dark"] .telemetry-data, [data-theme="dark"] .diagram-text-xs { color: #fff !important; opacity: 1 !important; fill: #fff !important; }
             .diag-legend { margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600; }
             .legend-item { display: flex; align-items: center; gap: 6px; }
             .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -271,6 +275,7 @@
             main { margin-top: 50px; padding: 0; width: 100%; max-width: 100vw; display: block; }
             .content-col { padding: 1.5rem; max-width: none; }
             .diagram-col { display: none; } /* Mobile hides diagram */
+            footer { width: 100%; position: relative; } /* Mobile footer reset */
         }
     </style>
 </head>
@@ -322,10 +327,18 @@
             </div>
             <a href="https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:" target="_blank" class="repo-link">START ACCESS REQUEST →</a>
         </div>
-
-        <div class="export-container">
-            <button class="export-btn" onclick="window.print()"><span>🖨</span> EXPORT RECORD</button>
-        </div>
+        
+        <footer>
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
+                    <div class="footer-secondary">Versioned research record · Logged revisions · Inspectable claims</div>
+                </div>
+                <div class="footer-right">
+                    <div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div>
+                </div>
+            </div>
+        </footer>
     </aside>
 
     <main>
@@ -395,18 +408,16 @@
                 <section><div class="logic-header"><span class="scramble">04 //</span> FAILURE CONDITIONS</div><div class="logic-content">OBJ_MUTATION → INV-001 violation&#10;SEMANTIC_DRIFT → INV-002 violation&#10;LOGIC_NEGATION → INV-005 violation</div></section>
                 <section><div class="logic-header"><span class="scramble">05 //</span> EVALUATION MODE</div><div class="logic-content">OUTPUT ∈ {PASS, FAIL}&#10;DEFAULT = FAIL</div></section>
             </div>
-
-            <footer><div class="footer-content"><div class="footer-left"><div class="footer-primary">© 2026 Enlightened AI Research Lab</div><div class="footer-secondary">Versioned research record · Logged revisions · Inspectable claims</div></div><div class="footer-right"><div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div></div></div></footer>
         </div>
 
         <div class="diagram-col">
             <div class="diagram-label">TRAINING & DEPLOYMENT LOOP</div>
-            <div class="diagram-label-xs">(PRIMARY CAUSAL PATH HIGHLIGHTED)</div>
+            <div class="diagram-label-xs">ALIGNMENT IS ENFORCED PRE-EXECUTION. EVALUATION IS POST-HOC.</div>
             
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V137 THEME ENGINE */
+                        /* V138 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         :root {
                             --diag-stroke: #333; --diag-text: #eee; --diag-fill: #0b0b0c; --diag-mute: #666;
@@ -425,7 +436,7 @@
                         .telemetry-text { font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; opacity: 0; font-weight: 600; }
 
                         /* MODE VISIBILITY CLASSES */
-                        .mode-group-audit { opacity: 0; transition: opacity 0.2s; }
+                        .mode-group-audit { opacity: 0.3; transition: opacity 0.2s; }
                         .mode-group-mech { opacity: 0; transition: opacity 0.2s; } 
                         
                         /* ANIMATION ENGINE */
@@ -471,18 +482,18 @@
                         .diag-container { fill: none; stroke: var(--border-color, #444); stroke-width: 1px; stroke-dasharray: 4 4; }
                     </style>
 
-                    <g class="diag-root" transform="translate(20,0)">
+                    <g class="diag-root" transform="translate(0,0)">
                         <rect x="0" y="10" width="700" height="240" rx="4" class="diag-container"/>
 
-                        <g id="grp-system">
-                            <g transform="translate(20, 105)">
+                        <g id="grp-system" transform="translate(-40, 0)">
+                            <g transform="translate(60, 105)">
                                 <rect id="intent-box" width="110" height="50" rx="2" class="diag-bg"/>
                                 <text x="55" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
                             </g>
-                            <path d="M130 130 L170 130" class="diag-line" />
-                            <path id="packet-1" d="M130 130 L170 130" style="fill:none;" />
+                            <path d="M170 130 L210 130" class="diag-line" />
+                            <path id="packet-1" d="M170 130 L210 130" style="fill:none;" />
 
-                            <g transform="translate(170, 50)">
+                            <g transform="translate(210, 50)">
                                 <rect id="gate-box" width="250" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
                                 <text x="125" y="25" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:800;">ENFORCEMENT GATE</text>
                                 
@@ -499,46 +510,46 @@
                                 <path id="packet-gate" d="M95 68 L95 80 M95 108 L95 120" style="fill:none; stroke-linecap:round;" />
                             </g>
 
-                            <path d="M420 130 L460 130" class="diag-line" />
-                            <path id="packet-2" d="M420 130 L460 130" style="fill:none;" />
+                            <path d="M460 130 L500 130" class="diag-line" />
+                            <path id="packet-2" d="M460 130 L500 130" style="fill:none;" />
 
-                            <g transform="translate(460, 105)">
+                            <g transform="translate(500, 105)">
                                 <rect id="model-box" width="110" height="50" rx="2" class="diag-bg"/>
                                 <text x="55" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
                             </g>
                         </g>
 
-                        <g id="grp-mechanism" class="mode-group-mech">
-                            <g transform="translate(170, 50)">
+                        <g id="grp-mechanism" class="mode-group-mech" transform="translate(-40, 0)">
+                            <g transform="translate(210, 50)">
                                 <text id="tel-lex" x="170" y="58" class="telemetry-text">REF: LEX-02</text>
                                 <text id="tel-ser" x="170" y="98" class="telemetry-text">CHK: VALID</text>
                                 <text id="tel-sta" x="170" y="138" class="telemetry-text">LCK: 8F2A</text>
                             </g>
-                            <path id="policy-path" d="M635 60 L635 30 L130 30 L130 105" class="diag-line" />
-                            <text id="policy-label" x="350" y="25" class="telemetry-text" style="fill:var(--signal-eval); font-weight:700; opacity:0; font-size:10px;">POLICY UPDATE LOOP</text>
+                            <path id="policy-path" d="M675 60 L675 30 L170 30 L170 105" class="diag-line" />
+                            <text id="policy-label" x="390" y="25" class="telemetry-text" style="fill:var(--signal-eval); font-weight:700; opacity:0; font-size:10px;">POLICY UPDATE LOOP</text>
                         </g>
 
-                        <g id="grp-audit" class="mode-group-audit">
-                            <g transform="translate(590, 60)">
+                        <g id="grp-audit" class="mode-group-audit" transform="translate(-40, 0)">
+                            <g transform="translate(630, 60)">
                                 <rect id="eval-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted, #666); stroke-width:1.5px; opacity:0.8;"/>
                                 <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Safety Eval</text>
                             </g>
-                            <g transform="translate(590, 160)">
+                            <g transform="translate(630, 160)">
                                 <rect id="train-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted, #666); stroke-width:1.5px; opacity:0.8;"/>
                                 <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Base Train</text>
                             </g>
 
-                            <path d="M515 105 L515 80 L590 80" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                            <path id="packet-3" d="M515 105 L515 80 L590 80" style="fill:none;" />
+                            <path d="M555 105 L555 80 L630 80" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                            <path id="packet-3" d="M555 105 L555 80 L630 80" style="fill:none;" />
                             
-                            <path d="M635 100 L635 160" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                            <path id="packet-4" d="M635 100 L635 160" style="fill:none;" />
+                            <path d="M675 100 L675 160" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                            <path id="packet-4" d="M675 100 L675 160" style="fill:none;" />
                             
-                            <path d="M590 180 L515 180 L515 155" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                            <path id="packet-5" d="M590 180 L515 180 L515 155" style="fill:none;" />
+                            <path d="M630 180 L555 180 L555 155" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                            <path id="packet-5" d="M630 180 L555 180 L555 155" style="fill:none;" />
                             
-                            <text x="590" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.8; letter-spacing:0.1em; font-weight:600;">POST-HOC EVALUATION</text>
-                            <text x="590" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
+                            <text x="630" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.8; letter-spacing:0.1em; font-weight:600;">POST-HOC EVALUATION</text>
+                            <text x="630" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
                         </g>
                     </g>
                 </svg>
@@ -585,6 +596,16 @@
                         .d2-text { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--text-main); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
                         .d2-metric { font-family: "JetBrains Mono", monospace; font-size: 9px; fill: var(--text-muted); font-weight: 500; }
                         .d2-label { font-family: "JetBrains Mono", monospace; font-size: 8px; fill: var(--signal-eval); font-weight: 700; letter-spacing: 0.1em; }
+                        [data-theme="dark"] .d2-metric { fill: #999; }
+                        [data-theme="dark"] .d2-header { fill: #fff; }
+                        
+                        @keyframes signalPulse {
+                            0% { stroke-dasharray: 0 600; stroke-dashoffset: 0; opacity: 0; }
+                            10% { opacity: 0.8; }
+                            40% { stroke-dasharray: 100 600; opacity: 0.8; }
+                            70% { opacity: 0.2; }
+                            100% { stroke-dasharray: 100 600; stroke-dashoffset: -550; opacity: 0; }
+                        }
                     </style>
                     
                     <g transform="translate(20,0)">
@@ -638,7 +659,7 @@
     </main>
 
     <script>
-        // DATA RECORD
+        // DATA RECORD - UNCHANGED
         const LEXICON_RECORD = {
             meta: { doc_id: "RAL-LEX-0002", version: "17.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
@@ -694,7 +715,7 @@
                 systemGroup.style.opacity = '1';
             }
             
-            updateTelemetry();
+            // NOTE: Telemetry update function removed from here to ensure it's invariant.
         }
 
         // --- DYNAMIC TELEMETRY LOGIC ---
