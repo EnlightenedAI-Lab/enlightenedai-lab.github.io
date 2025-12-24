@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V113 (FEEDBACK INTEGRATED) */
+        /* THEME: INSTITUTE STANDARD V114 (STABILIZED SYSTEM) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -198,7 +198,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V113)
+           LAYOUT ENGINE: SEGREGATED (V114)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -251,6 +251,14 @@
                 font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); font-weight:700;
                 text-align: center; margin-bottom: 2rem;
             }
+            
+            /* LEGEND (V114) */
+            .diag-legend { 
+                margin-top: 2rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
+                display: flex; gap: 12px; justify-content: center; text-transform: uppercase;
+            }
+            .legend-item { display: flex; align-items: center; gap: 4px; }
+            .legend-dot { width: 6px; height: 6px; border-radius: 50%; }
         }
 
         /* MOBILE/TABLET ENGINE (Width <= 1100px) */
@@ -400,7 +408,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V113 THEME ENGINE */
+                        /* V114 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -410,6 +418,7 @@
                             --diag-fill: #0b0b0c;
                             --diag-mute: #666;
                             --diag-signal: #00cc00;
+                            --diag-amber: #ffcc00;
                         }
                         
                         /* Light Mode Overrides */
@@ -438,28 +447,32 @@
                             filter: drop-shadow(0 0 2px #00cc00);
                         }
                         #gate-box { animation: gateImpact 4s linear infinite; animation-delay: 1.0s; }
+                        
+                        /* DELIBERATION SEQUENCE (SLOWED) */
                         #lexicon-box { animation: stepImpact 4s linear infinite; animation-delay: 1.2s; }
-                        #serial-box { animation: stepImpact 4s linear infinite; animation-delay: 1.5s; }
-                        #state-box { animation: stepImpact 4s linear infinite; animation-delay: 1.8s; }
+                        #serial-box { animation: stepImpact 4s linear infinite; animation-delay: 1.6s; } /* Slower Gap */
+                        #state-box { animation: stepImpact 4s linear infinite; animation-delay: 2.0s; }
+                        
                         #packet-2 { 
                             stroke: #00cc00; stroke-width: 4px; stroke-linecap: round;
                             stroke-dasharray: 40 1000; stroke-dashoffset: 460;
-                            animation: packetFlow 4s linear infinite; animation-delay: 2.2s;
+                            animation: packetFlow 4s linear infinite; animation-delay: 2.4s;
                             filter: drop-shadow(0 0 2px #00cc00);
                         }
-                        #model-box { animation: gateImpact 4s linear infinite; animation-delay: 2.7s; }
+                        #model-box { animation: gateImpact 4s linear infinite; animation-delay: 2.9s; }
                         
-                        /* --- SECONDARY FEEDBACK LOOP (V113) --- */
-                        /* Delayed, subordinate pulse */
-                        #eval-box { animation: secondaryPulse 4s linear infinite; animation-delay: 3.0s; }
-                        #train-box { animation: secondaryPulse 4s linear infinite; animation-delay: 3.3s; }
+                        /* --- SECONDARY FEEDBACK LOOP (Solidified) --- */
+                        .diag-solid-mute { fill: var(--card-bg, #1a1a1a); stroke: var(--text-muted, #666); stroke-width: 1.5px; opacity: 0.7; }
                         
-                        /* Subtle opacity boost for feedback paths */
+                        /* Sequential Amber Pulse */
+                        #eval-box { animation: amberPulse 4s linear infinite; animation-delay: 3.2s; }
+                        #train-box { animation: amberPulse 4s linear infinite; animation-delay: 3.5s; }
+                        
                         .feedback-path { opacity: 0.3; animation: feedbackOpacity 4s linear infinite; }
-                        .feedback-delay-1 { animation-delay: 3.0s; }
-                        .feedback-delay-2 { animation-delay: 3.3s; }
+                        .feedback-delay-1 { animation-delay: 3.2s; }
+                        .feedback-delay-2 { animation-delay: 3.5s; }
 
-                        /* KEYFRAMES (PRIMARY) */
+                        /* KEYFRAMES */
                         @keyframes pulseBox {
                             0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
                             10% { stroke: #00cc00; stroke-width: 2.5px; }
@@ -474,7 +487,7 @@
                         @keyframes stepImpact {
                             0% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); }
                             5% { stroke: #00cc00; fill: rgba(0,204,0,0.15); stroke-width: 2px; }
-                            20% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); stroke-width: 1.5px; }
+                            30% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); stroke-width: 1.5px; }
                         }
                         @keyframes packetFlow {
                             0% { stroke-dashoffset: 460; opacity: 0; }
@@ -483,16 +496,14 @@
                             35% { opacity: 0; }
                             100% { opacity: 0; }
                         }
-
-                        /* KEYFRAMES (SECONDARY V113) */
-                        @keyframes secondaryPulse {
-                            0% { stroke-opacity: 0.7; stroke-width: 1.5px; }
-                            10% { stroke-opacity: 1; stroke: #00cc00; stroke-width: 2px; }
-                            30% { stroke-opacity: 0.7; stroke: var(--border-color, #333); stroke-width: 1.5px; }
+                        @keyframes amberPulse {
+                            0% { stroke: var(--text-muted, #666); }
+                            10% { stroke: #ffcc00; stroke-width: 2px; }
+                            30% { stroke: var(--text-muted, #666); stroke-width: 1.5px; }
                         }
                         @keyframes feedbackOpacity {
                             0%, 100% { opacity: 0.3; }
-                            10%, 30% { opacity: 0.7; stroke: #00cc00; }
+                            10%, 30% { opacity: 0.8; stroke: #ffcc00; }
                         }
 
                         /* Reduced Motion: Static State */
@@ -545,11 +556,11 @@
                         </g>
 
                         <g transform="translate(530, 60)">
-                            <rect id="eval-box" width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2; opacity:0.7;"/>
+                            <rect id="eval-box" width="100" height="40" rx="2" class="diag-solid-mute"/>
                             <text x="50" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted)">Safety Eval</text>
                         </g>
                         <g transform="translate(530, 160)">
-                            <rect id="train-box" width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2; opacity:0.7;"/>
+                            <rect id="train-box" width="100" height="40" rx="2" class="diag-solid-mute"/>
                             <text x="50" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted)">Base Train</text>
                         </g>
 
@@ -568,6 +579,13 @@
                 </svg>
                 <div class="cycle-label">TELEMETRY</div>
                 <div id="cycle-counter" class="cycle-counter">CYCLE: 0187</div>
+                
+                <div class="diag-legend">
+                    <div class="legend-item"><div class="legend-dot" style="background:#00cc00;"></div>ENFORCED</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#ffcc00;"></div>EVALUATION</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#666;"></div>STRUCTURAL</div>
+                </div>
+                
                 <figcaption class="diagram-caption">Diagram 01 — Context Loop (Institute Standard)</figcaption>
             </figure>
         </div>
@@ -641,14 +659,23 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER (V112) ---
-        let cycleCount = 187;
+        // --- CYCLE COUNTER & LOCK (V114) ---
+        let cycleCount = 201;
         const counterEl = document.getElementById('cycle-counter');
+        const telemetryContainer = document.querySelector('.cycle-label');
         
-        // Sync with CSS Loop (4s)
         setInterval(() => {
+            // End of Cycle Event
             cycleCount++;
-            counterEl.innerText = `CYCLE: ${cycleCount.toString().padStart(4, '0')}`;
+            counterEl.innerText = `CYCLE: ${cycleCount.toString().padStart(4, '0')} [LOCKED]`;
+            counterEl.style.color = '#00cc00';
+            
+            // Reset visual state after brief lock
+            setTimeout(() => {
+                counterEl.innerText = `CYCLE: ${cycleCount.toString().padStart(4, '0')}`;
+                counterEl.style.color = 'var(--text-main)';
+            }, 800);
+            
         }, 4000); 
     </script>
 </body>
