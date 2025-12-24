@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V70 */
+        /* THEME: INSTITUTE STANDARD V70 + DIAGRAM LAYER */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -197,62 +197,48 @@
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
-        /* --- MACHINE OVERLAY (FIXED TERMINAL) --- */
-        .machine-overlay {
-            position: fixed; inset: 0; z-index: 20000;
-            background: #0b0b0c; color: #eaeaea;
-            font-family: var(--font-mono); font-size: 0.75rem;
-            display: flex; flex-direction: column;
-            transition: opacity 0.2s ease;
-        }
-        .machine-overlay.hidden { display: none; opacity: 0; pointer-events: none; }
-        
-        .mo-header { padding: 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: space-between; align-items: center; background: #0b0b0c; }
-        .mo-title { font-weight: 700; letter-spacing: 0.05em; color: #fff; display: flex; align-items: center; gap: 1rem; }
-        .mo-mode-toggle { display: flex; gap: 4px; }
-        .mo-mode-btn { background: transparent; border: none; color: #888; font-family: inherit; font-size: 0.7rem; font-weight: 600; cursor: pointer; }
-        .mo-mode-btn.active { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
-        .mo-mode-btn:hover { color: #ccc; }
-        .mo-controls button { background: transparent; border: 1px solid #444; color: #999; padding: 4px 12px; margin-left: 8px; cursor: pointer; font-family: inherit; font-size: 0.65rem; transition: all 0.15s; }
-        .mo-controls button:hover { border-color: #fff; color: #fff; }
-        .mo-tabs { padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.15); background: #111; display: flex; gap: 1px; }
-        .mo-tabs.hidden { display: none; }
-        .mo-tab { background: transparent; border: none; color: #666; padding: 10px 16px; cursor: pointer; font-family: inherit; font-size: 0.7rem; font-weight: 600; border-bottom: 2px solid transparent; }
-        .mo-tab:hover { color: #ccc; }
-        .mo-tab.active { color: #fff; border-bottom-color: #fff; background: #1a1a1a; }
-        .mo-content { flex-grow: 1; padding: 2rem; overflow: auto; background: #0e0e0e; }
-        .mo-content pre { margin: 0; white-space: pre-wrap; word-break: break-all; color: #ccc; line-height: 1.6; }
-        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
-        .m-card { background: #1a1a1a; border: 1px solid #333; padding: 1.25rem; }
-        .mc-header { color: #666; font-size: 0.65rem; font-weight: 700; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; }
-        .mc-row { margin-bottom: 0.5rem; display: grid; grid-template-columns: 100px 1fr; gap: 1rem; }
-        .mc-label { color: #666; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .mc-val { color: #eee; font-size: 0.75rem; }
-        .mc-section-title { grid-column: span 2; color: #999; font-size: 0.7rem; font-weight: 700; margin: 2rem 0 1rem 0; letter-spacing: 0.05em; border-left: 2px solid #444; padding-left: 10px; }
-
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED
+           LAYOUT ENGINE: SEGREGATED (UPDATED)
            ========================================= */
 
-        /* DESKTOP ENGINE (Width > 900px) */
-        @media (min-width: 901px) {
+        /* DESKTOP ENGINE (Width > 1100px) - WIDER BREAKPOINT */
+        @media (min-width: 1101px) {
             body { display: flex; min-height: 100vh; }
-            aside#sidebar { 
-                width: 240px; height: 100vh; position: sticky; top: 0; 
-                border-right: 1px solid var(--border-color); padding: 2rem; 
+            aside#sidebar {
+                width: 240px; height: 100vh; position: sticky; top: 0;
+                border-right: 1px solid var(--border-color); padding: 2rem;
                 display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0;
             }
-            main { 
-                flex-grow: 1; 
-                display: block; 
-                max-width: 900px; 
-                margin: 0; /* ALIGNMENT FIXED HERE */
+            main {
+                flex-grow: 1;
+                display: flex; /* Flex for 2 columns */
+                margin: 0;
             }
-            .content-col { padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
+            .content-col {
+                flex: 1; /* Takes up remaining space */
+                padding: 3rem 4rem 6rem 4rem;
+                display: flex; flex-direction: column;
+                max-width: 900px;
+            }
+            .diagram-col {
+                width: 450px; /* Fixed width for diagram */
+                border-left: 1px solid var(--border-color);
+                background: var(--bg-color);
+                padding: 3rem 2rem;
+                display: flex; flex-direction: column;
+                position: sticky; top: 0; height: 100vh;
+                align-items: center; justify-content: center;
+            }
+            .diagram-figure { margin: 0; width: 100%; height: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+            .diagram-caption {
+                font-family: var(--font-mono); font-size: 0.65rem;
+                color: var(--text-muted); margin-top: 1rem;
+                text-align: center; letter-spacing: 0.05em;
+            }
         }
 
-        /* MOBILE ENGINE (Width <= 900px) */
-        @media (max-width: 900px) {
+        /* MOBILE/TABLET ENGINE (Width <= 1100px) */
+        @media (max-width: 1100px) {
             body { display: block; overflow-x: hidden; }
             aside#sidebar { 
                 position: fixed; top: 50px; left: 0; bottom: 0; width: 100%; 
@@ -261,8 +247,9 @@
                 display: flex; flex-direction: column;
             }
             aside#sidebar.open { transform: translateX(0); }
-            main { margin-top: 50px; padding: 1.5rem; width: 100%; max-width: 100vw; }
-            .content-col { padding: 0; }
+            main { margin-top: 50px; padding: 0; width: 100%; max-width: 100vw; display: block; }
+            .content-col { padding: 1.5rem; max-width: none; }
+            .diagram-col { display: none; } /* Hide diagram on mobile */
             .mo-header { padding: 1rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
             .mo-content { padding: 1rem; }
             .card-grid { grid-template-columns: 1fr; } 
@@ -276,7 +263,7 @@
         <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em; color:var(--text-main);">ENLIGHTENED AI</div>
         <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="font-family:var(--font-mono); font-size:0.75rem; padding:4px 10px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); cursor:pointer;">INDEX</button>
     </header>
-    <script>if(window.innerWidth<=900) document.getElementById('mobile-bar').style.display='flex';</script>
+    <script>if(window.innerWidth<=1100) document.getElementById('mobile-bar').style.display='flex';</script>
 
     <aside id="sidebar">
         <div class="brand">
@@ -323,8 +310,6 @@
             <button class="export-btn" onclick="window.print()"><span>🖨</span> EXPORT RECORD</button>
         </div>
     </aside>
-
-   
 
     <main>
         <div class="content-col">
@@ -396,6 +381,16 @@
 
             <footer><div class="footer-content"><div class="footer-left"><div class="footer-primary">© 2026 Enlightened AI Research Lab</div><div class="footer-secondary">Versioned research record · Logged revisions · Inspectable claims</div></div><div class="footer-right"><div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div></div></div></footer>
         </div>
+
+        <div class="diagram-col">
+            <figure class="diagram-figure">
+                <svg id="mermaid-1735133350000" width="600" xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 600 200" style="max-width:600px;background-color:#050505;"><style type="text/css" title="mermaid-svg-internal-css">/* */
+#mermaid-1735133350000 .node .label{font-family:'JetBrains Mono',monospace;color:#eee}#mermaid-1735133350000 .node rect,#mermaid-1735133350000 .node circle,#mermaid-1735133350000 .node ellipse,#mermaid-1735133350000 .node polygon,#mermaid-1735133350000 .node path{fill:#0b0b0c;stroke:#333;stroke-width:1px}#mermaid-1735133350000 .node.highlight rect{fill:#111;stroke:#00cc00;stroke-width:2px}#mermaid-1735133350000 .node.mute rect{fill:none;stroke:#444;stroke-dasharray:4 4}#mermaid-1735133350000 .edgePath .path{stroke:#666;stroke-width:1px;fill:none}#mermaid-1735133350000 .edgePath .path.critical{stroke:#00cc00;stroke-width:2px}#mermaid-1735133350000 .cluster rect{fill:none;stroke:#333;stroke-dasharray:2 2;stroke-width:1px}#mermaid-1735133350000 .cluster text{fill:#888;font-family:'JetBrains Mono',monospace}
+/* */
+</style><g><g class="cluster" id="cluster_Lifecycle" transform="translate(8,8)"><rect width="584" height="184" rx="2" ry="2" x="0" y="0"></rect><text x="292" y="16" font-weight="bold" font-size="14px">TRAINING &amp; DEPLOYMENT LOOP</text><g class="cluster" id="cluster_Gate" transform="translate(138,32)"><rect width="168" height="152" rx="2" ry="2" x="0" y="0"></rect><text x="84" y="16" font-weight="bold" font-size="14px">ENFORCEMENT GATE</text></g></g><g class="nodes"><g class="node default" id="node_Intent" transform="translate(69,108)"><rect width="106" height="36" rx="2" ry="2" x="-53" y="-18"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-43,-8)"><text><tspan xml:space="preserve" dy="1em" x="1">Human Intent</tspan></text></g></g></g><g class="node default" id="node_Lexicon" transform="translate(222,68)"><rect width="136" height="36" rx="2" ry="2" x="-68" y="-18"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-58,-8)"><text><tspan xml:space="preserve" dy="1em" x="1">1. Lexicon Defs</tspan></text></g></g></g><g class="node default" id="node_Serial" transform="translate(222,116)"><rect width="136" height="36" rx="2" ry="2" x="-68" y="-18"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-58,-8)"><text><tspan xml:space="preserve" dy="1em" x="1">2. Serialization</tspan></text></g></g></g><g class="node highlight" id="node_State" transform="translate(222,164)"><rect width="136" height="36" rx="2" ry="2" x="-68" y="-18"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-58,-8)"><text><tspan xml:space="preserve" dy="1em" x="1">3. Enforced State</tspan></text></g></g></g><g class="node default" id="node_Model" transform="translate(363,108)"><rect width="114" height="36" rx="2" ry="2" x="-57" y="-18"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-47,-8)"><text><tspan xml:space="preserve" dy="1em" x="1">Model Exec</tspan></text></g></g></g><g class="node mute" id="node_Eval" transform="translate(492,68)"><rect width="98" height="36" rx="2" ry="2" x="-49" y="-18"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-39,-8)"><text><tspan xml:space="preserve" dy="1em" x="1">Safety Eval</tspan></text></g></g></g><g class="node mute" id="node_Train" transform="translate(492,148)"><rect width="98" height="36" rx="2" ry="2" x="-49" y="-18"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-39,-8)"><text><tspan xml:space="preserve" dy="1em" x="1">Base Train</tspan></text></g></g></g></g><g class="edges"><g class="edgePath" style="fill:none"><path class="path" d="M222,86L222,98"></path><defs><marker id="arrowhead8" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#666"></path></marker></defs></g><g class="edgePath" style="fill:none"><path class="path" d="M222,134L222,146"></path><defs><marker id="arrowhead9" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#666"></path></marker></defs></g><g class="edgePath" style="fill:none"><path class="path" d="M122,108L146,108"></path><defs><marker id="arrowhead10" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#666"></path></marker></defs></g><g class="edgePath" style="fill:none"><path class="path critical" d="M290,164L306,164"></path><defs><marker id="arrowhead11" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#00cc00"></path></marker></defs></g><g class="edgePath" style="fill:none"><path class="path" d="M420,90L443,68"></path><defs><marker id="arrowhead12" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#666"></path></marker></defs></g><g class="edgePath" style="fill:none"><path class="path" d="M492,86L492,130"></path><defs><marker id="arrowhead13" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#666"></path></marker></defs></g><g class="edgePath" style="fill:none"><path class="path" d="M443,148L420,126"></path><defs><marker id="arrowhead14" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#666"></path></marker></defs></g></g></g></svg>
+                <figcaption class="diagram-caption">Diagram 01 — Context Loop (Institute Standard)</figcaption>
+            </figure>
+        </div>
     </main>
 
     <script>
@@ -465,89 +460,6 @@
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
-
-        // --- MACHINE OVERLAY LOGIC ---
-        let currentFormat = 'json';
-        let machineMode = 'cards';
-
-        function openMachineOverlay() {
-            document.getElementById('machineOverlay').classList.remove('hidden');
-            const savedMode = localStorage.getItem('lex_machine_mode');
-            if (savedMode) machineMode = savedMode;
-            switchMachineMode(machineMode);
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMachineOverlay() {
-            document.getElementById('machineOverlay').classList.add('hidden');
-            localStorage.setItem('lex_machine_dismissed', '1');
-            document.body.style.overflow = '';
-        }
-
-        function switchMachineMode(mode) {
-            machineMode = mode;
-            localStorage.setItem('lex_machine_mode', mode);
-            document.getElementById('btn-mode-cards').classList.toggle('active', mode === 'cards');
-            document.getElementById('btn-mode-serial').classList.toggle('active', mode === 'serialization');
-            if (mode === 'cards') {
-                document.getElementById('moTabs').classList.add('hidden');
-                document.getElementById('machineCode').style.display = 'none';
-                document.getElementById('machineCards').style.display = 'grid';
-                renderCards();
-            } else {
-                document.getElementById('moTabs').classList.remove('hidden');
-                document.getElementById('machineCode').style.display = 'block';
-                document.getElementById('machineCards').style.display = 'none';
-                renderFormat(currentFormat);
-            }
-        }
-
-        function renderCards() {
-            const container = document.getElementById('machineCards');
-            let html = '';
-            html += `<div class="m-card"><div class="mc-header"><div>METADATA</div><div>${LEXICON_RECORD.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON_RECORD.meta.classification}</div></div></div>`;
-            html += `<div class="mc-section-title">CORE TERMS</div>`;
-            LEXICON_RECORD.core_terms.forEach(t => { html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>${t.type || 'TERM'}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div></div>`; });
-            html += `<div class="mc-section-title">INVARIANTS</div>`;
-            LEXICON_RECORD.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div>${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
-            container.innerHTML = html;
-        }
-
-        function exportRecord() {
-            if(machineMode === 'cards') return; 
-            const content = document.getElementById('machineCode').innerText;
-            const ext = currentFormat === 'ts' ? 'ts' : currentFormat === 'python' ? 'py' : currentFormat;
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `lexicon_record.${ext}`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function renderFormat(fmt) {
-            currentFormat = fmt;
-            document.querySelectorAll('.mo-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(`tab-${fmt}`).classList.add('active');
-            const codeEl = document.getElementById('machineCode');
-            let output = '';
-            if (fmt === 'json') output = JSON.stringify(LEXICON_RECORD, null, 2);
-            else if (fmt === 'yaml') { output = `meta:\n  doc_id: ${LEXICON_RECORD.meta.doc_id}\n  version: ${LEXICON_RECORD.meta.version}\n\ncore_terms:\n`; LEXICON_RECORD.core_terms.forEach(t => output += `  - id: ${t.id}\n    label: ${t.label}\n`); }
-            else if (fmt === 'python') { output = `LEXICON_RECORD = {\n    "meta": {"doc_id": "${LEXICON_RECORD.meta.doc_id}"}\n}`; }
-            else if (fmt === 'ts') { output = `export const RECORD = {\n  meta: { doc_id: "${LEXICON_RECORD.meta.doc_id}" }\n};`; }
-            else if (fmt === 'sql') { output = `CREATE TABLE terms (id VARCHAR(10));`; }
-            else if (fmt === 'md') { output = `# Lexicon Record\n`; }
-            codeEl.innerText = output;
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('view') === 'machine' && !localStorage.getItem('lex_machine_dismissed')) {
-                openMachineOverlay();
-            }
-        });
-        document.addEventListener('keydown', (e) => { if (e.key === "Escape") closeMachineOverlay(); });
     </script>
 </body>
 </html>
