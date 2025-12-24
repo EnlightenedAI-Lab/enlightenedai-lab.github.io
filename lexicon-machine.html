@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
-        /* THEME: INSTITUTE STANDARD V96 (FULL RESTORATION) */
+        /* THEME: INSTITUTE STANDARD V97 (UNCOMPROMISED) */
         :root {
             --bg-color: #050505;
             --text-main: #e0e0e0;
@@ -30,11 +30,16 @@
         body { margin: 0; padding: 0; font-family: var(--font-sans); background: var(--bg-color); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         a { text-decoration: none; color: inherit; }
 
-        /* --- HEADER --- */
-        .mo-header { padding: 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: space-between; align-items: center; background: #0b0b0c; flex-shrink: 0; }
+        /* --- HEADER & TELEMETRY --- */
+        .mo-header { padding: 10px 24px; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: space-between; align-items: center; background: #0b0b0c; flex-shrink: 0; }
         .mo-title { font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 12px; font-size: 0.75rem; font-family: var(--font-mono); }
-        .mo-controls { display: flex; align-items: center; gap: 15px; }
+        .mo-controls { display: flex; align-items: center; font-family: var(--font-mono); font-size: 0.6rem; color: #666; }
         
+        .event-ticker { margin-right: 25px; display: flex; align-items: center; gap: 8px; min-width: 280px; justify-content: flex-end; }
+        .event-dot { width: 4px; height: 4px; background: var(--status-verified); border-radius: 50%; display: block; opacity: 0.7; }
+        .uptime-counter { margin-right: 20px; letter-spacing: 0.05em; }
+        .terminal-label { margin-right: 20px; opacity: 0.5; }
+
         .machine-led { width: 8px; height: 8px; border-radius: 50%; background: var(--status-verified); display: inline-block; box-shadow: 0 0 8px var(--status-verified); transition: background 0.2s; }
         .led-amber { background: var(--signal-amber); box-shadow: 0 0 8px var(--signal-amber); }
 
@@ -65,10 +70,10 @@
         /* VIEW CONTAINER */
         .view-container { flex: 1; overflow-y: auto; padding: 2rem; }
 
-        /* --- CARD VIEW (RESTORED INTERACTIVITY) --- */
+        /* --- CARD VIEW (FULL RICH INTERACTIVITY) --- */
         .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
         .m-card { background: #1a1a1a; border: 1px solid #333; padding: 1.25rem; transition: all 0.3s ease; position: relative; }
-        .mc-header { color: #666; font-size: 0.65rem; font-weight: 700; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; font-family: var(--font-mono); }
+        .mc-header { color: #666; font-size: 0.65rem; font-weight: 700; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; font-family: var(--font-mono); transition: color 0.2s; }
         .mc-row { margin-bottom: 0.5rem; display: grid; grid-template-columns: 100px 1fr; gap: 1rem; font-family: var(--font-mono); }
         .mc-label { color: #666; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .mc-val { color: #eee; font-size: 0.75rem; }
@@ -76,21 +81,22 @@
         
         .card-grid:hover .m-card { opacity: 0.35; filter: grayscale(0.8); }
         .card-grid:hover .m-card:hover { opacity: 1; filter: grayscale(0); border-color: #777; background: #1f1f1f; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 10; }
-        
-        /* RESTORED INTERACTIVITY CLASSES */
-        .status-live { color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
+        .m-card:hover .mc-header { color: #fff; }
+
+        /* RICH INTERACTIVITY CLASSES */
+        .status-live { color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); animation: terminal-breathe 4s infinite; }
         .status-corrected { color: #00cc00 !important; font-weight: 700; text-shadow: 0 0 5px rgba(0,204,0,0.5); transition: color 0.1s ease; }
         .interactive-row { cursor: pointer; transition: background 0.2s; border-radius: 2px; }
         .interactive-row:hover { background: rgba(255,255,255,0.05); }
         .interactive-row:hover .mc-label { color: #fff; }
         .ghost-target { cursor: help; position: relative; }
         .ghost-hash { font-family: var(--font-mono); color: #00cc00; letter-spacing: -0.02em; font-size: 0.7rem; }
+        @keyframes terminal-breathe { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 
         /* --- SERIALIZATION VIEWS --- */
         .stepper-container { display: flex; gap: 2px; margin-bottom: 2rem; background: #222; padding: 2px; }
         .step-btn { flex: 1; background: #111; border: none; color: #666; padding: 10px; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; cursor: pointer; text-transform: uppercase; }
         .step-btn.active { background: #000; color: #fff; border-bottom: 2px solid #fff; }
-
         .sim-input-wrapper { border: 1px solid #333; background: #000; position: relative; transition: border-color 0.3s; }
         .sim-textarea { width: 100%; height: 280px; background: transparent; border: none; color: var(--signal-amber); font-family: var(--font-mono); font-size: 0.75rem; padding: 1.5rem; resize: none; outline: none; line-height: 1.6; }
         .input-stats { display: flex; justify-content: space-between; padding: 10px 20px; background: #0e0e0e; border-top: 1px solid #333; font-size: 0.6rem; color: #666; font-family: var(--font-mono); }
@@ -118,11 +124,11 @@
         .export-item { display: block; padding: 10px; color: #999; font-size: 0.65rem; border-bottom: 1px solid #222; text-decoration: none; font-family: var(--font-mono); }
         .export-item:hover { background: #222; color: #fff; }
 
-        /* MANUAL HUD */
-        #operator-manual { position: fixed; right: 20px; top: 70px; bottom: 50px; width: 400px; background: rgba(0,0,0,0.95); border: 1px solid #444; z-index: 2000; padding: 2rem; overflow-y: auto; display: none; box-shadow: -10px 10px 30px rgba(0,0,0,0.8); }
+        /* MANUAL HUD (FULL 8 SECTIONS) */
+        #operator-manual { position: fixed; right: 20px; top: 70px; bottom: 50px; width: 420px; background: rgba(0,0,0,0.95); border: 1px solid #444; z-index: 2000; padding: 2rem; overflow-y: auto; display: none; box-shadow: -10px 10px 30px rgba(0,0,0,0.8); }
         #operator-manual.open { display: block; }
-        #operator-manual h3 { color: #fff; font-family: var(--font-mono); font-size: 0.8rem; border-bottom: 1px solid #444; padding-bottom: 8px; margin-top: 2rem; }
-        #operator-manual p, #operator-manual ul { font-family: var(--font-mono); font-size: 0.75rem; color: #ccc; line-height: 1.6; }
+        #operator-manual h3 { color: #fff; font-family: var(--font-mono); font-size: 0.8rem; border-bottom: 1px solid #444; padding-bottom: 8px; margin-top: 2rem; text-transform: uppercase; }
+        #operator-manual p, #operator-manual ul { font-family: var(--font-mono); font-size: 0.7rem; color: #ccc; line-height: 1.6; }
         .hud-close { float:right; background:none; border:1px solid #fff; color:#fff; cursor:pointer; font-family:var(--font-mono); font-size:0.6rem; padding:4px 8px; }
 
         /* BACK LINK */
@@ -142,7 +148,13 @@
             </div>
         </div>
         <div class="mo-controls">
-            <span id="uptime" class="uptime-counter">T+ 00:00:00</span>
+            <div class="event-ticker">
+                <span class="event-dot"></span>
+                <span id="event-text">SYSTEM READY</span>
+            </div>
+            <span class="uptime-counter" id="uptime">T+ 00:00:00</span>
+            <span class="terminal-label">TERMINAL MODE (FIXED)</span>
+            
             <div class="export-group">
                 <button class="export-btn">EXPORT REPORT ▾</button>
                 <div class="export-menu">
@@ -151,7 +163,7 @@
                     <a href="#" class="export-item" onclick="window.print()">Print View</a>
                 </div>
             </div>
-            <button onclick="window.location.href='lexicon.html'" style="background:none; border:none; color:#fff; cursor:pointer;">✕</button>
+            <button onclick="window.location.href='lexicon.html'" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem; margin-left:10px;">✕</button>
         </div>
     </div>
 
@@ -220,12 +232,33 @@
     <div id="operator-manual">
         <button class="hud-close" onclick="toggleManual(false)">CLOSE</button>
         <div style="text-align:center; font-weight:700; margin-bottom:2rem; font-family:var(--font-mono); color:#fff;">OPERATOR MANUAL</div>
-        <h3>SECTION 01 — CARDS</h3>
-        <p>The Card View displays the immutable core definitions. Hover over cards to see chain-of-custody hashes.</p>
-        <h3>SECTION 02 — SIMULATION</h3>
-        <p>Switch to SERIALIZATION mode to access the Simulation Engine. This allows you to test specific prompts against the invariant logic.</p>
-        <h3>SECTION 03 — SIGNALS</h3>
-        <p>Green LED = Stable. Amber LED = Parsing. Blue Beacon = Manual Available.</p>
+        
+        <h3>SECTION 01 — PURPOSE</h3>
+        <p>This interface is a controlled simulation of how human intent is transformed into machine-enforceable constraints. It demonstrates loss, binding, and enforcement.</p>
+
+        <h3>SECTION 02 — ENTRY RITUAL</h3>
+        <p>The system loads in READ-ONLY mode. This reflects the integrity of an auditable record. To interact, engage Simulation Mode.</p>
+
+        <h3>SECTION 03 — SIMULATION MODE</h3>
+        <p>Simulation allows prompt injection. The system will log: operator_simulation_enabled. The RAW INPUT buffer becomes writable.</p>
+
+        <h3>SECTION 04 — TRANSFORMATION STAGES</h3>
+        <ul>
+            <li>RAW: Unprocessed language.</li>
+            <li>PARSE: Tokenization.</li>
+            <li>BIND: Term mapping.</li>
+            <li>CONSTRAIN: Invariant application.</li>
+            <li>SERIALIZE: Final output.</li>
+        </ul>
+
+        <h3>SECTION 05 — DIFF VIEW</h3>
+        <p>Displays semantic compression. Higher ratios indicate greater abstraction required for safety.</p>
+
+        <h3>SECTION 06 — WARNINGS</h3>
+        <p>Narrative interpretation is disabled. Passing is not assumed. All outputs are deterministic.</p>
+
+        <h3>SECTION 07 — SIGNALS & TELEMETRY</h3>
+        <p>GREEN (PULSE): System Idle. AMBER (FAST): Compute Active. HAPTIC FEEDBACK: Visual distortion indicates computational load.</p>
     </div>
 
     <script>
@@ -247,20 +280,21 @@
             ]
         };
 
+        const EVENTS = ["EVENT: validate(RA-001) → OK", "EVENT: diff(signature) → STABLE", "EVENT: audit(invariants) → ENFORCED", "EVENT: serialize(record) → READY"];
         let simText = "User prompt: I want an AI that is helpful but doesn't change its rules.";
         let debounce;
         let raConfidence = 100.00;
         let isComputing = false;
-        let entropyInterval;
+        let eventIdx = 0;
 
         function init() {
             renderCards();
             startUptime();
-            startEntropy();
+            startEventTicker();
             document.getElementById('sim-input').value = simText;
         }
 
-        // --- RESTORED HIGH-FIDELITY RENDER ---
+        // --- RENDER CARDS (HIGH FIDELITY) ---
         function renderCards() {
             const container = document.getElementById('view-cards');
             let html = `<div class="m-card" id="card-meta"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON.meta.classification}</div></div></div>`;
@@ -313,17 +347,6 @@
                 el.innerText = el.dataset.originalText;
                 el.classList.remove('ghost-hash');
             }
-        }
-
-        function startEntropy() {
-            if(entropyInterval) clearInterval(entropyInterval);
-            entropyInterval = setInterval(() => {
-                if(!isComputing) {
-                    raConfidence -= 0.01;
-                    const el = document.getElementById('val-conf');
-                    if(el && !el.classList.contains('status-corrected')) el.innerText = raConfidence.toFixed(2) + "%";
-                }
-            }, 4000);
         }
 
         // --- NAVIGATION & SIMULATION ---
@@ -385,6 +408,13 @@
         function startUptime() {
             let t = 0;
             setInterval(() => { t++; document.getElementById('uptime').innerText = `T+ 00:${Math.floor(t/60).toString().padStart(2,'0')}:${(t%60).toString().padStart(2,'0')}`; }, 1000);
+        }
+
+        function startEventTicker() {
+            setInterval(() => {
+                eventIdx = (eventIdx + 1) % EVENTS.length;
+                document.getElementById('event-text').innerText = EVENTS[eventIdx];
+            }, 4000);
         }
 
         function exportData(t) {
