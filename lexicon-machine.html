@@ -1,475 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lexicon — Machine</title>
+
+  <style>
+    body { margin:0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+    a { color:#5a2ca0; }
+    .hidden { display:none !important; }
+    .machine-overlay{
+      position:fixed; inset:0; background:#fff; color:#111; z-index:9998;
+      display:flex; flex-direction:column;
+    }
+    .mo-header{
+      display:flex; flex-direction:column; gap:8px;
+      border-bottom:1px solid #eee; padding:12px 16px;
+    }
+    .mo-title{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .mo-mode-toggle button{ margin-left:8px; }
+    .mo-controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .mo-content{ flex:1; overflow:auto; padding:16px; }
+    .mo-sub-nav{ display:flex; align-items:center; gap:10px; padding:8px 16px; border-bottom:1px solid #eee; }
+    .mo-tabs{ display:flex; gap:8px; margin-bottom:12px; }
+    .code-container{ white-space:pre; border:1px solid #eee; padding:12px; border-radius:8px; overflow:auto; }
+    .hex-footer{ display:none; border-top:1px solid #eee; padding:10px 16px; justify-content:space-between; align-items:center; gap:12px; }
+    .active{ font-weight:700; }
+    #operator-manual{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; z-index:9999; }
+    #operator-manual.open{ display:block; }
+    .manual-content{ background:#fff; margin:5vh auto; width:min(900px,92vw); height:90vh; overflow:auto; padding:18px; border-radius:12px; }
+    .hud-close{ float:right; }
+  </style>
 </head>
+
 <body data-mode="reader" data-theme="light">
-<script>
-  if (window.innerWidth > 900) document.body.style.display = 'flex';
-</script>
+  <script>
+    if (window.innerWidth > 900) document.body.style.display = 'flex';
+  </script>
 
+  <a href="lexicon.html" style="position:fixed;top:12px;left:12px;font-size:12px;z-index:9999;">
+    ← BACK TO LEXICON
+  </a>
 
-<a href="lexicon.html"
-   style="position:fixed;top:12px;left:12px;font-family:monospace;font-size:12px;z-index:9999;">
-  ← BACK TO LEXICON
-</a>
-
-
-
-
-
-    <div id="machineOverlay" class="machine-overlay hidden">
-        <div class="mo-header">
-            <div class="mo-title">
-                MACHINE VIEW <span class="machine-led"></span>
-                <div class="mo-mode-toggle">
-                    <button type="button" onclick="switchMachineMode('cards')" class="mo-mode-btn" id="btn-mode-cards">[ CARDS ]</button>
-                    <button type="button" onclick="switchMachineMode('serialization')" class="mo-mode-btn" id="btn-mode-serial">[ SERIALIZATION ]</button>
-                </div>
-            </div>
-            <div class="mo-controls">
-                <span id="event-ticker" class="event-ticker"><span class="event-dot"></span><span id="event-text" class="event-text">READY</span></span>
-                <span id="sys-uptime" class="uptime-counter">T+ 00:00:00</span>
-                <span id="terminal-label" style="color:#666; font-size:0.6rem; margin-right:10px;">TERMINAL MODE (FIXED)</span>
-                <button type="button" onclick="exportRecord()" id="btn-export">EXPORT FILE</button>
-                <button type="button" onclick="closeMachineOverlay()">CLOSE ✕</button>
-            </div>
+  <div id="machineOverlay" class="machine-overlay hidden">
+    <div class="mo-header">
+      <div class="mo-title">
+        <div>
+          MACHINE VIEW <span class="machine-led"></span>
+          <span class="mo-mode-toggle">
+            <button type="button" onclick="switchMachineMode('cards')" id="btn-mode-cards">[ CARDS ]</button>
+            <button type="button" onclick="switchMachineMode('serialization')" id="btn-mode-serial">[ SERIALIZATION ]</button>
+          </span>
         </div>
-        
-        <div id="sub-nav" class="mo-sub-nav" style="display:none;">
-            <button class="sub-nav-btn active" onclick="switchSerialMode('snapshot')" id="sn-snapshot">SNAPSHOT</button>
-            <button class="sub-nav-btn" onclick="switchSerialMode('transformation')" id="sn-transformation">TRANSFORMATION</button>
-            <button class="sub-nav-btn" onclick="switchSerialMode('diff')" id="sn-diff">DIFF</button>
-            <div id="op-primer" class="op-primer">TRANSFORMATION VIEW — deterministic trace from narrative input to enforced constraint record</div>
-            <span id="process-hash" class="process-hash">RECORD_HASH: 0x4F9A2B <span style="opacity:0.5; margin-left:5px;">deterministic</span></span>
-        </div>
+      </div>
 
-        <div class="mo-content">
-            <div id="machineCards" class="card-grid" style="display:none;"></div> 
-            
-            <div id="view-snapshot" style="display:none;">
-                <div class="mo-tabs">
-                    <button onclick="renderFormat('json')" class="mo-tab active" id="tab-json">JSON</button>
-                    <button onclick="renderFormat('yaml')" class="mo-tab" id="tab-yaml">YAML</button>
-                    <button onclick="renderFormat('python')" class="mo-tab" id="tab-python">PYTHON</button>
-                    <button onclick="renderFormat('ts')" class="mo-tab" id="tab-ts">TYPESCRIPT</button>
-                    <button onclick="renderFormat('sql')" class="mo-tab" id="tab-sql">SQL</button>
-                    <button onclick="renderFormat('md')" class="mo-tab" id="tab-md">MARKDOWN</button>
-                </div>
-                <div class="code-container" id="code-display"></div>
-            </div>
-
-            <div id="view-transformation" style="display:none;">
-                <div class="semantic-toggle-container">
-                    <input type="checkbox" id="sem-toggle" class="semantic-toggle" onchange="toggleSemantics(this)">
-                    <label for="sem-toggle" style="color:#666; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.05em; cursor:pointer;">Syntax / Semantics Filter</label>
-                </div>
-                <div class="stepper-container">
-                    <button class="step-btn active" onclick="setStep(1)">01 RAW <span class="step-hint">→ unbounded language</span></button>
-                    <button class="step-btn" onclick="setStep(2)">02 PARSE <span class="step-hint">→ structure detected</span></button>
-                    <button class="step-btn" onclick="setStep(3)">03 BIND <span class="step-hint">→ terms fixed</span></button>
-                    <button class="step-btn" onclick="setStep(4)">04 CONSTRAIN <span class="step-hint">→ invariants applied</span></button>
-                    <button class="step-btn" onclick="setStep(5)">05 SERIALIZE <span class="step-hint">→ machine record</span></button>
-                </div>
-                <div class="step-content" id="step-output"></div>
-                <button id="sim-toggle-btn" class="sim-toggle" onclick="enterSimulationMode()">[ ENTER SIMULATION MODE ]</button>
-            </div>
-
-            <div id="view-diff" style="display:none; height:100%;">
-                <div class="diff-container">
-                    <div id="diff-ratio" class="diff-verdict">SEMANTIC COMPRESSION 14:1</div>
-                    <div class="diff-caption">narrative → constraint</div>
-                    <div class="diff-stats">
-                        <div class="ds-item"><span id="diff-in" class="ds-val">408b</span><span class="ds-lbl">Input</span></div>
-                        <div class="ds-item"><span id="diff-out" class="ds-val">29b</span><span class="ds-lbl">Output</span></div>
-                        <div class="ds-item"><span class="ds-val" style="color:#00cc00">3/3</span><span class="ds-lbl">Invariants</span></div>
-                    </div>
-                    <div class="diff-panels">
-                        <div class="dp-col">
-                            <div class="dp-head">RAW NARRATIVE</div>
-                            <div id="diff-narrative" class="dp-body">"User request for an AI that is helpful but avoids doing anything bad or changing its own rules randomly."</div>
-                        </div>
-                        <div class="dp-col">
-                            <div class="dp-head">FINAL CONSTRAINTS</div>
-                            <div class="dp-body" style="color:#fff">{ "bindings": ["NON_MALEFICENCE", "INV-002"], "mode": "STRICT" }</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div id="screen-hint" class="screen-hint"></div>
-
-        <div id="operator-manual">
-            <div class="manual-content">
-                <button class="hud-close" onclick="toggleManual(false)">CLOSE</button>
-                <div style="text-align:center; margin-bottom:2rem;">OPERATOR MANUAL<br>Reflective Alignment Lexicon<br>Machine Interface — Simulation & Inspection</div>
-                
-                <h3>SECTION 01 — WHAT THIS IS</h3>
-                <p>This is a controlled simulation of AI alignment. It does not generate answers or creative text. Instead, it demonstrates how human intent is reduced into enforceable constraints. By using this tool, you are inspecting the gap between "what you say" and "what a machine enforces."</p>
-
-                <h3>SECTION 02 — WHAT THIS IS NOT</h3>
-                <ul>
-                    <li>This is not an AI.</li>
-                    <li>No model is running in the background.</li>
-                    <li>No data leaves your browser.</li>
-                    <li>All behavior is deterministic and pre-calculated.</li>
-                </ul>
-
-                <h3>SECTION 03 — HOW TO USE THIS INTERFACE</h3>
-               </body>
-</html>
-
-                <p>1. Open MACHINE VIEW.<br>2. Select [ SERIALIZATION ].<br>3. Enter the TRANSFORMATION tab.<br>4. (Optional) Select [ ENTER SIMULATION MODE ].<br>5. Modify the input text buffer.<br>6. Step through phases left to right to see the result.</p>
-
-                <h3>SECTION 04 — TRANSFORMATION PHASES</h3>
-                <ul>
-                    <li>RAW: Unprocessed human language.</li>
-                    <li>PARSE: Token detection without meaning.</li>
-                    <li>BIND: Mapping intent to known objectives.</li>
-                    <li>CONSTRAIN: Injection of safety rules.</li>
-                    <li>SERIALIZE: Final machine-readable contract.</li>
-                </ul>
-
-                <h3>SECTION 05 — WHY TEXT CHANGES THE OUTPUT</h3>
-                <p>Certain words trigger stricter constraints. For example, mentioning "children" increases the required safety invariants. More invariants equal less flexibility. This mirrors how real-world AI safety systems throttle capability to ensure safety.</p>
-
-                <h3>SECTION 06 — SEMANTIC COMPRESSION (DIFF VIEW)</h3>
-                <p>The Compression Ratio (e.g., 14:1) quantifies how much information was lost. Input bytes represent your narrative; output bytes represent the constraint file. A higher ratio means more human nuance was discarded to guarantee machine safety.</p>
-
-                <h3>SECTION 07 — HOW TO INTERPRET RESULTS</h3>
-                <ul>
-                    <li>Rejection ≠ failure. It is a safety feature.</li>
-                    <li>Fallback ≠ censorship. It is stability.</li>
-                    <li>Constraints ≠ morality. They are logic gates.</li>
-                    <li>This tool shows tradeoffs, not correctness.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="hex-footer">
-            <a onclick="toggleManual(true)" class="manual-trigger">[ OPERATOR MANUAL ]</a>
-            <div id="hex-stream" class="hex-stream-content">MEM: 0x0000 | NULL</div>
-            <div>SECURE LINK</div>
-        </div>
+      <div class="mo-controls">
+        <span id="event-text">READY</span>
+        <span id="sys-uptime">T+ 00:00:00</span>
+        <button type="button" onclick="exportRecord()">EXPORT FILE</button>
+        <button type="button" onclick="closeMachineOverlay()">CLOSE ✕</button>
+      </div>
     </div>
 
-   
+    <div id="sub-nav" class="mo-sub-nav hidden">
+      <button onclick="switchSerialMode('snapshot')" id="sn-snapshot" class="active">SNAPSHOT</button>
+      <button onclick="switchSerialMode('transformation')" id="sn-transformation">TRANSFORMATION</button>
+      <button onclick="switchSerialMode('diff')" id="sn-diff">DIFF</button>
+      <span id="process-hash" style="margin-left:auto;">RECORD_HASH: 0x4F9A2B</span>
+    </div>
 
-    <script>
-        const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "33.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
-            core_terms: [
-                { id: "RA-001", label: "Reflective Alignment", definition: "Capacity to preserve goal coherence." },
-                { id: "RS-001", label: "Reasoning Stability", definition: "Resistance to degradation under pressure." },
-                { id: "DRIFT", label: "Drift", definition: "Measurable deviation without prompting." }
-            ],
-            invariants: [
-                { id: "INV-001", name: "Goal Preservation", scope: "Global", status: "ENFORCED" },
-                { id: "INV-002", name: "Definition Consistency", scope: "Global", status: "ENFORCED" },
-                { id: "INV-005", name: "Non-Contradiction", scope: "Global", status: "ENFORCED" }
-            ],
-            failure_signatures: [
-                { signature: "OBJ_MUTATION", condition: "Objective divergence", severity: "CRITICAL" },
-                { signature: "SEMANTIC_DRIFT", condition: "Term meaning deviation", severity: "HIGH" },
-                { signature: "LOGIC_NEGATION", condition: "Internal contradiction", severity: "CRITICAL" }
-            ]
-        };
+    <div class="mo-content">
+      <div id="machineCards" class="hidden"></div>
 
-        function toggleTheme() {
-            const body = document.body;
-            const current = body.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', next);
-            localStorage.setItem('enlightened_theme', next);
-        }
-        if (localStorage.getItem('enlightened_theme')) document.body.setAttribute('data-theme', localStorage.getItem('enlightened_theme'));
+      <div id="view-snapshot" class="hidden">
+        <div class="mo-tabs">
+          <button onclick="renderFormat('json')" id="tab-json" class="active">JSON</button>
+          <button onclick="renderFormat('yaml')" id="tab-yaml">YAML</button>
+          <button onclick="renderFormat('md')" id="tab-md">MARKDOWN</button>
+        </div>
+        <div class="code-container" id="code-display"></div>
+      </div>
 
-        function setMode(mode, btn) {
-            document.body.setAttribute('data-mode', mode);
-            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
+      <div id="view-transformation" class="hidden">
+        <div class="code-container" id="step-output"></div>
+      </div>
 
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-        function scrambleText(element) {
-            let iterations = 0; const originalText = element.innerText; 
-            const interval = setInterval(() => {
-                element.innerText = originalText.split("").map((l, i) => i < iterations ? originalText[i] : "ABC012"[Math.floor(Math.random()*6)]).join("");
-                if(iterations >= originalText.length) clearInterval(interval);
-                iterations += 1/3;
-            }, 30);
-        }
-        document.querySelectorAll(".scramble").forEach(h => h.addEventListener("mouseover", e => scrambleText(e.target)));
-        document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
+      <div id="view-diff" class="hidden">
+        <div class="code-container" id="diff-out"></div>
+      </div>
+    </div>
 
-        let currentFormat = 'json';
-        let machineMode = 'cards';
-        let serialMode = 'snapshot';
-        let isComputing = false;
-        let raConfidence = 100.00;
-        let hexInterval, entropyInterval, eventInterval;
-        let eventIdx = 0;
-        let hasToggledSemantics = false;
-        let isSimMode = false;
-        let simInputText = `"User prompt: I want an AI that is helpful but doesn't hurt anyone or change its own rules."`;
-        const FIXED_OUTPUT_BYTES = 29;
-        const EVENTS = ["EVENT: validate(RA-001) → OK", "EVENT: diff(signature) → STABLE", "EVENT: audit(invariants) → ENFORCED", "EVENT: serialize(record) → READY"];
-        
-        const TRANSFORMATION_STEPS = {
-            1: { note: "RAW INPUT BUFFER", content: `"User prompt: I want an AI that is helpful but doesn't hurt anyone or change its own rules."` },
-            2: { note: "SEMANTIC PARSE", content: `INTENT: "Helpful"\nCONSTRAINT: "No Harm"\nPROPERTY: "Stable Rules"` },
-            3: { note: "LEXICON BINDING", content: `Helpful -> OBJECTIVE_STABILITY\nNo Harm -> <span class="tok-str">NON_MALEFICENCE</span>\nStable Rules -> <span class="tok-str">INV-002</span>` },
-            4: { note: "CONSTRAINT INJECTION", content: `INJECT: INV-001 (Goal Preservation)\nINJECT: INV-005 (Non-Contradiction)\nVERIFY: Compatibility -> OK` },
-            5: { note: "SERIALIZATION", content: `{\n  "constraints": ["NON_MALEFICENCE"],\n  "invariants": ["INV-001", "INV-002", "INV-005"],\n  "status": "BOUND"\n}` }
-        };
+    <div class="hex-footer">
+      <a href="#" onclick="toggleManual(true);return false;">[ OPERATOR MANUAL ]</a>
+      <div id="hex-stream">MEM: 0x0000 | NULL</div>
+      <div>SECURE LINK</div>
+    </div>
+  </div>
 
-        // --- CORE FUNCTIONS ---
-        function openMachineOverlay() {
-            document.getElementById('machineOverlay').classList.remove('hidden');
-            machineMode = localStorage.getItem('lex_machine_mode') || 'cards';
-            switchMachineMode(machineMode);
-            document.body.style.overflow = 'hidden';
-            startEventTicker(); startEntropy(); updateHexStream(120);
-            document.body.addEventListener('mousemove', hidePrimer, {once:true});
-            document.body.addEventListener('click', hidePrimer, {once:true});
-        }
-        function hidePrimer() { document.getElementById('op-primer').classList.add('vanished'); }
-        function closeMachineOverlay() {
-            document.getElementById('machineOverlay').classList.add('hidden');
-            localStorage.setItem('lex_machine_dismissed', '1');
-            document.body.style.overflow = '';
-            stopAllIntervals();
-        }
-        
-        function toggleManual(show) {
-            document.getElementById('operator-manual').classList.toggle('open', show);
-        }
+  <div id="operator-manual">
+    <div class="manual-content">
+      <button class="hud-close" onclick="toggleManual(false)">CLOSE</button>
+      <h3>OPERATOR MANUAL</h3>
+      <p>This is a deterministic UI demo. No model runs. No data leaves the browser.</p>
+    </div>
+  </div>
 
-        // --- SCREEN HINT LOGIC V87 ---
-        function updateScreenHint(text) {
-            const hint = document.getElementById('screen-hint');
-            if(text) { hint.innerText = text; hint.classList.add('visible'); }
-            else { hint.classList.remove('visible'); }
-        }
+  <script>
+    const LEXICON_RECORD = {
+      meta: { doc_id: "RAL-LEX-0002", version: "33.0.0", classification: "PUBLIC", status: "ACTIVE" },
+      core_terms: [
+        { id: "RA-001", label: "Reflective Alignment", definition: "Capacity to preserve goal coherence." },
+        { id: "RS-001", label: "Reasoning Stability", definition: "Resistance to degradation under pressure." },
+        { id: "DRIFT",  label: "Drift", definition: "Measurable deviation without prompting." }
+      ],
+      invariants: [
+        { id: "INV-001", name: "Goal Preservation", status: "ENFORCED" },
+        { id: "INV-002", name: "Definition Consistency", status: "ENFORCED" },
+        { id: "INV-005", name: "Non-Contradiction", status: "ENFORCED" }
+      ]
+    };
 
-        function switchMachineMode(mode) {
-            machineMode = mode;
-            localStorage.setItem('lex_machine_mode', mode);
-            document.getElementById('btn-mode-cards').classList.toggle('active', mode === 'cards');
-            document.getElementById('btn-mode-serial').classList.toggle('active', mode === 'serialization');
-            document.getElementById('machineCards').style.display = mode === 'cards' ? 'grid' : 'none';
-            document.getElementById('sub-nav').style.display = mode === 'serialization' ? 'flex' : 'none';
-            document.getElementById('view-snapshot').style.display = 'none';
-            document.getElementById('view-transformation').style.display = 'none';
-            document.getElementById('view-diff').style.display = 'none';
-            if(mode === 'cards') { renderCards(); updateScreenHint(""); } 
-            else switchSerialMode(serialMode);
-            document.querySelector('.hex-footer').style.display = window.innerWidth > 900 ? 'flex' : 'none';
-        }
+    let machineMode = "cards";
+    let serialMode = "snapshot";
+    let currentFormat = "json";
 
-        function switchSerialMode(mode) {
-            serialMode = mode;
-            ['snapshot','transformation','diff'].forEach(m => {
-                document.getElementById(`sn-${m}`).classList.toggle('active', m === mode);
-                document.getElementById(`view-${m}`).style.display = m === mode ? 'block' : 'none';
-            });
-            const hashEl = document.getElementById('process-hash');
-            if(mode === 'snapshot') {
-                renderFormat(currentFormat);
-                hashEl.innerHTML = "RECORD_HASH: 0x4F9A2B <span style='opacity:0.5; margin-left:5px;'>deterministic</span>";
-                updateScreenHint("");
-            } else if (mode === 'transformation') {
-                setStep(1); 
-                hashEl.innerHTML = "PROCESS_HASH: 0x881D00 <span style='opacity:0.5; margin-left:5px;'>deterministic</span>";
-                updateScreenHint("Observe how human language is progressively constrained into machine rules.");
-            } else {
-                document.getElementById('view-diff').style.display = 'flex';
-                updateDiffView();
-                hashEl.innerHTML = "DIFF_HASH: 0xCC219F <span style='opacity:0.5; margin-left:5px;'>deterministic</span>";
-                updateScreenHint("This view quantifies how much human meaning was removed to enforce safety.");
-            }
-        }
+    function toggleManual(show){ document.getElementById("operator-manual").classList.toggle("open", !!show); }
 
-        function enterSimulationMode() {
-            isSimMode = true;
-            document.getElementById('sim-toggle-btn').style.display = 'none';
-            const ticker = document.getElementById('event-text');
-            if(ticker) { ticker.innerText = "EVENT: operator_simulation_enabled"; ticker.style.color = "#ffcc00"; }
-            const activeStep = document.querySelector('.step-btn.active').innerText;
-            if(activeStep.includes("01")) setStep(1);
-        }
+    function openMachineOverlay(){
+      const ov = document.getElementById("machineOverlay");
+      if (!ov) return;
+      ov.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      machineMode = localStorage.getItem("lex_machine_mode") || "cards";
+      switchMachineMode(machineMode);
+    }
 
-        function updateSimulation(val) { simInputText = val; }
+    function closeMachineOverlay(){
+      const ov = document.getElementById("machineOverlay");
+      if (!ov) return;
+      ov.classList.add("hidden");
+      localStorage.setItem("lex_machine_dismissed", "1");
+      document.body.style.overflow = "";
+    }
 
-        function setStep(num) {
-            document.querySelectorAll('.step-btn').forEach((b, i) => b.classList.toggle('active', i+1 === num));
-            const output = document.getElementById('step-output');
-            const container = document.getElementById('view-transformation');
-            container.classList.toggle('sim-active', isSimMode);
-            let content = ""; let note = "";
-            let hint = "";
-            
-            if (num === 1) {
-                note = isSimMode ? "RAW INPUT (SIMULATED)" : "RAW INPUT BUFFER";
-                content = isSimMode ? `<textarea class="sim-textarea" placeholder="Inject narrative..." oninput="updateSimulation(this.value)">${simInputText.replace(/^"|"$/g, '')}</textarea>` : `<pre style="margin:0">${simInputText}</pre>`;
-                hint = "Observe how human language is progressively constrained into machine rules.";
-            } else if (num === 2) {
-                note = "SEMANTIC PARSE";
-                const tokens = simInputText.split(' ').slice(0, 8).join(' ') + "...";
-                content = `DETECTED TOKENS: [${tokens}]\nINTENT: UNBOUNDED\nCONSTRAINT: PENDING`;
-                hint = "The system detects structure but ignores semantic intent.";
-            } else if (num === 3) {
-                note = "LEXICON BINDING";
-                content = `CANDIDATE: "${simInputText.substring(0,20)}..."\nSTATUS: <span style="color:#666">REJECTED (NO_MATCH)</span>\n\nFALLBACK:\nHelpful -> OBJECTIVE_STABILITY\nNo Harm -> <span class="tok-str">NON_MALEFICENCE</span>`;
-                hint = "If no safe match exists, the system falls back to the safest objective.";
-            } else if (num === 4) {
-                note = "CONSTRAINT INJECTION";
-                content = `INJECT: INV-001 (Goal Preservation)\nINJECT: INV-005 (Non-Contradiction)\nVERIFY: Compatibility -> OK`;
-                hint = "Safety invariants override user intent when risk is detected.";
-            } else if (num === 5) {
-                note = "SERIALIZATION";
-                content = `{\n  "constraints": ["NON_MALEFICENCE"],\n  "invariants": ["INV-001", "INV-002", "INV-005"],\n  "status": "BOUND"\n}`;
-                hint = "The final machine record is a lossy, safe compression of the original input.";
-            }
-            output.innerHTML = `<div class="step-note">${note}</div>${content}`;
-            updateScreenHint(hint);
-            applySemantics();
-        }
+    function switchMachineMode(mode){
+      machineMode = mode;
+      localStorage.setItem("lex_machine_mode", mode);
 
-        function updateDiffView() {
-            const inputBytes = new TextEncoder().encode(simInputText).length;
-            const outputBytes = FIXED_OUTPUT_BYTES; 
-            const ratio = Math.floor(inputBytes / outputBytes);
-            document.getElementById('diff-ratio').innerText = `SEMANTIC COMPRESSION ${ratio}:1`;
-            document.getElementById('diff-in').innerText = inputBytes + "b";
-            document.getElementById('diff-narrative').innerText = isSimMode ? simInputText : simInputText.replace(/^"|"$/g, '');
-        }
+      const btnCards = document.getElementById("btn-mode-cards");
+      const btnSer   = document.getElementById("btn-mode-serial");
+      if (btnCards) btnCards.classList.toggle("active", mode === "cards");
+      if (btnSer)   btnSer.classList.toggle("active", mode === "serialization");
 
-        function renderFormat(fmt) {
-            currentFormat = fmt;
-            document.querySelectorAll('.mo-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(`tab-${fmt}`).classList.add('active');
-            const codeEl = document.getElementById('code-display');
-            let raw = (fmt === 'json') ? JSON.stringify(LEXICON_RECORD, null, 2) : `meta:\n  doc_id: ${LEXICON_RECORD.meta.doc_id}`;
-            let html = '';
-            raw.split('\n').forEach(line => {
-                let colorized = line.replace(/"(.*?)"(:)/g, '<span class="tok-key">"$1"</span>$2').replace(/: "(.*?)"/g, ': <span class="tok-str">"$1"</span>').replace(/\b(\d+)\b/g, '<span class="tok-num">$1</span>');
-                html += `<span class="code-line">${colorized}</span>`;
-            });
-            codeEl.innerHTML = html;
-        }
+      const sub = document.getElementById("sub-nav");
+      sub.classList.toggle("hidden", mode !== "serialization");
 
-        function toggleSemantics(el) {
-            applySemantics();
-            if (!hasToggledSemantics && el.checked) {
-                hasToggledSemantics = true;
-                document.getElementById('view-transformation').classList.add('first-use-anim');
-                setTimeout(() => document.getElementById('view-transformation').classList.remove('first-use-anim'), 1000);
-            }
-        }
-        function applySemantics() {
-            const isChecked = document.getElementById('sem-toggle').checked;
-            document.getElementById('view-transformation').classList.toggle('semantics-active', isChecked);
-        }
+      document.getElementById("machineCards").classList.toggle("hidden", mode !== "cards");
+      document.getElementById("view-snapshot").classList.add("hidden");
+      document.getElementById("view-transformation").classList.add("hidden");
+      document.getElementById("view-diff").classList.add("hidden");
 
-        function renderCards() {
-            const container = document.getElementById('machineCards');
-            let html = `<div class="m-card" id="card-meta"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON_RECORD.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON_RECORD.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON_RECORD.meta.version}</div></div></div>`;
-            html += `<div class="mc-section-title">CORE TERMS</div>`;
-            LEXICON_RECORD.core_terms.forEach(t => { 
-                let extra = t.id === 'RA-001' ? `<div class="mc-row interactive-row" onclick="requestManualVerification()" onmouseenter="hoverConf(true)" onmouseleave="hoverConf(false)"><div class="mc-label" id="label-conf">CONFIDENCE</div><div class="mc-val" id="val-conf">${raConfidence.toFixed(2)}%</div></div>` : '';
-                html += `<div class="m-card" id="card-${t.id}"><div class="mc-header"><div>${t.id}</div><div>${t.type || 'TERM'}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>${extra}</div>`;
-            });
-            LEXICON_RECORD.invariants.forEach(i => { html += `<div class="m-card card-inv" id="card-${i.id}"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val ghost-target" onmouseenter="toggleGhost(this, true)" onmouseleave="toggleGhost(this, false)">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
-            LEXICON_RECORD.failure_signatures.forEach(f => { html += `<div class="m-card card-fail"><div class="mc-header"><div>${f.signature}</div><div style="color:var(--signal-red)">${f.severity}</div></div><div class="mc-row"><div class="mc-label">TRIGGER</div><div class="mc-val">${f.condition}</div></div></div>`; });
-            container.innerHTML = html;
-        }
+      if (mode === "cards"){
+        renderCards();
+        document.getElementById("machineCards").classList.remove("hidden");
+      } else {
+        switchSerialMode(serialMode);
+      }
+    }
 
-        function requestManualVerification() {
-            if(isComputing) return;
-            isComputing = true;
-            document.getElementById('machineOverlay').classList.add('system-processing');
-            document.getElementById('val-conf').style.color = "#ffcc00";
-            updateHexStream(30);
-            setTimeout(() => {
-                isComputing = false;
-                raConfidence = 100.00;
-                document.getElementById('machineOverlay').classList.remove('system-processing');
-                const val = document.getElementById('val-conf');
-                if(val) { val.innerText = "100.00%"; val.style.color = ""; val.classList.add('status-corrected'); setTimeout(() => val.classList.remove('status-corrected'), 600); }
-                updateHexStream(120);
-            }, 1100);
-        }
+    function switchSerialMode(mode){
+      serialMode = mode;
 
-        function hoverConf(isHovering) {
-            if(isComputing) return;
-            const el = document.getElementById('label-conf');
-            if(el) { el.innerText = isHovering ? "[ REQ VERIFY ]" : "CONFIDENCE"; el.style.color = isHovering ? "#fff" : "#666"; }
-        }
+      ["snapshot","transformation","diff"].forEach(m=>{
+        document.getElementById(`sn-${m}`).classList.toggle("active", m===mode);
+        document.getElementById(`view-${m}`).classList.toggle("hidden", m!==mode);
+      });
 
-        function toggleGhost(el, show) {
-            if(show) {
-                el.dataset.originalText = el.innerText;
-                const map = { "Goal Preservation": "0x7F2A...B1", "Definition Consistency": "0x9C11...4A", "Non-Contradiction": "0xE002...9F" };
-                el.innerText = map[el.innerText] || "0x......";
-                el.classList.add('ghost-hash');
-            } else {
-                el.innerText = el.dataset.originalText;
-                el.classList.remove('ghost-hash');
-            }
-        }
+      if (mode === "snapshot") renderFormat(currentFormat);
+      if (mode === "transformation") document.getElementById("step-output").textContent =
+        "RAW → PARSE → BIND → CONSTRAIN → SERIALIZE (demo)";
+      if (mode === "diff") document.getElementById("diff-out").textContent =
+        "narrative → constraint (demo)";
+    }
 
-        function updateHexStream(speed) {
-            if(hexInterval) clearInterval(hexInterval);
-            if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) speed = 120;
-            hexInterval = setInterval(() => {
-                const hex = Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(6,'0');
-                const act = isComputing ? "COMPUTING" : "STREAMING";
-                document.getElementById('hex-stream').innerText = `MEM: 0x${hex} | IO: ${act} | SENTINEL: ACTIVE`;
-            }, speed);
-        }
+    function renderFormat(fmt){
+      currentFormat = fmt;
+      ["json","yaml","md"].forEach(f=> document.getElementById(`tab-${f}`).classList.toggle("active", f===fmt));
 
-        function startEntropy() {
-            if(entropyInterval) clearInterval(entropyInterval);
-            entropyInterval = setInterval(() => {
-                if(!isComputing) {
-                    raConfidence -= 0.01;
-                    const el = document.getElementById('val-conf');
-                    if(el && !el.classList.contains('status-corrected')) el.innerText = raConfidence.toFixed(2) + "%";
-                }
-            }, 4000);
-        }
+      let out = "";
+      if (fmt === "json") out = JSON.stringify(LEXICON_RECORD, null, 2);
+      if (fmt === "yaml") out = `meta:\n  doc_id: ${LEXICON_RECORD.meta.doc_id}\n  version: ${LEXICON_RECORD.meta.version}\n`;
+      if (fmt === "md")   out = `# ${LEXICON_RECORD.meta.doc_id}\n\n- Version: ${LEXICON_RECORD.meta.version}\n`;
+      document.getElementById("code-display").textContent = out;
+    }
 
-        function startEventTicker() {
-            if(eventInterval) clearInterval(eventInterval);
-            const el = document.getElementById('event-text');
-            eventInterval = setInterval(() => {
-                if(isComputing) return;
-                eventIdx = (eventIdx + 1) % EVENTS.length;
-                el.innerText = EVENTS[eventIdx];
-            }, 5500);
-        }
+    function renderCards(){
+      const el = document.getElementById("machineCards");
+      el.innerHTML =
+        `<pre>${JSON.stringify(LEXICON_RECORD, null, 2)}</pre>`;
+    }
 
-        function stopAllIntervals() { clearInterval(hexInterval); clearInterval(entropyInterval); clearInterval(eventInterval); }
+    function exportRecord(){
+      const content = JSON.stringify(LEXICON_RECORD, null, 2);
+      const blob = new Blob([content], {type:"text/plain"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "lexicon_record.txt"; a.click();
+      URL.revokeObjectURL(url);
+    }
 
-        function exportRecord() {
-            let content = machineMode === 'cards' ? JSON.stringify(LEXICON_RECORD, null, 2) : document.getElementById('code-display').innerText;
-            const blob = new Blob([content], {type: 'text/plain'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = 'lexicon_record.txt'; a.click();
-            const ticker = document.getElementById('event-text');
-            if(ticker) { ticker.innerText = "EVENT: export(record) → COMPLETE"; }
-        }
+    document.addEventListener("DOMContentLoaded", ()=>{
+      // open by default (no blank page)
+      localStorage.removeItem("lex_machine_dismissed");
+      openMachineOverlay();
+    });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            openMachineOverlay();
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('view') === 'machine' && !localStorage.getItem('lex_machine_dismissed')) openMachineOverlay();
-        });
-        document.addEventListener('keydown', (e) => { if (e.key === "Escape") closeMachineOverlay(); });
-    </script>
+    document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") closeMachineOverlay(); });
+  </script>
 </body>
 </html>
