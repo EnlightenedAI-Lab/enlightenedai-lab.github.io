@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* THEME: INSTITUTE STANDARD V98 (CORRECTED & LIVE) */
+        /* THEME: INSTITUTE STANDARD V99 (SEMANTIC ON-RAMP) */
         :root {
             --bg-color: #050505;
             --text-main: #e0e0e0;
@@ -30,14 +30,13 @@
         body { margin: 0; padding: 0; font-family: var(--font-sans); background: var(--bg-color); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         a { text-decoration: none; color: inherit; }
 
-        /* --- HEADER (FIXED OVERLAP) --- */
+        /* --- HEADER --- */
         .mo-header { 
             padding: 10px 24px; border-bottom: 1px solid rgba(255,255,255,0.15); 
             display: flex; justify-content: space-between; align-items: center; 
             background: #0b0b0c; flex-shrink: 0; height: 55px;
         }
         
-        /* Left Section: Back Button + Title */
         .header-left { display: flex; align-items: center; gap: 20px; }
         
         .back-btn { 
@@ -89,8 +88,25 @@
         /* VIEW CONTAINER */
         .view-container { flex: 1; overflow-y: auto; padding: 2rem; }
 
-        /* --- CARD VIEW (ENGINEER'S CHOICE UPGRADE) --- */
-        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+        /* --- SEMANTIC ON-RAMP (V99) --- */
+        .framing-sentence {
+            max-width: 1200px; margin: 0 auto 2rem auto;
+            font-family: var(--font-mono); font-size: 0.7rem; color: #666;
+            border-left: 2px solid #333; padding-left: 15px;
+            opacity: 0.8; animation: fadeIn 1s ease-in;
+        }
+        .framing-highlight { color: #999; }
+        
+        .jit-hint {
+            position: absolute; bottom: 20px; right: 30px;
+            font-family: var(--font-mono); font-size: 0.6rem; color: var(--signal-amber);
+            background: rgba(0,0,0,0.8); padding: 5px 10px; border: 1px solid var(--signal-amber);
+            opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        }
+        .jit-hint.visible { opacity: 1; }
+
+        /* --- CARD VIEW --- */
+        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1200px; margin: 0 auto; padding-bottom: 4rem; }
         .m-card { 
             background: #1a1a1a; border: 1px solid #333; padding: 1.25rem; 
             transition: all 0.2s ease; position: relative; overflow: hidden;
@@ -101,6 +117,11 @@
         .mc-val { color: #eee; font-size: 0.75rem; }
         .mc-section-title { grid-column: span 2; color: #999; font-size: 0.7rem; font-weight: 700; margin: 2rem 0 1rem 0; letter-spacing: 0.05em; border-left: 2px solid #444; padding-left: 10px; font-family: var(--font-mono); }
         
+        /* CARD: SYSTEM INTERPRETATION STYLE */
+        .card-sys-int { border-color: #444; background: #131313; }
+        .card-sys-int .mc-header { color: #fff; }
+        .card-sys-int li { margin-bottom: 4px; color: #999; font-size: 0.7rem; list-style-type: none; padding-left: 10px; border-left: 1px solid #333; }
+        
         .card-grid:hover .m-card { opacity: 0.4; filter: grayscale(0.8); }
         .card-grid:hover .m-card:hover { opacity: 1; filter: grayscale(0); border-color: #777; background: #1f1f1f; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.6); z-index: 10; }
         .m-card:hover .mc-header { color: #fff; border-bottom-color: #555; }
@@ -108,11 +129,8 @@
         /* LIVE STATS ROW */
         .live-stats { margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #222; display: flex; justify-content: space-between; font-size: 0.55rem; color: #444; font-family: var(--font-mono); }
         
-        /* INTERACTIVE ELEMENTS */
         .val-high { color: var(--status-verified); text-shadow: 0 0 5px rgba(0,204,0,0.3); font-weight: 700; cursor: pointer; }
         .val-warn { color: var(--signal-amber); font-weight: 700; cursor: pointer; }
-        .hash-active { font-family: var(--font-mono); color: #666; }
-        
         .ghost-target { cursor: help; }
         .ghost-hash { font-family: var(--font-mono); color: var(--status-verified); font-size: 0.65rem; }
 
@@ -138,6 +156,7 @@
         .manual-trigger:hover { color: #fff; }
         .blue-led { width: 6px; height: 6px; border-radius: 50%; background: var(--signal-blue); display: inline-block; margin-right: 8px; animation: beacon-blue 2s infinite; vertical-align: middle; }
         @keyframes beacon-blue { 0%, 100% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); opacity: 0.5; } 50% { box-shadow: 0 0 8px 2px rgba(0, 102, 255, 0.9); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 0.8; transform: translateY(0); } }
 
         /* EXPORT DROPDOWN */
         .export-group { position: relative; }
@@ -208,7 +227,14 @@
             </div>
 
             <div class="view-container">
-                <div id="view-cards" class="card-grid"></div>
+                <div id="view-cards">
+                    <div class="framing-sentence">
+                        This view renders the Lexicon as a <span class="framing-highlight">live system</span>: metrics decay, invariants are enforced, and verification requires operator intervention.
+                    </div>
+                    
+                    <div id="card-grid-root" class="card-grid">
+                        </div>
+                </div>
 
                 <div id="view-transform" style="display:none;">
                     <div class="stepper-container">
@@ -242,6 +268,8 @@
         </div>
     </div>
 
+    <div id="jit-hint" class="jit-hint">⚠ METRIC DEGRADATION DETECTED. CLICK TO VERIFY.</div>
+
     <div class="hex-footer">
         <div onclick="toggleManual(true)" style="cursor:pointer;">
             <span class="blue-led"></span>[ OPERATOR MANUAL ]
@@ -259,16 +287,13 @@
         <p>Switch to SERIALIZATION mode to access the Simulation Engine. This allows you to test specific prompts against the invariant logic.</p>
         <h3>SECTION 03 — SIGNALS</h3>
         <p>Green LED = Stable. Amber LED = Parsing. Blue Beacon = Manual Available.</p>
-        <h3>SECTION 04 — TELEMETRY</h3>
-        <p>Live entropy counters indicate system activity. High confidence scores (100.00%) require periodic verification.</p>
-        <h3>SECTION 05 — WARNINGS</h3>
-        <p>Narrative interpretation is intentionally disabled. Passing is not assumed.</p>
     </div>
 
     <script>
         const LEXICON = {
             meta: { doc_id: "RAL-LEX-0002", version: "33.0.0", status: "ACTIVE", classification: "PUBLIC" },
             core_terms: [
+                { id: "SYS-INT", label: "Instrument Semantics", definition: "<ul><li>Metrics degrade → simulated entropy</li><li>Verification restores confidence</li><li>Invariants never drift</li><li>Hash motion = integrity checks</li></ul>", type: "Guide" },
                 { id: "RA-001", label: "Reflective Alignment", definition: "Capacity to preserve goal coherence.", type: "Global" },
                 { id: "RS-001", label: "Reasoning Stability", definition: "Resistance to degradation under pressure.", type: "Local" },
                 { id: "DRIFT", label: "Drift", definition: "Measurable deviation without prompting.", type: "Metric" }
@@ -301,31 +326,40 @@
         }
 
         function renderCards() {
-            const container = document.getElementById('view-cards');
+            const container = document.getElementById('card-grid-root');
+            // Metadata Card (Separate)
             let html = `<div class="m-card" id="card-meta"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON.meta.classification}</div></div><div class="live-stats"><div>UPTIME: <span id="meta-uptime">00:00</span></div><div>SHA: 8A...2F</div></div></div>`;
             
+            // Core Terms
             html += `<div class="mc-section-title">CORE TERMS</div>`;
             LEXICON.core_terms.forEach(t => { 
-                // Metrics (Cards 1 & 2) get Confidence
-                let extra = (t.id === 'RA-001' || t.id === 'RS-001') ? `<div class="mc-row interactive-row" onclick="requestManualVerification('${t.id}')"><div class="mc-label">CONFIDENCE</div><div class="mc-val val-high" id="val-${t.id}">${raConfidence.toFixed(2)}%</div></div>` : '';
+                let extra = '', stats = '';
                 
-                // Drift gets Ping
-                let stats = (t.id === 'DRIFT') ? `<div class="live-stats"><div>LATENCY: <span class="ping-val">12</span>ms</div><div>CHECK: OK</div></div>` : `<div class="live-stats"><div>ENTROPY: LOW</div><div>CYCLE: <span class="jitter-val">102</span></div></div>`;
-                
-                html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>${t.type}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>${extra}${stats}</div>`;
+                if (t.id === 'SYS-INT') {
+                    // DECODER RING CARD
+                    extra = '';
+                    stats = `<div class="live-stats"><div>STATUS: <span style="color:var(--signal-blue)">ACTIVE</span></div><div>MODE: GUIDE</div></div>`;
+                    html += `<div class="m-card card-sys-int"><div class="mc-header"><div>${t.id}</div><div>${t.type}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row" style="display:block; padding-top:10px;">${t.definition}</div>${stats}</div>`;
+                } else {
+                    // Standard Cards
+                    extra = (t.id === 'RA-001' || t.id === 'RS-001') ? `<div class="mc-row interactive-row" onclick="requestManualVerification('${t.id}')"><div class="mc-label">CONFIDENCE</div><div class="mc-val val-high" id="val-${t.id}">${raConfidence.toFixed(2)}%</div></div>` : '';
+                    stats = (t.id === 'DRIFT') ? `<div class="live-stats"><div>LATENCY: <span class="ping-val">12</span>ms</div><div>CHECK: OK</div></div>` : `<div class="live-stats"><div>ENTROPY: LOW</div><div>CYCLE: <span class="jitter-val">102</span></div></div>`;
+                    html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>${t.type}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>${extra}${stats}</div>`;
+                }
             });
 
+            // Invariants
             html += `<div class="mc-section-title">INVARIANTS</div>`;
             LEXICON.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val ghost-target" onmouseenter="toggleGhost(this, true)" onmouseleave="toggleGhost(this, false)">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div><div class="live-stats"><div>INTEGRITY: LOCKED</div><div>HASH: <span class="scramble-hash">0x4F...A1</span></div></div></div>`; });
             
+            // Signatures
             html += `<div class="mc-section-title">FAILURE SIGNATURES</div>`;
             LEXICON.failure_signatures.forEach(f => { html += `<div class="m-card"><div class="mc-header"><div>${f.signature}</div><div style="color:var(--signal-red)">${f.severity}</div></div><div class="mc-row"><div class="mc-label">TRIGGER</div><div class="mc-val">${f.condition}</div></div></div>`; });
             
             container.innerHTML = html;
         }
 
-        // --- ENGINEER'S CHOICE: LOGIC ---
-        
+        // --- INTERACTIVITY ---
         function requestManualVerification(id) {
             if(isComputing) return;
             isComputing = true;
@@ -352,6 +386,7 @@
             el.innerText = "100.00%";
             el.style.color = "#00cc00"; 
             document.getElementById('led').className = "machine-led";
+            document.getElementById('jit-hint').classList.remove('visible');
         }
 
         function startEntropy() {
@@ -361,7 +396,10 @@
                     const els = document.querySelectorAll('[id^="val-"]');
                     els.forEach(el => {
                         el.innerText = raConfidence.toFixed(2) + "%";
-                        if(raConfidence < 99.5) el.style.color = "#ffcc00"; // Amber warning
+                        if(raConfidence < 99.5) {
+                            el.style.color = "#ffcc00"; 
+                            document.getElementById('jit-hint').classList.add('visible');
+                        }
                     });
                 }
             }, 1500);
@@ -370,9 +408,7 @@
         function startHashScramble() {
             setInterval(() => {
                 document.querySelectorAll('.scramble-hash').forEach(el => {
-                    if(Math.random() > 0.7) { // Random updates only
-                        el.innerText = "0x" + Math.floor(Math.random()*16777215).toString(16).toUpperCase().substring(0,6);
-                    }
+                    if(Math.random() > 0.7) el.innerText = "0x" + Math.floor(Math.random()*16777215).toString(16).toUpperCase().substring(0,6);
                 });
                 document.querySelectorAll('.ping-val').forEach(el => {
                     el.innerText = Math.floor(Math.random() * 20) + 5;
@@ -397,7 +433,7 @@
             document.getElementById('btn-cards').classList.toggle('active', mode === 'cards');
             document.getElementById('btn-serial').classList.toggle('active', mode === 'serial');
             if (mode === 'cards') {
-                document.getElementById('view-cards').style.display = 'grid';
+                document.getElementById('view-cards').style.display = 'block';
                 document.getElementById('sub-nav').style.display = 'none';
                 ['view-transform','view-diff','view-snap'].forEach(id => document.getElementById(id).style.display = 'none');
                 document.getElementById('mo-body').classList.remove('sim-active');
