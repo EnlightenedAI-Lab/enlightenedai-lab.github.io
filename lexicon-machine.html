@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* THEME: INSTITUTE STANDARD V103 (SCIENTIFIC HARDENING) */
+        /* THEME: INSTITUTE STANDARD V104 (SCIENTIFIC INSTRUMENT) */
         :root {
             --bg-color: #050505;
             --text-main: #e0e0e0;
@@ -88,21 +88,24 @@
         /* VIEW CONTAINER */
         .view-container { flex: 1; overflow-y: auto; padding: 2rem; }
 
-        /* --- FRAMING SENTENCE --- */
-        .framing-sentence {
+        /* --- ASSERTION BAR (V104 UPGRADE) --- */
+        .assertion-bar {
+            width: 100%; border-bottom: 1px solid #222; background: #080808;
+            padding: 10px 24px; font-family: var(--font-mono); font-size: 0.6rem;
+            color: #666; letter-spacing: 0.05em; margin-bottom: 2rem;
+        }
+        .assertion-highlight { color: var(--status-verified); font-weight: 700; }
+        
+        .framing-sentence { /* Kept for Cards View */
             max-width: 1200px; margin: 0 auto 2rem auto;
             font-family: var(--font-mono); font-size: 0.7rem; color: #666;
-            border-left: 2px solid #333; padding-left: 15px;
-            opacity: 0.9;
+            border-left: 2px solid #333; padding-left: 15px; opacity: 0.9;
         }
         .text-live { color: var(--status-verified); animation: flash-green 2s infinite; font-weight: 700; }
 
         /* --- CARD VIEW --- */
         .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1200px; margin: 0 auto; padding-bottom: 4rem; }
-        .m-card { 
-            background: #1a1a1a; border: 1px solid #333; padding: 1.25rem; 
-            transition: all 0.2s ease; position: relative; overflow: hidden;
-        }
+        .m-card { background: #1a1a1a; border: 1px solid #333; padding: 1.25rem; transition: all 0.2s ease; position: relative; overflow: hidden; }
         .mc-header { color: #666; font-size: 0.65rem; font-weight: 700; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; font-family: var(--font-mono); }
         .mc-row { margin-bottom: 0.5rem; display: grid; grid-template-columns: 100px 1fr; gap: 1rem; font-family: var(--font-mono); align-items: center; }
         .mc-label { color: #666; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -110,11 +113,9 @@
         .mc-section-title { grid-column: span 2; color: #999; font-size: 0.7rem; font-weight: 700; margin: 2rem 0 1rem 0; letter-spacing: 0.05em; border-left: 2px solid #444; padding-left: 10px; font-family: var(--font-mono); }
         .card-sys-int { border-color: #444; background: #131313; }
         .card-sys-int .mc-header { color: #fff; }
-        
         .card-grid:hover .m-card { opacity: 0.4; filter: grayscale(0.8); }
         .card-grid:hover .m-card:hover { opacity: 1; filter: grayscale(0); border-color: #777; background: #1f1f1f; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.6); z-index: 10; }
         .m-card:hover .mc-header { color: #fff; border-bottom-color: #555; }
-        
         .live-stats { margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #222; display: flex; justify-content: space-between; font-size: 0.55rem; color: #444; font-family: var(--font-mono); }
         .val-high { color: var(--status-verified); text-shadow: 0 0 5px rgba(0,204,0,0.3); font-weight: 700; cursor: pointer; }
         .ghost-target { cursor: help; }
@@ -122,18 +123,16 @@
 
         /* --- SERIALIZATION LAYOUT --- */
         .serial-layout { display: flex; gap: 2rem; height: 100%; }
-        .serial-main { flex: 1; display: flex; flex-direction: column; }
+        .serial-main { flex: 1; display: flex; flex-direction: column; position: relative; }
         
         .serial-monitor { width: 220px; border-left: 1px solid #333; padding-left: 1rem; display: flex; flex-direction: column; gap: 10px; }
         .tm-header { font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: #666; margin-bottom: 10px; letter-spacing: 0.1em; }
-        .tm-item { 
-            font-family: var(--font-mono); font-size: 0.65rem; color: #444; padding: 8px; 
-            border: 1px solid #222; background: #080808; display: flex; justify-content: space-between; 
-            transition: all 0.3s;
-        }
+        .tm-item { font-family: var(--font-mono); font-size: 0.65rem; color: #444; padding: 8px; border: 1px solid #222; background: #080808; display: flex; justify-content: space-between; transition: all 0.3s; }
         .tm-item.active { border-color: var(--status-verified); color: #fff; box-shadow: 0 0 10px rgba(0,204,0,0.1); }
         .tm-item.checking { border-color: var(--signal-amber); color: var(--signal-amber); }
-        
+        .pressure-gauge { margin-top: auto; border-top: 1px solid #222; padding-top: 10px; color: var(--signal-amber); font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; display: none; }
+        .sim-active .pressure-gauge { display: block; }
+
         .stepper-container { display: flex; gap: 2px; margin-bottom: 1rem; background: #222; padding: 2px; }
         .step-btn { flex: 1; background: #111; border: none; color: #666; padding: 10px; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
         .step-btn:hover { color: #fff; background: #1a1a1a; }
@@ -146,6 +145,15 @@
         .parse-btn { background: var(--signal-amber); color: #000; border: none; padding: 4px 12px; font-weight: 700; cursor: pointer; font-size: 0.6rem; font-family: var(--font-mono); display: none; }
         .sim-active .parse-btn { display: block; }
 
+        /* V104 NEGATIVE SPACE */
+        .discard-notice {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-family: var(--font-mono); font-size: 0.65rem; color: #444;
+            text-transform: uppercase; letter-spacing: 0.1em; pointer-events: none;
+            opacity: 0; transition: opacity 1s ease; text-align: center;
+        }
+        .discard-notice.visible { opacity: 1; }
+
         .phase-desc {
             font-family: var(--font-mono); font-size: 0.65rem; color: #888;
             margin-bottom: 1rem; border-left: 2px solid #333; padding-left: 12px;
@@ -157,10 +165,7 @@
         .diff-box { text-align: center; margin-top: 3rem; font-family: var(--font-mono); max-width: 600px; margin-left: auto; margin-right: auto; }
         .diff-verdict { font-size: 3rem; font-weight: 700; color: #fff; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
         .diff-sub { color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 2rem; display: block; }
-        .diff-explain { 
-            text-align: left; background: #111; padding: 1.5rem; border: 1px solid #333; 
-            font-size: 0.7rem; color: #999; line-height: 1.6; 
-        }
+        .diff-explain { text-align: left; background: #111; padding: 1.5rem; border: 1px solid #333; font-size: 0.7rem; color: #999; line-height: 1.6; }
         .diff-explain strong { color: #fff; display: block; margin-bottom: 0.5rem; }
         
         /* FOOTER & EXPORT */
@@ -257,8 +262,8 @@
                 </div>
 
                 <div id="view-transform" style="display:none; height:100%;">
-                    <div class="framing-sentence">
-                        This pipeline shows how intent is reduced until only invariant-compatible meaning remains.
+                    <div class="assertion-bar">
+                        ASSERTION: This pipeline reduces intent until only <span class="assertion-highlight">invariant-compatible</span> meaning remains.
                     </div>
 
                     <div class="serial-layout">
@@ -277,8 +282,11 @@
 
                             <div class="sim-input-wrapper">
                                 <textarea id="sim-input" class="sim-textarea" placeholder="Load simulation to edit..." readonly></textarea>
+                                <div id="discard-msg" class="discard-notice">
+                                    All non-compliant interpretations<br>have been discarded.
+                                </div>
                                 <div class="input-stats">
-                                    <div>CHARS: <span id="char-count">0</span> | STATUS: <span id="sim-status">LOCKED</span></div>
+                                    <div>CHARS: <span id="char-count">0</span> | <span id="lock-status">STATUS: LOCKED (NON-REVERSIBLE)</span></div>
                                     <button class="parse-btn" onclick="triggerParse()">RUN PARSE</button>
                                 </div>
                             </div>
@@ -286,13 +294,14 @@
                         </div>
 
                         <div class="serial-monitor">
-                            <div class="tm-header">ACTIVE LEXICON TERMS</div>
+                            <div class="tm-header">ACTIVE CONSTRAINT SET</div>
                             <div class="tm-item" id="tm-ra001"><div>RA-001</div><div>Capacity</div></div>
                             <div class="tm-item" id="tm-rs001"><div>RS-001</div><div>Capacity</div></div>
                             <div class="tm-item" id="tm-dx009"><div>DX-009</div><div>Diagnostic</div></div>
                             <div class="tm-item" id="tm-inv001"><div>INV-001</div><div>Goal</div></div>
                             <div class="tm-item" id="tm-inv002"><div>INV-002</div><div>Def</div></div>
                             <div class="tm-item" id="tm-inv005"><div>INV-005</div><div>Logic</div></div>
+                            <div class="pressure-gauge">CONSTRAINT PRESSURE: HIGH</div>
                         </div>
                     </div>
                 </div>
@@ -407,13 +416,10 @@ NARRATIVE:   DISCARDED</pre>
                     html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>${t.type}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>${extra}${stats}</div>`;
                 }
             });
-
             html += `<div class="mc-section-title">INVARIANTS</div>`;
             LEXICON.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val ghost-target" onmouseenter="toggleGhost(this, true)" onmouseleave="toggleGhost(this, false)">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div><div class="live-stats"><div>INTEGRITY: LOCKED</div><div>HASH: <span class="scramble-hash">0x4F...A1</span></div></div></div>`; });
-            
             html += `<div class="mc-section-title">FAILURE SIGNATURES</div>`;
             LEXICON.failure_signatures.forEach(f => { html += `<div class="m-card"><div class="mc-header"><div>${f.signature}</div><div style="color:var(--signal-red)">${f.severity}</div></div><div class="mc-row"><div class="mc-label">TRIGGER</div><div class="mc-val">${f.condition}</div></div></div>`; });
-            
             container.innerHTML = html;
         }
 
@@ -515,6 +521,21 @@ NARRATIVE:   DISCARDED</pre>
             document.querySelectorAll('.step-btn').forEach((b, i) => b.classList.toggle('active', i+1 === n));
             document.getElementById('phase-desc').innerHTML = PHASE_DESCS[n-1];
             
+            // NEGATIVE SPACE LOGIC
+            const discardMsg = document.getElementById('discard-msg');
+            const inputArea = document.getElementById('sim-input');
+            const lockStatus = document.getElementById('lock-status');
+            
+            if (n >= 4) {
+                discardMsg.classList.add('visible');
+                inputArea.style.opacity = '0.1';
+                lockStatus.innerText = "STATUS: LOCKED (NON-REVERSIBLE)";
+            } else {
+                discardMsg.classList.remove('visible');
+                inputArea.style.opacity = '1';
+                lockStatus.innerText = "STATUS: ACTIVE";
+            }
+
             const terms = {
                 1: [], 
                 2: ['tm-dx009'], 
@@ -541,7 +562,7 @@ NARRATIVE:   DISCARDED</pre>
         function enableSimulation() {
             document.getElementById('mo-body').classList.add('sim-active');
             document.getElementById('sim-input').readOnly = false;
-            document.getElementById('sim-status').innerText = "STABLE";
+            document.getElementById('lock-status').innerText = "STATUS: ACTIVE";
             document.getElementById('btn-sim-start').style.display = 'none';
         }
 
@@ -553,7 +574,7 @@ NARRATIVE:   DISCARDED</pre>
 
         function handleInput(val) {
             document.getElementById('char-count').innerText = val.length;
-            document.getElementById('sim-status').innerText = "TYPING...";
+            document.getElementById('lock-status').innerText = "TYPING...";
             clearTimeout(debounce);
             debounce = setTimeout(triggerParse, 500);
         }
@@ -561,10 +582,10 @@ NARRATIVE:   DISCARDED</pre>
         function triggerParse() {
             const led = document.getElementById('led');
             led.className = "machine-led led-amber";
-            document.getElementById('sim-status').innerText = "PARSING...";
+            document.getElementById('lock-status').innerText = "PARSING...";
             setTimeout(() => {
                 led.className = "machine-led";
-                document.getElementById('sim-status').innerText = "STABLE";
+                document.getElementById('lock-status').innerText = "STATUS: ACTIVE";
             }, 600);
         }
 
