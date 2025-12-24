@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V121 (CAUSAL INSTRUMENT) */
+        /* THEME: INSTITUTE STANDARD V122 (HIGH CONTRAST REPAIR) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -198,7 +198,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V121)
+           LAYOUT ENGINE: SEGREGATED (V122)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -244,21 +244,28 @@
                 text-align: center; letter-spacing: 0.05em;
             }
             .cycle-label {
-                font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
-                text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 4px;
+                font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); font-weight:700;
+                text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.8; margin-bottom: 6px;
             }
+            /* DARK MODE TEXT FIXES */
+            [data-theme="dark"] .cycle-label, 
+            [data-theme="dark"] .cycle-counter,
+            [data-theme="dark"] .diagram-text-xs { 
+                color: #fff !important; opacity: 1 !important; fill: #fff !important; 
+            }
+            
             .cycle-counter {
-                font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); font-weight:700;
+                font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-main); font-weight:700;
                 text-align: center; margin-bottom: 2rem;
             }
             
             /* LEGEND */
             .diag-legend { 
-                margin-top: 2rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
-                display: flex; gap: 12px; justify-content: center; text-transform: uppercase;
+                margin-top: 2rem; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted);
+                display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600;
             }
-            .legend-item { display: flex; align-items: center; gap: 4px; }
-            .legend-dot { width: 6px; height: 6px; border-radius: 50%; }
+            .legend-item { display: flex; align-items: center; gap: 6px; }
+            .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
         }
 
         /* MOBILE/TABLET ENGINE (Width <= 1100px) */
@@ -408,7 +415,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V121 THEME ENGINE */
+                        /* V122 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -434,12 +441,18 @@
                         .diag-bg { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); stroke-width: 1.5px; vector-effect: non-scaling-stroke; transition: stroke 0.2s; }
                         .diag-text { fill: var(--text-main, #eee); font-size: 14px; font-weight: 600; }
                         .diag-text-sm { fill: var(--text-muted, #888); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
-                        .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+                        
+                        /* High-Contrast Labels (Dark Mode Force) */
+                        .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+                        [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
+
                         .diag-line { stroke: var(--text-muted, #666); stroke-width: 1.5px; fill: none; stroke-linecap: round; }
                         
-                        /* DARK MODE FIXES */
-                        [data-theme="dark"] .diag-text-xs { fill: #aaa !important; opacity: 1 !important; }
-                        [data-theme="dark"] .diag-text-sm { fill: #ddd !important; opacity: 1 !important; }
+                        /* MICRO-TELEMETRY TEXT (Restored) */
+                        .telemetry-text { 
+                            font-size: 9px; fill: #00cc00; font-family: "JetBrains Mono", monospace; 
+                            opacity: 0; animation-fill-mode: forwards; font-weight: 600; letter-spacing: 0.05em;
+                        }
 
                         /* ANIMATION ENGINE (8.5s Loop) */
                         
@@ -481,10 +494,11 @@
                         /* 6. Model Hold (3.8 - 6.0) - DELAYED to wait for packet */
                         #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 3.8s; }
                         
-                        /* 7. Eval Path (Cyan) (4.4+) */
+                        /* 7. Eval Path Packets (Cyan) (4.4+) */
                         #packet-3, #packet-4, #packet-5 {
                             stroke: #00d7ff; stroke-width: 2.5px; stroke-linecap: round;
-                            stroke-dasharray: 100 500; stroke-dashoffset: 260;
+                            stroke-dasharray: 100 500;
+                            stroke-dashoffset: 260;
                         }
                         #packet-3 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 4.4s; }
                         #packet-4 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.0s; }
@@ -499,6 +513,10 @@
                             stroke: #00d7ff; stroke-width: 2px; stroke-dasharray: 5 5; opacity: 0;
                             animation: policyFlash 8.5s linear infinite; animation-delay: 7.0s; 
                         }
+                        #policy-label { 
+                            fill: #00d7ff; opacity: 0; 
+                            animation: policyFlash 8.5s linear infinite; animation-delay: 7.0s; 
+                        }
 
                         /* KEYFRAMES */
                         @keyframes pulseBox {
@@ -508,20 +526,20 @@
                         }
                         @keyframes modelHold {
                             0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
-                            5% { stroke: #00cc00; stroke-width: 2px; }
-                            40% { stroke: #00cc00; stroke-width: 2px; }
-                            45% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
+                            5% { stroke: #00cc00; stroke-width: 2.5px; } /* Hit */
+                            40% { stroke: #00cc00; stroke-width: 2.5px; } /* HOLD GREEN */
+                            45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } /* Release */
                         }
                         @keyframes cyanPulse {
                             0% { stroke: var(--text-muted, #666); }
-                            5% { stroke: #00d7ff; stroke-width: 2px; }
-                            20% { stroke: #00d7ff; stroke-width: 2px; }
+                            5% { stroke: #00d7ff; stroke-width: 2.5px; } /* CYAN Flash */
+                            20% { stroke: #00d7ff; stroke-width: 2.5px; } /* Hold */
                             25% { stroke: var(--text-muted, #666); stroke-width: 1.5px; }
                         }
                         @keyframes gateActive {
                             0% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
-                            5% { stroke: #00cc00; stroke-width: 2.5px; }
-                            30% { stroke: #00cc00; stroke-width: 2.5px; }
+                            5% { stroke: #00cc00; stroke-width: 3.5px; }
+                            30% { stroke: #00cc00; stroke-width: 3.5px; }
                             40% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
                         }
                         @keyframes stepImpact {
@@ -533,7 +551,7 @@
                         @keyframes packetFlow { 0% { stroke-dashoffset: 460; opacity: 0; } 5% { opacity: 1; } 15% { stroke-dashoffset: 0; opacity: 1; } 20% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetGateFlow { 0% { stroke-dashoffset: 240; opacity: 0; } 5% { opacity: 1; } 20% { stroke-dashoffset: 0; opacity: 1; } 25% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetFlowSmall { 0% { stroke-dashoffset: 260; opacity: 0; } 10% { opacity: 1; } 30% { stroke-dashoffset: 0; opacity: 1; } 40% { opacity: 0; } 100% { opacity: 0; } }
-                        @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 0.5; } 100% { opacity: 0; } }
+                        @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 0.8; } 100% { opacity: 0; } }
 
                         @media (prefers-reduced-motion: reduce) {
                             * { animation: none !important; }
@@ -602,7 +620,7 @@
                         <path id="packet-5" d="M560 180 L485 180 L485 155" style="fill:none;" />
                         
                         <path id="policy-path" d="M605 60 L605 30 L130 30 L130 105" class="diag-line" />
-                        <text x="350" y="25" class="telemetry-text" style="fill:#00d7ff; opacity:0.5; animation: policyFlash 8.5s linear infinite; animation-delay: 7.0s;">POLICY UPDATE LOOP</text>
+                        <text id="policy-label" x="330" y="25" class="telemetry-text" style="fill:#00d7ff; font-weight:700;">POLICY UPDATE LOOP</text>
 
                         <text x="560" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em;">POST-HOC EVALUATION</text>
                         <text x="560" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.3; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
@@ -695,17 +713,16 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V121) ---
+        // --- CYCLE COUNTER & LOCK (V122) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
-        const telemetryColor = '#00cc00'; // Green Match
         
         setInterval(() => {
-            // Trigger Lock at ~5.8s (end of cycle)
+            // Trigger Lock at ~6.0s (end of cycle)
             setTimeout(() => {
                 cycleCount++;
-                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:${telemetryColor}; font-weight:800;">STATE: ENFORCED</span>`;
-            }, 5800);
+                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:#00cc00; font-weight:800;">STATE: ENFORCED</span>`;
+            }, 6000);
             
             // Reset visual state
             setTimeout(() => {
