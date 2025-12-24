@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V135 (INTEGRATED INSTRUMENT) */
+        /* THEME: INSTITUTE STANDARD V136 (FINAL ARTIFACT) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -186,7 +186,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V135)
+           LAYOUT ENGINE: SEGREGATED (V136)
            ========================================= */
 
         @media (min-width: 1101px) {
@@ -205,32 +205,41 @@
             }
             .telemetry-data { color: var(--text-main); font-weight: 700; }
             
-            /* INSTRUMENT LENS CONTROL - INTEGRATED */
-            .instrument-lens {
-                display: flex; gap: 12px;
-                background: transparent; padding: 0;
-            }
+            /* INSTRUMENT LENS CONTROL */
+            .instrument-lens { display: flex; gap: 12px; background: transparent; padding: 0; }
             .lens-label { font-weight: 700; letter-spacing: 0.05em; opacity: 0.5; }
             .lens-opt { cursor: pointer; transition: color 0.2s; opacity: 0.5; }
             .lens-opt:hover { opacity: 1; color: var(--text-main); }
             .lens-opt.active { color: var(--text-main); font-weight: 700; opacity: 1; }
             
-            /* COMPRESSED SPACING */
+            /* DIAGRAM STYLES */
             .diagram-label { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-main); font-weight: 800; opacity: 0.9; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: center; }
             .diagram-label-xs { font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.7; }
-            .diagram-caption { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; letter-spacing: 0.05em; }
+            .diagram-caption { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; letter-spacing: 0.05em; }
             
-            .cycle-label { font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 4px; margin-top: 0.5rem; }
-            
-            [data-theme="dark"] .cycle-label, [data-theme="dark"] .telemetry-data, [data-theme="dark"] .diagram-text-xs { color: #fff !important; opacity: 1 !important; fill: #fff !important; }
+            [data-theme="dark"] .telemetry-data, [data-theme="dark"] .diagram-text-xs { color: #fff !important; opacity: 1 !important; fill: #fff !important; }
             .diag-legend { margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600; }
             .legend-item { display: flex; align-items: center; gap: 6px; }
             .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
             
-            /* DIAGRAM 02 STYLES */
+            /* SEPARATOR */
             .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: 2rem 0; opacity: 0.5; }
             
-            /* D2 SPECIFIC */
+            /* DIAGRAM 2 CONTAINER */
+            .diagram-02-container { width: 100%; opacity: 0.8; /* Visual subordination */ }
+            
+            /* CAPABILITY MATRIX */
+            .cap-matrix { width: 100%; margin-top: 2rem; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; }
+            .cap-header { font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--text-main); padding-bottom: 4px; margin-bottom: 8px; letter-spacing: 0.05em; }
+            .cap-table { width: 100%; border-collapse: collapse; }
+            .cap-table th { text-align: left; padding: 4px 0; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
+            .cap-table td { padding: 6px 0; border-bottom: 1px solid var(--border-color); color: var(--text-muted); }
+            .cap-signal { color: var(--signal-enforced); font-weight: 600; }
+            .cap-footer { margin-top: 8px; font-size: 0.55rem; color: var(--text-muted); opacity: 0.7; font-style: italic; }
+            [data-theme="dark"] .cap-header { color: #fff; border-color: #fff; }
+            [data-theme="dark"] .cap-table th { color: #aaa; }
+            
+            /* D2 SVG STYLES */
             .d2-line { stroke: var(--text-muted); stroke-width: 1px; opacity: 0.3; }
             .d2-signal { stroke: var(--signal-eval); stroke-width: 2px; fill: none; opacity: 0; animation: signalPulse 4s linear infinite; }
             .d2-boundary { stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 4 4; }
@@ -243,8 +252,8 @@
             @keyframes signalPulse {
                 0% { stroke-dasharray: 0 600; stroke-dashoffset: 0; opacity: 0; }
                 10% { opacity: 0.8; }
-                40% { stroke-dasharray: 100 600; opacity: 0.8; } /* Crossing boundary */
-                70% { opacity: 0.2; } /* Fading */
+                40% { stroke-dasharray: 100 600; opacity: 0.8; }
+                70% { opacity: 0.2; }
                 100% { stroke-dasharray: 100 600; stroke-dashoffset: -550; opacity: 0; }
             }
         }
@@ -391,7 +400,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V135 THEME ENGINE */
+                        /* V136 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         :root {
                             --diag-stroke: #333; --diag-text: #eee; --diag-fill: #0b0b0c; --diag-mute: #666;
@@ -439,7 +448,7 @@
                         #policy-path { stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 5 5; opacity: 0; animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; }
                         #policy-label { fill: var(--signal-eval); opacity: 0; font-weight: 700; font-size: 10px; animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; }
 
-                        /* Keyframes (Same as V129) */
+                        /* Keyframes */
                         @keyframes pulseBox { 0% { stroke: var(--border-color, #333); stroke-width: 1.5px; } 5% { stroke: var(--signal-enforced); stroke-width: 2px; } 15% { stroke: var(--border-color, #333); stroke-width: 1.5px; } }
                         @keyframes modelHold { 0% { stroke: var(--border-color, #333); stroke-width: 1.5px; } 5% { stroke: var(--signal-enforced); stroke-width: 2.5px; } 40% { stroke: var(--signal-enforced); stroke-width: 2.5px; } 45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } }
                         @keyframes cyanPulse { 0% { stroke: var(--text-muted, #666); } 5% { stroke: var(--signal-eval); stroke-width: 2.5px; } 20% { stroke: var(--signal-eval); stroke-width: 2.5px; } 25% { stroke: var(--text-muted, #666); stroke-width: 1.5px; } }
@@ -553,11 +562,11 @@
             
             <div class="diagram-separator"></div>
             
-            <div class="diagram-label">DIAGRAM 02 — SEMANTIC STABILITY MAP</div>
-            <div class="diagram-label-xs">(MEASUREMENT, NOT CONTROL)</div>
+            <div class="diagram-label">SEMANTIC COMPRESSION UNDER LEXICAL CONSTRAINTS</div>
+            <div class="diagram-label-xs">(DIAGNOSTIC EVIDENCE)</div>
             
-            <figure class="diagram-figure">
-                <svg id="diagram-stability" width="100%" viewBox="0 0 740 180" xmlns="http://www.w3.org/2000/svg">
+            <figure class="diagram-figure diagram-02-container">
+                <svg id="diagram-stability" width="100%" viewBox="0 0 740 120" xmlns="http://www.w3.org/2000/svg">
                     <style>
                         /* D2 SPECIFIC */
                         .d2-line { stroke: var(--text-muted); stroke-width: 1px; opacity: 0.3; }
@@ -566,16 +575,6 @@
                         .d2-text { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--text-main); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
                         .d2-metric { font-family: "JetBrains Mono", monospace; font-size: 9px; fill: var(--text-muted); font-weight: 500; }
                         .d2-label { font-family: "JetBrains Mono", monospace; font-size: 8px; fill: var(--signal-eval); font-weight: 700; letter-spacing: 0.1em; }
-                        [data-theme="dark"] .d2-metric { fill: #999; }
-                        [data-theme="dark"] .d2-header { fill: #fff; }
-                        
-                        @keyframes signalPulse {
-                            0% { stroke-dasharray: 0 600; stroke-dashoffset: 0; opacity: 0; }
-                            10% { opacity: 0.8; }
-                            40% { stroke-dasharray: 100 600; opacity: 0.8; } /* Crossing boundary */
-                            70% { opacity: 0.2; } /* Fading */
-                            100% { stroke-dasharray: 100 600; stroke-dashoffset: -550; opacity: 0; }
-                        }
                     </style>
                     
                     <g transform="translate(20,0)">
@@ -599,16 +598,32 @@
                     </g>
                 </svg>
                 
-                <div class="cycle-counter" style="margin-top:0;">
-                    COMPRESSION RATIO: 14 : 1 <span style="margin-left:12px; opacity:0.3">|</span> <span style="margin-left:12px">STABILITY SCORE: 0.93</span>
+                <div class="diagram-caption">
+                    This diagram shows measured effects of lexicon enforcement. It does not control execution.
                 </div>
-                
-                <figcaption class="diagram-caption">
-                    This diagram shows how much meaning survives formalization.
-                    <br>
-                    Alignment quality is bounded by what survives serialization.
-                </figcaption>
             </figure>
+            
+            <div class="cap-matrix">
+                <div class="cap-header">LEXICON CAPABILITY MATRIX</div>
+                <table class="cap-table">
+                    <thead>
+                        <tr>
+                            <th>PROPERTY</th>
+                            <th>WITHOUT LEXICON</th>
+                            <th style="color:var(--signal-enforced)">WITH LEXICON</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Semantic Drift</td><td>Unbounded</td><td class="cap-signal">Bounded</td></tr>
+                        <tr><td>Definition Stability</td><td>Implicit</td><td class="cap-signal">Explicit</td></tr>
+                        <tr><td>Cross-Run Comparability</td><td>No</td><td class="cap-signal">Yes</td></tr>
+                        <tr><td>Auditability</td><td>Narrative</td><td class="cap-signal">Structural</td></tr>
+                        <tr><td>Reward Hacking Surface</td><td>High</td><td class="cap-signal">Reduced</td></tr>
+                        <tr><td>Alignment Accumulation</td><td>Non-cumulative</td><td class="cap-signal">Cumulative</td></tr>
+                    </tbody>
+                </table>
+                <div class="cap-footer">Alignment becomes a system property when meaning is fixed before execution.</div>
+            </div>
         </div>
     </main>
 
@@ -673,7 +688,6 @@
         // --- DYNAMIC TELEMETRY LOGIC ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
-        // We grab the color directly from CSS variable or hardcode since we know it
         const telemetryColor = '#00cc00'; 
         
         function updateTelemetry(isLockState = false) {
