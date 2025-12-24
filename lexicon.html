@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V136 (FINAL ARTIFACT) */
+        /* THEME: INSTITUTE STANDARD V137 (UNIFIED INSTRUMENT) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -62,7 +62,7 @@
             --panel-hover-text: #000;
             
             --signal-enforced: #00cc00;
-            --signal-eval: #ffffff;      /* White for Eval in Dark Mode */
+            --signal-eval: #00eaff; 
             --signal-struct: #333333;
 
             /* Dark Diff Colors */
@@ -186,7 +186,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V136)
+           LAYOUT ENGINE: SEGREGATED (V137)
            ========================================= */
 
         @media (min-width: 1101px) {
@@ -197,43 +197,49 @@
             .diagram-col { width: 580px; border-left: 1px solid var(--border-color); background: var(--bg-color); padding: 1.5rem 2rem; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; align-items: center; justify-content: flex-start; }
             .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
             
-            /* TELEMETRY ROW */
+            /* TELEMETRY ROW - GLOBAL */
             .telemetry-row {
-                width: 100%; display: flex; justify-content: space-between; align-items: flex-end;
-                margin-bottom: 0.5rem; font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted);
+                width: 100%; display: flex; justify-content: space-between; align-items: center;
+                margin-bottom: 0.5rem; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; color: var(--text-muted);
                 border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;
             }
-            .telemetry-data { color: var(--text-main); font-weight: 700; }
+            .telemetry-data { display: flex; gap: 12px; }
+            .tel-group { opacity: 0.4; transition: opacity 0.3s; }
             
-            /* INSTRUMENT LENS CONTROL */
-            .instrument-lens { display: flex; gap: 12px; background: transparent; padding: 0; }
+            /* LENS HIGHLIGHT LOGIC */
+            body[data-lens="system"] .tel-system { opacity: 1; color: var(--text-main); font-weight: 700; }
+            body[data-lens="audit"] .tel-audit { opacity: 1; color: var(--signal-eval); font-weight: 700; }
+            body[data-lens="mechanism"] .tel-mech { opacity: 1; color: var(--signal-enforced); font-weight: 700; }
+            
+            /* INSTRUMENT LENS CONTROL - TEXT ONLY */
+            .instrument-lens { display: flex; gap: 12px; background: transparent; padding: 0; font-family: "JetBrains Mono", monospace; font-size: 0.55rem; }
             .lens-label { font-weight: 700; letter-spacing: 0.05em; opacity: 0.5; }
             .lens-opt { cursor: pointer; transition: color 0.2s; opacity: 0.5; }
             .lens-opt:hover { opacity: 1; color: var(--text-main); }
             .lens-opt.active { color: var(--text-main); font-weight: 700; opacity: 1; }
             
-            /* DIAGRAM STYLES */
-            .diagram-label { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-main); font-weight: 800; opacity: 0.9; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: center; }
+            /* DIAGRAM STYLES - COMPRESSED */
+            .diagram-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-main); font-weight: 800; opacity: 0.9; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: center; }
             .diagram-label-xs { font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.7; }
             .diagram-caption { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; letter-spacing: 0.05em; }
             
-            [data-theme="dark"] .telemetry-data, [data-theme="dark"] .diagram-text-xs { color: #fff !important; opacity: 1 !important; fill: #fff !important; }
+            [data-theme="dark"] .diagram-text-xs { color: #fff !important; opacity: 1 !important; fill: #fff !important; }
             .diag-legend { margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600; }
             .legend-item { display: flex; align-items: center; gap: 6px; }
             .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
             
             /* SEPARATOR */
-            .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: 2rem 0; opacity: 0.5; }
+            .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: 1.5rem 0; opacity: 0.5; }
             
             /* DIAGRAM 2 CONTAINER */
-            .diagram-02-container { width: 100%; opacity: 0.8; /* Visual subordination */ }
+            .diagram-02-container { width: 100%; opacity: 0.9; }
             
             /* CAPABILITY MATRIX */
-            .cap-matrix { width: 100%; margin-top: 2rem; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; }
+            .cap-matrix { width: 100%; margin-top: 1.5rem; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; }
             .cap-header { font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--text-main); padding-bottom: 4px; margin-bottom: 8px; letter-spacing: 0.05em; }
             .cap-table { width: 100%; border-collapse: collapse; }
-            .cap-table th { text-align: left; padding: 4px 0; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
-            .cap-table td { padding: 6px 0; border-bottom: 1px solid var(--border-color); color: var(--text-muted); }
+            .cap-table th { text-align: left; padding: 6px 0; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
+            .cap-table td { padding: 8px 0; border-bottom: 1px solid var(--border-color); color: var(--text-muted); }
             .cap-signal { color: var(--signal-enforced); font-weight: 600; }
             .cap-footer { margin-top: 8px; font-size: 0.55rem; color: var(--text-muted); opacity: 0.7; font-style: italic; }
             [data-theme="dark"] .cap-header { color: #fff; border-color: #fff; }
@@ -268,7 +274,7 @@
         }
     </style>
 </head>
-<body data-mode="reader" data-theme="light">
+<body data-mode="reader" data-theme="light" data-lens="system">
 
     <header style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:var(--bg-color); border-bottom:1px solid var(--border-color); padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);" id="mobile-bar">
         <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em; color:var(--text-main);">ENLIGHTENED AI</div>
@@ -280,10 +286,10 @@
         <div class="brand">
             <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
             <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
-            <span>EST. 2026 // MONTREAL</span>
+            <span style="font-size: 0.55rem; opacity: 0.7; display: block; margin-top: 4px;">EST. 2026 // MONTREAL</span>
         </div>
 
-        <div class="mode-group">
+        <div class="mode-group" style="margin-top: 3rem;">
             <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
             <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
             <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
@@ -400,7 +406,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V136 THEME ENGINE */
+                        /* V137 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         :root {
                             --diag-stroke: #333; --diag-text: #eee; --diag-fill: #0b0b0c; --diag-mute: #666;
@@ -418,9 +424,9 @@
                         [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
                         .telemetry-text { font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; opacity: 0; font-weight: 600; }
 
-                        /* MODE VISIBILITY CLASSES - STRICT HIDING */
+                        /* MODE VISIBILITY CLASSES */
                         .mode-group-audit { opacity: 0; transition: opacity 0.2s; }
-                        .mode-group-mech { display: none; } /* Strict hide for mechanism internals */
+                        .mode-group-mech { opacity: 0; transition: opacity 0.2s; } 
                         
                         /* ANIMATION ENGINE */
                         #packet-1 { stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-dasharray: 120 500; stroke-dashoffset: 460; animation: packetFlow 8.5s linear infinite; }
@@ -434,7 +440,7 @@
                         #state-box { animation: stepImpact 8.5s linear infinite; animation-delay: 2.7s; }
                         #tel-sta { animation: telFlash 8.5s linear infinite; animation-delay: 2.7s; }
                         #packet-2 { stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-dasharray: 120 500; stroke-dashoffset: 620; animation: packetFlowCorrected 8.5s linear infinite; animation-delay: 3.3s; }
-                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 4.8s; }
+                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 4.7s; } /* 4.7s = STRICT CAUSALITY GAP */
                         
                         /* Eval Path */
                         #packet-3, #packet-4, #packet-5 { stroke: var(--signal-eval); stroke-width: 2.5px; stroke-dasharray: 100 500; stroke-dashoffset: 260; }
@@ -448,7 +454,7 @@
                         #policy-path { stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 5 5; opacity: 0; animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; }
                         #policy-label { fill: var(--signal-eval); opacity: 0; font-weight: 700; font-size: 10px; animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; }
 
-                        /* Keyframes */
+                        /* Keyframes (Same as V129) */
                         @keyframes pulseBox { 0% { stroke: var(--border-color, #333); stroke-width: 1.5px; } 5% { stroke: var(--signal-enforced); stroke-width: 2px; } 15% { stroke: var(--border-color, #333); stroke-width: 1.5px; } }
                         @keyframes modelHold { 0% { stroke: var(--border-color, #333); stroke-width: 1.5px; } 5% { stroke: var(--signal-enforced); stroke-width: 2.5px; } 40% { stroke: var(--signal-enforced); stroke-width: 2.5px; } 45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } }
                         @keyframes cyanPulse { 0% { stroke: var(--text-muted, #666); } 5% { stroke: var(--signal-eval); stroke-width: 2.5px; } 20% { stroke: var(--signal-eval); stroke-width: 2.5px; } 25% { stroke: var(--text-muted, #666); stroke-width: 1.5px; } }
@@ -538,7 +544,11 @@
                 </svg>
                 
                 <div class="telemetry-row">
-                    <div id="cycle-counter" class="telemetry-data">CYCLE: 0215</div>
+                    <div id="telemetry-display" class="telemetry-data">
+                        <span class="tel-group tel-system">CYCLE: 0215  STATE: ENFORCED</span>
+                        <span class="tel-group tel-mech">LEX: v8.2  SER: JSON-4</span>
+                        <span class="tel-group tel-audit">RET: 75%  DROP: 25%</span>
+                    </div>
                     <div class="instrument-lens">
                         <span class="lens-label">LENS:</span>
                         <span class="lens-opt active" onclick="setDiagramMode('system', this)">● SYSTEM</span>
@@ -628,7 +638,7 @@
     </main>
 
     <script>
-        // DATA RECORD - UNCHANGED
+        // DATA RECORD
         const LEXICON_RECORD = {
             meta: { doc_id: "RAL-LEX-0002", version: "17.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
@@ -662,22 +672,24 @@
             btn.classList.add('active');
             btn.innerHTML = btn.innerHTML.replace('○', '●');
             
-            // Diagram Element Visibility
+            // Set Body Attribute for CSS Styling
+            document.body.setAttribute('data-lens', mode);
+            
+            // Diagram Element Visibility (Opacity logic handled in CSS now via classes)
             const mechGroup = document.querySelector('.mode-group-mech');
             const auditGroup = document.querySelector('.mode-group-audit');
             const systemGroup = document.querySelector('#grp-system'); // Core elements
             
-            // Logic
             if(mode === 'system') {
-                mechGroup.style.display = 'none';
+                mechGroup.style.opacity = '0';
                 auditGroup.style.opacity = '0.1'; // Faint eval
                 systemGroup.style.opacity = '1';
             } else if (mode === 'audit') {
-                mechGroup.style.display = 'none';
+                mechGroup.style.opacity = '0';
                 auditGroup.style.opacity = '1'; // Full eval
                 systemGroup.style.opacity = '0.5'; // Dim core slightly
             } else if (mode === 'mechanism') {
-                mechGroup.style.display = 'block'; // Show internals
+                mechGroup.style.opacity = '1'; // Show internals
                 auditGroup.style.opacity = '0.3'; 
                 systemGroup.style.opacity = '1';
             }
@@ -687,30 +699,23 @@
 
         // --- DYNAMIC TELEMETRY LOGIC ---
         let cycleCount = 215;
-        const counterEl = document.getElementById('cycle-counter');
         const telemetryColor = '#00cc00'; 
         
+        // Update function handles highlighting via CSS classes (body[data-lens])
+        // We just need to update the cycle count number
         function updateTelemetry(isLockState = false) {
+             const systemSpan = document.querySelector('.tel-system');
+             
              if (isLockState) {
-                 if(currentMode === 'system') {
-                     counterEl.innerHTML = `CYCLE: ${cycleCount} <span style="color:${telemetryColor}; font-weight:700;">STATE: ENFORCED</span>`;
-                 } else if (currentMode === 'audit') {
-                     counterEl.innerHTML = `SAFETY: <span style="color:#00d7ff;">99.9%</span> BASE: <span style="color:#00d7ff;">STABLE</span>`;
-                 } else {
-                     counterEl.innerHTML = `LEX: v8.2 SER: JSON-4 <span style="color:${telemetryColor};">RET: 75%</span>`;
-                 }
+                 // Update content only
+                 systemSpan.innerHTML = `CYCLE: ${cycleCount} STATE: ENFORCED`; 
              } else {
-                 if(currentMode === 'system') {
-                     counterEl.innerHTML = `CYCLE: ${cycleCount}`;
-                 } else if (currentMode === 'audit') {
-                     counterEl.innerHTML = `SAFETY: 99.9% BASE: STABLE`;
-                 } else {
-                     counterEl.innerHTML = `LEX: v8.2 SER: JSON-4 RET: 75% DROP: 25%`;
-                 }
+                 systemSpan.innerHTML = `CYCLE: ${cycleCount}`;
              }
         }
 
         // Init Default
+        document.body.setAttribute('data-lens', 'system');
         setDiagramMode('system', document.querySelector('.lens-opt.active'));
         
         // Loop
