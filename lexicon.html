@@ -95,6 +95,7 @@
             flex-direction: column;
             min-height: 100vh;
             margin-left: 240px; /* Offset for fixed sidebar */
+            position: relative;
         }
         
         /* The Split View Container */
@@ -102,6 +103,7 @@
             display: flex;
             flex: 1; /* Takes remaining height */
             flex-wrap: wrap;
+            width: 100%;
         }
 
         /* --- TYPOGRAPHY --- */
@@ -200,10 +202,11 @@
             border-top: 1px solid var(--border-color);
             background: var(--bg-color);
             padding: 2rem 4rem;
-            margin-top: auto;
+            margin-top: auto; /* PINS FOOTER TO BOTTOM */
             font-family: var(--font-mono);
             font-size: 0.6rem;
             color: var(--text-muted);
+            flex-shrink: 0;
         }
         .site-footer .footer-inner {
             display: flex;
@@ -245,11 +248,20 @@
                 background: var(--sidebar-bg); 
             }
             
-            .content-col { width: 55%; padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; max-width: 900px; }
+            /* CONTENT COLUMN: Takes remaining space */
+            .content-col { 
+                flex: 1; 
+                padding: 3rem 4rem 6rem 4rem; 
+                display: flex; 
+                flex-direction: column; 
+                max-width: 900px; 
+            }
             
-            /* DIAGRAM COLUMN - EXPANDED WIDTH */
+            /* DIAGRAM COLUMN: HARD LOCK 450px WIDTH */
             .diagram-col { 
-                width: 45%; 
+                width: 450px; 
+                min-width: 450px; /* Prevent squeezing */
+                flex-shrink: 0;   /* Disable shrinking */
                 border-left: 1px solid var(--border-color); 
                 background: var(--bg-color); 
                 padding: 1.5rem 2rem; 
@@ -259,11 +271,24 @@
                 overflow-y: auto; 
                 align-items: center; justify-content: flex-start;
             }
-            .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
+
+            /* DIAGRAM FIGURE: HARD LOCK */
+            .diagram-figure { 
+                margin: 0; 
+                width: 100%; 
+                display: flex; 
+                flex-direction: column; 
+                align-items: center; 
+                justify-content: center; 
+                position: relative;
+            }
             
-            /* --- CRITICAL: GLOBAL SVG STYLES (Fixes Black Box) --- */
-            /* GEOMETRY LOCK: Ensures diagram never shifts layout during load or resize */
-            #diagram-context { aspect-ratio: 740 / 260; width: 100%; height: auto; display: block; }
+            /* SVG CONTEXT: HARD LOCK HEIGHT */
+            #diagram-context { 
+                height: 450px !important; 
+                width: 100%; 
+                display: block;
+            }
             
             .diag-container { fill: none; stroke: var(--border-color); stroke-width: 1px; stroke-dasharray: 4 4; opacity: 0.9; }
             .diag-bg { fill: var(--card-bg); stroke: var(--border-color); stroke-width: 1.5px; }
@@ -279,9 +304,16 @@
                 border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; letter-spacing: 0.05em;
             }
             .telemetry-data { display: flex; gap: 12px; }
-            /* Fixed width to prevent jitter when text length changes (st.empty equivalent) */
-            .tel-group { opacity: 1; transition: opacity 0.3s, color 0.3s; white-space: nowrap; }
-            .tel-system { min-width: 160px; } 
+            
+            /* JITTER GUARD: Fixed width for telemetry groups */
+            .tel-group { 
+                display: inline-block;
+                width: 160px; /* Fixed width to prevent layout shift */
+                white-space: nowrap;
+                overflow: hidden;
+                opacity: 1; 
+                transition: opacity 0.3s, color 0.3s; 
+            }
             
             /* LENS HIGHLIGHT LOGIC */
             .accent-enforced, .accent-eval, .accent-struct { transition: opacity 180ms ease, filter 180ms ease; }
@@ -499,7 +531,7 @@
                 <div class="diagram-label-xs">(PRIMARY CAUSAL PATH HIGHLIGHTED)</div>
                 
                 <figure class="diagram-figure">
-                    <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
+                    <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                         <g class="diag-root" transform="translate(0,0)">
                             <rect x="0" y="10" width="700" height="240" rx="4" class="diag-container"/>
                             
