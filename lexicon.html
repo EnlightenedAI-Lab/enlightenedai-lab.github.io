@@ -18,9 +18,9 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V126 (WHITE EVALUATION) */
+        /* THEME: INSTITUTE STANDARD V127 (PERFECTED TIMING) */
         :root {
-            /* LIGHT MODE (DEFAULT) */
+            /* LIGHT MODE */
             --bg-color: #ffffff;
             --sidebar-bg: #ffffff;
             --text-main: #050505;
@@ -34,22 +34,13 @@
             --panel-hover-bg: #000;
             --panel-hover-text: #fff;
             
-            --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-            
-            /* SIGNALS */
-            --status-verified: #00cc00;
-            --signal-blue: #0066ff;
-            --signal-red: #cc0000;
-            
-            /* VIEW MODES */
-            --mode-diff-del-bg: #ffebeb;
-            --mode-diff-del-text: #cc0000;
-            --mode-diff-ins-bg: #e6ffec;
-            --mode-diff-ins-text: #006600;
+            /* SIGNALS - HIGH CONTRAST */
+            --signal-enforced: #00cc00;  /* Green */
+            --signal-eval: #444444;      /* Dark Gray for Light Mode visibility */
+            --signal-struct: #cccccc;
         }
 
-        /* DARK MODE OVERRIDES */
+        /* DARK MODE */
         [data-theme="dark"] {
             --bg-color: #050505;
             --sidebar-bg: #050505;
@@ -58,18 +49,16 @@
             --border-color: #333333;
             --card-bg: #111111;
             
-            /* Invert Repo Panel behavior */
             --panel-border: #444;
             --panel-bg: #050505;
             --panel-text: #ccc;
             --panel-hover-bg: #e0e0e0;
             --panel-hover-text: #000;
-
-            /* Dark Diff Colors */
-            --mode-diff-del-bg: #330000;
-            --mode-diff-del-text: #ff6666;
-            --mode-diff-ins-bg: #003300;
-            --mode-diff-ins-text: #66ff66;
+            
+            /* SIGNALS - HIGH CONTRAST */
+            --signal-enforced: #00cc00;
+            --signal-eval: #ffffff;      /* Pure White for Dark Mode */
+            --signal-struct: #333333;
         }
 
         * { box-sizing: border-box; }
@@ -77,7 +66,7 @@
         
         body {
             margin: 0; padding: 0;
-            font-family: var(--font-stack);
+            font-family: "Inter", sans-serif;
             background: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
@@ -91,12 +80,12 @@
         ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
         li { margin-bottom: 0.5rem; font-size: 0.95rem; }
         
-        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
+        .mono { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .scramble { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
         /* ORIENTING FRAME */
         .orienting-frame { 
-            font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; 
+            font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; 
             margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 65ch; line-height: 1.4;
         }
 
@@ -105,7 +94,7 @@
             margin-top: auto; margin-bottom: 1rem; 
             border: 1px solid var(--panel-border); 
             background: var(--panel-bg); 
-            padding: 12px; font-family: var(--font-mono);
+            padding: 12px; font-family: "JetBrains Mono", monospace;
             transition: all 0.2s ease; cursor: pointer;
         }
         .repo-panel:hover { 
@@ -119,7 +108,7 @@
             font-size: 0.65rem; font-weight: 700; color: var(--panel-text); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; transition: color 0.2s;
         }
         .repo-panel:hover .repo-header { color: var(--panel-hover-text); }
-        .status-dot-red { width: 6px; height: 6px; background: var(--signal-red); border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
+        .status-dot-red { width: 6px; height: 6px; background: #cc0000; border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
         .repo-link { 
             display: block; font-size: 0.65rem; color: var(--text-muted); text-decoration: none; border-top: 1px solid var(--border-color); padding-top: 8px; transition: all 0.2s; 
         }
@@ -197,7 +186,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V126)
+           LAYOUT ENGINE: SEGREGATED (V127)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -414,7 +403,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V126 THEME ENGINE */
+                        /* V127 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -446,7 +435,7 @@
                         /* Dark Mode Visibility Fix */
                         [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
 
-                        /* MICRO-TELEMETRY TEXT */
+                        /* MICRO-TELEMETRY TEXT (Restored & Shortened) */
                         .telemetry-text { 
                             font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; 
                             opacity: 0; animation-fill-mode: forwards; font-weight: 600; letter-spacing: 0.05em;
@@ -482,15 +471,15 @@
                         #state-box { animation: stepImpact 8.5s linear infinite; animation-delay: 2.7s; }
                         #tel-sta { animation: telFlash 8.5s linear infinite; animation-delay: 2.7s; }
                         
-                        /* 5. Model Wire (3.3 - 4.2) - CAUSAL GAP ADDED */
+                        /* 5. Model Wire (3.3 - 4.575) - CAUSAL GAP ENFORCED */
                         #packet-2 { 
                             stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
                             stroke-dasharray: 120 500; stroke-dashoffset: 620; /* Start Left */
                             animation: packetFlowCorrected 8.5s linear infinite; animation-delay: 3.3s;
                         }
                         
-                        /* 6. Model Hold (4.5 - 6.5) - STRICTLY AFTER WIRE ARRIVAL */
-                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 4.5s; }
+                        /* 6. Model Hold (4.7 - 6.7) - STRICTLY AFTER WIRE ARRIVAL */
+                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 4.7s; }
                         
                         /* 7. Eval Path Packets (White) (5.0+) */
                         #packet-3, #packet-4, #packet-5 {
@@ -557,7 +546,7 @@
                         }
                         
                         @keyframes packetFlowSmall { 0% { stroke-dashoffset: 260; opacity: 0; } 10% { opacity: 1; } 30% { stroke-dashoffset: 0; opacity: 1; } 40% { opacity: 0; } 100% { opacity: 0; } }
-                        @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 0; } }
+                        @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 0.9; } 100% { opacity: 0; } }
 
                         @media (prefers-reduced-motion: reduce) {
                             * { animation: none !important; }
@@ -626,10 +615,10 @@
                         <path id="packet-5" d="M590 180 L515 180 L515 155" style="fill:none;" />
                         
                         <path id="policy-path" d="M635 60 L635 30 L130 30 L130 105" class="diag-line" />
-                        <text id="policy-label" x="350" y="25" class="telemetry-text" style="fill:var(--signal-eval); font-weight:700; opacity:0;">POLICY UPDATE LOOP</text>
+                        <text id="policy-label" x="350" y="25" class="telemetry-text" style="fill:var(--signal-eval); font-weight:700; opacity:0; font-size:10px;">POLICY UPDATE LOOP</text>
 
-                        <text x="590" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em;">POST-HOC EVALUATION</text>
-                        <text x="590" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.3; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
+                        <text x="590" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.8; letter-spacing:0.1em; font-weight:600;">POST-HOC EVALUATION</text>
+                        <text x="590" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
                     </g>
                 </svg>
                 
@@ -637,8 +626,8 @@
                 <div id="cycle-counter" class="cycle-counter">CYCLE: 0215</div>
                 
                 <div class="diag-legend">
-                    <div class="legend-item"><div class="legend-dot" style="background:var(--signal-enforced);"></div>ENFORCED</div>
-                    <div class="legend-item"><div class="legend-dot" style="background:var(--signal-eval);"></div>EVALUATION</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#00cc00;"></div>ENFORCED</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#ffffff; border:1px solid #666;"></div>EVALUATION</div>
                     <div class="legend-item"><div class="legend-dot" style="background:#666;"></div>STRUCTURAL</div>
                 </div>
                 
@@ -719,7 +708,7 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V126) ---
+        // --- CYCLE COUNTER & LOCK (V127) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
         const telemetryColor = '#00cc00'; // Green Match
