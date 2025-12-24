@@ -10,22 +10,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
-        /* THEME: INSTITUTE STANDARD V95 (HYBRID) */
+        /* THEME: INSTITUTE STANDARD V96 (FULL RESTORATION) */
         :root {
-            --bg-color: #050505; /* Locked to Dark for Machine View */
+            --bg-color: #050505;
             --text-main: #e0e0e0;
             --text-muted: #888888;
             --border-color: #333333;
-            --card-bg: #111111;
             
-            --panel-border: #444;
-            --panel-bg: #050505;
-            --panel-text: #ccc;
-            --panel-hover-bg: #e0e0e0;
-            --panel-hover-text: #000;
-            
-            --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             
             --status-verified: #00cc00;
             --signal-blue: #0066ff;
@@ -34,59 +27,47 @@
         }
 
         * { box-sizing: border-box; }
-        body { margin: 0; padding: 0; font-family: var(--font-stack); background: var(--bg-color); color: var(--text-main); line-height: 1.5; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
+        body { margin: 0; padding: 0; font-family: var(--font-sans); background: var(--bg-color); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        a { text-decoration: none; color: inherit; }
 
-        /* --- HEADER & CONTROLS --- */
-        .mo-header { padding: 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: space-between; align-items: center; background: #0b0b0c; flex-shrink: 0; }
-        .mo-title { font-weight: 700; letter-spacing: 0.05em; color: #fff; display: flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 0.75rem; }
-        .mo-mode-toggle { display: flex; gap: 10px; margin-left: 20px; }
-        .mo-mode-btn { background: transparent; border: 1px solid #333; color: #888; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 600; cursor: pointer; padding: 4px 12px; transition: all 0.2s; }
-        .mo-mode-btn.active { color: #fff; border-color: #fff; background: rgba(255,255,255,0.1); }
-        .mo-mode-btn:hover { color: #fff; border-color: #666; }
-        
+        /* --- HEADER --- */
+        .mo-header { padding: 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: space-between; align-items: center; background: #0b0b0c; flex-shrink: 0; }
+        .mo-title { font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 12px; font-size: 0.75rem; font-family: var(--font-mono); }
         .mo-controls { display: flex; align-items: center; gap: 15px; }
-        .uptime-counter { color: #666; font-size: 0.7rem; font-family: var(--font-mono); }
         
-        /* EXPORT DROPDOWN */
-        .export-group { position: relative; }
-        .export-btn { background: none; border: 1px solid #444; color: #999; padding: 5px 10px; cursor: pointer; font-family: var(--font-mono); font-size: 0.65rem; }
-        .export-menu { display: none; position: absolute; right: 0; top: 100%; background: #111; border: 1px solid #444; width: 160px; z-index: 500; }
-        .export-group:hover .export-menu { display: block; }
-        .export-item { display: block; padding: 10px; color: #999; font-size: 0.65rem; border-bottom: 1px solid #222; text-decoration: none; font-family: var(--font-mono); }
-        .export-item:hover { background: #222; color: #fff; }
+        .machine-led { width: 8px; height: 8px; border-radius: 50%; background: var(--status-verified); display: inline-block; box-shadow: 0 0 8px var(--status-verified); transition: background 0.2s; }
+        .led-amber { background: var(--signal-amber); box-shadow: 0 0 8px var(--signal-amber); }
 
-        /* --- MAIN LAYOUT --- */
+        .mode-btn { background: transparent; border: 1px solid #444; color: #888; padding: 4px 12px; font-family: var(--font-mono); font-size: 0.65rem; cursor: pointer; transition: all 0.2s; }
+        .mode-btn:hover { color: #fff; border-color: #fff; }
+        .mode-btn.active { color: #fff; text-decoration: underline; text-underline-offset: 4px; border-color: transparent; }
+
+        /* --- BODY LAYOUT --- */
         .mo-body { flex: 1; display: flex; overflow: hidden; position: relative; }
-        
-        /* PROMPT DECK (LEFT SIDEBAR) */
-        .prompt-deck { 
-            width: 0; opacity: 0; background: #080808; border-right: 1px solid #222; 
-            display: flex; flex-direction: column; gap: 8px; padding: 0; overflow-y: auto;
-            transition: width 0.3s ease, opacity 0.2s ease;
-        }
-        .sim-active .prompt-deck { width: 180px; opacity: 1; padding: 1.5rem 1rem; }
-        .deck-label { font-size: 0.55rem; color: #666; margin-bottom: 10px; font-weight: 700; letter-spacing: 0.1em; font-family: var(--font-mono); }
-        .deck-btn { 
-            background: #111; border: 1px solid #222; color: #888; padding: 10px; 
-            font-family: var(--font-mono); font-size: 0.6rem; text-align: left; cursor: pointer; transition: all 0.1s; 
-        }
-        .deck-btn:hover { background: #1a1a1a; color: #fff; border-color: #555; }
 
-        /* STAGE (RIGHT CONTENT) */
-        .mo-content { flex-grow: 1; padding: 0; overflow: hidden; display: flex; flex-direction: column; }
-        
+        /* PROMPT DECK */
+        .prompt-deck { width: 0; opacity: 0; background: #080808; border-right: 1px solid #222; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; transition: width 0.3s ease, opacity 0.2s ease; }
+        .sim-active .prompt-deck { width: 190px; opacity: 1; padding: 1.5rem 1rem; }
+        .deck-label { font-size: 0.55rem; color: #666; margin-bottom: 10px; font-weight: 700; letter-spacing: 0.1em; font-family: var(--font-mono); }
+        .deck-btn { background: #111; border: 1px solid #222; color: #888; padding: 10px; font-family: var(--font-mono); font-size: 0.6rem; text-align: left; cursor: pointer; transition: all 0.1s; }
+        .deck-btn:hover { background: #1a1a1a; color: #fff; border-color: #666; }
+
+        /* CONTENT STAGE */
+        .mo-content { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+
         /* SUB NAV */
-        .mo-sub-nav { padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); background: #111; display: flex; gap: 15px; align-items: center; height: 40px; flex-shrink: 0; }
+        .mo-sub-nav { padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); background: #111; display: flex; gap: 20px; align-items: center; height: 42px; flex-shrink: 0; }
         .sub-nav-btn { background: none; border: none; color: #666; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; cursor: pointer; padding: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+        .sub-nav-btn:hover { color: #ccc; }
         .sub-nav-btn.active { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
         .process-hash { margin-left: auto; color: #444; font-size: 0.6rem; letter-spacing: 0.05em; font-family: var(--font-mono); }
 
-        /* SCROLLABLE VIEW AREA */
-        .view-container { flex: 1; overflow-y: auto; padding: 2rem; position: relative; }
+        /* VIEW CONTAINER */
+        .view-container { flex: 1; overflow-y: auto; padding: 2rem; }
 
-        /* --- CARD VIEW (RESTORED) --- */
+        /* --- CARD VIEW (RESTORED INTERACTIVITY) --- */
         .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
-        .m-card { background: #1a1a1a; border: 1px solid #333; padding: 1.25rem; transition: all 0.3s ease; }
+        .m-card { background: #1a1a1a; border: 1px solid #333; padding: 1.25rem; transition: all 0.3s ease; position: relative; }
         .mc-header { color: #666; font-size: 0.65rem; font-weight: 700; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; font-family: var(--font-mono); }
         .mc-row { margin-bottom: 0.5rem; display: grid; grid-template-columns: 100px 1fr; gap: 1rem; font-family: var(--font-mono); }
         .mc-label { color: #666; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -95,7 +76,15 @@
         
         .card-grid:hover .m-card { opacity: 0.35; filter: grayscale(0.8); }
         .card-grid:hover .m-card:hover { opacity: 1; filter: grayscale(0); border-color: #777; background: #1f1f1f; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 10; }
+        
+        /* RESTORED INTERACTIVITY CLASSES */
         .status-live { color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
+        .status-corrected { color: #00cc00 !important; font-weight: 700; text-shadow: 0 0 5px rgba(0,204,0,0.5); transition: color 0.1s ease; }
+        .interactive-row { cursor: pointer; transition: background 0.2s; border-radius: 2px; }
+        .interactive-row:hover { background: rgba(255,255,255,0.05); }
+        .interactive-row:hover .mc-label { color: #fff; }
+        .ghost-target { cursor: help; position: relative; }
+        .ghost-hash { font-family: var(--font-mono); color: #00cc00; letter-spacing: -0.02em; font-size: 0.7rem; }
 
         /* --- SERIALIZATION VIEWS --- */
         .stepper-container { display: flex; gap: 2px; margin-bottom: 2rem; background: #222; padding: 2px; }
@@ -103,19 +92,33 @@
         .step-btn.active { background: #000; color: #fff; border-bottom: 2px solid #fff; }
 
         .sim-input-wrapper { border: 1px solid #333; background: #000; position: relative; transition: border-color 0.3s; }
-        .sim-textarea { width: 100%; height: 300px; background: transparent; border: none; color: var(--signal-amber); font-family: var(--font-mono); font-size: 0.75rem; padding: 1.5rem; resize: none; outline: none; line-height: 1.6; }
-        .input-stats { display: flex; justify-content: space-between; padding: 8px 16px; background: #0e0e0e; border-top: 1px solid #333; font-size: 0.6rem; color: #666; font-family: var(--font-mono); }
+        .sim-textarea { width: 100%; height: 280px; background: transparent; border: none; color: var(--signal-amber); font-family: var(--font-mono); font-size: 0.75rem; padding: 1.5rem; resize: none; outline: none; line-height: 1.6; }
+        .input-stats { display: flex; justify-content: space-between; padding: 10px 20px; background: #0e0e0e; border-top: 1px solid #333; font-size: 0.6rem; color: #666; font-family: var(--font-mono); }
         .sim-active .sim-input-wrapper { border-color: var(--signal-amber); }
         .parse-btn { background: var(--signal-amber); color: #000; border: none; padding: 4px 12px; font-weight: 700; cursor: pointer; font-size: 0.6rem; font-family: var(--font-mono); display: none; }
         .sim-active .parse-btn { display: block; }
 
-        /* --- FOOTER & MANUAL --- */
-        .hex-footer { position: fixed; bottom: 0; left: 0; right: 0; background: #080808; border-top: 1px solid #222; padding: 8px 20px; font-family: var(--font-mono); font-size: 0.6rem; color: #444; z-index: 20010; display: flex; justify-content: space-between; align-items: center; }
+        /* DIFF VIEW */
+        .diff-box { text-align: center; margin-top: 4rem; font-family: var(--font-mono); }
+        .diff-verdict { font-size: 3rem; font-weight: 700; color: #fff; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
+        .diff-sub { color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; }
+        
+        /* FOOTER */
+        .hex-footer { padding: 10px 24px; background: #080808; border-top: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-size: 0.6rem; color: #444; flex-shrink: 0; z-index: 1000; font-family: var(--font-mono); }
         .manual-trigger { cursor: pointer; color: #888; transition: color 0.2s; font-weight: 700; text-decoration: none; }
         .manual-trigger:hover { color: #fff; }
         .blue-led { width: 6px; height: 6px; border-radius: 50%; background: var(--signal-blue); display: inline-block; margin-right: 8px; animation: beacon-blue 2s infinite; vertical-align: middle; }
         @keyframes beacon-blue { 0%, 100% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); opacity: 0.5; } 50% { box-shadow: 0 0 8px 2px rgba(0, 102, 255, 0.9); opacity: 1; } }
 
+        /* EXPORT DROPDOWN */
+        .export-group { position: relative; }
+        .export-btn { background: none; border: 1px solid #444; color: #999; padding: 5px 12px; cursor: pointer; font-family: var(--font-mono); font-size: 0.6rem; }
+        .export-menu { display: none; position: absolute; right: 0; top: 100%; background: #111; border: 1px solid #444; width: 160px; z-index: 500; }
+        .export-group:hover .export-menu { display: block; }
+        .export-item { display: block; padding: 10px; color: #999; font-size: 0.65rem; border-bottom: 1px solid #222; text-decoration: none; font-family: var(--font-mono); }
+        .export-item:hover { background: #222; color: #fff; }
+
+        /* MANUAL HUD */
         #operator-manual { position: fixed; right: 20px; top: 70px; bottom: 50px; width: 400px; background: rgba(0,0,0,0.95); border: 1px solid #444; z-index: 2000; padding: 2rem; overflow-y: auto; display: none; box-shadow: -10px 10px 30px rgba(0,0,0,0.8); }
         #operator-manual.open { display: block; }
         #operator-manual h3 { color: #fff; font-family: var(--font-mono); font-size: 0.8rem; border-bottom: 1px solid #444; padding-bottom: 8px; margin-top: 2rem; }
@@ -132,10 +135,10 @@
 
     <div class="mo-header">
         <div class="mo-title">
-            MACHINE VIEW <span id="led" style="width:8px; height:8px; background:#00cc00; border-radius:50%; display:inline-block; margin-left:8px; box-shadow:0 0 8px #00cc00;"></span>
+            MACHINE VIEW <span id="led" class="machine-led"></span>
             <div class="mo-mode-toggle">
-                <button type="button" onclick="switchMode('cards')" class="mo-mode-btn active" id="btn-cards">[ CARDS ]</button>
-                <button type="button" onclick="switchMode('serial')" class="mo-mode-btn" id="btn-serial">[ SERIALIZATION ]</button>
+                <button type="button" onclick="switchMode('cards')" class="mode-btn active" id="btn-cards">[ CARDS ]</button>
+                <button type="button" onclick="switchMode('serial')" class="mode-btn" id="btn-serial">[ SERIALIZATION ]</button>
             </div>
         </div>
         <div class="mo-controls">
@@ -193,7 +196,10 @@
                 </div>
 
                 <div id="view-diff" style="display:none;">
-                    <pre style="color:#ccc; font-family:var(--font-mono); font-size:0.75rem;">DIFF VIEW PREVIEW: 14:1 Compression Ratio</pre>
+                    <div class="diff-box">
+                        <div class="diff-verdict">RATIO 14:1</div>
+                        <div class="diff-sub">Semantic Compression</div>
+                    </div>
                 </div>
 
                 <div id="view-snap" style="display:none;">
@@ -218,13 +224,11 @@
         <p>The Card View displays the immutable core definitions. Hover over cards to see chain-of-custody hashes.</p>
         <h3>SECTION 02 — SIMULATION</h3>
         <p>Switch to SERIALIZATION mode to access the Simulation Engine. This allows you to test specific prompts against the invariant logic.</p>
-        <h3>SECTION 03 — SIGNALS</h3>
-        <p>Green LED = Stable. Amber LED = Parsing. Blue Beacon = Manual Available.</p>
     </div>
 
     <script>
         const LEXICON = {
-            meta: { doc_id: "RAL-LEX-0002", version: "33.0.0", status: "ACTIVE" },
+            meta: { doc_id: "RAL-LEX-0002", version: "33.0.0", status: "ACTIVE", classification: "PUBLIC" },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", definition: "Capacity to preserve goal coherence." },
                 { id: "RS-001", label: "Reasoning Stability", definition: "Resistance to degradation under pressure." },
@@ -243,6 +247,8 @@
 
         let simText = "User prompt: I want an AI that is helpful but doesn't change its rules.";
         let debounce;
+        let raConfidence = 100.00;
+        let isComputing = false;
 
         function init() {
             renderCards();
@@ -250,18 +256,62 @@
             document.getElementById('sim-input').value = simText;
         }
 
+        // --- RESTORED HIGH-FIDELITY RENDER ---
         function renderCards() {
             const container = document.getElementById('view-cards');
-            let html = `<div class="m-card"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON.meta.version}</div></div></div>`;
+            let html = `<div class="m-card" id="card-meta"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON.meta.classification}</div></div></div>`;
+            
             html += `<div class="mc-section-title">CORE TERMS</div>`;
             LEXICON.core_terms.forEach(t => { 
-                html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>TERM</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div></div>`;
+                let extra = t.id === 'RA-001' ? `<div class="mc-row interactive-row" onclick="requestManualVerification()" onmouseenter="hoverConf(true)" onmouseleave="hoverConf(false)"><div class="mc-label" id="label-conf">CONFIDENCE</div><div class="mc-val" id="val-conf">${raConfidence.toFixed(2)}%</div></div>` : '';
+                html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>TERM</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>${extra}</div>`;
             });
-            LEXICON.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
+
+            html += `<div class="mc-section-title">INVARIANTS</div>`;
+            LEXICON.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val ghost-target" onmouseenter="toggleGhost(this, true)" onmouseleave="toggleGhost(this, false)">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div></div>`; });
+            
+            html += `<div class="mc-section-title">FAILURE SIGNATURES</div>`;
             LEXICON.failure_signatures.forEach(f => { html += `<div class="m-card"><div class="mc-header"><div>${f.signature}</div><div style="color:var(--signal-red)">${f.severity}</div></div><div class="mc-row"><div class="mc-label">TRIGGER</div><div class="mc-val">${f.condition}</div></div></div>`; });
+            
             container.innerHTML = html;
         }
 
+        // --- INTERACTIVITY ---
+        function requestManualVerification() {
+            if(isComputing) return;
+            isComputing = true;
+            document.getElementById('led').className = "machine-led led-amber";
+            document.getElementById('val-conf').style.color = "#ffcc00";
+            document.getElementById('val-conf').innerText = "VERIFYING...";
+            
+            setTimeout(() => {
+                isComputing = false;
+                raConfidence = 100.00;
+                document.getElementById('led').className = "machine-led";
+                const val = document.getElementById('val-conf');
+                if(val) { val.innerText = "100.00%"; val.style.color = ""; val.classList.add('status-corrected'); setTimeout(() => val.classList.remove('status-corrected'), 600); }
+            }, 1200);
+        }
+
+        function hoverConf(isHovering) {
+            if(isComputing) return;
+            const el = document.getElementById('label-conf');
+            if(el) { el.innerText = isHovering ? "[ REQ VERIFY ]" : "CONFIDENCE"; el.style.color = isHovering ? "#fff" : "#666"; }
+        }
+
+        function toggleGhost(el, show) {
+            if(show) {
+                el.dataset.originalText = el.innerText;
+                const map = { "Goal Preservation": "0x7F2A...B1", "Definition Consistency": "0x9C11...4A", "Non-Contradiction": "0xE002...9F" };
+                el.innerText = map[el.innerText] || "0x......";
+                el.classList.add('ghost-hash');
+            } else {
+                el.innerText = el.dataset.originalText;
+                el.classList.remove('ghost-hash');
+            }
+        }
+
+        // --- NAVIGATION & SIMULATION ---
         function switchMode(mode) {
             document.getElementById('btn-cards').classList.toggle('active', mode === 'cards');
             document.getElementById('btn-serial').classList.toggle('active', mode === 'serial');
@@ -270,7 +320,7 @@
                 document.getElementById('view-cards').style.display = 'grid';
                 document.getElementById('sub-nav').style.display = 'none';
                 ['view-transform','view-diff','view-snap'].forEach(id => document.getElementById(id).style.display = 'none');
-                document.getElementById('mo-body').classList.remove('sim-active'); // Hide Deck
+                document.getElementById('mo-body').classList.remove('sim-active');
             } else {
                 document.getElementById('view-cards').style.display = 'none';
                 document.getElementById('sub-nav').style.display = 'flex';
@@ -307,10 +357,10 @@
 
         function triggerParse() {
             const led = document.getElementById('led');
-            led.style.background = "#ffcc00"; // Amber
+            led.className = "machine-led led-amber";
             document.getElementById('sim-status').innerText = "PARSING...";
             setTimeout(() => {
-                led.style.background = "#00cc00"; // Green
+                led.className = "machine-led";
                 document.getElementById('sim-status').innerText = "STABLE";
             }, 600);
         }
