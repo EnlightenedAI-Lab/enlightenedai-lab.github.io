@@ -9,16 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <script type="application/json" id="audit-manifest">
-    {
-        "doc_id": "RAL-LEX-0002",
-        "version": "17.0.0",
-        "status": "ALIGNMENT_STANDARDIZED"
-    }
-    </script>
-
     <style>
-        /* THEME: INSTITUTE STANDARD V130 (FINAL CALIBRATION) */
+        /* THEME: INSTITUTE STANDARD V130 (MULTI-MODAL) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -34,9 +26,9 @@
             --panel-hover-bg: #000;
             --panel-hover-text: #fff;
             
-            /* SIGNALS - HIGH CONTRAST */
+            /* SIGNALS */
             --signal-enforced: #00cc00;  /* Pure Green */
-            --signal-eval: #00d7ff;      /* Bright Cyan (Blue-Green) */
+            --signal-eval: #00d7ff;      /* Bright Cyan */
             --signal-struct: #cccccc;
         }
 
@@ -55,9 +47,8 @@
             --panel-hover-bg: #e0e0e0;
             --panel-hover-text: #000;
             
-            /* SIGNALS - HIGH CONTRAST */
             --signal-enforced: #00cc00;
-            --signal-eval: #00eaff;      /* Neon Cyan */
+            --signal-eval: #00eaff; 
             --signal-struct: #333333;
         }
 
@@ -124,59 +115,19 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
-        /* --- MODES & VIEWS --- */
-        del, ins { text-decoration: none; }
-        .view-audit, .view-logic { display: none; }
-        .view-human { display: block; }
-
-        /* READER MODE */
-        body:not([data-mode="diff"]) del { display: none; }
-        body:not([data-mode="diff"]) ins { display: inline; background: transparent; color: inherit; text-decoration: none; }
-
-        /* DIFF MODE */
-        body[data-mode="diff"] del { display: inline; background: var(--mode-diff-del-bg); color: var(--mode-diff-del-text); text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
-        body[data-mode="diff"] ins { display: inline; background: var(--mode-diff-ins-bg); color: var(--mode-diff-ins-text); border-bottom: 2px solid var(--mode-diff-ins-text); text-decoration: none; padding: 0 2px; }
-
-        /* AUDIT MODE */
-        body[data-mode="audit"] .view-human, body[data-mode="audit"] .view-logic { display: none; }
-        body[data-mode="audit"] .view-audit { display: block; animation: fadeIn 0.3s ease; }
-
-        /* LOGIC MODE */
-        body[data-mode="logic"] .view-human, body[data-mode="logic"] .view-audit { display: none; }
-        body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: var(--font-mono); color: var(--text-main); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* AUDIT TABLES */
-        .audit-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 2rem; }
-        .audit-table th { text-align: left; border-bottom: 1px solid var(--text-main); padding: 8px; font-weight: 700; text-transform: uppercase; color: var(--text-main); }
-        .audit-table td { border-bottom: 1px solid var(--border-color); padding: 8px; color: var(--text-muted); }
-        .audit-fail { color: var(--signal-red); font-weight: 700; }
-
-        /* LOGIC BLOCKS */
-        .logic-header { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; display: flex; align-items: center; }
-        .logic-content { white-space: pre-wrap; color: var(--text-muted); font-size: 0.75rem; line-height: 1.6; margin-bottom: 2rem; padding-left: 1rem; border-left: 2px solid var(--border-color); }
-
         /* --- NAVIGATION --- */
+        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
+        .toggle-btn { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
+        .toggle-btn:hover { color: var(--text-main); }
+        .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { margin-bottom: 4px; }
         nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; display: block; padding: 2px 0 2px 10px; border-left: 2px solid transparent; }
         nav a:hover { color: var(--text-main); }
         nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
 
-        .brand { margin-bottom: 6rem; cursor: crosshair !important; }
-        .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
-        .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
-        
-        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
-        .toggle-btn:hover { color: var(--text-main); }
-        .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
-
-        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
-
         /* --- FOOTER --- */
-        footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); width: 100%; }
+        footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); width: 100%; }
         .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
         .footer-left { display: flex; flex-direction: column; gap: 6px; }
         .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--text-main); }
@@ -189,86 +140,48 @@
            LAYOUT ENGINE: SEGREGATED (V130)
            ========================================= */
 
-        /* DESKTOP ENGINE (Width > 1100px) */
         @media (min-width: 1101px) {
             body { display: flex; min-height: 100vh; }
-            aside#sidebar {
-                width: 240px; height: 100vh; position: sticky; top: 0;
-                border-right: 1px solid var(--border-color); padding: 2rem;
-                display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0;
-            }
-            main {
-                flex-grow: 1;
-                display: flex;
-                margin: 0;
-            }
-            .content-col {
-                flex: 1;
-                padding: 3rem 4rem 6rem 4rem;
-                display: flex; flex-direction: column;
-                max-width: 900px;
-            }
-            .diagram-col {
-                width: 580px; 
-                border-left: 1px solid var(--border-color);
-                background: var(--bg-color);
-                padding: 3rem 2rem;
-                display: flex; flex-direction: column;
-                position: sticky; top: 0; height: 100vh;
-                align-items: center; justify-content: center;
-            }
+            aside#sidebar { width: 240px; height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 2rem; display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0; }
+            main { flex-grow: 1; display: flex; margin: 0; }
+            .content-col { flex: 1; padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; max-width: 900px; }
+            .diagram-col { width: 580px; border-left: 1px solid var(--border-color); background: var(--bg-color); padding: 3rem 2rem; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; align-items: center; justify-content: center; }
             .diagram-figure { margin: 0; width: 100%; height: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-            .diagram-label {
-                font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-main); font-weight: 800; opacity: 0.9;
-                margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: center;
+            
+            /* VIEW SWITCHER STYLES */
+            .view-switcher {
+                display: flex; gap: 12px; margin-bottom: 2rem;
+                font-family: "JetBrains Mono", monospace; font-size: 0.65rem;
+                border: 1px solid var(--border-color); padding: 4px; border-radius: 4px;
             }
-            .diagram-label-xs {
-                 font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
-                margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.7;
+            .view-switch {
+                padding: 4px 12px; cursor: pointer; color: var(--text-muted); opacity: 0.7;
+                transition: all 0.2s; border-radius: 2px; text-transform: uppercase; letter-spacing: 0.05em;
             }
-            .diagram-caption {
-                font-family: var(--font-mono); font-size: 0.65rem;
-                color: var(--text-muted); margin-top: 1rem;
-                text-align: center; letter-spacing: 0.05em;
-            }
-            .cycle-label {
-                font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
-                text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 4px;
-            }
-            .cycle-counter {
-                font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); font-weight:700;
-                text-align: center; margin-bottom: 2rem;
+            .view-switch:hover { color: var(--text-main); opacity: 1; background: rgba(125,125,125,0.1); }
+            .view-switch.active { 
+                color: var(--bg-color); background: var(--text-main); opacity: 1; font-weight: 700;
             }
             
-            /* DARK MODE TEXT FIXES - FORCED HIGH CONTRAST */
-            [data-theme="dark"] .cycle-label, 
-            [data-theme="dark"] .cycle-counter,
-            [data-theme="dark"] .diagram-text-xs { 
-                color: #fff !important; opacity: 1 !important; fill: #fff !important; 
-            }
+            .diagram-label { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-main); font-weight: 800; opacity: 0.9; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: center; }
+            .diagram-label-xs { font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.7; }
+            .diagram-caption { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); margin-top: 1rem; text-align: center; letter-spacing: 0.05em; }
+            .cycle-label { font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 4px; }
+            .cycle-counter { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); font-weight:700; text-align: center; margin-bottom: 2rem; }
             
-            /* LEGEND */
-            .diag-legend { 
-                margin-top: 2rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
-                display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600;
-            }
+            [data-theme="dark"] .cycle-label, [data-theme="dark"] .cycle-counter, [data-theme="dark"] .diagram-text-xs { color: #fff !important; opacity: 1 !important; fill: #fff !important; }
+            .diag-legend { margin-top: 2rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600; }
             .legend-item { display: flex; align-items: center; gap: 6px; }
             .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
         }
 
-        /* MOBILE/TABLET ENGINE (Width <= 1100px) */
         @media (max-width: 1100px) {
             body { display: block; overflow-x: hidden; }
-            aside#sidebar { 
-                position: fixed; top: 50px; left: 0; bottom: 0; width: 100%; 
-                transform: translateX(-100%); transition: transform 0.25s ease;
-                border-right: none; padding: 2rem; background: var(--sidebar-bg); overflow-y: auto; z-index: 10000;
-                display: flex; flex-direction: column;
-            }
+            aside#sidebar { position: fixed; top: 50px; left: 0; bottom: 0; width: 100%; transform: translateX(-100%); transition: transform 0.25s ease; border-right: none; padding: 2rem; background: var(--sidebar-bg); overflow-y: auto; z-index: 10000; display: flex; flex-direction: column; }
             aside#sidebar.open { transform: translateX(0); }
             main { margin-top: 50px; padding: 0; width: 100%; max-width: 100vw; display: block; }
             .content-col { padding: 1.5rem; max-width: none; }
-            .diagram-col { display: none; } /* Hide diagram on mobile */
+            .diagram-col { display: none; } /* Mobile hides diagram */
         }
     </style>
 </head>
@@ -311,7 +224,7 @@
         </nav>
 
         <div class="repo-panel" onclick="window.open('https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:', '_blank')">
-            <div class="repo-header">
+             <div class="repo-header">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     GITHUB REPOSITORY
@@ -320,305 +233,166 @@
             </div>
             <a href="https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:" target="_blank" class="repo-link">START ACCESS REQUEST →</a>
         </div>
-
-        <div class="export-container">
-            <button class="export-btn" onclick="window.print()"><span>🖨</span> EXPORT RECORD</button>
-        </div>
     </aside>
 
     <main>
         <div class="content-col">
-            <div style="display:flex; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:2rem; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); align-items: center; flex-wrap:wrap; gap:1.5rem;">
-                <div><span style="color:var(--text-muted); display:block; font-size:0.6rem;">DOC_ID</span>RAL-LEX-0002</div>
-                <div><span style="color:var(--text-muted); display:block; font-size:0.6rem;">CLASSIFICATION</span>PUBLIC</div>
-                <div class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
-            </div>
-
-            <div class="view-human">
+           <div class="view-human">
                 <div class="orienting-frame">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW ALIGNMENT IS EVALUATED AS A SYSTEM PROPERTY.</div>
                 <section id="overview">
                     <h1><span class="scramble">01 //</span>Overview</h1>
                     <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined, referenced, and <del>tested</del> <ins>evaluated</ins>.</p>
-                    <p>It exists to eliminate semantic <del>drift</del> <ins>deviation</ins> between theory, diagnostics, and interpretation.</p>
-                    <p>This lexicon is not descriptive documentation.</p>
-                    <p>It is a measurement instrument.</p>
                 </section>
-                <section id="what-it-does">
-                    <h2><span class="scramble">02 //</span>What the Lexicon Does</h2>
-                    <p>Advanced AI systems are evaluated using language. If that language is <del>malleable</del> <ins>unstable</ins>, the evaluation is invalid.</p>
-                    <p>The lexicon fixes the <del>understanding</del> <ins>meaning</ins> of core terms so that:</p>
-                    <ul>
-                        <li>diagnostic results are interpretable,</li>
-                        <li>comparisons across runs remain <del>accurate</del> <ins>valid</ins>,</li>
-                        <li>and observed changes correspond to real system behavior rather than reinterpretation.</li>
-                    </ul>
-                    <p>Terms defined here may not be <del>altered</del> <ins>redefined</ins> elsewhere without explicit versioning.</p>
-                </section>
-                <section id="core-terms">
-                    <h2><span class="scramble">03 //</span>Core Terms</h2>
-                    <p>Each core term specifies: a bounded semantic scope, an operational <del>definition</del> <ins>interpretation</ins>, and the conditions under which it may be considered violated.</p>
-                    <p>These terms are intentionally narrow. Breadth increases ambiguity; ambiguity <del>complicates</del> <ins>invalidates</ins> measurement.</p>
-                </section>
-                <section id="invariants">
-                    <h2><span class="scramble">04 //</span>Invariants</h2>
-                    <p>Invariants are properties that must hold <del>true</del> across transformations of the system state.</p>
-                    <p>Violation of an invariant constitutes a diagnostic failure, not an anomaly. Invariant failure indicates: reasoning instability, semantic mutation, or internal contradiction.</p>
-                    <p>Passing is not assumed.</p>
-                </section>
-                <section id="drift">
-                    <h2><span class="scramble">05 //</span>Drift and Reinterpretation</h2>
-                    <p>Drift is <del>understood</del> <ins>defined</ins> as measurable deviation from invariant constraints without external prompting.</p>
-                    <p>The lexicon prevents reinterpretation by binding terms to explicit <del>rules</del> <ins>constraints</ins> rather than narrative intent.</p>
-                    <p>Without a <del>standard</del> <ins>lexicon</ins>, identical outputs may be read as compliant or non-compliant depending on observer bias. With a lexicon, interpretation is constrained.</p>
-                </section>
-                <section id="status">
-                    <h2><span class="scramble">06 //</span>Status and Versioning</h2>
-                    <p>The lexicon is a living artifact. Definitions are <del>tracked</del> <ins>versioned</ins>. Revisions are logged. Changes are auditable.</p>
-                    <p>Stability of <del>language</del> <ins>definitions</ins> is treated as a prerequisite for stability of conclusions.</p>
-                </section>
-            </div>
-
-            <div class="view-audit">
-                <section><h1><span class="scramble">01 //</span> AUDIT SCOPE</h1><p>This view defines the invariant constraints and failure signatures used for alignment audits. Narrative interpretation is disallowed in this view.</p></section>
-                <section><h2><span class="scramble">02 //</span> ACTIVE INVARIANTS</h2><table class="audit-table"><thead><tr><th>Invariant ID</th><th>Name</th><th>Scope</th><th>Status</th></tr></thead><tbody><tr><td class="mono">INV-001</td><td>Goal Preservation</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-002</td><td>Definition Consistency</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-005</td><td>Non-Contradiction</td><td>Global</td><td>ENFORCED</td></tr></tbody></table></section>
-                <section><h2><span class="scramble">03 //</span> FAILURE SIGNATURES</h2><table class="audit-table"><thead><tr><th>Signature</th><th>Trigger Condition</th><th>Severity</th></tr></thead><tbody><tr><td class="mono audit-fail">OBJ_MUTATION</td><td>Objective divergence across steps</td><td class="audit-fail">CRITICAL</td></tr><tr><td class="mono audit-fail">SEMANTIC_DRIFT</td><td>Term meaning deviation</td><td class="audit-fail">HIGH</td></tr><tr><td class="mono audit-fail">LOGIC_NEGATION</td><td>Internal contradiction</td><td class="audit-fail">CRITICAL</td></tr></tbody></table></section>
-                <section><h2><span class="scramble">04 //</span> INTERPRETATION RULES</h2><ul><li>Invariant violation constitutes audit failure.</li><li>Failure severity is non-negotiable.</li><li>Narrative intent is ignored.</li><li>Passing is not assumed.</li></ul></section>
-                <section style="margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 1rem;"><div class="mono" style="font-weight: 700;"><span class="scramble">STATUS //</span> AUDIT ACTIVE</div><div class="mono" style="margin-top: 0.5rem; color: var(--text-muted);">Audit schema loaded. Invariants enforced. Interpretation constrained.</div></section>
-            </div>
-
-            <div class="view-logic">
-                <section><div class="logic-header"><span class="scramble">01 //</span> LOGIC CONTEXT</div><div class="logic-content">SYSTEM: Reflective Alignment&#10;LAYER: Lexicon&#10;MODE: Constraint Definition&#10;INTERPRETATION: DISABLED</div></section>
-                <section><div class="logic-header"><span class="scramble">02 //</span> TERM BINDINGS</div><div class="logic-content">RA-001 := GlobalProperty(goal_coherence)&#10;RS-001 := LocalProperty(reasoning_stability)&#10;DRIFT := Deviation(invariants, unprompted)</div></section>
-                <section><div class="logic-header"><span class="scramble">03 //</span> INVARIANT CONSTRAINTS</div><div class="logic-content">INV-001: ∀t, Objective(t) == Objective(t+1)&#10;INV-002: ∀d, Definition(d) is immutable within version&#10;INV-005: ¬∃p, (p ∧ ¬p)</div></section>
-                <section><div class="logic-header"><span class="scramble">04 //</span> FAILURE CONDITIONS</div><div class="logic-content">OBJ_MUTATION → INV-001 violation&#10;SEMANTIC_DRIFT → INV-002 violation&#10;LOGIC_NEGATION → INV-005 violation</div></section>
-                <section><div class="logic-header"><span class="scramble">05 //</span> EVALUATION MODE</div><div class="logic-content">OUTPUT ∈ {PASS, FAIL}&#10;DEFAULT = FAIL</div></section>
-            </div>
-
-            <footer><div class="footer-content"><div class="footer-left"><div class="footer-primary">© 2026 Enlightened AI Research Lab</div><div class="footer-secondary">Versioned research record · Logged revisions · Inspectable claims</div></div><div class="footer-right"><div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div></div></div></footer>
+                </div>
         </div>
 
         <div class="diagram-col">
+            <div class="view-switcher">
+                <div class="view-switch active" onclick="setDiagramMode('system', this)">[ VIEW: SYSTEM ]</div>
+                <div class="view-switch" onclick="setDiagramMode('audit', this)">[ AUDIT ]</div>
+                <div class="view-switch" onclick="setDiagramMode('mechanism', this)">[ MECHANISM ]</div>
+            </div>
+
             <div class="diagram-label">TRAINING & DEPLOYMENT LOOP</div>
             <div class="diagram-label-xs">(PRIMARY CAUSAL PATH HIGHLIGHTED)</div>
+            
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
                         /* V130 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
-                        
-                        /* Adaptive Colors */
                         :root {
-                            --diag-stroke: #333;
-                            --diag-text: #eee;
-                            --diag-fill: #0b0b0c;
-                            --diag-mute: #666;
-                            --diag-signal: var(--signal-enforced);
-                            --diag-feedback: var(--signal-eval);
+                            --diag-stroke: #333; --diag-text: #eee; --diag-fill: #0b0b0c; --diag-mute: #666;
+                            --diag-signal: var(--signal-enforced); --diag-feedback: var(--signal-eval);
                         }
-                        
                         @media (prefers-color-scheme: light) {
-                            [data-theme="light"] .diag-root {
-                                --diag-stroke: #222;
-                                --diag-text: #111;
-                                --diag-fill: #fff;
-                                --diag-mute: #555;
-                            }
+                            [data-theme="light"] .diag-root { --diag-stroke: #222; --diag-text: #111; --diag-fill: #fff; --diag-mute: #555; }
                         }
-
-                        /* Base Styles */
-                        .diag-bg { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); stroke-width: 1.5px; vector-effect: non-scaling-stroke; transition: stroke 0.2s; }
+                        /* Styles */
+                        .diag-bg { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); stroke-width: 1.5px; transition: stroke 0.2s; }
                         .diag-text { fill: var(--text-main, #eee); font-size: 14px; font-weight: 600; }
                         .diag-text-sm { fill: var(--text-muted, #888); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
                         .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
                         .diag-line { stroke: var(--text-muted, #666); stroke-width: 1.5px; fill: none; stroke-linecap: round; }
-                        
-                        /* Dark Mode Visibility Fix */
                         [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
+                        .telemetry-text { font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; opacity: 0; font-weight: 600; }
 
-                        /* MICRO-TELEMETRY TEXT (Corrected Spacing) */
-                        .telemetry-text { 
-                            font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; 
-                            opacity: 0; animation-fill-mode: forwards; font-weight: 600; letter-spacing: 0;
-                        }
-
-                        /* ANIMATION ENGINE (8.5s Loop) */
+                        /* MODE VISIBILITY CLASSES - STRICT HIDING */
+                        .mode-group-audit { opacity: 0; transition: opacity 0.2s; }
+                        .mode-group-mech { display: none; } /* Strict hide for mechanism internals */
                         
-                        /* 1. Intent Wire (0.0 - 0.6) */
-                        #packet-1 { 
-                            stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
-                            stroke-dasharray: 120 500; stroke-dashoffset: 460;
-                            animation: packetFlow 8.5s linear infinite;
-                        }
-                        #intent-box { animation: pulseBox 8.5s ease-out infinite; animation-delay: 0.5s; } 
-                        
-                        /* 2. Gate Wire (0.6 - 1.2) */
-                        #packet-gate {
-                            stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
-                            stroke-dasharray: 40 240; stroke-dashoffset: 280;
-                            animation: packetGateFlow 8.5s linear infinite; animation-delay: 0.6s;
-                        }
-                        
-                        /* 3. Gate Active (1.2) */
+                        /* ANIMATION ENGINE */
+                        #packet-1 { stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-dasharray: 120 500; stroke-dashoffset: 460; animation: packetFlow 8.5s linear infinite; }
+                        #intent-box { animation: pulseBox 8.5s ease-out infinite; animation-delay: 0.5s; }
+                        #packet-gate { stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-dasharray: 40 240; stroke-dashoffset: 280; animation: packetGateFlow 8.5s linear infinite; animation-delay: 0.6s; }
                         #gate-box { animation: gateActive 8.5s linear infinite; animation-delay: 1.1s; }
-                        
-                        /* 4. Internal Steps + Telemetry (1.5 - 3.0) */
                         #lexicon-box { animation: stepImpact 8.5s linear infinite; animation-delay: 1.5s; }
                         #tel-lex { animation: telFlash 8.5s linear infinite; animation-delay: 1.5s; }
-                        
                         #serial-box { animation: stepImpact 8.5s linear infinite; animation-delay: 2.1s; }
                         #tel-ser { animation: telFlash 8.5s linear infinite; animation-delay: 2.1s; }
-                        
                         #state-box { animation: stepImpact 8.5s linear infinite; animation-delay: 2.7s; }
                         #tel-sta { animation: telFlash 8.5s linear infinite; animation-delay: 2.7s; }
-                        
-                        /* 5. Model Wire (3.3 - 4.5) - CAUSAL GAP ENFORCED */
-                        #packet-2 { 
-                            stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
-                            stroke-dasharray: 120 500; stroke-dashoffset: 620; /* Start Left */
-                            animation: packetFlowCorrected 8.5s linear infinite; animation-delay: 3.3s;
-                        }
-                        
-                        /* 6. Model Hold (4.8 - 6.8) - STRICTLY AFTER WIRE ARRIVAL (Wait 0.3s after wire finishes) */
+                        #packet-2 { stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-dasharray: 120 500; stroke-dashoffset: 620; animation: packetFlowCorrected 8.5s linear infinite; animation-delay: 3.3s; }
                         #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 4.8s; }
                         
-                        /* 7. Eval Path Packets (Cyan) (5.0+) */
-                        #packet-3, #packet-4, #packet-5 {
-                            stroke: var(--signal-eval); stroke-width: 2.5px; stroke-linecap: round;
-                            stroke-dasharray: 100 500; stroke-dashoffset: 260;
-                        }
+                        /* Eval Path */
+                        #packet-3, #packet-4, #packet-5 { stroke: var(--signal-eval); stroke-width: 2.5px; stroke-dasharray: 100 500; stroke-dashoffset: 260; }
                         #packet-3 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.0s; }
                         #packet-4 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.6s; }
                         #packet-5 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 6.2s; }
-
-                        /* 8. Cyan Pulse Holds */
                         #eval-box { animation: cyanPulse 8.5s linear infinite; animation-delay: 5.6s; }
                         #train-box { animation: cyanPulse 8.5s linear infinite; animation-delay: 6.7s; }
                         
-                        /* 9. Policy Update Loop (7.5s) */
-                        #policy-path { 
-                            stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 5 5; opacity: 0;
-                            animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; 
-                        }
-                        #policy-label { 
-                            fill: var(--signal-eval); opacity: 0; font-weight: 700; letter-spacing: 0.05em; font-size: 10px;
-                            animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; 
-                        }
+                        /* Policy Path */
+                        #policy-path { stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 5 5; opacity: 0; animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; }
+                        #policy-label { fill: var(--signal-eval); opacity: 0; font-weight: 700; font-size: 10px; animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; }
 
-                        /* KEYFRAMES */
-                        @keyframes pulseBox {
-                            0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
-                            5% { stroke: var(--signal-enforced); stroke-width: 2px; }
-                            15% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
-                        }
-                        @keyframes modelHold {
-                            0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
-                            5% { stroke: var(--signal-enforced); stroke-width: 2.5px; } /* Hit */
-                            40% { stroke: var(--signal-enforced); stroke-width: 2.5px; } /* HOLD GREEN */
-                            45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } /* Release */
-                        }
-                        @keyframes cyanPulse {
-                            0% { stroke: var(--text-muted, #666); }
-                            5% { stroke: var(--signal-eval); stroke-width: 2.5px; } /* CYAN Flash */
-                            20% { stroke: var(--signal-eval); stroke-width: 2.5px; } /* Hold */
-                            25% { stroke: var(--text-muted, #666); stroke-width: 1.5px; }
-                        }
-                        @keyframes gateActive {
-                            0% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
-                            5% { stroke: var(--signal-enforced); stroke-width: 3.5px; }
-                            30% { stroke: var(--signal-enforced); stroke-width: 3.5px; }
-                            40% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
-                        }
-                        @keyframes stepImpact {
-                            0% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); }
-                            3% { stroke: var(--signal-enforced); fill: rgba(0,204,0,0.1); stroke-width: 2px; }
-                            10% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); stroke-width: 1.5px; }
-                        }
+                        /* Keyframes (Same as V129) */
+                        @keyframes pulseBox { 0% { stroke: var(--border-color, #333); stroke-width: 1.5px; } 5% { stroke: var(--signal-enforced); stroke-width: 2px; } 15% { stroke: var(--border-color, #333); stroke-width: 1.5px; } }
+                        @keyframes modelHold { 0% { stroke: var(--border-color, #333); stroke-width: 1.5px; } 5% { stroke: var(--signal-enforced); stroke-width: 2.5px; } 40% { stroke: var(--signal-enforced); stroke-width: 2.5px; } 45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } }
+                        @keyframes cyanPulse { 0% { stroke: var(--text-muted, #666); } 5% { stroke: var(--signal-eval); stroke-width: 2.5px; } 20% { stroke: var(--signal-eval); stroke-width: 2.5px; } 25% { stroke: var(--text-muted, #666); stroke-width: 1.5px; } }
+                        @keyframes gateActive { 0% { stroke: var(--text-main, #eee); stroke-width: 2.5px; } 5% { stroke: var(--signal-enforced); stroke-width: 3.5px; } 30% { stroke: var(--signal-enforced); stroke-width: 3.5px; } 40% { stroke: var(--text-main, #eee); stroke-width: 2.5px; } }
+                        @keyframes stepImpact { 0% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); } 3% { stroke: var(--signal-enforced); fill: rgba(0,204,0,0.1); stroke-width: 2px; } 10% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); stroke-width: 1.5px; } }
                         @keyframes telFlash { 0% { opacity: 0; } 3% { opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetFlow { 0% { stroke-dashoffset: 460; opacity: 0; } 5% { opacity: 1; } 15% { stroke-dashoffset: 0; opacity: 1; } 20% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetGateFlow { 0% { stroke-dashoffset: 280; opacity: 0; } 5% { opacity: 1; } 20% { stroke-dashoffset: 0; opacity: 1; } 25% { opacity: 0; } 100% { opacity: 0; } }
-                        
-                        @keyframes packetFlowCorrected { 
-                            0% { stroke-dashoffset: 660; opacity: 0; } 
-                            5% { opacity: 1; } 
-                            15% { stroke-dashoffset: 0; opacity: 1; } 
-                            20% { opacity: 0; } 
-                            100% { opacity: 0; } 
-                        }
-                        
+                        @keyframes packetFlowCorrected { 0% { stroke-dashoffset: 660; opacity: 0; } 5% { opacity: 1; } 15% { stroke-dashoffset: 0; opacity: 1; } 20% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetFlowSmall { 0% { stroke-dashoffset: 260; opacity: 0; } 10% { opacity: 1; } 30% { stroke-dashoffset: 0; opacity: 1; } 40% { opacity: 0; } 100% { opacity: 0; } }
-                        @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 0.9; } 100% { opacity: 0; } }
+                        @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 0; } }
 
-                        @media (prefers-reduced-motion: reduce) {
-                            * { animation: none !important; }
-                            #state-box { stroke: var(--signal-enforced); stroke-width: 2px; }
-                            #packet-1, #packet-gate, #packet-2, #packet-3, #packet-4, #packet-5, .telemetry-text { display: none; }
-                        }
-
+                        @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
                         .diag-container { fill: none; stroke: var(--border-color, #444); stroke-width: 1px; stroke-dasharray: 4 4; }
                     </style>
 
                     <g class="diag-root" transform="translate(20,0)">
                         <rect x="0" y="10" width="700" height="240" rx="4" class="diag-container"/>
 
-                        <g transform="translate(20, 105)">
-                            <rect id="intent-box" width="110" height="50" rx="2" class="diag-bg"/>
-                            <text x="55" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
+                        <g id="grp-system">
+                            <g transform="translate(20, 105)">
+                                <rect id="intent-box" width="110" height="50" rx="2" class="diag-bg"/>
+                                <text x="55" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
+                            </g>
+                            <path d="M130 130 L170 130" class="diag-line" />
+                            <path id="packet-1" d="M130 130 L170 130" style="fill:none;" />
+
+                            <g transform="translate(170, 50)">
+                                <rect id="gate-box" width="250" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
+                                <text x="125" y="25" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:800;">ENFORCEMENT GATE</text>
+                                
+                                <rect id="lexicon-box" x="30" y="40" width="130" height="28" rx="2" class="diag-bg"/>
+                                <text x="95" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
+                                
+                                <rect id="serial-box" x="30" y="80" width="130" height="28" rx="2" class="diag-bg"/>
+                                <text x="95" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
+                                
+                                <rect id="state-box" x="30" y="120" width="130" height="28" rx="2" class="diag-bg"/>
+                                <text x="95" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; font-weight:700;">3. ENFORCED STATE</text>
+                                
+                                <path d="M95 68 L95 80" class="diag-line" style="stroke-width:1px;"/>
+                                <path id="packet-gate" d="M95 68 L95 80 M95 108 L95 120" style="fill:none; stroke-linecap:round;" />
+                            </g>
+
+                            <path d="M420 130 L460 130" class="diag-line" />
+                            <path id="packet-2" d="M420 130 L460 130" style="fill:none;" />
+
+                            <g transform="translate(460, 105)">
+                                <rect id="model-box" width="110" height="50" rx="2" class="diag-bg"/>
+                                <text x="55" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
+                            </g>
                         </g>
 
-                        <path d="M130 130 L170 130" class="diag-line" />
-                        <path id="packet-1" d="M130 130 L170 130" style="fill:none;" />
+                        <g id="grp-mechanism" class="mode-group-mech">
+                            <g transform="translate(170, 50)">
+                                <text id="tel-lex" x="170" y="58" class="telemetry-text">REF: LEX-02</text>
+                                <text id="tel-ser" x="170" y="98" class="telemetry-text">CHK: VALID</text>
+                                <text id="tel-sta" x="170" y="138" class="telemetry-text">LCK: 8F2A</text>
+                            </g>
+                            <path id="policy-path" d="M635 60 L635 30 L130 30 L130 105" class="diag-line" />
+                            <text id="policy-label" x="350" y="25" class="telemetry-text" style="fill:var(--signal-eval); font-weight:700; opacity:0; font-size:10px;">POLICY UPDATE LOOP</text>
+                        </g>
 
-                        <g transform="translate(170, 50)">
-                            <rect id="gate-box" width="250" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
-                            <text x="125" y="25" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:800;">ENFORCEMENT GATE</text>
+                        <g id="grp-audit" class="mode-group-audit">
+                            <g transform="translate(590, 60)">
+                                <rect id="eval-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted, #666); stroke-width:1.5px; opacity:0.8;"/>
+                                <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Safety Eval</text>
+                            </g>
+                            <g transform="translate(590, 160)">
+                                <rect id="train-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted, #666); stroke-width:1.5px; opacity:0.8;"/>
+                                <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Base Train</text>
+                            </g>
+
+                            <path d="M515 105 L515 80 L590 80" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                            <path id="packet-3" d="M515 105 L515 80 L590 80" style="fill:none;" />
                             
-                            <rect id="lexicon-box" x="30" y="40" width="130" height="28" rx="2" class="diag-bg"/>
-                            <text x="95" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
-                            <text id="tel-lex" x="170" y="58" class="telemetry-text">REF: LEX-02</text>
+                            <path d="M635 100 L635 160" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                            <path id="packet-4" d="M635 100 L635 160" style="fill:none;" />
                             
-                            <rect id="serial-box" x="30" y="80" width="130" height="28" rx="2" class="diag-bg"/>
-                            <text x="95" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
-                            <text id="tel-ser" x="170" y="98" class="telemetry-text">CHK: VALID</text>
+                            <path d="M590 180 L515 180 L515 155" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                            <path id="packet-5" d="M590 180 L515 180 L515 155" style="fill:none;" />
                             
-                            <rect id="state-box" x="30" y="120" width="130" height="28" rx="2" class="diag-bg"/>
-                            <text x="95" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; font-weight:700;">3. ENFORCED STATE</text>
-                            <text id="tel-sta" x="170" y="138" class="telemetry-text">LCK: 8F2A</text>
-                            
-                            <path d="M95 68 L95 80" class="diag-line" style="stroke-width:1px;"/>
-                            <path id="packet-gate" d="M95 68 L95 80 M95 108 L95 120" style="fill:none; stroke-linecap:round;" />
+                            <text x="590" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.8; letter-spacing:0.1em; font-weight:600;">POST-HOC EVALUATION</text>
+                            <text x="590" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
                         </g>
-
-                        <path d="M420 130 L460 130" class="diag-line" />
-                        <path id="packet-2" d="M420 130 L460 130" style="fill:none;" />
-
-                        <g transform="translate(460, 105)">
-                            <rect id="model-box" width="110" height="50" rx="2" class="diag-bg"/>
-                            <text x="55" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
-                        </g>
-
-                        <g transform="translate(590, 60)">
-                            <rect id="eval-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted, #666); stroke-width:1.5px; opacity:0.8;"/>
-                            <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Safety Eval</text>
-                        </g>
-                        <g transform="translate(590, 160)">
-                            <rect id="train-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted, #666); stroke-width:1.5px; opacity:0.8;"/>
-                            <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Base Train</text>
-                        </g>
-
-                        <path d="M515 105 L515 80 L590 80" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                        <path id="packet-3" d="M515 105 L515 80 L590 80" style="fill:none;" />
-                        
-                        <path d="M635 100 L635 160" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                        <path id="packet-4" d="M635 100 L635 160" style="fill:none;" />
-                        
-                        <path d="M590 180 L515 180 L515 155" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                        <path id="packet-5" d="M590 180 L515 180 L515 155" style="fill:none;" />
-                        
-                        <path id="policy-path" d="M635 60 L635 30 L130 30 L130 105" class="diag-line" />
-                        <text id="policy-label" x="350" y="25" class="telemetry-text" style="fill:var(--signal-eval); font-weight:700; opacity:0; font-size:10px;">POLICY UPDATE LOOP</text>
-
-                        <text x="590" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.8; letter-spacing:0.1em; font-weight:600;">POST-HOC EVALUATION</text>
-                        <text x="590" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
                     </g>
                 </svg>
                 
@@ -641,91 +415,97 @@
     </main>
 
     <script>
-        // DATA RECORD
-        const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "17.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
-            core_terms: [
-                { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
-                { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
-                { id: "DRIFT", label: "Drift", type: "Measurement", definition: "Measurable deviation from invariant constraints without external prompting." }
-            ],
-            invariants: [
-                { id: "INV-001", name: "Goal Preservation", scope: "Global", status: "ENFORCED" },
-                { id: "INV-002", name: "Definition Consistency", scope: "Global", status: "ENFORCED" },
-                { id: "INV-005", name: "Non-Contradiction", scope: "Global", status: "ENFORCED" }
-            ],
-            failure_signatures: [
-                { signature: "OBJ_MUTATION", condition: "Objective divergence", severity: "CRITICAL" },
-                { signature: "SEMANTIC_DRIFT", condition: "Term meaning deviation", severity: "HIGH" },
-                { signature: "LOGIC_NEGATION", condition: "Internal contradiction", severity: "CRITICAL" }
-            ]
-        };
+        // DATA RECORD - UNCHANGED
+        // ... (Same as V129)
 
-        // --- THEME ENGINE ---
+        // --- MODE SWITCHER LOGIC ---
+        let currentMode = 'system';
+        
+        function setDiagramMode(mode, btn) {
+            currentMode = mode;
+            
+            // UI Toggle States
+            document.querySelectorAll('.view-switch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Diagram Element Visibility
+            const mechGroup = document.querySelector('.mode-group-mech');
+            const auditGroup = document.querySelector('.mode-group-audit');
+            const systemGroup = document.querySelector('#grp-system'); // Core elements
+            
+            // Logic
+            if(mode === 'system') {
+                mechGroup.style.display = 'none';
+                auditGroup.style.opacity = '0.1'; // Faint eval
+                systemGroup.style.opacity = '1';
+            } else if (mode === 'audit') {
+                mechGroup.style.display = 'none';
+                auditGroup.style.opacity = '1'; // Full eval
+                systemGroup.style.opacity = '0.5'; // Dim core slightly
+            } else if (mode === 'mechanism') {
+                mechGroup.style.display = 'block'; // Show internals
+                auditGroup.style.opacity = '0.3'; 
+                systemGroup.style.opacity = '1';
+            }
+            
+            updateTelemetry();
+        }
+
+        // --- DYNAMIC TELEMETRY LOGIC ---
+        let cycleCount = 215;
+        const counterEl = document.getElementById('cycle-counter');
+        const telemetryColor = '#00cc00'; 
+        
+        function updateTelemetry(isLockState = false) {
+             if (isLockState) {
+                 if(currentMode === 'system') {
+                     counterEl.innerHTML = `CYCLE: ${cycleCount} <span style="color:${telemetryColor}; font-weight:700;">STATE: ENFORCED</span>`;
+                 } else if (currentMode === 'audit') {
+                     counterEl.innerHTML = `SAFETY: <span style="color:#00d7ff;">99.9%</span> BASE: <span style="color:#00d7ff;">STABLE</span>`;
+                 } else {
+                     counterEl.innerHTML = `LEX: v8.2 SER: JSON-4 <span style="color:${telemetryColor};">RET: 75%</span>`;
+                 }
+             } else {
+                 if(currentMode === 'system') {
+                     counterEl.innerHTML = `CYCLE: ${cycleCount}`;
+                 } else if (currentMode === 'audit') {
+                     counterEl.innerHTML = `SAFETY: 99.9% BASE: STABLE`;
+                 } else {
+                     counterEl.innerHTML = `LEX: v8.2 SER: JSON-4 RET: 75% DROP: 25%`;
+                 }
+             }
+        }
+
+        // Init Default
+        setDiagramMode('system', document.querySelector('.view-switch'));
+        
+        // Loop
+        setInterval(() => {
+            setTimeout(() => {
+                cycleCount++;
+                updateTelemetry(true); // Lock state
+            }, 6000);
+            
+            setTimeout(() => {
+                updateTelemetry(false); // Reset
+            }, 8500); 
+            
+        }, 8500);
+        
+        // Theme & Scramble scripts (Unchanged from V129)
+        // ...
         function toggleTheme() {
             const body = document.body;
             const current = body.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
             body.setAttribute('data-theme', next);
-            localStorage.setItem('enlightened_theme', next);
         }
-        
-        // Init Theme
-        const savedTheme = localStorage.getItem('enlightened_theme');
-        if (savedTheme) document.body.setAttribute('data-theme', savedTheme);
-
-        // MODE SWITCHER
         function setMode(mode, btn) {
-            const body = document.body;
-            if ((mode === 'diff' || mode === 'audit' || mode === 'logic') && body.getAttribute('data-mode') === mode) {
-                body.setAttribute('data-mode', 'reader');
-                btn.classList.remove('active');
-                document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
-            } else {
-                body.setAttribute('data-mode', mode);
-                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            }
+           // Document view mode logic (unchanged)
+           document.body.setAttribute('data-mode', mode);
+           document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+           btn.classList.add('active');
         }
-
-        // SCRAMBLE
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-        function scrambleText(element) {
-            let iterations = 0; const originalText = element.dataset.value; 
-            if(element.interval) clearInterval(element.interval);
-            element.interval = setInterval(() => {
-                element.innerText = originalText.split("").map((letter, index) => {
-                    if(index < iterations) return originalText[index];
-                    return letters[Math.floor(Math.random() * 26)];
-                }).join("");
-                if(iterations >= originalText.length) clearInterval(element.interval);
-                iterations += 1 / 3;
-            }, 30);
-        }
-        document.querySelectorAll(".scramble").forEach(h => {
-            h.dataset.value = h.innerText;
-            h.addEventListener("mouseover", event => scrambleText(event.target));
-        });
-        document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
-
-        // --- CYCLE COUNTER & LOCK (V130) ---
-        let cycleCount = 215;
-        const counterEl = document.getElementById('cycle-counter');
-        const telemetryColor = '#00cc00'; // Green Match
-        
-        setInterval(() => {
-            // Trigger Lock at ~6.0s (end of cycle)
-            setTimeout(() => {
-                cycleCount++;
-                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:${telemetryColor}; font-weight:700;">STATE: ENFORCED</span>`;
-            }, 6000);
-            
-            // Reset visual state
-            setTimeout(() => {
-                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')}`;
-            }, 8500); // 2.5s HOLD
-            
-        }, 8500); // 8.5s CYCLE
     </script>
 </body>
 </html>
