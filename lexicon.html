@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V128 (AMBER REVISION) */
+        /* THEME: INSTITUTE STANDARD V129 (CYAN CALIBRATION) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -36,7 +36,7 @@
             
             /* SIGNALS - HIGH CONTRAST */
             --signal-enforced: #00cc00;  /* Pure Green */
-            --signal-eval: #ff8c00;      /* Dark Amber Orange */
+            --signal-eval: #00d7ff;      /* Bright Cyan (Blue-Green) */
             --signal-struct: #cccccc;
         }
 
@@ -57,7 +57,7 @@
             
             /* SIGNALS - HIGH CONTRAST */
             --signal-enforced: #00cc00;
-            --signal-eval: #ff8c00;      /* Dark Amber Orange */
+            --signal-eval: #00eaff;      /* Neon Cyan */
             --signal-struct: #333333;
         }
 
@@ -186,7 +186,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V128)
+           LAYOUT ENGINE: SEGREGATED (V129)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -403,7 +403,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V128 THEME ENGINE */
+                        /* V129 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -435,15 +435,15 @@
                         /* Dark Mode Visibility Fix */
                         [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
 
-                        /* MICRO-TELEMETRY TEXT */
+                        /* MICRO-TELEMETRY TEXT (Corrected Spacing) */
                         .telemetry-text { 
                             font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; 
-                            opacity: 0; animation-fill-mode: forwards; font-weight: 600; letter-spacing: 0.05em;
+                            opacity: 0; animation-fill-mode: forwards; font-weight: 600; letter-spacing: 0;
                         }
 
                         /* ANIMATION ENGINE (8.5s Loop) */
                         
-                        /* 1. Intent Wire (Green) */
+                        /* 1. Intent Wire (0.0 - 0.6) */
                         #packet-1 { 
                             stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
                             stroke-dasharray: 120 500; stroke-dashoffset: 460;
@@ -451,17 +451,17 @@
                         }
                         #intent-box { animation: pulseBox 8.5s ease-out infinite; animation-delay: 0.5s; } 
                         
-                        /* 2. Gate Wire (Green) */
+                        /* 2. Gate Wire (0.6 - 1.2) */
                         #packet-gate {
                             stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
                             stroke-dasharray: 40 240; stroke-dashoffset: 280;
                             animation: packetGateFlow 8.5s linear infinite; animation-delay: 0.6s;
                         }
                         
-                        /* 3. Gate Active (Green) */
+                        /* 3. Gate Active (1.2) */
                         #gate-box { animation: gateActive 8.5s linear infinite; animation-delay: 1.1s; }
                         
-                        /* 4. Internal Steps (Green) */
+                        /* 4. Internal Steps + Telemetry (1.5 - 3.0) */
                         #lexicon-box { animation: stepImpact 8.5s linear infinite; animation-delay: 1.5s; }
                         #tel-lex { animation: telFlash 8.5s linear infinite; animation-delay: 1.5s; }
                         
@@ -471,17 +471,17 @@
                         #state-box { animation: stepImpact 8.5s linear infinite; animation-delay: 2.7s; }
                         #tel-sta { animation: telFlash 8.5s linear infinite; animation-delay: 2.7s; }
                         
-                        /* 5. Model Wire (Green) - CAUSAL GAP ENFORCED */
+                        /* 5. Model Wire (3.3 - 4.5) - CAUSAL GAP ENFORCED */
                         #packet-2 { 
                             stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
                             stroke-dasharray: 120 500; stroke-dashoffset: 620; /* Start Left */
                             animation: packetFlowCorrected 8.5s linear infinite; animation-delay: 3.3s;
                         }
                         
-                        /* 6. Model Hold (Green) - STRICTLY AFTER WIRE ARRIVAL */
-                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 4.7s; }
+                        /* 6. Model Hold (4.8 - 6.8) - STRICTLY AFTER WIRE ARRIVAL (Wait 0.3s after wire finishes) */
+                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 4.8s; }
                         
-                        /* 7. Eval Path Packets (Amber) (5.0+) */
+                        /* 7. Eval Path Packets (Cyan) (5.0+) */
                         #packet-3, #packet-4, #packet-5 {
                             stroke: var(--signal-eval); stroke-width: 2.5px; stroke-linecap: round;
                             stroke-dasharray: 100 500; stroke-dashoffset: 260;
@@ -490,11 +490,11 @@
                         #packet-4 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.6s; }
                         #packet-5 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 6.2s; }
 
-                        /* 8. Amber Pulse Holds */
-                        #eval-box { animation: evalPulse 8.5s linear infinite; animation-delay: 5.6s; }
-                        #train-box { animation: evalPulse 8.5s linear infinite; animation-delay: 6.7s; }
+                        /* 8. Cyan Pulse Holds */
+                        #eval-box { animation: cyanPulse 8.5s linear infinite; animation-delay: 5.6s; }
+                        #train-box { animation: cyanPulse 8.5s linear infinite; animation-delay: 6.7s; }
                         
-                        /* 9. Policy Update Loop (Amber) */
+                        /* 9. Policy Update Loop (7.5s) */
                         #policy-path { 
                             stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 5 5; opacity: 0;
                             animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; 
@@ -516,9 +516,9 @@
                             40% { stroke: var(--signal-enforced); stroke-width: 2.5px; } /* HOLD GREEN */
                             45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } /* Release */
                         }
-                        @keyframes evalPulse {
+                        @keyframes cyanPulse {
                             0% { stroke: var(--text-muted, #666); }
-                            5% { stroke: var(--signal-eval); stroke-width: 2.5px; } /* Amber Flash */
+                            5% { stroke: var(--signal-eval); stroke-width: 2.5px; } /* CYAN Flash */
                             20% { stroke: var(--signal-eval); stroke-width: 2.5px; } /* Hold */
                             25% { stroke: var(--text-muted, #666); stroke-width: 1.5px; }
                         }
@@ -708,7 +708,7 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V128) ---
+        // --- CYCLE COUNTER & LOCK (V129) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
         const telemetryColor = '#00cc00'; // Green Match
