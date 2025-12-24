@@ -18,10 +18,11 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V124 (VISIBILITY PATCH) */
+        /* THEME: INSTITUTE STANDARD V125 (PRECISION CALIBRATION) */
         :root {
-            /* LIGHT MODE */
+            /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
+            --sidebar-bg: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
@@ -33,29 +34,36 @@
             --panel-hover-bg: #000;
             --panel-hover-text: #fff;
             
-            /* SIGNALS */
+            --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            
+            /* SIGNALS - DISTINCT COLORS */
             --signal-enforced: #00cc00;  /* Pure Green */
-            --signal-eval: #00aaff;      /* Distinct Blue */
+            --signal-eval: #00eaff;      /* Bright Cyan (Distinct from Green) */
             --signal-struct: #666666;
         }
 
-        /* DARK MODE */
+        /* DARK MODE OVERRIDES */
         [data-theme="dark"] {
             --bg-color: #050505;
+            --sidebar-bg: #050505;
             --text-main: #e0e0e0;
             --text-muted: #888888;
             --border-color: #333333;
             --card-bg: #111111;
             
+            /* Invert Repo Panel behavior */
             --panel-border: #444;
             --panel-bg: #050505;
             --panel-text: #ccc;
             --panel-hover-bg: #e0e0e0;
             --panel-hover-text: #000;
-            
-            /* High Contrast Signals */
-            --signal-enforced: #00cc00;
-            --signal-eval: #00eaff; /* Brighter Cyan for Dark Mode */
+
+            /* Dark Diff Colors */
+            --mode-diff-del-bg: #330000;
+            --mode-diff-del-text: #ff6666;
+            --mode-diff-ins-bg: #003300;
+            --mode-diff-ins-text: #66ff66;
         }
 
         * { box-sizing: border-box; }
@@ -63,7 +71,7 @@
         
         body {
             margin: 0; padding: 0;
-            font-family: "Inter", sans-serif;
+            font-family: var(--font-stack);
             background: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
@@ -77,12 +85,12 @@
         ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
         li { margin-bottom: 0.5rem; font-size: 0.95rem; }
         
-        .mono { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .scramble { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
+        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
         /* ORIENTING FRAME */
         .orienting-frame { 
-            font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; 
+            font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; 
             margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 65ch; line-height: 1.4;
         }
 
@@ -91,7 +99,7 @@
             margin-top: auto; margin-bottom: 1rem; 
             border: 1px solid var(--panel-border); 
             background: var(--panel-bg); 
-            padding: 12px; font-family: "JetBrains Mono", monospace;
+            padding: 12px; font-family: var(--font-mono);
             transition: all 0.2s ease; cursor: pointer;
         }
         .repo-panel:hover { 
@@ -114,7 +122,12 @@
         .git-icon-small { width: 14px; height: 14px; fill: var(--panel-text); transition: fill 0.2s; }
         .repo-panel:hover .git-icon-small { fill: var(--panel-hover-text); }
 
+        @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
         @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
+        @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
+
+        .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
+        .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
         /* --- MODES & VIEWS --- */
         del, ins { text-decoration: none; }
@@ -126,10 +139,8 @@
         body:not([data-mode="diff"]) ins { display: inline; background: transparent; color: inherit; text-decoration: none; }
 
         /* DIFF MODE */
-        body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
-        body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #006600; text-decoration: none; padding: 0 2px; }
-        [data-theme="dark"] body[data-mode="diff"] del { background: #330000; color: #ff6666; }
-        [data-theme="dark"] body[data-mode="diff"] ins { background: #003300; color: #66ff66; }
+        body[data-mode="diff"] del { display: inline; background: var(--mode-diff-del-bg); color: var(--mode-diff-del-text); text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
+        body[data-mode="diff"] ins { display: inline; background: var(--mode-diff-ins-bg); color: var(--mode-diff-ins-text); border-bottom: 2px solid var(--mode-diff-ins-text); text-decoration: none; padding: 0 2px; }
 
         /* AUDIT MODE */
         body[data-mode="audit"] .view-human, body[data-mode="audit"] .view-logic { display: none; }
@@ -137,14 +148,14 @@
 
         /* LOGIC MODE */
         body[data-mode="logic"] .view-human, body[data-mode="logic"] .view-audit { display: none; }
-        body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: "JetBrains Mono", monospace; color: var(--text-main); }
+        body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: var(--font-mono); color: var(--text-main); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* AUDIT TABLES */
-        .audit-table { width: 100%; border-collapse: collapse; font-family: "JetBrains Mono", monospace; font-size: 0.75rem; margin-bottom: 2rem; }
+        .audit-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 2rem; }
         .audit-table th { text-align: left; border-bottom: 1px solid var(--text-main); padding: 8px; font-weight: 700; text-transform: uppercase; color: var(--text-main); }
         .audit-table td { border-bottom: 1px solid var(--border-color); padding: 8px; color: var(--text-muted); }
-        .audit-fail { color: #cc0000; font-weight: 700; }
+        .audit-fail { color: var(--signal-red); font-weight: 700; }
 
         /* LOGIC BLOCKS */
         .logic-header { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; display: flex; align-items: center; }
@@ -158,29 +169,29 @@
         nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
 
         .brand { margin-bottom: 6rem; cursor: crosshair !important; }
-        .brand div { font-family: "Inter", sans-serif; font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
+        .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
         
         .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
+        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
         .toggle-btn:hover { color: var(--text-main); }
         .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 
-        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
         /* --- FOOTER --- */
-        footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); width: 100%; }
+        footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); width: 100%; }
         .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
         .footer-left { display: flex; flex-direction: column; gap: 6px; }
         .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--text-main); }
         .footer-secondary { opacity: 0.7; }
         .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 500; }
-        .status-dot-small { width: 6px; height: 6px; background-color: #0066ff; border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
+        .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V124)
+           LAYOUT ENGINE: SEGREGATED (V125)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -203,7 +214,7 @@
                 max-width: 900px;
             }
             .diagram-col {
-                width: 580px; /* Widened again for layout */
+                width: 580px; 
                 border-left: 1px solid var(--border-color);
                 background: var(--bg-color);
                 padding: 3rem 2rem;
@@ -213,24 +224,24 @@
             }
             .diagram-figure { margin: 0; width: 100%; height: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
             .diagram-label {
-                font-family: "JetBrains Mono", monospace; font-size: 0.9rem; color: var(--text-main); font-weight: 800; opacity: 0.9;
+                font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-main); font-weight: 800; opacity: 0.9;
                 margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: center;
             }
             .diagram-label-xs {
-                 font-family: "JetBrains Mono", monospace; font-size: 0.55rem; color: var(--text-muted);
+                 font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
                 margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.7;
             }
             .diagram-caption {
-                font-family: "JetBrains Mono", monospace; font-size: 0.65rem;
+                font-family: var(--font-mono); font-size: 0.65rem;
                 color: var(--text-muted); margin-top: 1rem;
                 text-align: center; letter-spacing: 0.05em;
             }
             .cycle-label {
-                font-family: "JetBrains Mono", monospace; font-size: 0.55rem; color: var(--text-muted);
+                font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
                 text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 4px;
             }
             .cycle-counter {
-                font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-main); font-weight:700;
+                font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); font-weight:700;
                 text-align: center; margin-bottom: 2rem;
             }
             
@@ -243,7 +254,7 @@
             
             /* LEGEND */
             .diag-legend { 
-                margin-top: 2rem; font-family: "JetBrains Mono", monospace; font-size: 0.55rem; color: var(--text-muted);
+                margin-top: 2rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
                 display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600;
             }
             .legend-item { display: flex; align-items: center; gap: 6px; }
@@ -397,7 +408,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V124 THEME ENGINE */
+                        /* V125 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -429,7 +440,7 @@
                         /* Dark Mode Visibility Fix */
                         [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
 
-                        /* MICRO-TELEMETRY TEXT (Restored) */
+                        /* MICRO-TELEMETRY TEXT (Restored & Shortened) */
                         .telemetry-text { 
                             font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; 
                             opacity: 0; animation-fill-mode: forwards; font-weight: 600; letter-spacing: 0.05em;
@@ -465,15 +476,15 @@
                         #state-box { animation: stepImpact 8.5s linear infinite; animation-delay: 2.7s; }
                         #tel-sta { animation: telFlash 8.5s linear infinite; animation-delay: 2.7s; }
                         
-                        /* 5. Model Wire (3.0 - 3.8) - CORRECTED ORDER */
+                        /* 5. Model Wire (3.3 - 4.0) */
                         #packet-2 { 
                             stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
-                            stroke-dasharray: 120 500; stroke-dashoffset: 660; /* Start Left */
-                            animation: packetFlowCorrected 8.5s linear infinite; animation-delay: 3.0s;
+                            stroke-dasharray: 120 500; stroke-dashoffset: 620;
+                            animation: packetFlow 8.5s linear infinite; animation-delay: 3.3s;
                         }
                         
-                        /* 6. Model Hold (3.8 - 6.0) - DELAYED AFTER WIRE */
-                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 3.8s; }
+                        /* 6. Model Hold (4.1 - 6.0) - DELAYED to wait for packet arrival */
+                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 4.1s; }
                         
                         /* 7. Eval Path Packets (Cyan) (4.4+) */
                         #packet-3, #packet-4, #packet-5 {
@@ -490,11 +501,11 @@
                         
                         /* 9. Policy Update Loop (7.0s) - HIGH VISIBILITY */
                         #policy-path { 
-                            stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 6 6; opacity: 0;
+                            stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 5 5; opacity: 0;
                             animation: policyFlash 8.5s linear infinite; animation-delay: 7.0s; 
                         }
                         #policy-label { 
-                            fill: var(--signal-eval); opacity: 0; font-weight: 700; letter-spacing: 0.05em;
+                            fill: var(--signal-eval); opacity: 0; font-weight: 700; letter-spacing: 0.05em; font-size: 10px;
                             animation: policyFlash 8.5s linear infinite; animation-delay: 7.0s; 
                         }
 
@@ -506,20 +517,20 @@
                         }
                         @keyframes modelHold {
                             0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
-                            5% { stroke: var(--signal-enforced); stroke-width: 2px; } /* Hit */
-                            40% { stroke: var(--signal-enforced); stroke-width: 2px; } /* HOLD GREEN */
+                            5% { stroke: var(--signal-enforced); stroke-width: 2.5px; } /* Hit */
+                            40% { stroke: var(--signal-enforced); stroke-width: 2.5px; } /* HOLD GREEN */
                             45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } /* Release */
                         }
                         @keyframes cyanPulse {
                             0% { stroke: var(--text-muted, #666); }
-                            5% { stroke: var(--signal-eval); stroke-width: 2px; } /* CYAN Flash */
-                            20% { stroke: var(--signal-eval); stroke-width: 2px; } /* Hold */
+                            5% { stroke: var(--signal-eval); stroke-width: 2.5px; } /* CYAN Flash */
+                            20% { stroke: var(--signal-eval); stroke-width: 2.5px; } /* Hold */
                             25% { stroke: var(--text-muted, #666); stroke-width: 1.5px; }
                         }
                         @keyframes gateActive {
                             0% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
-                            5% { stroke: var(--signal-enforced); stroke-width: 2.5px; }
-                            30% { stroke: var(--signal-enforced); stroke-width: 2.5px; }
+                            5% { stroke: var(--signal-enforced); stroke-width: 3.5px; }
+                            30% { stroke: var(--signal-enforced); stroke-width: 3.5px; }
                             40% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
                         }
                         @keyframes stepImpact {
@@ -530,16 +541,6 @@
                         @keyframes telFlash { 0% { opacity: 0; } 3% { opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetFlow { 0% { stroke-dashoffset: 460; opacity: 0; } 5% { opacity: 1; } 15% { stroke-dashoffset: 0; opacity: 1; } 20% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetGateFlow { 0% { stroke-dashoffset: 280; opacity: 0; } 5% { opacity: 1; } 20% { stroke-dashoffset: 0; opacity: 1; } 25% { opacity: 0; } 100% { opacity: 0; } }
-                        
-                        /* CORRECTED LEFT-TO-RIGHT FLOW for Gate->Model */
-                        @keyframes packetFlowCorrected { 
-                            0% { stroke-dashoffset: 660; opacity: 0; } 
-                            5% { opacity: 1; } 
-                            15% { stroke-dashoffset: 0; opacity: 1; } 
-                            20% { opacity: 0; } 
-                            100% { opacity: 0; } 
-                        }
-                        
                         @keyframes packetFlowSmall { 0% { stroke-dashoffset: 260; opacity: 0; } 10% { opacity: 1; } 30% { stroke-dashoffset: 0; opacity: 1; } 40% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 0; } }
 
@@ -569,15 +570,15 @@
                             
                             <rect id="lexicon-box" x="30" y="40" width="130" height="28" rx="2" class="diag-bg"/>
                             <text x="95" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
-                            <text id="tel-lex" x="170" y="58" class="telemetry-text">REF: RAL-LEX-02</text>
+                            <text id="tel-lex" x="170" y="58" class="telemetry-text">REF: LEX-02</text>
                             
                             <rect id="serial-box" x="30" y="80" width="130" height="28" rx="2" class="diag-bg"/>
                             <text x="95" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
-                            <text id="tel-ser" x="170" y="98" class="telemetry-text">CHK: SCHEMA::OK</text>
+                            <text id="tel-ser" x="170" y="98" class="telemetry-text">CHK: VALID</text>
                             
                             <rect id="state-box" x="30" y="120" width="130" height="28" rx="2" class="diag-bg"/>
                             <text x="95" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; font-weight:700;">3. ENFORCED STATE</text>
-                            <text id="tel-sta" x="170" y="138" class="telemetry-text">LCK: 0x8F2A</text>
+                            <text id="tel-sta" x="170" y="138" class="telemetry-text">LCK: 8F2A</text>
                             
                             <path d="M95 68 L95 80" class="diag-line" style="stroke-width:1px;"/>
                             <path id="packet-gate" d="M95 68 L95 80 M95 108 L95 120" style="fill:none; stroke-linecap:round;" />
@@ -703,7 +704,7 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V124) ---
+        // --- CYCLE COUNTER & LOCK (V125) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
         
