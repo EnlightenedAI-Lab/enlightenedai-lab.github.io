@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V110 (LIVING SIGNAL) */
+        /* THEME: INSTITUTE STANDARD V111 (CAUSALITY ENGINE) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -198,7 +198,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V110)
+           LAYOUT ENGINE: SEGREGATED (V111)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -238,6 +238,10 @@
                 font-family: var(--font-mono); font-size: 0.65rem;
                 color: var(--text-muted); margin-top: 1rem;
                 text-align: center; letter-spacing: 0.05em;
+            }
+            .cycle-counter {
+                font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted);
+                margin-top: 0.5rem; text-align: center; opacity: 0.6;
             }
         }
 
@@ -387,7 +391,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V110 THEME ENGINE */
+                        /* V111 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -410,73 +414,75 @@
                         }
 
                         /* Base Styles */
-                        .diag-bg { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+                        .diag-bg { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); stroke-width: 1.5px; vector-effect: non-scaling-stroke; transition: stroke 0.2s; }
                         .diag-text { fill: var(--text-main, #eee); font-size: 14px; font-weight: 600; }
                         .diag-text-sm { fill: var(--text-muted, #888); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
-                        .diag-line { stroke: var(--text-muted, #666); stroke-width: 2px; fill: none; }
+                        .diag-line { stroke: var(--text-muted, #666); stroke-width: 2px; fill: none; stroke-linecap: round; }
                         
-                        /* Gate Emphasis */
-                        .diag-gate { stroke: var(--text-main, #eee); stroke-width: 2.5px; animation: gatePulse 3s ease-in-out infinite; }
+                        /* SEQUENCED ANIMATION (4s LOOP) */
                         
-                        @keyframes gatePulse {
-                            0%, 100% { stroke-opacity: 1; }
-                            50% { stroke: #00cc00; }
+                        /* 1. Human Intent Pulse (t=0.0) */
+                        #intent-box { animation: pulseBox 4s ease-out infinite; }
+                        
+                        /* 2. Arrow 1 Flow (t=0.5) */
+                        #arrow-1 { stroke-dasharray: 60 400; stroke-dashoffset: 460; animation: signalFlow 4s linear infinite; animation-delay: 0.5s; stroke-opacity: 0.5; }
+                        
+                        /* 3. Gate Active (t=1.0) */
+                        #gate-box { animation: gateActive 4s linear infinite; animation-delay: 1.0s; }
+                        
+                        /* 4. Internal Steps (t=1.2, 1.5, 1.8) */
+                        #lexicon-box { animation: stepActive 4s linear infinite; animation-delay: 1.2s; }
+                        #serial-box { animation: stepActive 4s linear infinite; animation-delay: 1.5s; }
+                        #state-box { animation: stepActive 4s linear infinite; animation-delay: 1.8s; }
+                        
+                        /* 5. Arrow 2 Flow (t=2.2) */
+                        #arrow-2 { stroke-dasharray: 60 400; stroke-dashoffset: 460; animation: signalFlow 4s linear infinite; animation-delay: 2.2s; stroke-opacity: 0.5; }
+                        
+                        /* 6. Model Pulse (t=2.7) */
+                        #model-box { animation: pulseBox 4s ease-out infinite; animation-delay: 2.7s; }
+                        
+                        /* 7. Feedback Loop (t=3.2) */
+                        .feedback-path { stroke-dasharray: 20 200; stroke-dashoffset: 220; animation: feedbackFlow 4s linear infinite; animation-delay: 3.2s; opacity: 0.4; }
+
+                        /* KEYFRAMES */
+                        @keyframes pulseBox {
+                            0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
+                            10% { stroke: #00cc00; stroke-width: 2.5px; }
+                            40% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
+                        }
+                        
+                        @keyframes gateActive {
+                            0% { stroke: var(--text-main, #eee); stroke-opacity: 0.5; }
+                            10% { stroke: #00cc00; stroke-opacity: 1; stroke-width: 3px; }
+                            40% { stroke: var(--text-main, #eee); stroke-opacity: 0.5; stroke-width: 2.5px; }
+                        }
+                        
+                        @keyframes stepActive {
+                            0% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); }
+                            10% { stroke: #00cc00; fill: rgba(0,204,0,0.15); }
+                            30% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); }
+                        }
+                        
+                        @keyframes signalFlow {
+                            0% { stroke-dashoffset: 460; stroke: #666; stroke-width: 2px; }
+                            20% { stroke: #00cc00; stroke-width: 4px; } 
+                            100% { stroke-dashoffset: 0; stroke: #666; stroke-width: 2px; }
+                        }
+                        
+                        @keyframes feedbackFlow {
+                            0% { stroke-dashoffset: 220; }
+                            100% { stroke-dashoffset: 0; }
                         }
 
-                        /* INTERNAL STEP HIGHLIGHTS */
-                        .step-active { fill: rgba(0,204,0,0.1); stroke: #00cc00; }
-                        
-                        #lexicon-box { animation: stepFlash 3s linear infinite; animation-delay: 0.8s; }
-                        #serial-box { animation: stepFlash 3s linear infinite; animation-delay: 1.0s; }
-                        #state-box { animation: stepFlash 3s linear infinite; animation-delay: 1.2s; }
-                        #model-box { animation: stepFlash 3s linear infinite; animation-delay: 2.2s; }
-
-                        @keyframes stepFlash {
-                            0%, 100% { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); }
-                            10% { fill: rgba(0,204,0,0.1); stroke: #00cc00; }
-                            20% { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); }
-                        }
-
-                        /* SIGNAL PATH ANIMATION */
-                        .signal-path-1 {
-                            fill: none; stroke: #00cc00; stroke-width: 3px;
-                            stroke-dasharray: 40 1000; stroke-dashoffset: 1040;
-                            animation: flow1 3s linear infinite;
-                        }
-                        
-                        .signal-path-2 {
-                            fill: none; stroke: #00cc00; stroke-width: 3px;
-                            stroke-dasharray: 40 1000; stroke-dashoffset: 1040;
-                            animation: flow2 3s linear infinite;
-                        }
-
-                        @keyframes flow1 {
-                            0% { stroke-dashoffset: 1040; opacity: 0; }
-                            10% { opacity: 1; }
-                            25% { stroke-dashoffset: 960; opacity: 0; }
-                            100% { stroke-dashoffset: 960; opacity: 0; }
-                        }
-                        
-                        @keyframes flow2 {
-                            0% { stroke-dashoffset: 1040; opacity: 0; }
-                            60% { stroke-dashoffset: 1040; opacity: 0; }
-                            70% { opacity: 1; }
-                            85% { stroke-dashoffset: 960; opacity: 0; }
-                            100% { stroke-dashoffset: 960; opacity: 0; }
-                        }
-                        
-                        /* Reduced Motion Support: STATIC FALLBACK */
+                        /* Reduced Motion: Static High-Integrity State */
                         @media (prefers-reduced-motion: reduce) {
-                            .signal-path-1, .signal-path-2, .diag-gate, #lexicon-box, #serial-box, #state-box, #model-box { 
-                                animation: none !important; 
+                            *, #intent-box, #arrow-1, #gate-box, #lexicon-box, #serial-box, #state-box, #arrow-2, #model-box, .feedback-path {
+                                animation: none !important;
                             }
-                            /* Static High-Integrity State */
-                            .signal-path-1 { stroke-dasharray: 0; opacity: 0.3; }
-                            .signal-path-2 { stroke-dasharray: 0; opacity: 0.3; }
-                            #state-box { stroke: #00cc00; }
+                            #state-box { stroke: #00cc00; stroke-width: 2px; } /* Permanent Highlight */
+                            #arrow-1, #arrow-2 { stroke-dasharray: 0; stroke: #666; }
                         }
 
-                        /* Container Dashed Box */
                         .diag-container { fill: none; stroke: var(--border-color, #444); stroke-width: 1px; stroke-dasharray: 4 4; }
                     </style>
 
@@ -485,14 +491,14 @@
                         <text x="300" y="35" text-anchor="middle" class="diag-text-sm">Training & Deployment Loop</text>
 
                         <g transform="translate(30, 105)">
-                            <rect width="110" height="50" rx="2" class="diag-bg"/>
+                            <rect id="intent-box" width="110" height="50" rx="2" class="diag-bg"/>
                             <text x="55" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
                         </g>
 
-                        <path d="M140 130 L180 130" class="signal-path-1"/>
+                        <path id="arrow-1" d="M140 130 L180 130" class="diag-line" />
 
                         <g transform="translate(180, 50)">
-                            <rect width="180" height="160" rx="4" class="diag-bg diag-gate"/>
+                            <rect id="gate-box" width="180" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
                             <text x="90" y="25" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:800;">ENFORCEMENT GATE</text>
                             
                             <rect id="lexicon-box" x="30" y="40" width="120" height="28" rx="2" class="diag-bg"/>
@@ -508,7 +514,7 @@
                             <path d="M90 108 L90 120" class="diag-line" style="stroke-width:1px;"/>
                         </g>
 
-                        <path d="M360 130 L400 130" class="signal-path-2"/>
+                        <path id="arrow-2" d="M360 130 L400 130" class="diag-line" />
 
                         <g transform="translate(400, 105)">
                             <rect id="model-box" width="110" height="50" rx="2" class="diag-bg"/>
@@ -519,18 +525,14 @@
                             <rect width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2; opacity:0.7;"/>
                             <text x="50" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted)">Safety Eval</text>
                         </g>
-
                         <g transform="translate(530, 160)">
                             <rect width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2; opacity:0.7;"/>
                             <text x="50" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted)">Base Train</text>
                         </g>
 
-                        <path d="M140 130 L180 130" class="diag-line" marker-end="url(#arrow)"/>
-                        <path d="M360 130 L400 130" class="diag-line" marker-end="url(#arrow)"/>
-                        
-                        <path d="M455 105 L455 80 L530 80" class="diag-line" style="stroke-dasharray:4 4" marker-end="url(#arrow)"/>
-                        <path d="M580 100 L580 160" class="diag-line" style="stroke-dasharray:4 4" marker-end="url(#arrow)"/>
-                        <path d="M530 180 L455 180 L455 155" class="diag-line" style="stroke-dasharray:4 4" marker-end="url(#arrow)"/>
+                        <path class="feedback-path" d="M455 105 L455 80 L530 80" class="diag-line" style="stroke:none; fill:none;"/> <path d="M455 105 L455 80 L530 80" class="diag-line feedback-path" />
+                        <path d="M580 100 L580 160" class="diag-line feedback-path" style="animation-delay: 3.4s;"/>
+                        <path d="M530 180 L455 180 L455 155" class="diag-line feedback-path" style="animation-delay: 3.6s;"/>
 
                         <defs>
                             <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
@@ -539,7 +541,10 @@
                         </defs>
                     </g>
                 </svg>
-                <figcaption class="diagram-caption">Diagram 01 — Context Loop (Institute Standard)</figcaption>
+                <figcaption class="diagram-caption">
+                    Diagram 01 — Context Loop (Institute Standard)
+                    <div id="cycle-counter" class="cycle-counter">CYCLE: 0187</div>
+                </figcaption>
             </figure>
         </div>
     </main>
@@ -611,6 +616,16 @@
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
+
+        // --- CYCLE COUNTER (V111) ---
+        let cycleCount = 187;
+        const counterEl = document.getElementById('cycle-counter');
+        
+        // Sync with CSS Loop (4s)
+        setInterval(() => {
+            cycleCount++;
+            counterEl.innerText = `CYCLE: ${cycleCount.toString().padStart(4, '0')}`;
+        }, 4000); 
     </script>
 </body>
 </html>
