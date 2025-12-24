@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V125 (PRECISION CALIBRATION) */
+        /* THEME: INSTITUTE STANDARD V126 (WHITE EVALUATION) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -37,10 +37,16 @@
             --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             
-            /* SIGNALS - DISTINCT COLORS */
-            --signal-enforced: #00cc00;  /* Pure Green */
-            --signal-eval: #00eaff;      /* Bright Cyan (Distinct from Green) */
-            --signal-struct: #666666;
+            /* SIGNALS */
+            --status-verified: #00cc00;
+            --signal-blue: #0066ff;
+            --signal-red: #cc0000;
+            
+            /* VIEW MODES */
+            --mode-diff-del-bg: #ffebeb;
+            --mode-diff-del-text: #cc0000;
+            --mode-diff-ins-bg: #e6ffec;
+            --mode-diff-ins-text: #006600;
         }
 
         /* DARK MODE OVERRIDES */
@@ -113,7 +119,7 @@
             font-size: 0.65rem; font-weight: 700; color: var(--panel-text); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; transition: color 0.2s;
         }
         .repo-panel:hover .repo-header { color: var(--panel-hover-text); }
-        .status-dot-red { width: 6px; height: 6px; background: #cc0000; border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
+        .status-dot-red { width: 6px; height: 6px; background: var(--signal-red); border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
         .repo-link { 
             display: block; font-size: 0.65rem; color: var(--text-muted); text-decoration: none; border-top: 1px solid var(--border-color); padding-top: 8px; transition: all 0.2s; 
         }
@@ -191,7 +197,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V125)
+           LAYOUT ENGINE: SEGREGATED (V126)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -408,7 +414,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V125 THEME ENGINE */
+                        /* V126 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -440,7 +446,7 @@
                         /* Dark Mode Visibility Fix */
                         [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
 
-                        /* MICRO-TELEMETRY TEXT (Restored & Shortened) */
+                        /* MICRO-TELEMETRY TEXT */
                         .telemetry-text { 
                             font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; 
                             opacity: 0; animation-fill-mode: forwards; font-weight: 600; letter-spacing: 0.05em;
@@ -476,37 +482,37 @@
                         #state-box { animation: stepImpact 8.5s linear infinite; animation-delay: 2.7s; }
                         #tel-sta { animation: telFlash 8.5s linear infinite; animation-delay: 2.7s; }
                         
-                        /* 5. Model Wire (3.3 - 4.0) */
+                        /* 5. Model Wire (3.3 - 4.2) - CAUSAL GAP ADDED */
                         #packet-2 { 
                             stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
-                            stroke-dasharray: 120 500; stroke-dashoffset: 620;
-                            animation: packetFlow 8.5s linear infinite; animation-delay: 3.3s;
+                            stroke-dasharray: 120 500; stroke-dashoffset: 620; /* Start Left */
+                            animation: packetFlowCorrected 8.5s linear infinite; animation-delay: 3.3s;
                         }
                         
-                        /* 6. Model Hold (4.1 - 6.0) - DELAYED to wait for packet arrival */
-                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 4.1s; }
+                        /* 6. Model Hold (4.5 - 6.5) - STRICTLY AFTER WIRE ARRIVAL */
+                        #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 4.5s; }
                         
-                        /* 7. Eval Path Packets (Cyan) (4.4+) */
+                        /* 7. Eval Path Packets (White) (5.0+) */
                         #packet-3, #packet-4, #packet-5 {
                             stroke: var(--signal-eval); stroke-width: 2.5px; stroke-linecap: round;
                             stroke-dasharray: 100 500; stroke-dashoffset: 260;
                         }
-                        #packet-3 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 4.4s; }
-                        #packet-4 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.0s; }
-                        #packet-5 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.6s; }
+                        #packet-3 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.0s; }
+                        #packet-4 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.6s; }
+                        #packet-5 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 6.2s; }
 
-                        /* 8. Cyan Pulse Holds */
-                        #eval-box { animation: cyanPulse 8.5s linear infinite; animation-delay: 5.0s; }
-                        #train-box { animation: cyanPulse 8.5s linear infinite; animation-delay: 6.1s; }
+                        /* 8. White Pulse Holds */
+                        #eval-box { animation: evalPulse 8.5s linear infinite; animation-delay: 5.6s; }
+                        #train-box { animation: evalPulse 8.5s linear infinite; animation-delay: 6.7s; }
                         
-                        /* 9. Policy Update Loop (7.0s) - HIGH VISIBILITY */
+                        /* 9. Policy Update Loop (7.5s) */
                         #policy-path { 
                             stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 5 5; opacity: 0;
-                            animation: policyFlash 8.5s linear infinite; animation-delay: 7.0s; 
+                            animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; 
                         }
                         #policy-label { 
                             fill: var(--signal-eval); opacity: 0; font-weight: 700; letter-spacing: 0.05em; font-size: 10px;
-                            animation: policyFlash 8.5s linear infinite; animation-delay: 7.0s; 
+                            animation: policyFlash 8.5s linear infinite; animation-delay: 7.5s; 
                         }
 
                         /* KEYFRAMES */
@@ -521,9 +527,9 @@
                             40% { stroke: var(--signal-enforced); stroke-width: 2.5px; } /* HOLD GREEN */
                             45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } /* Release */
                         }
-                        @keyframes cyanPulse {
+                        @keyframes evalPulse {
                             0% { stroke: var(--text-muted, #666); }
-                            5% { stroke: var(--signal-eval); stroke-width: 2.5px; } /* CYAN Flash */
+                            5% { stroke: var(--signal-eval); stroke-width: 2.5px; } /* White Flash */
                             20% { stroke: var(--signal-eval); stroke-width: 2.5px; } /* Hold */
                             25% { stroke: var(--text-muted, #666); stroke-width: 1.5px; }
                         }
@@ -541,6 +547,15 @@
                         @keyframes telFlash { 0% { opacity: 0; } 3% { opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetFlow { 0% { stroke-dashoffset: 460; opacity: 0; } 5% { opacity: 1; } 15% { stroke-dashoffset: 0; opacity: 1; } 20% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetGateFlow { 0% { stroke-dashoffset: 280; opacity: 0; } 5% { opacity: 1; } 20% { stroke-dashoffset: 0; opacity: 1; } 25% { opacity: 0; } 100% { opacity: 0; } }
+                        
+                        @keyframes packetFlowCorrected { 
+                            0% { stroke-dashoffset: 660; opacity: 0; } 
+                            5% { opacity: 1; } 
+                            15% { stroke-dashoffset: 0; opacity: 1; } 
+                            20% { opacity: 0; } 
+                            100% { opacity: 0; } 
+                        }
+                        
                         @keyframes packetFlowSmall { 0% { stroke-dashoffset: 260; opacity: 0; } 10% { opacity: 1; } 30% { stroke-dashoffset: 0; opacity: 1; } 40% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 0; } }
 
@@ -704,18 +719,16 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V125) ---
+        // --- CYCLE COUNTER & LOCK (V126) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
+        const telemetryColor = '#00cc00'; // Green Match
         
-        // Match JS Loop to CSS Animation (8.5s)
         setInterval(() => {
             // Trigger Lock at ~6.0s (end of cycle)
             setTimeout(() => {
                 cycleCount++;
-                // Use var(--signal-enforced) logic via inline style for simplicity or class
-                const color = document.body.getAttribute('data-theme') === 'dark' ? '#00cc00' : '#00cc00';
-                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:${color}; font-weight:800;">STATE: ENFORCED</span>`;
+                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:${telemetryColor}; font-weight:800;">STATE: ENFORCED</span>`;
             }, 6000);
             
             // Reset visual state
