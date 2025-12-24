@@ -442,6 +442,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            openMachineOverlay();
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('view') === 'machine' && !localStorage.getItem('lex_machine_dismissed')) openMachineOverlay();
         });
