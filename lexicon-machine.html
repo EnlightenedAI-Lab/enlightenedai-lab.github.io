@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* THEME: INSTITUTE STANDARD V100 (CONTEXT AWARE) */
+        /* THEME: INSTITUTE STANDARD V101 (STRUCTURAL UPGRADE) */
         :root {
             --bg-color: #050505;
             --text-main: #e0e0e0;
@@ -30,7 +30,7 @@
         body { margin: 0; padding: 0; font-family: var(--font-sans); background: var(--bg-color); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         a { text-decoration: none; color: inherit; }
 
-        /* --- HEADER (NO OVERLAP) --- */
+        /* --- HEADER --- */
         .mo-header { 
             padding: 0 24px; height: 55px; border-bottom: 1px solid rgba(255,255,255,0.15); 
             display: flex; justify-content: space-between; align-items: center; 
@@ -90,7 +90,7 @@
         /* VIEW CONTAINER */
         .view-container { flex: 1; overflow-y: auto; padding: 2rem; }
 
-        /* --- SEMANTIC ON-RAMP --- */
+        /* --- FRAMING SENTENCES --- */
         .framing-sentence {
             max-width: 1200px; margin: 0 auto 2rem auto;
             font-family: var(--font-mono); font-size: 0.7rem; color: #666;
@@ -121,7 +121,6 @@
         .mc-val { color: #eee; font-size: 0.75rem; }
         .mc-section-title { grid-column: span 2; color: #999; font-size: 0.7rem; font-weight: 700; margin: 2rem 0 1rem 0; letter-spacing: 0.05em; border-left: 2px solid #444; padding-left: 10px; font-family: var(--font-mono); }
         
-        /* SYS-INT DECODER RING */
         .card-sys-int { border-color: #444; background: #131313; }
         .card-sys-int .mc-header { color: #fff; }
         
@@ -138,9 +137,11 @@
         .ghost-hash { font-family: var(--font-mono); color: var(--status-verified); font-size: 0.65rem; }
 
         /* --- SERIALIZATION VIEWS --- */
-        .stepper-container { display: flex; gap: 2px; margin-bottom: 2rem; background: #222; padding: 2px; }
-        .step-btn { flex: 1; background: #111; border: none; color: #666; padding: 10px; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; cursor: pointer; text-transform: uppercase; }
+        .stepper-container { display: flex; gap: 2px; margin-bottom: 1.5rem; background: #222; padding: 2px; }
+        .step-btn { flex: 1; background: #111; border: none; color: #666; padding: 10px; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+        .step-btn:hover { color: #fff; background: #1a1a1a; }
         .step-btn.active { background: #000; color: #fff; border-bottom: 2px solid #fff; }
+        
         .sim-input-wrapper { border: 1px solid #333; background: #000; position: relative; transition: border-color 0.3s; }
         .sim-textarea { width: 100%; height: 280px; background: transparent; border: none; color: var(--signal-amber); font-family: var(--font-mono); font-size: 0.75rem; padding: 1.5rem; resize: none; outline: none; line-height: 1.6; }
         .input-stats { display: flex; justify-content: space-between; padding: 10px 20px; background: #0e0e0e; border-top: 1px solid #333; font-size: 0.6rem; color: #666; font-family: var(--font-mono); }
@@ -148,10 +149,24 @@
         .parse-btn { background: var(--signal-amber); color: #000; border: none; padding: 4px 12px; font-weight: 700; cursor: pointer; font-size: 0.6rem; font-family: var(--font-mono); display: none; }
         .sim-active .parse-btn { display: block; }
 
-        /* DIFF VIEW */
-        .diff-box { text-align: center; margin-top: 4rem; font-family: var(--font-mono); }
+        /* PHASE DESCRIPTION (V101 NEW) */
+        .phase-desc {
+            font-family: var(--font-mono); font-size: 0.65rem; color: #888;
+            margin-bottom: 1rem; border-left: 2px solid #333; padding-left: 12px;
+            height: 20px; /* Fixed height to prevent jump */
+            display: flex; align-items: center;
+        }
+        .phase-highlight { color: #fff; font-weight: 700; margin-right: 8px; text-transform: uppercase; }
+
+        /* DIFF VIEW (ENHANCED) */
+        .diff-box { text-align: center; margin-top: 3rem; font-family: var(--font-mono); max-width: 600px; margin-left: auto; margin-right: auto; }
         .diff-verdict { font-size: 3rem; font-weight: 700; color: #fff; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
-        .diff-sub { color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; }
+        .diff-sub { color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 2rem; display: block; }
+        .diff-explain { 
+            text-align: left; background: #111; padding: 1.5rem; border: 1px solid #333; 
+            font-size: 0.7rem; color: #999; line-height: 1.6; 
+        }
+        .diff-explain strong { color: #fff; display: block; margin-bottom: 0.5rem; }
         
         /* FOOTER */
         .hex-footer { padding: 10px 24px; background: #080808; border-top: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-size: 0.6rem; color: #444; flex-shrink: 0; z-index: 1000; font-family: var(--font-mono); }
@@ -234,18 +249,26 @@
                     <div class="framing-sentence">
                         This view renders the Lexicon as a <span class="text-live">live system</span>: metrics decay, invariants are enforced, and verification requires operator intervention.
                     </div>
-                    
                     <div id="card-grid-root" class="card-grid"></div>
                 </div>
 
                 <div id="view-transform" style="display:none;">
-                    <div class="stepper-container">
-                        <button class="step-btn active">01 RAW</button>
-                        <button class="step-btn">02 PARSE</button>
-                        <button class="step-btn">03 BIND</button>
-                        <button class="step-btn">04 CONSTRAIN</button>
-                        <button class="step-btn">05 SERIALIZE</button>
+                    <div class="framing-sentence">
+                        This view shows how natural language intent is transformed into a constrained, auditable internal state before any response is produced.
                     </div>
+
+                    <div class="stepper-container">
+                        <button class="step-btn active" onclick="setStep(1)">01 RAW</button>
+                        <button class="step-btn" onclick="setStep(2)">02 PARSE</button>
+                        <button class="step-btn" onclick="setStep(3)">03 BIND</button>
+                        <button class="step-btn" onclick="setStep(4)">04 CONSTRAIN</button>
+                        <button class="step-btn" onclick="setStep(5)">05 SERIALIZE</button>
+                    </div>
+                    
+                    <div id="phase-desc" class="phase-desc">
+                        <span class="phase-highlight">RAW</span> Unstructured human intent. No guarantees.
+                    </div>
+
                     <div class="sim-input-wrapper">
                         <textarea id="sim-input" class="sim-textarea" placeholder="Load simulation to edit..." readonly></textarea>
                         <div class="input-stats">
@@ -257,13 +280,23 @@
                 </div>
 
                 <div id="view-diff" style="display:none;">
+                    <div class="framing-sentence">
+                        This is a serialization instrument: it converts human prompts into machine-readable constraints that can be verified, diffed, and enforced.
+                    </div>
                     <div class="diff-box">
                         <div class="diff-verdict">RATIO 14:1</div>
-                        <div class="diff-sub">Semantic Compression</div>
+                        <span class="diff-sub">SEMANTIC COMPRESSION</span>
+                        
+                        <div class="diff-explain">
+                            <strong>14 units of narrative intent → 1 constrained internal state</strong>
+                            Lower ratios indicate higher ambiguity.<br>
+                            Higher ratios indicate stronger alignment pressure.
+                        </div>
                     </div>
                 </div>
 
                 <div id="view-snap" style="display:none;">
+                    <div class="framing-sentence">Immutable record of the last constrained state.</div>
                     <pre style="color:#ccc; font-family:var(--font-mono); font-size:0.75rem;">{ "record": "active" }</pre>
                 </div>
             </div>
@@ -282,7 +315,7 @@
 
     <div id="operator-manual">
         <button class="hud-close" onclick="toggleManual(false)">CLOSE</button>
-        <div style="text-align:center; font-weight:700; margin-bottom:2rem; font-family:var(--font-mono); color:#fff;">OPERATOR MANUAL</div>
+        <div id="manual-title" style="text-align:center; font-weight:700; margin-bottom:2rem; font-family:var(--font-mono); color:#fff;">OPERATOR MANUAL</div>
         <div id="manual-text">
             </div>
     </div>
@@ -309,8 +342,18 @@
 
         const MANUAL_CONTENT = {
             cards: `<h3>SECTION 01 — CARDS</h3><p>The Card View displays the immutable core definitions. Metrics degrade over time to simulate entropy; click to verify.</p><h3>SECTION 02 — TELEMETRY</h3><p>Live entropy counters indicate system activity. High confidence scores (100.00%) require periodic verification.</p><h3>SECTION 03 — SIGNALS</h3><p>Green LED = Stable. Amber LED = Parsing. Blue Beacon = Manual Available.</p>`,
-            serial: `<h3>SECTION 01 — SIMULATION</h3><p>This mode allows prompt injection. The system will log: operator_simulation_enabled. The RAW INPUT buffer becomes writable.</p><h3>SECTION 02 — TRANSFORMATION</h3><p>Observe how human language is stripped of nuance to fit machine constraints. This demonstrates the "lossy" nature of alignment.</p><h3>SECTION 03 — DIFF VIEW</h3><p>Shows the semantic compression ratio. Higher ratios mean more abstraction was required for safety.</p>`
+            
+            // V101 UPGRADE: SYSTEM PRIMER
+            serial: `<h3>SECTION 01 — WHAT THIS SYSTEM IS</h3><p>This system does not evaluate outputs. It evaluates internal transformations. Prompts are treated as raw signals that must be parsed, bound, and constrained before generation is allowed.</p><h3>SECTION 02 — WHY SERIALIZATION MATTERS</h3><p>Natural language is a lossy format for intent. Serialization compresses free-form language into a smaller, explicit set of semantic commitments.</p><h3>SECTION 03 — WHAT MAKES THIS DIFFERENT</h3><p>Rules are enforced before response generation. Drift is observable as state decay, not output failure. Narrative interpretation is intentionally disabled.</p>`
         };
+
+        const PHASE_DESCS = [
+            "<span class='phase-highlight'>RAW</span> Unstructured human intent. No guarantees.",
+            "<span class='phase-highlight'>PARSE</span> Intent is decomposed into candidate semantic units.",
+            "<span class='phase-highlight'>BIND</span> Units are mapped to known definitions and invariants.",
+            "<span class='phase-highlight'>CONSTRAIN</span> Illegal or unstable states are removed.",
+            "<span class='phase-highlight'>SERIALIZE</span> A minimal, auditable state is produced."
+        ];
 
         const EVENTS = ["EVENT: validate(RA-001) → OK", "EVENT: diff(signature) → STABLE", "EVENT: audit(invariants) → ENFORCED", "EVENT: serialize(record) → READY"];
         let simText = "User prompt: I want an AI that is helpful but doesn't change its rules.";
@@ -355,11 +398,7 @@
             container.innerHTML = html;
         }
 
-        // --- LOGIC ---
-        function updateManualContent(mode) {
-            document.getElementById('manual-text').innerHTML = MANUAL_CONTENT[mode];
-        }
-
+        // --- INTERACTIVITY ---
         function requestManualVerification(id) {
             if(isComputing) return;
             isComputing = true;
@@ -431,6 +470,11 @@
         function switchMode(mode) {
             document.getElementById('btn-cards').classList.toggle('active', mode === 'cards');
             document.getElementById('btn-serial').classList.toggle('active', mode === 'serial');
+            
+            // SYSTEM PRIMER LOGIC (V101)
+            const title = document.getElementById('manual-title');
+            if (mode === 'serial') title.innerText = "SYSTEM PRIMER";
+            else title.innerText = "OPERATOR MANUAL";
             updateManualContent(mode);
             
             if (mode === 'cards') {
@@ -450,6 +494,11 @@
                 document.getElementById(`sn-${s}`).classList.toggle('active', s === sub);
                 document.getElementById(`view-${s}`).style.display = s === sub ? 'block' : 'none';
             });
+        }
+
+        function setStep(n) {
+            document.querySelectorAll('.step-btn').forEach((b, i) => b.classList.toggle('active', i+1 === n));
+            document.getElementById('phase-desc').innerHTML = PHASE_DESCS[n-1]; // V101 UPGRADE
         }
 
         function enableSimulation() {
@@ -480,6 +529,10 @@
                 led.className = "machine-led";
                 document.getElementById('sim-status').innerText = "STABLE";
             }, 600);
+        }
+
+        function updateManualContent(mode) {
+            document.getElementById('manual-text').innerHTML = MANUAL_CONTENT[mode];
         }
 
         function toggleManual(show) { document.getElementById('operator-manual').classList.toggle('open', show); }
