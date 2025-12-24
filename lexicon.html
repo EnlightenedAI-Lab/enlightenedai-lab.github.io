@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V107 (ADAPTIVE FRONT-END) */
+        /* THEME: INSTITUTE STANDARD V108 (ADAPTIVE FRONT-END) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -201,7 +201,7 @@
            LAYOUT ENGINE: SEGREGATED (V107)
            ========================================= */
 
-        /* DESKTOP ENGINE (Width > 1100px) */
+        /* DESKTOP ENGINE (Width > 1100px) - WIDER BREAKPOINT */
         @media (min-width: 1101px) {
             body { display: flex; min-height: 100vh; }
             aside#sidebar {
@@ -211,17 +211,17 @@
             }
             main {
                 flex-grow: 1;
-                display: flex;
+                display: flex; /* Flex for 2 columns */
                 margin: 0;
             }
             .content-col {
-                flex: 1;
+                flex: 1; /* Takes up remaining space */
                 padding: 3rem 4rem 6rem 4rem;
                 display: flex; flex-direction: column;
                 max-width: 900px;
             }
             .diagram-col {
-                width: 450px;
+                width: 450px; /* Fixed width for diagram */
                 border-left: 1px solid var(--border-color);
                 background: var(--bg-color);
                 padding: 3rem 2rem;
@@ -380,83 +380,107 @@
 
         <div class="diagram-col">
             <figure class="diagram-figure">
-                <svg id="diagram-context" width="100%" viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg">
+                <svg id="diagram-context" width="100%" viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* ADAPTIVE THEME ENGINE */
+                        /* V108 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
-                        /* Dynamic Colors inheriting from lexicon.html */
-                        .diag-bg { fill: var(--card-bg); stroke: var(--border-color); stroke-width: 1px; }
-                        .diag-text { fill: var(--text-main); font-size: 14px; font-weight: 500; }
-                        .diag-text-sm { fill: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
-                        .diag-line { stroke: var(--text-muted); stroke-width: 1.5px; fill: none; }
-                        .diag-arrow { fill: var(--text-muted); }
+                        /* Light Mode Overrides */
+                        @media (prefers-color-scheme: light) {
+                            [data-theme="light"] .diag-root {
+                                --diag-stroke: #222;
+                                --diag-text: #111;
+                                --diag-fill: #fff;
+                                --diag-mute: #555;
+                            }
+                        }
+
+                        /* Base Styles */
+                        .diag-bg { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+                        .diag-text { fill: var(--text-main, #eee); font-size: 13px; font-weight: 600; }
+                        .diag-text-sm { fill: var(--text-muted, #888); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+                        .diag-line { stroke: var(--text-muted, #666); stroke-width: 2px; fill: none; }
                         
-                        /* Special States */
-                        .diag-highlight { stroke: #00cc00; stroke-width: 2px; fill: rgba(0, 204, 0, 0.05); }
-                        .diag-highlight-text { fill: #008800; font-weight: 700; }
+                        /* Gate Emphasis */
+                        .diag-gate { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
                         
-                        /* Dark Mode Overrides for Highlight */
-                        [data-theme="dark"] .diag-highlight-text { fill: #00cc00; }
+                        /* Highlight & Animation Path */
+                        .signal-path {
+                            fill: none;
+                            stroke: #00cc00;
+                            stroke-width: 3px;
+                            stroke-dasharray: 10 200; /* Create the 'packet' */
+                            stroke-dashoffset: 210;
+                            opacity: 0.8;
+                            animation: pulseFlow 3s linear infinite;
+                        }
                         
+                        @keyframes pulseFlow {
+                            to { stroke-dashoffset: 0; }
+                        }
+                        
+                        /* Reduced Motion Support */
+                        @media (prefers-reduced-motion: reduce) {
+                            .signal-path { animation: none; stroke-dasharray: 0; stroke-opacity: 0.5; }
+                        }
+
                         /* Container Dashed Box */
-                        .diag-container { fill: none; stroke: var(--border-color); stroke-width: 1px; stroke-dasharray: 4 4; }
+                        .diag-container { fill: none; stroke: var(--border-color, #444); stroke-width: 1px; stroke-dasharray: 4 4; }
                     </style>
 
                     <g class="diag-root">
-                        <rect x="10" y="10" width="680" height="230" rx="4" class="diag-container"/>
+                        <rect x="10" y="10" width="680" height="260" rx="4" class="diag-container"/>
                         <text x="340" y="35" text-anchor="middle" class="diag-text-sm">Training & Deployment Loop</text>
 
-                        <g transform="translate(40, 100)">
-                            <rect width="100" height="50" rx="2" class="diag-bg"/>
-                            <text x="50" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
+                        <g transform="translate(30, 115)">
+                            <rect width="110" height="50" rx="2" class="diag-bg"/>
+                            <text x="55" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
                         </g>
+
+                        <path d="M140 140 L180 140 M360 140 L400 140" class="signal-path" style="stroke-width:3px; opacity:0.6;"/>
 
                         <g transform="translate(180, 60)">
-                            <rect width="160" height="140" rx="4" class="diag-container" style="stroke: var(--text-main); stroke-dasharray: 0;"/>
-                            <text x="80" y="20" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:700;">ENFORCEMENT GATE</text>
+                            <rect width="180" height="160" rx="4" class="diag-bg diag-gate"/>
+                            <text x="90" y="25" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:800;">ENFORCEMENT GATE</text>
                             
-                            <rect x="20" y="35" width="120" height="25" rx="2" class="diag-bg"/>
-                            <text x="80" y="52" text-anchor="middle" class="diag-text" style="font-size:10px;">1. LEXICON</text>
+                            <rect x="30" y="40" width="120" height="28" rx="2" class="diag-bg"/>
+                            <text x="90" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
                             
-                            <rect x="20" y="70" width="120" height="25" rx="2" class="diag-bg"/>
-                            <text x="80" y="87" text-anchor="middle" class="diag-text" style="font-size:10px;">2. SERIALIZATION</text>
+                            <rect x="30" y="80" width="120" height="28" rx="2" class="diag-bg"/>
+                            <text x="90" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
                             
-                            <rect x="20" y="105" width="120" height="25" rx="2" class="diag-highlight"/>
-                            <text x="80" y="122" text-anchor="middle" class="diag-text diag-highlight-text" style="font-size:10px;">3. ENFORCED STATE</text>
+                            <rect x="30" y="120" width="120" height="28" rx="2" class="diag-bg" style="stroke:#00cc00; stroke-width:2px;"/>
+                            <text x="90" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; fill:#00cc00; font-weight:700;">3. ENFORCED STATE</text>
                             
-                            <path d="M80 60 L80 70" class="diag-line"/>
-                            <path d="M80 95 L80 105" class="diag-line"/>
+                            <path d="M90 68 L90 80" class="diag-line" style="stroke-width:1px;"/>
+                            <path d="M90 108 L90 120" class="diag-line" style="stroke-width:1px;"/>
                         </g>
 
-                        <g transform="translate(380, 100)">
-                            <rect width="100" height="50" rx="2" class="diag-bg"/>
-                            <text x="50" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
+                        <g transform="translate(400, 115)">
+                            <rect width="110" height="50" rx="2" class="diag-bg"/>
+                            <text x="55" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
                         </g>
 
-                        <g transform="translate(540, 60)">
-                            <rect width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2"/>
+                        <g transform="translate(550, 70)">
+                            <rect width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2; opacity:0.7;"/>
                             <text x="50" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted)">Safety Eval</text>
                         </g>
 
-                        <g transform="translate(540, 150)">
-                            <rect width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2"/>
+                        <g transform="translate(550, 170)">
+                            <rect width="100" height="40" rx="2" class="diag-bg" style="stroke-dasharray:2 2; opacity:0.7;"/>
                             <text x="50" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted)">Base Train</text>
                         </g>
 
-                        <path d="M140 125 L180 125" class="diag-line" marker-end="url(#arrow)"/>
+                        <path d="M140 140 L180 140" class="diag-line" marker-end="url(#arrow)"/>
+                        <path d="M360 140 L400 140" class="diag-line" style="stroke:#00cc00; stroke-width:2px;" marker-end="url(#arrow-green)"/>
                         
-                        <path d="M340 125 L380 125" class="diag-line" style="stroke:#00cc00; stroke-width:2px;" marker-end="url(#arrow-green)"/>
-                        
-                        <path d="M430 100 L430 80 L540 80" class="diag-line" marker-end="url(#arrow)"/>
-                        
-                        <path d="M590 100 L590 150" class="diag-line" style="stroke-dasharray:4 4" marker-end="url(#arrow)"/>
-                        
-                        <path d="M540 170 L430 170 L430 150" class="diag-line" style="stroke-dasharray:4 4" marker-end="url(#arrow)"/>
+                        <path d="M455 115 L455 90 L550 90" class="diag-line" style="stroke-dasharray:4 4" marker-end="url(#arrow)"/>
+                        <path d="M600 110 L600 170" class="diag-line" style="stroke-dasharray:4 4" marker-end="url(#arrow)"/>
+                        <path d="M550 190 L455 190 L455 165" class="diag-line" style="stroke-dasharray:4 4" marker-end="url(#arrow)"/>
 
                         <defs>
                             <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-                                <path d="M0,0 L0,6 L9,3 z" class="diag-arrow" />
+                                <path d="M0,0 L0,6 L9,3 z" fill="var(--text-muted)" />
                             </marker>
                             <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
                                 <path d="M0,0 L0,6 L9,3 z" fill="#00cc00" />
