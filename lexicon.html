@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V118 (NO TRIANGLES) */
+        /* THEME: INSTITUTE STANDARD V119 (ZERO TRIANGLES / STATE HOLD) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -198,7 +198,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V118)
+           LAYOUT ENGINE: SEGREGATED (V119)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -408,7 +408,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V117 THEME ENGINE */
+                        /* V119 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -443,56 +443,74 @@
                             opacity: 0; animation-fill-mode: forwards; 
                         }
 
-                        /* ANIMATION ENGINE (6s Loop) */
+                        /* ANIMATION ENGINE (7s Loop) */
                         
                         /* 1. Intent Pulse (t=0.0) */
-                        #intent-box { animation: pulseBox 6s ease-out infinite; }
+                        #intent-box { animation: pulseBox 7s ease-out infinite; }
                         
                         /* 2. Packet 1 (t=0.5) */
                         #packet-1 { 
                             stroke: #00cc00; stroke-width: 4px; stroke-linecap: round;
                             stroke-dasharray: 40 1000; stroke-dashoffset: 460;
-                            animation: packetFlow 6s linear infinite;
+                            animation: packetFlow 7s linear infinite;
                             filter: drop-shadow(0 0 2px #00cc00);
                         }
                         
-                        /* 3. Gate Active (t=1.0) */
-                        #gate-box { animation: gateActive 6s linear infinite; animation-delay: 1.0s; }
+                        /* 3. Gate Active (t=1.5) */
+                        #gate-box { animation: gateActive 7s linear infinite; animation-delay: 1.5s; }
                         
                         /* 4. Internal Steps + Telemetry */
-                        #lexicon-box { animation: stepImpact 6s linear infinite; animation-delay: 1.2s; }
-                        #tel-lex { animation: telFlash 6s linear infinite; animation-delay: 1.2s; }
+                        #lexicon-box { animation: stepImpact 7s linear infinite; animation-delay: 1.7s; }
+                        #tel-lex { animation: telFlash 7s linear infinite; animation-delay: 1.7s; }
                         
-                        #serial-box { animation: stepImpact 6s linear infinite; animation-delay: 1.8s; }
-                        #tel-ser { animation: telFlash 6s linear infinite; animation-delay: 1.8s; }
+                        #serial-box { animation: stepImpact 7s linear infinite; animation-delay: 2.2s; }
+                        #tel-ser { animation: telFlash 7s linear infinite; animation-delay: 2.2s; }
                         
-                        #state-box { animation: stepImpact 6s linear infinite; animation-delay: 2.4s; }
-                        #tel-sta { animation: telFlash 6s linear infinite; animation-delay: 2.4s; }
+                        #state-box { animation: stepImpact 7s linear infinite; animation-delay: 2.7s; }
+                        #tel-sta { animation: telFlash 7s linear infinite; animation-delay: 2.7s; }
                         
                         /* 5. Packet 2 (t=3.0) */
                         #packet-2 { 
                             stroke: #00cc00; stroke-width: 4px; stroke-linecap: round;
                             stroke-dasharray: 40 1000; stroke-dashoffset: 460;
-                            animation: packetFlow 6s linear infinite; animation-delay: 3.0s;
+                            animation: packetFlow 7s linear infinite; animation-delay: 3.0s;
                             filter: drop-shadow(0 0 2px #00cc00);
                         }
                         
-                        /* 6. Model Impact (t=3.5) */
-                        #model-box { animation: pulseBox 6s ease-out infinite; animation-delay: 3.5s; }
+                        /* 6. Model Hold (t=3.5 - 6.0) */
+                        #model-box { animation: modelHold 7s ease-out infinite; animation-delay: 3.5s; }
                         
-                        /* 7. Eval Path (Amber) */
-                        #eval-box { animation: amberPulse 6s linear infinite; animation-delay: 4.0s; }
-                        #train-box { animation: amberPulse 6s linear infinite; animation-delay: 5.0s; }
-                        
-                        .feedback-path { opacity: 0.3; stroke: #ffcc00; animation: feedbackOpacity 6s linear infinite; }
-                        .feedback-delay-1 { animation-delay: 4.0s; }
-                        .feedback-delay-2 { animation-delay: 5.0s; }
+                        /* 7. Eval Path Packets (Amber, t=4.0+) */
+                        #packet-3, #packet-4, #packet-5 {
+                            stroke: #ffcc00; stroke-width: 3px; stroke-linecap: round;
+                            stroke-dasharray: 20 500; stroke-dashoffset: 260;
+                            filter: drop-shadow(0 0 2px #ffcc00);
+                        }
+                        #packet-3 { animation: packetFlowSmall 7s linear infinite; animation-delay: 4.0s; } /* Model -> Safety */
+                        #packet-4 { animation: packetFlowSmall 7s linear infinite; animation-delay: 4.5s; } /* Safety -> Base */
+                        #packet-5 { animation: packetFlowSmall 7s linear infinite; animation-delay: 5.0s; } /* Base -> Model */
+
+                        /* 8. White Flash Holds (t=4.2, 5.2) */
+                        #eval-box { animation: whiteFlashHold 7s linear infinite; animation-delay: 4.2s; }
+                        #train-box { animation: whiteFlashHold 7s linear infinite; animation-delay: 5.2s; }
 
                         /* KEYFRAMES */
                         @keyframes pulseBox {
                             0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
                             5% { stroke: #00cc00; stroke-width: 2.5px; }
                             20% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
+                        }
+                        @keyframes modelHold {
+                            0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
+                            5% { stroke: #00cc00; stroke-width: 3px; } /* Hit */
+                            40% { stroke: #00cc00; stroke-width: 3px; } /* Hold while feedback runs */
+                            45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } /* Release */
+                        }
+                        @keyframes whiteFlashHold {
+                            0% { stroke: var(--text-muted, #666); }
+                            5% { stroke: #fff; stroke-width: 2.5px; } /* Flash */
+                            20% { stroke: #fff; stroke-width: 2.5px; } /* Hold */
+                            25% { stroke: var(--text-muted, #666); stroke-width: 1.5px; }
                         }
                         @keyframes gateActive {
                             0% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
@@ -518,20 +536,18 @@
                             20% { opacity: 0; }
                             100% { opacity: 0; }
                         }
-                        @keyframes amberPulse {
-                            0% { stroke: var(--text-muted, #666); }
-                            5% { stroke: #ffcc00; stroke-width: 2.5px; }
-                            20% { stroke: var(--text-muted, #666); stroke-width: 1.5px; }
-                        }
-                        @keyframes feedbackOpacity {
-                            0%, 100% { opacity: 0.3; }
-                            5%, 20% { opacity: 0.8; }
+                        @keyframes packetFlowSmall {
+                            0% { stroke-dashoffset: 260; opacity: 0; }
+                            10% { opacity: 1; }
+                            30% { stroke-dashoffset: 0; opacity: 1; } 
+                            40% { opacity: 0; }
+                            100% { opacity: 0; }
                         }
 
                         @media (prefers-reduced-motion: reduce) {
                             * { animation: none !important; }
                             #state-box { stroke: #00cc00; stroke-width: 2px; }
-                            #packet-1, #packet-2, .telemetry-text { display: none; }
+                            #packet-1, #packet-2, #packet-3, #packet-4, #packet-5, .telemetry-text { display: none; }
                         }
 
                         .diag-container { fill: none; stroke: var(--border-color, #444); stroke-width: 1px; stroke-dasharray: 4 4; }
@@ -586,9 +602,14 @@
                             <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Base Train</text>
                         </g>
 
-                        <path class="feedback-path feedback-delay-1" d="M485 105 L485 80 L560 80" class="diag-line" style="stroke-width:1.5px;"/>
-                        <path class="feedback-path feedback-delay-2" d="M605 100 L605 160" class="diag-line" style="stroke-width:1.5px;"/>
-                        <path class="feedback-path feedback-delay-2" d="M560 180 L485 180 L485 155" class="diag-line" style="stroke-width:1.5px;"/>
+                        <path d="M485 105 L485 80 L560 80" class="diag-line" style="stroke-width:1.5px;"/>
+                        <path id="packet-3" d="M485 105 L485 80 L560 80" style="fill:none;" />
+                        
+                        <path d="M605 100 L605 160" class="diag-line" style="stroke-width:1.5px;"/>
+                        <path id="packet-4" d="M605 100 L605 160" style="fill:none;" />
+                        
+                        <path d="M560 180 L485 180 L485 155" class="diag-line" style="stroke-width:1.5px;"/>
+                        <path id="packet-5" d="M560 180 L485 180 L485 155" style="fill:none;" />
                         
                         <text x="560" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em;">POST-HOC EVALUATION</text>
                         <text x="560" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.3; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
@@ -600,7 +621,7 @@
                 
                 <div class="diag-legend">
                     <div class="legend-item"><div class="legend-dot" style="background:#00cc00;"></div>ENFORCED</div>
-                    <div class="legend-item"><div class="legend-dot" style="background:#ffcc00;"></div>EVALUATION</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#fff; border:1px solid #ccc;"></div>EVALUATION</div>
                     <div class="legend-item"><div class="legend-dot" style="background:#666;"></div>STRUCTURAL</div>
                 </div>
                 
@@ -681,23 +702,23 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V116) ---
+        // --- CYCLE COUNTER & LOCK (V119) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
         
         setInterval(() => {
-            // Trigger Lock at ~5.8s (end of cycle)
+            // Trigger Lock at ~6.0s (end of cycle)
             setTimeout(() => {
                 cycleCount++;
                 counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:#00cc00; font-weight:800;">STATE: ENFORCED</span>`;
-            }, 5800);
+            }, 6000);
             
             // Reset visual state
             setTimeout(() => {
                 counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')}`;
-            }, 7800); // 2 SECONDS LOCK DURATION
+            }, 8000); // 2s Hold
             
-        }, 6000); 
+        }, 7000); 
     </script>
 </body>
 </html>
