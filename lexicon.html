@@ -18,11 +18,10 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V123 (FINAL POLISH) */
+        /* THEME: INSTITUTE STANDARD V124 (VISIBILITY PATCH) */
         :root {
-            /* LIGHT MODE (DEFAULT) */
+            /* LIGHT MODE */
             --bg-color: #ffffff;
-            --sidebar-bg: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
@@ -34,42 +33,29 @@
             --panel-hover-bg: #000;
             --panel-hover-text: #fff;
             
-            --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-            
             /* SIGNALS */
-            --status-verified: #00cc00;
-            --signal-blue: #0066ff;
-            --signal-red: #cc0000;
-            
-            /* VIEW MODES */
-            --mode-diff-del-bg: #ffebeb;
-            --mode-diff-del-text: #cc0000;
-            --mode-diff-ins-bg: #e6ffec;
-            --mode-diff-ins-text: #006600;
+            --signal-enforced: #00cc00;  /* Pure Green */
+            --signal-eval: #00aaff;      /* Distinct Blue */
+            --signal-struct: #666666;
         }
 
-        /* DARK MODE OVERRIDES */
+        /* DARK MODE */
         [data-theme="dark"] {
             --bg-color: #050505;
-            --sidebar-bg: #050505;
             --text-main: #e0e0e0;
             --text-muted: #888888;
             --border-color: #333333;
             --card-bg: #111111;
             
-            /* Invert Repo Panel behavior */
             --panel-border: #444;
             --panel-bg: #050505;
             --panel-text: #ccc;
             --panel-hover-bg: #e0e0e0;
             --panel-hover-text: #000;
-
-            /* Dark Diff Colors */
-            --mode-diff-del-bg: #330000;
-            --mode-diff-del-text: #ff6666;
-            --mode-diff-ins-bg: #003300;
-            --mode-diff-ins-text: #66ff66;
+            
+            /* High Contrast Signals */
+            --signal-enforced: #00cc00;
+            --signal-eval: #00eaff; /* Brighter Cyan for Dark Mode */
         }
 
         * { box-sizing: border-box; }
@@ -77,7 +63,7 @@
         
         body {
             margin: 0; padding: 0;
-            font-family: var(--font-stack);
+            font-family: "Inter", sans-serif;
             background: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
@@ -91,29 +77,21 @@
         ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
         li { margin-bottom: 0.5rem; font-size: 0.95rem; }
         
-        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
+        .mono { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .scramble { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
         /* ORIENTING FRAME */
         .orienting-frame { 
-            font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; 
+            font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; 
             margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 65ch; line-height: 1.4;
         }
-
-        /* --- BEACONS --- */
-        @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
-        @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
-        @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
-
-        .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
-        .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
         /* --- REPO PANEL --- */
         .repo-panel {
             margin-top: auto; margin-bottom: 1rem; 
             border: 1px solid var(--panel-border); 
             background: var(--panel-bg); 
-            padding: 12px; font-family: var(--font-mono);
+            padding: 12px; font-family: "JetBrains Mono", monospace;
             transition: all 0.2s ease; cursor: pointer;
         }
         .repo-panel:hover { 
@@ -127,7 +105,7 @@
             font-size: 0.65rem; font-weight: 700; color: var(--panel-text); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; transition: color 0.2s;
         }
         .repo-panel:hover .repo-header { color: var(--panel-hover-text); }
-        .status-dot-red { width: 6px; height: 6px; background: var(--signal-red); border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
+        .status-dot-red { width: 6px; height: 6px; background: #cc0000; border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
         .repo-link { 
             display: block; font-size: 0.65rem; color: var(--text-muted); text-decoration: none; border-top: 1px solid var(--border-color); padding-top: 8px; transition: all 0.2s; 
         }
@@ -135,6 +113,8 @@
         .repo-panel:hover .repo-link:hover { opacity: 1; text-decoration: underline; }
         .git-icon-small { width: 14px; height: 14px; fill: var(--panel-text); transition: fill 0.2s; }
         .repo-panel:hover .git-icon-small { fill: var(--panel-hover-text); }
+
+        @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
 
         /* --- MODES & VIEWS --- */
         del, ins { text-decoration: none; }
@@ -146,8 +126,10 @@
         body:not([data-mode="diff"]) ins { display: inline; background: transparent; color: inherit; text-decoration: none; }
 
         /* DIFF MODE */
-        body[data-mode="diff"] del { display: inline; background: var(--mode-diff-del-bg); color: var(--mode-diff-del-text); text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
-        body[data-mode="diff"] ins { display: inline; background: var(--mode-diff-ins-bg); color: var(--mode-diff-ins-text); border-bottom: 2px solid var(--mode-diff-ins-text); text-decoration: none; padding: 0 2px; }
+        body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
+        body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #006600; text-decoration: none; padding: 0 2px; }
+        [data-theme="dark"] body[data-mode="diff"] del { background: #330000; color: #ff6666; }
+        [data-theme="dark"] body[data-mode="diff"] ins { background: #003300; color: #66ff66; }
 
         /* AUDIT MODE */
         body[data-mode="audit"] .view-human, body[data-mode="audit"] .view-logic { display: none; }
@@ -155,14 +137,14 @@
 
         /* LOGIC MODE */
         body[data-mode="logic"] .view-human, body[data-mode="logic"] .view-audit { display: none; }
-        body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: var(--font-mono); color: var(--text-main); }
+        body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: "JetBrains Mono", monospace; color: var(--text-main); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* AUDIT TABLES */
-        .audit-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 2rem; }
+        .audit-table { width: 100%; border-collapse: collapse; font-family: "JetBrains Mono", monospace; font-size: 0.75rem; margin-bottom: 2rem; }
         .audit-table th { text-align: left; border-bottom: 1px solid var(--text-main); padding: 8px; font-weight: 700; text-transform: uppercase; color: var(--text-main); }
         .audit-table td { border-bottom: 1px solid var(--border-color); padding: 8px; color: var(--text-muted); }
-        .audit-fail { color: var(--signal-red); font-weight: 700; }
+        .audit-fail { color: #cc0000; font-weight: 700; }
 
         /* LOGIC BLOCKS */
         .logic-header { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; display: flex; align-items: center; }
@@ -176,29 +158,29 @@
         nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
 
         .brand { margin-bottom: 6rem; cursor: crosshair !important; }
-        .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
+        .brand div { font-family: "Inter", sans-serif; font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
         
         .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
+        .toggle-btn { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
         .toggle-btn:hover { color: var(--text-main); }
         .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 
-        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
         /* --- FOOTER --- */
-        footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); width: 100%; }
+        footer { margin-top: auto; border-top: 1px solid var(--border-color); padding: 2rem 0; font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); width: 100%; }
         .footer-content { display: flex; justify-content: space-between; align-items: flex-end; }
         .footer-left { display: flex; flex-direction: column; gap: 6px; }
         .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--text-main); }
         .footer-secondary { opacity: 0.7; }
         .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 500; }
-        .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
+        .status-dot-small { width: 6px; height: 6px; background-color: #0066ff; border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V123)
+           LAYOUT ENGINE: SEGREGATED (V124)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -221,7 +203,7 @@
                 max-width: 900px;
             }
             .diagram-col {
-                width: 540px; /* Slightly wider for layout shift */
+                width: 580px; /* Widened again for layout */
                 border-left: 1px solid var(--border-color);
                 background: var(--bg-color);
                 padding: 3rem 2rem;
@@ -231,28 +213,28 @@
             }
             .diagram-figure { margin: 0; width: 100%; height: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
             .diagram-label {
-                font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-main); font-weight: 800; opacity: 0.9;
+                font-family: "JetBrains Mono", monospace; font-size: 0.9rem; color: var(--text-main); font-weight: 800; opacity: 0.9;
                 margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: center;
             }
             .diagram-label-xs {
-                 font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
+                 font-family: "JetBrains Mono", monospace; font-size: 0.55rem; color: var(--text-muted);
                 margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.7;
             }
             .diagram-caption {
-                font-family: var(--font-mono); font-size: 0.65rem;
+                font-family: "JetBrains Mono", monospace; font-size: 0.65rem;
                 color: var(--text-muted); margin-top: 1rem;
                 text-align: center; letter-spacing: 0.05em;
             }
             .cycle-label {
-                font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
+                font-family: "JetBrains Mono", monospace; font-size: 0.55rem; color: var(--text-muted);
                 text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 4px;
             }
             .cycle-counter {
-                font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-main); font-weight:700;
+                font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-main); font-weight:700;
                 text-align: center; margin-bottom: 2rem;
             }
             
-            /* DARK MODE TEXT FIXES */
+            /* DARK MODE TEXT FIXES - FORCED HIGH CONTRAST */
             [data-theme="dark"] .cycle-label, 
             [data-theme="dark"] .cycle-counter,
             [data-theme="dark"] .diagram-text-xs { 
@@ -261,11 +243,11 @@
             
             /* LEGEND */
             .diag-legend { 
-                margin-top: 2rem; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted);
-                display: flex; gap: 12px; justify-content: center; text-transform: uppercase;
+                margin-top: 2rem; font-family: "JetBrains Mono", monospace; font-size: 0.55rem; color: var(--text-muted);
+                display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600;
             }
-            .legend-item { display: flex; align-items: center; gap: 4px; }
-            .legend-dot { width: 6px; height: 6px; border-radius: 50%; }
+            .legend-item { display: flex; align-items: center; gap: 6px; }
+            .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
         }
 
         /* MOBILE/TABLET ENGINE (Width <= 1100px) */
@@ -413,9 +395,9 @@
             <div class="diagram-label">TRAINING & DEPLOYMENT LOOP</div>
             <div class="diagram-label-xs">(PRIMARY CAUSAL PATH HIGHLIGHTED)</div>
             <figure class="diagram-figure">
-                <svg id="diagram-context" width="100%" viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg">
+                <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V123 THEME ENGINE */
+                        /* V124 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -424,8 +406,8 @@
                             --diag-text: #eee;
                             --diag-fill: #0b0b0c;
                             --diag-mute: #666;
-                            --diag-signal: #00cc00;
-                            --diag-feedback: #00d7ff; /* CYAN */
+                            --diag-signal: var(--signal-enforced);
+                            --diag-feedback: var(--signal-eval);
                         }
                         
                         @media (prefers-color-scheme: light) {
@@ -441,16 +423,15 @@
                         .diag-bg { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); stroke-width: 1.5px; vector-effect: non-scaling-stroke; transition: stroke 0.2s; }
                         .diag-text { fill: var(--text-main, #eee); font-size: 14px; font-weight: 600; }
                         .diag-text-sm { fill: var(--text-muted, #888); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
-                        
-                        /* High-Contrast Labels (Dark Mode Force) */
                         .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
-                        [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
-
                         .diag-line { stroke: var(--text-muted, #666); stroke-width: 1.5px; fill: none; stroke-linecap: round; }
                         
-                        /* MICRO-TELEMETRY TEXT */
+                        /* Dark Mode Visibility Fix */
+                        [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
+
+                        /* MICRO-TELEMETRY TEXT (Restored) */
                         .telemetry-text { 
-                            font-size: 9px; fill: #00cc00; font-family: "JetBrains Mono", monospace; 
+                            font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; 
                             opacity: 0; animation-fill-mode: forwards; font-weight: 600; letter-spacing: 0.05em;
                         }
 
@@ -458,7 +439,7 @@
                         
                         /* 1. Intent Wire (0.0 - 0.6) */
                         #packet-1 { 
-                            stroke: #00cc00; stroke-width: 2.5px; stroke-linecap: round;
+                            stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
                             stroke-dasharray: 120 500; stroke-dashoffset: 460;
                             animation: packetFlow 8.5s linear infinite;
                         }
@@ -466,7 +447,7 @@
                         
                         /* 2. Gate Wire (0.6 - 1.2) */
                         #packet-gate {
-                            stroke: #00cc00; stroke-width: 2.5px; stroke-linecap: round;
+                            stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
                             stroke-dasharray: 40 240; stroke-dashoffset: 280;
                             animation: packetGateFlow 8.5s linear infinite; animation-delay: 0.6s;
                         }
@@ -484,21 +465,20 @@
                         #state-box { animation: stepImpact 8.5s linear infinite; animation-delay: 2.7s; }
                         #tel-sta { animation: telFlash 8.5s linear infinite; animation-delay: 2.7s; }
                         
-                        /* 5. Model Wire (3.3 - 4.0) */
+                        /* 5. Model Wire (3.0 - 3.8) - CORRECTED ORDER */
                         #packet-2 { 
-                            stroke: #00cc00; stroke-width: 2.5px; stroke-linecap: round;
-                            stroke-dasharray: 120 500; stroke-dashoffset: 620;
-                            animation: packetFlow 8.5s linear infinite; animation-delay: 3.3s;
+                            stroke: var(--signal-enforced); stroke-width: 2.5px; stroke-linecap: round;
+                            stroke-dasharray: 120 500; stroke-dashoffset: 660; /* Start Left */
+                            animation: packetFlowCorrected 8.5s linear infinite; animation-delay: 3.0s;
                         }
                         
-                        /* 6. Model Hold (3.8 - 6.0) - DELAYED */
+                        /* 6. Model Hold (3.8 - 6.0) - DELAYED AFTER WIRE */
                         #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 3.8s; }
                         
                         /* 7. Eval Path Packets (Cyan) (4.4+) */
                         #packet-3, #packet-4, #packet-5 {
-                            stroke: #00d7ff; stroke-width: 2.5px; stroke-linecap: round;
-                            stroke-dasharray: 100 500;
-                            stroke-dashoffset: 260;
+                            stroke: var(--signal-eval); stroke-width: 2.5px; stroke-linecap: round;
+                            stroke-dasharray: 100 500; stroke-dashoffset: 260;
                         }
                         #packet-3 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 4.4s; }
                         #packet-4 { animation: packetFlowSmall 8.5s linear infinite; animation-delay: 5.0s; }
@@ -508,62 +488,72 @@
                         #eval-box { animation: cyanPulse 8.5s linear infinite; animation-delay: 5.0s; }
                         #train-box { animation: cyanPulse 8.5s linear infinite; animation-delay: 6.1s; }
                         
-                        /* 9. Policy Update Loop (7.0s) */
+                        /* 9. Policy Update Loop (7.0s) - HIGH VISIBILITY */
                         #policy-path { 
-                            stroke: #00d7ff; stroke-width: 2px; stroke-dasharray: 5 5; opacity: 0;
+                            stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 6 6; opacity: 0;
                             animation: policyFlash 8.5s linear infinite; animation-delay: 7.0s; 
                         }
                         #policy-label { 
-                            fill: #00d7ff; opacity: 0; 
+                            fill: var(--signal-eval); opacity: 0; font-weight: 700; letter-spacing: 0.05em;
                             animation: policyFlash 8.5s linear infinite; animation-delay: 7.0s; 
                         }
 
                         /* KEYFRAMES */
                         @keyframes pulseBox {
                             0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
-                            5% { stroke: #00cc00; stroke-width: 2px; }
+                            5% { stroke: var(--signal-enforced); stroke-width: 2px; }
                             15% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
                         }
                         @keyframes modelHold {
                             0% { stroke: var(--border-color, #333); stroke-width: 1.5px; }
-                            5% { stroke: #00cc00; stroke-width: 2.5px; } /* Hit */
-                            40% { stroke: #00cc00; stroke-width: 2.5px; } /* HOLD GREEN */
+                            5% { stroke: var(--signal-enforced); stroke-width: 2px; } /* Hit */
+                            40% { stroke: var(--signal-enforced); stroke-width: 2px; } /* HOLD GREEN */
                             45% { stroke: var(--border-color, #333); stroke-width: 1.5px; } /* Release */
                         }
                         @keyframes cyanPulse {
                             0% { stroke: var(--text-muted, #666); }
-                            5% { stroke: #00d7ff; stroke-width: 2.5px; } /* CYAN Flash */
-                            20% { stroke: #00d7ff; stroke-width: 2.5px; } /* Hold */
+                            5% { stroke: var(--signal-eval); stroke-width: 2px; } /* CYAN Flash */
+                            20% { stroke: var(--signal-eval); stroke-width: 2px; } /* Hold */
                             25% { stroke: var(--text-muted, #666); stroke-width: 1.5px; }
                         }
                         @keyframes gateActive {
                             0% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
-                            5% { stroke: #00cc00; stroke-width: 2.5px; } /* THINNER BORDER */
-                            30% { stroke: #00cc00; stroke-width: 2.5px; }
+                            5% { stroke: var(--signal-enforced); stroke-width: 2.5px; }
+                            30% { stroke: var(--signal-enforced); stroke-width: 2.5px; }
                             40% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
                         }
                         @keyframes stepImpact {
                             0% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); }
-                            3% { stroke: #00cc00; fill: rgba(0,204,0,0.1); stroke-width: 2px; }
+                            3% { stroke: var(--signal-enforced); fill: rgba(0,204,0,0.1); stroke-width: 2px; }
                             10% { stroke: var(--border-color, #333); fill: var(--card-bg, #1a1a1a); stroke-width: 1.5px; }
                         }
                         @keyframes telFlash { 0% { opacity: 0; } 3% { opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetFlow { 0% { stroke-dashoffset: 460; opacity: 0; } 5% { opacity: 1; } 15% { stroke-dashoffset: 0; opacity: 1; } 20% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetGateFlow { 0% { stroke-dashoffset: 280; opacity: 0; } 5% { opacity: 1; } 20% { stroke-dashoffset: 0; opacity: 1; } 25% { opacity: 0; } 100% { opacity: 0; } }
+                        
+                        /* CORRECTED LEFT-TO-RIGHT FLOW for Gate->Model */
+                        @keyframes packetFlowCorrected { 
+                            0% { stroke-dashoffset: 660; opacity: 0; } 
+                            5% { opacity: 1; } 
+                            15% { stroke-dashoffset: 0; opacity: 1; } 
+                            20% { opacity: 0; } 
+                            100% { opacity: 0; } 
+                        }
+                        
                         @keyframes packetFlowSmall { 0% { stroke-dashoffset: 260; opacity: 0; } 10% { opacity: 1; } 30% { stroke-dashoffset: 0; opacity: 1; } 40% { opacity: 0; } 100% { opacity: 0; } }
-                        @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 0.8; } 100% { opacity: 0; } }
+                        @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 0; } }
 
                         @media (prefers-reduced-motion: reduce) {
                             * { animation: none !important; }
-                            #state-box { stroke: #00cc00; stroke-width: 2px; }
+                            #state-box { stroke: var(--signal-enforced); stroke-width: 2px; }
                             #packet-1, #packet-gate, #packet-2, #packet-3, #packet-4, #packet-5, .telemetry-text { display: none; }
                         }
 
                         .diag-container { fill: none; stroke: var(--border-color, #444); stroke-width: 1px; stroke-dasharray: 4 4; }
                     </style>
 
-                    <g class="diag-root" transform="translate(10,0)">
-                        <rect x="0" y="10" width="680" height="240" rx="4" class="diag-container"/>
+                    <g class="diag-root" transform="translate(20,0)">
+                        <rect x="0" y="10" width="700" height="240" rx="4" class="diag-container"/>
 
                         <g transform="translate(20, 105)">
                             <rect id="intent-box" width="110" height="50" rx="2" class="diag-bg"/>
@@ -574,56 +564,56 @@
                         <path id="packet-1" d="M130 130 L170 130" style="fill:none;" />
 
                         <g transform="translate(170, 50)">
-                            <rect id="gate-box" width="240" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
-                            <text x="120" y="25" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:800;">ENFORCEMENT GATE</text>
+                            <rect id="gate-box" width="250" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
+                            <text x="125" y="25" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:800;">ENFORCEMENT GATE</text>
                             
-                            <rect id="lexicon-box" x="30" y="40" width="120" height="28" rx="2" class="diag-bg"/>
-                            <text x="90" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
-                            <text id="tel-lex" x="160" y="58" class="telemetry-text">REF: RAL-LEX-02</text>
+                            <rect id="lexicon-box" x="30" y="40" width="130" height="28" rx="2" class="diag-bg"/>
+                            <text x="95" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
+                            <text id="tel-lex" x="170" y="58" class="telemetry-text">REF: RAL-LEX-02</text>
                             
-                            <rect id="serial-box" x="30" y="80" width="120" height="28" rx="2" class="diag-bg"/>
-                            <text x="90" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
-                            <text id="tel-ser" x="160" y="98" class="telemetry-text">CHK: SCHEMA::OK</text>
+                            <rect id="serial-box" x="30" y="80" width="130" height="28" rx="2" class="diag-bg"/>
+                            <text x="95" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
+                            <text id="tel-ser" x="170" y="98" class="telemetry-text">CHK: SCHEMA::OK</text>
                             
-                            <rect id="state-box" x="30" y="120" width="120" height="28" rx="2" class="diag-bg"/>
-                            <text x="90" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; font-weight:700;">3. ENFORCED STATE</text>
-                            <text id="tel-sta" x="160" y="138" class="telemetry-text">LCK: 0x8F2A</text>
+                            <rect id="state-box" x="30" y="120" width="130" height="28" rx="2" class="diag-bg"/>
+                            <text x="95" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; font-weight:700;">3. ENFORCED STATE</text>
+                            <text id="tel-sta" x="170" y="138" class="telemetry-text">LCK: 0x8F2A</text>
                             
-                            <path d="M90 68 L90 80" class="diag-line" style="stroke-width:1px;"/>
-                            <path id="packet-gate" d="M90 68 L90 80 M90 108 L90 120" style="fill:none; stroke-linecap:round;" />
+                            <path d="M95 68 L95 80" class="diag-line" style="stroke-width:1px;"/>
+                            <path id="packet-gate" d="M95 68 L95 80 M95 108 L95 120" style="fill:none; stroke-linecap:round;" />
                         </g>
 
-                        <path d="M410 130 L450 130" class="diag-line" />
-                        <path id="packet-2" d="M410 130 L450 130" style="fill:none;" />
+                        <path d="M420 130 L460 130" class="diag-line" />
+                        <path id="packet-2" d="M420 130 L460 130" style="fill:none;" />
 
-                        <g transform="translate(450, 105)">
+                        <g transform="translate(460, 105)">
                             <rect id="model-box" width="110" height="50" rx="2" class="diag-bg"/>
                             <text x="55" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
                         </g>
 
-                        <g transform="translate(580, 60)">
+                        <g transform="translate(590, 60)">
                             <rect id="eval-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted, #666); stroke-width:1.5px; opacity:0.8;"/>
                             <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Safety Eval</text>
                         </g>
-                        <g transform="translate(580, 160)">
+                        <g transform="translate(590, 160)">
                             <rect id="train-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted, #666); stroke-width:1.5px; opacity:0.8;"/>
                             <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Base Train</text>
                         </g>
 
-                        <path d="M505 105 L505 80 L580 80" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                        <path id="packet-3" d="M505 105 L505 80 L580 80" style="fill:none;" />
+                        <path d="M515 105 L515 80 L590 80" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                        <path id="packet-3" d="M515 105 L515 80 L590 80" style="fill:none;" />
                         
-                        <path d="M625 100 L625 160" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                        <path id="packet-4" d="M625 100 L625 160" style="fill:none;" />
+                        <path d="M635 100 L635 160" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                        <path id="packet-4" d="M635 100 L635 160" style="fill:none;" />
                         
-                        <path d="M580 180 L505 180 L505 155" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                        <path id="packet-5" d="M580 180 L505 180 L505 155" style="fill:none;" />
+                        <path d="M590 180 L515 180 L515 155" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                        <path id="packet-5" d="M590 180 L515 180 L515 155" style="fill:none;" />
                         
-                        <path id="policy-path" d="M625 60 L625 30 L130 30 L130 105" class="diag-line" />
-                        <text id="policy-label" x="340" y="25" class="telemetry-text" style="fill:#00d7ff; font-weight:700;">POLICY UPDATE LOOP</text>
+                        <path id="policy-path" d="M635 60 L635 30 L130 30 L130 105" class="diag-line" />
+                        <text id="policy-label" x="350" y="25" class="telemetry-text" style="fill:var(--signal-eval); font-weight:700; opacity:0;">POLICY UPDATE LOOP</text>
 
-                        <text x="580" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em;">POST-HOC EVALUATION</text>
-                        <text x="580" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.3; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
+                        <text x="590" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em;">POST-HOC EVALUATION</text>
+                        <text x="590" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.3; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
                     </g>
                 </svg>
                 
@@ -631,8 +621,8 @@
                 <div id="cycle-counter" class="cycle-counter">CYCLE: 0215</div>
                 
                 <div class="diag-legend">
-                    <div class="legend-item"><div class="legend-dot" style="background:#00cc00;"></div>ENFORCED</div>
-                    <div class="legend-item"><div class="legend-dot" style="background:#00d7ff;"></div>EVALUATION</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:var(--signal-enforced);"></div>ENFORCED</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:var(--signal-eval);"></div>EVALUATION</div>
                     <div class="legend-item"><div class="legend-dot" style="background:#666;"></div>STRUCTURAL</div>
                 </div>
                 
@@ -713,16 +703,18 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V123) ---
+        // --- CYCLE COUNTER & LOCK (V124) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
-        const telemetryColor = '#00cc00'; // Green Match
         
+        // Match JS Loop to CSS Animation (8.5s)
         setInterval(() => {
             // Trigger Lock at ~6.0s (end of cycle)
             setTimeout(() => {
                 cycleCount++;
-                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:${telemetryColor}; font-weight:800;">STATE: ENFORCED</span>`;
+                // Use var(--signal-enforced) logic via inline style for simplicity or class
+                const color = document.body.getAttribute('data-theme') === 'dark' ? '#00cc00' : '#00cc00';
+                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:${color}; font-weight:800;">STATE: ENFORCED</span>`;
             }, 6000);
             
             // Reset visual state
