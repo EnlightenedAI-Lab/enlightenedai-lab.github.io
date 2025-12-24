@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V133 (VERTICAL COMPRESSION) */
+        /* THEME: INSTITUTE STANDARD V134 (DUAL INSTRUMENT) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -62,7 +62,7 @@
             --panel-hover-text: #000;
             
             --signal-enforced: #00cc00;
-            --signal-eval: #ffffff;      /* White for Eval in Dark Mode */
+            --signal-eval: #ffffff;      /* White Eval in Dark Mode */
             --signal-struct: #333333;
 
             /* Dark Diff Colors */
@@ -186,7 +186,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V133)
+           LAYOUT ENGINE: SEGREGATED (V134)
            ========================================= */
 
         @media (min-width: 1101px) {
@@ -194,7 +194,7 @@
             aside#sidebar { width: 240px; height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 2rem; display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0; }
             main { flex-grow: 1; display: flex; margin: 0; }
             .content-col { flex: 1; padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; max-width: 900px; }
-            .diagram-col { width: 580px; border-left: 1px solid var(--border-color); background: var(--bg-color); padding: 1.5rem 2rem; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; align-items: center; justify-content: center; }
+            .diagram-col { width: 580px; border-left: 1px solid var(--border-color); background: var(--bg-color); padding: 1.5rem 2rem; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; align-items: center; justify-content: flex-start; }
             .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
             
             /* INSTRUMENT LENS CONTROL - DOCKED */
@@ -224,9 +224,14 @@
             .legend-item { display: flex; align-items: center; gap: 6px; }
             .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
             
-            /* DIAGRAM 02 SEPARATOR & PLACEHOLDER */
+            /* DIAGRAM 02 STYLES */
             .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: 2rem 0; opacity: 0.5; }
-            .diagram-02-placeholder { width: 100%; height: 200px; border: 1px dashed var(--border-color); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); opacity: 0.5; }
+            
+            /* D2 SPECIFIC */
+            .d2-metric { font-size: 9px; fill: var(--text-muted); font-weight: 500; font-family: "JetBrains Mono", monospace; letter-spacing: 0.05em; }
+            .d2-header { font-size: 10px; fill: var(--text-main); font-weight: 700; text-transform: uppercase; font-family: "JetBrains Mono", monospace; letter-spacing: 0.05em; }
+            [data-theme="dark"] .d2-metric { fill: #999; }
+            [data-theme="dark"] .d2-header { fill: #fff; }
         }
 
         @media (max-width: 1100px) {
@@ -371,7 +376,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V133 THEME ENGINE */
+                        /* V134 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         :root {
                             --diag-stroke: #333; --diag-text: #eee; --diag-fill: #0b0b0c; --diag-mute: #666;
@@ -387,7 +392,7 @@
                         .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
                         .diag-line { stroke: var(--text-muted, #666); stroke-width: 1.5px; fill: none; stroke-linecap: round; }
                         [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
-                        .telemetry-text { font-size: 10px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; opacity: 0; font-weight: 700; letter-spacing: 0.05em; }
+                        .telemetry-text { font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; opacity: 0; font-weight: 600; }
 
                         /* MODE VISIBILITY CLASSES - STRICT HIDING */
                         .mode-group-audit { opacity: 0; transition: opacity 0.2s; }
@@ -532,9 +537,50 @@
             </figure>
             
             <div class="diagram-separator"></div>
-            <div class="diagram-02-placeholder">
-                // DIAGRAM 02 RESERVED SPACE //
-            </div>
+            
+            <div class="diagram-label">DIAGRAM 02 — SEMANTIC STABILITY MAP</div>
+            <div class="diagram-label-xs">(MEASUREMENT, NOT CONTROL)</div>
+            
+            <figure class="diagram-figure">
+                <svg id="diagram-stability" width="100%" viewBox="0 0 740 180" xmlns="http://www.w3.org/2000/svg">
+                    <style>
+                        .d2-line { stroke: var(--text-muted); stroke-width: 1px; opacity: 0.3; }
+                        .d2-boundary { stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 4 4; }
+                        .d2-text { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--text-main); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+                        .d2-metric { font-family: "JetBrains Mono", monospace; font-size: 9px; fill: var(--text-muted); font-weight: 500; }
+                        .d2-label { font-family: "JetBrains Mono", monospace; font-size: 8px; fill: var(--signal-eval); font-weight: 700; letter-spacing: 0.1em; }
+                    </style>
+                    
+                    <g transform="translate(20,0)">
+                        <line x1="50" y1="50" x2="650" y2="50" class="d2-line" />
+                        
+                        <text x="100" y="40" text-anchor="middle" class="d2-text">RAW INTENT</text>
+                        <circle cx="100" cy="50" r="3" fill="#666" />
+                        <text x="100" y="70" text-anchor="middle" class="d2-metric">ENTROPY: HIGH</text>
+                        
+                        <text x="370" y="40" text-anchor="middle" class="d2-text" style="fill:var(--signal-eval);">SERIALIZED STATE</text>
+                        <circle cx="370" cy="50" r="3" style="fill:var(--signal-eval);" />
+                        <text x="370" y="70" text-anchor="middle" class="d2-metric" style="fill:var(--signal-eval);">RETAINED: 75% | DROPPED: 25%</text>
+                        
+                        <text x="640" y="40" text-anchor="middle" class="d2-text" style="fill:var(--signal-enforced);">ENFORCED STATE</text>
+                        <circle cx="640" cy="50" r="3" style="fill:var(--signal-enforced);" />
+                        <text x="640" y="70" text-anchor="middle" class="d2-metric" style="fill:var(--signal-enforced);">DRIFT RISK: LOW</text>
+                        
+                        <line x1="235" y1="20" x2="235" y2="90" class="d2-boundary" />
+                        <text x="245" y="30" class="d2-label" transform="rotate(0)">LOSS BOUNDARY</text>
+                    </g>
+                </svg>
+                
+                <div class="cycle-counter" style="margin-top:0;">
+                    COMPRESSION RATIO: 14 : 1 <span style="margin-left:12px; opacity:0.3">|</span> <span style="margin-left:12px">STABILITY SCORE: 0.93</span>
+                </div>
+                
+                <figcaption class="diagram-caption">
+                    This diagram shows how much meaning survives formalization.
+                    <br>
+                    Alignment quality is bounded by what survives serialization.
+                </figcaption>
+            </figure>
         </div>
     </main>
 
