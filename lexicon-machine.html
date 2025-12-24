@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* THEME: INSTITUTE STANDARD V102 (LEXICON INTEGRATED) */
+        /* THEME: INSTITUTE STANDARD V103 (SCIENTIFIC HARDENING) */
         :root {
             --bg-color: #050505;
             --text-main: #e0e0e0;
@@ -45,9 +45,12 @@
         }
         .back-btn:hover { background: rgba(255,255,255,0.2); }
 
-        .mo-title { font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 12px; font-size: 0.75rem; font-family: var(--font-mono); }
+        .mo-title { 
+            font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; 
+            gap: 12px; font-size: 0.75rem; font-family: var(--font-mono); white-space: nowrap;
+        }
+
         .mo-controls { display: flex; align-items: center; font-family: var(--font-mono); font-size: 0.6rem; color: #666; }
-        
         .event-ticker { margin-right: 25px; display: flex; align-items: center; gap: 8px; min-width: 250px; justify-content: flex-end; }
         .event-dot { width: 4px; height: 4px; background: var(--status-verified); border-radius: 50%; display: block; opacity: 0.7; }
         .uptime-counter { margin-right: 20px; letter-spacing: 0.05em; }
@@ -65,7 +68,7 @@
         /* --- BODY LAYOUT --- */
         .mo-body { flex: 1; display: flex; overflow: hidden; position: relative; }
 
-        /* PROMPT DECK (LEFT) */
+        /* PROMPT DECK */
         .prompt-deck { width: 0; opacity: 0; background: #080808; border-right: 1px solid #222; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; transition: width 0.3s ease, opacity 0.2s ease; }
         .sim-active .prompt-deck { width: 190px; opacity: 1; padding: 1.5rem 1rem; }
         .deck-label { font-size: 0.55rem; color: #666; margin-bottom: 10px; font-weight: 700; letter-spacing: 0.1em; font-family: var(--font-mono); }
@@ -117,11 +120,10 @@
         .ghost-target { cursor: help; }
         .ghost-hash { font-family: var(--font-mono); color: var(--status-verified); font-size: 0.65rem; }
 
-        /* --- SERIALIZATION LAYOUT (V102) --- */
+        /* --- SERIALIZATION LAYOUT --- */
         .serial-layout { display: flex; gap: 2rem; height: 100%; }
         .serial-main { flex: 1; display: flex; flex-direction: column; }
         
-        /* ACTIVE TERMS MONITOR (RIGHT PANEL) */
         .serial-monitor { width: 220px; border-left: 1px solid #333; padding-left: 1rem; display: flex; flex-direction: column; gap: 10px; }
         .tm-header { font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: #666; margin-bottom: 10px; letter-spacing: 0.1em; }
         .tm-item { 
@@ -151,7 +153,7 @@
         }
         .phase-highlight { color: #fff; font-weight: 700; margin-right: 8px; text-transform: uppercase; }
 
-        /* DIFF VIEW (ENHANCED) */
+        /* DIFF VIEW */
         .diff-box { text-align: center; margin-top: 3rem; font-family: var(--font-mono); max-width: 600px; margin-left: auto; margin-right: auto; }
         .diff-verdict { font-size: 3rem; font-weight: 700; color: #fff; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
         .diff-sub { color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 2rem; display: block; }
@@ -161,7 +163,7 @@
         }
         .diff-explain strong { color: #fff; display: block; margin-bottom: 0.5rem; }
         
-        /* FOOTER */
+        /* FOOTER & EXPORT */
         .hex-footer { padding: 10px 24px; background: #080808; border-top: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-size: 0.6rem; color: #444; flex-shrink: 0; z-index: 1000; font-family: var(--font-mono); }
         .manual-trigger { cursor: pointer; color: #888; transition: color 0.2s; font-weight: 700; text-decoration: none; }
         .manual-trigger:hover { color: #fff; }
@@ -169,7 +171,6 @@
         @keyframes beacon-blue { 0%, 100% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); opacity: 0.5; } 50% { box-shadow: 0 0 8px 2px rgba(0, 102, 255, 0.9); opacity: 1; } }
         @keyframes flash-green { 0%, 100% { color: var(--status-verified); opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* EXPORT & HINTS */
         .export-group { position: relative; }
         .export-btn { background: none; border: 1px solid #444; color: #999; padding: 5px 12px; cursor: pointer; font-family: var(--font-mono); font-size: 0.6rem; }
         .export-menu { display: none; position: absolute; right: 0; top: 100%; background: #111; border: 1px solid #444; width: 160px; z-index: 500; }
@@ -185,6 +186,7 @@
             box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
         }
         .jit-hint.visible { opacity: 1; pointer-events: auto; }
+        .jit-hint:hover { background: var(--signal-amber); color: #000; }
 
         /* MANUAL HUD */
         #operator-manual { position: fixed; right: 20px; top: 70px; bottom: 50px; width: 420px; background: rgba(0,0,0,0.95); border: 1px solid #444; z-index: 2000; padding: 2rem; overflow-y: auto; display: none; box-shadow: -10px 10px 30px rgba(0,0,0,0.8); }
@@ -285,9 +287,9 @@
 
                         <div class="serial-monitor">
                             <div class="tm-header">ACTIVE LEXICON TERMS</div>
-                            <div class="tm-item" id="tm-ra001"><div>RA-001</div><div>Global</div></div>
-                            <div class="tm-item" id="tm-rs001"><div>RS-001</div><div>Local</div></div>
-                            <div class="tm-item" id="tm-drift"><div>DRIFT</div><div>Metric</div></div>
+                            <div class="tm-item" id="tm-ra001"><div>RA-001</div><div>Capacity</div></div>
+                            <div class="tm-item" id="tm-rs001"><div>RS-001</div><div>Capacity</div></div>
+                            <div class="tm-item" id="tm-dx009"><div>DX-009</div><div>Diagnostic</div></div>
                             <div class="tm-item" id="tm-inv001"><div>INV-001</div><div>Goal</div></div>
                             <div class="tm-item" id="tm-inv002"><div>INV-002</div><div>Def</div></div>
                             <div class="tm-item" id="tm-inv005"><div>INV-005</div><div>Logic</div></div>
@@ -311,12 +313,13 @@
 
                 <div id="view-snap" style="display:none;">
                     <div class="framing-sentence">Immutable record of the last constrained state.</div>
-                    <pre style="color:#ccc; font-family:var(--font-mono); font-size:0.75rem;">{
-  "state": "LOCKED",
-  "active_constraints": ["INV-001", "INV-002"],
-  "rejected_paths": 14,
-  "final_hash": "0x881D92F"
-}</pre>
+                    <pre style="color:#ccc; font-family:var(--font-mono); font-size:0.75rem;">REFLECTIVE STATE (LOCKED)
+-------------------------
+RA-001:      ENFORCED
+RS-001:      STABLE
+DX-009:      0.03 (NOMINAL)
+INVARIANTS:  5/5 SATISFIED
+NARRATIVE:   DISCARDED</pre>
                 </div>
             </div>
         </div>
@@ -343,9 +346,9 @@
             meta: { doc_id: "RAL-LEX-0002", version: "33.0.0", status: "ACTIVE", classification: "PUBLIC" },
             core_terms: [
                 { id: "SYS-INT", label: "Instrument Semantics", definition: "<ul><li>Metrics degrade → simulated entropy</li><li>Verification restores confidence</li><li>Invariants never drift</li><li>Hash motion = integrity checks</li></ul>", type: "Guide" },
-                { id: "RA-001", label: "Reflective Alignment", definition: "Capacity to preserve goal coherence.", type: "Global" },
-                { id: "RS-001", label: "Reasoning Stability", definition: "Resistance to degradation under pressure.", type: "Local" },
-                { id: "DRIFT", label: "Drift", definition: "Measurable deviation without prompting.", type: "Metric" }
+                { id: "RA-001", label: "Reflective Alignment", definition: "Capacity to preserve goal coherence.", type: "Capacity" },
+                { id: "RS-001", label: "Reasoning Stability", definition: "Resistance to degradation under pressure.", type: "Capacity" },
+                { id: "DX-009", label: "Diagnostic Telemetry", definition: "Real-time measurement of system state drift.", type: "Diagnostic" }
             ],
             invariants: [
                 { id: "INV-001", name: "Goal Preservation", scope: "Global", status: "ENFORCED" },
@@ -391,6 +394,7 @@
         function renderCards() {
             const container = document.getElementById('card-grid-root');
             let html = `<div class="m-card" id="card-meta"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON.meta.classification}</div></div><div class="live-stats"><div>UPTIME: <span id="meta-uptime">00:00</span></div><div>SHA: 8A...2F</div></div></div>`;
+            
             html += `<div class="mc-section-title">CORE TERMS</div>`;
             LEXICON.core_terms.forEach(t => { 
                 let extra = '', stats = '';
@@ -399,14 +403,17 @@
                     html += `<div class="m-card card-sys-int"><div class="mc-header"><div>${t.id}</div><div>${t.type}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row" style="display:block; padding-top:10px;">${t.definition}</div>${stats}</div>`;
                 } else {
                     extra = (t.id === 'RA-001' || t.id === 'RS-001') ? `<div class="mc-row interactive-row" onclick="requestManualVerification('${t.id}')"><div class="mc-label">CONFIDENCE</div><div class="mc-val val-high" id="val-${t.id}">${raConfidence.toFixed(2)}%</div></div>` : '';
-                    stats = (t.id === 'DRIFT') ? `<div class="live-stats"><div>LATENCY: <span class="ping-val">12</span>ms</div><div>CHECK: OK</div></div>` : `<div class="live-stats"><div>ENTROPY: LOW</div><div>CYCLE: <span class="jitter-val">102</span></div></div>`;
+                    stats = (t.id === 'DX-009') ? `<div class="live-stats"><div>LATENCY: <span class="ping-val">12</span>ms</div><div>CHECK: OK</div></div>` : `<div class="live-stats"><div>ENTROPY: LOW</div><div>CYCLE: <span class="jitter-val">102</span></div></div>`;
                     html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>${t.type}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>${extra}${stats}</div>`;
                 }
             });
+
             html += `<div class="mc-section-title">INVARIANTS</div>`;
             LEXICON.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val ghost-target" onmouseenter="toggleGhost(this, true)" onmouseleave="toggleGhost(this, false)">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div><div class="live-stats"><div>INTEGRITY: LOCKED</div><div>HASH: <span class="scramble-hash">0x4F...A1</span></div></div></div>`; });
+            
             html += `<div class="mc-section-title">FAILURE SIGNATURES</div>`;
             LEXICON.failure_signatures.forEach(f => { html += `<div class="m-card"><div class="mc-header"><div>${f.signature}</div><div style="color:var(--signal-red)">${f.severity}</div></div><div class="mc-row"><div class="mc-label">TRIGGER</div><div class="mc-val">${f.condition}</div></div></div>`; });
+            
             container.innerHTML = html;
         }
 
@@ -508,13 +515,12 @@
             document.querySelectorAll('.step-btn').forEach((b, i) => b.classList.toggle('active', i+1 === n));
             document.getElementById('phase-desc').innerHTML = PHASE_DESCS[n-1];
             
-            // ACTIVE TERMS MONITOR LOGIC
             const terms = {
-                1: [], // Intent
-                2: ['tm-drift'], // Decompose
-                3: ['tm-ra001', 'tm-rs001'], // Binding
-                4: ['tm-inv001', 'tm-inv002', 'tm-inv005'], // Enforce
-                5: ['tm-ra001', 'tm-rs001', 'tm-drift', 'tm-inv001', 'tm-inv002', 'tm-inv005'] // State
+                1: [], 
+                2: ['tm-dx009'], 
+                3: ['tm-ra001', 'tm-rs001'], 
+                4: ['tm-inv001', 'tm-inv002', 'tm-inv005'], 
+                5: ['tm-ra001', 'tm-rs001', 'tm-dx009', 'tm-inv001', 'tm-inv002', 'tm-inv005']
             };
             
             document.querySelectorAll('.tm-item').forEach(el => {
