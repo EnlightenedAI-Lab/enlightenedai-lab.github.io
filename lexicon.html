@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V122 (CAUSALITY REPAIR) */
+        /* THEME: INSTITUTE STANDARD V123 (FINAL POLISH) */
         :root {
             /* LIGHT MODE (DEFAULT) */
             --bg-color: #ffffff;
@@ -198,7 +198,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V122)
+           LAYOUT ENGINE: SEGREGATED (V123)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -221,7 +221,7 @@
                 max-width: 900px;
             }
             .diagram-col {
-                width: 500px; 
+                width: 540px; /* Slightly wider for layout shift */
                 border-left: 1px solid var(--border-color);
                 background: var(--bg-color);
                 padding: 3rem 2rem;
@@ -413,9 +413,9 @@
             <div class="diagram-label">TRAINING & DEPLOYMENT LOOP</div>
             <div class="diagram-label-xs">(PRIMARY CAUSAL PATH HIGHLIGHTED)</div>
             <figure class="diagram-figure">
-                <svg id="diagram-context" width="100%" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
+                <svg id="diagram-context" width="100%" viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V122 THEME ENGINE */
+                        /* V123 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -441,10 +441,14 @@
                         .diag-bg { fill: var(--card-bg, #1a1a1a); stroke: var(--border-color, #333); stroke-width: 1.5px; vector-effect: non-scaling-stroke; transition: stroke 0.2s; }
                         .diag-text { fill: var(--text-main, #eee); font-size: 14px; font-weight: 600; }
                         .diag-text-sm { fill: var(--text-muted, #888); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
-                        .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+                        
+                        /* High-Contrast Labels (Dark Mode Force) */
+                        .diag-text-xs { fill: var(--text-muted, #888); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+                        [data-theme="dark"] .diag-text-xs { fill: #ddd !important; opacity: 1 !important; }
+
                         .diag-line { stroke: var(--text-muted, #666); stroke-width: 1.5px; fill: none; stroke-linecap: round; }
                         
-                        /* MICRO-TELEMETRY TEXT (Restored) */
+                        /* MICRO-TELEMETRY TEXT */
                         .telemetry-text { 
                             font-size: 9px; fill: #00cc00; font-family: "JetBrains Mono", monospace; 
                             opacity: 0; animation-fill-mode: forwards; font-weight: 600; letter-spacing: 0.05em;
@@ -463,7 +467,7 @@
                         /* 2. Gate Wire (0.6 - 1.2) */
                         #packet-gate {
                             stroke: #00cc00; stroke-width: 2.5px; stroke-linecap: round;
-                            stroke-dasharray: 40 200; stroke-dashoffset: 240;
+                            stroke-dasharray: 40 240; stroke-dashoffset: 280;
                             animation: packetGateFlow 8.5s linear infinite; animation-delay: 0.6s;
                         }
                         
@@ -487,7 +491,7 @@
                             animation: packetFlow 8.5s linear infinite; animation-delay: 3.3s;
                         }
                         
-                        /* 6. Model Hold (3.8 - 6.0) - DELAYED to wait for packet */
+                        /* 6. Model Hold (3.8 - 6.0) - DELAYED */
                         #model-box { animation: modelHold 8.5s ease-out infinite; animation-delay: 3.8s; }
                         
                         /* 7. Eval Path Packets (Cyan) (4.4+) */
@@ -534,8 +538,8 @@
                         }
                         @keyframes gateActive {
                             0% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
-                            5% { stroke: #00cc00; stroke-width: 3.5px; }
-                            30% { stroke: #00cc00; stroke-width: 3.5px; }
+                            5% { stroke: #00cc00; stroke-width: 2.5px; } /* THINNER BORDER */
+                            30% { stroke: #00cc00; stroke-width: 2.5px; }
                             40% { stroke: var(--text-main, #eee); stroke-width: 2.5px; }
                         }
                         @keyframes stepImpact {
@@ -545,7 +549,7 @@
                         }
                         @keyframes telFlash { 0% { opacity: 0; } 3% { opacity: 1; } 15% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetFlow { 0% { stroke-dashoffset: 460; opacity: 0; } 5% { opacity: 1; } 15% { stroke-dashoffset: 0; opacity: 1; } 20% { opacity: 0; } 100% { opacity: 0; } }
-                        @keyframes packetGateFlow { 0% { stroke-dashoffset: 240; opacity: 0; } 5% { opacity: 1; } 20% { stroke-dashoffset: 0; opacity: 1; } 25% { opacity: 0; } 100% { opacity: 0; } }
+                        @keyframes packetGateFlow { 0% { stroke-dashoffset: 280; opacity: 0; } 5% { opacity: 1; } 20% { stroke-dashoffset: 0; opacity: 1; } 25% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes packetFlowSmall { 0% { stroke-dashoffset: 260; opacity: 0; } 10% { opacity: 1; } 30% { stroke-dashoffset: 0; opacity: 1; } 40% { opacity: 0; } 100% { opacity: 0; } }
                         @keyframes policyFlash { 0% { opacity: 0; } 10% { opacity: 0.8; } 100% { opacity: 0; } }
 
@@ -559,7 +563,7 @@
                     </style>
 
                     <g class="diag-root" transform="translate(10,0)">
-                        <rect x="0" y="10" width="660" height="240" rx="4" class="diag-container"/>
+                        <rect x="0" y="10" width="680" height="240" rx="4" class="diag-container"/>
 
                         <g transform="translate(20, 105)">
                             <rect id="intent-box" width="110" height="50" rx="2" class="diag-bg"/>
@@ -570,56 +574,56 @@
                         <path id="packet-1" d="M130 130 L170 130" style="fill:none;" />
 
                         <g transform="translate(170, 50)">
-                            <rect id="gate-box" width="220" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
-                            <text x="110" y="25" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:800;">ENFORCEMENT GATE</text>
+                            <rect id="gate-box" width="240" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
+                            <text x="120" y="25" text-anchor="middle" class="diag-text-sm" style="fill:var(--text-main); font-weight:800;">ENFORCEMENT GATE</text>
                             
-                            <rect id="lexicon-box" x="20" y="40" width="120" height="28" rx="2" class="diag-bg"/>
-                            <text x="80" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
-                            <text id="tel-lex" x="145" y="58" class="telemetry-text">REF: RAL-LEX-02</text>
+                            <rect id="lexicon-box" x="30" y="40" width="120" height="28" rx="2" class="diag-bg"/>
+                            <text x="90" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
+                            <text id="tel-lex" x="160" y="58" class="telemetry-text">REF: RAL-LEX-02</text>
                             
-                            <rect id="serial-box" x="20" y="80" width="120" height="28" rx="2" class="diag-bg"/>
-                            <text x="80" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
-                            <text id="tel-ser" x="145" y="98" class="telemetry-text">CHK: SCHEMA::OK</text>
+                            <rect id="serial-box" x="30" y="80" width="120" height="28" rx="2" class="diag-bg"/>
+                            <text x="90" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
+                            <text id="tel-ser" x="160" y="98" class="telemetry-text">CHK: SCHEMA::OK</text>
                             
-                            <rect id="state-box" x="20" y="120" width="120" height="28" rx="2" class="diag-bg"/>
-                            <text x="80" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; font-weight:700;">3. ENFORCED STATE</text>
-                            <text id="tel-sta" x="145" y="138" class="telemetry-text">LCK: 0x8F2A</text>
+                            <rect id="state-box" x="30" y="120" width="120" height="28" rx="2" class="diag-bg"/>
+                            <text x="90" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; font-weight:700;">3. ENFORCED STATE</text>
+                            <text id="tel-sta" x="160" y="138" class="telemetry-text">LCK: 0x8F2A</text>
                             
-                            <path d="M80 68 L80 80" class="diag-line" style="stroke-width:1px;"/>
-                            <path id="packet-gate" d="M80 68 L80 80 M80 108 L80 120" style="fill:none; stroke-linecap:round;" />
+                            <path d="M90 68 L90 80" class="diag-line" style="stroke-width:1px;"/>
+                            <path id="packet-gate" d="M90 68 L90 80 M90 108 L90 120" style="fill:none; stroke-linecap:round;" />
                         </g>
 
-                        <path d="M390 130 L430 130" class="diag-line" />
-                        <path id="packet-2" d="M390 130 L430 130" style="fill:none;" />
+                        <path d="M410 130 L450 130" class="diag-line" />
+                        <path id="packet-2" d="M410 130 L450 130" style="fill:none;" />
 
-                        <g transform="translate(430, 105)">
+                        <g transform="translate(450, 105)">
                             <rect id="model-box" width="110" height="50" rx="2" class="diag-bg"/>
                             <text x="55" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
                         </g>
 
-                        <g transform="translate(560, 60)">
+                        <g transform="translate(580, 60)">
                             <rect id="eval-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted, #666); stroke-width:1.5px; opacity:0.8;"/>
                             <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Safety Eval</text>
                         </g>
-                        <g transform="translate(560, 160)">
+                        <g transform="translate(580, 160)">
                             <rect id="train-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted, #666); stroke-width:1.5px; opacity:0.8;"/>
                             <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Base Train</text>
                         </g>
 
-                        <path d="M485 105 L485 80 L560 80" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                        <path id="packet-3" d="M485 105 L485 80 L560 80" style="fill:none;" />
+                        <path d="M505 105 L505 80 L580 80" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                        <path id="packet-3" d="M505 105 L505 80 L580 80" style="fill:none;" />
                         
-                        <path d="M605 100 L605 160" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                        <path id="packet-4" d="M605 100 L605 160" style="fill:none;" />
+                        <path d="M625 100 L625 160" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                        <path id="packet-4" d="M625 100 L625 160" style="fill:none;" />
                         
-                        <path d="M560 180 L485 180 L485 155" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                        <path id="packet-5" d="M560 180 L485 180 L485 155" style="fill:none;" />
+                        <path d="M580 180 L505 180 L505 155" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                        <path id="packet-5" d="M580 180 L505 180 L505 155" style="fill:none;" />
                         
-                        <path id="policy-path" d="M605 60 L605 30 L130 30 L130 105" class="diag-line" />
-                        <text id="policy-label" x="330" y="25" class="telemetry-text" style="fill:#00d7ff; font-weight:700;">POLICY UPDATE LOOP</text>
+                        <path id="policy-path" d="M625 60 L625 30 L130 30 L130 105" class="diag-line" />
+                        <text id="policy-label" x="340" y="25" class="telemetry-text" style="fill:#00d7ff; font-weight:700;">POLICY UPDATE LOOP</text>
 
-                        <text x="560" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em;">POST-HOC EVALUATION</text>
-                        <text x="560" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.3; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
+                        <text x="580" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em;">POST-HOC EVALUATION</text>
+                        <text x="580" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.3; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
                     </g>
                 </svg>
                 
@@ -709,7 +713,7 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V121) ---
+        // --- CYCLE COUNTER & LOCK (V123) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
         const telemetryColor = '#00cc00'; // Green Match
