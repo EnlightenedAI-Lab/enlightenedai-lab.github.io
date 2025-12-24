@@ -324,36 +324,7 @@
         </div>
     </aside>
 
-    <div id="machineOverlay" class="machine-overlay hidden">
-        <div class="mo-header">
-            <div class="mo-title">
-                MACHINE VIEW // 
-                <div class="mo-mode-toggle">
-                    <button onclick="switchMachineMode('cards')" class="mo-mode-btn" id="btn-mode-cards">[ CARDS ]</button>
-                    <button onclick="switchMachineMode('serialization')" class="mo-mode-btn" id="btn-mode-serial">[ SERIALIZATION ]</button>
-                </div>
-            </div>
-            <div class="mo-controls">
-                <span style="color:#666; font-size:0.6rem; margin-right:10px;">TERMINAL MODE (FIXED)</span>
-                <button onclick="exportRecord()" id="btn-export">EXPORT FILE</button>
-                <button onclick="closeMachineOverlay()">CLOSE ✕</button>
-            </div>
-        </div>
-        
-        <div class="mo-tabs" id="moTabs">
-            <button onclick="renderFormat('json')" class="mo-tab active" id="tab-json">JSON</button>
-            <button onclick="renderFormat('yaml')" class="mo-tab" id="tab-yaml">YAML</button>
-            <button onclick="renderFormat('python')" class="mo-tab" id="tab-python">PYTHON</button>
-            <button onclick="renderFormat('ts')" class="mo-tab" id="tab-ts">TYPESCRIPT</button>
-            <button onclick="renderFormat('sql')" class="mo-tab" id="tab-sql">SQL</button>
-            <button onclick="renderFormat('md')" class="mo-tab" id="tab-md">MARKDOWN</button>
-        </div>
-
-        <div class="mo-content">
-            <pre id="machineCode"></pre> 
-            <div id="machineCards" class="card-grid" style="display:none;"></div> 
-        </div>
-    </div>
+   
 
     <main>
         <div class="content-col">
