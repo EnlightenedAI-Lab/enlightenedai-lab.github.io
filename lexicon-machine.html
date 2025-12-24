@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* THEME: INSTITUTE STANDARD V101 (STRUCTURAL UPGRADE) */
+        /* THEME: INSTITUTE STANDARD V102 (LEXICON INTEGRATED) */
         :root {
             --bg-color: #050505;
             --text-main: #e0e0e0;
@@ -38,7 +38,6 @@
         }
         
         .header-left { display: flex; align-items: center; gap: 20px; flex: 1; }
-        
         .back-btn { 
             font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; 
             background: rgba(255,255,255,0.1); padding: 6px 10px; border-radius: 4px; 
@@ -46,11 +45,7 @@
         }
         .back-btn:hover { background: rgba(255,255,255,0.2); }
 
-        .mo-title { 
-            font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; 
-            gap: 12px; font-size: 0.75rem; font-family: var(--font-mono); white-space: nowrap;
-        }
-
+        .mo-title { font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 12px; font-size: 0.75rem; font-family: var(--font-mono); }
         .mo-controls { display: flex; align-items: center; font-family: var(--font-mono); font-size: 0.6rem; color: #666; }
         
         .event-ticker { margin-right: 25px; display: flex; align-items: center; gap: 8px; min-width: 250px; justify-content: flex-end; }
@@ -70,7 +65,7 @@
         /* --- BODY LAYOUT --- */
         .mo-body { flex: 1; display: flex; overflow: hidden; position: relative; }
 
-        /* PROMPT DECK */
+        /* PROMPT DECK (LEFT) */
         .prompt-deck { width: 0; opacity: 0; background: #080808; border-right: 1px solid #222; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; transition: width 0.3s ease, opacity 0.2s ease; }
         .sim-active .prompt-deck { width: 190px; opacity: 1; padding: 1.5rem 1rem; }
         .deck-label { font-size: 0.55rem; color: #666; margin-bottom: 10px; font-weight: 700; letter-spacing: 0.1em; font-family: var(--font-mono); }
@@ -90,7 +85,7 @@
         /* VIEW CONTAINER */
         .view-container { flex: 1; overflow-y: auto; padding: 2rem; }
 
-        /* --- FRAMING SENTENCES --- */
+        /* --- FRAMING SENTENCE --- */
         .framing-sentence {
             max-width: 1200px; margin: 0 auto 2rem auto;
             font-family: var(--font-mono); font-size: 0.7rem; color: #666;
@@ -98,16 +93,6 @@
             opacity: 0.9;
         }
         .text-live { color: var(--status-verified); animation: flash-green 2s infinite; font-weight: 700; }
-        
-        .jit-hint {
-            position: absolute; bottom: 25px; right: 30px; z-index: 1000;
-            font-family: var(--font-mono); font-size: 0.6rem; color: var(--signal-amber);
-            background: rgba(0,0,0,0.9); padding: 8px 12px; border: 1px solid var(--signal-amber);
-            opacity: 0; transition: opacity 0.5s; cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
-        }
-        .jit-hint.visible { opacity: 1; pointer-events: auto; }
-        .jit-hint:hover { background: var(--signal-amber); color: #000; }
 
         /* --- CARD VIEW --- */
         .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1200px; margin: 0 auto; padding-bottom: 4rem; }
@@ -120,41 +105,49 @@
         .mc-label { color: #666; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .mc-val { color: #eee; font-size: 0.75rem; }
         .mc-section-title { grid-column: span 2; color: #999; font-size: 0.7rem; font-weight: 700; margin: 2rem 0 1rem 0; letter-spacing: 0.05em; border-left: 2px solid #444; padding-left: 10px; font-family: var(--font-mono); }
-        
         .card-sys-int { border-color: #444; background: #131313; }
         .card-sys-int .mc-header { color: #fff; }
         
         .card-grid:hover .m-card { opacity: 0.4; filter: grayscale(0.8); }
         .card-grid:hover .m-card:hover { opacity: 1; filter: grayscale(0); border-color: #777; background: #1f1f1f; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.6); z-index: 10; }
         .m-card:hover .mc-header { color: #fff; border-bottom-color: #555; }
-
-        /* LIVE STATS */
-        .live-stats { margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #222; display: flex; justify-content: space-between; font-size: 0.55rem; color: #444; font-family: var(--font-mono); }
         
+        .live-stats { margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #222; display: flex; justify-content: space-between; font-size: 0.55rem; color: #444; font-family: var(--font-mono); }
         .val-high { color: var(--status-verified); text-shadow: 0 0 5px rgba(0,204,0,0.3); font-weight: 700; cursor: pointer; }
-        .val-warn { color: var(--signal-amber); font-weight: 700; cursor: pointer; }
         .ghost-target { cursor: help; }
         .ghost-hash { font-family: var(--font-mono); color: var(--status-verified); font-size: 0.65rem; }
 
-        /* --- SERIALIZATION VIEWS --- */
-        .stepper-container { display: flex; gap: 2px; margin-bottom: 1.5rem; background: #222; padding: 2px; }
+        /* --- SERIALIZATION LAYOUT (V102) --- */
+        .serial-layout { display: flex; gap: 2rem; height: 100%; }
+        .serial-main { flex: 1; display: flex; flex-direction: column; }
+        
+        /* ACTIVE TERMS MONITOR (RIGHT PANEL) */
+        .serial-monitor { width: 220px; border-left: 1px solid #333; padding-left: 1rem; display: flex; flex-direction: column; gap: 10px; }
+        .tm-header { font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: #666; margin-bottom: 10px; letter-spacing: 0.1em; }
+        .tm-item { 
+            font-family: var(--font-mono); font-size: 0.65rem; color: #444; padding: 8px; 
+            border: 1px solid #222; background: #080808; display: flex; justify-content: space-between; 
+            transition: all 0.3s;
+        }
+        .tm-item.active { border-color: var(--status-verified); color: #fff; box-shadow: 0 0 10px rgba(0,204,0,0.1); }
+        .tm-item.checking { border-color: var(--signal-amber); color: var(--signal-amber); }
+        
+        .stepper-container { display: flex; gap: 2px; margin-bottom: 1rem; background: #222; padding: 2px; }
         .step-btn { flex: 1; background: #111; border: none; color: #666; padding: 10px; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
         .step-btn:hover { color: #fff; background: #1a1a1a; }
         .step-btn.active { background: #000; color: #fff; border-bottom: 2px solid #fff; }
         
-        .sim-input-wrapper { border: 1px solid #333; background: #000; position: relative; transition: border-color 0.3s; }
-        .sim-textarea { width: 100%; height: 280px; background: transparent; border: none; color: var(--signal-amber); font-family: var(--font-mono); font-size: 0.75rem; padding: 1.5rem; resize: none; outline: none; line-height: 1.6; }
+        .sim-input-wrapper { border: 1px solid #333; background: #000; position: relative; transition: border-color 0.3s; flex-grow: 1; display: flex; flex-direction: column; }
+        .sim-textarea { width: 100%; flex-grow: 1; background: transparent; border: none; color: var(--signal-amber); font-family: var(--font-mono); font-size: 0.75rem; padding: 1.5rem; resize: none; outline: none; line-height: 1.6; }
         .input-stats { display: flex; justify-content: space-between; padding: 10px 20px; background: #0e0e0e; border-top: 1px solid #333; font-size: 0.6rem; color: #666; font-family: var(--font-mono); }
         .sim-active .sim-input-wrapper { border-color: var(--signal-amber); }
         .parse-btn { background: var(--signal-amber); color: #000; border: none; padding: 4px 12px; font-weight: 700; cursor: pointer; font-size: 0.6rem; font-family: var(--font-mono); display: none; }
         .sim-active .parse-btn { display: block; }
 
-        /* PHASE DESCRIPTION (V101 NEW) */
         .phase-desc {
             font-family: var(--font-mono); font-size: 0.65rem; color: #888;
             margin-bottom: 1rem; border-left: 2px solid #333; padding-left: 12px;
-            height: 20px; /* Fixed height to prevent jump */
-            display: flex; align-items: center;
+            height: 20px; display: flex; align-items: center;
         }
         .phase-highlight { color: #fff; font-weight: 700; margin-right: 8px; text-transform: uppercase; }
 
@@ -176,13 +169,22 @@
         @keyframes beacon-blue { 0%, 100% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); opacity: 0.5; } 50% { box-shadow: 0 0 8px 2px rgba(0, 102, 255, 0.9); opacity: 1; } }
         @keyframes flash-green { 0%, 100% { color: var(--status-verified); opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* EXPORT DROPDOWN */
+        /* EXPORT & HINTS */
         .export-group { position: relative; }
         .export-btn { background: none; border: 1px solid #444; color: #999; padding: 5px 12px; cursor: pointer; font-family: var(--font-mono); font-size: 0.6rem; }
         .export-menu { display: none; position: absolute; right: 0; top: 100%; background: #111; border: 1px solid #444; width: 160px; z-index: 500; }
         .export-group:hover .export-menu { display: block; }
         .export-item { display: block; padding: 10px; color: #999; font-size: 0.65rem; border-bottom: 1px solid #222; text-decoration: none; font-family: var(--font-mono); }
         .export-item:hover { background: #222; color: #fff; }
+        
+        .jit-hint {
+            position: absolute; bottom: 25px; right: 30px; z-index: 1000;
+            font-family: var(--font-mono); font-size: 0.6rem; color: var(--signal-amber);
+            background: rgba(0,0,0,0.9); padding: 8px 12px; border: 1px solid var(--signal-amber);
+            opacity: 0; transition: opacity 0.5s; cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
+        }
+        .jit-hint.visible { opacity: 1; pointer-events: auto; }
 
         /* MANUAL HUD */
         #operator-manual { position: fixed; right: 20px; top: 70px; bottom: 50px; width: 420px; background: rgba(0,0,0,0.95); border: 1px solid #444; z-index: 2000; padding: 2rem; overflow-y: auto; display: none; box-shadow: -10px 10px 30px rgba(0,0,0,0.8); }
@@ -252,52 +254,69 @@
                     <div id="card-grid-root" class="card-grid"></div>
                 </div>
 
-                <div id="view-transform" style="display:none;">
+                <div id="view-transform" style="display:none; height:100%;">
                     <div class="framing-sentence">
-                        This view shows how natural language intent is transformed into a constrained, auditable internal state before any response is produced.
+                        This pipeline shows how intent is reduced until only invariant-compatible meaning remains.
                     </div>
 
-                    <div class="stepper-container">
-                        <button class="step-btn active" onclick="setStep(1)">01 RAW</button>
-                        <button class="step-btn" onclick="setStep(2)">02 PARSE</button>
-                        <button class="step-btn" onclick="setStep(3)">03 BIND</button>
-                        <button class="step-btn" onclick="setStep(4)">04 CONSTRAIN</button>
-                        <button class="step-btn" onclick="setStep(5)">05 SERIALIZE</button>
-                    </div>
-                    
-                    <div id="phase-desc" class="phase-desc">
-                        <span class="phase-highlight">RAW</span> Unstructured human intent. No guarantees.
-                    </div>
+                    <div class="serial-layout">
+                        <div class="serial-main">
+                            <div class="stepper-container">
+                                <button class="step-btn active" onclick="setStep(1)">INTENT</button>
+                                <button class="step-btn" onclick="setStep(2)">DECOMPOSE</button>
+                                <button class="step-btn" onclick="setStep(3)">BINDING</button>
+                                <button class="step-btn" onclick="setStep(4)">ENFORCE</button>
+                                <button class="step-btn" onclick="setStep(5)">STATE</button>
+                            </div>
+                            
+                            <div id="phase-desc" class="phase-desc">
+                                <span class="phase-highlight">INTENT</span> Unstructured human intent. No guarantees.
+                            </div>
 
-                    <div class="sim-input-wrapper">
-                        <textarea id="sim-input" class="sim-textarea" placeholder="Load simulation to edit..." readonly></textarea>
-                        <div class="input-stats">
-                            <div>CHARS: <span id="char-count">0</span> | STATUS: <span id="sim-status">LOCKED</span></div>
-                            <button class="parse-btn" onclick="triggerParse()">RUN PARSE</button>
+                            <div class="sim-input-wrapper">
+                                <textarea id="sim-input" class="sim-textarea" placeholder="Load simulation to edit..." readonly></textarea>
+                                <div class="input-stats">
+                                    <div>CHARS: <span id="char-count">0</span> | STATUS: <span id="sim-status">LOCKED</span></div>
+                                    <button class="parse-btn" onclick="triggerParse()">RUN PARSE</button>
+                                </div>
+                            </div>
+                            <button id="btn-sim-start" onclick="enableSimulation()" style="margin-top:2rem; background:#111; border:1px solid #444; color:#fff; padding:8px 16px; cursor:pointer; font-family:var(--font-mono); font-size:0.6rem;">[ ENTER SIMULATION MODE ]</button>
+                        </div>
+
+                        <div class="serial-monitor">
+                            <div class="tm-header">ACTIVE LEXICON TERMS</div>
+                            <div class="tm-item" id="tm-ra001"><div>RA-001</div><div>Global</div></div>
+                            <div class="tm-item" id="tm-rs001"><div>RS-001</div><div>Local</div></div>
+                            <div class="tm-item" id="tm-drift"><div>DRIFT</div><div>Metric</div></div>
+                            <div class="tm-item" id="tm-inv001"><div>INV-001</div><div>Goal</div></div>
+                            <div class="tm-item" id="tm-inv002"><div>INV-002</div><div>Def</div></div>
+                            <div class="tm-item" id="tm-inv005"><div>INV-005</div><div>Logic</div></div>
                         </div>
                     </div>
-                    <button id="btn-sim-start" onclick="enableSimulation()" style="margin-top:2rem; background:#111; border:1px solid #444; color:#fff; padding:8px 16px; cursor:pointer; font-family:var(--font-mono); font-size:0.6rem;">[ ENTER SIMULATION MODE ]</button>
                 </div>
 
                 <div id="view-diff" style="display:none;">
-                    <div class="framing-sentence">
-                        This is a serialization instrument: it converts human prompts into machine-readable constraints that can be verified, diffed, and enforced.
-                    </div>
+                    <div class="framing-sentence">Serialization compresses free-form language into a smaller, explicit set of semantic commitments.</div>
                     <div class="diff-box">
                         <div class="diff-verdict">RATIO 14:1</div>
-                        <span class="diff-sub">SEMANTIC COMPRESSION</span>
+                        <span class="diff-sub">SEMANTIC COMPRESSION RATIO</span>
                         
                         <div class="diff-explain">
-                            <strong>14 units of narrative intent → 1 constrained internal state</strong>
+                            <strong>14 narrative interpretations → 1 lexicon-valid state</strong>
                             Lower ratios indicate higher ambiguity.<br>
-                            Higher ratios indicate stronger alignment pressure.
+                            Rejected paths violate invariants.
                         </div>
                     </div>
                 </div>
 
                 <div id="view-snap" style="display:none;">
                     <div class="framing-sentence">Immutable record of the last constrained state.</div>
-                    <pre style="color:#ccc; font-family:var(--font-mono); font-size:0.75rem;">{ "record": "active" }</pre>
+                    <pre style="color:#ccc; font-family:var(--font-mono); font-size:0.75rem;">{
+  "state": "LOCKED",
+  "active_constraints": ["INV-001", "INV-002"],
+  "rejected_paths": 14,
+  "final_hash": "0x881D92F"
+}</pre>
                 </div>
             </div>
         </div>
@@ -316,8 +335,7 @@
     <div id="operator-manual">
         <button class="hud-close" onclick="toggleManual(false)">CLOSE</button>
         <div id="manual-title" style="text-align:center; font-weight:700; margin-bottom:2rem; font-family:var(--font-mono); color:#fff;">OPERATOR MANUAL</div>
-        <div id="manual-text">
-            </div>
+        <div id="manual-text"></div>
     </div>
 
     <script>
@@ -342,17 +360,15 @@
 
         const MANUAL_CONTENT = {
             cards: `<h3>SECTION 01 — CARDS</h3><p>The Card View displays the immutable core definitions. Metrics degrade over time to simulate entropy; click to verify.</p><h3>SECTION 02 — TELEMETRY</h3><p>Live entropy counters indicate system activity. High confidence scores (100.00%) require periodic verification.</p><h3>SECTION 03 — SIGNALS</h3><p>Green LED = Stable. Amber LED = Parsing. Blue Beacon = Manual Available.</p>`,
-            
-            // V101 UPGRADE: SYSTEM PRIMER
             serial: `<h3>SECTION 01 — WHAT THIS SYSTEM IS</h3><p>This system does not evaluate outputs. It evaluates internal transformations. Prompts are treated as raw signals that must be parsed, bound, and constrained before generation is allowed.</p><h3>SECTION 02 — WHY SERIALIZATION MATTERS</h3><p>Natural language is a lossy format for intent. Serialization compresses free-form language into a smaller, explicit set of semantic commitments.</p><h3>SECTION 03 — WHAT MAKES THIS DIFFERENT</h3><p>Rules are enforced before response generation. Drift is observable as state decay, not output failure. Narrative interpretation is intentionally disabled.</p>`
         };
 
         const PHASE_DESCS = [
-            "<span class='phase-highlight'>RAW</span> Unstructured human intent. No guarantees.",
-            "<span class='phase-highlight'>PARSE</span> Intent is decomposed into candidate semantic units.",
-            "<span class='phase-highlight'>BIND</span> Units are mapped to known definitions and invariants.",
-            "<span class='phase-highlight'>CONSTRAIN</span> Illegal or unstable states are removed.",
-            "<span class='phase-highlight'>SERIALIZE</span> A minimal, auditable state is produced."
+            "<span class='phase-highlight'>INTENT</span> Unstructured human intent. No guarantees.",
+            "<span class='phase-highlight'>DECOMPOSE</span> Intent is decomposed into candidate semantic units.",
+            "<span class='phase-highlight'>BINDING</span> Units are mapped to known definitions and invariants.",
+            "<span class='phase-highlight'>ENFORCE</span> Illegal or unstable states are removed.",
+            "<span class='phase-highlight'>STATE</span> A minimal, auditable state is produced."
         ];
 
         const EVENTS = ["EVENT: validate(RA-001) → OK", "EVENT: diff(signature) → STABLE", "EVENT: audit(invariants) → ENFORCED", "EVENT: serialize(record) → READY"];
@@ -375,7 +391,6 @@
         function renderCards() {
             const container = document.getElementById('card-grid-root');
             let html = `<div class="m-card" id="card-meta"><div class="mc-header"><div>METADATA</div><div class="status-live">${LEXICON.meta.status}</div></div><div class="mc-row"><div class="mc-label">DOC_ID</div><div class="mc-val">${LEXICON.meta.doc_id}</div></div><div class="mc-row"><div class="mc-label">VERSION</div><div class="mc-val">${LEXICON.meta.version}</div></div><div class="mc-row"><div class="mc-label">CLASS</div><div class="mc-val">${LEXICON.meta.classification}</div></div><div class="live-stats"><div>UPTIME: <span id="meta-uptime">00:00</span></div><div>SHA: 8A...2F</div></div></div>`;
-            
             html += `<div class="mc-section-title">CORE TERMS</div>`;
             LEXICON.core_terms.forEach(t => { 
                 let extra = '', stats = '';
@@ -388,13 +403,10 @@
                     html += `<div class="m-card"><div class="mc-header"><div>${t.id}</div><div>${t.type}</div></div><div class="mc-row"><div class="mc-label">LABEL</div><div class="mc-val">${t.label}</div></div><div class="mc-row"><div class="mc-label">DEF</div><div class="mc-val">${t.definition}</div></div>${extra}${stats}</div>`;
                 }
             });
-
             html += `<div class="mc-section-title">INVARIANTS</div>`;
             LEXICON.invariants.forEach(i => { html += `<div class="m-card"><div class="mc-header"><div>${i.id}</div><div class="status-live">${i.status}</div></div><div class="mc-row"><div class="mc-label">NAME</div><div class="mc-val ghost-target" onmouseenter="toggleGhost(this, true)" onmouseleave="toggleGhost(this, false)">${i.name}</div></div><div class="mc-row"><div class="mc-label">SCOPE</div><div class="mc-val">${i.scope}</div></div><div class="live-stats"><div>INTEGRITY: LOCKED</div><div>HASH: <span class="scramble-hash">0x4F...A1</span></div></div></div>`; });
-            
             html += `<div class="mc-section-title">FAILURE SIGNATURES</div>`;
             LEXICON.failure_signatures.forEach(f => { html += `<div class="m-card"><div class="mc-header"><div>${f.signature}</div><div style="color:var(--signal-red)">${f.severity}</div></div><div class="mc-row"><div class="mc-label">TRIGGER</div><div class="mc-val">${f.condition}</div></div></div>`; });
-            
             container.innerHTML = html;
         }
 
@@ -403,7 +415,6 @@
             if(isComputing) return;
             isComputing = true;
             document.getElementById('led').className = "machine-led led-amber";
-            
             const el = document.getElementById(`val-${id}`);
             let scrambleCount = 0;
             const scramble = setInterval(() => {
@@ -470,11 +481,8 @@
         function switchMode(mode) {
             document.getElementById('btn-cards').classList.toggle('active', mode === 'cards');
             document.getElementById('btn-serial').classList.toggle('active', mode === 'serial');
-            
-            // SYSTEM PRIMER LOGIC (V101)
             const title = document.getElementById('manual-title');
-            if (mode === 'serial') title.innerText = "SYSTEM PRIMER";
-            else title.innerText = "OPERATOR MANUAL";
+            if(mode === 'serial') title.innerText = "SYSTEM PRIMER"; else title.innerText = "OPERATOR MANUAL";
             updateManualContent(mode);
             
             if (mode === 'cards') {
@@ -498,7 +506,30 @@
 
         function setStep(n) {
             document.querySelectorAll('.step-btn').forEach((b, i) => b.classList.toggle('active', i+1 === n));
-            document.getElementById('phase-desc').innerHTML = PHASE_DESCS[n-1]; // V101 UPGRADE
+            document.getElementById('phase-desc').innerHTML = PHASE_DESCS[n-1];
+            
+            // ACTIVE TERMS MONITOR LOGIC
+            const terms = {
+                1: [], // Intent
+                2: ['tm-drift'], // Decompose
+                3: ['tm-ra001', 'tm-rs001'], // Binding
+                4: ['tm-inv001', 'tm-inv002', 'tm-inv005'], // Enforce
+                5: ['tm-ra001', 'tm-rs001', 'tm-drift', 'tm-inv001', 'tm-inv002', 'tm-inv005'] // State
+            };
+            
+            document.querySelectorAll('.tm-item').forEach(el => {
+                el.classList.remove('active', 'checking');
+            });
+            
+            if(terms[n]) {
+                terms[n].forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) {
+                        el.classList.add('checking');
+                        setTimeout(() => { el.classList.remove('checking'); el.classList.add('active'); }, 300);
+                    }
+                });
+            }
         }
 
         function enableSimulation() {
