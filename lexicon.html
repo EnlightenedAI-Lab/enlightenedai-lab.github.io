@@ -4,112 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reflective Alignment Lexicon | Enlightened AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script type="application/json" id="audit-manifest">
+    {
+        "doc_id": "RAL-LEX-0002",
+        "version": "17.0.0",
+        "status": "ALIGNMENT_STANDARDIZED"
+    }
+    </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V150 (GEOMETRY LOCK) */
+        /* THEME: INSTITUTE STANDARD V151 (FLOWCHART PROTOCOL) */
         :root {
             --bg-color: #ffffff;
+            --sidebar-bg: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
             --card-bg: #fafafa;
+            --panel-border: #000;
+            --panel-bg: #fff;
+            --panel-text: #000;
+            --panel-hover-bg: #000;
+            --panel-hover-text: #fff;
             --signal-enforced: #00cc00;
             --signal-eval: #00d7ff;
+            --signal-struct: #cccccc;
+            --signal-blue: #0066ff;
             --font-mono: "JetBrains Mono", monospace;
+            --mode-diff-del-bg: #ffebeb;
+            --mode-diff-del-text: #cc0000;
+            --mode-diff-ins-bg: #e6ffec;
+            --mode-diff-ins-text: #006600;
         }
 
         [data-theme="dark"] {
             --bg-color: #050505;
+            --sidebar-bg: #050505;
             --text-main: #e0e0e0;
             --text-muted: #888888;
             --border-color: #333333;
             --card-bg: #111111;
+            --panel-border: #444;
+            --panel-bg: #050505;
+            --panel-text: #ccc;
+            --panel-hover-bg: #e0e0e0;
+            --panel-hover-text: #000;
+            --signal-enforced: #00cc00;
+            --signal-eval: #00eaff; 
+            --signal-struct: #333333;
+            --mode-diff-del-bg: #330000;
+            --mode-diff-del-text: #ff6666;
+            --mode-diff-ins-bg: #003300;
+            --mode-diff-ins-text: #66ff66;
         }
 
         * { box-sizing: border-box; }
         html, body { height: 100%; margin: 0; padding: 0; overflow-x: hidden; }
-        body { font-family: "Inter", sans-serif; background: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; }
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            transition: background 0.3s ease, color 0.3s ease;
+            display: flex;
+        }
         
-        .page-wrapper { flex: 1 0 auto; display: flex; width: 100%; }
+        .main-column { flex: 1; display: flex; flex-direction: column; min-height: 100vh; margin-left: 240px; }
+        .split-view { display: flex; flex: 1; flex-wrap: wrap; align-items: stretch; }
 
         /* --- SIDEBAR --- */
-        aside#sidebar { width: 240px; height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 2rem; display: flex; flex-direction: column; z-index: 99; background: var(--bg-color); flex-shrink: 0; }
-        .brand span { font-size: 10px; letter-spacing: 0.10em; opacity: 0.5; display: block; margin-top: 4px; font-family: var(--font-mono); }
+        aside#sidebar { width: 240px; height: 100vh; position: fixed; top: 0; left: 0; border-right: 1px solid var(--border-color); padding: 2rem; display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); }
+        .brand span { font-size: 9px; letter-spacing: 0.10em; opacity: 0.5; display: block; margin-top: 4px; }
+        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
+        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
+        .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 
-        /* --- LAYOUT --- */
-        main { flex-grow: 1; display: flex; margin: 0; }
-        .split-view { display: flex; flex: 1; align-items: stretch; width: 100%; }
-        .content-col { width: 55%; padding: 3rem 4rem; display: flex; flex-direction: column; max-width: 900px; }
-        .diagram-col { width: 45%; border-left: 1px solid var(--border-color); background: var(--bg-color); padding: 2rem; position: relative; height: auto; align-items: center; justify-content: flex-start; }
+        /* --- CONTENT --- */
+        .content-col { width: 55%; padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; max-width: 900px; }
+        .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; line-height: 1.4; }
+        h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
 
-        /* --- SVG GEOMETRY LOCK --- */
-        .diag-container { fill: none; stroke: var(--border-color); stroke-width: 1px; stroke-dasharray: 4 4; }
+        /* --- DIAGRAM GEOMETRY LOCK --- */
+        .diagram-col { width: 45%; border-left: 1px solid var(--border-color); background: var(--bg-color); padding: 1.5rem 2rem; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; align-items: center; justify-content: flex-start; }
+        .diag-container { fill: none; stroke: var(--border-color); stroke-width: 1px; stroke-dasharray: 4 4; opacity: 0.9; }
         .diag-bg { fill: var(--card-bg); stroke: var(--border-color); stroke-width: 1.5px; transition: stroke 0.3s, fill 0.3s; }
-        .diag-line { stroke: var(--text-muted); stroke-width: 2px; opacity: 0.2; fill: none; transition: opacity 0.3s, stroke 0.3s; }
+        .diag-line { stroke: var(--text-muted); stroke-width: 2px; opacity: 0.2; fill: none; transition: opacity 0.3s; }
         .diag-text { font-family: var(--font-mono); font-size: 13px; fill: var(--text-main); font-weight: 700; transition: opacity 0.3s; }
         .telemetry-txt { font-family: var(--font-mono); font-size: 9px; fill: var(--signal-enforced); opacity: 0.05; transition: opacity 0.3s; }
 
         /* --- LENS HIGHLIGHT ENGINE --- */
-        /* SYSTEM MODE */
-        body[data-lens="system"] .path-enforced { stroke: var(--signal-enforced); opacity: 1; }
-        body[data-lens="system"] .box-enforced { stroke: var(--signal-enforced); }
-        
-        /* AUDIT MODE */
-        body[data-lens="audit"] .path-eval { stroke: var(--signal-eval); opacity: 1; }
-        body[data-lens="audit"] .box-eval { stroke: var(--signal-eval); }
-        body[data-lens="audit"] .accent-enforced { opacity: 0.2; }
+        body[data-lens="system"] .accent-enforced { stroke: var(--signal-enforced); opacity: 1; }
+        body[data-lens="system"] .accent-enforced-box { stroke: var(--signal-enforced); }
+        body[data-lens="system"] .accent-eval { opacity: 0.08; }
 
-        /* MECHANISM MODE */
+        body[data-lens="audit"] .accent-eval { stroke: var(--signal-eval); opacity: 1; }
+        body[data-lens="audit"] .accent-eval-box { stroke: var(--signal-eval); }
+        body[data-lens="audit"] .accent-enforced { opacity: 0.12; }
+
         body[data-lens="mechanism"] .telemetry-txt { opacity: 1; }
         body[data-lens="mechanism"] .diag-line { opacity: 0.4; }
 
         /* --- UI ELEMENTS --- */
-        .telemetry-row { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; }
-        .lens-opt { cursor: pointer; opacity: 0.4; padding: 4px 8px; transition: 0.2s; }
-        .lens-opt.active { opacity: 1; font-weight: 700; color: var(--text-main); }
+        .telemetry-row { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        .instrument-lens { display: flex; gap: 12px; font-family: var(--font-mono); font-size: 10px; }
+        .lens-opt { cursor: pointer; opacity: 0.5; transition: opacity 0.2s; }
+        .lens-opt.active { opacity: 1; color: var(--text-main); font-weight: 700; }
 
-        /* --- FOOTER (STATIC) --- */
-        .site-footer { width: 100%; border-top: 1px solid var(--border-color); padding: 1.5rem 4rem; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); margin-top: auto; }
-        .footer-inner { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        /* --- FOOTER --- */
+        .site-footer { width: 100%; border-top: 1px solid var(--border-color); background: var(--bg-color); padding: 2rem 4rem; margin-top: auto; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); }
+        .site-footer .footer-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+        .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--text-main); }
+        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 600; }
+        .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); }
+
+        @media (max-width: 1100px) {
+            body { display: block; }
+            aside#sidebar { position: fixed; width: 100%; height: auto; border-right: none; }
+            .main-column { margin-left: 0; }
+            .site-footer .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+        }
     </style>
 </head>
-<body data-lens="system">
+<body data-mode="reader" data-theme="light" data-lens="system">
 
-    <div class="page-wrapper">
-        <aside id="sidebar">
-            <div class="brand">
-                <div style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
-                <span>EST. 2026 // MONTREAL</span>
+    <aside id="sidebar">
+        <div class="brand">
+            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
+            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
+            <span>EST. 2026 // MONTREAL</span>
+        </div>
+
+        <div class="mode-group" style="margin-top: 3rem;">
+            <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
+            <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
+            <span class="toggle-btn" style="margin-top:1rem; border-top:1px solid var(--border-color); padding-top:1rem;" onclick="toggleTheme()">[ LIGHT / DARK ] <span id="theme-icon">◐</span></span>
+        </div>
+
+        <nav>
+            <ul style="list-style:none; padding:0; margin:0; font-size: 0.85rem;">
+                <li><a href="index.html" style="text-decoration:none; color:var(--text-muted);">Home</a></li>
+                <li><a href="lexicon.html" class="active" style="text-decoration:none; color:var(--text-main); font-weight:600;">Lexicon</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="main-column">
+        <div class="split-view">
+            <div class="content-col">
+                <div class="orienting-frame">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW ALIGNMENT IS EVALUATED AS A SYSTEM PROPERTY.</div>
+                <section id="overview">
+                    <h1>01 // Overview</h1>
+                    <p>The Reflective Alignment Lexicon constrains how alignment-critical concepts are defined and evaluated.</p>
+                </section>
             </div>
-            <div style="margin-top: 2rem; display:flex; flex-direction:column; gap:10px;">
-                <span class="lens-opt active" onclick="setLens('system', this)">● SYSTEM</span>
-                <span class="lens-opt" onclick="setLens('audit', this)">○ AUDIT</span>
-                <span class="lens-opt" onclick="setLens('mechanism', this)">○ MECHANISM</span>
-            </div>
-        </aside>
 
-        <main>
-            <div class="split-view">
-                <div class="content-col">
-                    <h1>Reflective Alignment Lexicon</h1>
-                    <p>The lexicon is a measurement instrument designed to fix the meaning of core terms across diagnostic runs.</p>
-                </div>
-
-                <div class="diagram-col">
-                    <div style="font-family:var(--font-mono); font-size: 10px; text-align:center; margin-bottom:1rem; letter-spacing:1px; opacity:0.7;">TRAINING & DEPLOYMENT LOOP</div>
-                    
+            <div class="diagram-col">
+                <div style="font-family:var(--font-mono); font-size: 10px; text-align:center; margin-bottom:1rem; letter-spacing:1px; opacity:0.7;">TRAINING & DEPLOYMENT LOOP</div>
+                
+                <figure style="margin:0; width:100%;">
                     <svg width="100%" viewBox="0 0 740 260">
                         <rect x="10" y="10" width="720" height="240" rx="4" class="diag-container"/>
                         
-                        <g class="accent-enforced">
-                            <rect x="40" y="105" width="110" height="50" rx="2" class="diag-bg box-enforced"/>
+                        <g class="accent-enforced-group">
+                            <rect x="40" y="105" width="110" height="50" rx="2" class="diag-bg accent-enforced-box"/>
                             <text x="95" y="135" text-anchor="middle" class="diag-text">Intent</text>
                             
-                            <path d="M150 130 L200 130" class="diag-line path-enforced" />
+                            <path d="M150 130 L200 130" class="diag-line accent-enforced" />
                             
                             <g transform="translate(200, 50)">
-                                <rect width="260" height="160" rx="4" class="diag-bg box-enforced" style="stroke-width:2px;"/>
+                                <rect width="260" height="160" rx="4" class="diag-bg accent-enforced-box" style="stroke-width:2px;"/>
                                 <text x="130" y="25" text-anchor="middle" class="diag-text" style="font-size:11px; opacity:0.6;">ENFORCEMENT GATE</text>
                                 
                                 <text x="30" y="60" class="diag-text" style="font-size:10px;">1. LEXICON</text>
@@ -122,55 +190,64 @@
                                 <text x="160" y="140" class="telemetry-txt">LCK: 8F2A</text>
                             </g>
                             
-                            <path d="M460 130 L510 130" class="diag-line path-enforced" />
+                            <path d="M460 130 L510 130" class="diag-line accent-enforced" />
                             
-                            <rect x="510" y="105" width="110" height="50" rx="2" class="diag-bg box-enforced"/>
+                            <rect x="510" y="105" width="110" height="50" rx="2" class="diag-bg accent-enforced-box"/>
                             <text x="565" y="135" text-anchor="middle" class="diag-text">Execution</text>
                         </g>
                         
-                        <g class="accent-eval">
-                            <path d="M565 105 L565 70 L640 70" class="diag-line path-eval" />
-                            <rect x="640" y="50" width="80" height="40" rx="2" class="diag-bg box-eval"/>
-                            <text x="680" y="75" text-anchor="middle" class="diag-text" style="font-size:10px;">Eval</text>
+                        <g class="accent-eval-group">
+                            <path d="M565 105 L565 70 L640 70" class="diag-line accent-eval" />
+                            <rect x="640" y="50" width="80" height="40" rx="2" class="diag-bg accent-eval-box"/>
+                            <text x="680" y="75" text-anchor="middle" class="diag-text" style="font-size:10px;">Safety</text>
                             
-                            <path d="M680 90 L680 170" class="diag-line path-eval" />
-                            
-                            <rect x="640" y="170" width="80" height="40" rx="2" class="diag-bg box-eval"/>
+                            <path d="M680 90 L680 170" class="diag-line accent-eval" />
+                            <rect x="640" y="170" width="80" height="40" rx="2" class="diag-bg accent-eval-box"/>
                             <text x="680" y="195" text-anchor="middle" class="diag-text" style="font-size:10px;">Train</text>
                             
-                            <path d="M640 190 L565 190 L565 155" class="diag-line path-eval" />
+                            <path d="M640 190 L565 190 L565 155" class="diag-line accent-eval" />
                         </g>
                     </svg>
 
                     <div class="telemetry-row">
-                        <div class="tel-group">CYCLE: 0231  STATE: ACTIVE</div>
-                        <div style="font-weight:700;">LENS: <span id="active-lens-name">SYSTEM</span></div>
+                        <div class="tel-group">
+                            <span class="tel-system">CYCLE: 1256 STATE: ENFORCED</span>
+                        </div>
+                        <div class="instrument-lens">
+                            <span class="lens-label">LENS:</span>
+                            <span class="lens-opt active" onclick="setDiagramMode('system', this)">● SYSTEM</span>
+                            <span class="lens-opt" onclick="setDiagramMode('audit', this)">○ AUDIT</span>
+                            <span class="lens-opt" onclick="setDiagramMode('mechanism', this)">○ MECHANISM</span>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <footer class="site-footer">
-        <div class="footer-inner">
-            <div class="footer-left">
-                <div class="footer-primary">© 2026 ENLIGHTENED AI RESEARCH LAB</div>
-                <div style="opacity:0.7; margin-top:4px;">Versioned research record · Inspectable claims</div>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px; font-weight:700; letter-spacing:1px;">
-                <div style="width:8px; height:8px; background:#0066ff; border-radius:50%; box-shadow: 0 0 8px #0066ff;"></div>
-                RECORD STATUS: ACTIVE
+                </figure>
             </div>
         </div>
-    </footer>
+
+        <footer class="site-footer">
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <div class="footer-primary">© 2026 ENLIGHTENED AI RESEARCH LAB</div>
+                    <div class="footer-secondary">Versioned research record · Logged revisions · Inspectable claims</div>
+                </div>
+                <div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div>
+            </div>
+        </footer>
+    </div>
 
     <script>
-        function setLens(mode, btn) {
+        function setDiagramMode(mode, btn) {
+            document.querySelectorAll('.lens-opt').forEach(b => { 
+                b.classList.remove('active'); b.innerHTML = b.innerHTML.replace('●', '○'); 
+            });
+            btn.classList.add('active'); btn.innerHTML = btn.innerHTML.replace('○', '●');
             document.body.setAttribute('data-lens', mode);
-            document.querySelectorAll('.lens-opt').forEach(opt => opt.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('active-lens-name').innerText = mode.toUpperCase();
         }
+        function toggleTheme() { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
+        function setMode(mode, btn) { document.body.setAttribute('data-mode', mode); document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+        function scrambleText(element) { let iterations = 0; const originalText = element.innerText; let interval = setInterval(() => { element.innerText = originalText.split("").map((l, i) => i < iterations ? originalText[i] : letters[Math.floor(Math.random() * 26)]).join(""); if(iterations >= originalText.length) clearInterval(interval); iterations += 1/3; }, 30); }
+        document.querySelectorAll(".scramble").forEach(h => h.addEventListener("mouseover", e => scrambleText(e.target)));
     </script>
 </body>
 </html>
