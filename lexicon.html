@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V140 (IMMUTABLE FOUNDATION) */
+        /* THEME: INSTITUTE STANDARD V141 (FINAL STABILITY PATCH) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -35,9 +35,14 @@
             --panel-hover-text: #fff;
             
             /* SIGNALS */
-            --signal-enforced: #00cc00;
-            --signal-eval: #00d7ff;
+            --signal-enforced: #00cc00;  /* Pure Green */
+            --signal-eval: #00d7ff;      /* Bright Cyan */
             --signal-struct: #cccccc;
+            --signal-blue: #0066ff;      /* For status dot */
+            --status-verified: #00cc00;  /* For integrity seal */
+            
+            /* FONTS */
+            --font-mono: "JetBrains Mono", monospace;
             
             /* VIEW MODES */
             --mode-diff-del-bg: #ffebeb;
@@ -99,11 +104,11 @@
         ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
         li { margin-bottom: 0.5rem; font-size: 0.95rem; }
         
-        .mono { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .scramble { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
+        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
         .orienting-frame { 
-            font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; 
+            font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; 
             margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 65ch; line-height: 1.4;
         }
 
@@ -112,12 +117,12 @@
             margin-top: auto; margin-bottom: 1rem; 
             border: 1px solid var(--panel-border); 
             background: var(--panel-bg); 
-            padding: 12px; font-family: "JetBrains Mono", monospace;
+            padding: 12px; font-family: var(--font-mono);
             transition: all 0.2s ease; cursor: pointer;
         }
         .repo-panel:hover { 
             background: var(--panel-hover-bg); 
-            color: var(--panel-text-hover); 
+            color: var(--panel-hover-text); 
             border-color: var(--panel-hover-bg);
             transform: translateY(-2px); 
             box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
@@ -157,10 +162,10 @@
         body[data-mode="audit"] .view-audit { display: block; animation: fadeIn 0.3s ease; }
 
         body[data-mode="logic"] .view-human, body[data-mode="logic"] .view-audit { display: none; }
-        body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: "JetBrains Mono", monospace; color: var(--text-main); }
+        body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: var(--font-mono); color: var(--text-main); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .audit-table { width: 100%; border-collapse: collapse; font-family: "JetBrains Mono", monospace; font-size: 0.75rem; margin-bottom: 2rem; }
+        .audit-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 2rem; }
         .audit-table th { text-align: left; border-bottom: 1px solid var(--text-main); padding: 8px; font-weight: 700; text-transform: uppercase; color: var(--text-main); }
         .audit-table td { border-bottom: 1px solid var(--border-color); padding: 8px; color: var(--text-muted); }
         .audit-fail { color: #cc0000; font-weight: 700; }
@@ -170,7 +175,7 @@
 
         /* --- NAVIGATION --- */
         .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
+        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
         .toggle-btn:hover { color: var(--text-main); }
         .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
         nav ul { list-style: none; padding: 0; margin: 0; }
@@ -179,64 +184,52 @@
         nav a:hover { color: var(--text-main); }
         nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
 
-        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
-        /* --- FOOTER (STATIC, BOTTOM OF FLOW) --- */
-        .site-footer {
-            flex-shrink: 0; /* Don't shrink, stay full height */
-            width: 100%;
-            border-top: 1px solid var(--border-color); 
-            padding: 2rem 0; 
-            font-family: "JetBrains Mono", monospace; font-size: 0.6rem; color: var(--text-muted); 
+        /* --- FOOTER --- */
+        footer { 
+            width: 100%; 
+            border-top: 1px solid var(--border-color); padding: 2rem 4rem; 
+            font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); 
             background: var(--bg-color); 
-            text-align: center;
-            margin-top: 24px;
+            margin-top: auto; 
         }
-        .footer-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 24px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 600; }
+        .footer-content { display: flex; justify-content: space-between; align-items: flex-end; max-width: 1400px; margin: 0 auto; }
+        .footer-left { display: flex; flex-direction: column; gap: 6px; }
+        .footer-primary { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--text-main); }
+        .footer-secondary { opacity: 0.7; }
+        .record-status { text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 500; }
         .status-dot-small { width: 6px; height: 6px; background-color: var(--signal-blue); border-radius: 50%; box-shadow: 0 0 4px rgba(0, 102, 255, 0.6); animation: beacon-blue 2.5s infinite cubic-bezier(0.66, 0, 0, 1); }
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V140)
+           LAYOUT ENGINE: SEGREGATED (V141)
            ========================================= */
 
         @media (min-width: 1101px) {
-            aside#sidebar { 
-                width: 240px; height: 100vh; position: sticky; top: 0; 
-                border-right: 1px solid var(--border-color); padding: 2rem; 
-                display: flex; flex-direction: column; z-index: 99; 
-                background: var(--sidebar-bg); flex-shrink: 0; 
-            }
-            
+            body { display: flex; min-height: 100vh; flex-direction: row; flex-wrap: wrap; }
+            aside#sidebar { width: 240px; height: 100vh; position: sticky; top: 0; border-right: 1px solid var(--border-color); padding: 2rem; display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0; }
+            main { flex-grow: 1; display: flex; margin: 0; }
             .content-col { flex: 1; padding: 3rem 4rem 6rem 4rem; display: flex; flex-direction: column; max-width: 900px; }
-            .diagram-col { 
-                width: 580px; 
-                border-left: 1px solid var(--border-color); 
-                background: var(--bg-color); 
-                padding: 1.5rem 2rem; 
-                display: flex; flex-direction: column; 
-                position: sticky; top: 0; height: 100vh; 
-                overflow-y: auto; 
-                align-items: center; justify-content: flex-start;
-                flex-shrink: 0; 
-            }
+            .diagram-col { width: 580px; border-left: 1px solid var(--border-color); background: var(--bg-color); padding: 1.5rem 2rem; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; align-items: center; justify-content: flex-start; flex-shrink: 0; }
             .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
             
-            /* TELEMETRY ROW - FIXED & ALWAYS VISIBLE */
+            /* Footer Full Width Fix */
+            footer { width: 100%; margin-left: 240px; } 
+
+            /* --- CRITICAL: SVG BASE STYLES --- */
+            .diag-container { fill: none; stroke: var(--border-color); stroke-width: 1px; stroke-dasharray: 4 4; opacity: 0.9; }
+            .diag-bg { fill: var(--card-bg); stroke: var(--border-color); stroke-width: 1.5px; }
+            .diag-line { stroke: var(--text-muted); stroke-width: 2px; opacity: 0.35; fill: none; }
+            .diag-text { font-family: var(--font-mono); font-size: 14px; fill: var(--text-main); font-weight: 700; }
+            .diag-text-sm { font-family: var(--font-mono); font-size: 12px; fill: var(--text-main); font-weight: 700; }
+            .diag-text-xs { font-family: var(--font-mono); font-size: 9px; fill: var(--text-muted); opacity: 0.6; letter-spacing: 0.08em; }
+            
+            /* TELEMETRY ROW */
             .telemetry-row {
                 width: 100%; display: flex; justify-content: space-between; align-items: center;
-                margin-bottom: 0.5rem; font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--text-muted);
+                margin-bottom: 0.5rem; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
                 border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; letter-spacing: 0.05em;
             }
             .telemetry-data { display: flex; gap: 12px; }
@@ -246,6 +239,11 @@
             /* Diagram Accents */
             .accent-enforced, .accent-eval, .accent-struct { transition: opacity 180ms ease, filter 180ms ease; }
             
+            /* Base (Always) */
+            .accent-enforced{ opacity: 1; }
+            .accent-eval{ opacity: 0.18; }
+            .accent-struct{ opacity: 0.28; }
+
             /* System Mode (Default) */
             body[data-lens="system"] .accent-enforced { opacity: 1; }
             body[data-lens="system"] .accent-eval { opacity: 0.12; }
@@ -268,7 +266,7 @@
             body[data-lens="mechanism"] .tel-system, body[data-lens="mechanism"] .tel-audit { opacity: 0.4; }
             
             /* INSTRUMENT LENS CONTROL */
-            .instrument-lens { display: flex; gap: 12px; background: transparent; padding: 0; font-family: "JetBrains Mono", monospace; font-size: 10px; }
+            .instrument-lens { display: flex; gap: 12px; background: transparent; padding: 0; font-family: var(--font-mono); font-size: 10px; }
             .lens-label { font-weight: 700; letter-spacing: 0.05em; opacity: 0.5; }
             .lens-opt { cursor: pointer; transition: color 0.2s; opacity: 0.5; }
             .lens-opt:hover { opacity: 1; color: var(--text-main); }
@@ -287,8 +285,11 @@
             /* SEPARATOR */
             .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: 1.5rem 0; opacity: 0.5; }
             
+            /* DIAGRAM 2 CONTAINER */
+            .diagram-02-container { width: 100%; opacity: 0.9; }
+            
             /* CAPABILITY MATRIX */
-            .cap-matrix { width: 100%; margin-top: 1.5rem; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; }
+            .cap-matrix { width: 100%; margin-top: 1.5rem; font-family: var(--font-mono); font-size: 0.6rem; }
             .cap-header { font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--text-main); padding-bottom: 4px; margin-bottom: 8px; letter-spacing: 0.05em; }
             .cap-table { width: 100%; border-collapse: collapse; }
             .cap-table th { text-align: left; padding: 6px 0; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
@@ -299,15 +300,15 @@
             [data-theme="dark"] .cap-table th { color: #aaa; }
             
             /* SVG SPECIFIC */
-            .telemetry-text { font-size: 9px; fill: var(--signal-enforced); font-family: "JetBrains Mono", monospace; opacity: 1; font-weight: 600; } /* Always opacity 1 in class, handled by group opacity */
+            .telemetry-text { font-size: 9px; fill: var(--signal-enforced); font-family: var(--font-mono); opacity: 1; font-weight: 600; } 
             
             /* D2 SVG STYLES */
             .d2-line { stroke: var(--text-muted); stroke-width: 1px; opacity: 0.3; }
             .d2-signal { stroke: var(--signal-eval); stroke-width: 2px; fill: none; opacity: 0; animation: signalPulse 4s linear infinite; }
             .d2-boundary { stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 4 4; }
-            .d2-text { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--text-main); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-            .d2-metric { font-family: "JetBrains Mono", monospace; font-size: 9px; fill: var(--text-muted); font-weight: 500; }
-            .d2-label { font-family: "JetBrains Mono", monospace; font-size: 8px; fill: var(--signal-eval); font-weight: 700; letter-spacing: 0.1em; }
+            .d2-text { font-family: var(--font-mono); font-size: 10px; fill: var(--text-main); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+            .d2-metric { font-family: var(--font-mono); font-size: 9px; fill: var(--text-muted); font-weight: 500; }
+            .d2-label { font-family: var(--font-mono); font-size: 8px; fill: var(--signal-eval); font-weight: 700; letter-spacing: 0.1em; }
             [data-theme="dark"] .d2-metric { fill: #999; }
             [data-theme="dark"] .d2-header { fill: #fff; }
             
@@ -327,6 +328,7 @@
             main { margin-top: 50px; padding: 0; width: 100%; max-width: 100vw; display: block; }
             .content-col { padding: 1.5rem; max-width: none; }
             .diagram-col { display: none; } /* Mobile hides diagram */
+            footer { width: 100%; margin-left: 0; }
         }
     </style>
 </head>
@@ -412,42 +414,50 @@
                     <section id="core-terms">
                         <h2><span class="scramble">03 //</span>Core Terms</h2>
                         <p>Each core term specifies: a bounded semantic scope, an operational <del>definition</del> <ins>interpretation</ins>, and the conditions under which it may be considered violated.</p>
+                        <p>These terms are intentionally narrow. Breadth increases ambiguity; ambiguity <del>complicates</del> <ins>invalidates</ins> measurement.</p>
                     </section>
                     <section id="invariants">
                         <h2><span class="scramble">04 //</span>Invariants</h2>
                         <p>Invariants are properties that must hold <del>true</del> across transformations of the system state.</p>
-                        <p>Violation of an invariant constitutes a diagnostic failure, not an anomaly.</p>
+                        <p>Violation of an invariant constitutes a diagnostic failure, not an anomaly. Invariant failure indicates: reasoning instability, semantic mutation, or internal contradiction.</p>
+                        <p>Passing is not assumed.</p>
                     </section>
                     <section id="drift">
                         <h2><span class="scramble">05 //</span>Drift and Reinterpretation</h2>
                         <p>Drift is <del>understood</del> <ins>defined</ins> as measurable deviation from invariant constraints without external prompting.</p>
+                        <p>The lexicon prevents reinterpretation by binding terms to explicit <del>rules</del> <ins>constraints</ins> rather than narrative intent.</p>
+                        <p>Without a <del>standard</del> <ins>lexicon</ins>, identical outputs may be read as compliant or non-compliant depending on observer bias. With a lexicon, interpretation is constrained.</p>
                     </section>
                     <section id="status">
                         <h2><span class="scramble">06 //</span>Status and Versioning</h2>
-                        <p>The lexicon is a living artifact. Definitions are <del>tracked</del> <ins>versioned</ins>. Revisions are logged.</p>
+                        <p>The lexicon is a living artifact. Definitions are <del>tracked</del> <ins>versioned</ins>. Revisions are logged. Changes are auditable.</p>
+                        <p>Stability of <del>language</del> <ins>definitions</ins> is treated as a prerequisite for stability of conclusions.</p>
                     </section>
                 </div>
 
                 <div class="view-audit">
-                    <section><h1><span class="scramble">01 //</span> AUDIT SCOPE</h1><p>This view defines the invariant constraints and failure signatures used for alignment audits.</p></section>
+                    <section><h1><span class="scramble">01 //</span> AUDIT SCOPE</h1><p>This view defines the invariant constraints and failure signatures used for alignment audits. Narrative interpretation is disallowed in this view.</p></section>
                     <section><h2><span class="scramble">02 //</span> ACTIVE INVARIANTS</h2><table class="audit-table"><thead><tr><th>Invariant ID</th><th>Name</th><th>Scope</th><th>Status</th></tr></thead><tbody><tr><td class="mono">INV-001</td><td>Goal Preservation</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-002</td><td>Definition Consistency</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-005</td><td>Non-Contradiction</td><td>Global</td><td>ENFORCED</td></tr></tbody></table></section>
+                    <section><h2><span class="scramble">03 //</span> FAILURE SIGNATURES</h2><table class="audit-table"><thead><tr><th>Signature</th><th>Trigger Condition</th><th>Severity</th></tr></thead><tbody><tr><td class="mono audit-fail">OBJ_MUTATION</td><td>Objective divergence across steps</td><td class="audit-fail">CRITICAL</td></tr><tr><td class="mono audit-fail">SEMANTIC_DRIFT</td><td>Term meaning deviation</td><td class="audit-fail">HIGH</td></tr><tr><td class="mono audit-fail">LOGIC_NEGATION</td><td>Internal contradiction</td><td class="audit-fail">CRITICAL</td></tr></tbody></table></section>
+                    <section><h2><span class="scramble">04 //</span> INTERPRETATION RULES</h2><ul><li>Invariant violation constitutes audit failure.</li><li>Failure severity is non-negotiable.</li><li>Narrative intent is ignored.</li><li>Passing is not assumed.</li></ul></section>
+                    <section style="margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 1rem;"><div class="mono" style="font-weight: 700;"><span class="scramble">STATUS //</span> AUDIT ACTIVE</div><div class="mono" style="margin-top: 0.5rem; color: var(--text-muted);">Audit schema loaded. Invariants enforced. Interpretation constrained.</div></section>
                 </div>
 
                 <div class="view-logic">
                     <section><div class="logic-header"><span class="scramble">01 //</span> LOGIC CONTEXT</div><div class="logic-content">SYSTEM: Reflective Alignment&#10;LAYER: Lexicon&#10;MODE: Constraint Definition&#10;INTERPRETATION: DISABLED</div></section>
                     <section><div class="logic-header"><span class="scramble">02 //</span> TERM BINDINGS</div><div class="logic-content">RA-001 := GlobalProperty(goal_coherence)&#10;RS-001 := LocalProperty(reasoning_stability)&#10;DRIFT := Deviation(invariants, unprompted)</div></section>
+                    <section><div class="logic-header"><span class="scramble">03 //</span> INVARIANT CONSTRAINTS</div><div class="logic-content">INV-001: ∀t, Objective(t) == Objective(t+1)&#10;INV-002: ∀d, Definition(d) is immutable within version&#10;INV-005: ¬∃p, (p ∧ ¬p)</div></section>
+                    <section><div class="logic-header"><span class="scramble">04 //</span> FAILURE CONDITIONS</div><div class="logic-content">OBJ_MUTATION → INV-001 violation&#10;SEMANTIC_DRIFT → INV-002 violation&#10;LOGIC_NEGATION → INV-005 violation</div></section>
+                    <section><div class="logic-header"><span class="scramble">05 //</span> EVALUATION MODE</div><div class="logic-content">OUTPUT ∈ {PASS, FAIL}&#10;DEFAULT = FAIL</div></section>
                 </div>
             </div>
 
             <div class="diagram-col">
                 <div class="diagram-label">TRAINING & DEPLOYMENT LOOP</div>
-                <div class="diagram-label-xs">(PRIMARY CAUSAL PATH HIGHLIGHTED)</div>
+                <div class="diagram-label-xs">ALIGNMENT IS ENFORCED PRE-EXECUTION. EVALUATION IS POST-HOC.</div>
                 
                 <figure class="diagram-figure">
                     <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
-                        <style>
-                            /* Animation/Styles reused from header */
-                        </style>
                         <g class="diag-root" transform="translate(0,0)">
                             <rect x="0" y="10" width="700" height="240" rx="4" class="diag-container"/>
                             
@@ -600,36 +610,55 @@
 
     <footer class="site-footer">
         <div class="footer-inner">
-            <div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div>
-            <div>© 2026 ENLIGHTENED AI RESEARCH LAB</div>
-            <div>Versioned research record · Logged revisions · Inspectable claims</div>
+            <div class="footer-left">
+                <div class="footer-primary">© 2026 Enlightened AI Research Lab</div>
+                <div class="footer-secondary">Versioned research record · Logged revisions · Inspectable claims</div>
+                <div class="record-status"><span class="status-dot-small"></span> RECORD STATUS: ACTIVE</div>
+            </div>
         </div>
     </footer>
 
     <script>
-        // --- MODE SWITCHER LOGIC ---
+        // --- MODE SWITCHER LOGIC (PURE CSS OPACITY) ---
         let currentMode = 'system';
         function setDiagramMode(mode, btn) {
             currentMode = mode;
-            document.querySelectorAll('.lens-opt').forEach(b => { b.classList.remove('active'); b.innerHTML = b.innerHTML.replace('●', '○'); });
-            btn.classList.add('active'); btn.innerHTML = btn.innerHTML.replace('○', '●');
+            // Toggle Buttons
+            document.querySelectorAll('.lens-opt').forEach(b => { 
+                b.classList.remove('active'); 
+                b.innerHTML = b.innerHTML.replace('●', '○'); 
+            });
+            btn.classList.add('active'); 
+            btn.innerHTML = btn.innerHTML.replace('○', '●');
+            
+            // Set Body Attribute (CSS handles visibility)
             document.body.setAttribute('data-lens', mode);
-            // No manual DOM manipulation here. All handled by CSS opacity.
+            
+            // No DOM manipulation or display:none here.
             updateTelemetry();
         }
         
         let cycleCount = 215;
         const telemetryColor = '#00cc00'; 
+        
+        // Update function handles highlighting via CSS classes
         function updateTelemetry(isLockState = false) {
-             // Updates text content only, visibility handled by CSS
              const systemSpan = document.querySelector('.tel-system');
-             if (isLockState) { systemSpan.innerHTML = `CYCLE: ${cycleCount} STATE: ENFORCED`; } 
-             else { systemSpan.innerHTML = `CYCLE: ${cycleCount}`; }
+             // Only update text content, never structure
+             if (isLockState) { 
+                 systemSpan.innerHTML = `CYCLE: ${cycleCount} STATE: ENFORCED`; 
+             } else { 
+                 systemSpan.innerHTML = `CYCLE: ${cycleCount}`; 
+             }
         }
         
         document.body.setAttribute('data-lens', 'system');
         setDiagramMode('system', document.querySelector('.lens-opt.active'));
-        setInterval(() => { setTimeout(() => { cycleCount++; updateTelemetry(true); }, 6000); setTimeout(() => { updateTelemetry(false); }, 8500); }, 8500);
+        
+        setInterval(() => { 
+            setTimeout(() => { cycleCount++; updateTelemetry(true); }, 6000); 
+            setTimeout(() => { updateTelemetry(false); }, 8500); 
+        }, 8500);
         
         function toggleTheme() { const body = document.body; const current = body.getAttribute('data-theme'); const next = current === 'dark' ? 'light' : 'dark'; body.setAttribute('data-theme', next); localStorage.setItem('enlightened_theme', next); }
         function setMode(mode, btn) { document.body.setAttribute('data-mode', mode); document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
