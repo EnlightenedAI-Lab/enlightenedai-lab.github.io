@@ -18,7 +18,7 @@
     </script>
 
     <style>
-        /* THEME: INSTITUTE STANDARD V129 (CYAN CALIBRATION) */
+        /* THEME: INSTITUTE STANDARD V130 (FINAL CALIBRATION) */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -186,7 +186,7 @@
         @keyframes beacon-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7); } 100% { box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); } }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED (V129)
+           LAYOUT ENGINE: SEGREGATED (V130)
            ========================================= */
 
         /* DESKTOP ENGINE (Width > 1100px) */
@@ -403,7 +403,7 @@
             <figure class="diagram-figure">
                 <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
                     <style>
-                        /* V129 THEME ENGINE */
+                        /* V130 THEME ENGINE */
                         .diag-root { font-family: "JetBrains Mono", monospace; }
                         
                         /* Adaptive Colors */
@@ -708,7 +708,7 @@
         });
         document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
 
-        // --- CYCLE COUNTER & LOCK (V129) ---
+        // --- CYCLE COUNTER & LOCK (V130) ---
         let cycleCount = 215;
         const counterEl = document.getElementById('cycle-counter');
         const telemetryColor = '#00cc00'; // Green Match
@@ -717,7 +717,7 @@
             // Trigger Lock at ~6.0s (end of cycle)
             setTimeout(() => {
                 cycleCount++;
-                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:${telemetryColor}; font-weight:800;">STATE: ENFORCED</span>`;
+                counterEl.innerHTML = `CYCLE: ${cycleCount.toString().padStart(4, '0')} <span style="color:${telemetryColor}; font-weight:700;">STATE: ENFORCED</span>`;
             }, 6000);
             
             // Reset visual state
