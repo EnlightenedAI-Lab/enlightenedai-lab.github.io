@@ -1,148 +1,184 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Reflective Diagnostics — Diagram Preview</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  body{margin:0;background:#050505;display:grid;place-items:center;height:100vh}
-  .wrap{width:min(1200px,96vw)}
-  .caption{font:600 12px "JetBrains Mono",monospace;color:#7a7a7a;letter-spacing:.08em;margin:10px 2px 0}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reflective Diagnostics — Flow Skeleton</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#111111;
+      --muted:#666666;
+      --line:#cfcfcf;
+      --box:#ffffff;
+      --boxLine:#bdbdbd;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+      padding:48px 24px;
+    }
+    .title{
+      font-weight:800;
+      letter-spacing:-0.02em;
+      margin:0 0 10px 0;
+      font-size:28px;
+    }
+    .sub{
+      margin:0 0 28px 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+      max-width:900px;
+    }
+    .frame{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:18px;
+      background:#fff;
+    }
+    .hint{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    svg{width:100%; height:auto; display:block}
+    .box{
+      fill:var(--box);
+      stroke:var(--boxLine);
+      stroke-width:1.25;
+      rx:12; ry:12;
+    }
+    .boxtitle{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      fill:var(--ink);
+    }
+    .boxtext{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size:12px;
+      fill:var(--muted);
+    }
+    .arrow{
+      stroke:var(--ink);
+      stroke-width:1.25;
+      fill:none;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+    .rail{
+      fill:#fff;
+      stroke:var(--line);
+      stroke-width:1.25;
+      rx:10; ry:10;
+    }
+    .railtext{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size:12px;
+      fill:var(--muted);
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+    }
+    .chip{
+      fill:#fff;
+      stroke:var(--line);
+      stroke-width:1.25;
+      rx:999; ry:999;
+    }
+    .chiptext{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size:12px;
+      fill:var(--ink);
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
+  <div class="wrap">
+    <h1 class="title">Reflective Diagnostics — Flow Skeleton</h1>
+    <p class="sub">
+      White-background wireframe. No animation. Simple flowchart with arrows.
+      (We can layer the “instrument” look back in after the structure reads cleanly.)
+    </p>
 
-<svg viewBox="0 0 1200 360" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feColorMatrix in="blur" type="matrix"
-        values="1 0 0 0 0
-                0 1 0 0 0.9
-                0 0 1 0 0
-                0 0 0 0.9 0" result="glow"/>
-      <feMerge>
-        <feMergeNode in="glow"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
+    <div class="frame">
+      <svg viewBox="0 0 1200 420" role="img" aria-label="Diagnostics flow skeleton">
+        <defs>
+          <marker id="arrowHead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#111111"></path>
+          </marker>
+        </defs>
 
-    <linearGradient id="panelGrad" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="#0b0b0c"/>
-      <stop offset="1" stop-color="#070707"/>
-    </linearGradient>
+        <!-- TOP ROW: 4 BOXES -->
+        <!-- Box geometry -->
+        <!-- x positions: 30, 322, 614, 906 ; width 264 ; height 150 -->
+        <rect class="box" x="30"  y="40" width="264" height="150"></rect>
+        <rect class="box" x="322" y="40" width="264" height="150"></rect>
+        <rect class="box" x="614" y="40" width="264" height="150"></rect>
+        <rect class="box" x="906" y="40" width="264" height="150"></rect>
 
-    <linearGradient id="wireDim" x1="0" x2="1">
-      <stop offset="0" stop-color="#2b2b2b"/>
-      <stop offset="1" stop-color="#1b1b1b"/>
-    </linearGradient>
+        <!-- Titles -->
+        <text class="boxtitle" x="56"  y="74">Evidence intake</text>
+        <text class="boxtitle" x="348" y="74">Lexicon binding</text>
+        <text class="boxtitle" x="640" y="74">Diagnostic pipeline</text>
+        <text class="boxtitle" x="932" y="74">Audit record</text>
 
-    <style>
-      .mono{font-family:"JetBrains Mono",monospace}
-      .title{font-weight:700;font-size:14px;letter-spacing:.12em;fill:#e9e9e9}
-      .sub{font-weight:600;font-size:11px;letter-spacing:.08em;fill:#8a8a8a}
-      .cap{font-weight:600;font-size:10px;letter-spacing:.08em;fill:#666}
-      .num{font-weight:700;font-size:16px;letter-spacing:.08em;fill:#bdbdbd}
-      .panel{fill:url(#panelGrad);stroke:#242424;stroke-width:1}
-      .wire{stroke:url(#wireDim);stroke-width:2;fill:none;opacity:.9}
-      .wireLive{stroke:#00cc66;stroke-width:2.5;fill:none;filter:url(#softGlow)}
-      .dot{fill:#00cc66;filter:url(#softGlow)}
-      .dot2{fill:#ffcc00;filter:url(#softGlow);opacity:.75}
-      .node{fill:#0f0f10;stroke:#2a2a2a;stroke-width:1}
-      .nodeOff{fill:#0b0b0c;stroke:#232323;opacity:.7}
-      .tag{fill:#0b0b0c;stroke:#2a2a2a}
-      .tagtxt{font-weight:700;font-size:10px;letter-spacing:.12em;fill:#9a9a9a}
-      .status{font-weight:700;font-size:10px;letter-spacing:.16em;fill:#7a7a7a}
-      .strip{fill:#070707;stroke:#202020}
-      .stripTxt{font-weight:700;font-size:10px;letter-spacing:.18em;fill:#7a7a7a}
+        <!-- Body text (2 lines each) -->
+        <text class="boxtext" x="56"  y="104">Stored outputs • transcripts • snapshots</text>
+        <text class="boxtext" x="56"  y="126">Read-only once ingested</text>
 
-      /* running light */
-      @keyframes runX { 0%{transform:translateX(0)} 100%{transform:translateX(760px)} }
-      .runner{animation:runX 3.2s linear infinite}
-      @keyframes runDown { 0%{transform:translateY(0)} 100%{transform:translateY(98px)} }
-      .runnerDown{animation:runDown 1.6s ease-in-out infinite alternate}
+        <text class="boxtext" x="348" y="104">Frozen terms • versioned schema</text>
+        <text class="boxtext" x="348" y="126">Meaning constrained pre-measurement</text>
 
-      /* optional “discarded” flicker */
-      @keyframes flicker { 0%,100%{opacity:.22} 50%{opacity:.55} }
-      .discard{animation:flicker 2.4s ease-in-out infinite}
-    </style>
-  </defs>
+        <text class="boxtext" x="640" y="104">Structure checks • invariant enforcement</text>
+        <text class="boxtext" x="640" y="126">Non-conforming paths discarded</text>
 
-  <!-- panels -->
-  <rect class="panel" x="40"  y="60" width="250" height="190" rx="10"/>
-  <rect class="panel" x="330" y="60" width="250" height="190" rx="10"/>
-  <rect class="panel" x="620" y="60" width="300" height="190" rx="10"/>
-  <rect class="panel" x="960" y="60" width="200" height="190" rx="10"/>
+        <text class="boxtext" x="932" y="104">Signals • evidence links • hashes</text>
+        <text class="boxtext" x="932" y="126">Reproducible • verifiable • stored</text>
 
-  <!-- labels -->
-  <text class="mono num"   x="60"  y="95">01 //</text>
-  <text class="mono title" x="140" y="95">EVIDENCE INTAKE</text>
-  <text class="mono sub"   x="60"  y="124">Stored outputs · transcripts · snapshots</text>
-  <text class="mono cap"   x="60"  y="238">Read-only. Immutable once ingested.</text>
+        <!-- ARROWS between boxes -->
+        <path class="arrow" marker-end="url(#arrowHead)" d="M 294 115 L 322 115"></path>
+        <path class="arrow" marker-end="url(#arrowHead)" d="M 586 115 L 614 115"></path>
+        <path class="arrow" marker-end="url(#arrowHead)" d="M 878 115 L 906 115"></path>
 
-  <text class="mono num"   x="350" y="95">02 //</text>
-  <text class="mono title" x="430" y="95">LEXICON BINDING</text>
-  <text class="mono sub"   x="350" y="124">Frozen terms · versioned schema</text>
-  <text class="mono cap"   x="350" y="238">Meaning constrained before measurement.</text>
+        <!-- Optional: feedback loop from Audit Record back to Binding (thin, light) -->
+        <path class="arrow" marker-end="url(#arrowHead)" d="M 1038 190 C 1038 260, 470 260, 470 190"
+              style="stroke:#9b9b9b; stroke-width:1.1;"></path>
+        <text class="boxtext" x="720" y="255" style="fill:#9b9b9b;">(optional) audit triggers re-verification</text>
 
-  <text class="mono num"   x="640" y="95">03 //</text>
-  <text class="mono title" x="720" y="95">DIAGNOSTIC PIPELINE</text>
-  <text class="mono sub"   x="640" y="124">Structural checks · invariant enforcement</text>
-  <text class="mono cap"   x="640" y="238">Non-conforming paths discarded.</text>
+        <!-- BOTTOM RAIL -->
+        <rect class="rail" x="30" y="300" width="1140" height="74"></rect>
+        <text class="railtext" x="56" y="334">Status:</text>
 
-  <text class="mono num"   x="980" y="95">04 //</text>
-  <text class="mono title" x="1060" y="95">AUDIT RECORD</text>
-  <text class="mono sub"   x="980" y="124">Signals · evidence links · hashes</text>
-  <text class="mono cap"   x="980" y="238">Reproducible. Verifiable. Stored.</text>
+        <!-- Chips -->
+        <rect class="chip" x="140" y="318" width="170" height="38"></rect>
+        <text class="chiptext" x="160" y="342">Deterministic</text>
 
-  <!-- base wiring -->
-  <path class="wire" d="M290 155 C310 155, 310 155, 330 155"/>
-  <path class="wire" d="M580 155 C600 155, 600 155, 620 155"/>
-  <path class="wire" d="M920 155 C940 155, 940 155, 960 155"/>
+        <rect class="chip" x="328" y="318" width="170" height="38"></rect>
+        <text class="chiptext" x="350" y="342">Lexicon-bound</text>
 
-  <!-- pipeline nodes -->
-  <rect class="node" x="690" y="145" width="160" height="26" rx="6"/>
-  <rect class="node" x="690" y="177" width="160" height="26" rx="6"/>
-  <rect class="nodeOff discard" x="690" y="209" width="160" height="26" rx="6"/>
+        <rect class="chip" x="516" y="318" width="170" height="38"></rect>
+        <text class="chiptext" x="544" y="342">Non-interactive</text>
 
-  <text class="mono cap" x="700" y="162">EVAL</text>
-  <text class="mono cap" x="700" y="194">CHECK</text>
-  <text class="mono cap" x="700" y="226">DISCARD</text>
+        <rect class="chip" x="704" y="318" width="170" height="38"></rect>
+        <text class="chiptext" x="742" y="342">Audit-ready</text>
 
-  <!-- “discarded” side branch -->
-  <path class="wire discard" d="M850 222 C890 222, 900 245, 940 245" />
-  <text class="mono cap discard" x="946" y="248">×</text>
-
-  <!-- live runner across the main line -->
-  <g class="runner">
-    <circle class="dot" cx="290" cy="155" r="4"/>
-  </g>
-  <path class="wireLive" d="M290 155 C310 155, 310 155, 330 155"/>
-  <path class="wireLive" d="M580 155 C600 155, 600 155, 620 155"/>
-  <path class="wireLive" d="M920 155 C940 155, 940 155, 960 155"/>
-
-  <!-- runner down inside pipeline -->
-  <g transform="translate(0,0)">
-    <g class="runnerDown">
-      <circle class="dot2" cx="872" cy="158" r="3.5"/>
-    </g>
-  </g>
-
-  <!-- status strip -->
-  <rect class="strip" x="40" y="280" width="1120" height="46" rx="8"/>
-  <text class="mono stripTxt" x="70" y="309">STATUS:</text>
-  <text class="mono stripTxt" x="160" y="309">DETERMINISTIC</text>
-  <text class="mono stripTxt" x="355" y="309">·</text>
-  <text class="mono stripTxt" x="390" y="309">LEXICON-BOUND</text>
-  <text class="mono stripTxt" x="585" y="309">·</text>
-  <text class="mono stripTxt" x="620" y="309">NON-INTERACTIVE</text>
-  <text class="mono stripTxt" x="845" y="309">·</text>
-  <text class="mono stripTxt" x="880" y="309">AUDIT-READY</text>
-</svg>
-
-<div class="caption">Preview mock (SVG). If this matches, we can convert it to Mermaid or a production SVG file.</div>
-</div>
+        <rect class="chip" x="892" y="318" width="278" height="38"></rect>
+        <text class="chiptext" x="916" y="342">Evidence → metric → source</text>
+      </svg>
+      <div class="hint">Next step: if this reads clearly, we can re-introduce the darker “instrument” styling, glow, and subtle motion.</div>
+    </div>
+  </div>
 </body>
 </html>
