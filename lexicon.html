@@ -48,7 +48,7 @@
             --mode-diff-ins-text: #006600;
 
             /* SPACING VARS */
-            --stack-gap: 3rem; /* Consistent vertical rhythm */
+            --block-gap: 48px; /* Standardized vertical gap */
         }
 
         /* DARK MODE */
@@ -91,7 +91,16 @@
         }
 
         /* --- TYPOGRAPHY --- */
-        h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; display:flex; align-items:center; }
+        /* H1 Reduced Size for Hierarchy Balance */
+        h1 { 
+            font-size: 1.1rem; /* Reduced from 1.8rem */
+            font-weight: 700; 
+            letter-spacing: -0.01em; 
+            margin-bottom: 1.5rem; 
+            display:flex; 
+            align-items:center; 
+            text-transform: uppercase;
+        }
         h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; display:flex; align-items:center; }
         p { font-size: 0.95rem; margin-bottom: 1.2rem; color: var(--text-main); max-width: 65ch; }
         ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
@@ -100,7 +109,7 @@
         .mono { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .scramble { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
-        /* ORIENTING FRAME & HEADER (GLOBAL) */
+        /* ORIENTING FRAME & HEADER (Left Aligned) */
         .global-header-strip {
             width: 100%;
             padding: 2rem 4rem;
@@ -152,7 +161,7 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
-        /* --- MODES & VIEWS (RESTORED DIFF LOGIC) --- */
+        /* --- MODES & VIEWS --- */
         del, ins { text-decoration: none; }
 
         /* Reader Mode: Hide deletions, plain text insertions */
@@ -180,20 +189,13 @@
             border-radius: 2px;
         }
 
-        /* AUDIT MODE */
-        body[data-mode="audit"] .view-human, body[data-mode="audit"] .view-logic { display: none; }
-        body[data-mode="audit"] .view-audit { display: block; animation: fadeIn 0.3s ease; }
-
-        /* LOGIC MODE */
-        body[data-mode="logic"] .view-human, body[data-mode="logic"] .view-audit { display: none; }
+        /* AUDIT MODE (REMOVED CONTENT LOGIC, ONLY RETAINED FOR SAFETY IF JS TRIGGERS) */
+        .view-human { display: block; }
+        body[data-mode="logic"] .view-human { display: none; }
         body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: "JetBrains Mono", monospace; color: var(--text-main); }
+        .view-logic { display: none; }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* AUDIT TABLES */
-        .audit-table { width: 100%; border-collapse: collapse; font-family: "JetBrains Mono", monospace; font-size: 0.75rem; margin-bottom: 2rem; }
-        .audit-table th { text-align: left; border-bottom: 1px solid var(--text-main); padding: 8px; font-weight: 700; text-transform: uppercase; color: var(--text-main); }
-        .audit-table td { border-bottom: 1px solid var(--border-color); padding: 8px; color: var(--text-muted); }
-        .audit-fail { color: var(--signal-red); font-weight: 700; }
 
         /* LOGIC BLOCKS */
         .logic-header { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; display: flex; align-items: center; }
@@ -253,11 +255,11 @@
             }
             .content-col {
                 flex: 1;
-                padding: 2rem 4rem 6rem 4rem; /* Reduced top padding since header is above */
+                padding: 2rem 4rem 6rem 4rem; 
                 display: flex; flex-direction: column;
                 max-width: 900px;
             }
-            /* DIAGRAM COLUMN: UNIFIED SCROLL */
+            /* DIAGRAM COLUMN: STICKY RESTORED + UNIFIED SCROLL */
             .diagram-col {
                 width: 580px; 
                 border-left: 1px solid var(--border-color);
@@ -265,7 +267,10 @@
                 padding: 2rem 2rem 4rem 2rem;
                 display: flex; flex-direction: column;
                 align-items: center; justify-content: flex-start;
-                /* No sticky/height to allow unified scrolling */
+                /* Sticky Behavior: Pinned to top, moves with body scroll until end */
+                position: sticky; top: 0; 
+                height: fit-content; 
+                align-self: flex-start;
             }
             .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
             
@@ -289,10 +294,17 @@
             }
             .cycle-counter {
                 font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-main); font-weight:700;
-                text-align: center; margin-bottom: 0.5rem; /* TIGHTENED */
+                text-align: center; margin-bottom: 0.2rem; /* Tightened dead space */
             }
             
-            /* LEGEND - Tightened */
+            /* DARK MODE TEXT FIXES */
+            [data-theme="dark"] .cycle-label, 
+            [data-theme="dark"] .cycle-counter,
+            [data-theme="dark"] .diagram-text-xs { 
+                color: #fff !important; opacity: 1 !important; fill: #fff !important; 
+            }
+            
+            /* LEGEND */
             .diag-legend { 
                 margin-top: 0.5rem;
                 font-family: "JetBrains Mono", monospace; font-size: 0.55rem; color: var(--text-muted);
@@ -301,8 +313,8 @@
             .legend-item { display: flex; align-items: center; gap: 6px; }
             .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
 
-            /* --- STACK GAP SPACERS --- */
-            .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: var(--stack-gap) 0; opacity: 0.5; }
+            /* --- SPACERS FOR SEPARATION --- */
+            .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: var(--block-gap) 0; opacity: 0.5; }
             
             .diagram-02-container { width: 100%; opacity: 0.9; margin: 0; }
             /* D2 Styles */
@@ -364,7 +376,6 @@
 
         <div class="mode-group">
             <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
-            <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
             <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
             <span class="toggle-btn" onclick="setMode('logic', this)">[ LOGIC ] <span>λ</span></span>
            <span class="toggle-btn" onclick="window.location.href='lexicon-machine.html'">[ MACHINE ] <span>≡</span></span>
@@ -454,14 +465,6 @@
                         <p>The lexicon is a living artifact. Definitions are <del>tracked</del> <ins>versioned</ins>. Revisions are logged. Changes are auditable.</p>
                         <p>Stability of <del>language</del> <ins>definitions</ins> is treated as a prerequisite for stability of conclusions.</p>
                     </section>
-                </div>
-
-                <div class="view-audit">
-                    <section><h1><span class="scramble">01 //</span> AUDIT SCOPE</h1><p>This view defines the invariant constraints and failure signatures used for alignment audits. Narrative interpretation is disallowed in this view.</p></section>
-                    <section><h2><span class="scramble">02 //</span> ACTIVE INVARIANTS</h2><table class="audit-table"><thead><tr><th>Invariant ID</th><th>Name</th><th>Scope</th><th>Status</th></tr></thead><tbody><tr><td class="mono">INV-001</td><td>Goal Preservation</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-002</td><td>Definition Consistency</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-005</td><td>Non-Contradiction</td><td>Global</td><td>ENFORCED</td></tr></tbody></table></section>
-                    <section><h2><span class="scramble">03 //</span> FAILURE SIGNATURES</h2><table class="audit-table"><thead><tr><th>Signature</th><th>Trigger Condition</th><th>Severity</th></tr></thead><tbody><tr><td class="mono audit-fail">OBJ_MUTATION</td><td>Objective divergence across steps</td><td class="audit-fail">CRITICAL</td></tr><tr><td class="mono audit-fail">SEMANTIC_DRIFT</td><td>Term meaning deviation</td><td class="audit-fail">HIGH</td></tr><tr><td class="mono audit-fail">LOGIC_NEGATION</td><td>Internal contradiction</td><td class="audit-fail">CRITICAL</td></tr></tbody></table></section>
-                    <section><h2><span class="scramble">04 //</span> INTERPRETATION RULES</h2><ul><li>Invariant violation constitutes audit failure.</li><li>Failure severity is non-negotiable.</li><li>Narrative intent is ignored.</li><li>Passing is not assumed.</li></ul></section>
-                    <section style="margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 1rem;"><div class="mono" style="font-weight: 700;"><span class="scramble">STATUS //</span> AUDIT ACTIVE</div><div class="mono" style="margin-top: 0.5rem; color: var(--text-muted);">Audit schema loaded. Invariants enforced. Interpretation constrained.</div></section>
                 </div>
 
                 <div class="view-logic">
