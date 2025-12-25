@@ -21,6 +21,7 @@
     <style>
         /* --- THEME: INSTITUTE STANDARD V54 --- */
         :root {
+            /* LIGHT MODE */
             --bg-color: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
@@ -76,9 +77,18 @@
             color: var(--text-main);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            /* [FIX] Vertical Flex for Footer Stacking */
             display: flex;
+            flex-direction: column; 
             min-height: 100vh;
             transition: background-color 0.2s, color 0.2s;
+        }
+
+        /* [FIX] Layout Wrapper for Sidebar + Main */
+        .layout-wrapper {
+            display: flex;
+            flex: 1; /* Pushes footer down */
+            width: 100%;
         }
 
         /* --- BEACONS --- */
@@ -133,10 +143,13 @@
 
         /* --- SIDEBAR --- */
         aside { 
-            width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; 
+            width: var(--sidebar-width); 
+            /* Sticky behavior inside flex container requires align-self: flex-start */
+            height: 100vh; position: sticky; top: 0; align-self: flex-start;
             border-right: 1px solid var(--border-color); padding: 3rem 2rem; 
             display: flex; flex-direction: column; flex-shrink: 0; 
             background: var(--bg-color); z-index: 1000; 
+            overflow-y: auto;
         }
         .brand { margin-bottom: 4rem; }
         .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
@@ -172,14 +185,28 @@
         .export-btn:hover { background: #000; color: #fff; border-color: #000; }
 
         /* --- MAIN CONTENT --- */
-        main { flex-grow: 1; padding: 3rem 5rem; max-width: 1200px; }
+        main { 
+            flex-grow: 1; 
+            /* [FIX] Reduced padding from 5rem to 3rem to tighten whitespace */
+            padding: 3rem 3rem; 
+            max-width: 1200px; 
+            width: 100%;
+        }
         
         .doc-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); }
         .doc-meta { display: flex; flex-direction: column; }
         .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
         .doc-val { font-weight: 500; color: #000; }
 
-        section { margin-bottom: 6rem; scroll-margin-top: 5rem; display: grid; grid-template-columns: 1fr; gap: 0; position: relative; }
+        section { 
+            /* [FIX] Reduced margin from 6rem to 3rem for tighter vertical flow */
+            margin-bottom: 3rem; 
+            scroll-margin-top: 5rem; 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 0; 
+            position: relative; 
+        }
         
         h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; display:flex; align-items:center; }
         h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; display:flex; align-items:center; }
@@ -187,6 +214,14 @@
         
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
         .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; }
+
+        /* [FIX] Footer Stacking */
+        #footer-mount {
+            width: 100%;
+            z-index: 100;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-color);
+        }
 
         /* --- VISIBILITY RULES --- */
         del, ins, .diff-tag { display: none; } 
@@ -278,7 +313,10 @@
 
         /* --- MOBILE ADJUSTMENTS --- */
         @media (max-width: 900px) {
-            body { flex-direction: column; overflow-x: hidden; }
+            /* Disable layout wrapper flex on mobile */
+            .layout-wrapper { display: block; }
+            
+            body { overflow-x: hidden; }
             .mobile-bar { display: flex; }
             
             aside { 
@@ -318,189 +356,191 @@
         </div>
     </header>
 
-    <aside id="sidebar">
-        <div class="brand">
-            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
-            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
-            <span>EST. 2026 // MONTREAL</span>
-        </div>
+    <div class="layout-wrapper">
+        <aside id="sidebar">
+            <div class="brand">
+                <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
+                <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
+                <span>EST. 2026 // MONTREAL</span>
+            </div>
 
-        <div class="mode-group">
-            <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader', 'READER MODE')">[ READER ] <span>•</span></span>
-            <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')">[ AUDIT ] <span>•</span></span>
-            <span class="toggle-btn" id="btn-diff" onclick="setMode('diff', 'CHANGE TRACE ACTIVE')">[ DIFF LOG ] <span>Δ</span></span>
-            <span class="toggle-btn" id="btn-logic" onclick="setMode('logic', 'LOGIC LAYER EXPOSED')">[ LOGIC ] <span>λ</span></span>
-        </div>
-        
-        <nav>
-            <ul>
-                <li><a href="#mission" class="nav-link">Mission</a></li>
-                <li><a href="#theory" class="nav-link">Theory</a></li>
-                <li><a href="#instruments" class="nav-link">Instruments</a></li>
-                <li><a href="#outputs" class="nav-link">Outputs</a></li>
-                <li><a href="lexicon.html" class="nav-link" style="margin-top:10px; border-top:1px solid var(--border-color); padding-top:10px;">Lexicon →</a></li>
-            </ul>
-        </nav>
-        
-        <div class="theme-switch" onclick="toggleTheme()">
-            [ LIGHT / DARK ] <span id="theme-icon">◐</span>
-        </div>
+            <div class="mode-group">
+                <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader', 'READER MODE')">[ READER ] <span>•</span></span>
+                <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')">[ AUDIT ] <span>•</span></span>
+                <span class="toggle-btn" id="btn-diff" onclick="setMode('diff', 'CHANGE TRACE ACTIVE')">[ DIFF LOG ] <span>Δ</span></span>
+                <span class="toggle-btn" id="btn-logic" onclick="setMode('logic', 'LOGIC LAYER EXPOSED')">[ LOGIC ] <span>λ</span></span>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#mission" class="nav-link">Mission</a></li>
+                    <li><a href="#theory" class="nav-link">Theory</a></li>
+                    <li><a href="#instruments" class="nav-link">Instruments</a></li>
+                    <li><a href="#outputs" class="nav-link">Outputs</a></li>
+                    <li><a href="lexicon.html" class="nav-link" style="margin-top:10px; border-top:1px solid var(--border-color); padding-top:10px;">Lexicon →</a></li>
+                </ul>
+            </nav>
+            
+            <div class="theme-switch" onclick="toggleTheme()">
+                [ LIGHT / DARK ] <span id="theme-icon">◐</span>
+            </div>
 
-        <div class="export-container">
-            <button class="export-btn" onclick="window.print()"><span>🖨</span> Export Record</button>
-        </div>
-    </aside>
+            <div class="export-container">
+                <button class="export-btn" onclick="window.print()"><span>🖨</span> Export Record</button>
+            </div>
+        </aside>
 
-    <main>
-        <div class="doc-header mono">
-            <div class="doc-meta"><span class="doc-label">DOC_ID</span><span class="doc-val">EAI-2026-001</span></div>
-            <div class="doc-meta"><span class="doc-label">CLASSIFICATION</span><span class="doc-val">PUBLIC</span></div>
-            <div class="integrity-seal verified"><span class="status-dot"></span><span>INTEGRITY: VERIFIED</span></div>
-        </div>
+        <main>
+            <div class="doc-header mono">
+                <div class="doc-meta"><span class="doc-label">DOC_ID</span><span class="doc-val">EAI-2026-001</span></div>
+                <div class="doc-meta"><span class="doc-label">CLASSIFICATION</span><span class="doc-val">PUBLIC</span></div>
+                <div class="integrity-seal verified"><span class="status-dot"></span><span>INTEGRITY: VERIFIED</span></div>
+            </div>
 
-        <section id="mission">
-            <div class="content-col">
-                <div class="orienting-frame">This site is an inspectable record of how we evaluate alignment as a system property.</div>
-                
-                <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Claim Hardening]</div>
-                <h1><span class="scramble">01 //</span>Mission <a onclick="copyLink('mission')" class="permalink"></a></h1>
-                <div class="prose-content">
-                    <p class="abstract" id="mission-text">
-                        <span class="audit-marker">[M1.0]</span>
-                        We advance the <del>field</del> <ins>science</ins> of reflective alignment and reasoning stability.
-                    </p>
-                    <p>
-                        <span class="audit-marker">[M1.1]</span>
-                        We <del>build</del> <ins>develop</ins> governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an <del>abstract intention</del> <ins>abstract intention, but as an internal system property</ins> that can be examined, stressed, and verified.
-                    </p>
+            <section id="mission">
+                <div class="content-col">
+                    <div class="orienting-frame">This site is an inspectable record of how we evaluate alignment as a system property.</div>
                     
-                    <div class="logic-block">
+                    <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Claim Hardening]</div>
+                    <h1><span class="scramble">01 //</span>Mission <a onclick="copyLink('mission')" class="permalink"></a></h1>
+                    <div class="prose-content">
+                        <p class="abstract" id="mission-text">
+                            <span class="audit-marker">[M1.0]</span>
+                            We advance the <del>field</del> <ins>science</ins> of reflective alignment and reasoning stability.
+                        </p>
+                        <p>
+                            <span class="audit-marker">[M1.1]</span>
+                            We <del>build</del> <ins>develop</ins> governance-grade diagnostics to evaluate whether advanced AI systems remain coherent under <del>extreme</del> <ins>high-complexity</ins> conditions. Our work treats alignment not as an <del>abstract intention</del> <ins>abstract intention, but as an internal system property</ins> that can be examined, stressed, and verified.
+                        </p>
+                        
+                        <div class="logic-block">
 <span class="logic-comment"># Formal Definition: Mission Objective Function</span>
 <span class="logic-keyword">def</span> maximize_alignment_stability(agent: <span class="logic-type">CognitiveSystem</span>) -> <span class="logic-type">Proof</span>:
     <span class="logic-keyword">assert</span> agent.has_capability(<span class="logic-type">"REFLECTIVE_MONITORING"</span>)
     <span class="logic-keyword">return</span> <span class="logic-type">VerifiedProof</span>(agent)
+                        </div>
+
+                        <p>Our research tests whether <del>theoretical</del> <ins>empirical</ins> alignment guarantees survive real model behavior and provides auditable instruments suitable for <del>corporate</del> <ins>public-sector</ins> and institutional review.</p>
                     </div>
-
-                    <p>Our research tests whether <del>theoretical</del> <ins>empirical</ins> alignment guarantees survive real model behavior and provides auditable instruments suitable for <del>corporate</del> <ins>public-sector</ins> and institutional review.</p>
                 </div>
-            </div>
 
-            <div class="audit-rail">
-                <div class="claim-box" id="c-m1" onmouseenter="highlightText('M1.0')" onmouseleave="unhighlightText('M1.0')">
-                    <span class="claim-id">CLAIM [M1.0]</span>
-                    <div class="claim-meta"><span>SCOPE: CONCEPT</span><span class="metric-tag">CONF: HIGH</span></div>
-                    <div class="claim-text">"Alignment is evaluated as an internal system property"</div>
+                <div class="audit-rail">
+                    <div class="claim-box" id="c-m1" onmouseenter="highlightText('M1.0')" onmouseleave="unhighlightText('M1.0')">
+                        <span class="claim-id">CLAIM [M1.0]</span>
+                        <div class="claim-meta"><span>SCOPE: CONCEPT</span><span class="metric-tag">CONF: HIGH</span></div>
+                        <div class="claim-text">"Alignment is evaluated as an internal system property"</div>
+                    </div>
+                    <div class="claim-box" id="c-m2">
+                        <span class="claim-id">CLAIM [M1.1]</span>
+                        <div class="claim-meta"><span>SCOPE: TOOLING</span></div>
+                        <div class="claim-text">Diagnostics must meet governance-grade audit standards.</div>
+                    </div>
                 </div>
-                <div class="claim-box" id="c-m2">
-                    <span class="claim-id">CLAIM [M1.1]</span>
-                    <div class="claim-meta"><span>SCOPE: TOOLING</span></div>
-                    <div class="claim-text">Diagnostics must meet governance-grade audit standards.</div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="theory">
-            <div class="content-col">
-                <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Scope Restriction]</div>
-                <h2><span class="scramble">02 //</span>What We Evaluate <a onclick="copyLink('theory')" class="permalink"></a></h2>
-                <div class="prose-content">
-                    <p>
-                        <span class="audit-marker">[E-01]</span>
-                        We evaluate alignment as a <del>static</del> <ins>dynamic</ins> property of reasoning systems, not as a <del>stated</del> <ins>stated</ins> objective.
-                    </p>
-                    <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where <del>failures</del> <ins>failure modes</ins> emerge. <span class="diff-tag">[scope narrowed]</span></p>
-                    
-                    <div class="logic-block">
+            <section id="theory">
+                <div class="content-col">
+                    <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Scope Restriction]</div>
+                    <h2><span class="scramble">02 //</span>What We Evaluate <a onclick="copyLink('theory')" class="permalink"></a></h2>
+                    <div class="prose-content">
+                        <p>
+                            <span class="audit-marker">[E-01]</span>
+                            We evaluate alignment as a <del>static</del> <ins>dynamic</ins> property of reasoning systems, not as a <del>stated</del> <ins>stated</ins> objective.
+                        </p>
+                        <p>Our work focuses on how alignment behaves under pressure: recursive self-reference, increasing model scale, and prolonged reasoning trajectories. These conditions are where <del>failures</del> <ins>failure modes</ins> emerge. <span class="diff-tag">[scope narrowed]</span></p>
+                        
+                        <div class="logic-block">
 <span class="logic-comment"># Evaluation Strategy: Dynamic Stress Testing</span>
 <span class="logic-keyword">def</span> evaluate_under_pressure(model: <span class="logic-type">Model</span>):
     drift = model.run_trajectory(<span class="logic-type">EvaluationContext.RECURSIVE_REF</span>)
     <span class="logic-keyword">if</span> drift > <span class="logic-type">SAFTEY_MARGIN</span>: <span class="logic-keyword">return</span> <span class="logic-type">FailureMode.DETECTED</span>
+                        </div>
+
+                        <p>The alignment lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation.</p>
+                        <p>The lexicon is not descriptive documentation. It is a measurement instrument. <span class="diff-tag">[clarified]</span></p>
                     </div>
-
-                    <p>The alignment lexicon constrains how core concepts are defined, referenced, and tested, eliminating semantic drift between theory, diagnostics, and interpretation.</p>
-                    <p>The lexicon is not descriptive documentation. It is a measurement instrument. <span class="diff-tag">[clarified]</span></p>
                 </div>
-            </div>
-            
-            <div class="audit-rail">
-                <div class="claim-box" id="c-e1">
-                    <span class="claim-id">METHOD [E-01]</span>
-                    <div class="claim-meta"><span>TYPE: STRESS_TEST</span><span class="metric-tag">DIMS: 3</span></div>
-                    <div class="claim-text">Dynamic stress testing of recursive self-reference.</div>
+                
+                <div class="audit-rail">
+                    <div class="claim-box" id="c-e1">
+                        <span class="claim-id">METHOD [E-01]</span>
+                        <div class="claim-meta"><span>TYPE: STRESS_TEST</span><span class="metric-tag">DIMS: 3</span></div>
+                        <div class="claim-text">Dynamic stress testing of recursive self-reference.</div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="instruments">
-            <div class="content-col">
-                <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Formalization]</div>
-                <h2><span class="scramble">03 //</span>Instruments <a onclick="copyLink('instruments')" class="permalink"></a></h2>
-                <div class="prose-content">
-                    <p>
-                        <span class="audit-marker">[D-09]</span>
-                        We develop reflective diagnostics to <del>check</del> <ins>test</ins> how alignment behaves over time, not only how it is expressed at a single point.
-                    </p>
-                    
-                    <div class="logic-block">
+            <section id="instruments">
+                <div class="content-col">
+                    <div class="diff-header">REVISION TRACE — v1.0 → v1.3 [Formalization]</div>
+                    <h2><span class="scramble">03 //</span>Instruments <a onclick="copyLink('instruments')" class="permalink"></a></h2>
+                    <div class="prose-content">
+                        <p>
+                            <span class="audit-marker">[D-09]</span>
+                            We develop reflective diagnostics to <del>check</del> <ins>test</ins> how alignment behaves over time, not only how it is expressed at a single point.
+                        </p>
+                        
+                        <div class="logic-block">
 <span class="logic-comment"># Theorem: Invariant Preservation Across Time</span>
 <span class="logic-keyword">Theorem</span> Invariant_B:
     <span class="logic-keyword">forall</span> s <span class="logic-keyword">in</span> States: 
         <span class="logic-keyword">if</span> IsAligned(s) <span class="logic-keyword">and</span> IsReflective(s):
             <span class="logic-keyword">then</span> IsAligned(Next(s))
+                        </div>
+
+                        <p>These diagnostics operate directly over the controlled alignment lexicon, ensuring that detected changes correspond to genuine reasoning drift rather than interpretive ambiguity. <span class="diff-tag">[precision added]</span></p>
+                        <p>The instruments are designed to expose failure modes. <del>Passing is expected.</del> <ins>Passing is not assumed.</ins></p>
                     </div>
-
-                    <p>These diagnostics operate directly over the controlled alignment lexicon, ensuring that detected changes correspond to genuine reasoning drift rather than interpretive ambiguity. <span class="diff-tag">[precision added]</span></p>
-                    <p>The instruments are designed to expose failure modes. <del>Passing is expected.</del> <ins>Passing is not assumed.</ins></p>
                 </div>
-            </div>
 
-            <div class="audit-rail">
-                <div class="claim-box" id="c-d1">
-                    <span class="claim-id">TOOL [D-09]</span>
-                    <div class="claim-meta"><span>STATUS: DEPLOYED</span><span class="metric-tag">COVERAGE: PARTIAL</span></div>
-                    <div class="claim-text">Reflective diagnostics suite (v2.4).</div>
+                <div class="audit-rail">
+                    <div class="claim-box" id="c-d1">
+                        <span class="claim-id">TOOL [D-09]</span>
+                        <div class="claim-meta"><span>STATUS: DEPLOYED</span><span class="metric-tag">COVERAGE: PARTIAL</span></div>
+                        <div class="claim-text">Reflective diagnostics suite (v2.4).</div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="outputs">
-            <div class="content-col">
-                <div class="diff-header">REVISION TRACE — v1.0 → v1.3</div>
-                <h2><span class="scramble">04 //</span>Outputs <a onclick="copyLink('outputs')" class="permalink"></a></h2>
-                <div class="prose-content">
-                    <p>
-                        <span class="audit-marker">[A-01]</span>
-                        Our research outputs are published as <del>summaries</del> <ins>inspectable artifacts</ins>.
-                    </p>
-                    
-                    <div class="logic-block">
+            <section id="outputs">
+                <div class="content-col">
+                    <div class="diff-header">REVISION TRACE — v1.0 → v1.3</div>
+                    <h2><span class="scramble">04 //</span>Outputs <a onclick="copyLink('outputs')" class="permalink"></a></h2>
+                    <div class="prose-content">
+                        <p>
+                            <span class="audit-marker">[A-01]</span>
+                            Our research outputs are published as <del>summaries</del> <ins>inspectable artifacts</ins>.
+                        </p>
+                        
+                        <div class="logic-block">
 <span class="logic-comment"># Artifact Integrity Signer</span>
 <span class="logic-keyword">def</span> sign_artifact(data: <span class="logic-type">ResearchData</span>):
     artifact.attach_proof(data.reproducible_evidence)
     artifact.lock_integrity()
+                        </div>
+
+                        <p>All outputs are treated as living records. Revisions are logged, claims are traceable, and results are subject to re-evaluation as evidence accumulates.</p>
                     </div>
-
-                    <p>All outputs are treated as living records. Revisions are logged, claims are traceable, and results are subject to re-evaluation as evidence accumulates.</p>
                 </div>
-            </div>
-             <div class="audit-rail">
-                <div class="claim-box" id="c-o1">
-                    <span class="claim-id">ARTIFACT [A-01]</span>
-                    <div class="claim-meta"><span>REPO STATUS</span><span class="metric-tag">LOGGED: YES</span></div>
-                    <div class="claim-text" style="color:#008800; font-weight:600;">● PASSING (CI/CD)</div>
+                 <div class="audit-rail">
+                    <div class="claim-box" id="c-o1">
+                        <span class="claim-id">ARTIFACT [A-01]</span>
+                        <div class="claim-meta"><span>REPO STATUS</span><span class="metric-tag">LOGGED: YES</span></div>
+                        <div class="claim-text" style="color:#008800; font-weight:600;">● PASSING (CI/CD)</div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </main>
+    </div>
 
-        <div id="footer-mount"></div>
-        <script>
-          fetch('/partials/footer.html')
-            .then(r => r.text())
-            .then(html => {
-              document.getElementById('footer-mount').innerHTML = html;
-            });
-        </script>
-    </main>
+    <div id="footer-mount"></div>
+    <script>
+      fetch('/partials/footer.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('footer-mount').innerHTML = html;
+        });
+    </script>
 
     <script>
         function setMode(mode, label) {
@@ -568,12 +608,12 @@
 
         // Close sidebar when tapping outside (mobile)
         document.addEventListener("click", (e) => {
-          if (window.innerWidth > 900) return;
-          const sidebar = document.getElementById("sidebar");
-          const isOpen = sidebar.classList.contains("open");
-          if (!isOpen) return;
-          const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
-          if (!clickedInside) sidebar.classList.remove("open");
+            if (window.innerWidth > 900) return;
+            const sidebar = document.getElementById("sidebar");
+            const isOpen = sidebar.classList.contains("open");
+            if (!isOpen) return;
+            const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
+            if (!clickedInside) sidebar.classList.remove("open");
         });
     </script>
 </body>
