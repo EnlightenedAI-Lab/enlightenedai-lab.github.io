@@ -17,7 +17,7 @@
     transition: background-color 0.2s, color 0.2s;
 }
 
-/* Illumination Line (Visible Green Glow) */
+/* Illumination Line */
 #system-footer .footer-illumination {
     position: absolute;
     top: -1px;
@@ -35,6 +35,16 @@
     box-shadow: 0 0 12px rgba(0, 204, 0, 0.35);
     opacity: 1;
     pointer-events: none;
+}
+
+/* Content Alignment & Width Control */
+#system-footer .footer-system-grid,
+#system-footer .footer-bottom-row {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 5rem;
+    padding-right: 5rem;
 }
 
 /* Scoped Grid Layout */
@@ -86,7 +96,7 @@
     padding: 14px 18px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background: transparent; /* Allows bg color to pass through */
+    background: transparent;
     color: var(--text-main);
     text-decoration: none;
     transition: all 0.2s ease;
@@ -101,7 +111,8 @@
 }
 
 /* Interactive Card Hover Effects */
-#system-footer .footer-card.interactive:hover {
+#system-footer .footer-card.interactive:hover,
+#system-footer a.footer-card:hover {
     border-color: var(--text-muted);
     transform: translateY(-2px);
     background: rgba(128, 128, 128, 0.03);
@@ -198,5 +209,12 @@
     #system-footer {
         padding: 40px 0;
         margin-top: 60px;
+    }
+    
+    /* Mobile Padding Adjustment */
+    #system-footer .footer-system-grid,
+    #system-footer .footer-bottom-row {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
     }
 }
