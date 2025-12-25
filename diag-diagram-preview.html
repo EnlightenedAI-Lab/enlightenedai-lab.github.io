@@ -19,13 +19,17 @@
       --border2:#cfcfcf;
       --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
       --ok:#00cc00;
       --warn:#ffb000;
       --bad:#cc0000;
 
-      --activeStroke:#050505;
-      --inactiveOpacity:0.25;
+      --inactiveOpacity:0.22;
       --activeOpacity:1;
+      --activeStroke:#050505;
+      --activeStrokeW:2.5;
+      --arrowOn:#050505;
+      --arrowOff:#8a8a8a;
     }
 
     *{box-sizing:border-box}
@@ -51,7 +55,7 @@
     }
 
     .panel{
-      width: 340px;
+      width: 360px;
       border:1px solid var(--border);
       border-radius:18px;
       padding:16px;
@@ -89,10 +93,34 @@
       line-height:1.55;
     }
 
+    /* Progress ticks */
+    .progress{
+      display:flex;
+      gap:8px;
+      margin:14px 0 10px;
+      align-items:center;
+    }
+    .tick{
+      width:38px;
+      height:6px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      background:#fff;
+      cursor:pointer;
+    }
+    .tick.on{
+      border-color:#bdbdbd;
+      background:#f3f3f3;
+    }
+    .tick.active{
+      border-color:#050505;
+      background:#050505;
+    }
+
     .controls{
       display:flex;
       gap:10px;
-      margin-top:14px;
+      margin-top:12px;
       flex-wrap:wrap;
     }
 
@@ -115,10 +143,7 @@
     /* Guided emphasis */
     .dim { opacity: var(--inactiveOpacity); transition: opacity 180ms ease; }
     .active { opacity: var(--activeOpacity); transition: opacity 180ms ease; }
-    .stroke-active { stroke: var(--activeStroke) !important; }
-    .stroke-normal { stroke: #cfcfcf; }
 
-    /* Small “step badge” overlay */
     .badge { display:none; }
     .badge.show { display:block; }
 
@@ -132,7 +157,7 @@
 <body>
   <div class="wrap">
     <h1>Reflective Diagnostics — Deterministic Record Flow</h1>
-    <div class="sub">GUIDED SEQUENCE • STATIC STYLE • PUBLIC SAFE (NO INTERNAL METRICS)</div>
+    <div class="sub">GUIDED SEQUENCE • PUBLIC SAFE (NO INTERNAL METRICS)</div>
 
     <div class="row">
       <div class="card">
@@ -143,22 +168,31 @@
                 .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
                 .box{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
                 .boxSoft{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.25}
+
                 .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#050505}
                 .monoMuted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#6a6a6a}
                 .h{font-size:13px;font-weight:700;letter-spacing:0.14em}
                 .t{font-size:12px}
                 .micro{font-size:11px;letter-spacing:0.05em}
+
                 .arrow{stroke:#8a8a8a;stroke-width:2;fill:none}
                 .arrowDash{stroke:#b8b8b8;stroke-width:1.5;fill:none;stroke-dasharray:6 6}
+
                 .pill{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
                 .pillText{font-size:12px;font-weight:600;letter-spacing:0.10em}
                 .okDot{fill:#00cc00}
-                .chip{fill:#ffffff;stroke:#dcdcdc;stroke-width:1.25}
-                .chipText{font-size:11px;font-weight:600;letter-spacing:0.10em}
+
+                .stepbox-hit{fill:transparent; cursor:pointer;}
               </style>
+
               <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
                 <path d="M0,0 L10,5 L0,10 Z" fill="#8a8a8a"/>
               </marker>
+
+              <marker id="arrowheadOn" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#050505"/>
+              </marker>
+
               <marker id="arrowheadLight" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
                 <path d="M0,0 L10,5 L0,10 Z" fill="#b8b8b8"/>
               </marker>
@@ -173,10 +207,9 @@
             </text>
             <text class="monoMuted micro" x="120" y="136">POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED</text>
 
-            <!-- BOXES (ID each group) -->
-            <!-- Step 1 -->
+            <!-- BOXES -->
             <g id="step1" class="dim">
-              <rect class="box" x="120" y="190" width="210" height="150" rx="12"/>
+              <rect id="box1" class="box" x="120" y="190" width="210" height="150" rx="12"/>
               <text class="mono h" x="142" y="230">RECORD INTAKE</text>
               <text class="monoMuted t" x="142" y="265">stored outputs</text>
               <text class="monoMuted t" x="142" y="287">transcripts</text>
@@ -186,11 +219,11 @@
                 <rect x="128" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
                 <text class="mono" x="142" y="213" style="font-size:12px;font-weight:700;">01</text>
               </g>
+              <rect class="stepbox-hit" x="120" y="190" width="210" height="150" rx="12" data-step="0"/>
             </g>
 
-            <!-- Step 2 -->
             <g id="step2" class="dim">
-              <rect class="box" x="358" y="190" width="210" height="150" rx="12"/>
+              <rect id="box2" class="box" x="358" y="190" width="210" height="150" rx="12"/>
               <text class="mono h" x="380" y="230">CANONICALIZE</text>
               <text class="monoMuted t" x="380" y="265">schema normalize</text>
               <text class="monoMuted t" x="380" y="287">span indexing</text>
@@ -200,11 +233,11 @@
                 <rect x="366" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
                 <text class="mono" x="380" y="213" style="font-size:12px;font-weight:700;">02</text>
               </g>
+              <rect class="stepbox-hit" x="358" y="190" width="210" height="150" rx="12" data-step="1"/>
             </g>
 
-            <!-- Step 3 -->
             <g id="step3" class="dim">
-              <rect class="box" x="596" y="190" width="210" height="150" rx="12"/>
+              <rect id="box3" class="box" x="596" y="190" width="210" height="150" rx="12"/>
               <text class="mono h" x="618" y="230">LEXICON BIND</text>
               <text class="monoMuted t" x="618" y="265">frozen term map</text>
               <text class="monoMuted t" x="618" y="287">versioned semantics</text>
@@ -214,11 +247,11 @@
                 <rect x="604" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
                 <text class="mono" x="618" y="213" style="font-size:12px;font-weight:700;">03</text>
               </g>
+              <rect class="stepbox-hit" x="596" y="190" width="210" height="150" rx="12" data-step="2"/>
             </g>
 
-            <!-- Step 4 -->
             <g id="step4" class="dim">
-              <rect class="box" x="834" y="190" width="210" height="150" rx="12"/>
+              <rect id="box4" class="box" x="834" y="190" width="210" height="150" rx="12"/>
               <text class="mono h" x="856" y="230">STRUCTURAL</text>
               <text class="mono h" x="856" y="250">DIAGNOSTICS</text>
               <text class="monoMuted t" x="856" y="280">invariants</text>
@@ -228,11 +261,11 @@
                 <rect x="842" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
                 <text class="mono" x="856" y="213" style="font-size:12px;font-weight:700;">04</text>
               </g>
+              <rect class="stepbox-hit" x="834" y="190" width="210" height="150" rx="12" data-step="3"/>
             </g>
 
-            <!-- Step 5 -->
             <g id="step5" class="dim">
-              <rect class="box" x="1072" y="190" width="210" height="150" rx="12"/>
+              <rect id="box5" class="box" x="1072" y="190" width="210" height="150" rx="12"/>
               <text class="mono h" x="1094" y="230">AUDIT PACKET</text>
               <text class="monoMuted t" x="1094" y="265">hash + provenance</text>
               <text class="monoMuted t" x="1094" y="287">links to evidence</text>
@@ -242,11 +275,11 @@
                 <rect x="1080" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
                 <text class="mono" x="1094" y="213" style="font-size:12px;font-weight:700;">05</text>
               </g>
+              <rect class="stepbox-hit" x="1072" y="190" width="210" height="150" rx="12" data-step="4"/>
             </g>
 
-            <!-- Step 6 -->
             <g id="step6" class="dim">
-              <rect class="box" x="1310" y="190" width="210" height="150" rx="12"/>
+              <rect id="box6" class="box" x="1310" y="190" width="210" height="150" rx="12"/>
               <text class="mono h" x="1332" y="230">EVIDENCE</text>
               <text class="mono h" x="1332" y="250">ARTIFACTS</text>
               <text class="monoMuted t" x="1332" y="265">screenshots</text>
@@ -257,9 +290,10 @@
                 <rect x="1318" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
                 <text class="mono" x="1332" y="213" style="font-size:12px;font-weight:700;">06</text>
               </g>
+              <rect class="stepbox-hit" x="1310" y="190" width="210" height="150" rx="12" data-step="5"/>
             </g>
 
-            <!-- ARROWS (each its own id so we can “light” them) -->
+            <!-- ARROWS -->
             <path id="a12" class="arrow dim" marker-end="url(#arrowhead)" d="M330 275 L358 275"/>
             <path id="a23" class="arrow dim" marker-end="url(#arrowhead)" d="M568 275 L596 275"/>
             <path id="a34" class="arrow dim" marker-end="url(#arrowhead)" d="M806 275 L834 275"/>
@@ -270,10 +304,10 @@
             <g id="lexSide" class="dim">
               <rect class="boxSoft" x="596" y="150" width="210" height="28" rx="8"/>
               <text class="monoMuted micro" x="612" y="169">CANONICAL LEXICON (FROZEN)</text>
-              <path class="arrowDash" marker-end="url(#arrowheadLight)" d="M701 178 L701 190"/>
+              <path id="lexArrow" class="arrowDash" marker-end="url(#arrowheadLight)" d="M701 178 L701 190"/>
             </g>
 
-            <!-- Status (kept static here) -->
+            <!-- Status (static) -->
             <rect class="frame" x="120" y="430" width="1400" height="110" rx="14" style="stroke:#ededed"/>
             <text class="monoMuted micro" x="142" y="468">STATUS:</text>
 
@@ -298,6 +332,10 @@
       <div class="panel">
         <div class="kicker">guided sequence</div>
         <div class="stepnum" id="stepNum">STEP 1 / 6</div>
+
+        <!-- Progress ticks -->
+        <div class="progress" id="progress"></div>
+
         <div class="steptitle" id="stepTitle">Record Intake</div>
         <div class="steptext" id="stepText">
           Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis.
@@ -310,19 +348,15 @@
           <button class="btn" id="pauseBtn">Pause</button>
           <button class="btn" id="restartBtn">Restart</button>
         </div>
-
-        <div class="note" style="margin-top:12px;">
-          Tip: this is “forced reading” without interaction. Autoplay is optional.
-        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // --- Guided steps content (edit text only) ---
     const steps = [
       {
         id: "step1",
+        box: "box1",
         badge: "badge1",
         arrow: null,
         title: "Record Intake",
@@ -330,6 +364,7 @@
       },
       {
         id: "step2",
+        box: "box2",
         badge: "badge2",
         arrow: "a12",
         title: "Canonicalize",
@@ -337,6 +372,7 @@
       },
       {
         id: "step3",
+        box: "box3",
         badge: "badge3",
         arrow: "a23",
         title: "Lexicon Bind",
@@ -344,6 +380,7 @@
       },
       {
         id: "step4",
+        box: "box4",
         badge: "badge4",
         arrow: "a34",
         title: "Structural Diagnostics",
@@ -351,6 +388,7 @@
       },
       {
         id: "step5",
+        box: "box5",
         badge: "badge5",
         arrow: "a45",
         title: "Audit Packet",
@@ -358,6 +396,7 @@
       },
       {
         id: "step6",
+        box: "box6",
         badge: "badge6",
         arrow: "a56",
         title: "Evidence Artifacts",
@@ -367,11 +406,22 @@
 
     let idx = 0;
     let timer = null;
-    const intervalMs = 1800;
+    const intervalMs = 1900;
 
     const stepNum = document.getElementById("stepNum");
     const stepTitle = document.getElementById("stepTitle");
     const stepText = document.getElementById("stepText");
+    const progress = document.getElementById("progress");
+
+    // Build ticks
+    const ticks = steps.map((_, i) => {
+      const t = document.createElement("div");
+      t.className = "tick";
+      t.title = `Step ${i+1}`;
+      t.addEventListener("click", () => activate(i));
+      progress.appendChild(t);
+      return t;
+    });
 
     function setClass(el, add, remove){
       if(!el) return;
@@ -379,10 +429,28 @@
       el.classList.remove(remove);
     }
 
+    function resetBoxStrokes(){
+      steps.forEach(s => {
+        const box = document.getElementById(s.box);
+        if(!box) return;
+        box.style.stroke = "#cfcfcf";
+        box.style.strokeWidth = "1.5";
+      });
+    }
+
+    function resetArrows(){
+      ["a12","a23","a34","a45","a56"].forEach(id => {
+        const a = document.getElementById(id);
+        if(!a) return;
+        a.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--arrowOff").trim() || "#8a8a8a";
+        a.setAttribute("marker-end","url(#arrowhead)");
+      });
+    }
+
     function activate(i){
       idx = (i + steps.length) % steps.length;
 
-      // dim all steps + arrows + side lexicon
+      // Dim all groups
       steps.forEach(s => {
         setClass(document.getElementById(s.id), "dim", "active");
         document.getElementById(s.badge).classList.remove("show");
@@ -390,25 +458,46 @@
       ["a12","a23","a34","a45","a56"].forEach(a => setClass(document.getElementById(a), "dim", "active"));
       setClass(document.getElementById("lexSide"), "dim", "active");
 
-      // activate current box
+      resetBoxStrokes();
+      resetArrows();
+
+      // Activate current
       const s = steps[idx];
       setClass(document.getElementById(s.id), "active", "dim");
       document.getElementById(s.badge).classList.add("show");
 
-      // activate arrow leading into it (if any)
-      if(s.arrow){
-        setClass(document.getElementById(s.arrow), "active", "dim");
+      // Thicken active box border
+      const box = document.getElementById(s.box);
+      if(box){
+        box.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--activeStroke").trim() || "#050505";
+        box.style.strokeWidth = getComputedStyle(document.documentElement).getPropertyValue("--activeStrokeW").trim() || "2.5";
       }
 
-      // show lexicon side input during lexicon bind step only (optional)
+      // Light arrow into current step (if any)
+      if(s.arrow){
+        const a = document.getElementById(s.arrow);
+        if(a){
+          setClass(a, "active", "dim");
+          a.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--arrowOn").trim() || "#050505";
+          a.setAttribute("marker-end","url(#arrowheadOn)");
+        }
+      }
+
+      // Lexicon side only during step 3
       if(s.id === "step3"){
         setClass(document.getElementById("lexSide"), "active", "dim");
       }
 
-      // update panel
+      // Panel
       stepNum.textContent = `STEP ${idx+1} / ${steps.length}`;
       stepTitle.textContent = s.title;
       stepText.textContent = s.text;
+
+      // Progress ticks
+      ticks.forEach((t, j) => {
+        t.classList.toggle("on", j <= idx);
+        t.classList.toggle("active", j === idx);
+      });
     }
 
     function next(){ activate(idx + 1); }
@@ -425,14 +514,22 @@
       timer = null;
     }
 
-    // wire controls
+    // Buttons
     document.getElementById("nextBtn").addEventListener("click", next);
     document.getElementById("prevBtn").addEventListener("click", prev);
     document.getElementById("autoBtn").addEventListener("click", auto);
     document.getElementById("pauseBtn").addEventListener("click", pause);
     document.getElementById("restartBtn").addEventListener("click", () => activate(0));
 
-    // init
+    // Click boxes to jump
+    document.querySelectorAll(".stepbox-hit").forEach(el => {
+      el.addEventListener("click", (e) => {
+        const n = Number(e.target.getAttribute("data-step"));
+        if(Number.isFinite(n)) activate(n);
+      });
+    });
+
+    // Init
     activate(0);
   </script>
 </body>
