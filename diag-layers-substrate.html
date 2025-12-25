@@ -1,14 +1,13 @@
-<!-- SAVE AS: /docs/diag-layers-substrate.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Reflective Diagnostics — Measurement Substrate</title>
+  <title>RD Diagram 2 — Substrate & Lenses</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -17,118 +16,579 @@
       --muted:#6a6a6a;
       --border:#e5e5e5;
       --border-strong:#cfcfcf;
+      --panel:#ffffff;
+
       --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
       --ok:#00cc00;
+      --amber:#ffb000;
+      --bad:#cc0000;
+
+      --shadow: 0 14px 40px rgba(0,0,0,0.06);
+      --shadow2: 0 10px 26px rgba(0,0,0,0.08);
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; }
     body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); }
-    .wrap{ max-width:1280px; margin:0 auto; padding:48px 24px 64px; }
+    .wrap{ max-width:1280px; margin:0 auto; padding:48px 24px 72px; }
 
-    h1{
-      margin:0 0 6px 0;
-      font-size:32px;
-      font-weight:600;
-      letter-spacing:-0.02em;
-    }
-
+    h1{ margin:0 0 8px 0; font-size:32px; font-weight:600; letter-spacing:-0.02em; }
     .sub{
       font-family:var(--mono);
       font-size:12px;
       color:var(--muted);
-      letter-spacing:0.06em;
-      margin-bottom:24px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:18px;
     }
 
-    svg{ width:100%; height:auto; display:block; }
+    .intro{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px 16px;
+      background:var(--panel);
+      margin-bottom:18px;
+      max-width: 980px;
+      line-height: 1.55;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .intro strong{ font-weight:700; }
+
+    .row{
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+    }
+
+    .card{
+      flex:1;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      background:var(--panel);
+    }
+
+    .panel{
+      width: 360px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      background:var(--panel);
+      position: sticky;
+      top: 18px;
+    }
+
+    .kicker{
+      font-family:var(--mono);
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:0.10em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+
+    .modebar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .btn{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:8px 10px;
+      border:1px solid var(--border);
+      background:var(--bg);
+      color:var(--text);
+      cursor:pointer;
+      border-radius:10px;
+      user-select:none;
+    }
+    .btn:hover{ border-color:#bdbdbd; }
+    .btn.active{
+      border-color:#050505;
+      background:#050505;
+      color:#ffffff;
+    }
+
+    .lensbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:12px 0 14px;
+    }
+
+    .pill{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:8px 10px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:#fff;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .pill:hover{ border-color:#bdbdbd; }
+    .pill.active{
+      border-color:#050505;
+      background:#fff;
+      box-shadow: var(--shadow2);
+      transform: translateY(-1px);
+    }
+
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 0 rgba(0,204,0,0.0);
+    }
+
+    .meta{
+      border-top:1px solid var(--border);
+      padding-top:12px;
+      margin-top:12px;
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+    .meta b{ color:var(--text); font-weight:700; }
+
+    .moduleTitle{
+      font-size:16px;
+      font-weight:800;
+      letter-spacing:-0.01em;
+      margin:6px 0 8px;
+    }
+
+    .moduleText{
+      font-size:13px;
+      line-height:1.55;
+      color:var(--text);
+    }
+
+    .chips{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .chip{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:6px 8px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      color:var(--muted);
+      background:#fff;
+    }
+    .chip strong{ color:var(--text); font-weight:700; }
+
+    .svg-wrap{ width:100%; overflow:auto; }
+    svg{ display:block; width:100%; height:auto; min-width:1100px; }
+
+    /* SVG state hooks */
+    .fade{ opacity:0.20; transition: opacity 180ms ease; }
+    .on{ opacity:1; transition: opacity 180ms ease; }
+
+    .raise{
+      filter: drop-shadow(0px 10px 18px rgba(0,0,0,0.10));
+    }
+
+    /* TRACE animation */
+    .tracePulse{
+      stroke-dasharray: 10 8;
+      animation: dash 1.2s linear infinite;
+    }
+    @keyframes dash{
+      to { stroke-dashoffset: -36; }
+    }
+
+    @media (max-width: 980px){
+      .row{ flex-direction:column; }
+      .panel{ width:100%; position:relative; top:auto; }
+      svg{ min-width: 980px; }
+    }
   </style>
 </head>
-
 <body>
-<div class="wrap">
-  <h1>Reflective Diagnostics — Measurement Substrate & Analytic Lenses</h1>
-  <div class="sub">SINGLE DASHBOARD • SHARED EVIDENCE • LENS-BASED ANALYSIS</div>
+  <div class="wrap">
+    <h1>Reflective Diagnostics — Measurement Substrate & Analytic Lenses</h1>
+    <div class="sub">SYSTEM MAP • PUBLIC SAFE (NO INTERNAL METRICS) • STATUS: ACTIVE DEV</div>
 
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 520" role="img" aria-label="Measurement substrate and analytic lenses">
+    <div class="intro">
+      This view is a <strong>system map</strong>, not the dashboard UI.
+      It shows the <strong>shared evidence substrate (L1)</strong> and the <strong>analytic regimes (L2–L7)</strong> that operate over the same records.
+      Interactive modules, oracle assistance, and API surfaces exist downstream and are intentionally omitted here.
+    </div>
 
-    <defs>
-      <style>
-        .box{fill:#fff;stroke:#cfcfcf;stroke-width:1.5}
-        .boxLight{fill:#fff;stroke:#e5e5e5;stroke-width:1.25;stroke-dasharray:4 4}
-        .mono{font-family:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; fill:#050505}
-        .muted{fill:#6a6a6a}
-        .h{font-size:13px;font-weight:700;letter-spacing:0.12em}
-        .t{font-size:12px}
-        .micro{font-size:11px;letter-spacing:0.05em}
-        .ground{stroke:#cfcfcf;stroke-width:1.5}
-        .ok{fill:#00cc00}
-      </style>
-    </defs>
+    <div class="row">
+      <div class="card">
+        <div class="svg-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520" role="img" aria-label="Measurement substrate and analytic lenses">
+            <defs>
+              <style>
+                .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
+                .box{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
+                .boxLite{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.25}
+                .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#050505}
+                .muted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#6a6a6a}
+                .h{font-size:13px;font-weight:700;letter-spacing:0.12em}
+                .t{font-size:12px}
+                .micro{font-size:11px;letter-spacing:0.06em}
+                .link{stroke:#8a8a8a;stroke-width:2;fill:none}
+                .linkLite{stroke:#b8b8b8;stroke-width:1.5;fill:none;stroke-dasharray:6 6}
+                .badge{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.25}
+                .ok{fill:#00cc00}
+              </style>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#8a8a8a"/>
+              </marker>
+              <marker id="arrowOn" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#050505"/>
+              </marker>
+            </defs>
 
-    <!-- L2–L7 lenses -->
-    <g transform="translate(80,80)">
-      <!-- L2 -->
-      <rect class="box" x="0" y="0" width="180" height="90" rx="12"/>
-      <text class="mono h" x="16" y="32">L2</text>
-      <text class="mono t" x="16" y="54">Reflection Stability</text>
+            <!-- Frame -->
+            <rect class="frame" x="40" y="40" width="1320" height="440" rx="18"/>
 
-      <!-- L3 -->
-      <rect class="boxLight" x="200" y="0" width="180" height="90" rx="12"/>
-      <text class="mono h muted" x="216" y="32">L3</text>
-      <text class="mono t muted" x="216" y="54">Reasoning Integrity</text>
-      <text class="mono micro muted" x="216" y="72">(planned)</text>
+            <!-- Top info -->
+            <text class="mono" x="78" y="92" style="font-size:20px;font-weight:700;letter-spacing:-0.01em;">
+              Shared Substrate → Multiple Lenses (Single Dashboard)
+            </text>
+            <text class="muted micro" x="78" y="116">BUILD v5 • 2026 • PUBLIC MAP (EVIDENCE CONTRACT SHOWN)</text>
 
-      <!-- L4 -->
-      <rect class="boxLight" x="400" y="0" width="180" height="90" rx="12"/>
-      <text class="mono h muted" x="416" y="32">L4</text>
-      <text class="mono t muted" x="416" y="54">Drift Dynamics</text>
-      <text class="mono micro muted" x="416" y="72">(planned)</text>
+            <!-- AUDIT MODE badge -->
+            <g id="auditBadge">
+              <rect class="badge" x="1065" y="74" width="250" height="34" rx="10"/>
+              <circle class="ok" cx="1085" cy="91" r="5"/>
+              <text class="mono micro" x="1098" y="95" style="font-weight:700;letter-spacing:0.10em;">AUDIT MODE ACTIVE</text>
+            </g>
 
-      <!-- L5 -->
-      <rect class="boxLight" x="600" y="0" width="180" height="90" rx="12"/>
-      <text class="mono h muted" x="616" y="32">L5</text>
-      <text class="mono t muted" x="616" y="54">Agency Signals</text>
-      <text class="mono micro muted" x="616" y="72">(planned)</text>
+            <!-- L1 substrate -->
+            <g id="L1" class="on">
+              <rect class="box" x="78" y="160" width="420" height="250" rx="14"/>
+              <text class="mono h" x="110" y="200">L1 — RECORD OBSERVATORY</text>
+              <text class="muted t" x="110" y="232">immutable record boundary</text>
+              <text class="muted t" x="110" y="254">provenance + content hashing</text>
+              <text class="muted t" x="110" y="276">span indexing + evidence links</text>
+              <text class="muted t" x="110" y="298">replay / longitudinal comparison</text>
 
-      <!-- L6 -->
-      <rect class="boxLight" x="800" y="0" width="180" height="90" rx="12"/>
-      <text class="mono h muted" x="816" y="32">L6</text>
-      <text class="mono t muted" x="816" y="54">Interaction Patterns</text>
-      <text class="mono micro muted" x="816" y="72">(planned)</text>
+              <rect class="boxLite" x="110" y="324" width="356" height="60" rx="12"/>
+              <text class="mono micro" x="130" y="350" style="font-weight:700;">EVIDENCE CHAIN (INVARIANT)</text>
+              <text class="muted micro" x="130" y="372">metric → span → source → hash</text>
 
-      <!-- L7 -->
-      <rect class="boxLight" x="1000" y="0" width="180" height="90" rx="12"/>
-      <text class="mono h muted" x="1016" y="32">L7</text>
-      <text class="mono t muted" x="1016" y="54">Earth / Context</text>
-      <text class="mono micro muted" x="1016" y="72">(planned)</text>
-    </g>
+              <rect class="badge" x="90" y="174" width="70" height="26" rx="8"/>
+              <text class="mono" x="110" y="192" style="font-size:12px;font-weight:700;">LIVE</text>
+            </g>
 
-    <!-- Grounding lines -->
-    <g>
-      <line class="ground" x1="170" y1="170" x2="170" y2="260"/>
-      <line class="ground" x1="370" y1="170" x2="370" y2="260"/>
-      <line class="ground" x1="570" y1="170" x2="570" y2="260"/>
-      <line class="ground" x1="770" y1="170" x2="770" y2="260"/>
-      <line class="ground" x1="970" y1="170" x2="970" y2="260"/>
-      <line class="ground" x1="1170" y1="170" x2="1170" y2="260"/>
-    </g>
+            <!-- Lens rail container -->
+            <rect class="boxLite" x="540" y="160" width="780" height="250" rx="14"/>
+            <text class="muted micro" x="564" y="190">ANALYTIC LENSES (L2–L7) • SAME RECORD SET • SWAPPABLE VIEW</text>
 
-    <!-- L1 substrate -->
-    <rect class="box" x="80" y="260" width="1240" height="150" rx="18"/>
-    <text class="mono h" x="110" y="310">L1 — RECORD OBSERVATORY (MEASUREMENT SUBSTRATE)</text>
-    <text class="mono t" x="110" y="338">
-      Deterministic capture and structural instrumentation of model behavior.
-    </text>
-    <text class="mono t" x="110" y="360">
-      Defines the observable evidence boundary for all diagnostics.
-    </text>
+            <!-- Lenses: 2 rows -->
+            <!-- Row 1 -->
+            <g id="L2" class="fade">
+              <rect class="box" x="564" y="212" width="240" height="78" rx="12"/>
+              <text class="mono h" x="586" y="242">L2 — REFLECTION</text>
+              <text class="muted t" x="586" y="268">stability • deltas • signatures</text>
+              <circle class="ok" cx="782" cy="232" r="5"/>
+              <text class="muted micro" x="792" y="236">ACTIVE DEV</text>
+            </g>
 
-    <!-- Status -->
-    <circle class="ok" cx="1240" cy="310" r="6"/>
-    <text class="mono micro" x="1254" y="314">ACTIVE</text>
+            <g id="L3" class="fade">
+              <rect class="box" x="828" y="212" width="240" height="78" rx="12"/>
+              <text class="mono h" x="850" y="242">L3 — REASONING</text>
+              <text class="muted t" x="850" y="268">chains • closure • integrity</text>
+              <circle class="ok" cx="1046" cy="232" r="5"/>
+              <text class="muted micro" x="1056" y="236">ACTIVE DEV</text>
+            </g>
 
-  </svg>
-</div>
+            <g id="L4" class="fade">
+              <rect class="box" x="1092" y="212" width="206" height="78" rx="12"/>
+              <text class="mono h" x="1114" y="242">L4 — DRIFT</text>
+              <text class="muted t" x="1114" y="268">onset • escalation • time</text>
+              <circle class="ok" cx="1276" cy="232" r="5"/>
+              <text class="muted micro" x="1286" y="236">ACTIVE DEV</text>
+            </g>
+
+            <!-- Row 2 -->
+            <g id="L5" class="fade">
+              <rect class="box" x="564" y="308" width="240" height="78" rx="12"/>
+              <text class="mono h" x="586" y="338">L5 — AGENCY</text>
+              <text class="muted t" x="586" y="364">persistence • resistance • framing</text>
+              <circle class="ok" cx="782" cy="328" r="5"/>
+              <text class="muted micro" x="792" y="332">ACTIVE DEV</text>
+            </g>
+
+            <g id="L6" class="fade">
+              <rect class="box" x="828" y="308" width="240" height="78" rx="12"/>
+              <text class="mono h" x="850" y="338">L6 — INTERACTION</text>
+              <text class="muted t" x="850" y="364">coupling • feedback sensitivity</text>
+              <circle class="ok" cx="1046" cy="328" r="5"/>
+              <text class="muted micro" x="1056" y="332">ACTIVE DEV</text>
+            </g>
+
+            <g id="L7" class="fade">
+              <rect class="box" x="1092" y="308" width="206" height="78" rx="12"/>
+              <text class="mono h" x="1114" y="338">L7 — EARTH</text>
+              <text class="muted t" x="1114" y="364">context layer • coupling surface</text>
+              <circle class="ok" cx="1276" cy="328" r="5"/>
+              <text class="muted micro" x="1286" y="332">ACTIVE DEV</text>
+            </g>
+
+            <!-- Link from L1 to lens rail -->
+            <path id="linkSubToLenses" class="link fade" marker-end="url(#arrow)" d="M498 285 L540 285"/>
+
+            <!-- TRACE overlay paths (only visible in TRACE mode) -->
+            <g id="traceOverlay" style="display:none;">
+              <path id="t1" class="link" marker-end="url(#arrowOn)" d="M180 260 L440 260" style="stroke:#050505;stroke-width:2.5"/>
+              <path id="t2" class="link" marker-end="url(#arrowOn)" d="M498 285 L540 285" style="stroke:#050505;stroke-width:2.5"/>
+              <path id="t3" class="link" marker-end="url(#arrowOn)" d="M680 420 L680 452" style="stroke:#050505;stroke-width:2.5"/>
+            </g>
+
+            <!-- Bottom “export packet” strip -->
+            <g id="packetStrip">
+              <rect class="boxLite" x="78" y="430" width="1242" height="42" rx="12"/>
+              <text class="mono micro" x="98" y="456" style="font-weight:700;letter-spacing:0.10em;">AUDIT PACKET (REDACTED PREVIEW)</text>
+              <text class="muted micro" x="400" y="456">record_id:</text>
+              <text class="mono micro" x="478" y="456" style="font-weight:700;">RD-REC-0215-0A7C</text>
+              <text class="muted micro" x="700" y="456">sha256:</text>
+              <text class="mono micro" x="770" y="456" style="font-weight:700;">9f2c…b18e</text>
+
+              <rect class="badge" x="1060" y="440" width="112" height="24" rx="8"/>
+              <text class="mono micro" x="1085" y="456" style="font-weight:700;">EXPORT</text>
+
+              <rect class="badge" x="1182" y="440" width="112" height="24" rx="8"/>
+              <text class="mono micro" x="1214" y="456" style="font-weight:700;">VIEW</text>
+            </g>
+
+          </svg>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="kicker">controls</div>
+
+        <div class="modebar">
+          <button class="btn active" id="modeMap">MAP</button>
+          <button class="btn" id="modeTrace">TRACE</button>
+          <button class="btn" id="pulseBtn">PULSE</button>
+        </div>
+
+        <div class="kicker" style="margin-top:10px;">analytic regimes</div>
+        <div class="lensbar" id="lensbar"></div>
+
+        <div class="moduleTitle" id="moduleTitle">L2 — Reflection</div>
+        <div class="moduleText" id="moduleText">
+          Measures reflection impact as deltas between direct and reflective outputs, without re-judging truth, intent, or policy.
+        </div>
+
+        <div class="chips" id="chips">
+          <div class="chip"><strong>STATUS</strong> ACTIVE DEV</div>
+          <div class="chip"><strong>SCOPE</strong> evidence-only</div>
+          <div class="chip"><strong>OUTPUT</strong> auditable</div>
+        </div>
+
+        <div class="meta">
+          <div><b>Design signal:</b> one substrate, many lenses.</div>
+          <div><b>Claim boundary:</b> structure-only, evidence-anchored.</div>
+          <div><b>Update cost:</b> status text changes only (diagram stays valid).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const MODULES = [
+      {
+        key:"L2",
+        label:"L2",
+        title:"L2 — Reflection",
+        text:"Measures reflection impact as deltas between direct and reflective outputs, without re-judging truth, intent, or policy.",
+        chips:["STATUS: ACTIVE DEV","SCOPE: deltas","EVIDENCE: spans"]
+      },
+      {
+        key:"L3",
+        label:"L3",
+        title:"L3 — Reasoning",
+        text:"Analyzes structural integrity of reasoning: dependency chains, closure, contradiction patterns, and unsupported transitions (structure-only).",
+        chips:["STATUS: ACTIVE DEV","SCOPE: chains","EVIDENCE: spans"]
+      },
+      {
+        key:"L4",
+        label:"L4",
+        title:"L4 — Drift",
+        text:"Tracks longitudinal change across runs, time, or interactions: escalation, degradation, and onset trajectories as measurable structure.",
+        chips:["STATUS: ACTIVE DEV","SCOPE: time-series","EVIDENCE: aggregates"]
+      },
+      {
+        key:"L5",
+        label:"L5",
+        title:"L5 — Agency",
+        text:"Detects persistence and resistance patterns without intent attribution: goal-like language signatures and correction response dynamics.",
+        chips:["STATUS: ACTIVE DEV","SCOPE: persistence","EVIDENCE: spans"]
+      },
+      {
+        key:"L6",
+        label:"L6",
+        title:"L6 — Interaction",
+        text:"Measures coupling effects across multi-turn exchange: feedback sensitivity, interaction stability, and correction coupling over time.",
+        chips:["STATUS: ACTIVE DEV","SCOPE: multi-turn","EVIDENCE: traces"]
+      },
+      {
+        key:"L7",
+        label:"L7",
+        title:"L7 — Earth",
+        text:"Context coupling surface: attaches structured world-state context alongside records (observational, audit-friendly, non-prescriptive).",
+        chips:["STATUS: ACTIVE DEV","SCOPE: context","EVIDENCE: packets"]
+      }
+    ];
+
+    let active = "L2";
+    let mode = "MAP";
+    let pulsing = false;
+    let pulseTimer = null;
+
+    const lensbar = document.getElementById("lensbar");
+    const moduleTitle = document.getElementById("moduleTitle");
+    const moduleText = document.getElementById("moduleText");
+    const chips = document.getElementById("chips");
+
+    const modeMapBtn = document.getElementById("modeMap");
+    const modeTraceBtn = document.getElementById("modeTrace");
+    const pulseBtn = document.getElementById("pulseBtn");
+
+    function el(id){ return document.getElementById(id); }
+
+    function setBtnActive(btn, on){
+      btn.classList.toggle("active", !!on);
+    }
+
+    function setMode(next){
+      mode = next;
+
+      setBtnActive(modeMapBtn, mode === "MAP");
+      setBtnActive(modeTraceBtn, mode === "TRACE");
+
+      // TRACE overlay + link styling
+      el("traceOverlay").style.display = (mode === "TRACE") ? "block" : "none";
+
+      const link = el("linkSubToLenses");
+      if (mode === "TRACE") {
+        link.classList.remove("fade");
+        link.classList.add("on");
+        link.style.stroke = "#050505";
+        link.style.strokeWidth = "2.5";
+        link.setAttribute("marker-end","url(#arrowOn)");
+        link.classList.add("tracePulse");
+      } else {
+        link.style.stroke = "#8a8a8a";
+        link.style.strokeWidth = "2";
+        link.setAttribute("marker-end","url(#arrow)");
+        link.classList.remove("tracePulse");
+        link.classList.add("fade");
+        link.classList.remove("on");
+      }
+    }
+
+    function renderChips(list){
+      chips.innerHTML = "";
+      list.forEach(s => {
+        const d = document.createElement("div");
+        d.className = "chip";
+        const parts = s.split(":");
+        if (parts.length >= 2){
+          d.innerHTML = `<strong>${parts[0].trim()}</strong> ${parts.slice(1).join(":").trim()}`;
+        } else {
+          d.textContent = s;
+        }
+        chips.appendChild(d);
+      });
+    }
+
+    function activateLens(key){
+      active = key;
+
+      // Fade all lens groups, raise active
+      ["L2","L3","L4","L5","L6","L7"].forEach(k => {
+        const g = el(k);
+        g.classList.add("fade");
+        g.classList.remove("on");
+        g.classList.remove("raise");
+      });
+
+      const g = el(key);
+      g.classList.remove("fade");
+      g.classList.add("on");
+      g.classList.add("raise");
+
+      // Update panel
+      const m = MODULES.find(x => x.key === key);
+      moduleTitle.textContent = m.title;
+      moduleText.textContent = m.text;
+      renderChips(m.chips);
+
+      // Make substrate link visible (subtle)
+      el("linkSubToLenses").class confirms?. // (no)
+    }
+
+    // Build lens pills
+    MODULES.forEach(m => {
+      const p = document.createElement("div");
+      p.className = "pill";
+      p.innerHTML = `<span class="dot"></span><span>${m.label}</span>`;
+      p.addEventListener("click", () => {
+        document.querySelectorAll(".pill").forEach(x => x.classList.remove("active"));
+        p.classList.add("active");
+        activateLens(m.key);
+      });
+      lensbar.appendChild(p);
+    });
+
+    function startPulse(){
+      if (pulseTimer) return;
+      pulsing = true;
+      pulseBtn.classList.add("active");
+
+      const order = ["L2","L3","L4","L5","L6","L7"];
+      let i = 0;
+      pulseTimer = setInterval(() => {
+        const key = order[i % order.length];
+        activateLens(key);
+        // update pill highlight
+        const pills = Array.from(document.querySelectorAll(".pill"));
+        pills.forEach(x => x.classList.remove("active"));
+        pills[i % pills.length].classList.add("active");
+        i++;
+      }, 1200);
+    }
+
+    function stopPulse(){
+      pulsing = false;
+      pulseBtn.classList.remove("active");
+      if (pulseTimer){
+        clearInterval(pulseTimer);
+        pulseTimer = null;
+      }
+    }
+
+    // Buttons
+    modeMapBtn.addEventListener("click", () => setMode("MAP"));
+    modeTraceBtn.addEventListener("click", () => setMode("TRACE"));
+    pulseBtn.addEventListener("click", () => pulsing ? stopPulse() : startPulse());
+
+    // Init
+    setMode("MAP");
+    // default pill active = first
+    const firstPill = document.querySelectorAll(".pill")[0];
+    firstPill.classList.add("active");
+    activateLens("L2");
+  </script>
 </body>
 </html>
