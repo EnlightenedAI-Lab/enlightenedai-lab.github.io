@@ -9,8 +9,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
+    <script type="application/json" id="audit-manifest">
+    {
+        "doc_id": "RAL-LEX-0002",
+        "version": "17.0.0",
+        "status": "ALIGNMENT_STANDARDIZED"
+    }
+    </script>
+
     <style>
-        /* THEME: INSTITUTE STANDARD V143.1 */
+        /* THEME: INSTITUTE STANDARD V143.1 (FOOTER CANONICAL) */
         :root {
             --bg-color: #ffffff;
             --sidebar-bg: #ffffff;
@@ -18,8 +26,11 @@
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
             --card-bg: #fafafa;
+            --panel-border: #000;
+            --panel-bg: #fff;
+            --panel-text: #000;
             --signal-enforced: #00cc00;  /* Pure Green */
-            --signal-eval: #00d7ff;
+            --signal-eval: #00d7ff;      /* Bright Cyan */
             --font-mono: "JetBrains Mono", monospace;
         }
 
@@ -42,30 +53,30 @@
             display: flex;
         }
 
-        /* --- RESTORED WORKING SIDEBAR --- */
+        /* --- MASTER LAYOUT ANCHORS --- */
         aside#sidebar { 
             width: 240px; height: 100vh; position: fixed; top: 0; left: 0; 
             border-right: 1px solid var(--border-color); padding: 2rem; 
             display: flex; flex-direction: column; background: var(--sidebar-bg); z-index: 100;
         }
-        
+
         .main-column {
             flex: 1;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            margin-left: 240px; /* Locked offset to prevent overlap */
+            margin-left: 240px; /* Locked sidebar offset */
         }
 
         .split-view { display: flex; flex: 1; }
 
-        /* --- GEOMETRY LOCK: Fixed Pillar for Diagram --- */
         .content-col { 
             flex: 1; 
             padding: 3rem 4rem 6rem 4rem; 
             max-width: 900px; 
         }
 
+        /* GEOMETRY LOCK: Diagram column is now a solid pillar that never shifts */
         .diagram-col { 
             width: 480px !important; 
             min-width: 480px !important;
@@ -91,13 +102,17 @@
         h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
         h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
         p { font-size: 0.95rem; margin-bottom: 1.2rem; color: var(--text-main); }
-        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; }
 
         /* --- SVG STYLES --- */
         .diag-container { fill: none; stroke: var(--border-color); stroke-width: 1px; stroke-dasharray: 4 4; }
         .diag-bg { fill: var(--card-bg); stroke: var(--border-color); stroke-width: 1.5px; }
         .diag-text { font-family: var(--font-mono); font-size: 13px; fill: var(--text-main); font-weight: 700; }
-        .telemetry-row { width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between; }
+        
+        .telemetry-row { 
+            width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem;
+            font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between;
+        }
 
         .site-footer { border-top: 1px solid var(--border-color); padding: 2rem 4rem; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); margin-top: auto; }
     </style>
@@ -111,7 +126,6 @@
         </div>
         <nav>
             <ul style="list-style:none; padding:0; margin: 2rem 0;">
-                <li style="margin-bottom:10px;"><a href="#" style="text-decoration:none; color:var(--text-muted); font-size:0.85rem;">Home</a></li>
                 <li style="margin-bottom:10px;"><a href="#" style="text-decoration:none; color:var(--text-main); font-size:0.85rem; font-weight:600;">Lexicon</a></li>
                 <li style="margin-bottom:10px;"><a href="#overview" style="text-decoration:none; color:var(--text-muted); font-size:0.85rem;">Overview</a></li>
             </ul>
@@ -130,7 +144,7 @@
                 </section>
                 <section id="core-terms">
                     <h2>02 // Core Terms</h2>
-                    <p>Each term specifies: a bounded semantic scope, an operational interpretation, and the conditions under which it may be considered violated.</p>
+                    <p>Each core term specifies: a bounded semantic scope, an operational interpretation, and the conditions under which it may be considered violated.</p>
                     <p>Stability of definitions is treated as a prerequisite for stability of conclusions.</p>
                 </section>
             </div>
@@ -156,10 +170,12 @@
                     <g transform="translate(210, 50)">
                         <rect width="250" height="160" rx="4" class="diag-bg" style="stroke:var(--signal-enforced); stroke-width:2.5px;"/>
                         <text x="125" y="25" text-anchor="middle" class="diag-text" style="font-size:10px;">ENFORCEMENT GATE</text>
+                        
                         <rect x="30" y="50" width="190" height="30" rx="2" fill="rgba(0,204,0,0.05)" stroke="var(--signal-enforced)" stroke-dasharray="2 2"/>
-                        <text x="125" y="70" text-anchor="middle" class="diag-text" style="font-size:11px; fill:var(--signal-enforced)">LEXICON BINDING</text>
+                        <text x="125" y="70" text-anchor="middle" class="diag-text" style="font-size:11px; fill:var(--signal-enforced)">1. LEXICON BINDING</text>
+                        
                         <rect x="30" y="90" width="190" height="30" rx="2" fill="rgba(0,204,0,0.05)" stroke="var(--signal-enforced)" stroke-dasharray="2 2"/>
-                        <text x="125" y="110" text-anchor="middle" class="diag-text" style="font-size:11px; fill:var(--signal-enforced)">ENFORCED STATE</text>
+                        <text x="125" y="110" text-anchor="middle" class="diag-text" style="font-size:11px; fill:var(--signal-enforced)">2. ENFORCED STATE</text>
                     </g>
 
                     <path d="M460 130 L520 130" style="stroke:var(--signal-enforced); stroke-width:2.5px; fill:none;"/>
@@ -195,7 +211,7 @@
         setInterval(() => {
             count++;
             document.getElementById('cycle-val').innerText = count.toString().padStart(4, '0');
-        }, 8000);
+        }, 10000);
     </script>
 </body>
 </html>
