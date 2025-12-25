@@ -1,110 +1,95 @@
-<!-- SAVE AS: /diag-diagram-preview.html  (or /docs/diag-diagram-preview.html if using GitHub Pages /docs) -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RD Diagram Preview</title>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1400"
+  height="560"
+  viewBox="0 0 1400 560"
+  preserveAspectRatio="xMidYMid meet"
+  role="img"
+  aria-label="Reflective Diagnostics — Deterministic Flow (Public Skeleton)"
+  style="background:#ffffff; border:1px solid #e5e5e5;"
+>
+  <defs>
+    <style>
+      .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
+      .box{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
+      .mono{font-family:"JetBrains Mono", monospace;fill:#050505}
+      .monoMuted{font-family:"JetBrains Mono", monospace;fill:#6a6a6a}
+      .h{font-size:13px;font-weight:700;letter-spacing:0.14em}
+      .t{font-size:12px}
+      .micro{font-size:11px;letter-spacing:0.05em}
+      .arrow{stroke:#8a8a8a;stroke-width:2;fill:none}
+      .arrowDash{stroke:#b8b8b8;stroke-width:1.5;fill:none;stroke-dasharray:6 6}
+      .pill{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
+      .pillText{font-size:12px;font-weight:600;letter-spacing:0.10em}
+      .okDot{fill:#00cc00}
+    </style>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#8a8a8a"/>
+    </marker>
+    <marker id="arrowheadLight" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#b8b8b8"/>
+    </marker>
+  </defs>
 
-  <style>
-    :root{
-      --bg:#ffffff;
-      --text:#050505;
-      --muted:#6a6a6a;
-      --border:#e5e5e5;
- remind: --border2:#d8d8d8;
-      --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      --ok:#00cc00;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--text);
-      font-family:var(--sans);
-    }
-    .wrap{
-      max-width:1240px;
-      margin:0 auto;
-      padding:48px 24px 64px;
-    }
-    .head{
-      margin-bottom:22px;
-    }
-    h1{
-      margin:0 0 8px 0;
-      font-size:34px;
-      font-weight:600;
-      letter-spacing:-0.02em;
-    }
-    .sub{
-      font-family:var(--mono);
-      color:var(--muted);
-      font-size:12px;
-      letter-spacing:0.04em;
-    }
-    .card{
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:22px;
-      background:var(--bg);
-    }
-    .note{
-      margin-top:14px;
-      font-family:var(--mono);
-      color:var(--muted);
-      font-size:12px;
-    }
-    /* crisp rendering */
-    svg{display:block; width:100%; height:auto;}
-  </style>
-</head>
+  <!-- DEBUG ANCHOR (remove later if you want) -->
+  <rect x="10" y="10" width="50" height="50" fill="#00cc00"/>
+  <text x="70" y="42" class="mono micro">SVG ACTIVE</text>
 
-<body>
-  <div class="wrap">
-    <div class="head">
-      <h1>Reflective Diagnostics — Flow Skeleton</h1>
-      <div class="sub">WHITE-BACKGROUND WIREFRAME • STATIC • PREVIEW PAGE (CHROME)</div>
-    </div>
+  <!-- OUTER FRAME -->
+  <rect class="frame" x="60" y="30" width="1280" height="500" rx="18"/>
 
-    <div class="card">
-      <!-- INLINE SVG: edit here, refresh Chrome -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 560" role="img" aria-label="Reflective Diagnostics — Deterministic Flow (Public Skeleton)">
-        <defs>
-          <style>
-            .bg{fill:#fff}
-            .frame{fill:#fff;stroke:#e5e5e5;stroke-width:1.25}
-            .box{fill:#fff;stroke:#d8d8d8;stroke-width:1.25}
-            .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#050505}
-            .monoMuted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#6a6a6a}
-            .title{font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;font-weight:600;font-size:28px;fill:#050505;letter-spacing:-0.02em}
-            .sub{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;font-size:12px;fill:#6a6a6a;letter-spacing:0.04em}
-            .h{font-size:13px;font-weight:700;letter-spacing:0.14em}
-            .t{font-size:12px;font-weight:400}
-            .micro{font-size:11px;letter-spacing:0.05em}
-            .arrow{stroke:#9a9a9a;stroke-width:1.5;fill:none}
-            .arrowDash{stroke:#b8b8b8;stroke-width:1.25;fill:none;stroke-dasharray:6 6}
-            .pill{fill:#fff;stroke:#d8d8d8;stroke-width:1.25}
-            .pillText{font-size:12px;font-weight:600;letter-spacing:0.10em}
-            .okDot{fill:#00cc00}
-          </style>
+  <!-- BOXES -->
+  <rect class="box" x="150" y="175" width="260" height="150" rx="12"/>
+  <rect class="box" x="470" y="175" width="260" height="150" rx="12"/>
+  <rect class="box" x="790" y="175" width="260" height="150" rx="12"/>
+  <rect class="box" x="1110" y="175" width="260" height="150" rx="12"/>
 
-          <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-            <path d="M0,0 L10,5 L0,10 Z" fill="#9a9a9a"/>
-          </marker>
-          <marker id="arrowheadLight" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-            <path d="M0,0 L10,5 L0,10 Z" fill="#b8b8b8"/>
-          </marker>
-        </defs>
+  <!-- HEADERS -->
+  <text class="mono h" x="178" y="215">EVIDENCE INTAKE</text>
+  <text class="mono h" x="498" y="215">LEXICON BINDING</text>
+  <text class="mono h" x="818" y="215">DIAGNOSTIC PIPELINE</text>
+  <text class="mono h" x="1138" y="215">AUDIT RECORD</text>
 
-        <!-- Outer frame -->
-        <rect class="frame" x="60" y="30" width="1280" height="500" rx="18" ry="18"/>
+  <!-- BODY TEXT -->
+  <text class="monoMuted t" x="178" y="250">stored outputs • transcripts • snapshots</text>
+  <text class="monoMuted t" x="498" y="250">frozen terms • versioned schema</text>
+  <text class="monoMuted t" x="818" y="250">structure checks • invariants</text>
+  <text class="monoMuted t" x="1138" y="250">signals • evidence links • hashes</text>
 
-        <!-- Header inside frame -->
-        <text class="title" x="105" y="90">Reflective Diagnostics — Deterministic Flow (Public Skeleton)</text>
-        <text class="sub" x="105" y="120">NON-CAUSAL • POST-EXECUTION •
+  <!-- ARROWS -->
+  <path class="arrow" marker-end="url(#arrowhead)" d="M410 250 L470 250"/>
+  <path class="arrow" marker-end="url(#arrowhead)" d="M730 250 L790 250"/>
+  <path class="arrow" marker-end="url(#arrowhead)" d="M1050 250 L1110 250"/>
+
+  <!-- REPLAY LOOP (STRAIGHT) -->
+  <path class="arrowDash" marker-end="url(#arrowheadLight)" d="M1240 325 L1240 360 L920 360 L920 325"/>
+  <text class="monoMuted micro" x="940" y="382">(optional) audit triggers deterministic replay</text>
+
+  <!-- STATUS BAR -->
+  <rect class="frame" x="150" y="365" width="1220" height="130" rx="14"/>
+  <text class="monoMuted micro" x="178" y="408">STATUS:</text>
+
+  <!-- STATUS PILLS -->
+  <rect class="pill" x="260" y="390" width="220" height="44" rx="6"/>
+  <circle class="okDot" cx="282" cy="412" r="5"/>
+  <text class="mono pillText" x="296" y="417">DETERMINISTIC</text>
+
+  <rect class="pill" x="495" y="390" width="220" height="44" rx="6"/>
+  <circle class="okDot" cx="517" cy="412" r="5"/>
+  <text class="mono pillText" x="531" y="417">LEXICON-BOUND</text>
+
+  <rect class="pill" x="730" y="390" width="240" height="44" rx="6"/>
+  <circle class="okDot" cx="752" cy="412" r="5"/>
+  <text class="mono pillText" x="766" y="417">NON-INTERACTIVE</text>
+
+  <rect class="pill" x="985" y="390" width="210" height="44" rx="6"/>
+  <circle class="okDot" cx="1007" cy="412" r="5"/>
+  <text class="mono pillText" x="1021" y="417">AUDIT-READY</text>
+
+  <rect class="pill" x="1210" y="390" width="160" height="44" rx="6"/>
+  <circle class="okDot" cx="1232" cy="412" r="5"/>
+  <text class="mono pillText" x="1246" y="417">TRACEABLE</text>
+
+  <text class="monoMuted micro" x="260" y="468">EVIDENCE → METRIC → SOURCE</text>
+</svg>
