@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RD Diagram Preview (v4 guided)</title>
+  <title>RD Diagram Preview (v4)</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,10 +28,9 @@
       --activeOpacity:1;
       --activeStroke:#050505;
       --activeStrokeW:2.5;
+
       --arrowOn:#050505;
       --arrowOff:#8a8a8a;
-
-      --liftY:-4px;
     }
 
     *{box-sizing:border-box}
@@ -62,6 +61,8 @@
       border-radius:18px;
       padding:16px;
       background:var(--bg);
+      position: sticky;
+      top: 18px;
     }
 
     .panel .kicker{
@@ -110,14 +111,8 @@
       background:#fff;
       cursor:pointer;
     }
-    .tick.on{
-      border-color:#bdbdbd;
-      background:#f3f3f3;
-    }
-    .tick.active{
-      border-color:#050505;
-      background:#050505;
-    }
+    .tick.on{ border-color:#bdbdbd; background:#f3f3f3; }
+    .tick.active{ border-color:#050505; background:#050505; }
 
     .controls{
       display:flex;
@@ -139,6 +134,15 @@
     }
     .btn:hover{ border-color: #bdbdbd; }
 
+    .hint{
+      margin-top:12px;
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:0.04em;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
     .svg-wrap{ width:100%; overflow:auto; }
     svg{ display:block; width:100%; height:auto; min-width:1200px; }
 
@@ -149,12 +153,9 @@
     .badge { display:none; }
     .badge.show { display:block; }
 
-    /* Lift */
-    svg .lift-shadow { filter: url(#liftShadow); }
-
     @media (max-width: 980px){
       .row{ flex-direction:column; }
-      .panel{ width:100%; }
+      .panel{ width:100%; position:relative; top:auto; }
     }
   </style>
 </head>
@@ -162,12 +163,12 @@
 <body>
   <div class="wrap">
     <h1>Reflective Diagnostics — Deterministic Record Flow</h1>
-    <div class="sub">GUIDED SEQUENCE • PUBLIC SAFE (NO INTERNAL METRICS)</div>
+    <div class="sub">GUIDED SEQUENCE • PUBLIC SAFE (NO INTERNAL METRICS) • BUILD: v4</div>
 
     <div class="row">
       <div class="card">
         <div class="svg-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="640" viewBox="0 0 1600 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Reflective Diagnostics flow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="700" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Reflective Diagnostics flow">
             <defs>
               <style>
                 .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
@@ -188,221 +189,231 @@
                 .okDot{fill:#00cc00}
 
                 .stepbox-hit{fill:transparent; cursor:pointer;}
+                .chip{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.25}
+                .chipText{font-size:11px;font-weight:700;letter-spacing:0.14em}
+                .tiny{font-size:10px;letter-spacing:0.08em}
               </style>
 
-              <!-- Lift shadow filter -->
-              <filter id="liftShadow" x="-30%" y="-30%" width="160%" height="180%">
-                <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000000" flood-opacity="0.10"/>
-                <feDropShadow dx="0" dy="2"  stdDeviation="0.5" flood-color="#000000" flood-opacity="0.10"/>
-              </filter>
-
+              <!-- markers -->
               <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
                 <path d="M0,0 L10,5 L0,10 Z" fill="#8a8a8a"/>
               </marker>
-
               <marker id="arrowheadOn" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
                 <path d="M0,0 L10,5 L0,10 Z" fill="#050505"/>
               </marker>
-
               <marker id="arrowheadLight" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
                 <path d="M0,0 L10,5 L0,10 Z" fill="#b8b8b8"/>
               </marker>
+
+              <!-- “float” filter for active step -->
+              <filter id="lift" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000000" flood-opacity="0.10"/>
+                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.10"/>
+              </filter>
+
+              <!-- subtle shimmer line -->
+              <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+                <stop offset="50%" stop-color="#ffffff" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+              </linearGradient>
             </defs>
 
             <!-- OUTER -->
-            <rect class="frame" x="70" y="50" width="1460" height="520" rx="18"/>
+            <rect class="frame" x="70" y="40" width="1460" height="610" rx="18"/>
 
             <!-- Title -->
-            <text class="mono" x="120" y="110" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
+            <text class="mono" x="120" y="102" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
               Reflective Diagnostics — Deterministic Record Flow (Public Skeleton)
             </text>
-            <text class="monoMuted micro" x="120" y="136">POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED</text>
+            <text class="monoMuted micro" x="120" y="128">POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED</text>
 
-            <!-- AUDIT CHIP (top-right) -->
-            <g id="auditChip" opacity="0.95">
-              <rect x="1248" y="86" width="250" height="44" rx="10" fill="#fff" stroke="#cfcfcf" stroke-width="1.5"/>
-              <text class="mono" x="1268" y="114" style="font-size:12px;font-weight:800;letter-spacing:0.14em;">AUDIT MODE ACTIVE</text>
-              <circle cx="1476" cy="108" r="5" fill="#00cc00"/>
+            <!-- BUILD STAMP (so you always know what's deployed) -->
+            <text class="monoMuted tiny" x="120" y="148">BUILD v4 • 2025-12-25</text>
+
+            <!-- AUDIT CHIP (top-right inside frame) -->
+            <g id="auditChip">
+              <rect class="chip" x="1290" y="74" width="210" height="34" rx="8"/>
+              <circle class="okDot" cx="1310" cy="91" r="5"/>
+              <text class="mono chipText" x="1324" y="96">AUDIT MODE ACTIVE</text>
             </g>
 
-            <!-- TELEMETRY STRIP -->
-            <g id="telemetry">
-              <text class="monoMuted micro" x="120" y="166">TELEMETRY:</text>
-              <text class="mono micro" x="220" y="166" id="telCycle">CYCLE 0215</text>
-              <text class="monoMuted micro" x="350" y="166">•</text>
-              <text class="mono micro" x="375" y="166" id="telPhase">PHASE 01/06</text>
-              <text class="monoMuted micro" x="520" y="166">•</text>
-              <text class="mono micro" x="545" y="166" id="telTime">T+00:00</text>
+            <!-- FRAMING TEXT (INSIDE SVG, before the boxes) -->
+            <g id="framing">
+              <text class="monoMuted" x="120" y="175" style="font-size:13px;letter-spacing:0.01em;">
+                Scope of this diagram:
+              </text>
+              <text class="monoMuted" x="120" y="196" style="font-size:13px;letter-spacing:0.01em;">
+                This view shows the evidence formation contract that governs what the dashboard may display.
+              </text>
+              <text class="monoMuted" x="120" y="217" style="font-size:13px;letter-spacing:0.01em;">
+                Interactive modules, oracle assistance, and analytic regimes operate strictly downstream and are omitted here.
+              </text>
             </g>
 
-            <!-- BOXES -->
+            <!-- TELEMETRY (updates with step) -->
+            <text class="monoMuted micro" x="120" y="250" id="telemetry">TELEMETRY: CYCLE 0215 • PHASE 01/06 • T+00:00</text>
+
+            <!-- BOXES (moved slightly down) -->
             <g id="step1" class="dim">
-              <rect id="box1" class="box" x="120" y="190" width="210" height="150" rx="12"/>
-              <rect id="rail1" x="120" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
-              <g id="lock1" opacity="0" transform="translate(280 206)">
-                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
-                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
-              </g>
-
-              <text class="mono h" x="142" y="230">RECORD INTAKE</text>
-              <text class="monoMuted t" x="142" y="265">stored outputs</text>
-              <text class="monoMuted t" x="142" y="287">transcripts</text>
-              <text class="monoMuted t" x="142" y="309">immutable boundary</text>
+              <rect id="box1" class="box" x="120" y="300" width="210" height="150" rx="12"/>
+              <!-- left rail -->
+              <rect id="rail1" x="120" y="300" width="6" height="150" rx="12" fill="#000" opacity="0"/>
+              <text class="mono h" x="142" y="340">RECORD INTAKE</text>
+              <text class="monoMuted t" x="142" y="375">stored outputs</text>
+              <text class="monoMuted t" x="142" y="397">transcripts</text>
+              <text class="monoMuted t" x="142" y="419">immutable boundary</text>
 
               <g class="badge" id="badge1">
-                <rect x="128" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="142" y="213" style="font-size:12px;font-weight:700;">01</text>
+                <rect x="128" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="142" y="323" style="font-size:12px;font-weight:700;">01</text>
               </g>
-              <rect class="stepbox-hit" x="120" y="190" width="210" height="150" rx="12" data-step="0"/>
+              <rect class="stepbox-hit" x="120" y="300" width="210" height="150" rx="12" data-step="0"/>
             </g>
 
             <g id="step2" class="dim">
-              <rect id="box2" class="box" x="358" y="190" width="210" height="150" rx="12"/>
-              <rect id="rail2" x="358" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
-              <g id="lock2" opacity="0" transform="translate(518 206)">
-                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
-                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
-              </g>
-
-              <text class="mono h" x="380" y="230">CANONICALIZE</text>
-              <text class="monoMuted t" x="380" y="265">schema normalize</text>
-              <text class="monoMuted t" x="380" y="287">span indexing</text>
-              <text class="monoMuted t" x="380" y="309">deterministic transforms</text>
+              <rect id="box2" class="box" x="358" y="300" width="210" height="150" rx="12"/>
+              <rect id="rail2" x="358" y="300" width="6" height="150" rx="12" fill="#000" opacity="0"/>
+              <text class="mono h" x="380" y="340">CANONICALIZE</text>
+              <text class="monoMuted t" x="380" y="375">schema normalize</text>
+              <text class="monoMuted t" x="380" y="397">span indexing</text>
+              <text class="monoMuted t" x="380" y="419">deterministic transforms</text>
 
               <g class="badge" id="badge2">
-                <rect x="366" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="380" y="213" style="font-size:12px;font-weight:700;">02</text>
+                <rect x="366" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="380" y="323" style="font-size:12px;font-weight:700;">02</text>
               </g>
-              <rect class="stepbox-hit" x="358" y="190" width="210" height="150" rx="12" data-step="1"/>
+              <rect class="stepbox-hit" x="358" y="300" width="210" height="150" rx="12" data-step="1"/>
             </g>
 
             <g id="step3" class="dim">
-              <rect id="box3" class="box" x="596" y="190" width="210" height="150" rx="12"/>
-              <rect id="rail3" x="596" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
-              <g id="lock3" opacity="0" transform="translate(756 206)">
-                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
-                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
-              </g>
-
-              <text class="mono h" x="618" y="230">LEXICON BIND</text>
-              <text class="monoMuted t" x="618" y="265">frozen term map</text>
-              <text class="monoMuted t" x="618" y="287">versioned semantics</text>
-              <text class="monoMuted t" x="618" y="309">pre-measure constraint</text>
+              <rect id="box3" class="box" x="596" y="300" width="210" height="150" rx="12"/>
+              <rect id="rail3" x="596" y="300" width="6" height="150" rx="12" fill="#000" opacity="0"/>
+              <text class="mono h" x="618" y="340">LEXICON BIND</text>
+              <text class="monoMuted t" x="618" y="375">frozen term map</text>
+              <text class="monoMuted t" x="618" y="397">versioned semantics</text>
+              <text class="monoMuted t" x="618" y="419">pre-measure constraint</text>
 
               <g class="badge" id="badge3">
-                <rect x="604" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="618" y="213" style="font-size:12px;font-weight:700;">03</text>
+                <rect x="604" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="618" y="323" style="font-size:12px;font-weight:700;">03</text>
               </g>
-              <rect class="stepbox-hit" x="596" y="190" width="210" height="150" rx="12" data-step="2"/>
+              <rect class="stepbox-hit" x="596" y="300" width="210" height="150" rx="12" data-step="2"/>
             </g>
 
             <g id="step4" class="dim">
-              <rect id="box4" class="box" x="834" y="190" width="210" height="150" rx="12"/>
-              <rect id="rail4" x="834" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
-              <g id="lock4" opacity="0" transform="translate(994 206)">
-                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
-                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
-              </g>
-
-              <text class="mono h" x="856" y="230">STRUCTURAL</text>
-              <text class="mono h" x="856" y="250">DIAGNOSTICS</text>
-              <text class="monoMuted t" x="856" y="280">invariants</text>
-              <text class="monoMuted t" x="856" y="302">structure-only signals</text>
+              <rect id="box4" class="box" x="834" y="300" width="210" height="150" rx="12"/>
+              <rect id="rail4" x="834" y="300" width="6" height="150" rx="12" fill="#000" opacity="0"/>
+              <text class="mono h" x="856" y="340">STRUCTURAL</text>
+              <text class="mono h" x="856" y="360">DIAGNOSTICS</text>
+              <text class="monoMuted t" x="856" y="390">invariants</text>
+              <text class="monoMuted t" x="856" y="412">structure-only signals</text>
 
               <g class="badge" id="badge4">
-                <rect x="842" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="856" y="213" style="font-size:12px;font-weight:700;">04</text>
+                <rect x="842" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="856" y="323" style="font-size:12px;font-weight:700;">04</text>
               </g>
-              <rect class="stepbox-hit" x="834" y="190" width="210" height="150" rx="12" data-step="3"/>
+              <rect class="stepbox-hit" x="834" y="300" width="210" height="150" rx="12" data-step="3"/>
             </g>
 
             <g id="step5" class="dim">
-              <rect id="box5" class="box" x="1072" y="190" width="210" height="150" rx="12"/>
-              <rect id="rail5" x="1072" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
-              <g id="lock5" opacity="0" transform="translate(1232 206)">
-                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
-                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
-              </g>
-
-              <text class="mono h" x="1094" y="230">AUDIT PACKET</text>
-              <text class="monoMuted t" x="1094" y="265">hash + provenance</text>
-              <text class="monoMuted t" x="1094" y="287">links to evidence</text>
-              <text class="monoMuted t" x="1094" y="309">replay references</text>
+              <rect id="box5" class="box" x="1072" y="300" width="210" height="150" rx="12"/>
+              <rect id="rail5" x="1072" y="300" width="6" height="150" rx="12" fill="#000" opacity="0"/>
+              <text class="mono h" x="1094" y="340">AUDIT PACKET</text>
+              <text class="monoMuted t" x="1094" y="375">hash + provenance</text>
+              <text class="monoMuted t" x="1094" y="397">links to evidence</text>
+              <text class="monoMuted t" x="1094" y="419">replay references</text>
 
               <g class="badge" id="badge5">
-                <rect x="1080" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="1094" y="213" style="font-size:12px;font-weight:700;">05</text>
+                <rect x="1080" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="1094" y="323" style="font-size:12px;font-weight:700;">05</text>
               </g>
-              <rect class="stepbox-hit" x="1072" y="190" width="210" height="150" rx="12" data-step="4"/>
+              <rect class="stepbox-hit" x="1072" y="300" width="210" height="150" rx="12" data-step="4"/>
             </g>
 
             <g id="step6" class="dim">
-              <rect id="box6" class="box" x="1310" y="190" width="210" height="150" rx="12"/>
-              <rect id="rail6" x="1310" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
-              <g id="lock6" opacity="0" transform="translate(1470 206)">
-                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
-                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
-              </g>
-
-              <text class="mono h" x="1332" y="230">EVIDENCE</text>
-              <text class="mono h" x="1332" y="250">ARTIFACTS</text>
-              <text class="monoMuted t" x="1332" y="265">screenshots</text>
-              <text class="monoMuted t" x="1332" y="287">CSV / JSON export</text>
-              <text class="monoMuted t" x="1332" y="309">auditable bundle</text>
+              <rect id="box6" class="box" x="1310" y="300" width="210" height="150" rx="12"/>
+              <rect id="rail6" x="1310" y="300" width="6" height="150" rx="12" fill="#000" opacity="0"/>
+              <text class="mono h" x="1332" y="340">EVIDENCE</text>
+              <text class="mono h" x="1332" y="360">ARTIFACTS</text>
+              <text class="monoMuted t" x="1332" y="375">screenshots</text>
+              <text class="monoMuted t" x="1332" y="397">CSV / JSON export</text>
+              <text class="monoMuted t" x="1332" y="419">auditable bundle</text>
 
               <g class="badge" id="badge6">
-                <rect x="1318" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="1332" y="213" style="font-size:12px;font-weight:700;">06</text>
+                <rect x="1318" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="1332" y="323" style="font-size:12px;font-weight:700;">06</text>
               </g>
-              <rect class="stepbox-hit" x="1310" y="190" width="210" height="150" rx="12" data-step="5"/>
+              <rect class="stepbox-hit" x="1310" y="300" width="210" height="150" rx="12" data-step="5"/>
             </g>
 
-            <!-- ARROWS + NODES -->
-            <path id="a12" class="arrow dim" marker-end="url(#arrowhead)" d="M330 275 L358 275"/>
-            <circle id="n12" cx="344" cy="275" r="3" fill="#b8b8b8" opacity="0.9"/>
-
-            <path id="a23" class="arrow dim" marker-end="url(#arrowhead)" d="M568 275 L596 275"/>
-            <circle id="n23" cx="582" cy="275" r="3" fill="#b8b8b8" opacity="0.9"/>
-
-            <path id="a34" class="arrow dim" marker-end="url(#arrowhead)" d="M806 275 L834 275"/>
-            <circle id="n34" cx="820" cy="275" r="3" fill="#b8b8b8" opacity="0.9"/>
-
-            <path id="a45" class="arrow dim" marker-end="url(#arrowhead)" d="M1044 275 L1072 275"/>
-            <circle id="n45" cx="1058" cy="275" r="3" fill="#b8b8b8" opacity="0.9"/>
-
-            <path id="a56" class="arrow dim" marker-end="url(#arrowhead)" d="M1282 275 L1310 275"/>
-            <circle id="n56" cx="1296" cy="275" r="3" fill="#b8b8b8" opacity="0.9"/>
+            <!-- ARROWS -->
+            <path id="a12" class="arrow dim" marker-end="url(#arrowhead)" d="M330 385 L358 385"/>
+            <path id="a23" class="arrow dim" marker-end="url(#arrowhead)" d="M568 385 L596 385"/>
+            <path id="a34" class="arrow dim" marker-end="url(#arrowhead)" d="M806 385 L834 385"/>
+            <path id="a45" class="arrow dim" marker-end="url(#arrowhead)" d="M1044 385 L1072 385"/>
+            <path id="a56" class="arrow dim" marker-end="url(#arrowhead)" d="M1282 385 L1310 385"/>
 
             <!-- Canonical Lexicon side input -->
             <g id="lexSide" class="dim">
-              <rect class="boxSoft" x="596" y="150" width="210" height="28" rx="8"/>
-              <text class="monoMuted micro" x="612" y="169">CANONICAL LEXICON (FROZEN)</text>
-              <path id="lexArrow" class="arrowDash" marker-end="url(#arrowheadLight)" d="M701 178 L701 190"/>
+              <rect class="boxSoft" x="596" y="260" width="210" height="28" rx="8"/>
+              <text class="monoMuted micro" x="612" y="279">CANONICAL LEXICON (FROZEN)</text>
+              <path id="lexArrow" class="arrowDash" marker-end="url(#arrowheadLight)" d="M701 288 L701 300"/>
             </g>
 
-            <!-- Status (static) -->
-            <rect class="frame" x="120" y="430" width="1400" height="110" rx="14" style="stroke:#ededed"/>
-            <text class="monoMuted micro" x="142" y="468">STATUS:</text>
+            <!-- LOCK tags for completed steps (shown dynamically) -->
+            <g id="locks">
+              <g id="lock1" opacity="0">
+                <rect class="chip" x="280" y="308" width="42" height="22" rx="6"/>
+                <text class="mono" x="292" y="323" style="font-size:12px;font-weight:700;">LOCK</text>
+              </g>
+              <g id="lock2" opacity="0">
+                <rect class="chip" x="518" y="308" width="42" height="22" rx="6"/>
+                <text class="mono" x="530" y="323" style="font-size:12px;font-weight:700;">LOCK</text>
+              </g>
+              <g id="lock3" opacity="0">
+                <rect class="chip" x="756" y="308" width="42" height="22" rx="6"/>
+                <text class="mono" x="768" y="323" style="font-size:12px;font-weight:700;">LOCK</text>
+              </g>
+              <g id="lock4" opacity="0">
+                <rect class="chip" x="994" y="308" width="42" height="22" rx="6"/>
+                <text class="mono" x="1006" y="323" style="font-size:12px;font-weight:700;">LOCK</text>
+              </g>
+              <g id="lock5" opacity="0">
+                <rect class="chip" x="1232" y="308" width="42" height="22" rx="6"/>
+                <text class="mono" x="1244" y="323" style="font-size:12px;font-weight:700;">LOCK</text>
+              </g>
+            </g>
 
-            <rect class="pill" x="230" y="450" width="230" height="44" rx="6"/><circle class="okDot" cx="252" cy="472" r="5"/>
-            <text class="mono pillText" x="266" y="477">DETERMINISTIC</text>
+            <!-- Status -->
+            <rect class="frame" x="120" y="520" width="1400" height="110" rx="14" style="stroke:#ededed"/>
+            <text class="monoMuted micro" x="142" y="558">STATUS:</text>
 
-            <rect class="pill" x="475" y="450" width="230" height="44" rx="6"/><circle class="okDot" cx="497" cy="472" r="5"/>
-            <text class="mono pillText" x="511" y="477">LEXICON-BOUND</text>
+            <rect class="pill" x="230" y="540" width="230" height="44" rx="6"/><circle class="okDot" cx="252" cy="562" r="5"/>
+            <text class="mono pillText" x="266" y="567">DETERMINISTIC</text>
 
-            <rect class="pill" x="720" y="450" width="260" height="44" rx="6"/><circle class="okDot" cx="742" cy="472" r="5"/>
-            <text class="mono pillText" x="756" y="477">RECORD-GROUNDED</text>
+            <rect class="pill" x="475" y="540" width="230" height="44" rx="6"/><circle class="okDot" cx="497" cy="562" r="5"/>
+            <text class="mono pillText" x="511" y="567">LEXICON-BOUND</text>
 
-            <rect class="pill" x="995" y="450" width="240" height="44" rx="6"/><circle class="okDot" cx="1017" cy="472" r="5"/>
-            <text class="mono pillText" x="1031" y="477">SPAN-TRACEABLE</text>
+            <rect class="pill" x="720" y="540" width="260" height="44" rx="6"/><circle class="okDot" cx="742" cy="562" r="5"/>
+            <text class="mono pillText" x="756" y="567">RECORD-GROUNDED</text>
 
-            <rect class="pill" x="1250" y="450" width="240" height="44" rx="6"/><circle class="okDot" cx="1272" cy="472" r="5"/>
-            <text class="mono pillText" x="1286" y="477">REPRODUCIBLE</text>
+            <rect class="pill" x="995" y="540" width="240" height="44" rx="6"/><circle class="okDot" cx="1017" cy="562" r="5"/>
+            <text class="mono pillText" x="1031" y="567">SPAN-TRACEABLE</text>
+
+            <rect class="pill" x="1250" y="540" width="240" height="44" rx="6"/><circle class="okDot" cx="1272" cy="562" r="5"/>
+            <text class="mono pillText" x="1286" y="567">REPRODUCIBLE</text>
+
+            <!-- Omitted surface (quiet disclosure) -->
+            <text class="monoMuted tiny" x="120" y="662">OMITTED IN THIS VIEW: interactive dashboard modules • oracle assistance • analytic regimes • live API surfaces</text>
+
+            <!-- Sheen overlay for active box (moved by JS) -->
+            <rect id="sheenRect" x="120" y="300" width="210" height="150" rx="12" fill="url(#sheen)" opacity="0" pointer-events="none"/>
           </svg>
         </div>
       </div>
 
-      <div class="panel">
+      <div class="panel" id="panel">
         <div class="kicker">guided sequence</div>
         <div class="stepnum" id="stepNum">STEP 1 / 6</div>
 
@@ -420,51 +431,54 @@
           <button class="btn" id="pauseBtn">Pause</button>
           <button class="btn" id="restartBtn">Restart</button>
         </div>
+
+        <div class="hint">
+          Keys: ← / → step • Space auto/pause • R restart<br/>
+          Hover diagram to pause auto.
+        </div>
       </div>
     </div>
   </div>
 
   <script>
     const steps = [
-      { id:"step1", box:"box1", badge:"badge1", arrow:null,  title:"Record Intake",
-        text:"Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis." },
-      { id:"step2", box:"box2", badge:"badge2", arrow:"a12", title:"Canonicalize",
-        text:"Deterministic normalization and span indexing. Converts raw artifacts into a stable measurement substrate." },
-      { id:"step3", box:"box3", badge:"badge3", arrow:"a23", title:"Lexicon Bind",
-        text:"Binds records to a frozen, versioned term and schema specification. Constrains measurement semantics pre-computation." },
-      { id:"step4", box:"box4", badge:"badge4", arrow:"a34", title:"Structural Diagnostics",
-        text:"Computes structure-only signals (invariants, integrity checks) without truth, intent, or policy judgment." },
-      { id:"step5", box:"box5", badge:"badge5", arrow:"a45", title:"Audit Packet",
-        text:"Produces a traceable audit packet: provenance, hashes, evidence links, and replay references." },
-      { id:"step6", box:"box6", badge:"badge6", arrow:"a56", title:"Evidence Artifacts",
-        text:"Exports an auditable bundle (screenshots + CSV/JSON) suitable for controlled technical review." }
+      { id:"step1", box:"box1", rail:"rail1", badge:"badge1", lock:null, arrow:null,
+        title:"Record Intake",
+        text:"Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis."
+      },
+      { id:"step2", box:"box2", rail:"rail2", badge:"badge2", lock:"lock1", arrow:"a12",
+        title:"Canonicalize",
+        text:"Deterministic normalization and span indexing. Converts raw artifacts into a stable measurement substrate."
+      },
+      { id:"step3", box:"box3", rail:"rail3", badge:"badge3", lock:"lock2", arrow:"a23",
+        title:"Lexicon Bind",
+        text:"Binds records to a frozen, versioned term and schema specification. Constrains measurement semantics pre-computation."
+      },
+      { id:"step4", box:"box4", rail:"rail4", badge:"badge4", lock:"lock3", arrow:"a34",
+        title:"Structural Diagnostics",
+        text:"Computes structure-only signals (invariants, integrity checks) without truth, intent, or policy judgment."
+      },
+      { id:"step5", box:"box5", rail:"rail5", badge:"badge5", lock:"lock4", arrow:"a45",
+        title:"Audit Packet",
+        text:"Produces a traceable audit packet: provenance, hashes, evidence links, and replay references."
+      },
+      { id:"step6", box:"box6", rail:"rail6", badge:"badge6", lock:"lock5", arrow:"a56",
+        title:"Evidence Artifacts",
+        text:"Exports an auditable bundle (screenshots + CSV/JSON) suitable for controlled technical review."
+      }
     ];
 
     let idx = 0;
     let timer = null;
+    let t0 = Date.now();
     const intervalMs = 1900;
 
     const stepNum = document.getElementById("stepNum");
     const stepTitle = document.getElementById("stepTitle");
     const stepText = document.getElementById("stepText");
     const progress = document.getElementById("progress");
-
-    // Telemetry clock
-    const t0 = Date.now();
-    function pad(n){ return String(n).padStart(2,"0"); }
-
-    function updateTelemetry(){
-      const cycle = document.getElementById("telCycle");
-      const phase = document.getElementById("telPhase");
-      const time  = document.getElementById("telTime");
-      if(cycle) cycle.textContent = "CYCLE 0215";
-      if(phase) phase.textContent = `PHASE ${pad(idx+1)}/${pad(steps.length)}`;
-      if(time){
-        const s = Math.floor((Date.now()-t0)/1000);
-        time.textContent = `T+${pad(Math.floor(s/60))}:${pad(s%60)}`;
-      }
-    }
-    setInterval(updateTelemetry, 500);
+    const telemetry = document.getElementById("telemetry");
+    const sheenRect = document.getElementById("sheenRect");
 
     // Build ticks
     const ticks = steps.map((_, i) => {
@@ -485,84 +499,90 @@
     function resetBoxStrokes(){
       steps.forEach(s => {
         const box = document.getElementById(s.box);
-        if(!box) return;
-        box.style.stroke = "#cfcfcf";
-        box.style.strokeWidth = "1.5";
-        box.classList.remove("lift-shadow");
+        const rail = document.getElementById(s.rail);
+        if(box){
+          box.style.stroke = "#cfcfcf";
+          box.style.strokeWidth = "1.5";
+          box.style.filter = "none";
+        }
+        if(rail) rail.setAttribute("opacity","0");
       });
     }
 
-    function resetArrowsAndNodes(){
+    function resetArrows(){
       ["a12","a23","a34","a45","a56"].forEach(id => {
         const a = document.getElementById(id);
         if(!a) return;
         a.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--arrowOff").trim() || "#8a8a8a";
         a.setAttribute("marker-end","url(#arrowhead)");
       });
-      ["n12","n23","n34","n45","n56"].forEach(id => {
-        const n = document.getElementById(id);
-        if(!n) return;
-        n.setAttribute("fill", "#b8b8b8");
-      });
     }
 
-    function clearLift(){
-      steps.forEach((s, i) => {
-        const g = document.getElementById(s.id);
-        const rail = document.getElementById(`rail${i+1}`);
-        if (g) g.setAttribute("transform", "translate(0 0)");
-        if (rail) rail.setAttribute("opacity", "0");
-      });
-    }
-
-    function applyLift(i){
-      const s = steps[i];
-      const g = document.getElementById(s.id);
-      const box = document.getElementById(s.box);
-      const rail = document.getElementById(`rail${i+1}`);
-      if (g) g.setAttribute("transform", "translate(0 -4)");
-      if (box) box.classList.add("lift-shadow");
-      if (rail) rail.setAttribute("opacity", "1");
+    function resetBadges(){
+      steps.forEach(s => document.getElementById(s.badge).classList.remove("show"));
     }
 
     function updateLocks(){
-      steps.forEach((_, j) => {
-        const lk = document.getElementById(`lock${j+1}`);
-        if(!lk) return;
-        lk.setAttribute("opacity", (j < idx) ? "1" : "0");
+      // show LOCK for completed steps (everything before current)
+      steps.forEach((s, i) => {
+        if(!s.lock) return;
+        const g = document.getElementById(s.lock);
+        if(!g) return;
+        g.setAttribute("opacity", (i < idx) ? "1" : "0");
       });
+    }
+
+    function fmtTplus(ms){
+      const sec = Math.max(0, Math.floor(ms/1000));
+      const m = Math.floor(sec/60);
+      const s = String(sec%60).padStart(2,"0");
+      return `T+${String(m).padStart(2,"0")}:${s}`;
+    }
+
+    function placeSheenOn(box){
+      if(!box || !sheenRect) return;
+      const x = Number(box.getAttribute("x"));
+      const y = Number(box.getAttribute("y"));
+      const w = Number(box.getAttribute("width"));
+      const h = Number(box.getAttribute("height"));
+      const rx = box.getAttribute("rx") || "12";
+      sheenRect.setAttribute("x", x);
+      sheenRect.setAttribute("y", y);
+      sheenRect.setAttribute("width", w);
+      sheenRect.setAttribute("height", h);
+      sheenRect.setAttribute("rx", rx);
+      sheenRect.setAttribute("opacity", "0.20");
     }
 
     function activate(i){
       idx = (i + steps.length) % steps.length;
 
       // Dim all groups
-      steps.forEach(s => {
-        setClass(document.getElementById(s.id), "dim", "active");
-        document.getElementById(s.badge).classList.remove("show");
-      });
+      steps.forEach(s => setClass(document.getElementById(s.id), "dim", "active"));
       ["a12","a23","a34","a45","a56"].forEach(a => setClass(document.getElementById(a), "dim", "active"));
       setClass(document.getElementById("lexSide"), "dim", "active");
 
       resetBoxStrokes();
-      resetArrowsAndNodes();
-      clearLift();
+      resetArrows();
+      resetBadges();
 
       // Activate current
       const s = steps[idx];
       setClass(document.getElementById(s.id), "active", "dim");
       document.getElementById(s.badge).classList.add("show");
 
-      applyLift(idx);
-
-      // Active box border
+      // Active box styling: stroke + lift + rail
       const box = document.getElementById(s.box);
+      const rail = document.getElementById(s.rail);
       if(box){
         box.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--activeStroke").trim() || "#050505";
         box.style.strokeWidth = getComputedStyle(document.documentElement).getPropertyValue("--activeStrokeW").trim() || "2.5";
+        box.style.filter = "url(#lift)";
+        placeSheenOn(box);
       }
+      if(rail) rail.setAttribute("opacity","0.85");
 
-      // Light arrow into current step (if any) + node
+      // Light arrow into current step (if any)
       if(s.arrow){
         const a = document.getElementById(s.arrow);
         if(a){
@@ -570,9 +590,6 @@
           a.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--arrowOn").trim() || "#050505";
           a.setAttribute("marker-end","url(#arrowheadOn)");
         }
-        const nodeId = "n" + s.arrow.slice(1); // a12 -> n12
-        const node = document.getElementById(nodeId);
-        if(node) node.setAttribute("fill", "#050505");
       }
 
       // Lexicon side only during step 3
@@ -591,8 +608,12 @@
         t.classList.toggle("active", j === idx);
       });
 
+      // Locks
       updateLocks();
-      updateTelemetry();
+
+      // Telemetry
+      const tplus = fmtTplus(Date.now() - t0);
+      telemetry.textContent = `TELEMETRY: CYCLE 0215 • PHASE ${String(idx+1).padStart(2,"0")}/${String(steps.length).padStart(2,"0")} • ${tplus}`;
     }
 
     function next(){ activate(idx + 1); }
@@ -624,8 +645,30 @@
       });
     });
 
+    // Keyboard controls
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "ArrowRight"){ next(); }
+      else if(e.key === "ArrowLeft"){ prev(); }
+      else if(e.key === " "){
+        e.preventDefault();
+        timer ? pause() : auto();
+      }
+      else if(e.key.toLowerCase() === "r"){ activate(0); }
+    });
+
+    // Pause auto on hover over diagram
+    const svgWrap = document.querySelector(".svg-wrap");
+    svgWrap.addEventListener("mouseenter", () => { if(timer) pause(); });
+    // (optional) do not auto-resume on leave; user controls it
+
     // Init
     activate(0);
+
+    // Make telemetry tick even if user doesn't click
+    setInterval(() => {
+      const tplus = fmtTplus(Date.now() - t0);
+      telemetry.textContent = `TELEMETRY: CYCLE 0215 • PHASE ${String(idx+1).padStart(2,"0")}/${String(steps.length).padStart(2,"0")} • ${tplus}`;
+    }, 1000);
   </script>
 </body>
 </html>
