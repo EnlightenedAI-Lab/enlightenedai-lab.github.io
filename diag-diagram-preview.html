@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RD Diagram Preview (v3 guided)</title>
+  <title>RD Diagram Preview (v4 guided)</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +31,6 @@
       --arrowOn:#050505;
       --arrowOff:#8a8a8a;
 
-      /* Lift tuning */
       --liftY:-4px;
     }
 
@@ -150,7 +149,7 @@
     .badge { display:none; }
     .badge.show { display:block; }
 
-    /* --- ACTIVE "FLOAT" EFFECT (instrument lift, not glow) --- */
+    /* Lift */
     svg .lift-shadow { filter: url(#liftShadow); }
 
     @media (max-width: 980px){
@@ -219,10 +218,32 @@
             </text>
             <text class="monoMuted micro" x="120" y="136">POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED</text>
 
+            <!-- AUDIT CHIP (top-right) -->
+            <g id="auditChip" opacity="0.95">
+              <rect x="1248" y="86" width="250" height="44" rx="10" fill="#fff" stroke="#cfcfcf" stroke-width="1.5"/>
+              <text class="mono" x="1268" y="114" style="font-size:12px;font-weight:800;letter-spacing:0.14em;">AUDIT MODE ACTIVE</text>
+              <circle cx="1476" cy="108" r="5" fill="#00cc00"/>
+            </g>
+
+            <!-- TELEMETRY STRIP -->
+            <g id="telemetry">
+              <text class="monoMuted micro" x="120" y="166">TELEMETRY:</text>
+              <text class="mono micro" x="220" y="166" id="telCycle">CYCLE 0215</text>
+              <text class="monoMuted micro" x="350" y="166">•</text>
+              <text class="mono micro" x="375" y="166" id="telPhase">PHASE 01/06</text>
+              <text class="monoMuted micro" x="520" y="166">•</text>
+              <text class="mono micro" x="545" y="166" id="telTime">T+00:00</text>
+            </g>
+
             <!-- BOXES -->
             <g id="step1" class="dim">
               <rect id="box1" class="box" x="120" y="190" width="210" height="150" rx="12"/>
               <rect id="rail1" x="120" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
+              <g id="lock1" opacity="0" transform="translate(280 206)">
+                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
+                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
+              </g>
+
               <text class="mono h" x="142" y="230">RECORD INTAKE</text>
               <text class="monoMuted t" x="142" y="265">stored outputs</text>
               <text class="monoMuted t" x="142" y="287">transcripts</text>
@@ -238,6 +259,11 @@
             <g id="step2" class="dim">
               <rect id="box2" class="box" x="358" y="190" width="210" height="150" rx="12"/>
               <rect id="rail2" x="358" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
+              <g id="lock2" opacity="0" transform="translate(518 206)">
+                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
+                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
+              </g>
+
               <text class="mono h" x="380" y="230">CANONICALIZE</text>
               <text class="monoMuted t" x="380" y="265">schema normalize</text>
               <text class="monoMuted t" x="380" y="287">span indexing</text>
@@ -253,6 +279,11 @@
             <g id="step3" class="dim">
               <rect id="box3" class="box" x="596" y="190" width="210" height="150" rx="12"/>
               <rect id="rail3" x="596" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
+              <g id="lock3" opacity="0" transform="translate(756 206)">
+                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
+                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
+              </g>
+
               <text class="mono h" x="618" y="230">LEXICON BIND</text>
               <text class="monoMuted t" x="618" y="265">frozen term map</text>
               <text class="monoMuted t" x="618" y="287">versioned semantics</text>
@@ -268,6 +299,11 @@
             <g id="step4" class="dim">
               <rect id="box4" class="box" x="834" y="190" width="210" height="150" rx="12"/>
               <rect id="rail4" x="834" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
+              <g id="lock4" opacity="0" transform="translate(994 206)">
+                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
+                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
+              </g>
+
               <text class="mono h" x="856" y="230">STRUCTURAL</text>
               <text class="mono h" x="856" y="250">DIAGNOSTICS</text>
               <text class="monoMuted t" x="856" y="280">invariants</text>
@@ -283,6 +319,11 @@
             <g id="step5" class="dim">
               <rect id="box5" class="box" x="1072" y="190" width="210" height="150" rx="12"/>
               <rect id="rail5" x="1072" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
+              <g id="lock5" opacity="0" transform="translate(1232 206)">
+                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
+                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
+              </g>
+
               <text class="mono h" x="1094" y="230">AUDIT PACKET</text>
               <text class="monoMuted t" x="1094" y="265">hash + provenance</text>
               <text class="monoMuted t" x="1094" y="287">links to evidence</text>
@@ -298,6 +339,11 @@
             <g id="step6" class="dim">
               <rect id="box6" class="box" x="1310" y="190" width="210" height="150" rx="12"/>
               <rect id="rail6" x="1310" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
+              <g id="lock6" opacity="0" transform="translate(1470 206)">
+                <rect x="0" y="0" width="40" height="18" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1"/>
+                <text class="monoMuted" x="8" y="13" style="font-size:10px;font-weight:700;letter-spacing:0.10em;">LOCK</text>
+              </g>
+
               <text class="mono h" x="1332" y="230">EVIDENCE</text>
               <text class="mono h" x="1332" y="250">ARTIFACTS</text>
               <text class="monoMuted t" x="1332" y="265">screenshots</text>
@@ -311,12 +357,21 @@
               <rect class="stepbox-hit" x="1310" y="190" width="210" height="150" rx="12" data-step="5"/>
             </g>
 
-            <!-- ARROWS -->
+            <!-- ARROWS + NODES -->
             <path id="a12" class="arrow dim" marker-end="url(#arrowhead)" d="M330 275 L358 275"/>
+            <circle id="n12" cx="344" cy="275" r="3" fill="#b8b8b8" opacity="0.9"/>
+
             <path id="a23" class="arrow dim" marker-end="url(#arrowhead)" d="M568 275 L596 275"/>
+            <circle id="n23" cx="582" cy="275" r="3" fill="#b8b8b8" opacity="0.9"/>
+
             <path id="a34" class="arrow dim" marker-end="url(#arrowhead)" d="M806 275 L834 275"/>
+            <circle id="n34" cx="820" cy="275" r="3" fill="#b8b8b8" opacity="0.9"/>
+
             <path id="a45" class="arrow dim" marker-end="url(#arrowhead)" d="M1044 275 L1072 275"/>
+            <circle id="n45" cx="1058" cy="275" r="3" fill="#b8b8b8" opacity="0.9"/>
+
             <path id="a56" class="arrow dim" marker-end="url(#arrowhead)" d="M1282 275 L1310 275"/>
+            <circle id="n56" cx="1296" cy="275" r="3" fill="#b8b8b8" opacity="0.9"/>
 
             <!-- Canonical Lexicon side input -->
             <g id="lexSide" class="dim">
@@ -351,7 +406,6 @@
         <div class="kicker">guided sequence</div>
         <div class="stepnum" id="stepNum">STEP 1 / 6</div>
 
-        <!-- Progress ticks -->
         <div class="progress" id="progress"></div>
 
         <div class="steptitle" id="stepTitle">Record Intake</div>
@@ -395,6 +449,23 @@
     const stepText = document.getElementById("stepText");
     const progress = document.getElementById("progress");
 
+    // Telemetry clock
+    const t0 = Date.now();
+    function pad(n){ return String(n).padStart(2,"0"); }
+
+    function updateTelemetry(){
+      const cycle = document.getElementById("telCycle");
+      const phase = document.getElementById("telPhase");
+      const time  = document.getElementById("telTime");
+      if(cycle) cycle.textContent = "CYCLE 0215";
+      if(phase) phase.textContent = `PHASE ${pad(idx+1)}/${pad(steps.length)}`;
+      if(time){
+        const s = Math.floor((Date.now()-t0)/1000);
+        time.textContent = `T+${pad(Math.floor(s/60))}:${pad(s%60)}`;
+      }
+    }
+    setInterval(updateTelemetry, 500);
+
     // Build ticks
     const ticks = steps.map((_, i) => {
       const t = document.createElement("div");
@@ -421,12 +492,17 @@
       });
     }
 
-    function resetArrows(){
+    function resetArrowsAndNodes(){
       ["a12","a23","a34","a45","a56"].forEach(id => {
         const a = document.getElementById(id);
         if(!a) return;
         a.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--arrowOff").trim() || "#8a8a8a";
         a.setAttribute("marker-end","url(#arrowhead)");
+      });
+      ["n12","n23","n34","n45","n56"].forEach(id => {
+        const n = document.getElementById(id);
+        if(!n) return;
+        n.setAttribute("fill", "#b8b8b8");
       });
     }
 
@@ -449,6 +525,14 @@
       if (rail) rail.setAttribute("opacity", "1");
     }
 
+    function updateLocks(){
+      steps.forEach((_, j) => {
+        const lk = document.getElementById(`lock${j+1}`);
+        if(!lk) return;
+        lk.setAttribute("opacity", (j < idx) ? "1" : "0");
+      });
+    }
+
     function activate(i){
       idx = (i + steps.length) % steps.length;
 
@@ -461,7 +545,7 @@
       setClass(document.getElementById("lexSide"), "dim", "active");
 
       resetBoxStrokes();
-      resetArrows();
+      resetArrowsAndNodes();
       clearLift();
 
       // Activate current
@@ -471,14 +555,14 @@
 
       applyLift(idx);
 
-      // Thicken active box border
+      // Active box border
       const box = document.getElementById(s.box);
       if(box){
         box.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--activeStroke").trim() || "#050505";
         box.style.strokeWidth = getComputedStyle(document.documentElement).getPropertyValue("--activeStrokeW").trim() || "2.5";
       }
 
-      // Light arrow into current step (if any)
+      // Light arrow into current step (if any) + node
       if(s.arrow){
         const a = document.getElementById(s.arrow);
         if(a){
@@ -486,6 +570,9 @@
           a.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--arrowOn").trim() || "#050505";
           a.setAttribute("marker-end","url(#arrowheadOn)");
         }
+        const nodeId = "n" + s.arrow.slice(1); // a12 -> n12
+        const node = document.getElementById(nodeId);
+        if(node) node.setAttribute("fill", "#050505");
       }
 
       // Lexicon side only during step 3
@@ -503,6 +590,9 @@
         t.classList.toggle("on", j <= idx);
         t.classList.toggle("active", j === idx);
       });
+
+      updateLocks();
+      updateTelemetry();
     }
 
     function next(){ activate(idx + 1); }
