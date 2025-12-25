@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RD Diagram Preview (v2)</title>
+  <title>RD Diagram Preview (v3 guided)</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,245 +20,124 @@
       --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       --ok:#00cc00;
-      --warn:#ffb000;  /* amber */
-      --bad:#cc0000;   /* red */
+      --warn:#ffb000;
+      --bad:#cc0000;
+
+      --activeStroke:#050505;
+      --inactiveOpacity:0.25;
+      --activeOpacity:1;
     }
 
     *{box-sizing:border-box}
     body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); }
-    .wrap{ max-width:1240px; margin:0 auto; padding:48px 24px 64px; }
+    .wrap{ max-width:1240px; margin:0 auto; padding:42px 24px 60px; }
 
     h1{ margin:0 0 8px 0; font-size:34px; font-weight:600; letter-spacing:-0.02em; }
     .sub{ font-family:var(--mono); color:var(--muted); font-size:12px; letter-spacing:0.04em; }
 
-    .card{
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:22px;
-      background:var(--bg);
+    .row{
+      display:flex;
+      align-items:flex-start;
+      gap:18px;
       margin-top:18px;
     }
 
-    /* Ensure SVG never collapses */
-    .svg-wrap{
-      width:100%;
-      overflow:auto;
-    }
-    svg{
-      display:block;
-      width:100%;
-      height:auto;
-      min-width:1100px; /* keeps layout stable on narrow windows */
+    .card{
+      flex: 1;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      background:var(--bg);
     }
 
-    .note{
-      margin-top:14px;
+    .panel{
+      width: 340px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      background:var(--bg);
+    }
+
+    .panel .kicker{
       font-family:var(--mono);
       color:var(--muted);
-      font-size:12px;
-      letter-spacing:0.02em;
+      font-size:11px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:10px;
     }
 
-    /* “Alive” indicator (subtle, not marketing) */
-    .alive{
-      display:inline-flex;
-      align-items:center;
+    .stepnum{
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:0.10em;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+
+    .steptitle{
+      font-size:16px;
+      font-weight:700;
+      letter-spacing:-0.01em;
+      margin-bottom:10px;
+    }
+
+    .steptext{
+      font-family:var(--sans);
+      font-size:13px;
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    .controls{
+      display:flex;
       gap:10px;
-      margin-top:12px;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
       font-family:var(--mono);
       font-size:12px;
-      color:var(--muted);
+      padding:8px 10px;
+      border:1px solid var(--border);
+      background:var(--bg);
+      color:var(--text);
+      cursor:pointer;
+      border-radius:10px;
+      user-select:none;
     }
-    .pulse{
-      width:8px; height:8px; border-radius:50%;
-      background:var(--ok);
-      box-shadow:0 0 0 0 rgba(0,204,0,0.35);
-      animation:pulse 1.8s infinite;
-    }
-    @keyframes pulse{
-      0%{ box-shadow:0 0 0 0 rgba(0,204,0,0.35); }
-      70%{ box-shadow:0 0 0 10px rgba(0,204,0,0); }
-      100%{ box-shadow:0 0 0 0 rgba(0,204,0,0); }
+    .btn:hover{ border-color: #bdbdbd; }
+
+    .svg-wrap{ width:100%; overflow:auto; }
+    svg{ display:block; width:100%; height:auto; min-width:1200px; }
+
+    /* Guided emphasis */
+    .dim { opacity: var(--inactiveOpacity); transition: opacity 180ms ease; }
+    .active { opacity: var(--activeOpacity); transition: opacity 180ms ease; }
+    .stroke-active { stroke: var(--activeStroke) !important; }
+    .stroke-normal { stroke: #cfcfcf; }
+
+    /* Small “step badge” overlay */
+    .badge { display:none; }
+    .badge.show { display:block; }
+
+    @media (max-width: 980px){
+      .row{ flex-direction:column; }
+      .panel{ width:100%; }
     }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <h1>Reflective Diagnostics — Flow Skeleton (v2)</h1>
-    <div class="sub">PUBLIC SAFE • NON-CAUSAL • STRUCTURE-ONLY • SHOWS REAL INSTRUMENT SHAPE (NOT UI)</div>
+    <h1>Reflective Diagnostics — Deterministic Record Flow</h1>
+    <div class="sub">GUIDED SEQUENCE • STATIC STYLE • PUBLIC SAFE (NO INTERNAL METRICS)</div>
 
-    <div class="alive"><span class="pulse"></span><span>instrument preview — static rendering (no internal metrics)</span></div>
-
-    <div class="card">
-      <div class="svg-wrap">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1600"
-          height="640"
-          viewBox="0 0 1600 640"
-          preserveAspectRatio="xMidYMid meet"
-          role="img"
-          aria-label="Reflective Diagnostics — Deterministic Record Flow (Public Skeleton v2)"
-          style="background:#ffffff;"
-        >
-          <defs>
-            <style>
-              .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
-              .box{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
-              .boxSoft{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.25}
-              .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#050505}
-              .monoMuted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#6a6a6a}
-              .h{font-size:13px;font-weight:700;letter-spacing:0.14em}
-              .t{font-size:12px}
-              .micro{font-size:11px;letter-spacing:0.05em}
-              .arrow{stroke:#8a8a8a;stroke-width:2;fill:none}
-              .arrowDash{stroke:#b8b8b8;stroke-width:1.5;fill:none;stroke-dasharray:6 6}
-              .pill{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
-              .pillText{font-size:12px;font-weight:600;letter-spacing:0.10em}
-              .okDot{fill:#00cc00}
-              .warnDot{fill:#ffb000}
-              .badDot{fill:#cc0000}
-              .chip{fill:#ffffff;stroke:#dcdcdc;stroke-width:1.25}
-              .chipText{font-size:11px;font-weight:600;letter-spacing:0.10em}
-            </style>
-
-            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-              <path d="M0,0 L10,5 L0,10 Z" fill="#8a8a8a"/>
-            </marker>
-            <marker id="arrowheadLight" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-              <path d="M0,0 L10,5 L0,10 Z" fill="#b8b8b8"/>
-            </marker>
-          </defs>
-
-          <!-- OUTER FRAME -->
-          <rect class="frame" x="70" y="50" width="1460" height="520" rx="18"/>
-
-          <!-- TITLE INSIDE -->
-          <text class="mono" x="120" y="110" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
-            Reflective Diagnostics — Deterministic Record Flow (Public Skeleton)
-          </text>
-          <text class="monoMuted micro" x="120" y="136">POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED</text>
-
-          <!-- PIPELINE ROW: 6 BOXES -->
-          <!-- Geometry: w=210 h=150 gap=28 -->
-          <!-- Row y=190 -->
-          <rect class="box" x="120" y="190" width="210" height="150" rx="12"/>
-          <rect class="box" x="358" y="190" width="210" height="150" rx="12"/>
-          <rect class="box" x="596" y="190" width="210" height="150" rx="12"/>
-          <rect class="box" x="834" y="190" width="210" height="150" rx="12"/>
-          <rect class="box" x="1072" y="190" width="210" height="150" rx="12"/>
-          <rect class="box" x="1310" y="190" width="210" height="150" rx="12"/>
-
-          <!-- HEADERS -->
-          <text class="mono h" x="142" y="230">RECORD INTAKE</text>
-          <text class="mono h" x="380" y="230">CANONICALIZE</text>
-          <text class="mono h" x="618" y="230">LEXICON BIND</text>
-          <text class="mono h" x="856" y="230">STRUCTURAL</text>
-          <text class="mono h" x="856" y="250">DIAGNOSTICS</text>
-          <text class="mono h" x="1094" y="230">AUDIT PACKET</text>
-          <text class="mono h" x="1332" y="230">EVIDENCE</text>
-          <text class="mono h" x="1332" y="250">ARTIFACTS</text>
-
-          <!-- TEXT -->
-          <text class="monoMuted t" x="142" y="265">stored outputs</text>
-          <text class="monoMuted t" x="142" y="287">transcripts</text>
-          <text class="monoMuted t" x="142" y="309">immutable record boundary</text>
-
-          <text class="monoMuted t" x="380" y="265">schema normalize</text>
-          <text class="monoMuted t" x="380" y="287">span indexing</text>
-          <text class="monoMuted t" x="380" y="309">deterministic transforms</text>
-
-          <text class="monoMuted t" x="618" y="265">frozen term map</text>
-          <text class="monoMuted t" x="618" y="287">versioned semantics</text>
-          <text class="monoMuted t" x="618" y="309">pre-measure constraint</text>
-
-          <text class="monoMuted t" x="856" y="280">invariants</text>
-          <text class="monoMuted t" x="856" y="302">structure-only signals</text>
-
-          <text class="monoMuted t" x="1094" y="265">hash + provenance</text>
-          <text class="monoMuted t" x="1094" y="287">links to evidence</text>
-          <text class="monoMuted t" x="1094" y="309">replay references</text>
-
-          <text class="monoMuted t" x="1332" y="265">screenshots</text>
-          <text class="monoMuted t" x="1332" y="287">CSV / JSON export</text>
-          <text class="monoMuted t" x="1332" y="309">auditable bundle</text>
-
-          <!-- ARROWS (straight) -->
-          <path class="arrow" marker-end="url(#arrowhead)" d="M330 275 L358 275"/>
-          <path class="arrow" marker-end="url(#arrowhead)" d="M568 275 L596 275"/>
-          <path class="arrow" marker-end="url(#arrowhead)" d="M806 275 L834 275"/>
-          <path class="arrow" marker-end="url(#arrowhead)" d="M1044 275 L1072 275"/>
-          <path class="arrow" marker-end="url(#arrowhead)" d="M1282 275 L1310 275"/>
-
-          <!-- CANONICAL LEXICON SIDE INPUT -->
-          <rect class="boxSoft" x="596" y="150" width="210" height="28" rx="8"/>
-          <text class="monoMuted micro" x="612" y="169">CANONICAL LEXICON (FROZEN)</text>
-          <path class="arrowDash" marker-end="url(#arrowheadLight)" d="M701 178 L701 190"/>
-
-          <!-- OPTIONAL REPLAY LOOP (straight lines) -->
-          <!-- From AUDIT PACKET bottom -> down -> left -> up into STRUCTURAL DIAGNOSTICS -->
-          <path class="arrowDash" marker-end="url(#arrowheadLight)" d="M1177 340 L1177 382 L939 382 L939 340"/>
-          <text class="monoMuted micro" x="960" y="402">(optional) audit triggers deterministic replay</text>
-
-          <!-- LAYER LABEL (subtle, prevents confusion) -->
-          <text class="monoMuted micro" x="120" y="370">L1: RECORD SUBSTRATE</text>
-          <text class="monoMuted micro" x="834" y="370">L2+: DIAGNOSTIC LENSES (APPLIED OVER RECORDS)</text>
-
-          <!-- STATUS AREA -->
-          <rect class="frame" x="120" y="430" width="1400" height="110" rx="14" style="stroke:#ededed"/>
-          <text class="monoMuted micro" x="142" y="468">STATUS:</text>
-
-          <!-- Pills (rectangular) -->
-          <rect class="pill" x="230" y="450" width="230" height="44" rx="6"/>
-          <circle class="okDot" cx="252" cy="472" r="5"/>
-          <text class="mono pillText" x="266" y="477">DETERMINISTIC</text>
-
-          <rect class="pill" x="475" y="450" width="230" height="44" rx="6"/>
-          <circle class="okDot" cx="497" cy="472" r="5"/>
-          <text class="mono pillText" x="511" y="477">LEXICON-BOUND</text>
-
-          <rect class="pill" x="720" y="450" width="260" height="44" rx="6"/>
-          <circle class="okDot" cx="742" cy="472" r="5"/>
-          <text class="mono pillText" x="756" y="477">RECORD-GROUNDED</text>
-
-          <rect class="pill" x="995" y="450" width="240" height="44" rx="6"/>
-          <circle class="okDot" cx="1017" cy="472" r="5"/>
-          <text class="mono pillText" x="1031" y="477">SPAN-TRACEABLE</text>
-
-          <rect class="pill" x="1250" y="450" width="240" height="44" rx="6"/>
-          <circle class="okDot" cx="1272" cy="472" r="5"/>
-          <text class="mono pillText" x="1286" y="477">REPRODUCIBLE</text>
-
-          <!-- “Alive” indicators (subtle): shows system can be active without implying deployment) -->
-          <!-- These are UI-style, not claims: they visually suggest instrumentation state -->
-          <rect class="chip" x="230" y="505" width="210" height="26" rx="6"/>
-          <circle class="warnDot" cx="252" cy="518" r="5"/>
-          <text class="mono chipText" x="266" y="522">INSTRUMENTATION</text>
-
-          <rect class="chip" x="455" y="505" width="210" height="26" rx="6"/>
-          <circle class="okDot" cx="477" cy="518" r="5"/>
-          <text class="mono chipText" x="491" y="522">EVIDENCE READY</text>
-
-          <rect class="chip" x="680" y="505" width="210" height="26" rx="6"/>
-          <circle class="okDot" cx="702" cy="518" r="5"/>
-          <text class="mono chipText" x="716" y="522">EXPORT READY</text>
-
-          <rect class="chip" x="905" y="505" width="210" height="26" rx="6"/>
-          <circle class="warnDot" cx="927" cy="518" r="5"/>
-          <text class="mono chipText" x="941" y="522">REVIEW MODE</text>
-
-          <rect class="chip" x="1130" y="505" width="290" height="26" rx="6"/>
-          <circle class="badDot" cx="1152" cy="518" r="5"/>
-          <text class="mono chipText" x="1166" y="522">PUBLIC VIEW (REDACTED)</text>
-        </svg>
-      </div>
-    </div>
-
-    <div class="note">
-      If this renders: next step is exporting the SVG into <span style="font-family:var(--mono)">/figures/rd-flow-skeleton-public-v2.svg</span>
-      and embedding it on <span style="font-family:var(--mono)">reflective-diagnostics.html</span>.
-    </div>
-  </div>
-</body>
-</html>
+    <div class="row">
+      <div class="card">
+        <div class="svg-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="640" viewBox="0 0 1600 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Reflective Diagnostics flow">
+            <defs>
+              <style>
+                .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
