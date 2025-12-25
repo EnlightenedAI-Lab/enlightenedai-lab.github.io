@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RD Diagram Preview (v5 result tray)</title>
+  <title>Reflective Diagnostics — Deterministic Record Flow</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,11 +26,23 @@
 
       --inactiveOpacity:0.22;
       --activeOpacity:1;
+
+      /* Selection (NOT success) */
       --activeStroke:#050505;
       --activeStrokeW:2.5;
 
       --arrowOn:#050505;
       --arrowOff:#8a8a8a;
+
+      /* “Instrument” lift */
+      --liftShadow: 0 14px 26px rgba(0,0,0,0.10), 0 2px 0 rgba(0,0,0,0.04);
+      --liftShadowSoft: 0 10px 22px rgba(0,0,0,0.08), 0 2px 0 rgba(0,0,0,0.03);
+
+      /* Step 6 outcome glow (meaning: crystallized evidence) */
+      --resultGlow: 0 0 0 1px rgba(0,0,0,0.06), 0 18px 40px rgba(0,0,0,0.10);
+      --resultGlowGreen: 0 0 0 1px rgba(0,0,0,0.06), 0 18px 40px rgba(0,0,0,0.10), 0 0 30px rgba(0,204,0,0.10);
+
+      --radius:18px;
     }
 
     *{box-sizing:border-box}
@@ -40,24 +52,29 @@
     h1{ margin:0 0 8px 0; font-size:34px; font-weight:600; letter-spacing:-0.02em; }
     .sub{ font-family:var(--mono); color:var(--muted); font-size:12px; letter-spacing:0.04em; }
 
-    .row{ display:flex; align-items:flex-start; gap:18px; margin-top:18px; }
+    .row{
+      display:flex;
+      align-items:flex-start;
+      gap:18px;
+      margin-top:18px;
+    }
 
     .card{
-      flex:1;
+      flex: 1;
       border:1px solid var(--border);
-      border-radius:18px;
+      border-radius:var(--radius);
       padding:18px;
       background:var(--bg);
     }
 
     .panel{
-      width:360px;
+      width: 360px;
       border:1px solid var(--border);
-      border-radius:18px;
+      border-radius:var(--radius);
       padding:16px;
       background:var(--bg);
       position: sticky;
-      top: 18px;
+      top: 16px;
     }
 
     .panel .kicker{
@@ -69,16 +86,59 @@
       margin-bottom:10px;
     }
 
-    .stepnum{ font-family:var(--mono); font-size:12px; letter-spacing:0.10em; color:var(--muted); margin-bottom:10px; }
-    .steptitle{ font-size:16px; font-weight:700; letter-spacing:-0.01em; margin-bottom:10px; }
-    .steptext{ font-size:13px; color:var(--text); line-height:1.55; }
+    .stepnum{
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:0.10em;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
 
-    .progress{ display:flex; gap:8px; margin:14px 0 10px; align-items:center; }
-    .tick{ width:38px; height:6px; border:1px solid var(--border); border-radius:8px; background:#fff; cursor:pointer; }
-    .tick.on{ border-color:#bdbdbd; background:#f3f3f3; }
-    .tick.active{ border-color:#050505; background:#050505; }
+    .steptitle{
+      font-size:16px;
+      font-weight:700;
+      letter-spacing:-0.01em;
+      margin-bottom:10px;
+    }
 
-    .controls{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+    .steptext{
+      font-family:var(--sans);
+      font-size:13px;
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    /* Progress ticks */
+    .progress{
+      display:flex;
+      gap:8px;
+      margin:14px 0 10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .tick{
+      width:38px;
+      height:6px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      background:#fff;
+      cursor:pointer;
+    }
+    .tick.on{
+      border-color:#bdbdbd;
+      background:#f3f3f3;
+    }
+    .tick.active{
+      border-color:#050505;
+      background:#050505;
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
 
     .btn{
       font-family:var(--mono);
@@ -91,25 +151,25 @@
       border-radius:10px;
       user-select:none;
     }
-    .btn:hover{ border-color:#bdbdbd; }
-
-    .hint{
-      margin-top:12px;
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:0.04em;
-      color:var(--muted);
-      line-height:1.45;
-    }
+    .btn:hover{ border-color: #bdbdbd; }
 
     .svg-wrap{ width:100%; overflow:auto; }
     svg{ display:block; width:100%; height:auto; min-width:1200px; }
 
+    /* Guided emphasis */
     .dim { opacity: var(--inactiveOpacity); transition: opacity 180ms ease; }
     .active { opacity: var(--activeOpacity); transition: opacity 180ms ease; }
 
     .badge { display:none; }
     .badge.show { display:block; }
+
+    /* subtle “float” for active element via drop-shadow filter on SVG groups */
+    /* (JS will toggle .lift on active step group) */
+    .lift{
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,0.16)) drop-shadow(0 2px 0 rgba(0,0,0,0.05));
+      transform: translateY(-1px);
+      transform-origin: center;
+    }
 
     @media (max-width: 980px){
       .row{ flex-direction:column; }
@@ -121,12 +181,12 @@
 <body>
   <div class="wrap">
     <h1>Reflective Diagnostics — Deterministic Record Flow</h1>
-    <div class="sub">GUIDED SEQUENCE • PUBLIC SAFE (NO INTERNAL METRICS) • BUILD: v5</div>
+    <div class="sub">GUIDED SEQUENCE • PUBLIC SAFE (NO INTERNAL METRICS)</div>
 
     <div class="row">
       <div class="card">
         <div class="svg-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Reflective Diagnostics flow">
             <defs>
               <style>
                 .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
@@ -138,225 +198,215 @@
                 .h{font-size:13px;font-weight:700;letter-spacing:0.14em}
                 .t{font-size:12px}
                 .micro{font-size:11px;letter-spacing:0.05em}
-                .tiny{font-size:10px;letter-spacing:0.08em}
 
                 .arrow{stroke:#8a8a8a;stroke-width:2;fill:none}
                 .arrowDash{stroke:#b8b8b8;stroke-width:1.5;fill:none;stroke-dasharray:6 6}
 
-                .pill{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
+                .pill{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5; rx:6}
                 .pillText{font-size:12px;font-weight:600;letter-spacing:0.10em}
                 .okDot{fill:#00cc00}
 
                 .stepbox-hit{fill:transparent; cursor:pointer;}
-                .chip{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.25}
-                .chipText{font-size:11px;font-weight:700;letter-spacing:0.14em}
 
-                .tray{fill:#ffffff;stroke:#ededed;stroke-width:1.25}
-                .trayLine{stroke:#e5e5e5;stroke-width:1}
-                .btnGhost{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.25}
-                .btnGhostText{font-size:11px;font-weight:700;letter-spacing:0.12em}
+                .chip{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.25}
+                .chipText{font-size:12px;font-weight:700;letter-spacing:0.12em}
+
+                .miniBtn{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.25}
+                .miniBtnText{font-size:11px;font-weight:700;letter-spacing:0.10em}
               </style>
 
               <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
                 <path d="M0,0 L10,5 L0,10 Z" fill="#8a8a8a"/>
               </marker>
+
               <marker id="arrowheadOn" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
                 <path d="M0,0 L10,5 L0,10 Z" fill="#050505"/>
               </marker>
+
               <marker id="arrowheadLight" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
                 <path d="M0,0 L10,5 L0,10 Z" fill="#b8b8b8"/>
               </marker>
-
-              <filter id="lift" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000000" flood-opacity="0.10"/>
-                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.10"/>
-              </filter>
-
-              <!-- clip for tray slide -->
-              <clipPath id="trayClip">
-                <rect x="120" y="570" width="1400" height="90" rx="14"/>
-              </clipPath>
             </defs>
 
             <!-- OUTER -->
-            <rect class="frame" x="70" y="40" width="1460" height="640" rx="18"/>
+            <rect class="frame" x="70" y="50" width="1460" height="620" rx="18"/>
 
             <!-- Title -->
-            <text class="mono" x="120" y="102" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
+            <text class="mono" x="120" y="108" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
               Reflective Diagnostics — Deterministic Record Flow (Public Skeleton)
             </text>
-            <text class="monoMuted micro" x="120" y="128">POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED</text>
-            <text class="monoMuted tiny" x="120" y="148">BUILD v5 • 2025-12-25</text>
+            <text class="monoMuted micro" x="120" y="134">POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED</text>
+            <text class="monoMuted micro" x="120" y="156">BUILD v5 • 2026 • PUBLIC PREVIEW</text>
 
-            <!-- AUDIT CHIP -->
-            <g>
-              <rect class="chip" x="1290" y="74" width="210" height="34" rx="8"/>
-              <circle class="okDot" cx="1310" cy="91" r="5"/>
-              <text class="mono chipText" x="1324" y="96">AUDIT MODE ACTIVE</text>
+            <!-- Small “what this view is” note -->
+            <text class="monoMuted micro" x="120" y="188">
+              This view shows the evidence-formation contract (what must exist before any module can report results).
+            </text>
+            <text class="monoMuted micro" x="120" y="208">
+              Interactive regimes + oracle assistance exist downstream and are intentionally not shown here.
+            </text>
+
+            <!-- AUDIT MODE chip (top-right) -->
+            <g id="auditChip">
+              <rect class="chip" x="1248" y="90" width="260" height="34" rx="10"/>
+              <circle class="okDot" cx="1268" cy="107" r="5"/>
+              <text class="mono chipText" x="1282" y="112">AUDIT MODE ACTIVE</text>
             </g>
 
-            <!-- Framing -->
-            <g>
-              <text class="monoMuted" x="120" y="175" style="font-size:13px;">
-                This view shows the evidence formation contract (what must exist before any module can report results).
-              </text>
-              <text class="monoMuted" x="120" y="196" style="font-size:13px;">
-                Interactive regimes + oracle assistance exist downstream and are intentionally not shown here.
-              </text>
-            </g>
-
-            <text class="monoMuted micro" x="120" y="230" id="telemetry">TELEMETRY: CYCLE 0215 • PHASE 01/06 • T+00:00</text>
+            <!-- TELEMETRY line -->
+            <text class="monoMuted micro" x="120" y="242">TELEMETRY: CYCLE 0215 • PHASE 01/06 • T+00:13</text>
 
             <!-- BOXES -->
             <g id="step1" class="dim">
-              <rect id="box1" class="box" x="120" y="280" width="210" height="150" rx="12"/>
-              <rect id="rail1" x="120" y="280" width="6" height="150" rx="12" fill="#000" opacity="0"/>
-              <text class="mono h" x="142" y="320">RECORD INTAKE</text>
-              <text class="monoMuted t" x="142" y="355">stored outputs</text>
-              <text class="monoMuted t" x="142" y="377">transcripts</text>
-              <text class="monoMuted t" x="142" y="399">immutable boundary</text>
+              <rect id="box1" class="box" x="120" y="300" width="210" height="150" rx="12"/>
+              <text class="mono h" x="142" y="340">RECORD INTAKE</text>
+              <text class="monoMuted t" x="142" y="375">stored outputs</text>
+              <text class="monoMuted t" x="142" y="397">transcripts</text>
+              <text class="monoMuted t" x="142" y="419">immutable boundary</text>
+
               <g class="badge" id="badge1">
-                <rect x="128" y="288" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="142" y="303" style="font-size:12px;font-weight:700;">01</text>
+                <rect x="128" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="142" y="323" style="font-size:12px;font-weight:700;">01</text>
               </g>
-              <rect class="stepbox-hit" x="120" y="280" width="210" height="150" rx="12" data-step="0"/>
+              <rect class="stepbox-hit" x="120" y="300" width="210" height="150" rx="12" data-step="0"/>
             </g>
 
             <g id="step2" class="dim">
-              <rect id="box2" class="box" x="358" y="280" width="210" height="150" rx="12"/>
-              <rect id="rail2" x="358" y="280" width="6" height="150" rx="12" fill="#000" opacity="0"/>
-              <text class="mono h" x="380" y="320">CANONICALIZE</text>
-              <text class="monoMuted t" x="380" y="355">schema normalize</text>
-              <text class="monoMuted t" x="380" y="377">span indexing</text>
-              <text class="monoMuted t" x="380" y="399">deterministic transforms</text>
+              <rect id="box2" class="box" x="358" y="300" width="210" height="150" rx="12"/>
+              <text class="mono h" x="380" y="340">CANONICALIZE</text>
+              <text class="monoMuted t" x="380" y="375">schema normalize</text>
+              <text class="monoMuted t" x="380" y="397">span indexing</text>
+              <text class="monoMuted t" x="380" y="419">deterministic transforms</text>
+
               <g class="badge" id="badge2">
-                <rect x="366" y="288" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="380" y="303" style="font-size:12px;font-weight:700;">02</text>
+                <rect x="366" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="380" y="323" style="font-size:12px;font-weight:700;">02</text>
               </g>
-              <rect class="stepbox-hit" x="358" y="280" width="210" height="150" rx="12" data-step="1"/>
+              <rect class="stepbox-hit" x="358" y="300" width="210" height="150" rx="12" data-step="1"/>
             </g>
 
             <g id="step3" class="dim">
-              <rect id="box3" class="box" x="596" y="280" width="210" height="150" rx="12"/>
-              <rect id="rail3" x="596" y="280" width="6" height="150" rx="12" fill="#000" opacity="0"/>
-              <text class="mono h" x="618" y="320">LEXICON BIND</text>
-              <text class="monoMuted t" x="618" y="355">frozen term map</text>
-              <text class="monoMuted t" x="618" y="377">versioned semantics</text>
-              <text class="monoMuted t" x="618" y="399">pre-measure constraint</text>
+              <rect id="box3" class="box" x="596" y="300" width="210" height="150" rx="12"/>
+              <text class="mono h" x="618" y="340">LEXICON BIND</text>
+              <text class="monoMuted t" x="618" y="375">frozen term map</text>
+              <text class="monoMuted t" x="618" y="397">versioned semantics</text>
+              <text class="monoMuted t" x="618" y="419">pre-measure constraint</text>
+
               <g class="badge" id="badge3">
-                <rect x="604" y="288" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="618" y="303" style="font-size:12px;font-weight:700;">03</text>
+                <rect x="604" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="618" y="323" style="font-size:12px;font-weight:700;">03</text>
               </g>
-              <rect class="stepbox-hit" x="596" y="280" width="210" height="150" rx="12" data-step="2"/>
+              <rect class="stepbox-hit" x="596" y="300" width="210" height="150" rx="12" data-step="2"/>
             </g>
 
             <g id="step4" class="dim">
-              <rect id="box4" class="box" x="834" y="280" width="210" height="150" rx="12"/>
-              <rect id="rail4" x="834" y="280" width="6" height="150" rx="12" fill="#000" opacity="0"/>
-              <text class="mono h" x="856" y="320">STRUCTURAL</text>
-              <text class="mono h" x="856" y="340">DIAGNOSTICS</text>
-              <text class="monoMuted t" x="856" y="370">invariants</text>
-              <text class="monoMuted t" x="856" y="392">structure-only signals</text>
+              <rect id="box4" class="box" x="834" y="300" width="210" height="150" rx="12"/>
+              <text class="mono h" x="856" y="340">STRUCTURAL</text>
+              <text class="mono h" x="856" y="360">DIAGNOSTICS</text>
+              <text class="monoMuted t" x="856" y="390">invariants</text>
+              <text class="monoMuted t" x="856" y="412">structure-only signals</text>
+
               <g class="badge" id="badge4">
-                <rect x="842" y="288" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="856" y="303" style="font-size:12px;font-weight:700;">04</text>
+                <rect x="842" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="856" y="323" style="font-size:12px;font-weight:700;">04</text>
               </g>
-              <rect class="stepbox-hit" x="834" y="280" width="210" height="150" rx="12" data-step="3"/>
+              <rect class="stepbox-hit" x="834" y="300" width="210" height="150" rx="12" data-step="3"/>
             </g>
 
             <g id="step5" class="dim">
-              <rect id="box5" class="box" x="1072" y="280" width="210" height="150" rx="12"/>
-              <rect id="rail5" x="1072" y="280" width="6" height="150" rx="12" fill="#000" opacity="0"/>
-              <text class="mono h" x="1094" y="320">AUDIT PACKET</text>
-              <text class="monoMuted t" x="1094" y="355">hash + provenance</text>
-              <text class="monoMuted t" x="1094" y="377">links to evidence</text>
-              <text class="monoMuted t" x="1094" y="399">replay references</text>
+              <rect id="box5" class="box" x="1072" y="300" width="210" height="150" rx="12"/>
+              <text class="mono h" x="1094" y="340">AUDIT PACKET</text>
+              <text class="monoMuted t" x="1094" y="375">hash + provenance</text>
+              <text class="monoMuted t" x="1094" y="397">links to evidence</text>
+              <text class="monoMuted t" x="1094" y="419">replay references</text>
+
               <g class="badge" id="badge5">
-                <rect x="1080" y="288" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="1094" y="303" style="font-size:12px;font-weight:700;">05</text>
+                <rect x="1080" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="1094" y="323" style="font-size:12px;font-weight:700;">05</text>
               </g>
-              <rect class="stepbox-hit" x="1072" y="280" width="210" height="150" rx="12" data-step="4"/>
+              <rect class="stepbox-hit" x="1072" y="300" width="210" height="150" rx="12" data-step="4"/>
             </g>
 
             <g id="step6" class="dim">
-              <rect id="box6" class="box" x="1310" y="280" width="210" height="150" rx="12"/>
-              <rect id="rail6" x="1310" y="280" width="6" height="150" rx="12" fill="#000" opacity="0"/>
-              <text class="mono h" x="1332" y="320">EVIDENCE</text>
-              <text class="mono h" x="1332" y="340">ARTIFACTS</text>
-              <text class="monoMuted t" x="1332" y="355">screenshots</text>
-              <text class="monoMuted t" x="1332" y="377">CSV / JSON export</text>
-              <text class="monoMuted t" x="1332" y="399">auditable bundle</text>
+              <rect id="box6" class="box" x="1310" y="300" width="210" height="150" rx="12"/>
+              <text class="mono h" x="1332" y="340">EVIDENCE</text>
+              <text class="mono h" x="1332" y="360">ARTIFACTS</text>
+              <text class="monoMuted t" x="1332" y="375">screenshots</text>
+              <text class="monoMuted t" x="1332" y="397">CSV / JSON export</text>
+              <text class="monoMuted t" x="1332" y="419">auditable bundle</text>
+
               <g class="badge" id="badge6">
-                <rect x="1318" y="288" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="1332" y="303" style="font-size:12px;font-weight:700;">06</text>
+                <rect x="1318" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="1332" y="323" style="font-size:12px;font-weight:700;">06</text>
               </g>
-              <rect class="stepbox-hit" x="1310" y="280" width="210" height="150" rx="12" data-step="5"/>
+              <rect class="stepbox-hit" x="1310" y="300" width="210" height="150" rx="12" data-step="5"/>
             </g>
 
             <!-- ARROWS -->
-            <path id="a12" class="arrow dim" marker-end="url(#arrowhead)" d="M330 365 L358 365"/>
-            <path id="a23" class="arrow dim" marker-end="url(#arrowhead)" d="M568 365 L596 365"/>
-            <path id="a34" class="arrow dim" marker-end="url(#arrowhead)" d="M806 365 L834 365"/>
-            <path id="a45" class="arrow dim" marker-end="url(#arrowhead)" d="M1044 365 L1072 365"/>
-            <path id="a56" class="arrow dim" marker-end="url(#arrowhead)" d="M1282 365 L1310 365"/>
+            <path id="a12" class="arrow dim" marker-end="url(#arrowhead)" d="M330 385 L358 385"/>
+            <path id="a23" class="arrow dim" marker-end="url(#arrowhead)" d="M568 385 L596 385"/>
+            <path id="a34" class="arrow dim" marker-end="url(#arrowhead)" d="M806 385 L834 385"/>
+            <path id="a45" class="arrow dim" marker-end="url(#arrowhead)" d="M1044 385 L1072 385"/>
+            <path id="a56" class="arrow dim" marker-end="url(#arrowhead)" d="M1282 385 L1310 385"/>
 
-            <!-- Lexicon side -->
+            <!-- Canonical Lexicon side input -->
             <g id="lexSide" class="dim">
-              <rect class="boxSoft" x="596" y="240" width="210" height="28" rx="8"/>
-              <text class="monoMuted micro" x="612" y="259">CANONICAL LEXICON (FROZEN)</text>
-              <path class="arrowDash" marker-end="url(#arrowheadLight)" d="M701 268 L701 280"/>
+              <rect class="boxSoft" x="596" y="260" width="210" height="28" rx="8"/>
+              <text class="monoMuted micro" x="612" y="279">CANONICAL LEXICON (FROZEN)</text>
+              <path id="lexArrow" class="arrowDash" marker-end="url(#arrowheadLight)" d="M701 288 L701 300"/>
             </g>
 
-            <!-- STATUS -->
-            <rect class="frame" x="120" y="460" width="1400" height="90" rx="14" style="stroke:#ededed"/>
-            <text class="monoMuted micro" x="142" y="495">STATUS:</text>
+            <!-- Status -->
+            <rect class="frame" x="120" y="520" width="1400" height="96" rx="14" style="stroke:#ededed"/>
+            <text class="monoMuted micro" x="142" y="558">STATUS:</text>
 
-            <rect class="pill" x="230" y="480" width="230" height="44" rx="6"/><circle class="okDot" cx="252" cy="502" r="5"/>
-            <text class="mono pillText" x="266" y="507">DETERMINISTIC</text>
+            <rect class="pill" x="230" y="540" width="230" height="44"/><circle class="okDot" cx="252" cy="562" r="5"/>
+            <text class="mono pillText" x="266" y="567">DETERMINISTIC</text>
 
-            <rect class="pill" x="475" y="480" width="230" height="44" rx="6"/><circle class="okDot" cx="497" cy="502" r="5"/>
-            <text class="mono pillText" x="511" y="507">LEXICON-BOUND</text>
+            <rect class="pill" x="475" y="540" width="230" height="44"/><circle class="okDot" cx="497" cy="562" r="5"/>
+            <text class="mono pillText" x="511" y="567">LEXICON-BOUND</text>
 
-            <rect class="pill" x="720" y="480" width="260" height="44" rx="6"/><circle class="okDot" cx="742" cy="502" r="5"/>
-            <text class="mono pillText" x="756" y="507">RECORD-GROUNDED</text>
+            <rect class="pill" x="720" y="540" width="260" height="44"/><circle class="okDot" cx="742" cy="562" r="5"/>
+            <text class="mono pillText" x="756" y="567">RECORD-GROUNDED</text>
 
-            <rect class="pill" x="995" y="480" width="240" height="44" rx="6"/><circle class="okDot" cx="1017" cy="502" r="5"/>
-            <text class="mono pillText" x="1031" y="507">SPAN-TRACEABLE</text>
+            <rect class="pill" x="995" y="540" width="240" height="44"/><circle class="okDot" cx="1017" cy="562" r="5"/>
+            <text class="mono pillText" x="1031" y="567">SPAN-TRACEABLE</text>
 
-            <rect class="pill" x="1250" y="480" width="240" height="44" rx="6"/><circle class="okDot" cx="1272" cy="502" r="5"/>
-            <text class="mono pillText" x="1286" y="507">REPRODUCIBLE</text>
+            <rect class="pill" x="1250" y="540" width="240" height="44"/><circle class="okDot" cx="1272" cy="562" r="5"/>
+            <text class="mono pillText" x="1286" y="567">REPRODUCIBLE</text>
 
-            <!-- RESULT TRAY AREA (appears only at step 6) -->
-            <g clip-path="url(#trayClip)">
-              <!-- The tray group slides in from below via translateY -->
-              <g id="resultTray" transform="translate(0,120)" opacity="0">
-                <rect class="tray" x="120" y="570" width="1400" height="90" rx="14"/>
-                <text class="mono" x="142" y="602" style="font-size:12px;font-weight:700;letter-spacing:0.14em;">AUDIT PACKET PREVIEW</text>
-                <text class="monoMuted micro" x="142" y="622">EXPORT BUNDLE (REDACTED) • CONTENT HASHES PARTIAL • METRICS OMITTED</text>
+            <!-- RESULT TRAY (appears at step 6) -->
+            <g id="resultTray" style="opacity:0; transition: opacity 220ms ease;">
+              <rect x="120" y="630" width="1400" height="56" rx="12" fill="#fff" stroke="#ededed" stroke-width="1.25"/>
+              <text class="mono" x="142" y="664" style="font-size:12px;font-weight:800;letter-spacing:0.14em;">AUDIT PACKET PREVIEW</text>
 
-                <!-- left column -->
-                <text class="monoMuted" x="520" y="604" style="font-size:12px;">record_id:</text>
-                <text class="mono" x="600" y="604" style="font-size:12px;font-weight:700;">RD-REC-0215-0A7C</text>
-                <text class="monoMuted" x="520" y="626" style="font-size:12px;">hash:</text>
-                <text class="mono" x="600" y="626" style="font-size:12px;font-weight:700;">sha256: 9f2c…b18e</text>
+              <!-- left: redaction-safe identifiers -->
+              <text class="monoMuted" x="380" y="663" style="font-size:11px;letter-spacing:0.05em;">
+                record_id: <tspan class="mono" style="font-weight:700;">RD-REC-0215-0A7C</tspan> •
+                hashes: <tspan class="mono" style="font-weight:700;">sha256: 9f2c…b18e</tspan>
+              </text>
 
-                <!-- artifacts list -->
-                <text class="monoMuted" x="840" y="604" style="font-size:12px;">artifacts:</text>
-                <text class="mono" x="930" y="604" style="font-size:12px;font-weight:700;">3 screenshots • 2 tables • 1 json</text>
-                <text class="monoMuted" x="840" y="626" style="font-size:12px;">trace:</text>
-                <text class="mono" x="930" y="626" style="font-size:12px;font-weight:700;">metric → span → source</text>
+              <!-- center: what’s inside -->
+              <text class="monoMuted" x="900" y="663" style="font-size:11px;letter-spacing:0.05em;">
+                artifacts: <tspan class="mono" style="font-weight:700;">3 screenshots</tspan> •
+                <tspan class="mono" style="font-weight:700;">2 tables</tspan> •
+                <tspan class="mono" style="font-weight:700;">1 json</tspan>
+                • trace: <tspan class="mono" style="font-weight:700;">metric → span → source</tspan>
+              </text>
 
-                <!-- buttons (disabled vibe) -->
-                <g opacity="0.55">
-                  <rect class="btnGhost" x="1300" y="592" width="98" height="32" rx="8"/>
-                  <text class="mono btnGhostText" x="1323" y="613">EXPORT</text>
-                  <rect class="btnGhost" x="1410" y="592" width="98" height="32" rx="8"/>
-                  <text class="mono btnGhostText" x="1432" y="613">VIEW</text>
-                </g>
+              <!-- right: faux buttons -->
+              <g transform="translate(1320,642)">
+                <rect class="miniBtn" x="0" y="0" width="88" height="30" rx="10"/>
+                <text class="mono miniBtnText" x="18" y="20">EXPORT</text>
+              </g>
+              <g transform="translate(1420,642)">
+                <rect class="miniBtn" x="0" y="0" width="76" height="30" rx="10"/>
+                <text class="mono miniBtnText" x="22" y="20">VIEW</text>
               </g>
             </g>
 
-            <text class="monoMuted tiny" x="120" y="676">OMITTED: interactive modules • oracle assistance • analytic regimes • live API surfaces</text>
+            <!-- Omitted line -->
+            <text class="monoMuted micro" x="120" y="706">OMITTED: interactive modules • oracle assistance • analytic regimes • live API surfaces</text>
           </svg>
         </div>
       </div>
@@ -364,6 +414,7 @@
       <div class="panel">
         <div class="kicker">guided sequence</div>
         <div class="stepnum" id="stepNum">STEP 1 / 6</div>
+
         <div class="progress" id="progress"></div>
 
         <div class="steptitle" id="stepTitle">Record Intake</div>
@@ -378,55 +429,74 @@
           <button class="btn" id="pauseBtn">Pause</button>
           <button class="btn" id="restartBtn">Restart</button>
         </div>
-
-        <div class="hint">
-          Keys: ← / → step • Space auto/pause • R restart<br/>
-          Step 6 reveals an audit-packet preview.
-        </div>
       </div>
     </div>
   </div>
 
   <script>
     const steps = [
-      { id:"step1", box:"box1", rail:"rail1", badge:"badge1", arrow:null,
-        title:"Record Intake",
-        text:"Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis."
+      {
+        id: "step1",
+        box: "box1",
+        badge: "badge1",
+        arrow: null,
+        title: "Record Intake",
+        text: "Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis."
       },
-      { id:"step2", box:"box2", rail:"rail2", badge:"badge2", arrow:"a12",
-        title:"Canonicalize",
-        text:"Deterministic normalization and span indexing. Converts raw artifacts into a stable measurement substrate."
+      {
+        id: "step2",
+        box: "box2",
+        badge: "badge2",
+        arrow: "a12",
+        title: "Canonicalize",
+        text: "Deterministic normalization and span indexing. Converts raw artifacts into a stable measurement substrate."
       },
-      { id:"step3", box:"box3", rail:"rail3", badge:"badge3", arrow:"a23",
-        title:"Lexicon Bind",
-        text:"Binds records to a frozen, versioned term and schema specification. Constrains measurement semantics pre-computation."
+      {
+        id: "step3",
+        box: "box3",
+        badge: "badge3",
+        arrow: "a23",
+        title: "Lexicon Bind",
+        text: "Binds records to a frozen, versioned term and schema specification. Constrains measurement semantics pre-computation."
       },
-      { id:"step4", box:"box4", rail:"rail4", badge:"badge4", arrow:"a34",
-        title:"Structural Diagnostics",
-        text:"Computes structure-only signals (invariants, integrity checks) without truth, intent, or policy judgment."
+      {
+        id: "step4",
+        box: "box4",
+        badge: "badge4",
+        arrow: "a34",
+        title: "Structural Diagnostics",
+        text: "Computes structure-only signals (invariants, integrity checks) without truth, intent, or policy judgment."
       },
-      { id:"step5", box:"box5", rail:"rail5", badge:"badge5", arrow:"a45",
-        title:"Audit Packet",
-        text:"Produces a traceable audit packet: provenance, hashes, evidence links, and replay references."
+      {
+        id: "step5",
+        box: "box5",
+        badge: "badge5",
+        arrow: "a45",
+        title: "Audit Packet",
+        text: "Produces a traceable audit packet: provenance, hashes, evidence links, and replay references."
       },
-      { id:"step6", box:"box6", rail:"rail6", badge:"badge6", arrow:"a56",
-        title:"Evidence Artifacts",
-        text:"Exports an auditable bundle (screenshots + CSV/JSON) suitable for controlled technical review."
+      {
+        id: "step6",
+        box: "box6",
+        badge: "badge6",
+        arrow: "a56",
+        title: "Evidence Artifacts",
+        text: "Exports an auditable bundle (screenshots + CSV/JSON) suitable for controlled technical review."
       }
     ];
 
     let idx = 0;
     let timer = null;
-    let t0 = Date.now();
     const intervalMs = 1900;
 
     const stepNum = document.getElementById("stepNum");
     const stepTitle = document.getElementById("stepTitle");
     const stepText = document.getElementById("stepText");
     const progress = document.getElementById("progress");
-    const telemetry = document.getElementById("telemetry");
-    const tray = document.getElementById("resultTray");
 
+    const resultTray = document.getElementById("resultTray");
+
+    // Build ticks
     const ticks = steps.map((_, i) => {
       const t = document.createElement("div");
       t.className = "tick";
@@ -436,14 +506,18 @@
       return t;
     });
 
-    function setClass(el, add, remove){ if(!el) return; el.classList.add(add); el.classList.remove(remove); }
+    function setClass(el, add, remove){
+      if(!el) return;
+      el.classList.add(add);
+      el.classList.remove(remove);
+    }
 
     function resetBoxStrokes(){
       steps.forEach(s => {
         const box = document.getElementById(s.box);
-        const rail = document.getElementById(s.rail);
-        if(box){ box.style.stroke="#cfcfcf"; box.style.strokeWidth="1.5"; box.style.filter="none"; }
-        if(rail) rail.setAttribute("opacity","0");
+        if(!box) return;
+        box.style.stroke = "#cfcfcf";
+        box.style.strokeWidth = "1.5";
       });
     }
 
@@ -456,64 +530,53 @@
       });
     }
 
-    function resetBadges(){
-      steps.forEach(s => document.getElementById(s.badge).classList.remove("show"));
+    function clearLift(){
+      steps.forEach(s => {
+        const g = document.getElementById(s.id);
+        if(g) g.classList.remove("lift");
+      });
     }
 
-    function fmtTplus(ms){
-      const sec = Math.max(0, Math.floor(ms/1000));
-      const m = Math.floor(sec/60);
-      const s = String(sec%60).padStart(2,"0");
-      return `T+${String(m).padStart(2,"0")}:${s}`;
-    }
-
-    function showTray(on){
-      if(!tray) return;
-      // slide animation (simple tween)
-      const startY = on ? 120 : 0;
-      const endY   = on ? 0   : 120;
-      const startO = on ? 0   : 1;
-      const endO   = on ? 1   : 0;
-
-      const tStart = performance.now();
-      const dur = 320;
-
-      function tick(now){
-        const p = Math.min(1, (now - tStart)/dur);
-        const ease = 1 - Math.pow(1-p, 3);
-        const y = startY + (endY - startY)*ease;
-        const o = startO + (endO - startO)*ease;
-        tray.setAttribute("transform", `translate(0,${y})`);
-        tray.setAttribute("opacity", String(o));
-        if(p < 1) requestAnimationFrame(tick);
+    function showResultTray(show){
+      if(!resultTray) return;
+      resultTray.style.opacity = show ? "1" : "0";
+      // subtle “green meaning” only at step 6
+      const trayRect = resultTray.querySelector("rect");
+      if(trayRect){
+        trayRect.style.filter = show ? "drop-shadow(0 18px 40px rgba(0,0,0,0.10)) drop-shadow(0 0 22px rgba(0,204,0,0.10))" : "none";
       }
-      requestAnimationFrame(tick);
     }
 
     function activate(i){
       idx = (i + steps.length) % steps.length;
 
-      steps.forEach(s => setClass(document.getElementById(s.id), "dim", "active"));
+      // Dim all groups
+      steps.forEach(s => {
+        setClass(document.getElementById(s.id), "dim", "active");
+        document.getElementById(s.badge).classList.remove("show");
+      });
       ["a12","a23","a34","a45","a56"].forEach(a => setClass(document.getElementById(a), "dim", "active"));
       setClass(document.getElementById("lexSide"), "dim", "active");
 
       resetBoxStrokes();
       resetArrows();
-      resetBadges();
+      clearLift();
 
+      // Activate current
       const s = steps[idx];
-      setClass(document.getElementById(s.id), "active", "dim");
+      const g = document.getElementById(s.id);
+      setClass(g, "active", "dim");
+      g.classList.add("lift");
       document.getElementById(s.badge).classList.add("show");
 
+      // Thicken active box border (selection only)
       const box = document.getElementById(s.box);
-      const rail = document.getElementById(s.rail);
       if(box){
         box.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--activeStroke").trim() || "#050505";
         box.style.strokeWidth = getComputedStyle(document.documentElement).getPropertyValue("--activeStrokeW").trim() || "2.5";
-        box.style.filter = "url(#lift)";
       }
-      if(rail) rail.setAttribute("opacity","0.85");
 
+      // Light arrow into current step (if any)
       if(s.arrow){
         const a = document.getElementById(s.arrow);
         if(a){
@@ -523,37 +586,55 @@
         }
       }
 
+      // Lexicon side only during step 3
       if(s.id === "step3"){
         setClass(document.getElementById("lexSide"), "active", "dim");
       }
 
+      // Result tray only at step 6
+      showResultTray(s.id === "step6");
+
+      // Panel
       stepNum.textContent = `STEP ${idx+1} / ${steps.length}`;
       stepTitle.textContent = s.title;
       stepText.textContent = s.text;
 
+      // Progress ticks
       ticks.forEach((t, j) => {
         t.classList.toggle("on", j <= idx);
         t.classList.toggle("active", j === idx);
       });
-
-      const tplus = fmtTplus(Date.now() - t0);
-      telemetry.textContent = `TELEMETRY: CYCLE 0215 • PHASE ${String(idx+1).padStart(2,"0")}/${String(steps.length).padStart(2,"0")} • ${tplus}`;
-
-      // RESULT TRAY ONLY ON STEP 6
-      showTray(s.id === "step6");
     }
 
     function next(){ activate(idx + 1); }
     function prev(){ activate(idx - 1); }
-    function auto(){ if(timer) return; timer = setInterval(next, intervalMs); }
-    function pause(){ if(!timer) return; clearInterval(timer); timer = null; }
 
+    function auto(){
+      if(timer) return;
+      timer = setInterval(next, intervalMs);
+    }
+
+    function pause(){
+      if(!timer) return;
+      clearInterval(timer);
+      timer = null;
+    }
+
+    // Buttons
     document.getElementById("nextBtn").addEventListener("click", next);
     document.getElementById("prevBtn").addEventListener("click", prev);
     document.getElementById("autoBtn").addEventListener("click", auto);
     document.getElementById("pauseBtn").addEventListener("click", pause);
     document.getElementById("restartBtn").addEventListener("click", () => activate(0));
 
+    // Keyboard (fast demo)
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "ArrowRight") next();
+      if(e.key === "ArrowLeft") prev();
+      if(e.key.toLowerCase() === "r") activate(0);
+    });
+
+    // Click boxes to jump
     document.querySelectorAll(".stepbox-hit").forEach(el => {
       el.addEventListener("click", (e) => {
         const n = Number(e.target.getAttribute("data-step"));
@@ -561,21 +642,8 @@
       });
     });
 
-    document.addEventListener("keydown", (e) => {
-      if(e.key === "ArrowRight"){ next(); }
-      else if(e.key === "ArrowLeft"){ prev(); }
-      else if(e.key === " "){
-        e.preventDefault();
-        timer ? pause() : auto();
-      }
-      else if(e.key.toLowerCase() === "r"){ activate(0); }
-    });
-
+    // Init
     activate(0);
-    setInterval(() => {
-      const tplus = fmtTplus(Date.now() - t0);
-      telemetry.textContent = `TELEMETRY: CYCLE 0215 • PHASE ${String(idx+1).padStart(2,"0")}/${String(steps.length).padStart(2,"0")} • ${tplus}`;
-    }, 1000);
   </script>
 </body>
 </html>
