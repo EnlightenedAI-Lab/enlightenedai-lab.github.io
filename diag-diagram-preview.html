@@ -30,6 +30,9 @@
       --activeStrokeW:2.5;
       --arrowOn:#050505;
       --arrowOff:#8a8a8a;
+
+      /* Lift tuning */
+      --liftY:-4px;
     }
 
     *{box-sizing:border-box}
@@ -147,6 +150,9 @@
     .badge { display:none; }
     .badge.show { display:block; }
 
+    /* --- ACTIVE "FLOAT" EFFECT (instrument lift, not glow) --- */
+    svg .lift-shadow { filter: url(#liftShadow); }
+
     @media (max-width: 980px){
       .row{ flex-direction:column; }
       .panel{ width:100%; }
@@ -185,6 +191,12 @@
                 .stepbox-hit{fill:transparent; cursor:pointer;}
               </style>
 
+              <!-- Lift shadow filter -->
+              <filter id="liftShadow" x="-30%" y="-30%" width="160%" height="180%">
+                <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000000" flood-opacity="0.10"/>
+                <feDropShadow dx="0" dy="2"  stdDeviation="0.5" flood-color="#000000" flood-opacity="0.10"/>
+              </filter>
+
               <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
                 <path d="M0,0 L10,5 L0,10 Z" fill="#8a8a8a"/>
               </marker>
@@ -210,6 +222,7 @@
             <!-- BOXES -->
             <g id="step1" class="dim">
               <rect id="box1" class="box" x="120" y="190" width="210" height="150" rx="12"/>
+              <rect id="rail1" x="120" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
               <text class="mono h" x="142" y="230">RECORD INTAKE</text>
               <text class="monoMuted t" x="142" y="265">stored outputs</text>
               <text class="monoMuted t" x="142" y="287">transcripts</text>
@@ -224,6 +237,7 @@
 
             <g id="step2" class="dim">
               <rect id="box2" class="box" x="358" y="190" width="210" height="150" rx="12"/>
+              <rect id="rail2" x="358" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
               <text class="mono h" x="380" y="230">CANONICALIZE</text>
               <text class="monoMuted t" x="380" y="265">schema normalize</text>
               <text class="monoMuted t" x="380" y="287">span indexing</text>
@@ -238,6 +252,7 @@
 
             <g id="step3" class="dim">
               <rect id="box3" class="box" x="596" y="190" width="210" height="150" rx="12"/>
+              <rect id="rail3" x="596" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
               <text class="mono h" x="618" y="230">LEXICON BIND</text>
               <text class="monoMuted t" x="618" y="265">frozen term map</text>
               <text class="monoMuted t" x="618" y="287">versioned semantics</text>
@@ -252,6 +267,7 @@
 
             <g id="step4" class="dim">
               <rect id="box4" class="box" x="834" y="190" width="210" height="150" rx="12"/>
+              <rect id="rail4" x="834" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
               <text class="mono h" x="856" y="230">STRUCTURAL</text>
               <text class="mono h" x="856" y="250">DIAGNOSTICS</text>
               <text class="monoMuted t" x="856" y="280">invariants</text>
@@ -266,6 +282,7 @@
 
             <g id="step5" class="dim">
               <rect id="box5" class="box" x="1072" y="190" width="210" height="150" rx="12"/>
+              <rect id="rail5" x="1072" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
               <text class="mono h" x="1094" y="230">AUDIT PACKET</text>
               <text class="monoMuted t" x="1094" y="265">hash + provenance</text>
               <text class="monoMuted t" x="1094" y="287">links to evidence</text>
@@ -280,6 +297,7 @@
 
             <g id="step6" class="dim">
               <rect id="box6" class="box" x="1310" y="190" width="210" height="150" rx="12"/>
+              <rect id="rail6" x="1310" y="190" width="6" height="150" rx="12" fill="#050505" opacity="0"/>
               <text class="mono h" x="1332" y="230">EVIDENCE</text>
               <text class="mono h" x="1332" y="250">ARTIFACTS</text>
               <text class="monoMuted t" x="1332" y="265">screenshots</text>
@@ -354,54 +372,18 @@
 
   <script>
     const steps = [
-      {
-        id: "step1",
-        box: "box1",
-        badge: "badge1",
-        arrow: null,
-        title: "Record Intake",
-        text: "Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis."
-      },
-      {
-        id: "step2",
-        box: "box2",
-        badge: "badge2",
-        arrow: "a12",
-        title: "Canonicalize",
-        text: "Deterministic normalization and span indexing. Converts raw artifacts into a stable measurement substrate."
-      },
-      {
-        id: "step3",
-        box: "box3",
-        badge: "badge3",
-        arrow: "a23",
-        title: "Lexicon Bind",
-        text: "Binds records to a frozen, versioned term and schema specification. Constrains measurement semantics pre-computation."
-      },
-      {
-        id: "step4",
-        box: "box4",
-        badge: "badge4",
-        arrow: "a34",
-        title: "Structural Diagnostics",
-        text: "Computes structure-only signals (invariants, integrity checks) without truth, intent, or policy judgment."
-      },
-      {
-        id: "step5",
-        box: "box5",
-        badge: "badge5",
-        arrow: "a45",
-        title: "Audit Packet",
-        text: "Produces a traceable audit packet: provenance, hashes, evidence links, and replay references."
-      },
-      {
-        id: "step6",
-        box: "box6",
-        badge: "badge6",
-        arrow: "a56",
-        title: "Evidence Artifacts",
-        text: "Exports an auditable bundle (screenshots + CSV/JSON) suitable for controlled technical review."
-      }
+      { id:"step1", box:"box1", badge:"badge1", arrow:null,  title:"Record Intake",
+        text:"Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis." },
+      { id:"step2", box:"box2", badge:"badge2", arrow:"a12", title:"Canonicalize",
+        text:"Deterministic normalization and span indexing. Converts raw artifacts into a stable measurement substrate." },
+      { id:"step3", box:"box3", badge:"badge3", arrow:"a23", title:"Lexicon Bind",
+        text:"Binds records to a frozen, versioned term and schema specification. Constrains measurement semantics pre-computation." },
+      { id:"step4", box:"box4", badge:"badge4", arrow:"a34", title:"Structural Diagnostics",
+        text:"Computes structure-only signals (invariants, integrity checks) without truth, intent, or policy judgment." },
+      { id:"step5", box:"box5", badge:"badge5", arrow:"a45", title:"Audit Packet",
+        text:"Produces a traceable audit packet: provenance, hashes, evidence links, and replay references." },
+      { id:"step6", box:"box6", badge:"badge6", arrow:"a56", title:"Evidence Artifacts",
+        text:"Exports an auditable bundle (screenshots + CSV/JSON) suitable for controlled technical review." }
     ];
 
     let idx = 0;
@@ -435,6 +417,7 @@
         if(!box) return;
         box.style.stroke = "#cfcfcf";
         box.style.strokeWidth = "1.5";
+        box.classList.remove("lift-shadow");
       });
     }
 
@@ -445,6 +428,25 @@
         a.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--arrowOff").trim() || "#8a8a8a";
         a.setAttribute("marker-end","url(#arrowhead)");
       });
+    }
+
+    function clearLift(){
+      steps.forEach((s, i) => {
+        const g = document.getElementById(s.id);
+        const rail = document.getElementById(`rail${i+1}`);
+        if (g) g.setAttribute("transform", "translate(0 0)");
+        if (rail) rail.setAttribute("opacity", "0");
+      });
+    }
+
+    function applyLift(i){
+      const s = steps[i];
+      const g = document.getElementById(s.id);
+      const box = document.getElementById(s.box);
+      const rail = document.getElementById(`rail${i+1}`);
+      if (g) g.setAttribute("transform", "translate(0 -4)");
+      if (box) box.classList.add("lift-shadow");
+      if (rail) rail.setAttribute("opacity", "1");
     }
 
     function activate(i){
@@ -460,11 +462,14 @@
 
       resetBoxStrokes();
       resetArrows();
+      clearLift();
 
       // Activate current
       const s = steps[idx];
       setClass(document.getElementById(s.id), "active", "dim");
       document.getElementById(s.badge).classList.add("show");
+
+      applyLift(idx);
 
       // Thicken active box border
       const box = document.getElementById(s.box);
