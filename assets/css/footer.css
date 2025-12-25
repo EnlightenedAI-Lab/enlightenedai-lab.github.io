@@ -5,7 +5,7 @@
 /* Scoped Container */
 #system-footer {
     width: 100%;
-    margin-top: 120px; /* Increased separation */
+    margin-top: 120px;
     padding: 64px 0;
     background-color: var(--bg-color);
     color: var(--text-main);
@@ -17,7 +17,7 @@
     transition: background-color 0.2s, color 0.2s;
 }
 
-/* Illumination Line (Subtle Gradient Glow) */
+/* Illumination Line */
 #system-footer .footer-illumination {
     position: absolute;
     top: -1px;
@@ -84,7 +84,7 @@
     padding: 14px 18px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background: transparent; /* Allows bg color to pass through */
+    background: transparent;
     color: var(--text-main);
     text-decoration: none;
     transition: all 0.2s ease;
@@ -99,8 +99,7 @@
 }
 
 /* Interactive Card Hover Effects */
-#system-footer .footer-card.interactive:hover,
-#system-footer a.footer-card:hover {
+#system-footer .footer-card.interactive:hover {
     border-color: var(--text-muted);
     transform: translateY(-2px);
     background: rgba(128, 128, 128, 0.03);
