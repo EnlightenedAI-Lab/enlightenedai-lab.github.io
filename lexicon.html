@@ -36,10 +36,21 @@
             
             /* SIGNALS - HIGH CONTRAST */
             --signal-enforced: #00cc00;  /* Pure Green */
-            --signal-eval: #00d7ff;      /* Bright Cyan (Blue-Green) */
+            --signal-eval: #00d7ff;      /* Bright Cyan */
             --signal-struct: #cccccc;
-            --signal-blue: #0066ff;      /* Added for footer dot */
-            --signal-red: #cc0000;       /* Added for audit fail */
+            --signal-blue: #0066ff;      
+            --signal-red: #cc0000;       
+
+            /* VIEW MODE COLORS */
+            --mode-diff-del-bg: #ffebeb;
+            --mode-diff-del-text: #cc0000;
+            --mode-diff-ins-bg: #e6ffec;
+            --mode-diff-ins-text: #006600;
+
+            /* DIAGRAM SPACING VARIABLES */
+            --diag-gap-lg: 24px;
+            --diag-gap-md: 16px;
+            --diag-gap-sm: 10px;
         }
 
         /* DARK MODE */
@@ -57,10 +68,16 @@
             --panel-hover-bg: #e0e0e0;
             --panel-hover-text: #000;
             
-            /* SIGNALS - HIGH CONTRAST */
+            /* SIGNALS */
             --signal-enforced: #00cc00;
-            --signal-eval: #00eaff;      /* Neon Cyan */
+            --signal-eval: #00eaff;      
             --signal-struct: #333333;
+
+            /* DIFF COLORS DARK */
+            --mode-diff-del-bg: #330000;
+            --mode-diff-del-text: #ff6666;
+            --mode-diff-ins-bg: #003300;
+            --mode-diff-ins-text: #66ff66;
         }
 
         * { box-sizing: border-box; }
@@ -126,18 +143,33 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
-        /* --- MODES & VIEWS --- */
+        /* --- VIEW MODES (RESTORED) --- */
         del, ins { text-decoration: none; }
-        .view-audit, .view-logic { display: none; }
-        .view-human { display: block; }
 
-        /* READER MODE */
-        body:not([data-mode="diff"]) del { display: none; }
-        body:not([data-mode="diff"]) ins { display: inline; background: transparent; color: inherit; text-decoration: none; }
+        /* Reader Mode: Hide deletions, plain text insertions */
+        body:not([data-mode="diff"]) del { display:none; }
+        body:not([data-mode="diff"]) ins { background:transparent; color:inherit; border:0; }
 
-        /* DIFF MODE */
-        body[data-mode="diff"] del { display: inline; background: var(--mode-diff-del-bg); color: var(--mode-diff-del-text); text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
-        body[data-mode="diff"] ins { display: inline; background: var(--mode-diff-ins-bg); color: var(--mode-diff-ins-text); border-bottom: 2px solid var(--mode-diff-ins-text); text-decoration: none; padding: 0 2px; }
+        /* Diff Mode: Visible styling */
+        body[data-mode="diff"] del {
+            display:inline;
+            background: var(--mode-diff-del-bg);
+            color: var(--mode-diff-del-text);
+            text-decoration: line-through;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 2px;
+            padding: 0 3px;
+            border-radius: 2px;
+        }
+
+        body[data-mode="diff"] ins {
+            display:inline;
+            background: var(--mode-diff-ins-bg);
+            color: var(--mode-diff-ins-text);
+            border-bottom: 2px solid var(--mode-diff-ins-text);
+            padding: 0 2px;
+            border-radius: 2px;
+        }
 
         /* AUDIT MODE */
         body[data-mode="audit"] .view-human, body[data-mode="audit"] .view-logic { display: none; }
@@ -210,27 +242,32 @@
                 display: flex; flex-direction: column;
                 max-width: 900px;
             }
-            /* DIAGRAM COLUMN: UNIFIED SCROLL (Sticky Removed) */
             .diagram-col {
                 width: 580px; 
                 border-left: 1px solid var(--border-color);
                 background: var(--bg-color);
-                padding: 3rem 2rem;
+                /* VERTICAL RHYTHM FIX */
+                padding: 20px 2rem; 
                 display: flex; flex-direction: column;
+                position: sticky; top: 0; height: 100vh;
                 align-items: center; justify-content: flex-start;
+                overflow-y: auto;
             }
-            .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+            .diagram-figure { margin: 0; padding: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+            
+            /* TIGHTENED SPACINGS */
             .diagram-label {
                 font-family: "JetBrains Mono", monospace; font-size: 0.9rem; color: var(--text-main); font-weight: 800; opacity: 0.9;
-                margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: center;
+                margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 0.12em; text-align: center;
             }
             .diagram-label-xs {
                  font-family: "JetBrains Mono", monospace; font-size: 0.55rem; color: var(--text-muted);
-                margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.7;
+                margin: 0 0 var(--diag-gap-md) 0; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; opacity: 0.7;
             }
             .diagram-caption {
                 font-family: "JetBrains Mono", monospace; font-size: 0.65rem;
-                color: var(--text-muted); margin-top: 0.75rem; /* Reduced from 1rem */
+                color: var(--text-muted); 
+                margin: 10px 0 var(--diag-gap-lg) 0;
                 text-align: center; letter-spacing: 0.05em;
             }
             .cycle-label {
@@ -238,20 +275,22 @@
                 text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 4px;
             }
             .cycle-counter {
+                /* Acting as the telemetry row */
                 font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-main); font-weight:700;
-                text-align: center; margin-bottom: 1rem; /* Reduced from 2rem */
+                text-align: center; 
+                margin: 10px 0 var(--diag-gap-sm) 0;
             }
             
-            /* DARK MODE TEXT FIXES */
+            /* DARK MODE TEXT FIXES - FORCED HIGH CONTRAST */
             [data-theme="dark"] .cycle-label, 
             [data-theme="dark"] .cycle-counter,
             [data-theme="dark"] .diagram-text-xs { 
                 color: #fff !important; opacity: 1 !important; fill: #fff !important; 
             }
             
-            /* LEGEND - Tightened */
+            /* LEGEND - TIGHTENED */
             .diag-legend { 
-                margin-top: 1rem; /* Reduced from 2rem */
+                margin: 8px 0 var(--diag-gap-md) 0;
                 font-family: "JetBrains Mono", monospace; font-size: 0.55rem; color: var(--text-muted);
                 display: flex; gap: 16px; justify-content: center; text-transform: uppercase; font-weight: 600;
             }
@@ -259,9 +298,9 @@
             .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
 
             /* --- SPACERS FOR SEPARATION --- */
-            .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: 4rem 0; opacity: 0.5; } /* Increased from 2.5rem */
+            .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: var(--diag-gap-lg) 0; opacity: 0.35; }
             
-            .diagram-02-container { width: 100%; opacity: 0.9; margin-bottom: 3rem; } /* Added margin bottom */
+            .diagram-02-container { width: 100%; opacity: 0.9; margin: 0; }
             .d2-line { stroke: var(--text-muted); stroke-width: 1px; opacity: 0.3; }
             .d2-signal { stroke: var(--signal-eval); stroke-width: 2px; fill: none; opacity: 0; animation: signalPulse 4s linear infinite; }
             .d2-boundary { stroke: var(--signal-eval); stroke-width: 2px; stroke-dasharray: 4 4; }
@@ -277,8 +316,8 @@
               100% { stroke-dasharray: 100 600; stroke-dashoffset: -550; opacity: 0; }
             }
 
-            .cap-matrix { width: 100%; margin-top: 2rem; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; } /* Increased from 1.5rem */
-            .cap-header { font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--text-main); padding-bottom: 4px; margin-bottom: 8px; letter-spacing: 0.05em; }
+            .cap-matrix { width: 100%; margin-top: var(--diag-gap-lg); font-family: "JetBrains Mono", monospace; font-size: 0.6rem; }
+            .cap-header { font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--text-main); padding-bottom: 4px; margin: 0 0 10px 0; letter-spacing: 0.05em; }
             .cap-table { width: 100%; border-collapse: collapse; }
             .cap-table th { text-align: left; padding: 6px 0; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
             .cap-table td { padding: 8px 0; border-bottom: 1px solid var(--border-color); color: var(--text-muted); }
@@ -699,6 +738,8 @@
                 This diagram shows measured effects of lexicon enforcement. It does not control execution.
               </div>
             </figure>
+            
+            <div class="diagram-separator"></div>
 
             <div class="cap-matrix">
               <div class="cap-header">LEXICON CAPABILITY MATRIX</div>
