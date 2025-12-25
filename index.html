@@ -39,6 +39,33 @@
             --mode-diff: #000000;  
         }
 
+        /* --- DARK MODE OVERRIDES --- */
+        body[data-theme="dark"] {
+            --bg-color: #0a0a0a;
+            --text-main: #f0f0f0;
+            --text-muted: #888888;
+            --border-color: #333333;
+            --mode-audit: #ffaa00;
+            --mode-logic: #66aaff;
+        }
+        body[data-theme="dark"] aside { background-color: #0a0a0a; border-right-color: #333; }
+        body[data-theme="dark"] .mobile-bar { background: rgba(10,10,10,0.95); border-bottom-color: #333; }
+        body[data-theme="dark"] .mobile-index-btn { background: var(--bg-color); color: var(--text-main); border-color: var(--border-color); }
+        body[data-theme="dark"] .brand div { color: #fff; }
+        body[data-theme="dark"] nav a.active { color: #fff; border-left-color: #fff; background: linear-gradient(90deg, #151515, #0a0a0a); }
+        body[data-theme="dark"] nav a:hover { color: #fff; }
+        body[data-theme="dark"] .toggle-btn:hover, body[data-theme="dark"] .toggle-btn.active { color: #fff; }
+        body[data-theme="dark"] .export-btn { background: #111; color: #ccc; border-color: #444; }
+        body[data-theme="dark"] .export-btn:hover { background: #fff; color: #000; }
+        body[data-theme="dark"] .claim-box { background: #111; border-color: #333; }
+        body[data-theme="dark"] .claim-id { color: #fff; }
+        body[data-theme="dark"] .claim-text { color: #ccc; }
+        body[data-theme="dark"] .logic-block { background: #111; border-color: #333; color: #ccc; }
+        body[data-theme="dark"] .logic-block::before { background: #222; border-color: #333; }
+        body[data-theme="dark"] p { color: #ccc; }
+        body[data-theme="dark"] h1, body[data-theme="dark"] h2 { color: #fff; }
+        body[data-theme="dark"] .doc-val { color: #fff; }
+
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         
@@ -51,6 +78,7 @@
             -webkit-font-smoothing: antialiased;
             display: flex;
             min-height: 100vh;
+            transition: background-color 0.2s, color 0.2s;
         }
 
         /* --- BEACONS --- */
@@ -84,7 +112,7 @@
             position: fixed; top: 0; left: 0; right: 0;
             z-index: 10001; 
             background: rgba(255,255,255,0.98);
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: 1px solid var(--border-color);
             padding: 0 1.25rem;
             height: 50px;
             align-items: center;
@@ -92,20 +120,29 @@
             backdrop-filter: blur(10px);
         }
         .mobile-brand { font-weight: 800; font-size: 0.85rem; letter-spacing: -0.02em; }
-        .mobile-index-btn { font-family: var(--font-mono); font-size: 0.75rem; padding: 4px 10px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
+        
+        .mobile-index-btn {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-main);
+            cursor: pointer;
+        }
 
         /* --- SIDEBAR --- */
         aside { 
             width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; 
             border-right: 1px solid var(--border-color); padding: 3rem 2rem; 
             display: flex; flex-direction: column; flex-shrink: 0; 
-            background: #fff; z-index: 1000; 
+            background: var(--bg-color); z-index: 1000; 
         }
         .brand { margin-bottom: 4rem; }
         .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
 
-        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1.5rem; }
+        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
         .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
         .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
         
@@ -115,24 +152,23 @@
         nav a:hover { color: #000; }
         nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9, #fff); }
 
-        /* --- SIDEBAR MODULES --- */
-        .git-module { 
+        /* --- DARK MODE TOGGLE --- */
+        .theme-switch {
             margin-top: auto; 
-            margin-bottom: 1rem; border: 1px solid #000; padding: 12px; text-decoration: none; 
-            display: flex; align-items: center; gap: 12px; transition: all 0.15s; background: #fff; 
-            cursor: pointer !important; position: relative; overflow: hidden; 
+            margin-bottom: 1rem;
+            cursor: pointer; 
+            font-family: var(--font-mono); 
+            font-size: 0.7rem; 
+            color: var(--text-muted); 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 12px 0; 
+            border-top: 1px solid var(--border-color);
+            transition: color 0.2s;
         }
-        .git-module:hover { background: #000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .git-icon { width: 24px; height: 24px; fill: #000; transition: fill 0.1s; }
-        .git-module:hover .git-icon { fill: #fff; }
-        .git-info { display: flex; flex-direction: column; flex-grow: 1; }
-        .git-label { font-family: var(--font-mono); font-size: 0.55rem; color: #666; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 2px; transition: color 0.1s; }
-        .git-module:hover .git-label { color: #aaa; }
-        .git-repo { font-family: var(--font-mono); font-weight: 700; font-size: 0.75rem; color: #000; display: flex; justify-content: space-between; align-items: center; transition: color 0.1s; }
-        .git-module:hover .git-repo { color: #fff; }
-        .git-status-dot { height: 6px; width: 6px; background-color: #00cc00; border-radius: 50%; display: inline-block; margin-left: auto; box-shadow: 0 0 6px rgba(0,204,0,0.8); animation: beacon-pulse-green 1.5s infinite; }
+        .theme-switch:hover { color: var(--text-main); }
 
-        .export-btn { width: 100%; background: #fff; border: 1px solid #ccc; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .export-btn { width: 100%; background: #fff; border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .export-btn:hover { background: #000; color: #fff; border-color: #000; }
 
         /* --- MAIN CONTENT --- */
@@ -147,10 +183,10 @@
         
         h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 1.5rem; display:flex; align-items:center; }
         h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; display:flex; align-items:center; }
-        p { margin-bottom: 1.5rem; max-width: 65ch; color: #222; position: relative; }
+        p { margin-bottom: 1.5rem; max-width: 65ch; color: inherit; position: relative; }
         
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
-        .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid #ccc; padding-left: 12px; }
+        .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; }
 
         /* --- VISIBILITY RULES --- */
         del, ins, .diff-tag { display: none; } 
@@ -193,15 +229,30 @@
         body[data-mode="audit"] .audit-rail { display: block; }
         
         .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); position: sticky; top: 100px; height: fit-content; }
-        .claim-box { margin-bottom: 2rem; padding: 1rem; background: #fafafa; border: 1px solid #eee; transition: all 0.2s; cursor: pointer; }
+        .claim-box { margin-bottom: 2rem; padding: 1rem; background: #fafafa; border: 1px solid var(--border-color); transition: all 0.2s; cursor: pointer; }
         .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
-        .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+        .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; }
         .metric-tag { font-weight: 600; color: #000; }
         .claim-text { color: #333; line-height: 1.4; }
 
         /* 4. LOGIC MODE: Show Ins, Hide Del */
-        .logic-block { display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; background-color: #fcfcfc; border: 1px solid #d0d7de; border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
-        .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: #fff; color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid #d0d7de; border-left: 1px solid #d0d7de; padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
+        .logic-block { display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; background-color: #fcfcfc; border: 1px solid var(--border-color); border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
+        
+        .logic-block::before {
+            content: "FORMAL BACKING — NON-EXECUTABLE";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--bg-color);
+            color: var(--mode-logic);
+            font-size: 0.55rem;
+            border-bottom: 1px solid var(--border-color);
+            border-left: 1px solid var(--border-color);
+            padding: 4px 8px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
         
         body[data-mode="logic"] ins { 
@@ -233,7 +284,7 @@
             aside { 
                 position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); 
                 transform: translateX(-100%); transition: transform 0.25s ease;
-                border-right: none; padding: 2rem; background: #fff; overflow-y: auto; z-index: 10000;
+                border-right: none; padding: 2rem; background: var(--bg-color); overflow-y: auto; z-index: 10000;
             }
             aside.open { transform: translateX(0); }
             
@@ -255,7 +306,7 @@
         }
     </style>
 </head>
-<body data-mode="reader">
+<body data-mode="reader" data-theme="light">
 
     <div id="mode-banner">READER MODE</div>
 
@@ -284,14 +335,13 @@
                 <li><a href="#theory" class="nav-link">Theory</a></li>
                 <li><a href="#instruments" class="nav-link">Instruments</a></li>
                 <li><a href="#outputs" class="nav-link">Outputs</a></li>
-                <li><a href="lexicon.html" class="nav-link" style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">Lexicon →</a></li>
+                <li><a href="lexicon.html" class="nav-link" style="margin-top:10px; border-top:1px solid var(--border-color); padding-top:10px;">Lexicon →</a></li>
             </ul>
         </nav>
         
-        <a href="https://github.com/EnlightenedAI-Lab" target="_blank" class="git-module">
-            <svg class="git-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            <div class="git-info"><span class="git-label">GITHUB_REPO</span><div class="git-repo">enlightened/core <span class="git-status-dot"></span></div></div>
-        </a>
+        <div class="theme-switch" onclick="toggleTheme()">
+            [ LIGHT / DARK ] <span id="theme-icon">◐</span>
+        </div>
 
         <div class="export-container">
             <button class="export-btn" onclick="window.print()"><span>🖨</span> Export Record</button>
@@ -460,8 +510,13 @@
             // Close mobile sidebar if open
             if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
         }
-        function highlightClaim(id) { document.getElementById(id).classList.add('active'); }
-        function unhighlightClaim(id) { document.getElementById(id).classList.remove('active'); }
+        
+        // Prevent ReferenceErrors for onmouseenter/onmouseleave calls in markup
+        function highlightText(id) {} 
+        function unhighlightText(id) {}
+        // Backward-compatibility aliases if older code calls these
+        function highlightClaim(id) {}
+        function unhighlightClaim(id) {}
         
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         function scrambleText(element) {
@@ -484,6 +539,24 @@
         function copyCite(text) { navigator.clipboard.writeText(text); }
         function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`); }
         
+        // --- DARK MODE LOGIC ---
+        function setTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            const icon = document.getElementById('theme-icon');
+            if (icon) icon.textContent = (theme === 'dark') ? '◑' : '◐';
+        }
+
+        function toggleTheme() {
+            const current = document.body.getAttribute('data-theme') || 'light';
+            const next = (current === 'dark') ? 'light' : 'dark';
+            setTheme(next);
+        }
+
+        // Initialize Theme from LocalStorage
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
         // Close sidebar when tapping outside (mobile)
         document.addEventListener("click", (e) => {
           if (window.innerWidth > 900) return;
