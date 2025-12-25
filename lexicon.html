@@ -189,13 +189,27 @@
             border-radius: 2px;
         }
 
-        /* AUDIT MODE (REMOVED CONTENT LOGIC, ONLY RETAINED FOR SAFETY IF JS TRIGGERS) */
-        .view-human { display: block; }
+        /* AUDIT CONTENT VISIBILITY RULES */
+        /* Hidden by default in reader/logic */
+        .view-audit { display: none; margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 2rem; }
+        
+        /* Visible ONLY in Diff Mode as part of content flow */
+        body[data-mode="diff"] .view-audit { display: block; animation: fadeIn 0.3s ease; }
+
+        /* LOGIC MODE */
         body[data-mode="logic"] .view-human { display: none; }
+        /* Ensure audit content is hidden in logic mode explicitly */
+        body[data-mode="logic"] .view-audit { display: none; }
         body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: "JetBrains Mono", monospace; color: var(--text-main); }
         .view-logic { display: none; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* AUDIT TABLES */
+        .audit-table { width: 100%; border-collapse: collapse; font-family: "JetBrains Mono", monospace; font-size: 0.75rem; margin-bottom: 2rem; }
+        .audit-table th { text-align: left; border-bottom: 1px solid var(--text-main); padding: 8px; font-weight: 700; text-transform: uppercase; color: var(--text-main); }
+        .audit-table td { border-bottom: 1px solid var(--border-color); padding: 8px; color: var(--text-muted); }
+        .audit-fail { color: var(--signal-red); font-weight: 700; }
 
         /* LOGIC BLOCKS */
         .logic-header { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; display: flex; align-items: center; }
@@ -465,6 +479,14 @@
                         <p>The lexicon is a living artifact. Definitions are <del>tracked</del> <ins>versioned</ins>. Revisions are logged. Changes are auditable.</p>
                         <p>Stability of <del>language</del> <ins>definitions</ins> is treated as a prerequisite for stability of conclusions.</p>
                     </section>
+                </div>
+
+                <div class="view-audit">
+                    <section><h1><span class="scramble">01 //</span> AUDIT SCOPE</h1><p>This view defines the invariant constraints and failure signatures used for alignment audits. Narrative interpretation is disallowed in this view.</p></section>
+                    <section><h2><span class="scramble">02 //</span> ACTIVE INVARIANTS</h2><table class="audit-table"><thead><tr><th>Invariant ID</th><th>Name</th><th>Scope</th><th>Status</th></tr></thead><tbody><tr><td class="mono">INV-001</td><td>Goal Preservation</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-002</td><td>Definition Consistency</td><td>Global</td><td>ENFORCED</td></tr><tr><td class="mono">INV-005</td><td>Non-Contradiction</td><td>Global</td><td>ENFORCED</td></tr></tbody></table></section>
+                    <section><h2><span class="scramble">03 //</span> FAILURE SIGNATURES</h2><table class="audit-table"><thead><tr><th>Signature</th><th>Trigger Condition</th><th>Severity</th></tr></thead><tbody><tr><td class="mono audit-fail">OBJ_MUTATION</td><td>Objective divergence across steps</td><td class="audit-fail">CRITICAL</td></tr><tr><td class="mono audit-fail">SEMANTIC_DRIFT</td><td>Term meaning deviation</td><td class="audit-fail">HIGH</td></tr><tr><td class="mono audit-fail">LOGIC_NEGATION</td><td>Internal contradiction</td><td class="audit-fail">CRITICAL</td></tr></tbody></table></section>
+                    <section><h2><span class="scramble">04 //</span> INTERPRETATION RULES</h2><ul><li>Invariant violation constitutes audit failure.</li><li>Failure severity is non-negotiable.</li><li>Narrative intent is ignored.</li><li>Passing is not assumed.</li></ul></section>
+                    <section style="margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 1rem;"><div class="mono" style="font-weight: 700;"><span class="scramble">STATUS //</span> AUDIT ACTIVE</div><div class="mono" style="margin-top: 0.5rem; color: var(--text-muted);">Audit schema loaded. Invariants enforced. Interpretation constrained.</div></section>
                 </div>
 
                 <div class="view-logic">
@@ -816,7 +838,7 @@
         // MODE SWITCHER
         function setMode(mode, btn) {
             const body = document.body;
-            if ((mode === 'diff' || mode === 'audit' || mode === 'logic') && body.getAttribute('data-mode') === mode) {
+            if ((mode === 'diff' || mode === 'logic') && body.getAttribute('data-mode') === mode) {
                 body.setAttribute('data-mode', 'reader');
                 btn.classList.remove('active');
                 document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
