@@ -141,3 +141,299 @@
             <defs>
               <style>
                 .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
+                .box{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
+                .boxSoft{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.25}
+                .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#050505}
+                .monoMuted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#6a6a6a}
+                .h{font-size:13px;font-weight:700;letter-spacing:0.14em}
+                .t{font-size:12px}
+                .micro{font-size:11px;letter-spacing:0.05em}
+                .arrow{stroke:#8a8a8a;stroke-width:2;fill:none}
+                .arrowDash{stroke:#b8b8b8;stroke-width:1.5;fill:none;stroke-dasharray:6 6}
+                .pill{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
+                .pillText{font-size:12px;font-weight:600;letter-spacing:0.10em}
+                .okDot{fill:#00cc00}
+                .chip{fill:#ffffff;stroke:#dcdcdc;stroke-width:1.25}
+                .chipText{font-size:11px;font-weight:600;letter-spacing:0.10em}
+              </style>
+              <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#8a8a8a"/>
+              </marker>
+              <marker id="arrowheadLight" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#b8b8b8"/>
+              </marker>
+            </defs>
+
+            <!-- OUTER -->
+            <rect class="frame" x="70" y="50" width="1460" height="520" rx="18"/>
+
+            <!-- Title -->
+            <text class="mono" x="120" y="110" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
+              Reflective Diagnostics — Deterministic Record Flow (Public Skeleton)
+            </text>
+            <text class="monoMuted micro" x="120" y="136">POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED</text>
+
+            <!-- BOXES (ID each group) -->
+            <!-- Step 1 -->
+            <g id="step1" class="dim">
+              <rect class="box" x="120" y="190" width="210" height="150" rx="12"/>
+              <text class="mono h" x="142" y="230">RECORD INTAKE</text>
+              <text class="monoMuted t" x="142" y="265">stored outputs</text>
+              <text class="monoMuted t" x="142" y="287">transcripts</text>
+              <text class="monoMuted t" x="142" y="309">immutable boundary</text>
+
+              <g class="badge" id="badge1">
+                <rect x="128" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="142" y="213" style="font-size:12px;font-weight:700;">01</text>
+              </g>
+            </g>
+
+            <!-- Step 2 -->
+            <g id="step2" class="dim">
+              <rect class="box" x="358" y="190" width="210" height="150" rx="12"/>
+              <text class="mono h" x="380" y="230">CANONICALIZE</text>
+              <text class="monoMuted t" x="380" y="265">schema normalize</text>
+              <text class="monoMuted t" x="380" y="287">span indexing</text>
+              <text class="monoMuted t" x="380" y="309">deterministic transforms</text>
+
+              <g class="badge" id="badge2">
+                <rect x="366" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="380" y="213" style="font-size:12px;font-weight:700;">02</text>
+              </g>
+            </g>
+
+            <!-- Step 3 -->
+            <g id="step3" class="dim">
+              <rect class="box" x="596" y="190" width="210" height="150" rx="12"/>
+              <text class="mono h" x="618" y="230">LEXICON BIND</text>
+              <text class="monoMuted t" x="618" y="265">frozen term map</text>
+              <text class="monoMuted t" x="618" y="287">versioned semantics</text>
+              <text class="monoMuted t" x="618" y="309">pre-measure constraint</text>
+
+              <g class="badge" id="badge3">
+                <rect x="604" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="618" y="213" style="font-size:12px;font-weight:700;">03</text>
+              </g>
+            </g>
+
+            <!-- Step 4 -->
+            <g id="step4" class="dim">
+              <rect class="box" x="834" y="190" width="210" height="150" rx="12"/>
+              <text class="mono h" x="856" y="230">STRUCTURAL</text>
+              <text class="mono h" x="856" y="250">DIAGNOSTICS</text>
+              <text class="monoMuted t" x="856" y="280">invariants</text>
+              <text class="monoMuted t" x="856" y="302">structure-only signals</text>
+
+              <g class="badge" id="badge4">
+                <rect x="842" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="856" y="213" style="font-size:12px;font-weight:700;">04</text>
+              </g>
+            </g>
+
+            <!-- Step 5 -->
+            <g id="step5" class="dim">
+              <rect class="box" x="1072" y="190" width="210" height="150" rx="12"/>
+              <text class="mono h" x="1094" y="230">AUDIT PACKET</text>
+              <text class="monoMuted t" x="1094" y="265">hash + provenance</text>
+              <text class="monoMuted t" x="1094" y="287">links to evidence</text>
+              <text class="monoMuted t" x="1094" y="309">replay references</text>
+
+              <g class="badge" id="badge5">
+                <rect x="1080" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="1094" y="213" style="font-size:12px;font-weight:700;">05</text>
+              </g>
+            </g>
+
+            <!-- Step 6 -->
+            <g id="step6" class="dim">
+              <rect class="box" x="1310" y="190" width="210" height="150" rx="12"/>
+              <text class="mono h" x="1332" y="230">EVIDENCE</text>
+              <text class="mono h" x="1332" y="250">ARTIFACTS</text>
+              <text class="monoMuted t" x="1332" y="265">screenshots</text>
+              <text class="monoMuted t" x="1332" y="287">CSV / JSON export</text>
+              <text class="monoMuted t" x="1332" y="309">auditable bundle</text>
+
+              <g class="badge" id="badge6">
+                <rect x="1318" y="198" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
+                <text class="mono" x="1332" y="213" style="font-size:12px;font-weight:700;">06</text>
+              </g>
+            </g>
+
+            <!-- ARROWS (each its own id so we can “light” them) -->
+            <path id="a12" class="arrow dim" marker-end="url(#arrowhead)" d="M330 275 L358 275"/>
+            <path id="a23" class="arrow dim" marker-end="url(#arrowhead)" d="M568 275 L596 275"/>
+            <path id="a34" class="arrow dim" marker-end="url(#arrowhead)" d="M806 275 L834 275"/>
+            <path id="a45" class="arrow dim" marker-end="url(#arrowhead)" d="M1044 275 L1072 275"/>
+            <path id="a56" class="arrow dim" marker-end="url(#arrowhead)" d="M1282 275 L1310 275"/>
+
+            <!-- Canonical Lexicon side input -->
+            <g id="lexSide" class="dim">
+              <rect class="boxSoft" x="596" y="150" width="210" height="28" rx="8"/>
+              <text class="monoMuted micro" x="612" y="169">CANONICAL LEXICON (FROZEN)</text>
+              <path class="arrowDash" marker-end="url(#arrowheadLight)" d="M701 178 L701 190"/>
+            </g>
+
+            <!-- Status (kept static here) -->
+            <rect class="frame" x="120" y="430" width="1400" height="110" rx="14" style="stroke:#ededed"/>
+            <text class="monoMuted micro" x="142" y="468">STATUS:</text>
+
+            <rect class="pill" x="230" y="450" width="230" height="44" rx="6"/><circle class="okDot" cx="252" cy="472" r="5"/>
+            <text class="mono pillText" x="266" y="477">DETERMINISTIC</text>
+
+            <rect class="pill" x="475" y="450" width="230" height="44" rx="6"/><circle class="okDot" cx="497" cy="472" r="5"/>
+            <text class="mono pillText" x="511" y="477">LEXICON-BOUND</text>
+
+            <rect class="pill" x="720" y="450" width="260" height="44" rx="6"/><circle class="okDot" cx="742" cy="472" r="5"/>
+            <text class="mono pillText" x="756" y="477">RECORD-GROUNDED</text>
+
+            <rect class="pill" x="995" y="450" width="240" height="44" rx="6"/><circle class="okDot" cx="1017" cy="472" r="5"/>
+            <text class="mono pillText" x="1031" y="477">SPAN-TRACEABLE</text>
+
+            <rect class="pill" x="1250" y="450" width="240" height="44" rx="6"/><circle class="okDot" cx="1272" cy="472" r="5"/>
+            <text class="mono pillText" x="1286" y="477">REPRODUCIBLE</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="kicker">guided sequence</div>
+        <div class="stepnum" id="stepNum">STEP 1 / 6</div>
+        <div class="steptitle" id="stepTitle">Record Intake</div>
+        <div class="steptext" id="stepText">
+          Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis.
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="prevBtn">Prev</button>
+          <button class="btn" id="nextBtn">Next</button>
+          <button class="btn" id="autoBtn">Auto</button>
+          <button class="btn" id="pauseBtn">Pause</button>
+          <button class="btn" id="restartBtn">Restart</button>
+        </div>
+
+        <div class="note" style="margin-top:12px;">
+          Tip: this is “forced reading” without interaction. Autoplay is optional.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Guided steps content (edit text only) ---
+    const steps = [
+      {
+        id: "step1",
+        badge: "badge1",
+        arrow: null,
+        title: "Record Intake",
+        text: "Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis."
+      },
+      {
+        id: "step2",
+        badge: "badge2",
+        arrow: "a12",
+        title: "Canonicalize",
+        text: "Deterministic normalization and span indexing. Converts raw artifacts into a stable measurement substrate."
+      },
+      {
+        id: "step3",
+        badge: "badge3",
+        arrow: "a23",
+        title: "Lexicon Bind",
+        text: "Binds records to a frozen, versioned term and schema specification. Constrains measurement semantics pre-computation."
+      },
+      {
+        id: "step4",
+        badge: "badge4",
+        arrow: "a34",
+        title: "Structural Diagnostics",
+        text: "Computes structure-only signals (invariants, integrity checks) without truth, intent, or policy judgment."
+      },
+      {
+        id: "step5",
+        badge: "badge5",
+        arrow: "a45",
+        title: "Audit Packet",
+        text: "Produces a traceable audit packet: provenance, hashes, evidence links, and replay references."
+      },
+      {
+        id: "step6",
+        badge: "badge6",
+        arrow: "a56",
+        title: "Evidence Artifacts",
+        text: "Exports an auditable bundle (screenshots + CSV/JSON) suitable for controlled technical review."
+      }
+    ];
+
+    let idx = 0;
+    let timer = null;
+    const intervalMs = 1800;
+
+    const stepNum = document.getElementById("stepNum");
+    const stepTitle = document.getElementById("stepTitle");
+    const stepText = document.getElementById("stepText");
+
+    function setClass(el, add, remove){
+      if(!el) return;
+      el.classList.add(add);
+      el.classList.remove(remove);
+    }
+
+    function activate(i){
+      idx = (i + steps.length) % steps.length;
+
+      // dim all steps + arrows + side lexicon
+      steps.forEach(s => {
+        setClass(document.getElementById(s.id), "dim", "active");
+        document.getElementById(s.badge).classList.remove("show");
+      });
+      ["a12","a23","a34","a45","a56"].forEach(a => setClass(document.getElementById(a), "dim", "active"));
+      setClass(document.getElementById("lexSide"), "dim", "active");
+
+      // activate current box
+      const s = steps[idx];
+      setClass(document.getElementById(s.id), "active", "dim");
+      document.getElementById(s.badge).classList.add("show");
+
+      // activate arrow leading into it (if any)
+      if(s.arrow){
+        setClass(document.getElementById(s.arrow), "active", "dim");
+      }
+
+      // show lexicon side input during lexicon bind step only (optional)
+      if(s.id === "step3"){
+        setClass(document.getElementById("lexSide"), "active", "dim");
+      }
+
+      // update panel
+      stepNum.textContent = `STEP ${idx+1} / ${steps.length}`;
+      stepTitle.textContent = s.title;
+      stepText.textContent = s.text;
+    }
+
+    function next(){ activate(idx + 1); }
+    function prev(){ activate(idx - 1); }
+
+    function auto(){
+      if(timer) return;
+      timer = setInterval(next, intervalMs);
+    }
+
+    function pause(){
+      if(!timer) return;
+      clearInterval(timer);
+      timer = null;
+    }
+
+    // wire controls
+    document.getElementById("nextBtn").addEventListener("click", next);
+    document.getElementById("prevBtn").addEventListener("click", prev);
+    document.getElementById("autoBtn").addEventListener("click", auto);
+    document.getElementById("pauseBtn").addEventListener("click", pause);
+    document.getElementById("restartBtn").addEventListener("click", () => activate(0));
+
+    // init
+    activate(0);
+  </script>
+</body>
+</html>
