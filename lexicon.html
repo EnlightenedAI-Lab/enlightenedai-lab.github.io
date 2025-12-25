@@ -132,6 +132,25 @@
             border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
         }
 
+        /* --- SIDEBAR COMPONENTS --- */
+        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
+        .toggle-btn { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
+        .toggle-btn:hover { color: var(--text-main); }
+        .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+
+        /* THEME SWITCH: Base Styles */
+        .theme-switch {
+            display: flex; 
+            justify-content: space-between;
+            padding: 12px 0; 
+            
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.7rem; 
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .theme-switch:hover { color: var(--text-main); }
+
         /* --- REPO PANEL --- */
         .repo-panel {
             margin-top: 0; 
@@ -160,6 +179,9 @@
         .repo-panel:hover .repo-link:hover { opacity: 1; text-decoration: underline; }
         .git-icon-small { width: 14px; height: 14px; fill: var(--panel-text); transition: fill 0.2s; }
         .repo-panel:hover .git-icon-small { fill: var(--panel-hover-text); }
+
+        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
         @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
         @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
@@ -231,14 +253,6 @@
         .brand { margin-bottom: 6rem; cursor: crosshair !important; }
         .brand div { font-family: "JetBrains Mono", monospace; font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
-        
-        .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
-        .toggle-btn:hover { color: var(--text-main); }
-        .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
-
-        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
         /* =========================================
            LAYOUT ENGINE: SEGREGATED (V130)
@@ -247,40 +261,84 @@
         /* DESKTOP ENGINE (Width > 1100px) */
         @media (min-width: 1101px) {
             body { display: flex; min-height: 100vh; }
+            
             aside#sidebar {
-                width: 240px; height: 100vh; position: sticky; top: 0;
-                border-right: 1px solid var(--border-color); padding: 2rem;
-                display: flex; flex-direction: column; z-index: 99; background: var(--sidebar-bg); flex-shrink: 0;
+                width: 240px;
+                height: 100vh;
+                position: sticky;
+                top: 0;
+                border-right: 1px solid var(--border-color);
+                padding: 0;                 /* moves into inner wrappers */
+                display: flex;
+                flex-direction: column;
+                z-index: 99;
+                background: var(--sidebar-bg);
+                flex-shrink: 0;
+                overflow: hidden;           /* prevent double scrolling */
             }
+
+            .sidebar-scroll {
+                flex: 1;
+                min-height: 0;              /* REQUIRED for overflow inside flex */
+                overflow-y: auto;
+                padding: 2rem;
+            }
+
+            .sidebar-bottom {
+                padding: 0 2rem 2rem 2rem;
+                background: var(--sidebar-bg);
+                border-top: 1px solid var(--border-color);
+            }
+
+            /* Theme switch is pinned via layout, no sticky needed here */
+            .theme-switch {
+                position: static;
+                margin: 0 0 1rem 0 !important;
+                border-top: none !important;
+            }
+
             .main-column {
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
                 margin: 0;
                 min-height: 100vh;
+                min-width: 0; 
             }
+
             .split-view {
                 display: flex;
                 flex: 1;
+                align-items: flex-start;
+                min-width: 0;
             }
+
             .content-col {
-                flex: 1;
+                flex: 1 1 auto;
+                min-width: 0;
+                max-width: none;
                 padding: 2rem 4rem 6rem 4rem; 
-                display: flex; flex-direction: column;
-                max-width: 900px;
+                display: flex;
+                flex-direction: column;
             }
-            /* DIAGRAM COLUMN: STICKY & SCROLL */
+
             .diagram-col {
+                flex: 0 0 580px;
                 width: 580px; 
                 border-left: 1px solid var(--border-color);
                 background: var(--bg-color);
                 padding: 2rem 2rem 4rem 2rem;
-                display: flex; flex-direction: column;
-                align-items: center; justify-content: flex-start;
-                position: sticky; top: 0; 
-                height: fit-content; 
-                align-self: flex-start;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                
+                position: sticky; 
+                top: 0; 
+                height: 100vh; 
+                overflow-y: auto; 
             }
+            
             .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
             
             /* DIAGRAM 1 SPACINGS */
@@ -354,13 +412,64 @@
         /* MOBILE/TABLET ENGINE (Width <= 1100px) */
         @media (max-width: 1100px) {
             body { display: block; overflow-x: hidden; }
-            aside#sidebar { 
-                position: fixed; top: 50px; left: 0; bottom: 0; width: 100%; 
-                transform: translateX(-100%); transition: transform 0.25s ease;
-                border-right: none; padding: 2rem; background: var(--sidebar-bg); overflow-y: auto; z-index: 10000;
-                display: flex; flex-direction: column;
+
+            /* [FIX] Body scroll lock (iOS friendly) */
+            body.sidebar-open { 
+                position: fixed;
+                width: 100%;
+                overflow: hidden;
             }
+
+            #sidebar-overlay {
+                position: fixed; top: 50px; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.5); 
+                opacity: 0; pointer-events: none;
+                transition: opacity 0.25s ease;
+                z-index: 9999;
+                backdrop-filter: blur(2px);
+            }
+
+            aside#sidebar.open ~ #sidebar-overlay {
+                opacity: 1; pointer-events: auto;
+            }
+
+            aside#sidebar {
+                position: fixed;
+                top: 50px;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+                border-right: none;
+                background: var(--sidebar-bg);
+                z-index: 10000;
+                
+                /* [FIX] Dynamic Viewport Height for Mobile Browsers */
+                height: calc(100dvh - 50px);
+
+                /* keep split layout */
+                display: flex;
+                flex-direction: column;
+                overflow: hidden; /* key: do NOT scroll the whole aside */
+                padding: 0;       /* padding moves to inner wrappers */
+            }
+
             aside#sidebar.open { transform: translateX(0); }
+            
+            .sidebar-scroll {
+                flex: 1;
+                min-height: 0;
+                overflow-y: auto;
+                padding: 2rem;
+            }
+
+            .sidebar-bottom {
+                padding: 0 2rem 2rem 2rem;
+                background: var(--sidebar-bg);
+                border-top: 1px solid var(--border-color);
+            }
+
             .global-header-strip { padding: 2rem; }
             .main-column { margin-top: 50px; padding: 0; width: 100%; max-width: 100vw; display: block; }
             .content-col { padding: 1.5rem; max-width: none; }
@@ -497,7 +606,7 @@
 
     <header style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:var(--bg-color); border-bottom:1px solid var(--border-color); padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);" id="mobile-bar">
         <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em; color:var(--text-main);">ENLIGHTENED AI</div>
-        <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; padding:4px 10px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); cursor:pointer;">INDEX</button>
+        <button onclick="toggleSidebar()" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; padding:4px 10px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); cursor:pointer;">INDEX</button>
     </header>
     
     <script>
@@ -510,64 +619,56 @@
     </script>
 
     <aside id="sidebar">
-        <div class="brand">
-            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
-            <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
-            <span>EST. 2026 // MONTREAL</span>
-        </div>
-
-        <div class="mode-group">
-            <span class="toggle-btn active" data-mode-btn="reader" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
-            <span class="toggle-btn" data-mode-btn="audit" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
-            <span class="toggle-btn" data-mode-btn="diff" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
-            <span class="toggle-btn" data-mode-btn="logic" onclick="setMode('logic', this)">[ LOGIC ] <span>λ</span></span>
-           <span class="toggle-btn" onclick="window.location.href='lexicon-machine.html'">[ MACHINE ] <span>≡</span></span>
-        </div>
-
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="lexicon.html" class="active">Lexicon</a></li>
-                <li style="margin-top:1rem; opacity:0.5; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; padding-left:10px;">Sections</li>
-                <li><a href="#overview">Overview</a></li>
-                <li><a href="#what-it-does">What It Does</a></li>
-                <li><a href="#core-terms">Core Terms</a></li>
-                <li><a href="#invariants">Invariants</a></li>
-                <li><a href="#drift">Drift</a></li>
-                <li><a href="#status">Status</a></li>
-            </ul>
-        </nav>
-
-        <div class="theme-switch" onclick="toggleTheme()" style="margin-top:auto; margin-bottom:1rem; cursor:pointer; font-family:'JetBrains Mono', monospace; font-size:0.7rem; color:var(--text-muted); display:flex; justify-content:space-between; padding:12px 0; border-top:1px solid var(--border-color);">
-            [ LIGHT / DARK ] <span id="theme-icon">◐</span>
-        </div>
-
-        <div class="repo-panel" onclick="window.open('https://github.com/EnlightenedAI-Lab', '_blank')">
-            <div class="repo-header">
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    GITHUB: PUBLIC RECORD
-                </div>
-                <span class="status-dot" style="width:6px;height:6px;background:#00cc00;border-radius:50%;display:block;"></span>
+        <div class="sidebar-scroll">
+            <div class="brand">
+                <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
+                <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
+                <span>EST. 2026 // MONTREAL</span>
             </div>
-            <a href="https://github.com/EnlightenedAI-Lab" target="_blank" class="repo-link">OPEN ORG →</a>
-        </div>
 
-        <div class="repo-panel" onclick="window.open('https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:', '_blank')">
-            <div class="repo-header">
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    GITHUB REPOSITORY
-                </div>
-                <span class="status-dot-red"></span>
+            <div class="mode-group">
+                <span class="toggle-btn active" data-mode-btn="reader" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
+                <span class="toggle-btn" data-mode-btn="audit" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
+                <span class="toggle-btn" data-mode-btn="diff" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
+                <span class="toggle-btn" data-mode-btn="logic" onclick="setMode('logic', this)">[ LOGIC ] <span>λ</span></span>
+               <span class="toggle-btn" onclick="window.location.href='lexicon-machine.html'">[ MACHINE ] <span>≡</span></span>
             </div>
-            <a href="https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:" target="_blank" class="repo-link">START ACCESS REQUEST →</a>
-        </div>
 
-        <div class="export-container">
-            <button class="export-btn" onclick="window.print()"><span>🖨</span> EXPORT RECORD</button>
-        </div>
-    </aside>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="lexicon.html" class="active">Lexicon</a></li>
+                    <li style="margin-top:1rem; opacity:0.5; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; padding-left:10px;">Sections</li>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#what-it-does">What It Does</a></li>
+                    <li><a href="#core-terms">Core Terms</a></li>
+                    <li><a href="#invariants">Invariants</a></li>
+                    <li><a href="#drift">Drift</a></li>
+                    <li><a href="#status">Status</a></li>
+                </ul>
+            </nav>
+        </div><div class="sidebar-bottom">
+            <div class="theme-switch" onclick="toggleTheme()">
+                [ LIGHT / DARK ] <span id="theme-icon">◐</span>
+            </div>
+
+            <div class="repo-panel" onclick="window.open('https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:', '_blank')">
+                <div class="repo-header">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        GITHUB REPOSITORY
+                    </div>
+                    <span class="status-dot-red"></span>
+                </div>
+                <a href="https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:" target="_blank" class="repo-link">START ACCESS REQUEST →</a>
+            </div>
+
+            <div class="export-container">
+                <button class="export-btn" onclick="window.print()"><span>🖨</span> EXPORT RECORD</button>
+            </div>
+        </div></aside>
+
+    <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
     <div class="main-column">
         <div class="global-header-strip">
@@ -909,6 +1010,36 @@
                 renderNormal();
             }
         }, 100);
+
+        // --- SIDEBAR LOGIC (MOBILE OVERLAY & SCROLL LOCK) ---
+        let __scrollY = 0;
+
+        function openSidebar() {
+            __scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+            document.body.style.top = `-${__scrollY}px`;
+            document.getElementById('sidebar').classList.add('open');
+            document.body.classList.add('sidebar-open');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.body.classList.remove('sidebar-open');
+            const y = __scrollY;
+            document.body.style.top = '';
+            window.scrollTo(0, y);
+        }
+
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            sb.classList.contains('open') ? closeSidebar() : openSidebar();
+        }
+
+        // Close sidebar on mobile after navigation click
+        document.querySelectorAll('#sidebar a[href^="#"], #sidebar a[href$=".html"]').forEach(a => {
+            a.addEventListener('click', () => {
+                if (window.innerWidth <= 1100) closeSidebar();
+            });
+        });
     </script>
 </body>
 </html>
