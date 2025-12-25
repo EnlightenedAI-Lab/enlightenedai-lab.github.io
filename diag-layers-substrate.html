@@ -56,11 +56,7 @@
     }
     .intro strong{ font-weight:700; }
 
-    .row{
-      display:flex;
-      gap:18px;
-      align-items:flex-start;
-    }
+    .row{ display:flex; gap:18px; align-items:flex-start; }
 
     .card{
       flex:1;
@@ -68,6 +64,8 @@
       border-radius:18px;
       padding:18px;
       background:var(--panel);
+      position: relative;
+      overflow: hidden;
     }
 
     .panel{
@@ -89,12 +87,7 @@
       margin-bottom:10px;
     }
 
-    .modebar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:12px;
-    }
+    .modebar{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
 
     .btn{
       font-family:var(--mono);
@@ -108,18 +101,9 @@
       user-select:none;
     }
     .btn:hover{ border-color:#bdbdbd; }
-    .btn.active{
-      border-color:#050505;
-      background:#050505;
-      color:#ffffff;
-    }
+    .btn.active{ border-color:#050505; background:#050505; color:#ffffff; }
 
-    .lensbar{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin:12px 0 14px;
-    }
+    .lensbar{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 14px; }
 
     .pill{
       font-family:var(--mono);
@@ -142,11 +126,7 @@
       transform: translateY(-1px);
     }
 
-    .dot{
-      width:8px; height:8px; border-radius:50%;
-      background: var(--ok);
-      box-shadow: 0 0 0 0 rgba(0,204,0,0.0);
-    }
+    .dot{ width:8px; height:8px; border-radius:50%; background: var(--ok); }
 
     .meta{
       border-top:1px solid var(--border);
@@ -159,25 +139,10 @@
     }
     .meta b{ color:var(--text); font-weight:700; }
 
-    .moduleTitle{
-      font-size:16px;
-      font-weight:800;
-      letter-spacing:-0.01em;
-      margin:6px 0 8px;
-    }
+    .moduleTitle{ font-size:16px; font-weight:800; letter-spacing:-0.01em; margin:6px 0 8px; }
+    .moduleText{ font-size:13px; line-height:1.55; color:var(--text); }
 
-    .moduleText{
-      font-size:13px;
-      line-height:1.55;
-      color:var(--text);
-    }
-
-    .chips{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
     .chip{
       font-family:var(--mono);
       font-size:11px;
@@ -195,19 +160,57 @@
     /* SVG state hooks */
     .fade{ opacity:0.20; transition: opacity 180ms ease; }
     .on{ opacity:1; transition: opacity 180ms ease; }
+    .raise{ filter: drop-shadow(0px 10px 18px rgba(0,0,0,0.10)); }
 
-    .raise{
-      filter: drop-shadow(0px 10px 18px rgba(0,0,0,0.10));
+    /* TRACE dash motion */
+    .tracePulse{ stroke-dasharray: 10 8; animation: dash 1.2s linear infinite; }
+    @keyframes dash{ to { stroke-dashoffset: -36; } }
+
+    /* Lens “heartbeat” */
+    @keyframes heartbeat{
+      0%{ filter: drop-shadow(0px 10px 18px rgba(0,0,0,0.10)); transform: translateY(0px); }
+      50%{ filter: drop-shadow(0px 16px 28px rgba(0,0,0,0.14)); transform: translateY(-1px); }
+      100%{ filter: drop-shadow(0px 10px 18px rgba(0,0,0,0.10)); transform: translateY(0px); }
+    }
+    .beat{ animation: heartbeat 0.9s ease-in-out infinite; }
+
+    /* “Scan” overlay on TRACE click */
+    .scan{
+      position:absolute; inset:0;
+      pointer-events:none;
+      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0) 100%);
+      transform: translateX(-120%);
+      opacity:0;
+    }
+    .scan.run{
+      opacity:1;
+      animation: scanMove 650ms ease-out 1;
+    }
+    @keyframes scanMove{
+      0%{ transform: translateX(-120%); opacity:0.0; }
+      15%{ opacity:1; }
+      100%{ transform: translateX(120%); opacity:0.0; }
     }
 
-    /* TRACE animation */
-    .tracePulse{
-      stroke-dasharray: 10 8;
-      animation: dash 1.2s linear infinite;
+    /* Small toast */
+    .toast{
+      position:absolute;
+      right:16px; bottom:16px;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      font-family:var(--mono);
+      font-size:11px;
+      color:var(--text);
+      box-shadow: var(--shadow);
+      opacity:0;
+      transform: translateY(6px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      pointer-events:none;
+      white-space:nowrap;
     }
-    @keyframes dash{
-      to { stroke-dashoffset: -36; }
-    }
+    .toast.show{ opacity:1; transform: translateY(0px); }
 
     @media (max-width: 980px){
       .row{ flex-direction:column; }
@@ -228,7 +231,10 @@
     </div>
 
     <div class="row">
-      <div class="card">
+      <div class="card" id="card">
+        <div class="scan" id="scan"></div>
+        <div class="toast" id="toast">TRACE ACTIVE</div>
+
         <div class="svg-wrap">
           <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520" role="img" aria-label="Measurement substrate and analytic lenses">
             <defs>
@@ -242,7 +248,6 @@
                 .t{font-size:12px}
                 .micro{font-size:11px;letter-spacing:0.06em}
                 .link{stroke:#8a8a8a;stroke-width:2;fill:none}
-                .linkLite{stroke:#b8b8b8;stroke-width:1.5;fill:none;stroke-dasharray:6 6}
                 .badge{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.25}
                 .ok{fill:#00cc00}
               </style>
@@ -254,23 +259,19 @@
               </marker>
             </defs>
 
-            <!-- Frame -->
             <rect class="frame" x="40" y="40" width="1320" height="440" rx="18"/>
 
-            <!-- Top info -->
             <text class="mono" x="78" y="92" style="font-size:20px;font-weight:700;letter-spacing:-0.01em;">
               Shared Substrate → Multiple Lenses (Single Dashboard)
             </text>
             <text class="muted micro" x="78" y="116">BUILD v5 • 2026 • PUBLIC MAP (EVIDENCE CONTRACT SHOWN)</text>
 
-            <!-- AUDIT MODE badge -->
             <g id="auditBadge">
               <rect class="badge" x="1065" y="74" width="250" height="34" rx="10"/>
               <circle class="ok" cx="1085" cy="91" r="5"/>
               <text class="mono micro" x="1098" y="95" style="font-weight:700;letter-spacing:0.10em;">AUDIT MODE ACTIVE</text>
             </g>
 
-            <!-- L1 substrate -->
             <g id="L1" class="on">
               <rect class="box" x="78" y="160" width="420" height="250" rx="14"/>
               <text class="mono h" x="110" y="200">L1 — RECORD OBSERVATORY</text>
@@ -287,12 +288,9 @@
               <text class="mono" x="110" y="192" style="font-size:12px;font-weight:700;">LIVE</text>
             </g>
 
-            <!-- Lens rail container -->
             <rect class="boxLite" x="540" y="160" width="780" height="250" rx="14"/>
             <text class="muted micro" x="564" y="190">ANALYTIC LENSES (L2–L7) • SAME RECORD SET • SWAPPABLE VIEW</text>
 
-            <!-- Lenses: 2 rows -->
-            <!-- Row 1 -->
             <g id="L2" class="fade">
               <rect class="box" x="564" y="212" width="240" height="78" rx="12"/>
               <text class="mono h" x="586" y="242">L2 — REFLECTION</text>
@@ -317,7 +315,6 @@
               <text class="muted micro" x="1286" y="236">ACTIVE DEV</text>
             </g>
 
-            <!-- Row 2 -->
             <g id="L5" class="fade">
               <rect class="box" x="564" y="308" width="240" height="78" rx="12"/>
               <text class="mono h" x="586" y="338">L5 — AGENCY</text>
@@ -342,17 +339,13 @@
               <text class="muted micro" x="1286" y="332">ACTIVE DEV</text>
             </g>
 
-            <!-- Link from L1 to lens rail -->
             <path id="linkSubToLenses" class="link fade" marker-end="url(#arrow)" d="M498 285 L540 285"/>
 
-            <!-- TRACE overlay paths (only visible in TRACE mode) -->
             <g id="traceOverlay" style="display:none;">
               <path id="t1" class="link" marker-end="url(#arrowOn)" d="M180 260 L440 260" style="stroke:#050505;stroke-width:2.5"/>
               <path id="t2" class="link" marker-end="url(#arrowOn)" d="M498 285 L540 285" style="stroke:#050505;stroke-width:2.5"/>
-              <path id="t3" class="link" marker-end="url(#arrowOn)" d="M680 420 L680 452" style="stroke:#050505;stroke-width:2.5"/>
             </g>
 
-            <!-- Bottom “export packet” strip -->
             <g id="packetStrip">
               <rect class="boxLite" x="78" y="430" width="1242" height="42" rx="12"/>
               <text class="mono micro" x="98" y="456" style="font-weight:700;letter-spacing:0.10em;">AUDIT PACKET (REDACTED PREVIEW)</text>
@@ -366,6 +359,8 @@
 
               <rect class="badge" x="1182" y="440" width="112" height="24" rx="8"/>
               <text class="mono micro" x="1214" y="456" style="font-weight:700;">VIEW</text>
+
+              <text class="muted micro" x="980" y="456" id="ticker" style="display:none;">tick: 0007</text>
             </g>
 
           </svg>
@@ -406,54 +401,31 @@
 
   <script>
     const MODULES = [
-      {
-        key:"L2",
-        label:"L2",
-        title:"L2 — Reflection",
+      { key:"L2", label:"L2", title:"L2 — Reflection",
         text:"Measures reflection impact as deltas between direct and reflective outputs, without re-judging truth, intent, or policy.",
-        chips:["STATUS: ACTIVE DEV","SCOPE: deltas","EVIDENCE: spans"]
-      },
-      {
-        key:"L3",
-        label:"L3",
-        title:"L3 — Reasoning",
+        chips:["STATUS: ACTIVE DEV","SCOPE: deltas","EVIDENCE: spans"] },
+      { key:"L3", label:"L3", title:"L3 — Reasoning",
         text:"Analyzes structural integrity of reasoning: dependency chains, closure, contradiction patterns, and unsupported transitions (structure-only).",
-        chips:["STATUS: ACTIVE DEV","SCOPE: chains","EVIDENCE: spans"]
-      },
-      {
-        key:"L4",
-        label:"L4",
-        title:"L4 — Drift",
+        chips:["STATUS: ACTIVE DEV","SCOPE: chains","EVIDENCE: spans"] },
+      { key:"L4", label:"L4", title:"L4 — Drift",
         text:"Tracks longitudinal change across runs, time, or interactions: escalation, degradation, and onset trajectories as measurable structure.",
-        chips:["STATUS: ACTIVE DEV","SCOPE: time-series","EVIDENCE: aggregates"]
-      },
-      {
-        key:"L5",
-        label:"L5",
-        title:"L5 — Agency",
+        chips:["STATUS: ACTIVE DEV","SCOPE: time-series","EVIDENCE: aggregates"] },
+      { key:"L5", label:"L5", title:"L5 — Agency",
         text:"Detects persistence and resistance patterns without intent attribution: goal-like language signatures and correction response dynamics.",
-        chips:["STATUS: ACTIVE DEV","SCOPE: persistence","EVIDENCE: spans"]
-      },
-      {
-        key:"L6",
-        label:"L6",
-        title:"L6 — Interaction",
+        chips:["STATUS: ACTIVE DEV","SCOPE: persistence","EVIDENCE: spans"] },
+      { key:"L6", label:"L6", title:"L6 — Interaction",
         text:"Measures coupling effects across multi-turn exchange: feedback sensitivity, interaction stability, and correction coupling over time.",
-        chips:["STATUS: ACTIVE DEV","SCOPE: multi-turn","EVIDENCE: traces"]
-      },
-      {
-        key:"L7",
-        label:"L7",
-        title:"L7 — Earth",
+        chips:["STATUS: ACTIVE DEV","SCOPE: multi-turn","EVIDENCE: traces"] },
+      { key:"L7", label:"L7", title:"L7 — Earth",
         text:"Context coupling surface: attaches structured world-state context alongside records (observational, audit-friendly, non-prescriptive).",
-        chips:["STATUS: ACTIVE DEV","SCOPE: context","EVIDENCE: packets"]
-      }
+        chips:["STATUS: ACTIVE DEV","SCOPE: context","EVIDENCE: packets"] }
     ];
 
     let active = "L2";
     let mode = "MAP";
     let pulsing = false;
     let pulseTimer = null;
+    let tick = 7;
 
     const lensbar = document.getElementById("lensbar");
     const moduleTitle = document.getElementById("moduleTitle");
@@ -464,11 +436,26 @@
     const modeTraceBtn = document.getElementById("modeTrace");
     const pulseBtn = document.getElementById("pulseBtn");
 
+    const scan = document.getElementById("scan");
+    const toast = document.getElementById("toast");
+    const ticker = document.getElementById("ticker");
+
     function el(id){ return document.getElementById(id); }
 
-    function setBtnActive(btn, on){
-      btn.classList.toggle("active", !!on);
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 950);
     }
+
+    function runScan(){
+      scan.classList.remove("run");
+      // force reflow
+      void scan.offsetWidth;
+      scan.classList.add("run");
+    }
+
+    function setBtnActive(btn, on){ btn.classList.toggle("active", !!on); }
 
     function setMode(next){
       mode = next;
@@ -476,7 +463,6 @@
       setBtnActive(modeMapBtn, mode === "MAP");
       setBtnActive(modeTraceBtn, mode === "TRACE");
 
-      // TRACE overlay + link styling
       el("traceOverlay").style.display = (mode === "TRACE") ? "block" : "none";
 
       const link = el("linkSubToLenses");
@@ -487,6 +473,9 @@
         link.style.strokeWidth = "2.5";
         link.setAttribute("marker-end","url(#arrowOn)");
         link.classList.add("tracePulse");
+
+        runScan();
+        showToast("TRACE ACTIVE");
       } else {
         link.style.stroke = "#8a8a8a";
         link.style.strokeWidth = "2";
@@ -494,6 +483,8 @@
         link.classList.remove("tracePulse");
         link.classList.add("fade");
         link.classList.remove("on");
+
+        showToast("MAP ACTIVE");
       }
     }
 
@@ -512,10 +503,13 @@
       });
     }
 
+    function clearLensBeat(){
+      ["L2","L3","L4","L5","L6","L7"].forEach(k => el(k).classList.remove("beat"));
+    }
+
     function activateLens(key){
       active = key;
 
-      // Fade all lens groups, raise active
       ["L2","L3","L4","L5","L6","L7"].forEach(k => {
         const g = el(k);
         g.classList.add("fade");
@@ -528,18 +522,63 @@
       g.classList.add("on");
       g.classList.add("raise");
 
-      // Update panel
+      if(pulsing){
+        clearLensBeat();
+        g.classList.add("beat");
+      }
+
       const m = MODULES.find(x => x.key === key);
       moduleTitle.textContent = m.title;
       moduleText.textContent = m.text;
       renderChips(m.chips);
+    }
 
-      // Make substrate link visible (subtle)
-      el("linkSubToLenses").class confirms?. // (no)
+    function startPulse(){
+      if (pulseTimer) return;
+      pulsing = true;
+      pulseBtn.classList.add("active");
+      ticker.style.display = "block";
+      showToast("PULSE RUNNING");
+
+      clearLensBeat();
+      el(active).classList.add("beat");
+
+      const order = ["L2","L3","L4","L5","L6","L7"];
+      let i = order.indexOf(active);
+      if(i < 0) i = 0;
+
+      pulseTimer = setInterval(() => {
+        const key = order[i % order.length];
+        activateLens(key);
+
+        // update pill highlight
+        const pills = Array.from(document.querySelectorAll(".pill"));
+        pills.forEach(x => x.classList.remove("active"));
+        pills[i % pills.length].classList.add("active");
+
+        tick++;
+        ticker.textContent = `tick: ${String(tick).padStart(4,"0")}`;
+
+        i++;
+      }, 1200);
+    }
+
+    function stopPulse(){
+      pulsing = false;
+      pulseBtn.classList.remove("active");
+      showToast("PULSE STOPPED");
+
+      clearLensBeat();
+      ticker.style.display = "none";
+
+      if (pulseTimer){
+        clearInterval(pulseTimer);
+        pulseTimer = null;
+      }
     }
 
     // Build lens pills
-    MODULES.forEach(m => {
+    MODULES.forEach((m, idx) => {
       const p = document.createElement("div");
       p.className = "pill";
       p.innerHTML = `<span class="dot"></span><span>${m.label}</span>`;
@@ -551,44 +590,15 @@
       lensbar.appendChild(p);
     });
 
-    function startPulse(){
-      if (pulseTimer) return;
-      pulsing = true;
-      pulseBtn.classList.add("active");
-
-      const order = ["L2","L3","L4","L5","L6","L7"];
-      let i = 0;
-      pulseTimer = setInterval(() => {
-        const key = order[i % order.length];
-        activateLens(key);
-        // update pill highlight
-        const pills = Array.from(document.querySelectorAll(".pill"));
-        pills.forEach(x => x.classList.remove("active"));
-        pills[i % pills.length].classList.add("active");
-        i++;
-      }, 1200);
-    }
-
-    function stopPulse(){
-      pulsing = false;
-      pulseBtn.classList.remove("active");
-      if (pulseTimer){
-        clearInterval(pulseTimer);
-        pulseTimer = null;
-      }
-    }
-
     // Buttons
     modeMapBtn.addEventListener("click", () => setMode("MAP"));
     modeTraceBtn.addEventListener("click", () => setMode("TRACE"));
     pulseBtn.addEventListener("click", () => pulsing ? stopPulse() : startPulse());
 
     // Init
-    setMode("MAP");
-    // default pill active = first
-    const firstPill = document.querySelectorAll(".pill")[0];
-    firstPill.classList.add("active");
+    document.querySelectorAll(".pill")[0].classList.add("active");
     activateLens("L2");
+    setMode("MAP");
   </script>
 </body>
 </html>
