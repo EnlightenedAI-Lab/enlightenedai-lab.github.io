@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RD Diagram 2 — Substrate & Lenses</title>
+  <title>RD Diagram 2 — Substrate & Lenses (Alive)</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,6 @@
       --muted:#6a6a6a;
       --border:#e5e5e5;
       --border-strong:#cfcfcf;
-      --panel:#ffffff;
 
       --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -47,14 +46,14 @@
       border:1px solid var(--border);
       border-radius:16px;
       padding:14px 16px;
-      background:var(--panel);
+      background:#fff;
       margin-bottom:18px;
       max-width: 980px;
       line-height: 1.55;
       font-size: 13px;
       color: var(--text);
     }
-    .intro strong{ font-weight:700; }
+    .intro strong{ font-weight:800; }
 
     .row{ display:flex; gap:18px; align-items:flex-start; }
 
@@ -63,7 +62,7 @@
       border:1px solid var(--border);
       border-radius:18px;
       padding:18px;
-      background:var(--panel);
+      background:#fff;
       position: relative;
       overflow: hidden;
     }
@@ -73,7 +72,7 @@
       border:1px solid var(--border);
       border-radius:18px;
       padding:16px;
-      background:var(--panel);
+      background:#fff;
       position: sticky;
       top: 18px;
     }
@@ -117,6 +116,7 @@
       align-items:center;
       gap:8px;
       user-select:none;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
     }
     .pill:hover{ border-color:#bdbdbd; }
     .pill.active{
@@ -137,7 +137,7 @@
       color:var(--muted);
       line-height:1.55;
     }
-    .meta b{ color:var(--text); font-weight:700; }
+    .meta b{ color:var(--text); font-weight:800; }
 
     .moduleTitle{ font-size:16px; font-weight:800; letter-spacing:-0.01em; margin:6px 0 8px; }
     .moduleText{ font-size:13px; line-height:1.55; color:var(--text); }
@@ -152,7 +152,7 @@
       color:var(--muted);
       background:#fff;
     }
-    .chip strong{ color:var(--text); font-weight:700; }
+    .chip strong{ color:var(--text); font-weight:800; }
 
     .svg-wrap{ width:100%; overflow:auto; }
     svg{ display:block; width:100%; height:auto; min-width:1100px; }
@@ -166,7 +166,7 @@
     .tracePulse{ stroke-dasharray: 10 8; animation: dash 1.2s linear infinite; }
     @keyframes dash{ to { stroke-dashoffset: -36; } }
 
-    /* Lens “heartbeat” */
+    /* Lens heartbeat */
     @keyframes heartbeat{
       0%{ filter: drop-shadow(0px 10px 18px rgba(0,0,0,0.10)); transform: translateY(0px); }
       50%{ filter: drop-shadow(0px 16px 28px rgba(0,0,0,0.14)); transform: translateY(-1px); }
@@ -174,7 +174,7 @@
     }
     .beat{ animation: heartbeat 0.9s ease-in-out infinite; }
 
-    /* “Scan” overlay on TRACE click */
+    /* Scan overlay on TRACE click */
     .scan{
       position:absolute; inset:0;
       pointer-events:none;
@@ -192,7 +192,21 @@
       100%{ transform: translateX(120%); opacity:0.0; }
     }
 
-    /* Small toast */
+    /* Cursor spotlight */
+    .spotlight{
+      position:absolute; inset:0;
+      pointer-events:none;
+      opacity:0;
+      transition: opacity 220ms ease;
+      background:
+        radial-gradient(420px 280px at var(--mx, 50%) var(--my, 50%),
+          rgba(0,0,0,0.065),
+          rgba(0,0,0,0.028) 35%,
+          rgba(0,0,0,0.0) 70%);
+    }
+    .card:hover .spotlight{ opacity:1; }
+
+    /* Toast */
     .toast{
       position:absolute;
       right:16px; bottom:16px;
@@ -211,6 +225,30 @@
       white-space:nowrap;
     }
     .toast.show{ opacity:1; transform: translateY(0px); }
+
+    /* Verify ticks */
+    @keyframes popIn{
+      0%{ opacity:0; transform: translateY(2px); }
+      100%{ opacity:1; transform: translateY(0); }
+    }
+    .vtick{ opacity:0; }
+    .vtick.show{ animation: popIn 180ms ease-out forwards; }
+
+    /* Lens hover preview */
+    .preview{
+      opacity:0.55 !important;
+      filter: drop-shadow(0px 10px 18px rgba(0,0,0,0.08));
+    }
+
+    /* Export arm glow */
+    .armGlow{
+      filter: none;
+      transition: filter 240ms ease, transform 240ms ease;
+    }
+    .armGlow.on{
+      filter: drop-shadow(0px 12px 22px rgba(0,0,0,0.14));
+      transform: translateY(-1px);
+    }
 
     @media (max-width: 980px){
       .row{ flex-direction:column; }
@@ -233,6 +271,7 @@
     <div class="row">
       <div class="card" id="card">
         <div class="scan" id="scan"></div>
+        <div class="spotlight" id="spotlight"></div>
         <div class="toast" id="toast">TRACE ACTIVE</div>
 
         <div class="svg-wrap">
@@ -266,6 +305,10 @@
             </text>
             <text class="muted micro" x="78" y="116">BUILD v5 • 2026 • PUBLIC MAP (EVIDENCE CONTRACT SHOWN)</text>
 
+            <text class="muted micro" x="78" y="138" id="telemetryLine">
+              TELEMETRY: cycle 0215 • phase 02/06 • jitter 0.00
+            </text>
+
             <g id="auditBadge">
               <rect class="badge" x="1065" y="74" width="250" height="34" rx="10"/>
               <circle class="ok" cx="1085" cy="91" r="5"/>
@@ -280,9 +323,16 @@
               <text class="muted t" x="110" y="276">span indexing + evidence links</text>
               <text class="muted t" x="110" y="298">replay / longitudinal comparison</text>
 
-              <rect class="boxLite" x="110" y="324" width="356" height="60" rx="12"/>
+              <rect class="boxLite" x="110" y="324" width="356" height="76" rx="12"/>
               <text class="mono micro" x="130" y="350" style="font-weight:700;">EVIDENCE CHAIN (INVARIANT)</text>
               <text class="muted micro" x="130" y="372">metric → span → source → hash</text>
+
+              <g id="verifyTicks">
+                <text class="mono micro vtick" id="vt1" x="130" y="392">✓</text>
+                <text class="mono micro vtick" id="vt2" x="240" y="392">✓</text>
+                <text class="mono micro vtick" id="vt3" x="350" y="392">✓</text>
+                <text class="mono micro vtick" id="vt4" x="430" y="392">✓</text>
+              </g>
 
               <rect class="badge" x="90" y="174" width="70" height="26" rx="8"/>
               <text class="mono" x="110" y="192" style="font-size:12px;font-weight:700;">LIVE</text>
@@ -342,27 +392,30 @@
             <path id="linkSubToLenses" class="link fade" marker-end="url(#arrow)" d="M498 285 L540 285"/>
 
             <g id="traceOverlay" style="display:none;">
-              <path id="t1" class="link" marker-end="url(#arrowOn)" d="M180 260 L440 260" style="stroke:#050505;stroke-width:2.5"/>
-              <path id="t2" class="link" marker-end="url(#arrowOn)" d="M498 285 L540 285" style="stroke:#050505;stroke-width:2.5"/>
+              <path class="link" marker-end="url(#arrowOn)" d="M180 260 L440 260" style="stroke:#050505;stroke-width:2.5"/>
+              <path class="link" marker-end="url(#arrowOn)" d="M498 285 L540 285" style="stroke:#050505;stroke-width:2.5"/>
             </g>
 
             <g id="packetStrip">
               <rect class="boxLite" x="78" y="430" width="1242" height="42" rx="12"/>
-              <text class="mono micro" x="98" y="456" style="font-weight:700;letter-spacing:0.10em;">AUDIT PACKET (REDACTED PREVIEW)</text>
+              <text class="mono micro" x="98" y="456" style="font-weight:800;letter-spacing:0.10em;">AUDIT PACKET (REDACTED PREVIEW)</text>
               <text class="muted micro" x="400" y="456">record_id:</text>
-              <text class="mono micro" x="478" y="456" style="font-weight:700;">RD-REC-0215-0A7C</text>
+              <text class="mono micro" x="478" y="456" style="font-weight:800;">RD-REC-0215-0A7C</text>
               <text class="muted micro" x="700" y="456">sha256:</text>
-              <text class="mono micro" x="770" y="456" style="font-weight:700;">9f2c…b18e</text>
+              <text class="mono micro" x="770" y="456" style="font-weight:800;">9f2c…b18e</text>
 
-              <rect class="badge" x="1060" y="440" width="112" height="24" rx="8"/>
-              <text class="mono micro" x="1085" y="456" style="font-weight:700;">EXPORT</text>
+              <g id="exportGroup" class="armGlow">
+                <rect class="badge" x="1060" y="440" width="112" height="24" rx="8"/>
+                <text class="mono micro" x="1085" y="456" style="font-weight:800;">EXPORT</text>
+              </g>
 
-              <rect class="badge" x="1182" y="440" width="112" height="24" rx="8"/>
-              <text class="mono micro" x="1214" y="456" style="font-weight:700;">VIEW</text>
+              <g id="viewGroup" class="armGlow">
+                <rect class="badge" x="1182" y="440" width="112" height="24" rx="8"/>
+                <text class="mono micro" x="1214" y="456" style="font-weight:800;">VIEW</text>
+              </g>
 
               <text class="muted micro" x="980" y="456" id="ticker" style="display:none;">tick: 0007</text>
             </g>
-
           </svg>
         </div>
       </div>
@@ -393,13 +446,14 @@
         <div class="meta">
           <div><b>Design signal:</b> one substrate, many lenses.</div>
           <div><b>Claim boundary:</b> structure-only, evidence-anchored.</div>
-          <div><b>Update cost:</b> status text changes only (diagram stays valid).</div>
+          <div><b>Update cost:</b> status text changes only (map stays valid).</div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    // ===== DATA =====
     const MODULES = [
       { key:"L2", label:"L2", title:"L2 — Reflection",
         text:"Measures reflection impact as deltas between direct and reflective outputs, without re-judging truth, intent, or policy.",
@@ -421,12 +475,19 @@
         chips:["STATUS: ACTIVE DEV","SCOPE: context","EVIDENCE: packets"] }
     ];
 
+    // ===== STATE =====
     let active = "L2";
     let mode = "MAP";
     let pulsing = false;
     let pulseTimer = null;
     let tick = 7;
 
+    // Telemetry state
+    let phase = 2;
+    let cycle = 215;
+    let jitter = 0;
+
+    // ===== DOM =====
     const lensbar = document.getElementById("lensbar");
     const moduleTitle = document.getElementById("moduleTitle");
     const moduleText = document.getElementById("moduleText");
@@ -436,12 +497,16 @@
     const modeTraceBtn = document.getElementById("modeTrace");
     const pulseBtn = document.getElementById("pulseBtn");
 
+    const card = document.getElementById("card");
+    const spotlight = document.getElementById("spotlight");
     const scan = document.getElementById("scan");
     const toast = document.getElementById("toast");
+    const telemetryLine = document.getElementById("telemetryLine");
     const ticker = document.getElementById("ticker");
 
     function el(id){ return document.getElementById(id); }
 
+    // ===== UI HELPERS =====
     function showToast(msg){
       toast.textContent = msg;
       toast.classList.add("show");
@@ -450,43 +515,11 @@
 
     function runScan(){
       scan.classList.remove("run");
-      // force reflow
       void scan.offsetWidth;
       scan.classList.add("run");
     }
 
     function setBtnActive(btn, on){ btn.classList.toggle("active", !!on); }
-
-    function setMode(next){
-      mode = next;
-
-      setBtnActive(modeMapBtn, mode === "MAP");
-      setBtnActive(modeTraceBtn, mode === "TRACE");
-
-      el("traceOverlay").style.display = (mode === "TRACE") ? "block" : "none";
-
-      const link = el("linkSubToLenses");
-      if (mode === "TRACE") {
-        link.classList.remove("fade");
-        link.classList.add("on");
-        link.style.stroke = "#050505";
-        link.style.strokeWidth = "2.5";
-        link.setAttribute("marker-end","url(#arrowOn)");
-        link.classList.add("tracePulse");
-
-        runScan();
-        showToast("TRACE ACTIVE");
-      } else {
-        link.style.stroke = "#8a8a8a";
-        link.style.strokeWidth = "2";
-        link.setAttribute("marker-end","url(#arrow)");
-        link.classList.remove("tracePulse");
-        link.classList.add("fade");
-        link.classList.remove("on");
-
-        showToast("MAP ACTIVE");
-      }
-    }
 
     function renderChips(list){
       chips.innerHTML = "";
@@ -503,8 +536,108 @@
       });
     }
 
+    // Export “arm” glow (SVG group)
+    function armExport(){
+      const g1 = el("exportGroup");
+      const g2 = el("viewGroup");
+      [g1,g2].forEach(g => {
+        if(!g) return;
+        g.classList.add("on");
+        setTimeout(() => g.classList.remove("on"), 520);
+      });
+    }
+
+    // ===== SPOTLIGHT TRACKING =====
+    if(card && spotlight){
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width) * 100;
+        const y = ((e.clientY - r.top) / r.height) * 100;
+        spotlight.style.setProperty("--mx", x + "%");
+        spotlight.style.setProperty("--my", y + "%");
+      });
+    }
+
+    // ===== TELEMETRY =====
+    function setTelemetry(extra=""){
+      if(!telemetryLine) return;
+      telemetryLine.textContent =
+        `TELEMETRY: cycle ${String(cycle).padStart(4,"0")} • phase ${String(phase).padStart(2,"0")}/06 • jitter ${jitter.toFixed(2)}${extra ? " • " + extra : ""}`;
+    }
+
+    function bumpTelemetry(tag){
+      jitter = Math.max(0, Math.min(0.85, jitter + (Math.random()*0.18 - 0.06)));
+      phase = Math.max(1, Math.min(6, phase + 1));
+      if(phase === 6){ cycle += 1; phase = 1; }
+      setTelemetry(tag);
+    }
+
+    // ===== VERIFY TICKS =====
+    function clearVerify(){
+      ["vt1","vt2","vt3","vt4"].forEach(id => {
+        const t = el(id);
+        if(!t) return;
+        t.classList.remove("show");
+        t.style.opacity = 0;
+      });
+    }
+
+    function runVerify(){
+      clearVerify();
+      const ids = ["vt1","vt2","vt3","vt4"];
+      ids.forEach((id, i) => {
+        setTimeout(() => {
+          const t = el(id);
+          if(!t) return;
+          t.classList.add("show");
+          t.style.opacity = 1;
+        }, 120 + i*140);
+      });
+    }
+
+    // ===== MODES =====
+    function setMode(next){
+      mode = next;
+
+      setBtnActive(modeMapBtn, mode === "MAP");
+      setBtnActive(modeTraceBtn, mode === "TRACE");
+
+      el("traceOverlay").style.display = (mode === "TRACE") ? "block" : "none";
+
+      const link = el("linkSubToLenses");
+      if(!link) return;
+
+      if (mode === "TRACE") {
+        link.classList.remove("fade");
+        link.classList.add("on");
+        link.style.stroke = "#050505";
+        link.style.strokeWidth = "2.5";
+        link.setAttribute("marker-end","url(#arrowOn)");
+        link.classList.add("tracePulse");
+
+        runScan();
+        runVerify();
+        bumpTelemetry("trace");
+        showToast("TRACE ACTIVE");
+      } else {
+        link.style.stroke = "#8a8a8a";
+        link.style.strokeWidth = "2";
+        link.setAttribute("marker-end","url(#arrow)");
+        link.classList.remove("tracePulse");
+        link.classList.add("fade");
+        link.classList.remove("on");
+
+        clearVerify();
+        bumpTelemetry("map");
+        showToast("MAP ACTIVE");
+      }
+
+      armExport();
+    }
+
+    // ===== LENS ACTIVATION =====
     function clearLensBeat(){
-      ["L2","L3","L4","L5","L6","L7"].forEach(k => el(k).classList.remove("beat"));
+      ["L2","L3","L4","L5","L6","L7"].forEach(k => el(k)?.classList.remove("beat"));
     }
 
     function activateLens(key){
@@ -512,36 +645,43 @@
 
       ["L2","L3","L4","L5","L6","L7"].forEach(k => {
         const g = el(k);
+        if(!g) return;
         g.classList.add("fade");
         g.classList.remove("on");
         g.classList.remove("raise");
+        g.classList.remove("preview");
       });
 
       const g = el(key);
-      g.classList.remove("fade");
-      g.classList.add("on");
-      g.classList.add("raise");
-
-      if(pulsing){
-        clearLensBeat();
-        g.classList.add("beat");
+      if(g){
+        g.classList.remove("fade");
+        g.classList.add("on");
+        g.classList.add("raise");
+        if(pulsing) g.classList.add("beat");
       }
 
       const m = MODULES.find(x => x.key === key);
-      moduleTitle.textContent = m.title;
-      moduleText.textContent = m.text;
-      renderChips(m.chips);
+      if(m){
+        moduleTitle.textContent = m.title;
+        moduleText.textContent = m.text;
+        renderChips(m.chips);
+      }
+
+      bumpTelemetry(key.toLowerCase());
+      armExport();
     }
 
+    // ===== PULSE =====
     function startPulse(){
       if (pulseTimer) return;
       pulsing = true;
       pulseBtn.classList.add("active");
       ticker.style.display = "block";
       showToast("PULSE RUNNING");
+      bumpTelemetry("pulse");
 
       clearLensBeat();
-      el(active).classList.add("beat");
+      el(active)?.classList.add("beat");
 
       const order = ["L2","L3","L4","L5","L6","L7"];
       let i = order.indexOf(active);
@@ -551,13 +691,15 @@
         const key = order[i % order.length];
         activateLens(key);
 
-        // update pill highlight
         const pills = Array.from(document.querySelectorAll(".pill"));
         pills.forEach(x => x.classList.remove("active"));
-        pills[i % pills.length].classList.add("active");
+        pills[i % pills.length]?.classList.add("active");
 
         tick++;
         ticker.textContent = `tick: ${String(tick).padStart(4,"0")}`;
+
+        // If TRACE mode is on, keep verify feeling “alive”
+        if(mode === "TRACE") runVerify();
 
         i++;
       }, 1200);
@@ -567,6 +709,7 @@
       pulsing = false;
       pulseBtn.classList.remove("active");
       showToast("PULSE STOPPED");
+      bumpTelemetry("pause");
 
       clearLensBeat();
       ticker.style.display = "none";
@@ -577,26 +720,39 @@
       }
     }
 
-    // Build lens pills
+    // ===== BUILD LENS PILLS + HOVER PREVIEW =====
     MODULES.forEach((m, idx) => {
       const p = document.createElement("div");
       p.className = "pill";
       p.innerHTML = `<span class="dot"></span><span>${m.label}</span>`;
+
       p.addEventListener("click", () => {
         document.querySelectorAll(".pill").forEach(x => x.classList.remove("active"));
         p.classList.add("active");
         activateLens(m.key);
       });
+
+      p.addEventListener("mouseenter", () => {
+        if(pulsing) return;
+        if(m.key === active) return;
+        el(m.key)?.classList.add("preview");
+      });
+
+      p.addEventListener("mouseleave", () => {
+        el(m.key)?.classList.remove("preview");
+      });
+
       lensbar.appendChild(p);
     });
 
-    // Buttons
+    // ===== BUTTONS =====
     modeMapBtn.addEventListener("click", () => setMode("MAP"));
     modeTraceBtn.addEventListener("click", () => setMode("TRACE"));
     pulseBtn.addEventListener("click", () => pulsing ? stopPulse() : startPulse());
 
-    // Init
+    // ===== INIT =====
     document.querySelectorAll(".pill")[0].classList.add("active");
+    setTelemetry();
     activateLens("L2");
     setMode("MAP");
   </script>
