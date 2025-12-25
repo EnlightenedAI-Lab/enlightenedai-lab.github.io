@@ -143,7 +143,6 @@
             display: flex; 
             justify-content: space-between;
             padding: 12px 0; 
-            
             font-family: "JetBrains Mono", monospace;
             font-size: 0.7rem; 
             color: var(--text-muted);
@@ -322,21 +321,25 @@
                 flex-direction: column;
             }
 
+            /* [FIX] DESKTOP STICKY WRAPPER LOGIC */
             .diagram-col {
                 flex: 0 0 580px;
                 width: 580px; 
                 border-left: 1px solid var(--border-color);
                 background: var(--bg-color);
-                padding: 2rem 2rem 4rem 2rem;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: flex-start;
+                padding: 0;               /* padding moves into .diagram-scroll */
+                align-self: flex-start;
                 
                 position: sticky; 
                 top: 0; 
                 height: 100vh; 
-                overflow-y: auto; 
+                overflow: hidden;        /* OUTER container does NOT scroll */
+            }
+            
+            .diagram-scroll {
+                height: 100%;
+                overflow-y: auto;        /* INNER container scrolls */
+                padding: 2rem 2rem 4rem 2rem;
             }
             
             .diagram-figure { margin: 0; width: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
@@ -473,7 +476,9 @@
             .global-header-strip { padding: 2rem; }
             .main-column { margin-top: 50px; padding: 0; width: 100%; max-width: 100vw; display: block; }
             .content-col { padding: 1.5rem; max-width: none; }
-            .diagram-col { display: none; } /* Hide diagram on mobile */
+            
+            /* [FIX] Hide diagram column on mobile, but keep styles valid */
+            .diagram-col { display: none; } 
         }
 
         /* --- DIAGRAM CONTEXT SVG STYLES (Moved from inline) --- */
@@ -600,33 +605,16 @@
             #state-box { stroke: var(--signal-enforced); stroke-width: 2px; }
             #packet-1, #packet-gate, #packet-2, #packet-3, #packet-4, #packet-5, .telemetry-text { display: none; }
         }
-
-        /* === STICKY DIAGRAM COLUMN: HARD OVERRIDE (DESKTOP) === */
-        @media (min-width: 1101px) {
-          html, body { overflow: visible !important; }
-
-          .main-column,
-          .split-view,
-          .content-col {
-            overflow: visible !important;
-            transform: none !important;   /* transform on an ancestor breaks sticky */
-          }
-
-          .diagram-col {
-            position: sticky !important;
-            top: 0 !important;
-            align-self: flex-start !important;
-            height: 100vh !important;
-            overflow-y: auto !important;
-          }
-        }
     </style>
 </head>
 <body data-mode="reader" data-theme="light">
 
     <header style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:var(--bg-color); border-bottom:1px solid var(--border-color); padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);" id="mobile-bar">
         <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em; color:var(--text-main);">ENLIGHTENED AI</div>
-        <button onclick="toggleSidebar()" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; padding:4px 10px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); cursor:pointer;">INDEX</button>
+        <div style="display:flex; gap:15px; align-items:center;">
+             <span onclick="toggleTheme()" style="cursor:pointer; font-size:1rem; color:var(--text-main);">◐</span>
+             <button onclick="toggleSidebar()" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; padding:4px 10px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); cursor:pointer;">INDEX</button>
+        </div>
     </header>
     
     <script>
@@ -771,148 +759,148 @@
             </div>
 
             <div class="diagram-col">
-                <div class="diagram-label">TRAINING & DEPLOYMENT LOOP</div>
-                <div class="diagram-label-xs">(PRIMARY CAUSAL PATH HIGHLIGHTED)</div>
-                <figure class="diagram-figure">
-                    <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
-                        <g class="diag-root" transform="translate(20,0)">
-                            <rect x="0" y="10" width="700" height="240" rx="4" class="diag-container"/>
+                <div class="diagram-scroll">
+                    <div class="diagram-label">TRAINING & DEPLOYMENT LOOP</div>
+                    <div class="diagram-label-xs">(PRIMARY CAUSAL PATH HIGHLIGHTED)</div>
+                    <figure class="diagram-figure">
+                        <svg id="diagram-context" width="100%" viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg">
+                            <g class="diag-root" transform="translate(20,0)">
+                                <rect x="0" y="10" width="700" height="240" rx="4" class="diag-container"/>
 
-                            <g transform="translate(20, 105)">
-                                <rect id="intent-box" width="110" height="50" rx="2" class="diag-bg"/>
-                                <text x="55" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
-                            </g>
+                                <g transform="translate(20, 105)">
+                                    <rect id="intent-box" width="110" height="50" rx="2" class="diag-bg"/>
+                                    <text x="55" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
+                                </g>
 
-                            <path d="M130 130 L170 130" class="diag-line" />
-                            <path id="packet-1" d="M130 130 L170 130" style="fill:none;" />
+                                <path d="M130 130 L170 130" class="diag-line" />
+                                <path id="packet-1" d="M130 130 L170 130" style="fill:none;" />
 
-                            <g transform="translate(170, 50)">
-                                <rect id="gate-box" width="250" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
-                                <text x="125" y="25" text-anchor="middle" class="diag-text-sm">ENFORCEMENT GATE</text>
+                                <g transform="translate(170, 50)">
+                                    <rect id="gate-box" width="250" height="160" rx="4" class="diag-bg" style="stroke-width:2.5px;"/>
+                                    <text x="125" y="25" text-anchor="middle" class="diag-text-sm">ENFORCEMENT GATE</text>
+                                    
+                                    <rect id="lexicon-box" x="30" y="40" width="130" height="28" rx="2" class="diag-bg"/>
+                                    <text x="95" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
+                                    <text id="tel-lex" x="170" y="58" class="telemetry-text">REF: LEX-02</text>
+                                    
+                                    <rect id="serial-box" x="30" y="80" width="130" height="28" rx="2" class="diag-bg"/>
+                                    <text x="95" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
+                                    <text id="tel-ser" x="170" y="98" class="telemetry-text">CHK: VALID</text>
+                                    
+                                    <rect id="state-box" x="30" y="120" width="130" height="28" rx="2" class="diag-bg"/>
+                                    <text x="95" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; font-weight:700;">3. ENFORCED STATE</text>
+                                    <text id="tel-sta" x="170" y="138" class="telemetry-text">LCK: 8F2A</text>
+                                    
+                                    <path d="M95 68 L95 80" class="diag-line" style="stroke-width:1px;"/>
+                                    <path id="packet-gate" d="M95 68 L95 80 M95 108 L95 120" style="fill:none; stroke-linecap:round;" />
+                                </g>
+
+                                <path d="M420 130 L460 130" class="diag-line" />
+                                <path id="packet-2" d="M420 130 L460 130" style="fill:none;" />
+
+                                <g transform="translate(460, 105)">
+                                    <rect id="model-box" width="110" height="50" rx="2" class="diag-bg"/>
+                                    <text x="55" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
+                                </g>
+
+                                <g transform="translate(590, 60)">
+                                    <rect id="eval-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted); stroke-width:1.5px; opacity:0.8;"/>
+                                    <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Safety Eval</text>
+                                </g>
+                                <g transform="translate(590, 160)">
+                                    <rect id="train-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted); stroke-width:1.5px; opacity:0.8;"/>
+                                    <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Base Train</text>
+                                </g>
+
+                                <path d="M515 105 L515 80 L590 80" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                                <path id="packet-3" d="M515 105 L515 80 L590 80" style="fill:none;" />
                                 
-                                <rect id="lexicon-box" x="30" y="40" width="130" height="28" rx="2" class="diag-bg"/>
-                                <text x="95" y="58" text-anchor="middle" class="diag-text" style="font-size:11px;">1. LEXICON</text>
-                                <text id="tel-lex" x="170" y="58" class="telemetry-text">REF: LEX-02</text>
+                                <path d="M635 100 L635 160" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                                <path id="packet-4" d="M635 100 L635 160" style="fill:none;" />
                                 
-                                <rect id="serial-box" x="30" y="80" width="130" height="28" rx="2" class="diag-bg"/>
-                                <text x="95" y="98" text-anchor="middle" class="diag-text" style="font-size:11px;">2. SERIALIZATION</text>
-                                <text id="tel-ser" x="170" y="98" class="telemetry-text">CHK: VALID</text>
+                                <path d="M590 180 L515 180 L515 155" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
+                                <path id="packet-5" d="M590 180 L515 180 L515 155" style="fill:none;" />
                                 
-                                <rect id="state-box" x="30" y="120" width="130" height="28" rx="2" class="diag-bg"/>
-                                <text x="95" y="138" text-anchor="middle" class="diag-text" style="font-size:11px; font-weight:700;">3. ENFORCED STATE</text>
-                                <text id="tel-sta" x="170" y="138" class="telemetry-text">LCK: 8F2A</text>
-                                
-                                <path d="M95 68 L95 80" class="diag-line" style="stroke-width:1px;"/>
-                                <path id="packet-gate" d="M95 68 L95 80 M95 108 L95 120" style="fill:none; stroke-linecap:round;" />
+                                <path id="policy-path" d="M635 60 L635 30 L130 30 L130 105" class="diag-line" />
+                                <text id="policy-label" x="350" y="25" class="telemetry-text" style="fill:var(--signal-eval); font-weight:700; opacity:0; font-size:10px;">POLICY UPDATE LOOP</text>
+
+                                <text x="590" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.8; letter-spacing:0.1em; font-weight:600;">POST-HOC EVALUATION</text>
+                                <text x="590" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
                             </g>
+                        </svg>
+                        
+                        <div class="cycle-label">TELEMETRY</div>
+                        <div id="cycle-counter" class="cycle-counter">CYCLE: 0215</div>
+                        
+                        <div class="diag-legend">
+                            <div class="legend-item"><div class="legend-dot" style="background:var(--signal-enforced);"></div>ENFORCED</div>
+                            <div class="legend-item"><div class="legend-dot" style="background:var(--signal-eval);"></div>EVALUATION</div>
+                            <div class="legend-item"><div class="legend-dot" style="background:#666;"></div>STRUCTURAL</div>
+                        </div>
+                        
+                        <figcaption class="diagram-caption">
+                            System Context (Abstracted)
+                            <br>
+                            <span style="font-size:0.55rem; opacity:0.7;">This diagram shows where alignment constraints are enforced: before execution, not after evaluation.</span>
+                        </figcaption>
+                    </figure>
 
-                            <path d="M420 130 L460 130" class="diag-line" />
-                            <path id="packet-2" d="M420 130 L460 130" style="fill:none;" />
+                    <div class="diagram-separator"></div>
 
-                            <g transform="translate(460, 105)">
-                                <rect id="model-box" width="110" height="50" rx="2" class="diag-bg"/>
-                                <text x="55" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
-                            </g>
+                    <div class="diagram-label">SEMANTIC COMPRESSION UNDER LEXICAL CONSTRAINTS</div>
+                    <div class="diagram-label-xs">(DIAGNOSTIC EVIDENCE)</div>
 
-                            <g transform="translate(590, 60)">
-                                <rect id="eval-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted); stroke-width:1.5px; opacity:0.8;"/>
-                                <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Safety Eval</text>
-                            </g>
-                            <g transform="translate(590, 160)">
-                                <rect id="train-box" width="90" height="40" rx="2" class="diag-bg" style="stroke:var(--text-muted); stroke-width:1.5px; opacity:0.8;"/>
-                                <text x="45" y="25" text-anchor="middle" class="diag-text" style="fill:var(--text-muted); font-size:12px;">Base Train</text>
-                            </g>
+                    <figure class="diagram-figure diagram-02-container">
+                      <svg id="diagram-stability" width="100%" viewBox="0 0 740 120" xmlns="http://www.w3.org/2000/svg">
+                        <g transform="translate(20,0)">
+                          <line x1="50" y1="50" x2="650" y2="50" class="d2-line" />
+                          <line x1="50" y1="50" x2="650" y2="50" class="d2-signal" />
+                          <text x="100" y="40" text-anchor="middle" class="d2-text">RAW INTENT</text>
+                          <circle cx="100" cy="50" r="3" fill="#666" />
+                          <text x="100" y="70" text-anchor="middle" class="d2-metric">ENTROPY: HIGH</text>
 
-                            <path d="M515 105 L515 80 L590 80" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                            <path id="packet-3" d="M515 105 L515 80 L590 80" style="fill:none;" />
-                            
-                            <path d="M635 100 L635 160" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                            <path id="packet-4" d="M635 100 L635 160" style="fill:none;" />
-                            
-                            <path d="M590 180 L515 180 L515 155" class="diag-line" style="stroke-width:1.5px; opacity:0.2;"/>
-                            <path id="packet-5" d="M590 180 L515 180 L515 155" style="fill:none;" />
-                            
-                            <path id="policy-path" d="M635 60 L635 30 L130 30 L130 105" class="diag-line" />
-                            <text id="policy-label" x="350" y="25" class="telemetry-text" style="fill:var(--signal-eval); font-weight:700; opacity:0; font-size:10px;">POLICY UPDATE LOOP</text>
+                          <text x="370" y="40" text-anchor="middle" class="d2-text" style="fill:var(--signal-eval);">SERIALIZED STATE</text>
+                          <circle cx="370" cy="50" r="3" style="fill:var(--signal-eval);" />
+                          <text x="370" y="70" text-anchor="middle" class="d2-metric" style="fill:var(--signal-eval);">RETAINED: 75% | DROPPED: 25%</text>
 
-                            <text x="590" y="225" text-anchor="middle" class="diag-text-xs" style="opacity:0.8; letter-spacing:0.1em; font-weight:600;">POST-HOC EVALUATION</text>
-                            <text x="590" y="238" text-anchor="middle" class="diag-text-xs" style="opacity:0.5; letter-spacing:0.1em; font-size:8px;">(NON-CAUSAL)</text>
+                          <text x="640" y="40" text-anchor="middle" class="d2-text" style="fill:var(--signal-enforced);">ENFORCED STATE</text>
+                          <circle cx="640" cy="50" r="3" style="fill:var(--signal-enforced);" />
+                          <text x="640" y="70" text-anchor="middle" class="d2-metric" style="fill:var(--signal-enforced);">DRIFT RISK: LOW</text>
+
+                          <line x1="235" y1="20" x2="235" y2="90" class="d2-boundary" />
+                          <text x="245" y="30" class="d2-label">LOSS BOUNDARY</text>
                         </g>
-                    </svg>
+                      </svg>
+
+                      <div class="diagram-caption">
+                        This diagram shows measured effects of lexicon enforcement. It does not control execution.
+                      </div>
+                    </figure>
                     
-                    <div class="cycle-label">TELEMETRY</div>
-                    <div id="cycle-counter" class="cycle-counter">CYCLE: 0215</div>
-                    
-                    <div class="diag-legend">
-                        <div class="legend-item"><div class="legend-dot" style="background:var(--signal-enforced);"></div>ENFORCED</div>
-                        <div class="legend-item"><div class="legend-dot" style="background:var(--signal-eval);"></div>EVALUATION</div>
-                        <div class="legend-item"><div class="legend-dot" style="background:#666;"></div>STRUCTURAL</div>
+                    <div class="diagram-separator"></div>
+
+                    <div class="cap-matrix">
+                      <div class="cap-header">LEXICON CAPABILITY MATRIX</div>
+                      <table class="cap-table">
+                        <thead>
+                          <tr>
+                            <th>PROPERTY</th>
+                            <th>WITHOUT LEXICON</th>
+                            <th style="color:var(--signal-enforced)">WITH LEXICON</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr><td>Semantic Drift</td><td>Unbounded</td><td class="cap-signal">Bounded</td></tr>
+                          <tr><td>Definition Stability</td><td>Implicit</td><td class="cap-signal">Explicit</td></tr>
+                          <tr><td>Cross-Run Comparability</td><td>No</td><td class="cap-signal">Yes</td></tr>
+                          <tr><td>Auditability</td><td>Narrative</td><td class="cap-signal">Structural</td></tr>
+                          <tr><td>Reward Hacking Surface</td><td>High</td><td class="cap-signal">Reduced</td></tr>
+                          <tr><td>Alignment Accumulation</td><td>Non-cumulative</td><td class="cap-signal">Cumulative</td></tr>
+                        </tbody>
+                      </table>
+                      <div class="cap-footer">Alignment becomes a system property when meaning is fixed before execution.</div>
                     </div>
-                    
-                    <figcaption class="diagram-caption">
-                        System Context (Abstracted)
-                        <br>
-                        <span style="font-size:0.55rem; opacity:0.7;">This diagram shows where alignment constraints are enforced: before execution, not after evaluation.</span>
-                    </figcaption>
-                </figure>
-
-                <div class="diagram-separator"></div>
-
-                <div class="diagram-label">SEMANTIC COMPRESSION UNDER LEXICAL CONSTRAINTS</div>
-                <div class="diagram-label-xs">(DIAGNOSTIC EVIDENCE)</div>
-
-                <figure class="diagram-figure diagram-02-container">
-                  <svg id="diagram-stability" width="100%" viewBox="0 0 740 120" xmlns="http://www.w3.org/2000/svg">
-                    <g transform="translate(20,0)">
-                      <line x1="50" y1="50" x2="650" y2="50" class="d2-line" />
-                      <line x1="50" y1="50" x2="650" y2="50" class="d2-signal" />
-                      <text x="100" y="40" text-anchor="middle" class="d2-text">RAW INTENT</text>
-                      <circle cx="100" cy="50" r="3" fill="#666" />
-                      <text x="100" y="70" text-anchor="middle" class="d2-metric">ENTROPY: HIGH</text>
-
-                      <text x="370" y="40" text-anchor="middle" class="d2-text" style="fill:var(--signal-eval);">SERIALIZED STATE</text>
-                      <circle cx="370" cy="50" r="3" style="fill:var(--signal-eval);" />
-                      <text x="370" y="70" text-anchor="middle" class="d2-metric" style="fill:var(--signal-eval);">RETAINED: 75% | DROPPED: 25%</text>
-
-                      <text x="640" y="40" text-anchor="middle" class="d2-text" style="fill:var(--signal-enforced);">ENFORCED STATE</text>
-                      <circle cx="640" cy="50" r="3" style="fill:var(--signal-enforced);" />
-                      <text x="640" y="70" text-anchor="middle" class="d2-metric" style="fill:var(--signal-enforced);">DRIFT RISK: LOW</text>
-
-                      <line x1="235" y1="20" x2="235" y2="90" class="d2-boundary" />
-                      <text x="245" y="30" class="d2-label">LOSS BOUNDARY</text>
-                    </g>
-                  </svg>
-
-                  <div class="diagram-caption">
-                    This diagram shows measured effects of lexicon enforcement. It does not control execution.
-                  </div>
-                </figure>
-                
-                <div class="diagram-separator"></div>
-
-                <div class="cap-matrix">
-                  <div class="cap-header">LEXICON CAPABILITY MATRIX</div>
-                  <table class="cap-table">
-                    <thead>
-                      <tr>
-                        <th>PROPERTY</th>
-                        <th>WITHOUT LEXICON</th>
-                        <th style="color:var(--signal-enforced)">WITH LEXICON</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr><td>Semantic Drift</td><td>Unbounded</td><td class="cap-signal">Bounded</td></tr>
-                      <tr><td>Definition Stability</td><td>Implicit</td><td class="cap-signal">Explicit</td></tr>
-                      <tr><td>Cross-Run Comparability</td><td>No</td><td class="cap-signal">Yes</td></tr>
-                      <tr><td>Auditability</td><td>Narrative</td><td class="cap-signal">Structural</td></tr>
-                      <tr><td>Reward Hacking Surface</td><td>High</td><td class="cap-signal">Reduced</td></tr>
-                      <tr><td>Alignment Accumulation</td><td>Non-cumulative</td><td class="cap-signal">Cumulative</td></tr>
-                    </tbody>
-                  </table>
-                  <div class="cap-footer">Alignment becomes a system property when meaning is fixed before execution.</div>
-                </div>
-
-            </div>
+                </div></div>
         </div>
     </div>
 
