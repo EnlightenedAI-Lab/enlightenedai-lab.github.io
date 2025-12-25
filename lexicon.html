@@ -21,11 +21,8 @@
             --panel-border: #000;
             --panel-bg: #fff;
             --panel-text: #000;
-            --panel-hover-bg: #000;
-            --panel-hover-text: #fff;
             --signal-enforced: #00cc00;  /* Pure Green */
-            --signal-eval: #00d7ff;      /* Bright Cyan */
-            --signal-struct: #cccccc;
+            --signal-eval: #00d7ff;
             --font-mono: "JetBrains Mono", monospace;
         }
 
@@ -36,11 +33,6 @@
             --text-muted: #888888;
             --border-color: #333333;
             --card-bg: #111111;
-            --panel-border: #444;
-            --panel-bg: #050505;
-            --panel-text: #ccc;
-            --panel-hover-bg: #e0e0e0;
-            --panel-hover-text: #000;
         }
 
         * { box-sizing: border-box; }
@@ -53,24 +45,30 @@
             display: flex;
         }
 
-        /* --- MASTER LAYOUT ANCHORS --- */
+        /* --- RESTORED SIDEBAR --- */
+        aside#sidebar { 
+            width: 240px; height: 100vh; position: fixed; top: 0; left: 0; 
+            border-right: 1px solid var(--border-color); padding: 2rem; 
+            display: flex; flex-direction: column; background: var(--sidebar-bg); z-index: 100;
+        }
+        
         .main-column {
             flex: 1;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            margin-left: 240px; /* Sidebar Offset */
+            margin-left: 240px;
         }
 
         .split-view { display: flex; flex: 1; }
 
+        /* --- GEOMETRY LOCK: Fixed Pillar for Diagram --- */
         .content-col { 
             flex: 1; 
             padding: 3rem 4rem 6rem 4rem; 
             max-width: 900px; 
         }
 
-        /* GEOMETRY LOCK: Diagram column is now a solid pillar that never shifts */
         .diagram-col { 
             width: 480px !important; 
             min-width: 480px !important;
@@ -92,37 +90,17 @@
             display: block;
         }
 
-        /* --- PERMANENT HIGHLIGHTS (Green Path) --- */
-        .accent-enforced { opacity: 1; stroke: var(--signal-enforced); stroke-width: 2.5px; }
-        .accent-eval { opacity: 0.15; }
-        .accent-struct { opacity: 0.3; }
-
-        /* --- TYPOGRAPHY --- */
+        /* --- TYPOGRAPHY & SEALS --- */
         h1 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
         h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
         p { font-size: 0.95rem; margin-bottom: 1.2rem; color: var(--text-main); }
-        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; }
-
-        /* --- SIDEBAR & NAV --- */
-        aside#sidebar { 
-            width: 240px; height: 100vh; position: fixed; top: 0; left: 0; 
-            border-right: 1px solid var(--border-color); padding: 2rem; 
-            display: flex; flex-direction: column; background: var(--sidebar-bg); 
-        }
-        nav ul { list-style: none; padding: 0; margin: 2rem 0; }
-        nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; display: block; padding: 5px 0; border-left: 2px solid transparent; padding-left: 10px; }
-        nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); }
+        .mono { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
         /* --- SVG STYLES --- */
         .diag-container { fill: none; stroke: var(--border-color); stroke-width: 1px; stroke-dasharray: 4 4; }
         .diag-bg { fill: var(--card-bg); stroke: var(--border-color); stroke-width: 1.5px; }
         .diag-text { font-family: var(--font-mono); font-size: 13px; fill: var(--text-main); font-weight: 700; }
-        
-        .telemetry-row { 
-            width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem;
-            font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between;
-        }
-        .tel-group { min-width: 160px; }
+        .telemetry-row { width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between; }
 
         .site-footer { border-top: 1px solid var(--border-color); padding: 2rem 4rem; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); margin-top: auto; }
     </style>
@@ -135,11 +113,10 @@
             <span style="font-size: 9px; opacity: 0.5;">EST. 2026 // MONTREAL</span>
         </div>
         <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="lexicon.html" class="active">Lexicon</a></li>
-                <li><a href="#overview">Overview</a></li>
-                <li><a href="#core-terms">Core Terms</a></li>
+            <ul style="list-style:none; padding:0; margin: 2rem 0;">
+                <li style="margin-bottom:10px;"><a href="#" style="text-decoration:none; color:var(--text-muted); font-size:0.85rem;">Home</a></li>
+                <li style="margin-bottom:10px;"><a href="#" style="text-decoration:none; color:var(--text-main); font-size:0.85rem; font-weight:600;">Lexicon</a></li>
+                <li style="margin-bottom:10px;"><a href="#overview" style="text-decoration:none; color:var(--text-muted); font-size:0.85rem;">Overview</a></li>
             </ul>
         </nav>
         <button onclick="toggleTheme()" style="margin-top:auto; background:none; border:1px solid var(--border-color); color:var(--text-main); padding:10px; cursor:pointer; font-family:var(--font-mono); font-size:10px;">[ TOGGLE THEME ]</button>
@@ -159,12 +136,12 @@
                     <p>Each term specifies: a bounded semantic scope, an operational interpretation, and the conditions under which it may be considered violated.</p>
                     <p>Stability of definitions is treated as a prerequisite for stability of conclusions.</p>
                 </section>
-                </div>
+            </div>
 
             <div class="diagram-col">
                 <div class="telemetry-row">
-                    <div class="tel-group">SYSTEM STATUS: <span style="color:var(--signal-enforced)">ENFORCED</span></div>
-                    <div class="tel-group">CYCLE: <span id="cycle-val">0601</span></div>
+                    <div>SYSTEM STATUS: <span style="color:var(--signal-enforced)">ENFORCED</span></div>
+                    <div>CYCLE: <span id="cycle-val">0601</span></div>
                 </div>
                 
                 <div style="text-align:center; font-family:var(--font-mono); font-size:10px; font-weight:800; margin-bottom:1rem; letter-spacing: 0.1em;">TRAINING & DEPLOYMENT LOOP</div>
@@ -177,34 +154,27 @@
                         <text x="55" y="30" text-anchor="middle" class="diag-text">Human Intent</text>
                     </g>
                     
-                    <path d="M150 130 L210 130" class="diag-line" style="stroke:var(--signal-enforced); opacity:1;"/>
+                    <path d="M150 130 L210 130" style="stroke:var(--signal-enforced); stroke-width:2.5px; fill:none;"/>
 
                     <g transform="translate(210, 50)">
                         <rect width="250" height="160" rx="4" class="diag-bg" style="stroke:var(--signal-enforced); stroke-width:2.5px;"/>
                         <text x="125" y="25" text-anchor="middle" class="diag-text" style="font-size:10px;">ENFORCEMENT GATE</text>
-                        
                         <rect x="30" y="50" width="190" height="30" rx="2" fill="rgba(0,204,0,0.05)" stroke="var(--signal-enforced)" stroke-dasharray="2 2"/>
-                        <text x="125" y="70" text-anchor="middle" class="diag-text" style="font-size:11px; fill:var(--signal-enforced)">1. LEXICON BINDING</text>
-                        
+                        <text x="125" y="70" text-anchor="middle" class="diag-text" style="font-size:11px; fill:var(--signal-enforced)">LEXICON BINDING</text>
                         <rect x="30" y="90" width="190" height="30" rx="2" fill="rgba(0,204,0,0.05)" stroke="var(--signal-enforced)" stroke-dasharray="2 2"/>
-                        <text x="125" y="110" text-anchor="middle" class="diag-text" style="font-size:11px; fill:var(--signal-enforced)">2. ENFORCED STATE</text>
+                        <text x="125" y="110" text-anchor="middle" class="diag-text" style="font-size:11px; fill:var(--signal-enforced)">ENFORCED STATE</text>
                     </g>
 
-                    <path d="M460 130 L520 130" class="diag-line" style="stroke:var(--signal-enforced); opacity:1;"/>
+                    <path d="M460 130 L520 130" style="stroke:var(--signal-enforced); stroke-width:2.5px; fill:none;"/>
 
                     <g transform="translate(520, 105)">
                         <rect width="110" height="50" rx="2" class="diag-bg"/>
                         <text x="55" y="30" text-anchor="middle" class="diag-text">Model Exec</text>
                     </g>
-
-                    <g class="accent-eval">
-                        <rect x="640" y="60" width="80" height="40" rx="2" class="diag-bg"/>
-                        <text x="680" y="85" text-anchor="middle" class="diag-text" style="font-size:10px;">Safety Eval</text>
-                    </g>
                 </svg>
 
-                <div style="font-family:var(--font-mono); font-size:9px; color:var(--text-muted); text-align:center; padding:1rem 2rem; border-top: 1px solid var(--border-color); width:100%;">
-                    PRIMARY CAUSAL PATH LOCKED // INTERACTIVE LENSES DISABLED FOR SYSTEM STABILITY
+                <div style="font-family:var(--font-mono); font-size:9px; color:var(--text-muted); text-align:center; padding:1rem 2rem; border-top: 1px solid var(--border-color); width:100%; margin-top:1rem;">
+                    PRIMARY CAUSAL PATH LOCKED // LENS INTERACTION REMOVED FOR STRUCTURAL INTEGRITY
                 </div>
             </div>
         </div>
@@ -224,12 +194,11 @@
             body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
         }
 
-        // Simulating a live heartbeat without changing any layout positions
         let count = 601;
         setInterval(() => {
             count++;
             document.getElementById('cycle-val').innerText = count.toString().padStart(4, '0');
-        }, 10000);
+        }, 8000);
     </script>
 </body>
 </html>
