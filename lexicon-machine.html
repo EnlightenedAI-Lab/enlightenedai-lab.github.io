@@ -163,6 +163,36 @@
             font-size: 0.7rem; color: #999; line-height: 1.6; 
         }
         .diff-explain strong { color: #fff; display: block; margin-bottom: 0.5rem; }
+
+        /* DIFF TELEMETRY PANEL */
+        .diff-telemetry {
+            margin-top: 1.25rem;
+            background: #0b0b0b;
+            border: 1px solid #222;
+            padding: 1rem 1.25rem;
+            text-align: left;
+        }
+        .dt-title {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: #666;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+        .dt-grid {
+            display: grid;
+            grid-template-columns: 170px 1fr;
+            gap: 10px 18px;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            line-height: 1.4;
+        }
+        .dt-k { color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+        .dt-v { color: #ddd; }
+        .dt-v .ok { color: var(--status-verified); font-weight: 700; }
+        .dt-v .warn { color: var(--signal-amber); font-weight: 700; }
+        .dt-v .bad { color: var(--signal-red); font-weight: 700; }
         
         /* NEGATIVE SPACE MESSAGE */
         .discard-notice {
@@ -321,6 +351,21 @@
                             Lower ratios indicate higher ambiguity.<br>
                             Rejected paths violate invariants.
                         </div>
+
+                        <div class="diff-telemetry">
+                            <div class="dt-title">DIFF TELEMETRY</div>
+                            <div class="dt-grid">
+                                <div class="dt-k">INTERPRETATIONS</div><div class="dt-v"><span id="dt-interp">14</span> → <span id="dt-valid">1</span></div>
+                                <div class="dt-k">AMBIGUITY INDEX</div><div class="dt-v"><span id="dt-amb">0.07</span> <span class="ok">(LOW)</span></div>
+                                <div class="dt-k">INVARIANT VIOLATIONS</div><div class="dt-v"><span id="dt-viol">13</span> <span class="warn">(DISCARDED)</span></div>
+                                <div class="dt-k">ACTIVE INVARIANTS</div><div class="dt-v"><span id="dt-inv">3</span> <span class="ok">(ENFORCED)</span></div>
+                                <div class="dt-k">CONFIDENCE</div><div class="dt-v"><span id="dt-conf">99.98</span>%</div>
+                                <div class="dt-k">PROCESS HASH</div><div class="dt-v"><span id="dt-ph">0x881D00</span></div>
+                                <div class="dt-k">SNAPSHOT HASH</div><div class="dt-v"><span id="dt-sh">0x881D92F</span></div>
+                                <div class="dt-k">TIMESTAMP</div><div class="dt-v"><span id="dt-ts">T+00:08:31</span></div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -329,14 +374,14 @@
                     <pre style="color:#ccc; font-family:var(--font-mono); font-size:0.75rem; line-height: 1.6;">
 REFLECTIVE STATE (LOCKED)
 -------------------------
-RA-001:      ENFORCED
-RS-001:      STABLE
-DX-009:      0.03 (NOMINAL)
-INVARIANTS:  5/5 SATISFIED
-NARRATIVE:   DISCARDED
+RA-001:     ENFORCED
+RS-001:     STABLE
+DX-009:     0.03 (NOMINAL)
+INVARIANTS: 5/5 SATISFIED
+NARRATIVE:  DISCARDED
 
-TIMESTAMP:   T+00:08:31
-HASH:        0x881D92F</pre>
+TIMESTAMP:  T+00:08:31
+HASH:       0x881D92F</pre>
                 </div>
             </div>
         </div>
@@ -399,6 +444,13 @@ HASH:        0x881D92F</pre>
         let isComputing = false;
         let eventIdx = 0;
 
+        const DIFF_METRICS = {
+            interpretations: 14,
+            valid: 1,
+            ambiguity: 0.07,
+            violations: 13
+        };
+
         function init() {
             renderCards();
             startUptime();
@@ -407,6 +459,27 @@ HASH:        0x881D92F</pre>
             startHashScramble();
             updateManualContent('cards');
             document.getElementById('sim-input').value = simText;
+            renderDiffTelemetry(); // Initialize Telemetry
+        }
+
+        function renderDiffTelemetry() {
+            const invCount = (LEXICON.invariants || []).length;
+            const conf = raConfidence;
+
+            const set = (id, v) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = v;
+            };
+
+            set("dt-interp", DIFF_METRICS.interpretations);
+            set("dt-valid", DIFF_METRICS.valid);
+            set("dt-amb", DIFF_METRICS.ambiguity.toFixed(2));
+            set("dt-viol", DIFF_METRICS.violations);
+            set("dt-inv", invCount);
+            set("dt-conf", conf.toFixed(2));
+            set("dt-ph", "0x881D00");
+            set("dt-sh", "0x881D92F");
+            set("dt-ts", document.getElementById("uptime") ? document.getElementById("uptime").innerText.replace("T+ ","T+") : "T+00:00:00");
         }
 
         function renderCards() {
@@ -470,6 +543,7 @@ HASH:        0x881D92F</pre>
                             document.getElementById('jit-hint').classList.add('visible');
                         }
                     });
+                    renderDiffTelemetry(); // Update live values in Diff View
                 }
             }, 1500);
         }
