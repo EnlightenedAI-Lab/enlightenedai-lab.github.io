@@ -600,6 +600,26 @@
             #state-box { stroke: var(--signal-enforced); stroke-width: 2px; }
             #packet-1, #packet-gate, #packet-2, #packet-3, #packet-4, #packet-5, .telemetry-text { display: none; }
         }
+
+        /* === STICKY DIAGRAM COLUMN: HARD OVERRIDE (DESKTOP) === */
+        @media (min-width: 1101px) {
+          html, body { overflow: visible !important; }
+
+          .main-column,
+          .split-view,
+          .content-col {
+            overflow: visible !important;
+            transform: none !important;   /* transform on an ancestor breaks sticky */
+          }
+
+          .diagram-col {
+            position: sticky !important;
+            top: 0 !important;
+            align-self: flex-start !important;
+            height: 100vh !important;
+            overflow-y: auto !important;
+          }
+        }
     </style>
 </head>
 <body data-mode="reader" data-theme="light">
