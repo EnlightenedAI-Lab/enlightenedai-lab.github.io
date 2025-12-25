@@ -34,7 +34,7 @@
             --panel-hover-bg: #000;
             --panel-hover-text: #fff;
             
-            /* SIGNALS - HIGH CONTRAST */
+            /* SIGNALS */
             --signal-enforced: #00cc00;  /* Pure Green */
             --signal-eval: #00d7ff;      /* Bright Cyan */
             --signal-struct: #cccccc;
@@ -48,7 +48,7 @@
             --mode-diff-ins-text: #006600;
 
             /* SPACING VARS */
-            --block-gap: 48px; /* Standardized vertical gap */
+            --block-gap: 48px;
         }
 
         /* DARK MODE */
@@ -91,9 +91,8 @@
         }
 
         /* --- TYPOGRAPHY --- */
-        /* H1 Reduced Size for Hierarchy Balance */
         h1 { 
-            font-size: 1.1rem; /* Reduced from 1.8rem */
+            font-size: 1.1rem; 
             font-weight: 700; 
             letter-spacing: -0.01em; 
             margin-bottom: 1.5rem; 
@@ -109,7 +108,7 @@
         .mono { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .scramble { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
-        /* ORIENTING FRAME & HEADER (Left Aligned) */
+        /* ORIENTING FRAME & HEADER */
         .global-header-strip {
             width: 100%;
             padding: 2rem 4rem;
@@ -164,11 +163,15 @@
         /* --- MODES & VIEWS --- */
         del, ins { text-decoration: none; }
 
-        /* Reader Mode: Hide deletions, plain text insertions */
+        /* DEFAULT: Reader Mode (Human View) */
+        .view-audit, .view-logic { display: none; }
+        .view-human { display: block; animation: fadeIn 0.3s ease; }
+
+        /* Reader Mode CSS: Hide deletions, plain text insertions */
         body:not([data-mode="diff"]) del { display:none; }
         body:not([data-mode="diff"]) ins { background:transparent; color:inherit; border:0; }
 
-        /* Diff Mode: Visible styling */
+        /* Diff Log Mode CSS: Visible styling, but still uses .view-human structure */
         body[data-mode="diff"] del {
             display:inline;
             background: var(--mode-diff-del-bg);
@@ -179,7 +182,6 @@
             padding: 0 3px;
             border-radius: 2px;
         }
-
         body[data-mode="diff"] ins {
             display:inline;
             background: var(--mode-diff-ins-bg);
@@ -189,19 +191,15 @@
             border-radius: 2px;
         }
 
-        /* AUDIT CONTENT VISIBILITY RULES */
-        /* Hidden by default in reader/logic */
-        .view-audit { display: none; margin-top: 4rem; border-top: 1px solid var(--border-color); padding-top: 2rem; }
-        
-        /* Visible ONLY in Diff Mode as part of content flow */
-        body[data-mode="diff"] .view-audit { display: block; animation: fadeIn 0.3s ease; }
+        /* AUDIT MODE: EXCLUSIVE VIEW */
+        body[data-mode="audit"] .view-human { display: none; }
+        body[data-mode="audit"] .view-logic { display: none; }
+        body[data-mode="audit"] .view-audit { display: block; animation: fadeIn 0.3s ease; }
 
-        /* LOGIC MODE */
+        /* LOGIC MODE: EXCLUSIVE VIEW */
         body[data-mode="logic"] .view-human { display: none; }
-        /* Ensure audit content is hidden in logic mode explicitly */
         body[data-mode="logic"] .view-audit { display: none; }
         body[data-mode="logic"] .view-logic { display: block; animation: fadeIn 0.3s ease; font-family: "JetBrains Mono", monospace; color: var(--text-main); }
-        .view-logic { display: none; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -273,7 +271,7 @@
                 display: flex; flex-direction: column;
                 max-width: 900px;
             }
-            /* DIAGRAM COLUMN: STICKY RESTORED + UNIFIED SCROLL */
+            /* DIAGRAM COLUMN: STICKY & SCROLL */
             .diagram-col {
                 width: 580px; 
                 border-left: 1px solid var(--border-color);
@@ -281,7 +279,6 @@
                 padding: 2rem 2rem 4rem 2rem;
                 display: flex; flex-direction: column;
                 align-items: center; justify-content: flex-start;
-                /* Sticky Behavior: Pinned to top, moves with body scroll until end */
                 position: sticky; top: 0; 
                 height: fit-content; 
                 align-self: flex-start;
@@ -308,7 +305,7 @@
             }
             .cycle-counter {
                 font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-main); font-weight:700;
-                text-align: center; margin-bottom: 0.2rem; /* Tightened dead space */
+                text-align: center; margin-bottom: 0.2rem;
             }
             
             /* DARK MODE TEXT FIXES */
@@ -327,7 +324,7 @@
             .legend-item { display: flex; align-items: center; gap: 6px; }
             .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
 
-            /* --- SPACERS FOR SEPARATION --- */
+            /* --- SPACERS --- */
             .diagram-separator { width: 100%; height: 1px; background: var(--border-color); margin: var(--block-gap) 0; opacity: 0.5; }
             
             .diagram-02-container { width: 100%; opacity: 0.9; margin: 0; }
@@ -390,6 +387,7 @@
 
         <div class="mode-group">
             <span class="toggle-btn active" onclick="setMode('reader', this)">[ READER ] <span>•</span></span>
+            <span class="toggle-btn" onclick="setMode('audit', this)">[ AUDIT ] <span>•</span></span>
             <span class="toggle-btn" onclick="setMode('diff', this)">[ DIFF LOG ] <span>Δ</span></span>
             <span class="toggle-btn" onclick="setMode('logic', this)">[ LOGIC ] <span>λ</span></span>
            <span class="toggle-btn" onclick="window.location.href='lexicon-machine.html'">[ MACHINE ] <span>≡</span></span>
@@ -838,15 +836,16 @@
         // MODE SWITCHER
         function setMode(mode, btn) {
             const body = document.body;
-            if ((mode === 'diff' || mode === 'logic') && body.getAttribute('data-mode') === mode) {
-                body.setAttribute('data-mode', 'reader');
-                btn.classList.remove('active');
-                document.querySelector('.toggle-btn[onclick*="reader"]').classList.add('active');
-            } else {
-                body.setAttribute('data-mode', mode);
-                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            }
+            // Prevent accidental fallthrough or forced logic if undefined mode is passed
+            const validModes = ['reader', 'audit', 'diff', 'logic'];
+            if (!validModes.includes(mode)) return;
+
+            // Simple switch: Set the attribute, UI updates via CSS rules
+            body.setAttribute('data-mode', mode);
+            
+            // Update Active State
+            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
         }
 
         // SCRAMBLE
