@@ -49,13 +49,13 @@
 
             /* SPACING */
             --sidebar-width: 280px;
-            --rail-width: 500px; /* INCREASED FOR LARGER DIAGRAMS */
+            --rail-width: 450px; 
         }
 
         /* DARK MODE */
         [data-theme="dark"] {
-            --bg-color: #050505;
-            --sidebar-bg: #050505;
+            --bg-color: #0a0a0a;
+            --sidebar-bg: #0a0a0a;
             --text-main: #e0e0e0;
             --text-muted: #888888;
             --border-color: #333333;
@@ -68,6 +68,7 @@
             --mode-audit: #ffaa00;
             --mode-logic: #66aaff;
             
+            /* DIFF COLORS DARK */
             --mode-diff-del-bg: #330000;
             --mode-diff-del-text: #ff6666;
             --mode-diff-ins-bg: #003300;
@@ -85,7 +86,7 @@
             line-height: 1.6;
             transition: background 0.2s ease, color 0.2s ease;
             overflow-x: hidden;
-            display: flex; /* Enforce flex layout */
+            display: flex;
             min-height: 100vh;
         }
 
@@ -212,7 +213,9 @@
         .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
         .export-btn:hover { background: var(--text-main); color: var(--bg-color); }
 
+        @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
         @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
+        @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
 
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
@@ -475,7 +478,9 @@
                             <p>Full <del>dashboard</del> <ins>instrument</ins> access and repository access is <del>available privately</del> <ins>restricted</ins> to authorized funders, technical reviewers, and collaborators under controlled review or NDA.</p>
                         </div>
                     </section>
-                </div><div class="diagram-rail">
+                </div>
+
+                <div class="diagram-rail">
                     
                     <div class="rail-item" onclick="openModal('/diag-coverage-map-v1.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-01</span>
@@ -492,7 +497,10 @@
                         <img class="rail-thumb" src="/assets/images/fig10_static.jpg" alt="Substrate" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
                     </div>
 
-                </div></div><div id="footer-mount"></div>
+                </div>
+            </div>
+
+            <div id="footer-mount"></div>
             
         </main>
     </div>
