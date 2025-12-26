@@ -19,7 +19,7 @@
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V130 (STRICT LEXICON MATCH) --- */
+        /* --- THEME: INSTITUTE STANDARD V130 --- */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -47,9 +47,9 @@
             --mode-diff-ins-bg: #e6ffec;
             --mode-diff-ins-text: #006600;
 
-            /* LAYOUT DIMS */
+            /* SPACING */
             --sidebar-width: 280px;
-            --rail-width: 450px; /* Matched to Lexicon */
+            --rail-width: 420px; 
         }
 
         /* DARK MODE */
@@ -233,10 +233,11 @@
             }
             .split-view { display: flex; flex: 1; align-items: flex-start; }
             
-            .content-col {
-                flex: 1 1 auto;
-                min-width: 0;
-                padding: 3rem 4rem 6rem 4rem; /* Spacious padding */
+            .content-col { 
+                flex: 1 1 auto; 
+                min-width: 0; 
+                padding: 3rem 4rem 6rem 4rem; 
+                display: flex; flex-direction: column; 
             }
 
             /* RIGHT RAIL (DIAGRAMS) */
@@ -258,10 +259,14 @@
                 font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); 
                 font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;
             }
-            /* Clean Thumbnail Image Style */
+            /* Clean Thumbnail Image Style (Matched to Lexicon) */
             .rail-thumb {
-                width: 100%; height: auto; display: block;
-                border: 1px solid var(--border-color); background: var(--card-bg);
+                width: 100%; 
+                height: auto; 
+                display: block;
+                border: 1px solid var(--border-color); 
+                background: #000; /* Dark bg for diagrams */
+                object-fit: contain;
             }
         }
 
@@ -278,6 +283,14 @@
             aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); transition: transform 0.25s ease; border-right: none; background: var(--sidebar-bg); z-index: 10000; }
             aside.open { transform: translateX(0); }
         }
+        
+        /* FOOTER POSITIONING (FIX) */
+        #footer-mount {
+            width: 100%;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-color);
+            margin-top: auto; /* Pushes to bottom if content is short */
+        }
 
         /* FULLSCREEN MODAL */
         #diagram-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.92); z-index: 20000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
@@ -291,13 +304,22 @@
 
     <div id="mode-banner">READER MODE</div>
 
-    <header class="mobile-bar">
-        <div class="mobile-brand">ENLIGHTENED AI</div>
-        <div style="display:flex; align-items:center; gap:15px;">
-            <span id="theme-icon-mobile" onclick="toggleTheme()" style="cursor:pointer; font-size:1rem; color:var(--text-main);">◐</span>
-            <button class="mobile-index-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">INDEX</button>
+    <header style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:var(--bg-color); border-bottom:1px solid var(--border-color); padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);" id="mobile-bar">
+        <div style="font-weight:800; font-size:0.85rem; letter-spacing:-.02em; color:var(--text-main);">ENLIGHTENED AI</div>
+        <div style="display:flex; gap:15px; align-items:center;">
+             <span onclick="toggleTheme()" style="cursor:pointer; font-size:1rem; color:var(--text-main);">◐</span>
+             <button onclick="toggleSidebar()" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; padding:4px 10px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); cursor:pointer;">INDEX</button>
         </div>
     </header>
+    
+    <script>
+    (function syncMobileBar() {
+      const bar = document.getElementById('mobile-bar');
+      const apply = () => { bar.style.display = (window.innerWidth <= 1100) ? 'flex' : 'none'; };
+      window.addEventListener('resize', apply);
+      apply();
+    })();
+    </script>
 
     <div class="layout-wrapper">
         <aside id="sidebar">
@@ -329,7 +351,7 @@
                     [ LIGHT / DARK ] <span id="theme-icon">◐</span>
                 </div>
 
-                <div class="repo-panel">
+                <div class="repo-panel" title="Access available under NDA or technical review.">
                     <div class="repo-header">
                         <div style="display:flex; align-items:center; gap:8px;">
                             <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -346,8 +368,9 @@
             </div>
         </aside>
 
-        <main class="main-column">
-            
+        <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+        <div class="main-column">
             <div class="global-header-strip">
                 <div class="header-meta">
                     <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">DOC_ID</span>RD-DIAG-0001</div>
@@ -486,35 +509,27 @@
                         </div>
                     </section>
 
-                    <div id="footer-mount"></div>
-                    <script>
-                      fetch('/partials/footer.html')
-                        .then(r => r.ok ? r.text() : '')
-                        .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
-                        .catch(() => {});
-                    </script>
                 </div><div class="diagram-rail">
                     
                     <div class="rail-item" onclick="openModal('/diag-coverage-map-v1.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-01</span>
-                        <img class="rail-thumb" src="/assets/diagrams/rd-fig-01.png" alt="Coverage Map" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWJlYmViOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNzciPkRJQUdSQU0gUFJFVklFVyAobWlzc2luZyk8L3RleHQ+PC9zdmc+'">
+                        <img class="rail-thumb" src="assets/images/image_79b414.png" alt="Coverage Map" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
                     </div>
 
                     <div class="rail-item" onclick="openModal('/diag-diagram-preview.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-02</span>
-                        <img class="rail-thumb" src="/assets/diagrams/rd-fig-02.png" alt="Preview" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWJlYmViOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNzciPkRJQUdSQU0gUFJFVklFVyAobWlzc2luZyk8L3RleHQ+PC9zdmc+'">
+                        <img class="rail-thumb" src="assets/images/fig11_static.jpg" alt="Preview" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
                     </div>
 
                     <div class="rail-item" onclick="openModal('/diag-layers-substrate.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-03</span>
-                        <img class="rail-thumb" src="/assets/diagrams/rd-fig-03.png" alt="Substrate" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWJlYmViOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNzciPkRJQUdSQU0gUFJFVklFVyAobWlzc2luZyk8L3RleHQ+PC9zdmc+'">
+                        <img class="rail-thumb" src="assets/images/fig10_static.jpg" alt="Substrate" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
                     </div>
 
-                </div>
-            </div></main>
-    </div>
-
-    <div id="diagram-modal">
+                </div></div><div id="footer-mount"></div>
+            
+        </main>
+    </div><div id="diagram-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">Close [ESC]</button>
             <iframe id="modal-iframe" class="modal-iframe"></iframe>
@@ -522,14 +537,14 @@
     </div>
 
     <script>
-        // --- MODE SWITCH ---
         function setMode(mode, label) {
             document.body.setAttribute('data-mode', mode);
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${mode}`).classList.add('active');
             const banner = document.getElementById('mode-banner');
             banner.innerText = (mode === 'reader') ? "READER MODE" : mode.toUpperCase() + " MODE ACTIVE";
-            if(window.innerWidth <= 1100) document.getElementById('sidebar').classList.remove('open');
+            
+            if(window.innerWidth <= 1100) closeSidebar();
         }
         
         // --- SCRAMBLE LOGIC ---
@@ -570,7 +585,27 @@
             if (e.key === "Escape") closeModal();
         });
 
-        // --- DARK MODE LOGIC ---
+        // --- SIDEBAR LOGIC ---
+        let __scrollY = 0;
+        function openSidebar() {
+            __scrollY = window.scrollY;
+            document.body.style.top = `-${__scrollY}px`;
+            document.getElementById('sidebar').classList.add('open');
+            document.body.classList.add('sidebar-open');
+        }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.body.classList.remove('sidebar-open');
+            const y = __scrollY;
+            document.body.style.top = '';
+            window.scrollTo(0, y);
+        }
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            sb.classList.contains('open') ? closeSidebar() : openSidebar();
+        }
+
+        // --- DARK MODE ---
         function setTheme(theme) {
             document.body.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
@@ -584,6 +619,12 @@
         }
         const savedTheme = localStorage.getItem('theme') || 'light';
         setTheme(savedTheme);
+        
+        // --- FOOTER INJECT ---
+        fetch('/partials/footer.html')
+        .then(r => r.ok ? r.text() : '')
+        .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
+        .catch(() => {});
     </script>
 </body>
 </html>
