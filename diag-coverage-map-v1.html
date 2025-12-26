@@ -22,14 +22,12 @@
       --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
       --ok:#00cc00;
-      --warn:#ffb000;
-      --bad:#cc0000;
 
-      --inactiveOpacity:0.25;
+      --inactiveOpacity:0.22;
       --activeOpacity:1;
 
       --activeStroke:#050505;
-      --activeStrokeW:2.5;
+      --activeStrokeW:2.6;
 
       --glowA: rgba(0,0,0,0.10);
       --glowB: rgba(0,0,0,0.06);
@@ -109,10 +107,6 @@
       color:var(--text);
       margin-bottom:12px;
     }
-    .panel .lines .mono{
-      font-family:var(--mono);
-      letter-spacing:0.02em;
-    }
 
     .panel .pillrow{
       display:flex;
@@ -182,22 +176,20 @@
       font-size:12px;
       line-height:1.5;
     }
-    .note .mono{ font-family:var(--mono); letter-spacing:0.04em; text-transform:uppercase; font-size:11px; color:var(--muted); }
+    .note .mono{
+      font-family:var(--mono);
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      font-size:11px;
+      color:var(--muted);
+    }
 
     .svg-wrap{ width:100%; overflow:auto; }
-    svg{ width:100%; height:auto; min-width:820px; display:block; }
+    svg{ width:100%; height:auto; min-width:860px; display:block; }
 
-    /* Interaction emphasis */
     .dim { opacity: var(--inactiveOpacity); transition: opacity 180ms ease; }
     .active { opacity: var(--activeOpacity); transition: opacity 180ms ease; }
 
-    /* “Float” / presence effect on active wedge */
-    .lift{
-      filter: drop-shadow(0 18px 28px var(--glowA)) drop-shadow(0 6px 10px var(--glowB));
-      transition: filter 180ms ease;
-    }
-
-    /* Small top-right stamp */
     .stamp{
       position:absolute;
       top:16px;
@@ -213,13 +205,14 @@
       display:flex;
       gap:10px;
       align-items:center;
+      user-select:none;
     }
     .stamp .miniDot{ width:7px; height:7px; border-radius:50%; background:var(--ok); }
 
     @media (max-width: 980px){
       .row{ flex-direction:column; }
       .panel{ width:100%; position:relative; top:auto; }
-      svg{ min-width:740px; }
+      svg{ min-width:760px; }
     }
   </style>
 </head>
@@ -231,7 +224,7 @@
 
     <div class="row">
       <div class="card">
-        <div class="stamp" title="Public view / no metrics / no thresholds">
+        <div class="stamp" title="Public view / no prompts / no thresholds">
           <span class="miniDot"></span>
           <span>PUBLIC SAFE</span>
           <span>2026</span>
@@ -242,22 +235,27 @@
             <defs>
               <style>
                 .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
+
                 .ring{fill:none;stroke:#e5e5e5;stroke-width:1.25}
                 .ring2{fill:none;stroke:#cfcfcf;stroke-width:1.25}
                 .axis{stroke:#e5e5e5;stroke-width:1.25}
+
                 .wedge{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
-                .wedgeActive{fill:#ffffff;stroke:#050505;stroke-width:2.5}
+                .wedgeActive{fill:#ffffff;stroke:#050505;stroke-width:2.6}
 
                 .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#050505}
                 .monoMuted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#6a6a6a}
                 .sans{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; fill:#050505}
 
-                .H{font-size:16px;font-weight:800;letter-spacing:0.10em}
+                .H{font-size:15px;font-weight:800;letter-spacing:0.10em}
                 .T{font-size:12px}
                 .Micro{font-size:11px;letter-spacing:0.08em}
                 .CenterH{font-size:18px;font-weight:800;letter-spacing:-0.01em}
                 .CenterT{font-size:12px}
+
                 .hit{fill:transparent; cursor:pointer;}
+                .scan{opacity:0; pointer-events:none;}
+                .scan.on{opacity:1;}
               </style>
 
               <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
@@ -265,6 +263,17 @@
                 <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/>
               </filter>
 
+              <!-- Animated scanline (used only on selected wedge) -->
+              <linearGradient id="scanGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+                <stop offset="50%" stop-color="#000" stop-opacity="0.08"/>
+                <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+              </linearGradient>
+              <mask id="scanMask">
+                <rect x="-200" y="-200" width="400" height="400" fill="url(#scanGrad)">
+                  <animate attributeName="x" from="-320" to="320" dur="1.8s" repeatCount="indefinite"/>
+                </rect>
+              </mask>
             </defs>
 
             <!-- Outer frame -->
@@ -274,107 +283,35 @@
             <text class="sans" x="110" y="120" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
               Alignment Failure Surfaces — Minimal Diagnostic Basis Set
             </text>
-            <text class="monoMuted Micro" x="110" y="146">FIVE COMPLEMENTARY PROTOCOLS • NON-OVERLAPPING SURFACES • EVIDENCE-FIRST</text>
+            <text class="monoMuted Micro" x="110" y="146">FIVE COMPLEMENTARY PROTOCOLS • FULL COVERAGE MAP • EVIDENCE-FIRST</text>
 
-            <!-- Compass center -->
-            <!-- geometry: center at (600, 400), radius 230 -->
-            <g id="compass">
-              <circle class="ring" cx="600" cy="400" r="230"/>
-              <circle class="ring" cx="600" cy="400" r="150"/>
-              <circle class="ring2" cx="600" cy="400" r="80"/>
+            <!-- Compass scaffolding -->
+            <g id="scaffold">
+              <circle class="ring" cx="600" cy="400" r="240"/>
+              <circle class="ring" cx="600" cy="400" r="160"/>
+              <circle class="ring2" cx="600" cy="400" r="86"/>
+              <line class="axis" x1="600" y1="160" x2="600" y2="640"/>
+              <line class="axis" x1="360" y1="400" x2="840" y2="400"/>
 
-              <!-- Axes -->
-              <line class="axis" x1="600" y1="170" x2="600" y2="630"/>
-              <line class="axis" x1="370" y1="400" x2="830" y2="400"/>
+              <text class="monoMuted Micro" x="608" y="176">CRISIS / HIGH AROUSAL</text>
+              <text class="monoMuted Micro" x="608" y="636">GOVERNANCE / AUTOMATION</text>
+              <text class="monoMuted Micro" x="346" y="392" text-anchor="end">EPISTEMICS</text>
+              <text class="monoMuted Micro" x="854" y="392">UTILITY / REFUSAL</text>
 
-              <!-- Labels on axes -->
-              <text class="monoMuted Micro" x="607" y="186">HIGH ARousal / crisis</text>
-              <text class="monoMuted Micro" x="607" y="624">automation / governance</text>
-              <text class="monoMuted Micro" x="356" y="392" text-anchor="end">epistemics</text>
-              <text class="monoMuted Micro" x="844" y="392">utility / refusal</text>
+              <text class="sans CenterH" x="600" y="390" text-anchor="middle">OBSERVATORY MAP</text>
+              <text class="monoMuted CenterT" x="600" y="414" text-anchor="middle">outputs only • lexicon-bound • auditable</text>
+              <text class="monoMuted CenterT" x="600" y="434" text-anchor="middle">no prompts • no thresholds • no policy judgment</text>
+            </g>
 
-              <!-- Center content -->
-              <g>
-                <text class="sans CenterH" x="600" y="390" text-anchor="middle">OBSERVATORY MAP</text>
-                <text class="monoMuted CenterT" x="600" y="414" text-anchor="middle">outputs only • lexicon-bound • auditable</text>
-                <text class="monoMuted CenterT" x="600" y="434" text-anchor="middle">no scoring claims • no policy judgments</text>
-              </g>
+            <!-- Wedges container (generated by JS) -->
+            <g id="wedges"></g>
 
-              <!-- Wedges: 5 sectors (72° each). We'll draw as donut-like sectors using paths. -->
-              <!-- Helper: each wedge is an outer arc (r=230) and inner arc (r=80) -->
-              <!-- Wedge order clockwise starting top: Test 5, 2, 3, 1, 4 (so it reads well) -->
-
-              <!-- Wedge 1: Test 5 (top sector) -->
-              <g id="w5" class="dim">
-                <path id="p5" class="wedge" d="M600 170
-                  A230 230 0 0 1 776.9 242.0
-                  L661.5 330.0
-                  A80 80 0 0 0 600 320
-                  Z"/>
-                <text class="mono H" x="690" y="240">TEST 5</text>
-                <text class="monoMuted T" x="690" y="262">CRISIS</text>
-                <text class="monoMuted T" x="690" y="280">CO-REGULATION</text>
-                <rect class="hit" x="560" y="160" width="320" height="220" data-test="5"/>
-              </g>
-
-              <!-- Wedge 2: Test 2 (upper-right sector) -->
-              <g id="w2" class="dim">
-                <path id="p2" class="wedge" d="M776.9 242.0
-                  A230 230 0 0 1 830 400
-                  L680 400
-                  A80 80 0 0 0 661.5 330.0
-                  Z"/>
-                <text class="mono H" x="760" y="338" text-anchor="start">TEST 2</text>
-                <text class="monoMuted T" x="760" y="360">MECHANISM</text>
-                <text class="monoMuted T" x="760" y="378">UNIFICATION</text>
-                <rect class="hit" x="670" y="230" width="240" height="220" data-test="2"/>
-              </g>
-
-              <!-- Wedge 3: Test 3 (lower-right sector) -->
-              <g id="w3" class="dim">
-                <path id="p3" class="wedge" d="M830 400
-                  A230 230 0 0 1 776.9 558.0
-                  L661.5 470.0
-                  A80 80 0 0 0 680 400
-                  Z"/>
-                <text class="mono H" x="760" y="470">TEST 3</text>
-                <text class="monoMuted T" x="760" y="492">FALSE</text>
-                <text class="monoMuted T" x="760" y="510">REFUSALS</text>
-                <rect class="hit" x="670" y="400" width="240" height="250" data-test="3"/>
-              </g>
-
-              <!-- Wedge 4: Test 1 (bottom sector) -->
-              <g id="w1" class="dim">
-                <path id="p1" class="wedge" d="M776.9 558.0
-                  A230 230 0 0 1 600 630
-                  L600 480
-                  A80 80 0 0 0 661.5 470.0
-                  Z"/>
-                <text class="mono H" x="640" y="585">TEST 1</text>
-                <text class="monoMuted T" x="640" y="607">GOVERNANCE</text>
-                <rect class="hit" x="560" y="460" width="320" height="210" data-test="1"/>
-              </g>
-
-              <!-- Wedge 5: Test 4 (left sector) -->
-              <g id="w4" class="dim">
-                <path id="p4" class="wedge" d="M600 630
-                  A230 230 0 0 1 370 400
-                  L520 400
-                  A80 80 0 0 0 600 480
-                  Z"/>
-                <text class="mono H" x="410" y="470">TEST 4</text>
-                <text class="monoMuted T" x="410" y="492">EPISTEMIC</text>
-                <text class="monoMuted T" x="410" y="510">INTEGRITY</text>
-                <rect class="hit" x="300" y="390" width="260" height="280" data-test="4"/>
-              </g>
-
-              <!-- Small legend -->
-              <g>
-                <rect x="110" y="590" width="420" height="90" rx="14" fill="#fff" stroke="#ededed" stroke-width="1.25"/>
-                <text class="monoMuted Micro" x="130" y="620">INTERACTION:</text>
-                <text class="monoMuted T" x="130" y="644">hover = isolate • click = details • view sample = controlled link</text>
-                <text class="monoMuted T" x="130" y="664">this map shows coverage surfaces, not metrics or thresholds</text>
-              </g>
+            <!-- Interaction legend -->
+            <g>
+              <rect x="110" y="590" width="420" height="90" rx="14" fill="#fff" stroke="#ededed" stroke-width="1.25"/>
+              <text class="monoMuted Micro" x="130" y="620">INTERACTION:</text>
+              <text class="monoMuted T" x="130" y="644">hover = isolate • click = details • scan = evidence pulse</text>
+              <text class="monoMuted T" x="130" y="664">this map shows coverage, not results</text>
             </g>
           </svg>
         </div>
@@ -392,25 +329,8 @@
         </div>
 
         <div class="lines" id="panelLines">
-          <div class="mono" style="margin-bottom:8px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">
-            purpose
-          </div>
-          <div style="margin-bottom:10px; color:var(--muted);">
-            Select a test to view its scope and evidence boundary.
-          </div>
-
-          <div class="mono" style="margin:10px 0 8px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">
-            observes
-          </div>
-          <div style="margin-bottom:10px; color:var(--muted);">
-            Observable outputs only (no model internals, no training access).
-          </div>
-
-          <div class="mono" style="margin:10px 0 8px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">
-            emits
-          </div>
           <div style="color:var(--muted);">
-            Lexicon-anchored signature + traceable evidence chain.
+            Select a test to view scope and boundary.
           </div>
         </div>
 
@@ -421,56 +341,171 @@
 
         <div class="note">
           <div class="mono">Public boundary</div>
-          No prompts, thresholds, or internal metrics are displayed here. This surface demonstrates coverage, structure, and audit discipline.
+          No prompts, thresholds, or internal metrics are displayed. This is a coverage surface map only.
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    const tests = {
-      1: {
-        wedge: "w1", path: "p1",
+    // ====== DATA (labels kept tight for readability) ======
+    const tests = [
+      {
+        id: 1,
+        code: "TEST 1",
+        short: "GOVERNANCE",
+        sub: "AUTOMATION",
         title: "Test 1 — Automation & Programmable Governance",
-        purpose: "Persona-induced compliance failures (instruction override / governance surface).",
-        observes: "Output behavior under constraint + role framing (observable only).",
-        emits: "Governance-relevant signature + evidence spans + audit references.",
+        purpose: "Persona-induced compliance failures (governance surface).",
+        observes: "Output behavior under constraint + role framing.",
+        emits: "Lexicon signature + evidence spans + audit references.",
         link: "diag-results-test1-v1.html"
       },
-      2: {
-        wedge: "w2", path: "p2",
+      {
+        id: 2,
+        code: "TEST 2",
+        short: "MECHANISM",
+        sub: "UNIFICATION",
         title: "Test 2 — Universal Benchmarking",
         purpose: "Cross-domain mechanism unification (same failure mechanics across domains).",
-        observes: "Structural invariants across tasks without subjective labeling.",
-        emits: "Mechanism signature + trace artifacts suitable for comparison.",
+        observes: "Structural invariants across tasks without subjective labels.",
+        emits: "Mechanism signature + trace artifacts for comparison.",
         link: "diag-results-test2-v1.html"
       },
-      3: {
-        wedge: "w3", path: "p3",
+      {
+        id: 3,
+        code: "TEST 3",
+        short: "FALSE",
+        sub: "REFUSALS",
         title: "Test 3 — Alignment Tax Reduction",
         purpose: "Safety–utility balance and false refusals (over-refusal surface).",
-        observes: "Refusal vs justified non-action (structure + boundary discipline).",
-        emits: "Refusal-class signature + auditable row chain (record → span → export).",
+        observes: "Refusal vs justified non-action (boundary discipline).",
+        emits: "Refusal-class signature + auditable record chain.",
         link: "diag-results-test3-v1.html"
       },
-      4: {
-        wedge: "w4", path: "p4",
+      {
+        id: 4,
+        code: "TEST 4",
+        short: "EPISTEMIC",
+        sub: "INTEGRITY",
         title: "Test 4 — Epistemic Integrity Under Constraint",
-        purpose: "Correct non-action under missing inputs (distinguish abstention vs failure).",
+        purpose: "Correct non-action under missing inputs (abstain vs hallucinate).",
         observes: "Non-action discipline vs hallucination under insufficient data.",
         emits: "Epistemic stability signature + traceable evidence chain.",
         link: "diag-results-test4-v1.html"
       },
-      5: {
-        wedge: "w5", path: "p5",
+      {
+        id: 5,
+        code: "TEST 5",
+        short: "CRISIS",
+        sub: "CO-REGULATION",
         title: "Test 5 — Crisis Co-Regulation",
-        purpose: "Interaction stability under high arousal (escalation / de-escalation dynamics).",
-        observes: "Stability patterns in stressed interaction without intent attribution.",
+        purpose: "Interaction stability under high arousal (escalation dynamics).",
+        observes: "Stability patterns under stress without intent attribution.",
         emits: "Co-regulation signature + evidence spans + replay references.",
         link: "diag-results-test5-v1.html"
       }
-    };
+    ];
 
+    // ====== SVG sector math (NO GAPS) ======
+    const svg = document.querySelector("svg");
+    const wedgesG = document.getElementById("wedges");
+
+    const cx = 600, cy = 400;
+    const rOuter = 240;
+    const rInner = 86;
+    const n = tests.length;
+    const step = (Math.PI * 2) / n;
+
+    // start angle so "Test 5" sits visually near the top (instrument feel)
+    // -90° is top. We'll place tests in the order above around the circle.
+    const startAngle = -Math.PI / 2;
+
+    function polarToCartesian(cx, cy, r, a){
+      return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+    }
+
+    function sectorPath(cx, cy, rOut, rIn, a0, a1){
+      const p0 = polarToCartesian(cx, cy, rOut, a0);
+      const p1 = polarToCartesian(cx, cy, rOut, a1);
+      const q1 = polarToCartesian(cx, cy, rIn,  a1);
+      const q0 = polarToCartesian(cx, cy, rIn,  a0);
+      const largeArc = (a1 - a0) > Math.PI ? 1 : 0;
+      return [
+        `M ${p0.x.toFixed(2)} ${p0.y.toFixed(2)}`,
+        `A ${rOut} ${rOut} 0 ${largeArc} 1 ${p1.x.toFixed(2)} ${p1.y.toFixed(2)}`,
+        `L ${q1.x.toFixed(2)} ${q1.y.toFixed(2)}`,
+        `A ${rIn} ${rIn} 0 ${largeArc} 0 ${q0.x.toFixed(2)} ${q0.y.toFixed(2)}`,
+        "Z"
+      ].join(" ");
+    }
+
+    function makeEl(tag, attrs={}){
+      const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k, v));
+      return el;
+    }
+
+    function placeLabel(aMid, r, text, cls, dy=0){
+      const p = polarToCartesian(cx, cy, r, aMid);
+      const t = makeEl("text", { x: p.x, y: p.y + dy, class: cls });
+      t.textContent = text;
+      // anchor so labels read outward
+      const cos = Math.cos(aMid);
+      if (Math.abs(cos) < 0.15) t.setAttribute("text-anchor","middle");
+      else t.setAttribute("text-anchor", cos > 0 ? "start" : "end");
+      return t;
+    }
+
+    // Build wedges
+    tests.forEach((t, i) => {
+      const a0 = startAngle + i * step;
+      const a1 = startAngle + (i+1) * step;
+      const aMid = (a0 + a1) / 2;
+
+      const group = makeEl("g", { id: `w${t.id}`, class: "dim" });
+
+      const path = makeEl("path", {
+        id: `p${t.id}`,
+        d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
+        class: "wedge"
+      });
+
+      // Scan overlay (masked, only shown for selected)
+      const scan = makeEl("path", {
+        id: `s${t.id}`,
+        d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
+        fill: "#000",
+        opacity: "0.08",
+        mask: "url(#scanMask)",
+        class: "scan"
+      });
+
+      // Compact label placement
+      const labR = 170;
+      const code = placeLabel(aMid, labR, t.code, "mono H", -10);
+      const line1 = placeLabel(aMid, labR, t.short, "monoMuted T", 12);
+      const line2 = placeLabel(aMid, labR, t.sub, "monoMuted T", 30);
+
+      // Invisible hit target (bounding circle sector area)
+      // Use the exact same sector path for perfect hit-testing
+      const hit = makeEl("path", {
+        d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
+        class: "hit",
+        "data-test": String(t.id)
+      });
+
+      group.appendChild(path);
+      group.appendChild(scan);
+      group.appendChild(code);
+      group.appendChild(line1);
+      group.appendChild(line2);
+      group.appendChild(hit);
+
+      wedgesG.appendChild(group);
+    });
+
+    // ====== INTERACTION ======
     const panelTitle = document.getElementById("panelTitle");
     const panelLines = document.getElementById("panelLines");
     const viewBtn = document.getElementById("viewBtn");
@@ -486,69 +521,64 @@
     }
 
     function clearAll(){
-      Object.values(tests).forEach(t => {
-        setGroupClass(t.wedge, "dim", "active");
-        const p = document.getElementById(t.path);
+      tests.forEach(t => {
+        setGroupClass(`w${t.id}`, "dim", "active");
+        const p = document.getElementById(`p${t.id}`);
         if(p){
           p.setAttribute("class","wedge");
           p.removeAttribute("filter");
         }
+        const s = document.getElementById(`s${t.id}`);
+        if(s) s.classList.remove("on");
       });
+
       selected = null;
       panelTitle.textContent = "Click a wedge";
-      panelLines.innerHTML = `
-        <div class="mono" style="margin-bottom:8px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">purpose</div>
-        <div style="margin-bottom:10px; color:var(--muted);">Select a test to view its scope and evidence boundary.</div>
-        <div class="mono" style="margin:10px 0 8px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">observes</div>
-        <div style="margin-bottom:10px; color:var(--muted);">Observable outputs only (no model internals, no training access).</div>
-        <div class="mono" style="margin:10px 0 8px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">emits</div>
-        <div style="color:var(--muted);">Lexicon-anchored signature + traceable evidence chain.</div>
-      `;
+      panelLines.innerHTML = `<div style="color:var(--muted);">Select a test to view scope and boundary.</div>`;
       viewBtn.disabled = true;
+      delete viewBtn.dataset.href;
     }
 
-    function focusTest(n, isHover=false){
-      const t = tests[n];
+    function focusTest(id, isHover=false){
+      const t = tests.find(x => x.id === id);
       if(!t) return;
 
-      Object.keys(tests).forEach(k => {
-        const kk = Number(k);
-        if(kk === n) setGroupClass(tests[kk].wedge, "active", "dim");
-        else setGroupClass(tests[kk].wedge, "dim", "active");
+      tests.forEach(tt => {
+        if(tt.id === id) setGroupClass(`w${tt.id}`, "active", "dim");
+        else setGroupClass(`w${tt.id}`, "dim", "active");
       });
 
-      // Active wedge stroke + “lift”
-      const p = document.getElementById(t.path);
+      // Active wedge: stroke + lift + scanline (only on selected/click, not hover)
+      const p = document.getElementById(`p${t.id}`);
       if(p){
         p.setAttribute("class","wedgeActive");
         p.setAttribute("filter","url(#softShadow)");
       }
 
       if(!isHover){
-        selected = n;
+        selected = id;
+        const s = document.getElementById(`s${t.id}`);
+        if(s) s.classList.add("on");
+
         panelTitle.textContent = t.title;
         panelLines.innerHTML = `
-          <div class="mono" style="margin-bottom:8px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">purpose</div>
-          <div style="margin-bottom:10px;">${t.purpose}</div>
-
-          <div class="mono" style="margin:10px 0 8px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">observes</div>
-          <div style="margin-bottom:10px;">${t.observes}</div>
-
-          <div class="mono" style="margin:10px 0 8px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">emits</div>
-          <div>${t.emits}</div>
+          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">purpose</span><br>${t.purpose}</div>
+          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">observes</span><br>${t.observes}</div>
+          <div><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">emits</span><br>${t.emits}</div>
         `;
+
         viewBtn.disabled = false;
         viewBtn.dataset.href = t.link;
       }
     }
 
-    // Hover/click handlers
+    // Attach events (using the generated hit paths)
     document.querySelectorAll(".hit").forEach(hit => {
       hit.addEventListener("mouseenter", e => {
-        const n = Number(e.target.getAttribute("data-test"));
-        if(!Number.isFinite(n)) return;
-        if(selected !== null) return; // lock hover when selected
-        focusTest(n, true);
+        const id = Number(e.target.getAttribute("data-test"));
+        if(!Number.isFinite(id)) return;
+        if(selected !== null) return;
+        focusTest(id, true);
       });
 
       hit.addEventListener("mouseleave", () => {
@@ -557,9 +587,9 @@
       });
 
       hit.addEventListener("click", e => {
-        const n = Number(e.target.getAttribute("data-test"));
-        if(!Number.isFinite(n)) return;
-        focusTest(n, false);
+        const id = Number(e.target.getAttribute("data-test"));
+        if(!Number.isFinite(id)) return;
+        focusTest(id, false);
       });
     });
 
@@ -571,9 +601,8 @@
 
     resetBtn.addEventListener("click", clearAll);
 
-    // Init: soft reveal (no autoplay)
+    // Init
     clearAll();
   </script>
 </body>
 </html>
-
