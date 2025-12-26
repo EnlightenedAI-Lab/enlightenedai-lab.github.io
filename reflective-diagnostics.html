@@ -223,7 +223,7 @@
         ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
         li { margin-bottom: 0.5rem; font-size: 0.95rem; }
         
-        .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
+        .scramble-hover { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
         .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; }
 
         /* [FIX] Footer Stacking */
@@ -235,7 +235,10 @@
             border: 1px solid var(--border-color);
             background: var(--card-bg);
             padding: 1rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
         }
+        .inline-diagram-container:hover { border-color: var(--text-muted); }
         .diagram-label {
             font-family: "JetBrains Mono", monospace;
             font-size: 0.7rem;
@@ -249,8 +252,33 @@
             width: 100%;
             border: none;
             display: block;
-            background: var(--bg-color); /* Ensure iframe BG matches theme */
+            background: var(--bg-color);
+            pointer-events: none; /* Let clicks pass to container for fullscreen */
         }
+        
+        /* FULLSCREEN MODAL */
+        #diagram-modal {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 20000;
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        #diagram-modal.open { display: flex; }
+        .modal-content {
+            width: 90vw; height: 90vh;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute; top: -30px; right: 0;
+            color: #fff; background: none; border: none;
+            font-family: var(--font-mono); cursor: pointer;
+            text-transform: uppercase; letter-spacing: 0.1em;
+        }
+        .modal-iframe { width: 100%; height: 100%; border: none; }
 
         /* --- VISIBILITY RULES --- */
         del, ins, .diff-tag { display: none; } 
@@ -374,8 +402,8 @@
     <div class="layout-wrapper">
         <aside id="sidebar">
             <div class="brand">
-                <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
-                <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
+                <div class="scramble-brand" data-value="ENLIGHTENED AI" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
+                <div class="scramble-brand" data-value="RESEARCH LAB" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
                 <span>EST. 2026 // MONTREAL</span>
             </div>
 
@@ -429,7 +457,7 @@
             <section>
                 <div class="content-col">
                     <div class="diff-header">REVISION TRACE — v2.3 → v2.4 [Instrument Hardening]</div>
-                    <h2><span class="scramble">01 //</span> Overview</h2>
+                    <h2><span class="scramble-hover" data-value="01 //">01 //</span> Overview</h2>
                     <div class="prose-content">
                         <p>
                             <span class="audit-marker">[D1.0]</span>
@@ -458,13 +486,17 @@
                 </div>
             </section>
 
-            <div class="inline-diagram-container">
-                <div class="diagram-label">FIGURE 1.0 // 5-TEST COVERAGE MAP (PRIMARY OVERVIEW)</div>
+            <div class="inline-diagram-container" onclick="openModal('/diag-coverage-map-v1.html')">
+                <div class="diagram-label">RD-FIG-01 // 5-TEST COVERAGE MAP (PRIMARY OVERVIEW)</div>
                 <iframe class="diagram-frame" src="/diag-coverage-map-v1.html" style="height: 500px;"></iframe>
+                <div style="margin-top:0.5rem; text-align:center; font-family:'JetBrains Mono'; font-size:0.6rem; color:var(--text-muted);">
+                    CLICK TO EXPAND INTERACTIVE VIEW
+                </div>
             </div>
+
             <section>
                 <div class="content-col">
-                    <h2><span class="scramble">02 //</span> Scope</h2>
+                    <h2><span class="scramble-hover" data-value="02 //">02 //</span> Scope</h2>
                     <div class="prose-content">
                         <p>This public page provides a <del>basic</del> <ins>limited, illustrative</ins> <del>public view</del> <ins>interface surface</ins>. Full dashboard access is <del>intentionally restricted</del> <ins>gated by cryptographic role verification</ins>.</p>
                     </div>
@@ -473,7 +505,7 @@
 
             <section>
                 <div class="content-col">
-                    <h2><span class="scramble">03 //</span> What the Dashboard Does</h2>
+                    <h2><span class="scramble-hover" data-value="03 //">03 //</span> What the Dashboard Does</h2>
                     <div class="prose-content">
                         <ul>
                             <li><del>Ingests</del> <ins>Deterministic ingestion</ins> of model outputs and interaction records.</li>
@@ -500,14 +532,18 @@
                 </div>
             </section>
 
-            <div class="inline-diagram-container">
-                <div class="diagram-label">FIGURE 2.0 // DIAGNOSTIC DIAGRAM PREVIEW</div>
+            <div class="inline-diagram-container" onclick="openModal('/diag-diagram-preview.html')">
+                <div class="diagram-label">RD-FIG-02 // DIAGNOSTIC DIAGRAM PREVIEW</div>
                 <iframe class="diagram-frame" src="/diag-diagram-preview.html" style="height: 350px;"></iframe>
+                <div style="margin-top:0.5rem; text-align:center; font-family:'JetBrains Mono'; font-size:0.6rem; color:var(--text-muted);">
+                    CLICK TO EXPAND INTERACTIVE VIEW
+                </div>
             </div>
+
             <section>
                 <div class="content-col">
                     <div class="diff-header">REVISION TRACE — v2.3 → v2.4 [Lexicon Binding]</div>
-                    <h2><span class="scramble">04 //</span> Architectural Characteristics</h2>
+                    <h2><span class="scramble-hover" data-value="04 //">04 //</span> Architectural Characteristics</h2>
                     <div class="prose-content">
                         <ul>
                             <li><strong>Lexicon-bound:</strong> diagnostic terms and schemas are defined by a <del>standard</del> <ins>frozen, versioned specification</ins>.</li>
@@ -533,13 +569,17 @@
                 </div>
             </section>
 
-            <div class="inline-diagram-container">
-                <div class="diagram-label">FIGURE 3.0 // ANALYTICAL LAYERS & SUBSTRATE</div>
+            <div class="inline-diagram-container" onclick="openModal('/diag-layers-substrate.html')">
+                <div class="diagram-label">RD-FIG-03 // ANALYTICAL LAYERS & SUBSTRATE</div>
                 <iframe class="diagram-frame" src="/diag-layers-substrate.html" style="height: 450px;"></iframe>
+                <div style="margin-top:0.5rem; text-align:center; font-family:'JetBrains Mono'; font-size:0.6rem; color:var(--text-muted);">
+                    CLICK TO EXPAND INTERACTIVE VIEW
+                </div>
             </div>
+
             <section>
                 <div class="content-col">
-                    <h2><span class="scramble">05 //</span> Operational Boundary</h2>
+                    <h2><span class="scramble-hover" data-value="05 //">05 //</span> Operational Boundary</h2>
                     <div class="prose-content">
                         <ul>
                             <li>Not a <del>chatbot</del> <ins>stochastic conversational agent</ins>.</li>
@@ -554,7 +594,7 @@
 
             <section>
                 <div class="content-col">
-                    <h2><span class="scramble">06 //</span> Evidence Artifacts</h2>
+                    <h2><span class="scramble-hover" data-value="06 //">06 //</span> Evidence Artifacts</h2>
                     <div class="prose-content">
                         <p><del>Selected screenshots</del> <ins>Static artifacts</ins> shown on this page are representative examples demonstrating:</p>
                         <ul>
@@ -569,7 +609,7 @@
 
             <section>
                 <div class="content-col">
-                    <h2><span class="scramble">07 //</span> Authorization</h2>
+                    <h2><span class="scramble-hover" data-value="07 //">07 //</span> Authorization</h2>
                     <div class="prose-content">
                         <p>Full <del>dashboard</del> <ins>instrument</ins> access and repository access is <del>available privately</del> <ins>restricted</ins> to authorized funders, technical reviewers, and collaborators under controlled review or NDA.</p>
                     </div>
@@ -578,13 +618,19 @@
         </main>
     </div>
 
+    <div id="diagram-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">Close [ESC]</button>
+            <iframe id="modal-iframe" class="modal-iframe"></iframe>
+        </div>
+    </div>
+
     <div id="footer-mount"></div>
     <script>
       fetch('/partials/footer.html')
-        .then(r => r.text())
-        .then(html => {
-          document.getElementById('footer-mount').innerHTML = html;
-        });
+        .then(r => r.ok ? r.text() : '')
+        .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
+        .catch(() => {});
     </script>
 
     <script>
@@ -599,9 +645,11 @@
             if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
         }
         
+        // --- SCRAMBLE LOGIC (Targeting only brand + section numbers) ---
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         function scrambleText(element) {
-            let iterations = 0; const originalText = element.dataset.value; 
+            let iterations = 0; 
+            const originalText = element.dataset.value || element.innerText;
             if(element.interval) clearInterval(element.interval);
             element.interval = setInterval(() => {
                 element.innerText = originalText.split("").map((letter, index) => {
@@ -612,36 +660,51 @@
                 iterations += 1 / 3;
             }, 30);
         }
-        document.querySelectorAll(".scramble").forEach(h => {
-            h.dataset.value = h.innerText;
+        document.querySelectorAll(".scramble-brand, .scramble-hover").forEach(h => {
+             if(!h.dataset.value) h.dataset.value = h.innerText;
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
         
+        // --- MODAL LOGIC ---
+        function openModal(url) {
+            const modal = document.getElementById('diagram-modal');
+            const iframe = document.getElementById('modal-iframe');
+            iframe.src = url;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden'; // Lock background scroll
+        }
+        function closeModal() {
+            const modal = document.getElementById('diagram-modal');
+            const iframe = document.getElementById('modal-iframe');
+            modal.classList.remove('open');
+            iframe.src = ""; // Clear src to stop video/interaction
+            document.body.style.overflow = ''; // Unlock background scroll
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") closeModal();
+        });
+
         // --- DARK MODE LOGIC ---
         function setTheme(theme) {
             document.body.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
-            
-            // Update Desktop
             const icon = document.getElementById('theme-icon');
             if (icon) icon.textContent = (theme === 'dark') ? '◑' : '◐';
-            
-            // Update Mobile
-            const iconMobile = document.getElementById('theme-icon-mobile');
-            if (iconMobile) iconMobile.textContent = (theme === 'dark') ? '◑' : '◐';
         }
-
         function toggleTheme() {
             const current = document.body.getAttribute('data-theme') || 'light';
             const next = (current === 'dark') ? 'light' : 'dark';
             setTheme(next);
         }
-
-        // Initialize Theme from LocalStorage
         const savedTheme = localStorage.getItem('theme') || 'light';
         setTheme(savedTheme);
 
-        // Close sidebar when tapping outside (mobile)
+        // --- MOBILE SIDEBAR LOGIC ---
+        document.querySelectorAll('.mobile-index-btn').forEach(btn => {
+             btn.addEventListener('click', () => {
+                 document.getElementById('sidebar').classList.toggle('open');
+             });
+        });
         document.addEventListener("click", (e) => {
             if (window.innerWidth > 900) return;
             const sidebar = document.getElementById("sidebar");
