@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="/assets/css/footer.css">
 
   <style>
@@ -24,7 +23,8 @@
       --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 
       --ok:#00cc00;
-      --warn:#cc0000;
+      --okBorder: rgba(0,204,0,0.35);
+      --okBg: rgba(0,204,0,0.06);
     }
 
     body[data-theme="dark"]{
@@ -32,6 +32,7 @@
       --text:#f0f0f0;
       --muted:#888888;
       --border:#333333;
+      --okBg: rgba(0,204,0,0.10);
     }
 
     *{ box-sizing:border-box; }
@@ -94,12 +95,8 @@
       overflow-y:auto;
       z-index:1000;
     }
-    body[data-theme="dark"] aside{
-      background:var(--bg);
-      border-right-color:var(--border);
-    }
 
-    .brand{ margin-bottom:4rem; }
+    .brand{ margin-bottom:3rem; }
     .brand div{
       font-weight:800;
       font-size:.95rem;
@@ -114,25 +111,29 @@
       color:var(--muted);
     }
 
+    /* MODE GROUP (ACTIVE LIKE HOME) */
     .mode-group{
       display:flex;
       flex-direction:column;
-      gap:4px;
+      gap:6px;
       margin-bottom:2rem;
       border-bottom:1px solid var(--border);
-      padding-bottom:1.5rem;
+      padding-bottom:1.25rem;
     }
-    .mode-item{
+    .mode-link{
       font-family:var(--mono);
       font-size:.7rem;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:var(--muted);
       display:flex;
       justify-content:space-between;
-      color:var(--muted);
-      opacity:.55;
+      text-decoration:none;
+      padding:2px 0;
       user-select:none;
     }
-    .mode-item.active{ opacity:1; color:var(--text); }
-    .mode-item.offline{ opacity:.30; }
+    .mode-link:hover{ color:var(--text); }
+    .mode-link.active{ color:var(--text); font-weight:700; }
 
     nav ul{ list-style:none; padding:0; margin:0; }
     nav li{ margin-bottom:4px; }
@@ -172,39 +173,6 @@
     }
     .theme-switch:hover{ color:var(--text); }
 
-    /* REPO CARD */
-    .repo-panel{
-      margin-bottom:1rem;
-      border:1px solid var(--border);
-      background:var(--bg);
-      padding:12px;
-      font-family:var(--mono);
-      cursor:default;
-    }
-    .repo-header{
-      font-size:.65rem;
-      font-weight:700;
-      color:var(--text);
-      margin-bottom:8px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      letter-spacing:.05em;
-    }
-    .repo-subtext{ font-size:.6rem; color:var(--muted); }
-
-    .status-dot-red{
-      width:6px; height:6px;
-      background:var(--warn);
-      border-radius:50%;
-      display:block;
-      animation: beacon-red 2s infinite;
-    }
-    @keyframes beacon-red{
-      0% { box-shadow:0 0 0 0 rgba(204,0,0,0.7); opacity:1; }
-      100% { box-shadow:0 0 0 10px rgba(204,0,0,0.0); opacity:1; }
-    }
-
     .export-btn{
       width:100%;
       background:var(--bg);
@@ -235,7 +203,7 @@
       width:100%;
     }
 
-    .page-head{ margin-bottom:1.75rem; }
+    .page-head{ margin-bottom:1.25rem; }
     h1{
       font-size:2rem;
       font-weight:600;
@@ -249,12 +217,12 @@
       letter-spacing:.02em;
     }
 
-    /* TOP STRIP (like Lexicon) */
+    /* TOP STRIP (CONSISTENT) */
     .top-strip{
       border:1px solid var(--border);
       border-radius:14px;
       padding:14px 16px;
-      margin:1.5rem 0 2.5rem 0;
+      margin:1.5rem 0 2.25rem 0;
       background:var(--bg);
     }
     .top-row{
@@ -273,10 +241,10 @@
       align-items:center;
       gap:8px;
       padding:6px 10px;
-      border:1px solid rgba(0,204,0,0.35);
+      border:1px solid var(--okBorder);
       border-radius:10px;
       color:var(--text);
-      background:rgba(0,204,0,0.05);
+      background:var(--okBg);
       font-family:var(--mono);
       font-size:.75rem;
       letter-spacing:.06em;
@@ -341,14 +309,7 @@
     }
     li{ margin-bottom:.5rem; font-size:.95rem; }
 
-    .refs-note{
-      font-family:var(--mono);
-      font-size:.75rem;
-      color:var(--muted);
-      margin-top:.5rem;
-    }
-
-    /* Footer mount */
+    /* FOOTER MOUNT */
     #footer-mount{
       width:100%;
       z-index:100;
@@ -405,9 +366,12 @@
         <span>EST. 2026 // MONTREAL</span>
       </div>
 
+      <!-- ACTIVE MODES (MATCH HOME / LEXICON PATTERN) -->
       <div class="mode-group">
-        <div class="mode-item active">[ READER ] <span>•</span></div>
-        <div class="mode-item offline">[ AUDIT ] <span>•</span></div>
+        <a class="mode-link active" href="reflective-diagnostics.html">[ READER ] <span>•</span></a>
+        <a class="mode-link" href="reflective-diagnostics-audit.html">[ AUDIT ] <span>•</span></a>
+        <a class="mode-link" href="reflective-diagnostics-diff.html">[ DIFF LOG ] <span>Δ</span></a>
+        <a class="mode-link" href="reflective-diagnostics-logic.html">[ LOGIC ] <span>λ</span></a>
       </div>
 
       <nav>
@@ -422,19 +386,6 @@
         [ LIGHT / DARK ] <span id="theme-icon">◐</span>
       </div>
 
-      <div class="repo-panel" title="Access available under NDA or technical review.">
-        <div class="repo-header">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            GITHUB REPOSITORY
-          </div>
-          <span class="status-dot-red" aria-hidden="true"></span>
-        </div>
-        <div class="repo-subtext">Private repository — controlled access</div>
-      </div>
-
       <button class="export-btn" onclick="window.print()"><span>🖨</span> Export Record</button>
     </aside>
 
@@ -444,7 +395,7 @@
         <div class="subtitle">Internal diagnostic dashboard — limited public view</div>
       </div>
 
-      <!-- TOP STRIP (CONSISTENT WITH LEXICON STYLE) -->
+      <!-- TOP STRIP (CONSISTENT WITH HOME/LEXICON FEEL) -->
       <div class="top-strip">
         <div class="top-row">
           <div>DOC_ID RD-DIAG-0001</div>
@@ -522,7 +473,6 @@
           <li>Zenodo archival records (DOI badges to be added).</li>
           <li>Private GitHub repository (available upon request).</li>
         </ul>
-        <div class="refs-note">Note: When you have the DOI URLs, we’ll add compact Zenodo DOI badges here.</div>
       </section>
     </main>
   </div>
@@ -557,10 +507,10 @@
     // Close sidebar on mobile tap-outside
     document.addEventListener("click", (e) => {
       if (window.innerWidth > 900) return;
-      const sidebar = document.getElementById("sidebar");
-      if (!sidebar.classList.contains("open")) return;
-      const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
-      if (!clickedInside) sidebar.classList.remove("open");
+      const sidebar = document.getElementById('sidebar');
+      if (!sidebar.classList.contains('open')) return;
+      const clickedInside = sidebar.contains(e.target) || e.target.closest('.mobile-bar') || e.target.closest('.mobile-index-btn');
+      if (!clickedInside) sidebar.classList.remove('open');
     });
   </script>
 
