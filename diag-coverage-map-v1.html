@@ -17,118 +17,305 @@
       --border:#e5e5e5;
       --border2:#cfcfcf;
 
-      --mono:"JetBrains Mono", ui-monospace, monospace;
-      --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
       --ok:#00ff5a;
+      --okDim:#00cc48;
+
       --inactiveOpacity:0.20;
       --activeOpacity:1;
+
+      --activeStroke:#050505;
+      --activeStrokeW:2.8;
+
+      --glowA: rgba(0,0,0,0.10);
+      --glowB: rgba(0,0,0,0.06);
     }
 
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);}
-    .wrap{max-width:1240px;margin:0 auto;padding:42px 24px 56px;}
-
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap{
+      max-width:1240px;
+      margin:0 auto;
+      padding:42px 24px 56px;
+    }
     h1{
       margin:0 0 8px 0;
-      font-size:32px;
+      font-size:34px;
       font-weight:600;
       letter-spacing:-0.02em;
     }
-
     .sub{
       font-family:var(--mono);
+      color:var(--muted);
       font-size:12px;
       letter-spacing:0.08em;
       text-transform:uppercase;
+    }
+
+    .row{
+      display:flex;
+      gap:18px;
+      margin-top:18px;
+      align-items:flex-start;
+    }
+
+    .card{
+      flex: 1;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      background:var(--bg);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .panel{
+      width: 380px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:var(--bg);
+      padding:16px;
+      position:sticky;
+      top:18px;
+    }
+
+    .panel .kicker{
+      font-family:var(--mono);
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:0.10em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    .panel .title{
+      font-size:16px;
+      font-weight:800;
+      letter-spacing:-0.01em;
+      margin-bottom:10px;
+    }
+    .panel .lines{
+      font-size:13px;
+      line-height:1.55;
+      color:var(--text);
+      margin-bottom:12px;
+    }
+
+    .panel .pillrow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin:10px 0 12px;
+    }
+    .pill{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--border2);
+      border-radius:12px;
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      background:#fff;
+      user-select:none;
+    }
+    .dot{
+      width:7px; height:7px; border-radius:50%;
+      background:var(--ok);
+      box-shadow: 0 0 0 0 rgba(0,255,90,0.35);
+      animation: beacon 2.2s infinite;
+    }
+    @keyframes beacon{
+      0%{ box-shadow:0 0 0 0 rgba(0,255,90,0.26); }
+      70%{ box-shadow:0 0 0 12px rgba(0,255,90,0.0); }
+      100%{ box-shadow:0 0 0 0 rgba(0,255,90,0.0); }
+    }
+
+    .btnrow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .btn{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:8px 10px;
+      border:1px solid var(--border);
+      background:var(--bg);
+      color:var(--text);
+      cursor:pointer;
+      border-radius:10px;
+      user-select:none;
+    }
+    .btn:hover{ border-color:#bdbdbd; }
+    .btn.primary{
+      border-color:#050505;
+      background:#050505;
+      color:#fff;
+    }
+    .btn.primary:hover{
+      background:#000;
+      border-color:#000;
+    }
+    .btn.green{
+      border-color: rgba(0,255,90,0.55);
+      box-shadow: 0 0 0 rgba(0,255,90,0);
+      position:relative;
+      overflow:hidden;
+    }
+    .btn.green.on{
+      border-color: rgba(0,255,90,0.85);
+      box-shadow: 0 0 18px rgba(0,255,90,0.14);
+    }
+    .btn.green.on::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle at 30% 50%, rgba(0,255,90,0.22), rgba(0,255,90,0) 60%);
+      animation: sweep 1.3s linear infinite;
+      transform: translateX(-30%);
+      pointer-events:none;
+    }
+    @keyframes sweep{
+      0%{ transform: translateX(-35%) }
+      100%{ transform: translateX(35%) }
+    }
+
+    .note{
+      margin-top:14px;
+      border-top:1px solid var(--border);
+      padding-top:12px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+    .note .mono{
+      font-family:var(--mono);
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      font-size:11px;
       color:var(--muted);
     }
 
-    .row{display:flex;gap:18px;margin-top:18px;align-items:flex-start;}
-    .card{flex:1;border:1px solid var(--border);border-radius:18px;padding:18px;position:relative;}
-    .panel{width:380px;border:1px solid var(--border);border-radius:18px;padding:16px;position:sticky;top:18px;}
+    .svg-wrap{ width:100%; overflow:auto; }
+    svg{ width:100%; height:auto; min-width:860px; display:block; }
 
-    .svg-wrap{width:100%;overflow:auto;}
-    svg{width:100%;height:auto;min-width:860px;display:block;}
+    .dim { opacity: var(--inactiveOpacity); transition: opacity 160ms ease; }
+    .active { opacity: var(--activeOpacity); transition: opacity 160ms ease; }
 
     .stamp{
-      position:absolute;top:16px;right:16px;
-      border:1px solid var(--border);border-radius:12px;
-      padding:8px 10px;font-family:var(--mono);
-      font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
-      display:flex;gap:10px;align-items:center;
+      position:absolute;
+      top:16px;
+      right:16px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:8px 10px;
+      background:#fff;
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      user-select:none;
     }
-    .miniDot{width:7px;height:7px;border-radius:50%;background:var(--ok);}
+    .stamp .miniDot{
+      width:7px; height:7px; border-radius:50%;
+      background:var(--ok);
+      box-shadow: 0 0 10px rgba(0,255,90,0.22);
+    }
+
+    @media (max-width: 980px){
+      .row{ flex-direction:column; }
+      .panel{ width:100%; position:relative; top:auto; }
+      svg{ min-width:760px; }
+    }
   </style>
 </head>
 
 <body>
-<div class="wrap">
-  <h1>Reflective Alignment — 5-Test Coverage Map</h1>
-  <div class="sub">minimal basis set • observable outputs only • lexicon-bound • auditable</div>
+  <div class="wrap">
+    <h1>Reflective Alignment — 5-Test Coverage Map</h1>
+    <div class="sub">minimal basis set • observable outputs only • lexicon-bound • auditable</div>
 
-  <div class="row">
-    <div class="card">
-      <div class="stamp">
-        <span class="miniDot"></span>
-        <span>PUBLIC SAFE</span>
-        <span>2026</span>
-      </div>
+    <div class="row">
+      <div class="card">
+        <div class="stamp" title="Public view / no prompts / no thresholds">
+          <span class="miniDot"></span>
+          <span>PUBLIC SAFE</span>
+          <span>2026</span>
+        </div>
 
-      <div class="svg-wrap">
-        <svg viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <style>
-              .ring{fill:none;stroke:#e5e5e5;stroke-width:1.25}
-              .axis{stroke:#e5e5e5;stroke-width:1.25}
-              .mono{font-family:"JetBrains Mono";fill:#050505}
-              .monoMuted{font-family:"JetBrains Mono";fill:#6a6a6a}
-              .sans{font-family:"Inter";fill:#050505}
-              .H{font-size:15px;font-weight:800;letter-spacing:0.10em}
-              .T{font-size:12px}
-              .Micro{font-size:11px;letter-spacing:0.08em}
-              .CenterH{font-size:18px;font-weight:800}
-              .CenterT{font-size:12px}
-            </style>
-          </defs>
+        <div class="svg-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-label="Five-test coverage map">
+            <defs>
+              <style>
+                .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
 
-          <rect x="60" y="60" width="1080" height="640" rx="18"
-                fill="#fff" stroke="#e5e5e5" stroke-width="1.5"/>
+                .ring{fill:none;stroke:#e5e5e5;stroke-width:1.25}
+                .ring2{fill:none;stroke:#cfcfcf;stroke-width:1.25}
+                .axis{stroke:#e5e5e5;stroke-width:1.25}
 
-          <!-- compact single SVG label -->
-          <text class="monoMuted Micro" x="110" y="120">
-            MINIMAL DIAGNOSTIC BASIS SET • FULL COVERAGE
-          </text>
+                .wedge{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
+                .wedgeActive{fill:#ffffff;stroke:#050505;stroke-width:2.8}
 
-          <g id="scaffold">
-            <circle class="ring" cx="600" cy="400" r="240"/>
-            <circle class="ring" cx="600" cy="400" r="160"/>
-            <circle class="ring" cx="600" cy="400" r="86"/>
-            <line class="axis" x1="600" y1="160" x2="600" y2="640"/>
-            <line class="axis" x1="360" y1="400" x2="840" y2="400"/>
+                .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#050505}
+                .monoMuted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#6a6a6a}
+                .sans{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; fill:#050505}
 
-            <text class="monoMuted Micro" x="608" y="176">CRISIS / HIGH AROUSAL</text>
-            <text class="monoMuted Micro" x="608" y="636">GOVERNANCE / AUTOMATION</text>
-            <text class="monoMuted Micro" x="346" y="392" text-anchor="end">EPISTEMICS</text>
-            <text class="monoMuted Micro" x="854" y="392">UTILITY / REFUSAL</text>
+                .H{font-size:15px;font-weight:800;letter-spacing:0.10em}
+                .T{font-size:12px}
+                .Micro{font-size:11px;letter-spacing:0.08em}
+                .CenterH{font-size:18px;font-weight:800;letter-spacing:-0.01em}
+                .CenterT{font-size:12px}
 
-            <text class="sans CenterH" x="600" y="392" text-anchor="middle">OBSERVATORY MAP</text>
-            <text class="monoMuted CenterT" x="600" y="422" text-anchor="middle">
-              outputs only • lexicon-bound • auditable
-            </text>
-          </g>
-        </svg>
-      </div>
-    </div>
+                .hit{fill:transparent; cursor:pointer;}
 
-    <div class="panel">
-      <div class="sub">selected test</div>
-      <div style="font-size:16px;font-weight:800;margin:8px 0;">Click a wedge</div>
-      <div style="font-size:13px;color:var(--muted);">
-        Select a test to view scope and boundary.
-      </div>
-    </div>
-  </div>
-</div>
-</body>
-</html>
+                .scan{opacity:0; pointer-events:none;}
+                .scan.on{opacity:1;}
+
+                .orb{opacity:0.0; transition:opacity 220ms ease;}
+                .orb.on{opacity:1;}
+
+                .led{opacity:0.0; transition:opacity 180ms ease;}
+                .led.on{opacity:1;}
+              </style>
+
+              <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
+                <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity="0.10"/>
+                <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/>
+              </filter>
+
+              <filter id="greenGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2.8" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+
+              <linearGradient id="scanGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00ff5a" stop-opacity="0"/>
+                <stop offset="50%" stop-color="#00ff5a" stop-opacity="0.16"/>
+                <stop offset="100%" stop-color="#00ff5a" stop-opacity="0"/>
+              </linearGradient>
+              <mask id="scanMask">
+                <rect x="-200" y="-200" width="400" height="400" fill="url(#scanGrad)">
+                  <animate attributeName="x" from="-320" to="320" dur="1.4s" repeatCount="indefinite"/>
+                </rect>
+              </mask>
+
+              <linearGradient id="orbGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00ff5a" stop-opacity="0.0"/>
+                <stop offset="35%" stop-c
