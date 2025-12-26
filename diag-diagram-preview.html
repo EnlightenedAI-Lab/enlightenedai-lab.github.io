@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deterministic Record Flow</title>
+  <title>Deterministic Workflow</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,12 +17,11 @@
       --muted:#6a6a6a;
       --border:#e5e5e5;
       --border2:#cfcfcf;
+
       --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
       --ok:#00cc00;
-      --warn:#ffb000;
-      --bad:#cc0000;
 
       --inactiveOpacity:0.22;
       --activeOpacity:1;
@@ -34,14 +33,6 @@
       --arrowOn:#050505;
       --arrowOff:#8a8a8a;
 
-      /* “Instrument” lift */
-      --liftShadow: 0 14px 26px rgba(0,0,0,0.10), 0 2px 0 rgba(0,0,0,0.04);
-      --liftShadowSoft: 0 10px 22px rgba(0,0,0,0.08), 0 2px 0 rgba(0,0,0,0.03);
-
-      /* Step 6 outcome glow (meaning: crystallized evidence) */
-      --resultGlow: 0 0 0 1px rgba(0,0,0,0.06), 0 18px 40px rgba(0,0,0,0.10);
-      --resultGlowGreen: 0 0 0 1px rgba(0,0,0,0.06), 0 18px 40px rgba(0,0,0,0.10), 0 0 30px rgba(0,204,0,0.10);
-
       --radius:18px;
     }
 
@@ -49,8 +40,20 @@
     body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); }
     .wrap{ max-width:1240px; margin:0 auto; padding:42px 24px 60px; }
 
-    h1{ margin:0 0 8px 0; font-size:34px; font-weight:600; letter-spacing:-0.02em; }
-    .sub{ font-family:var(--mono); color:var(--muted); font-size:12px; letter-spacing:0.04em; }
+    /* Page title: shorter */
+    h1{
+      margin:0 0 6px 0;
+      font-size:34px;
+      font-weight:650;
+      letter-spacing:-0.02em;
+    }
+    .sub{
+      font-family:var(--mono);
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+    }
 
     .row{
       display:flex;
@@ -67,11 +70,12 @@
       background:var(--bg);
     }
 
+    /* Panel: more readable */
     .panel{
-      width: 360px;
+      width: 420px;
       border:1px solid var(--border);
       border-radius:var(--radius);
-      padding:16px;
+      padding:16px 16px 14px;
       background:var(--bg);
       position: sticky;
       top: 16px;
@@ -81,69 +85,156 @@
       font-family:var(--mono);
       color:var(--muted);
       font-size:11px;
-      letter-spacing:0.08em;
+      letter-spacing:0.10em;
       text-transform:uppercase;
       margin-bottom:10px;
     }
 
     .stepnum{
       font-family:var(--mono);
-      font-size:12px;
+      font-size:13px;
       letter-spacing:0.10em;
       color:var(--muted);
-      margin-bottom:10px;
+      margin-bottom:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .stepnum .smallHint{
+      font-size:11px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+      opacity:0.85;
+      white-space:nowrap;
     }
 
     .steptitle{
-      font-size:16px;
-      font-weight:700;
+      font-size:18px;
+      font-weight:800;
       letter-spacing:-0.01em;
-      margin-bottom:10px;
+      margin:0 0 10px 0;
+      line-height:1.15;
     }
 
     .steptext{
       font-family:var(--sans);
-      font-size:13px;
+      font-size:14px;
       color:var(--text);
-      line-height:1.55;
+      line-height:1.6;
+      margin-bottom:12px;
     }
 
-    /* Progress ticks */
+    /* Progress: bigger, numbered, clickable */
     .progress{
       display:flex;
-      gap:8px;
-      margin:14px 0 10px;
+      gap:10px;
+      margin:12px 0 12px;
       align-items:center;
       flex-wrap:wrap;
     }
     .tick{
-      width:38px;
-      height:6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:46px;
+      height:28px;
       border:1px solid var(--border);
-      border-radius:8px;
+      border-radius:10px;
       background:#fff;
       cursor:pointer;
+      user-select:none;
+      font-family:var(--mono);
+      font-size:12px;
+      font-weight:700;
+      color:#777;
+      transition: border-color 140ms ease, background 140ms ease, color 140ms ease, transform 140ms ease;
     }
+    .tick:hover{ border-color:#bdbdbd; transform: translateY(-1px); }
     .tick.on{
-      border-color:#bdbdbd;
-      background:#f3f3f3;
+      border-color:#d2d2d2;
+      background:#f5f5f5;
+      color:#6a6a6a;
     }
     .tick.active{
       border-color:#050505;
       background:#050505;
+      color:#fff;
+      transform:none;
+    }
+
+    /* Optional: mini list for clarity */
+    .stepList{
+      border-top:1px solid var(--border);
+      padding-top:12px;
+      margin-top:10px;
+    }
+    .stepRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:8px 10px;
+      border:1px solid transparent;
+      border-radius:12px;
+      cursor:pointer;
+      user-select:none;
+      transition: background 140ms ease, border-color 140ms ease;
+    }
+    .stepRow:hover{ background:#fafafa; border-color:#ededed; }
+    .stepRow.active{ background:#f7f7f7; border-color:#e6e6e6; }
+    .stepRow .left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .stepRow .n{
+      width:26px; height:26px;
+      border:1px solid var(--border2);
+      border-radius:9px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:var(--mono);
+      font-size:12px;
+      font-weight:800;
+      color:#050505;
+      flex:0 0 auto;
+      background:#fff;
+    }
+    .stepRow.active .n{
+      border-color:#050505;
+      background:#050505;
+      color:#fff;
+    }
+    .stepRow .label{
+      font-size:13px;
+      font-weight:700;
+      color:#222;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .stepRow .chev{
+      font-family:var(--mono);
+      font-size:12px;
+      color:#8a8a8a;
+      flex:0 0 auto;
     }
 
     .controls{
       display:flex;
       gap:10px;
-      margin-top:12px;
+      margin-top:14px;
       flex-wrap:wrap;
     }
 
     .btn{
       font-family:var(--mono);
       font-size:12px;
-      padding:8px 10px;
+      padding:9px 11px;
       border:1px solid var(--border);
       background:var(--bg);
       color:var(--text);
@@ -163,8 +254,7 @@
     .badge { display:none; }
     .badge.show { display:block; }
 
-    /* subtle “float” for active element via drop-shadow filter on SVG groups */
-    /* (JS will toggle .lift on active step group) */
+    /* subtle lift for active element */
     .lift{
       filter: drop-shadow(0 12px 18px rgba(0,0,0,0.16)) drop-shadow(0 2px 0 rgba(0,0,0,0.05));
       transform: translateY(-1px);
@@ -180,13 +270,13 @@
 
 <body>
   <div class="wrap">
-    <h1>Reflective Diagnostics — Deterministic Record Flow</h1>
+    <h1>Deterministic Workflow</h1>
     <div class="sub">GUIDED SEQUENCE • PUBLIC SAFE (NO INTERNAL METRICS)</div>
 
     <div class="row">
       <div class="card">
         <div class="svg-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Reflective Diagnostics flow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Deterministic workflow">
             <defs>
               <style>
                 .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
@@ -231,19 +321,19 @@
             <!-- OUTER -->
             <rect class="frame" x="70" y="50" width="1460" height="620" rx="18"/>
 
-            <!-- Title -->
+            <!-- Title (shorter, less dense) -->
             <text class="mono" x="120" y="108" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
-              Reflective Diagnostics — Deterministic Record Flow (Public Skeleton)
+              Deterministic Record Flow (Public Skeleton)
             </text>
-            <text class="monoMuted micro" x="120" y="134">POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED</text>
+            <text class="monoMuted micro" x="120" y="134">POST-EXECUTION • NON-CAUSAL • NAMES & THRESHOLDS OMITTED</text>
             <text class="monoMuted micro" x="120" y="156">BUILD v5 • 2026 • PUBLIC PREVIEW</text>
 
-            <!-- Small “what this view is” note -->
+            <!-- Compact note (kept, but cleaner) -->
             <text class="monoMuted micro" x="120" y="188">
-              This view shows the evidence-formation contract (what must exist before any module can report results).
+              Shows the evidence-formation contract: what must exist before any module can report results.
             </text>
             <text class="monoMuted micro" x="120" y="208">
-              Interactive regimes + oracle assistance exist downstream and are intentionally not shown here.
+              Interactive regimes + oracle assistance exist downstream and are intentionally omitted.
             </text>
 
             <!-- AUDIT MODE chip (top-right) -->
@@ -380,13 +470,11 @@
               <rect x="120" y="630" width="1400" height="56" rx="12" fill="#fff" stroke="#ededed" stroke-width="1.25"/>
               <text class="mono" x="142" y="664" style="font-size:12px;font-weight:800;letter-spacing:0.14em;">AUDIT PACKET PREVIEW</text>
 
-              <!-- left: redaction-safe identifiers -->
               <text class="monoMuted" x="380" y="663" style="font-size:11px;letter-spacing:0.05em;">
                 record_id: <tspan class="mono" style="font-weight:700;">RD-REC-0215-0A7C</tspan> •
                 hashes: <tspan class="mono" style="font-weight:700;">sha256: 9f2c…b18e</tspan>
               </text>
 
-              <!-- center: what’s inside -->
               <text class="monoMuted" x="900" y="663" style="font-size:11px;letter-spacing:0.05em;">
                 artifacts: <tspan class="mono" style="font-weight:700;">3 screenshots</tspan> •
                 <tspan class="mono" style="font-weight:700;">2 tables</tspan> •
@@ -394,7 +482,6 @@
                 • trace: <tspan class="mono" style="font-weight:700;">metric → span → source</tspan>
               </text>
 
-              <!-- right: faux buttons -->
               <g transform="translate(1320,642)">
                 <rect class="miniBtn" x="0" y="0" width="88" height="30" rx="10"/>
                 <text class="mono miniBtnText" x="18" y="20">EXPORT</text>
@@ -413,7 +500,11 @@
 
       <div class="panel">
         <div class="kicker">guided sequence</div>
-        <div class="stepnum" id="stepNum">STEP 1 / 6</div>
+
+        <div class="stepnum">
+          <span id="stepNum">STEP 1 / 6</span>
+          <span class="smallHint">Click 1–6</span>
+        </div>
 
         <div class="progress" id="progress"></div>
 
@@ -429,60 +520,31 @@
           <button class="btn" id="pauseBtn">Pause</button>
           <button class="btn" id="restartBtn">Restart</button>
         </div>
+
+        <div class="stepList" id="stepList"></div>
       </div>
     </div>
   </div>
 
   <script>
     const steps = [
-      {
-        id: "step1",
-        box: "box1",
-        badge: "badge1",
-        arrow: null,
-        title: "Record Intake",
-        text: "Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis."
-      },
-      {
-        id: "step2",
-        box: "box2",
-        badge: "badge2",
-        arrow: "a12",
-        title: "Canonicalize",
-        text: "Deterministic normalization and span indexing. Converts raw artifacts into a stable measurement substrate."
-      },
-      {
-        id: "step3",
-        box: "box3",
-        badge: "badge3",
-        arrow: "a23",
-        title: "Lexicon Bind",
-        text: "Binds records to a frozen, versioned term and schema specification. Constrains measurement semantics pre-computation."
-      },
-      {
-        id: "step4",
-        box: "box4",
-        badge: "badge4",
-        arrow: "a34",
-        title: "Structural Diagnostics",
-        text: "Computes structure-only signals (invariants, integrity checks) without truth, intent, or policy judgment."
-      },
-      {
-        id: "step5",
-        box: "box5",
-        badge: "badge5",
-        arrow: "a45",
-        title: "Audit Packet",
-        text: "Produces a traceable audit packet: provenance, hashes, evidence links, and replay references."
-      },
-      {
-        id: "step6",
-        box: "box6",
-        badge: "badge6",
-        arrow: "a56",
-        title: "Evidence Artifacts",
-        text: "Exports an auditable bundle (screenshots + CSV/JSON) suitable for controlled technical review."
-      }
+      { id:"step1", box:"box1", badge:"badge1", arrow:null,  title:"Record Intake",
+        text:"Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis." },
+
+      { id:"step2", box:"box2", badge:"badge2", arrow:"a12", title:"Canonicalize",
+        text:"Deterministic normalization and span indexing. Converts raw artifacts into a stable measurement substrate." },
+
+      { id:"step3", box:"box3", badge:"badge3", arrow:"a23", title:"Lexicon Bind",
+        text:"Binds records to a frozen, versioned term and schema specification. Constrains measurement semantics pre-computation." },
+
+      { id:"step4", box:"box4", badge:"badge4", arrow:"a34", title:"Structural Diagnostics",
+        text:"Computes structure-only signals (invariants, integrity checks) without truth, intent, or policy judgment." },
+
+      { id:"step5", box:"box5", badge:"badge5", arrow:"a45", title:"Audit Packet",
+        text:"Produces a traceable audit packet: provenance, hashes, evidence links, and replay references." },
+
+      { id:"step6", box:"box6", badge:"badge6", arrow:"a56", title:"Evidence Artifacts",
+        text:"Exports an auditable bundle (screenshots + CSV/JSON) suitable for controlled technical review." }
     ];
 
     let idx = 0;
@@ -493,17 +555,35 @@
     const stepTitle = document.getElementById("stepTitle");
     const stepText = document.getElementById("stepText");
     const progress = document.getElementById("progress");
-
+    const stepList = document.getElementById("stepList");
     const resultTray = document.getElementById("resultTray");
 
-    // Build ticks
-    const ticks = steps.map((_, i) => {
+    // Build numbered ticks
+    const ticks = steps.map((s, i) => {
       const t = document.createElement("div");
       t.className = "tick";
-      t.title = `Step ${i+1}`;
+      t.textContent = String(i + 1);
+      t.title = `Step ${i+1}: ${s.title}`;
       t.addEventListener("click", () => activate(i));
       progress.appendChild(t);
       return t;
+    });
+
+    // Build readable list (same click behavior)
+    const rows = steps.map((s, i) => {
+      const r = document.createElement("div");
+      r.className = "stepRow";
+      r.innerHTML = `
+        <div class="left">
+          <div class="n">${String(i+1)}</div>
+          <div class="label">${s.title}</div>
+        </div>
+        <div class="chev">›</div>
+      `;
+      r.title = `Go to step ${i+1}`;
+      r.addEventListener("click", () => activate(i));
+      stepList.appendChild(r);
+      return r;
     });
 
     function setClass(el, add, remove){
@@ -540,21 +620,25 @@
     function showResultTray(show){
       if(!resultTray) return;
       resultTray.style.opacity = show ? "1" : "0";
-      // subtle “green meaning” only at step 6
       const trayRect = resultTray.querySelector("rect");
       if(trayRect){
-        trayRect.style.filter = show ? "drop-shadow(0 18px 40px rgba(0,0,0,0.10)) drop-shadow(0 0 22px rgba(0,204,0,0.10))" : "none";
+        trayRect.style.filter = show
+          ? "drop-shadow(0 18px 40px rgba(0,0,0,0.10)) drop-shadow(0 0 22px rgba(0,204,0,0.10))"
+          : "none";
       }
     }
 
     function activate(i){
       idx = (i + steps.length) % steps.length;
 
-      // Dim all groups
+      // Dim all groups + hide badges
       steps.forEach(s => {
         setClass(document.getElementById(s.id), "dim", "active");
-        document.getElementById(s.badge).classList.remove("show");
+        const b = document.getElementById(s.badge);
+        if(b) b.classList.remove("show");
       });
+
+      // Dim arrows + lex side
       ["a12","a23","a34","a45","a56"].forEach(a => setClass(document.getElementById(a), "dim", "active"));
       setClass(document.getElementById("lexSide"), "dim", "active");
 
@@ -567,7 +651,9 @@
       const g = document.getElementById(s.id);
       setClass(g, "active", "dim");
       g.classList.add("lift");
-      document.getElementById(s.badge).classList.add("show");
+
+      const b = document.getElementById(s.badge);
+      if(b) b.classList.add("show");
 
       // Thicken active box border (selection only)
       const box = document.getElementById(s.box);
@@ -594,16 +680,19 @@
       // Result tray only at step 6
       showResultTray(s.id === "step6");
 
-      // Panel
+      // Panel text
       stepNum.textContent = `STEP ${idx+1} / ${steps.length}`;
       stepTitle.textContent = s.title;
       stepText.textContent = s.text;
 
-      // Progress ticks
+      // Ticks
       ticks.forEach((t, j) => {
         t.classList.toggle("on", j <= idx);
         t.classList.toggle("active", j === idx);
       });
+
+      // List highlight
+      rows.forEach((r, j) => r.classList.toggle("active", j === idx));
     }
 
     function next(){ activate(idx + 1); }
@@ -627,11 +716,13 @@
     document.getElementById("pauseBtn").addEventListener("click", pause);
     document.getElementById("restartBtn").addEventListener("click", () => activate(0));
 
-    // Keyboard (fast demo)
+    // Keyboard
     document.addEventListener("keydown", (e) => {
       if(e.key === "ArrowRight") next();
       if(e.key === "ArrowLeft") prev();
       if(e.key.toLowerCase() === "r") activate(0);
+      if(e.key.toLowerCase() === "a") auto();
+      if(e.key.toLowerCase() === "p") pause();
     });
 
     // Click boxes to jump
