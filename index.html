@@ -106,7 +106,7 @@
         /* --- LAYOUT STRUCTURE --- */
         .layout-wrapper { display: flex; width: 100%; min-height: 100vh; }
 
-        /* SIDEBAR */
+        /* SIDEBAR (Sticky) */
         aside#sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -154,7 +154,7 @@
             min-width: 0;
         }
 
-        /* RIGHT RAIL */
+        /* RIGHT RAIL (Sticky) */
         .diagram-rail {
             width: var(--rail-width);
             flex-shrink: 0;
@@ -164,7 +164,7 @@
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
-        /* --- DIAGRAM THUMBNAILS (UPDATED) --- */
+        /* DIAGRAM THUMBNAILS */
         .rail-item { margin-bottom: 2rem; cursor: zoom-in; transition: transform 0.2s; }
         .rail-item:hover { transform: scale(1.02); }
         
@@ -179,7 +179,7 @@
             border: 1px solid var(--border-color);
             background: #ffffff;
             border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -245,6 +245,7 @@
         /* --- VISIBILITY RULES --- */
         .diff-tag { display: none; }
 
+        /* FORCE NORMAL VIEW */
         body:not([data-mode="diff"]) del { display: none !important; }
         body:not([data-mode="diff"]) ins { 
             display: inline !important; 
@@ -253,6 +254,7 @@
             color: inherit !important; 
         }
 
+        /* DIFF MODE: Show both + Highlighting */
         body[data-mode="diff"] del {
             display: inline !important;
             background: var(--mode-diff-del-bg) !important;
@@ -270,6 +272,26 @@
             padding: 0 2px;
         }
         
+        /* DIFF MODE: Hide Unchanged Content */
+        body[data-mode="diff"] .prose-content p:not(.has-diff),
+        body[data-mode="diff"] .prose-content li:not(.has-diff),
+        body[data-mode="diff"] .prose-content ul:not(.has-diff-list) {
+            display: none !important;
+        }
+        body[data-mode="diff"] section:not(.has-diff-section) {
+             display: none !important;
+        }
+        body[data-mode="diff"] h2 { margin-top: 2rem; }
+
+        /* READER MODE: PURE PROSE */
+        body[data-mode="reader"] .audit-rail,
+        body[data-mode="reader"] .logic-block,
+        body[data-mode="reader"] .diff-header,
+        body[data-mode="reader"] .audit-marker {
+            display: none !important;
+        }
+        
+        /* Revision trace headers: only in DIFF mode */
         .diff-header {
             font-family: "JetBrains Mono", monospace;
             font-size: 0.65rem;
@@ -287,7 +309,7 @@
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         
         .audit-rail { display: none; margin-top: 1rem; padding-left: 1rem; border-left: 1px solid var(--border-color); font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); }
-        body[data-mode="audit"] .audit-rail, body[data-mode="diff"] .audit-rail { display: block; }
+        body[data-mode="audit"] .audit-rail { display: block; }
         
         .claim-box { margin-bottom: 1rem; padding: 0.8rem; background: var(--card-bg); border: 1px solid var(--border-color); }
         .claim-id { font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.5rem; }
@@ -512,6 +534,19 @@
                                 <li>Not a <del>public evaluation service</del> <ins>crowdsourced feedback mechanism</ins>.</li>
                             </ul>
                         </div>
+                        
+                        <div class="logic-block">
+<span class="logic-comment"># Boundary Invariant</span>
+<span class="logic-keyword">assert</span> system.mode != <span class="logic-type">LIVE_AGENT</span>
+<span class="logic-keyword">assert</span> outputs.anchor_to_evidence == <span class="logic-type">True</span>
+                        </div>
+                        <div class="audit-rail">
+                            <div class="claim-box">
+                                <span class="claim-id">BOUNDARY [D5.0]</span>
+                                <div class="claim-meta"><span>SCOPE: PUBLIC INTERFACE</span><span class="metric-tag">CONF: HIGH</span></div>
+                                <div class="claim-text">This page exposes inspectable artifacts only; it is not an interactive or scoring surface.</div>
+                            </div>
+                        </div>
                     </section>
 
                     <section>
@@ -525,12 +560,37 @@
                             </ul>
                             <p>Additional analytical layers and governance-related surfaces are <del>intentionally</del> <ins>cryptographically</ins> not exposed publicly.</p>
                         </div>
+                        
+                        <div class="logic-block">
+<span class="logic-comment"># Evidence Anchor</span>
+artifact_id = hash(record_id + run_id)
+<span class="logic-keyword">assert</span> store.exists(artifact_id)
+                        </div>
+                        <div class="audit-rail">
+                            <div class="claim-box">
+                                <span class="claim-id">TRACE [D6.0]</span>
+                                <div class="claim-meta"><span>SCOPE: EVIDENCE</span><span class="metric-tag">CONF: HIGH</span></div>
+                                <div class="claim-text">Every public figure is traceable to a stored run and immutable source record.</div>
+                            </div>
+                        </div>
                     </section>
 
                     <section>
                         <h2><span class="scramble-hover" data-value="07 //">07 //</span> Authorization</h2>
                         <div class="prose-content">
                             <p>Full <del>dashboard</del> <ins>instrument</ins> access and repository access is <del>available privately</del> <ins>restricted</ins> to authorized funders, technical reviewers, and collaborators under controlled review or NDA.</p>
+                        </div>
+                        
+                        <div class="logic-block">
+<span class="logic-comment"># Access Gate</span>
+<span class="logic-keyword">assert</span> role.verify(signature) == <span class="logic-type">True</span>
+                        </div>
+                        <div class="audit-rail">
+                            <div class="claim-box">
+                                <span class="claim-id">ACCESS [D7.0]</span>
+                                <div class="claim-meta"><span>SCOPE: GOVERNANCE</span><span class="metric-tag">CONF: HIGH</span></div>
+                                <div class="claim-text">Full instrument surfaces require controlled review; this page is intentionally non-sensitive.</div>
+                            </div>
                         </div>
                     </section>
                 </div>
@@ -600,6 +660,25 @@
 
             if (window.innerWidth <= 1100) document.getElementById('sidebar').classList.remove('open');
         }
+        
+        // --- JS for Diff Marking ---
+        function markDiffBlocks() {
+            // Mark blocks that contain del/ins so we can filter in DIFF mode.
+            const candidates = document.querySelectorAll('.prose-content p, .prose-content li, .prose-content ul');
+            candidates.forEach(el => {
+                if (el.querySelector('del, ins')) el.classList.add('has-diff');
+            });
+            // Also mark sections that contain any diff
+            document.querySelectorAll('section').forEach(sec => {
+                if (sec.querySelector('del, ins')) sec.classList.add('has-diff-section');
+            });
+            
+            // Mark list containers if any child is has-diff
+            document.querySelectorAll('ul').forEach(ul => {
+                if (ul.querySelector('.has-diff')) ul.classList.add('has-diff-list');
+            });
+        }
+        document.addEventListener('DOMContentLoaded', markDiffBlocks);
 
         // Initialize Mode
         const savedMode = localStorage.getItem('mode') || 'reader';
@@ -613,7 +692,7 @@
             element.interval = setInterval(() => {
                 element.innerText = originalText.split("").map((letter, index) => {
                     if(index < iterations) return originalText[index];
-                    return letters[Math.floor(Math.random() * letters.length)];
+                    return letters[Math.floor(Math.random() * 26)];
                 }).join("");
                 if(iterations >= originalText.length) clearInterval(element.interval);
                 iterations += 1 / 3;
