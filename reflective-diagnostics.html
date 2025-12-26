@@ -19,7 +19,7 @@
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V130 (SHARED WITH LEXICON) --- */
+        /* --- THEME: INSTITUTE STANDARD V130 (MATCHING LEXICON LAYOUT) --- */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -32,12 +32,9 @@
             --panel-border: #000;
             --panel-bg: #fff;
             --panel-text: #000;
-            --panel-hover-bg: #000;
-            --panel-hover-text: #fff;
             
             /* SIGNALS */
-            --signal-enforced: #00cc00;
-            --status-verified: var(--signal-enforced);
+            --status-verified: #00cc00;
             
             /* MODES */
             --mode-audit: #b45309; 
@@ -51,13 +48,14 @@
             --mode-diff-ins-text: #006600;
 
             /* SPACING */
-            --block-gap: 48px;
+            --sidebar-width: 280px;
+            --rail-width: 420px; /* Fixed width for right rail */
         }
 
         /* DARK MODE */
         [data-theme="dark"] {
             --bg-color: #050505;
-            --sidebar-bg: #050505;
+            --sidebar-bg: #050505; /* Ensures sidebar is dark */
             --text-main: #e0e0e0;
             --text-muted: #888888;
             --border-color: #333333;
@@ -66,8 +64,6 @@
             --panel-border: #444;
             --panel-bg: #050505;
             --panel-text: #ccc;
-            --panel-hover-bg: #e0e0e0;
-            --panel-hover-text: #000;
             
             --mode-audit: #ffaa00;
             --mode-logic: #66aaff;
@@ -88,7 +84,8 @@
             background: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.2s ease, color 0.2s ease;
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
         /* --- TYPOGRAPHY --- */
@@ -99,7 +96,7 @@
         .doc-subtitle { font-family: "JetBrains Mono", monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 3rem; letter-spacing: 0.02em; }
         
         h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; display:flex; align-items:center; }
-        p { font-size: 0.95rem; margin-bottom: 1.2rem; color: var(--text-main); max-width: 65ch; }
+        p { font-size: 0.95rem; margin-bottom: 1.2rem; color: var(--text-main); max-width: 60ch; }
         ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
         li { margin-bottom: 0.5rem; font-size: 0.95rem; }
         
@@ -160,17 +157,12 @@
         /* --- VISIBILITY RULES --- */
         del, ins, .diff-tag { display: none; } 
 
-        /* READER MODE */
-        body[data-mode="reader"] .audit-marker,
-        body[data-mode="reader"] .logic-block,
-        body[data-mode="reader"] .diff-del,
-        body[data-mode="reader"] .diff-tag,
-        body[data-mode="reader"] .audit-rail,
-        body[data-mode="reader"] .diff-header { display: none !important; }
+        /* 1. READER MODE */
+        body[data-mode="reader"] .audit-marker, body[data-mode="reader"] .logic-block, body[data-mode="reader"] .diff-del, body[data-mode="reader"] .diff-tag, body[data-mode="reader"] .audit-rail, body[data-mode="reader"] .diff-header { display: none !important; }
         body[data-mode="reader"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="reader"] del { display: none; }
 
-        /* DIFF MODE */
+        /* 2. DIFF MODE */
         body[data-mode="diff"] del { display: inline; background: var(--mode-diff-del-bg); color: var(--mode-diff-del-text); text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
         body[data-mode="diff"] ins { display: inline; background: var(--mode-diff-ins-bg); color: var(--mode-diff-ins-text); border-bottom: 2px solid var(--mode-diff-ins-text); text-decoration: none; padding: 0 2px; }
         body[data-mode="diff"] .diff-tag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
@@ -178,7 +170,7 @@
         body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
         body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; pointer-events: none; }
 
-        /* AUDIT MODE */
+        /* 3. AUDIT MODE */
         .audit-marker { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--bg-color); }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         body[data-mode="audit"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
@@ -192,7 +184,7 @@
         .metric-tag { font-weight: 600; color: var(--text-main); }
         .claim-text { color: var(--text-muted); line-height: 1.4; }
 
-        /* LOGIC MODE */
+        /* 4. LOGIC MODE */
         .logic-block { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.8rem; color: var(--text-muted); background-color: var(--card-bg); border: 1px solid var(--border-color); border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
         .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: var(--bg-color); color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid var(--border-color); border-left: 1px solid var(--border-color); padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
@@ -222,14 +214,14 @@
         nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
 
         /* =========================================
-           LAYOUT ENGINE: SEGREGATED 3-COLUMN (DESKTOP)
+           LAYOUT ENGINE: 3-COLUMN (Sidebar | Content | Rail)
            ========================================= */
 
         @media (min-width: 1101px) {
             body { display: flex; min-height: 100vh; }
             
             aside#sidebar {
-                width: 240px;
+                width: var(--sidebar-width);
                 height: 100vh;
                 position: sticky;
                 top: 0;
@@ -238,56 +230,43 @@
                 display: flex;
                 flex-direction: column;
                 z-index: 99;
-                background: var(--sidebar-bg);
+                background: var(--sidebar-bg); /* Crucial for dark mode */
                 flex-shrink: 0;
-                overflow: hidden;           
             }
 
-            .sidebar-scroll {
-                flex: 1;
-                min-height: 0;              
-                overflow-y: auto;
-                padding: 2rem;
-            }
-
-            .sidebar-bottom {
-                padding: 0 2rem 2rem 2rem;
-                background: var(--sidebar-bg);
-                border-top: 1px solid var(--border-color);
-            }
-
+            .sidebar-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 2rem; }
+            .sidebar-bottom { padding: 0 2rem 2rem 2rem; background: var(--sidebar-bg); border-top: 1px solid var(--border-color); }
             .theme-switch { position: static; margin: 0 0 1rem 0 !important; border-top: none !important; }
 
             .main-column { flex-grow: 1; display: flex; flex-direction: column; margin: 0; min-height: 100vh; min-width: 0; }
             .split-view { display: flex; flex: 1; align-items: flex-start; min-width: 0; }
-            .content-col { flex: 1 1 auto; min-width: 0; max-width: none; padding: 2rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
+            
+            /* Content Column */
+            .content-col { 
+                flex: 1 1 auto; 
+                min-width: 0; 
+                padding: 2rem 4rem 6rem 4rem; 
+                display: flex; flex-direction: column; 
+            }
 
-            /* DIAGRAM RAIL - STICKY RIGHT */
-            .diagram-col {
-                flex: 0 0 450px; /* Width for desktop rail */
-                width: 450px; 
+            /* Right Rail (Diagrams) */
+            .diagram-rail {
+                flex: 0 0 var(--rail-width);
+                width: var(--rail-width); 
                 border-left: 1px solid var(--border-color);
                 background: var(--bg-color);
                 padding: 0;
                 align-self: flex-start;
-                position: sticky; 
-                top: 0; 
-                height: 100vh; 
+                position: sticky; top: 0; height: 100vh; 
                 overflow: hidden;        
             }
+            .rail-scroll { height: 100%; overflow-y: auto; padding: 2rem 2rem 4rem 2rem; }
             
-            .diagram-scroll { height: 100%; overflow-y: auto; padding: 2rem 2rem 4rem 2rem; }
-            
-            .diagram-tile {
-                margin-bottom: 3rem;
-                cursor: zoom-in;
-                opacity: 0.9;
-                transition: opacity 0.2s, transform 0.2s;
-            }
-            .diagram-tile:hover { opacity: 1; transform: scale(1.01); }
-            
-            .tile-label { font-family: "JetBrains Mono", monospace; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; display:block; }
-            .tile-img { width: 100%; height: auto; border: 1px solid var(--border-color); background: var(--card-bg); display: block; }
+            /* Rail Item Styles */
+            .rail-item { margin-bottom: 2rem; transition: transform 0.2s; cursor: pointer; }
+            .rail-item:hover { transform: scale(1.02); }
+            .rail-label { font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em; }
+            .rail-thumb { width: 100%; height: auto; border: 1px solid var(--border-color); background: var(--card-bg); display: block; object-fit: contain; }
         }
 
         /* MOBILE/TABLET ENGINE */
@@ -295,16 +274,6 @@
             body { display: block; overflow-x: hidden; }
             body.sidebar-open { position: fixed; width: 100%; overflow: hidden; }
             
-            #sidebar-overlay {
-                position: fixed; top: 50px; left: 0; right: 0; bottom: 0;
-                background: rgba(0,0,0,0.5); 
-                opacity: 0; pointer-events: none;
-                transition: opacity 0.25s ease;
-                z-index: 9999;
-                backdrop-filter: blur(2px);
-            }
-            aside#sidebar.open ~ #sidebar-overlay { opacity: 1; pointer-events: auto; }
-
             aside#sidebar {
                 position: fixed; top: 50px; left: 0; bottom: 0; width: 100%;
                 transform: translateX(-100%); transition: transform 0.25s ease;
@@ -322,11 +291,9 @@
             .split-view { display: block; }
             .content-col { padding: 1.5rem; max-width: none; }
             
-            /* Mobile Diagram Rail: Collapses below content */
-            .diagram-col { 
-                width: 100%; height: auto; position: static; border-left: none; border-top: 1px solid var(--border-color);
-            }
-            .diagram-scroll { padding: 2rem; overflow: visible; }
+            /* Mobile Rail: Collapses below content */
+            .diagram-rail { width: 100%; height: auto; position: static; border-left: none; border-top: 1px solid var(--border-color); }
+            .rail-scroll { padding: 2rem; overflow: visible; }
             
             #mode-banner { top: 60px; right: 20px; z-index: 900; }
         }
@@ -335,19 +302,18 @@
         #diagram-modal {
             display: none;
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.92);
             z-index: 20000;
             align-items: center; justify-content: center;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
         #diagram-modal.open { display: flex; }
         .modal-content {
-            width: 95vw; height: 90vh; max-width: 1400px;
+            width: 95vw; height: 90vh; max-width: 1600px;
             background: var(--bg-color);
             border: 1px solid var(--border-color);
             position: relative;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
         }
         .modal-close {
             position: absolute; top: -30px; right: 0;
@@ -440,6 +406,7 @@
             </div>
 
             <div class="split-view">
+                
                 <div class="content-col">
                     <div style="margin-bottom: 4rem;">
                         <h1>Reflective Diagnostics</h1>
@@ -574,22 +541,22 @@
                         .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
                         .catch(() => {});
                     </script>
-                </div><div class="diagram-col">
-                    <div class="diagram-scroll">
+                </div><div class="diagram-rail">
+                    <div class="rail-scroll">
                         
-                        <div class="diagram-tile" onclick="openModal('/diag-coverage-map-v1.html?embed=1')">
-                            <span class="tile-label">DIAGRAM — RD-FIG-01</span>
-                            <img class="tile-img" src="/assets/diagrams/rd-fig-01.png" alt="Coverage Map" onerror="this.style.background='#eee'">
+                        <div class="rail-item" onclick="openModal('/diag-coverage-map-v1.html?embed=1')">
+                            <span class="rail-label">DIAGRAM — RD-FIG-01</span>
+                            <img class="rail-thumb" src="/assets/diagrams/rd-fig-01.png" alt="Coverage Map" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWVlOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0Ij5ET0NNT0RFX1RIVU1CX01JU1NJTkc8L3RleHQ+PC9zdmc+'">
                         </div>
 
-                        <div class="diagram-tile" onclick="openModal('/diag-diagram-preview.html?embed=1')">
-                            <span class="tile-label">DIAGRAM — RD-FIG-02</span>
-                            <img class="tile-img" src="/assets/diagrams/rd-fig-02.png" alt="Preview" onerror="this.style.background='#eee'">
+                        <div class="rail-item" onclick="openModal('/diag-diagram-preview.html?embed=1')">
+                            <span class="rail-label">DIAGRAM — RD-FIG-02</span>
+                            <img class="rail-thumb" src="/assets/diagrams/rd-fig-02.png" alt="Preview" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWVlOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0Ij5ET0NNT0RFX1RIVU1CX01JU1NJTkc8L3RleHQ+PC9zdmc+'">
                         </div>
 
-                        <div class="diagram-tile" onclick="openModal('/diag-layers-substrate.html?embed=1')">
-                            <span class="tile-label">DIAGRAM — RD-FIG-03</span>
-                            <img class="tile-img" src="/assets/diagrams/rd-fig-03.png" alt="Substrate" onerror="this.style.background='#eee'">
+                        <div class="rail-item" onclick="openModal('/diag-layers-substrate.html?embed=1')">
+                            <span class="rail-label">DIAGRAM — RD-FIG-03</span>
+                            <img class="rail-thumb" src="/assets/diagrams/rd-fig-03.png" alt="Substrate" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWVlOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0Ij5ET0NNT0RFX1RIVU1CX01JU1NJTkc8L3RleHQ+PC9zdmc+'">
                         </div>
 
                     </div>
@@ -619,7 +586,7 @@
             element.interval = setInterval(() => {
                 element.innerText = originalText.split("").map((letter, index) => {
                     if(index < iterations) return originalText[index];
-                    return letters[Math.floor(Math.random() * 26)];
+                    return letters[Math.floor(Math.random() * letters.length)];
                 }).join("");
                 if(iterations >= originalText.length) clearInterval(element.interval);
                 iterations += 1 / 3;
