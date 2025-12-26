@@ -8,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/footer.css">
+    
+    <link rel="stylesheet" href="assets/css/footer.css">
 
     <script type="application/json" id="audit-manifest">
     {
@@ -67,7 +68,6 @@
             --mode-audit: #ffaa00;
             --mode-logic: #66aaff;
             
-            /* DIFF COLORS DARK */
             --mode-diff-del-bg: #330000;
             --mode-diff-del-text: #ff6666;
             --mode-diff-ins-bg: #003300;
@@ -139,7 +139,7 @@
             border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
         }
 
-        /* SPLIT VIEW */
+        /* SPLIT VIEW (Content + Rail) */
         .split-view {
             display: flex;
             flex: 1;
@@ -216,14 +216,10 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
 
-        /* =========================================
-           VISIBILITY & DIFF RULES (THE FIX)
-           ========================================= */
-        
+        /* --- VISIBILITY RULES (NUCLEAR OPTION) --- */
         .diff-tag { display: none; }
 
-        /* 1. FORCE NORMAL VIEW (Reader/Audit/Logic) 
-           Hide DEL, Show INS as plain text */
+        /* FORCE NORMAL VIEW */
         body:not([data-mode="diff"]) del { display: none !important; }
         body:not([data-mode="diff"]) ins { 
             display: inline !important; 
@@ -232,8 +228,7 @@
             color: inherit !important; 
         }
 
-        /* 2. DIFF MODE 
-           Show both with styling */
+        /* DIFF MODE */
         body[data-mode="diff"] del {
             display: inline !important;
             background: var(--mode-diff-del-bg) !important;
@@ -250,8 +245,7 @@
             text-decoration: none;
             padding: 0 2px;
         }
-
-        /* OTHER MODES */
+        
         .audit-marker { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--bg-color); }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         
@@ -507,19 +501,19 @@
 
                 <div class="diagram-rail">
                     
-                    <div class="rail-item" onclick="openModal('/diag-coverage-map-v1.html?embed=1')">
+                    <div class="rail-item" onclick="openModal('diag-coverage-map-v1.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-01</span>
-                        <img class="rail-thumb" src="/assets/images/image_79b414.png" alt="Coverage Map" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
+                        <img class="rail-thumb" src="assets/images/image_79b414.png" alt="Coverage Map" onerror="this.style.background='#222';">
                     </div>
 
-                    <div class="rail-item" onclick="openModal('/diag-diagram-preview.html?embed=1')">
+                    <div class="rail-item" onclick="openModal('diag-diagram-preview.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-02</span>
-                        <img class="rail-thumb" src="/assets/images/fig11_static.jpg" alt="Preview" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
+                        <img class="rail-thumb" src="assets/images/fig11_static.jpg" alt="Preview" onerror="this.style.background='#222';">
                     </div>
 
-                    <div class="rail-item" onclick="openModal('/diag-layers-substrate.html?embed=1')">
+                    <div class="rail-item" onclick="openModal('diag-layers-substrate.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-03</span>
-                        <img class="rail-thumb" src="/assets/images/fig10_static.jpg" alt="Substrate" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
+                        <img class="rail-thumb" src="assets/images/fig10_static.jpg" alt="Substrate" onerror="this.style.background='#222';">
                     </div>
 
                 </div>
@@ -597,7 +591,8 @@
         const savedTheme = localStorage.getItem('theme') || 'light';
         setTheme(savedTheme);
         
-        fetch('/partials/footer.html')
+        // [FIX] Relative Path for Footer Fetch
+        fetch('partials/footer.html')
         .then(r => r.ok ? r.text() : '')
         .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
         .catch(() => {});
