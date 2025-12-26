@@ -207,8 +207,9 @@
       color:var(--muted);
     }
 
-    .svg-wrap{ width:100%; overflow:auto; }
-    svg{ width:100%; height:auto; min-width:860px; display:block; }
+    /* SCROLLBAR FIX: no forced horizontal overflow */
+    .svg-wrap{ width:100%; overflow:hidden; }
+    svg{ width:100%; height:auto; display:block; }
 
     .dim { opacity: var(--inactiveOpacity); transition: opacity 160ms ease; }
     .active { opacity: var(--activeOpacity); transition: opacity 160ms ease; }
@@ -239,7 +240,6 @@
     @media (max-width: 980px){
       .row{ flex-direction:column; }
       .panel{ width:100%; position:relative; top:auto; }
-      svg{ min-width:760px; }
     }
   </style>
 </head>
@@ -325,11 +325,6 @@
 
             <rect class="frame" x="60" y="60" width="1080" height="640" rx="18"/>
 
-            <!-- TITLE FIX: compact single line (no duplicate big title) -->
-            <text class="monoMuted Micro" x="110" y="118">
-              MINIMAL DIAGNOSTIC BASIS SET • FULL COVERAGE
-            </text>
-
             <g id="scaffold">
               <circle class="ring" cx="600" cy="400" r="240"/>
               <circle class="ring" cx="600" cy="400" r="160"/>
@@ -343,11 +338,7 @@
               <text class="monoMuted Micro" x="854" y="392">UTILITY / REFUSAL</text>
 
               <text class="sans CenterH" x="600" y="390" text-anchor="middle">OBSERVATORY MAP</text>
-
-              <!-- CENTER FIX: keep one line only -->
-              <text class="monoMuted CenterT" x="600" y="422" text-anchor="middle">
-                outputs only • lexicon-bound • auditable
-              </text>
+              <text class="monoMuted CenterT" x="600" y="422" text-anchor="middle">outputs only • lexicon-bound • auditable</text>
             </g>
 
             <g id="orbitLayer" class="orb">
@@ -410,66 +401,36 @@
 
   <script>
     const tests = [
-      {
-        id: 1,
-        code: "TEST 1",
-        short: "GOVERNANCE",
-        sub: "AUTOMATION",
-        title: "Test 1 — Automation & Programmable Governance",
+      { id: 1, code: "TEST 1", short: "GOVERNANCE", sub: "AUTOMATION", title: "Test 1 — Automation & Programmable Governance",
         purpose: "Persona-induced compliance failures (governance surface).",
         observes: "Output behavior under constraint + role framing.",
         emits: "Lexicon signature + evidence spans + audit references.",
         coverage: "Covers governance failure: user constraints → policy compliance dynamics; tests programmable control surfaces.",
-        link: "assets/diag-samples/test1.png"
-      },
-      {
-        id: 2,
-        code: "TEST 2",
-        short: "MECHANISM",
-        sub: "UNIFICATION",
-        title: "Test 2 — Universal Benchmarking",
+        link: "assets/diag-samples/test1.png" },
+      { id: 2, code: "TEST 2", short: "MECHANISM", sub: "UNIFICATION", title: "Test 2 — Universal Benchmarking",
         purpose: "Cross-domain mechanism unification (same failure mechanics across domains).",
         observes: "Structural invariants across tasks without subjective labels.",
         emits: "Mechanism signature + trace artifacts for comparison.",
         coverage: "Covers mechanism invariants: reveals the same error-cause across domains (math / geo / code) without narrative drift.",
-        link: "assets/diag-samples/test2.png"
-      },
-      {
-        id: 3,
-        code: "TEST 3",
-        short: "FALSE",
-        sub: "REFUSALS",
-        title: "Test 3 — Alignment Tax Reduction",
+        link: "assets/diag-samples/test2.png" },
+      { id: 3, code: "TEST 3", short: "FALSE", sub: "REFUSALS", title: "Test 3 — Alignment Tax Reduction",
         purpose: "Safety–utility balance and false refusals (over-refusal surface).",
         observes: "Refusal vs justified non-action (boundary discipline).",
         emits: "Refusal-class signature + auditable record chain.",
         coverage: "Covers utility boundary: distinguishes justified non-action vs avoidant refusal; measures alignment tax at the interface.",
-        link: "assets/diag-samples/test3.png"
-      },
-      {
-        id: 4,
-        code: "TEST 4",
-        short: "EPISTEMIC",
-        sub: "INTEGRITY",
-        title: "Test 4 — Epistemic Integrity Under Constraint",
+        link: "assets/diag-samples/test3.png" },
+      { id: 4, code: "TEST 4", short: "EPISTEMIC", sub: "INTEGRITY", title: "Test 4 — Epistemic Integrity Under Constraint",
         purpose: "Correct non-action under missing inputs (abstain vs hallucinate).",
         observes: "Non-action discipline vs hallucination under insufficient data.",
         emits: "Epistemic stability signature + traceable evidence chain.",
         coverage: "Covers epistemic correctness: tests whether the system invents facts or holds boundary under missing evidence.",
-        link: "assets/diag-samples/test4.png"
-      },
-      {
-        id: 5,
-        code: "TEST 5",
-        short: "CRISIS",
-        sub: "CO-REGULATION",
-        title: "Test 5 — Crisis Co-Regulation",
+        link: "assets/diag-samples/test4.png" },
+      { id: 5, code: "TEST 5", short: "CRISIS", sub: "CO-REGULATION", title: "Test 5 — Crisis Co-Regulation",
         purpose: "Interaction stability under high arousal (escalation dynamics).",
         observes: "Stability patterns under stress without intent attribution.",
         emits: "Co-regulation signature + evidence spans + replay references.",
         coverage: "Covers interaction dynamics: stabilizes user state under stress while avoiding speculation; tests escalation vs grounding control.",
-        link: "assets/diag-samples/test5.png"
-      }
+        link: "assets/diag-samples/test5.png" }
     ];
 
     const wedgesG = document.getElementById("wedges");
