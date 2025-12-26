@@ -21,7 +21,6 @@
     <style>
         /* --- THEME: INSTITUTE STANDARD V130 --- */
         :root {
-            /* LIGHT MODE */
             --bg-color: #ffffff;
             --sidebar-bg: #ffffff;
             --text-main: #050505;
@@ -49,7 +48,7 @@
 
             /* SPACING */
             --sidebar-width: 280px;
-            --rail-width: 450px; 
+            --rail-width: 500px; 
         }
 
         /* DARK MODE */
@@ -140,27 +139,26 @@
             border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
         }
 
-        /* SPLIT VIEW (Content + Rail) */
+        /* SPLIT VIEW */
         .split-view {
             display: flex;
             flex: 1;
-            align-items: flex-start; /* Ensures rail and content start at top */
+            align-items: flex-start;
         }
 
         .content-col {
             flex: 1;
             padding: 3rem 4rem 6rem 4rem;
-            min-width: 0; /* Prevents overflow */
+            min-width: 0;
         }
 
-        /* RIGHT RAIL (Sticky Diagrams) */
+        /* RIGHT RAIL */
         .diagram-rail {
             width: var(--rail-width);
             flex-shrink: 0;
             border-left: 1px solid var(--border-color);
             background: var(--bg-color);
             padding: 3rem 2rem;
-            /* Sticky behavior */
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
@@ -177,12 +175,12 @@
             object-fit: contain;
         }
 
-        /* FOOTER - Pushed to bottom */
+        /* FOOTER */
         #footer-mount {
             width: 100%;
             border-top: 1px solid var(--border-color);
             background: var(--bg-color);
-            margin-top: auto; /* This pushes the footer to the bottom */
+            margin-top: auto; 
         }
 
         /* --- SIDEBAR ELEMENTS --- */
@@ -213,43 +211,47 @@
         .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
         .export-btn:hover { background: var(--text-main); color: var(--bg-color); }
 
-        @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
         @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
-        @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
 
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
 
-        /* --- VISIBILITY RULES (FIX: show INS in normal modes) --- */
-        /* Default (READER / AUDIT / LOGIC): show the new text (ins), hide the old text (del) */
-        del { display: none; }
-        ins { 
-          display: inline; 
-          background: none; 
-          color: inherit; 
-          text-decoration: none; 
-        }
+        /* =========================================
+           VISIBILITY & DIFF RULES (THE FIX)
+           ========================================= */
+        
         .diff-tag { display: none; }
 
-        /* MODE STYLES */
-        /* DIFF mode: show both del + ins with highlighting */
+        /* 1. FORCE NORMAL VIEW (Reader/Audit/Logic) 
+           Hide DEL, Show INS as plain text */
+        body:not([data-mode="diff"]) del { display: none !important; }
+        body:not([data-mode="diff"]) ins { 
+            display: inline !important; 
+            text-decoration: none !important; 
+            background: none !important; 
+            color: inherit !important; 
+        }
+
+        /* 2. DIFF MODE 
+           Show both with styling */
         body[data-mode="diff"] del {
-          display: inline;
-          background: var(--mode-diff-del-bg);
-          color: var(--mode-diff-del-text);
-          text-decoration: line-through;
-          padding: 0 4px;
-          opacity: 0.7;
+            display: inline !important;
+            background: var(--mode-diff-del-bg) !important;
+            color: var(--mode-diff-del-text) !important;
+            text-decoration: line-through;
+            padding: 0 4px;
+            opacity: 0.7;
         }
         body[data-mode="diff"] ins {
-          display: inline;
-          background: var(--mode-diff-ins-bg);
-          color: var(--mode-diff-ins-text);
-          border-bottom: 2px solid var(--mode-diff-ins-text);
-          text-decoration: none;
-          padding: 0 2px;
+            display: inline !important;
+            background: var(--mode-diff-ins-bg) !important;
+            color: var(--mode-diff-ins-text) !important;
+            border-bottom: 2px solid var(--mode-diff-ins-text);
+            text-decoration: none;
+            padding: 0 2px;
         }
-        
+
+        /* OTHER MODES */
         .audit-marker { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--bg-color); }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         
