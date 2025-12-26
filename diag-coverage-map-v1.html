@@ -27,25 +27,24 @@
 
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);}
-    .wrap{max-width:1240px;margin:0 auto;padding:36px 24px 52px;}
+    .wrap{max-width:1240px;margin:0 auto;padding:42px 24px 56px;}
 
     h1{
-      margin:0 0 6px 0;
-      font-size:28px;
-      font-weight:650;
+      margin:0 0 8px 0;
+      font-size:32px;
+      font-weight:600;
       letter-spacing:-0.02em;
-      line-height:1.15;
     }
 
     .sub{
       font-family:var(--mono);
-      font-size:11px;
+      font-size:12px;
       letter-spacing:0.08em;
       text-transform:uppercase;
       color:var(--muted);
     }
 
-    .row{display:flex;gap:18px;margin-top:16px;align-items:flex-start;}
+    .row{display:flex;gap:18px;margin-top:18px;align-items:flex-start;}
     .card{flex:1;border:1px solid var(--border);border-radius:18px;padding:18px;position:relative;}
     .panel{width:380px;border:1px solid var(--border);border-radius:18px;padding:16px;position:sticky;top:18px;}
 
@@ -96,6 +95,11 @@
           <rect x="60" y="60" width="1080" height="640" rx="18"
                 fill="#fff" stroke="#e5e5e5" stroke-width="1.5"/>
 
+          <!-- compact single SVG label -->
+          <text class="monoMuted Micro" x="110" y="120">
+            MINIMAL DIAGNOSTIC BASIS SET • FULL COVERAGE
+          </text>
+
           <g id="scaffold">
             <circle class="ring" cx="600" cy="400" r="240"/>
             <circle class="ring" cx="600" cy="400" r="160"/>
@@ -109,7 +113,7 @@
             <text class="monoMuted Micro" x="854" y="392">UTILITY / REFUSAL</text>
 
             <text class="sans CenterH" x="600" y="392" text-anchor="middle">OBSERVATORY MAP</text>
-            <text class="monoMuted CenterT" x="600" y="418" text-anchor="middle">
+            <text class="monoMuted CenterT" x="600" y="422" text-anchor="middle">
               outputs only • lexicon-bound • auditable
             </text>
           </g>
