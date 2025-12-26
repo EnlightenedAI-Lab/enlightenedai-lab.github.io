@@ -19,7 +19,7 @@
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V130 (MATCHING LEXICON LAYOUT) --- */
+        /* --- THEME: INSTITUTE STANDARD V130 (STRICT LEXICON MATCH) --- */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -47,15 +47,15 @@
             --mode-diff-ins-bg: #e6ffec;
             --mode-diff-ins-text: #006600;
 
-            /* SPACING */
+            /* LAYOUT DIMS */
             --sidebar-width: 280px;
-            --rail-width: 420px; /* Fixed width for right rail */
+            --rail-width: 450px; /* Matched to Lexicon */
         }
 
         /* DARK MODE */
         [data-theme="dark"] {
             --bg-color: #050505;
-            --sidebar-bg: #050505; /* Ensures sidebar is dark */
+            --sidebar-bg: #050505;
             --text-main: #e0e0e0;
             --text-muted: #888888;
             --border-color: #333333;
@@ -83,27 +83,24 @@
             font-family: "Inter", sans-serif;
             background: var(--bg-color);
             color: var(--text-main);
-            line-height: 1.5;
+            line-height: 1.6;
             transition: background 0.2s ease, color 0.2s ease;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden;
         }
 
         /* --- TYPOGRAPHY --- */
-        h1 { 
-            font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; 
-            margin-bottom: 0.5rem; display:flex; align-items:center; text-transform: uppercase;
-        }
+        h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.5rem; text-transform: uppercase; }
         .doc-subtitle { font-family: "JetBrains Mono", monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 3rem; letter-spacing: 0.02em; }
         
         h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; display:flex; align-items:center; }
-        p { font-size: 0.95rem; margin-bottom: 1.2rem; color: var(--text-main); max-width: 60ch; }
+        p { font-size: 0.95rem; margin-bottom: 1.5rem; color: var(--text-main); max-width: 60ch; }
         ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
         li { margin-bottom: 0.5rem; font-size: 0.95rem; }
         
         .mono { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .scramble, .scramble-brand { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
+        .scramble, .scramble-brand, .scramble-hover { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
-        /* ORIENTING FRAME & HEADER */
+        /* --- HEADER STRIP --- */
         .global-header-strip {
             width: 100%; padding: 2rem 4rem; border-bottom: 1px solid var(--border-color);
             background: var(--bg-color); z-index: 10;
@@ -118,34 +115,46 @@
             border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
         }
 
-        /* --- SIDEBAR COMPONENTS --- */
+        /* --- SIDEBAR --- */
+        aside#sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            border-right: 1px solid var(--border-color);
+            background: var(--sidebar-bg);
+            display: flex; flex-direction: column;
+            z-index: 99; flex-shrink: 0;
+        }
+        .sidebar-scroll { flex: 1; overflow-y: auto; padding: 2rem; }
+        .sidebar-bottom { padding: 0 2rem 2rem 2rem; background: var(--sidebar-bg); border-top: 1px solid var(--border-color); }
+
+        .brand { margin-bottom: 4rem; }
+        .brand div { font-family: "JetBrains Mono", monospace; font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
+        .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
+
         .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; text-decoration: none; }
+        .toggle-btn { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; text-decoration: none; transition: color 0.1s; }
         .toggle-btn:hover { color: var(--text-main); }
         .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 
-        .theme-switch {
-            display: flex; justify-content: space-between; padding: 12px 0; 
-            font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted);
-            cursor: pointer;
-        }
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { margin-bottom: 4px; }
+        nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; display: block; padding: 2px 0 2px 10px; border-left: 2px solid transparent; }
+        nav a:hover { color: var(--text-main); }
+        nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
+
+        .theme-switch { display: flex; justify-content: space-between; padding: 12px 0; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; }
         .theme-switch:hover { color: var(--text-main); }
 
-        .repo-panel {
-            margin-top: 0; margin-bottom: 1rem; 
-            border: 1px solid var(--panel-border); background: var(--panel-bg); 
-            padding: 12px; font-family: "JetBrains Mono", monospace;
-            transition: all 0.2s ease; cursor: default;
-        }
-        .repo-header {
-            font-size: 0.65rem; font-weight: 700; color: var(--panel-text); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; transition: color 0.2s;
-        }
+        .repo-panel { margin-top: 0; margin-bottom: 1rem; border: 1px solid var(--panel-border); background: var(--panel-bg); padding: 12px; font-family: "JetBrains Mono", monospace; cursor: default; }
+        .repo-header { font-size: 0.65rem; font-weight: 700; color: var(--panel-text); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; }
         .repo-subtext { font-size: 0.6rem; color: var(--text-muted); }
         .status-dot-red { width: 6px; height: 6px; background: #cc0000; border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
-        .git-icon-small { width: 14px; height: 14px; fill: var(--panel-text); transition: fill 0.2s; }
-        
-        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+        .git-icon-small { width: 14px; height: 14px; fill: var(--panel-text); }
+
+        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+        .export-btn:hover { background: var(--text-main); color: var(--bg-color); }
 
         @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
         @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
@@ -157,12 +166,12 @@
         /* --- VISIBILITY RULES --- */
         del, ins, .diff-tag { display: none; } 
 
-        /* 1. READER MODE */
+        /* READER MODE */
         body[data-mode="reader"] .audit-marker, body[data-mode="reader"] .logic-block, body[data-mode="reader"] .diff-del, body[data-mode="reader"] .diff-tag, body[data-mode="reader"] .audit-rail, body[data-mode="reader"] .diff-header { display: none !important; }
         body[data-mode="reader"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="reader"] del { display: none; }
 
-        /* 2. DIFF MODE */
+        /* DIFF MODE */
         body[data-mode="diff"] del { display: inline; background: var(--mode-diff-del-bg); color: var(--mode-diff-del-text); text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
         body[data-mode="diff"] ins { display: inline; background: var(--mode-diff-ins-bg); color: var(--mode-diff-ins-text); border-bottom: 2px solid var(--mode-diff-ins-text); text-decoration: none; padding: 0 2px; }
         body[data-mode="diff"] .diff-tag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
@@ -170,7 +179,7 @@
         body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
         body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; pointer-events: none; }
 
-        /* 3. AUDIT MODE */
+        /* AUDIT MODE */
         .audit-marker { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--bg-color); }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         body[data-mode="audit"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
@@ -184,7 +193,7 @@
         .metric-tag { font-weight: 600; color: var(--text-main); }
         .claim-text { color: var(--text-muted); line-height: 1.4; }
 
-        /* 4. LOGIC MODE */
+        /* LOGIC MODE */
         .logic-block { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.8rem; color: var(--text-muted); background-color: var(--card-bg); border: 1px solid var(--border-color); border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
         .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: var(--bg-color); color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid var(--border-color); border-left: 1px solid var(--border-color); padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
@@ -206,13 +215,6 @@
         body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
         body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
 
-        /* --- NAVIGATION --- */
-        nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { margin-bottom: 4px; }
-        nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; display: block; padding: 2px 0 2px 10px; border-left: 2px solid transparent; }
-        nav a:hover { color: var(--text-main); }
-        nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
-
         /* =========================================
            LAYOUT ENGINE: 3-COLUMN (Sidebar | Content | Rail)
            ========================================= */
@@ -220,108 +222,68 @@
         @media (min-width: 1101px) {
             body { display: flex; min-height: 100vh; }
             
-            aside#sidebar {
-                width: var(--sidebar-width);
-                height: 100vh;
-                position: sticky;
-                top: 0;
-                border-right: 1px solid var(--border-color);
-                padding: 0;
-                display: flex;
-                flex-direction: column;
-                z-index: 99;
-                background: var(--sidebar-bg); /* Crucial for dark mode */
-                flex-shrink: 0;
-            }
-
-            .sidebar-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 2rem; }
-            .sidebar-bottom { padding: 0 2rem 2rem 2rem; background: var(--sidebar-bg); border-top: 1px solid var(--border-color); }
-            .theme-switch { position: static; margin: 0 0 1rem 0 !important; border-top: none !important; }
-
-            .main-column { flex-grow: 1; display: flex; flex-direction: column; margin: 0; min-height: 100vh; min-width: 0; }
-            .split-view { display: flex; flex: 1; align-items: flex-start; min-width: 0; }
+            /* 3-Column Split */
+            .layout-wrapper { display: flex; flex: 1; width: 100%; }
             
-            /* Content Column */
-            .content-col { 
-                flex: 1 1 auto; 
-                min-width: 0; 
-                padding: 2rem 4rem 6rem 4rem; 
-                display: flex; flex-direction: column; 
+            /* CENTER COLUMN */
+            .main-column {
+                flex: 1 1 auto;
+                min-width: 0; /* Prevent flex blowout */
+                display: flex; flex-direction: column;
+            }
+            .split-view { display: flex; flex: 1; align-items: flex-start; }
+            
+            .content-col {
+                flex: 1 1 auto;
+                min-width: 0;
+                padding: 3rem 4rem 6rem 4rem; /* Spacious padding */
             }
 
-            /* Right Rail (Diagrams) */
+            /* RIGHT RAIL (DIAGRAMS) */
             .diagram-rail {
                 flex: 0 0 var(--rail-width);
-                width: var(--rail-width); 
+                width: var(--rail-width);
+                height: 100vh;
+                position: sticky; top: 0;
                 border-left: 1px solid var(--border-color);
                 background: var(--bg-color);
-                padding: 0;
-                align-self: flex-start;
-                position: sticky; top: 0; height: 100vh; 
-                overflow: hidden;        
+                overflow-y: auto;
+                padding: 3rem 2rem 4rem 2rem;
             }
-            .rail-scroll { height: 100%; overflow-y: auto; padding: 2rem 2rem 4rem 2rem; }
             
-            /* Rail Item Styles */
-            .rail-item { margin-bottom: 2rem; transition: transform 0.2s; cursor: pointer; }
+            /* Diagram Tiles */
+            .rail-item { margin-bottom: 3rem; cursor: zoom-in; transition: transform 0.2s; }
             .rail-item:hover { transform: scale(1.02); }
-            .rail-label { font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em; }
-            .rail-thumb { width: 100%; height: auto; border: 1px solid var(--border-color); background: var(--card-bg); display: block; object-fit: contain; }
-        }
-
-        /* MOBILE/TABLET ENGINE */
-        @media (max-width: 1100px) {
-            body { display: block; overflow-x: hidden; }
-            body.sidebar-open { position: fixed; width: 100%; overflow: hidden; }
-            
-            aside#sidebar {
-                position: fixed; top: 50px; left: 0; bottom: 0; width: 100%;
-                transform: translateX(-100%); transition: transform 0.25s ease;
-                border-right: none; background: var(--sidebar-bg); z-index: 10000;
-                height: calc(100dvh - 50px);
-                display: flex; flex-direction: column; overflow: hidden; padding: 0;
+            .rail-label {
+                font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); 
+                font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;
             }
-            aside#sidebar.open { transform: translateX(0); }
-            
-            .sidebar-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 2rem; }
-            .sidebar-bottom { padding: 0 2rem 2rem 2rem; background: var(--sidebar-bg); border-top: 1px solid var(--border-color); }
+            /* Clean Thumbnail Image Style */
+            .rail-thumb {
+                width: 100%; height: auto; display: block;
+                border: 1px solid var(--border-color); background: var(--card-bg);
+            }
+        }
 
-            .global-header-strip { padding: 2rem; }
-            .main-column { margin-top: 50px; padding: 0; width: 100%; max-width: 100vw; display: block; }
+        /* MOBILE/TABLET */
+        @media (max-width: 1100px) {
+            .layout-wrapper { display: block; }
             .split-view { display: block; }
-            .content-col { padding: 1.5rem; max-width: none; }
-            
-            /* Mobile Rail: Collapses below content */
-            .diagram-rail { width: 100%; height: auto; position: static; border-left: none; border-top: 1px solid var(--border-color); }
-            .rail-scroll { padding: 2rem; overflow: visible; }
-            
+            .content-col { padding: 1.5rem; }
+            .diagram-rail { width: 100%; height: auto; position: static; border-left: none; border-top: 1px solid var(--border-color); padding: 2rem; }
             #mode-banner { top: 60px; right: 20px; z-index: 900; }
+            
+            /* Mobile Nav */
+            .mobile-bar { display: flex; }
+            aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); transition: transform 0.25s ease; border-right: none; background: var(--sidebar-bg); z-index: 10000; }
+            aside.open { transform: translateX(0); }
         }
-        
+
         /* FULLSCREEN MODAL */
-        #diagram-modal {
-            display: none;
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.92);
-            z-index: 20000;
-            align-items: center; justify-content: center;
-            backdrop-filter: blur(8px);
-        }
+        #diagram-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.92); z-index: 20000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
         #diagram-modal.open { display: flex; }
-        .modal-content {
-            width: 95vw; height: 90vh; max-width: 1600px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            position: relative;
-            display: flex; flex-direction: column;
-        }
-        .modal-close {
-            position: absolute; top: -30px; right: 0;
-            color: #fff; background: none; border: none;
-            font-family: "JetBrains Mono", monospace; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 0.1em;
-            font-size: 0.7rem;
-        }
+        .modal-content { width: 95vw; height: 90vh; max-width: 1600px; background: var(--bg-color); border: 1px solid var(--border-color); position: relative; display: flex; flex-direction: column; }
+        .modal-close { position: absolute; top: -30px; right: 0; color: #fff; background: none; border: none; font-family: "JetBrains Mono", monospace; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem; }
         .modal-iframe { width: 100%; flex-grow: 1; border: none; }
     </style>
 </head>
@@ -329,29 +291,20 @@
 
     <div id="mode-banner">READER MODE</div>
 
-    <header style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:var(--bg-color); border-bottom:1px solid var(--border-color); padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);" id="mobile-bar">
-        <div style="font-weight:800; font-size:0.85rem; letter-spacing:-.02em; color:var(--text-main);">ENLIGHTENED AI</div>
-        <div style="display:flex; gap:15px; align-items:center;">
-             <span onclick="toggleTheme()" style="cursor:pointer; font-size:1rem; color:var(--text-main);">◐</span>
-             <button onclick="toggleSidebar()" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; padding:4px 10px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); cursor:pointer;">INDEX</button>
+    <header class="mobile-bar">
+        <div class="mobile-brand">ENLIGHTENED AI</div>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <span id="theme-icon-mobile" onclick="toggleTheme()" style="cursor:pointer; font-size:1rem; color:var(--text-main);">◐</span>
+            <button class="mobile-index-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">INDEX</button>
         </div>
     </header>
-    
-    <script>
-    (function syncMobileBar() {
-      const bar = document.getElementById('mobile-bar');
-      const apply = () => { bar.style.display = (window.innerWidth <= 1100) ? 'flex' : 'none'; };
-      window.addEventListener('resize', apply);
-      apply();
-    })();
-    </script>
 
     <div class="layout-wrapper">
         <aside id="sidebar">
             <div class="sidebar-scroll">
                 <div class="brand">
-                    <div class="scramble-brand" data-value="ENLIGHTENED AI" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
-                    <div class="scramble-brand" data-value="RESEARCH LAB" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
+                    <div class="scramble-brand" data-value="ENLIGHTENED AI">ENLIGHTENED AI</div>
+                    <div class="scramble-brand" data-value="RESEARCH LAB">RESEARCH LAB</div>
                     <span>EST. 2026 // MONTREAL</span>
                 </div>
 
@@ -376,7 +329,7 @@
                     [ LIGHT / DARK ] <span id="theme-icon">◐</span>
                 </div>
 
-                <div class="repo-panel" title="Access available under NDA or technical review.">
+                <div class="repo-panel">
                     <div class="repo-header">
                         <div style="display:flex; align-items:center; gap:8px;">
                             <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -393,9 +346,8 @@
             </div>
         </aside>
 
-        <div id="sidebar-overlay" onclick="closeSidebar()"></div>
-
-        <div class="main-column">
+        <main class="main-column">
+            
             <div class="global-header-strip">
                 <div class="header-meta">
                     <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">DOC_ID</span>RD-DIAG-0001</div>
@@ -542,25 +494,27 @@
                         .catch(() => {});
                     </script>
                 </div><div class="diagram-rail">
-                    <div class="rail-scroll">
-                        
-                        <div class="rail-item" onclick="openModal('/diag-coverage-map-v1.html?embed=1')">
-                            <span class="rail-label">DIAGRAM — RD-FIG-01</span>
-                            <img class="rail-thumb" src="/assets/diagrams/rd-fig-01.png" alt="Coverage Map" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWVlOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0Ij5ET0NNT0RFX1RIVU1CX01JU1NJTkc8L3RleHQ+PC9zdmc+'">
-                        </div>
-
-                        <div class="rail-item" onclick="openModal('/diag-diagram-preview.html?embed=1')">
-                            <span class="rail-label">DIAGRAM — RD-FIG-02</span>
-                            <img class="rail-thumb" src="/assets/diagrams/rd-fig-02.png" alt="Preview" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWVlOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0Ij5ET0NNT0RFX1RIVU1CX01JU1NJTkc8L3RleHQ+PC9zdmc+'">
-                        </div>
-
-                        <div class="rail-item" onclick="openModal('/diag-layers-substrate.html?embed=1')">
-                            <span class="rail-label">DIAGRAM — RD-FIG-03</span>
-                            <img class="rail-thumb" src="/assets/diagrams/rd-fig-03.png" alt="Substrate" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWVlOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE0Ij5ET0NNT0RFX1RIVU1CX01JU1NJTkc8L3RleHQ+PC9zdmc+'">
-                        </div>
-
+                    
+                    <div class="rail-item" onclick="openModal('/diag-coverage-map-v1.html?embed=1')">
+                        <span class="rail-label">DIAGRAM — RD-FIG-01</span>
+                        <img class="rail-thumb" src="/assets/diagrams/rd-fig-01.png" alt="Coverage Map" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWJlYmViOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNzciPkRJQUdSQU0gUFJFVklFVyAobWlzc2luZyk8L3RleHQ+PC9zdmc+'">
                     </div>
-                </div></div></div></div><div id="diagram-modal">
+
+                    <div class="rail-item" onclick="openModal('/diag-diagram-preview.html?embed=1')">
+                        <span class="rail-label">DIAGRAM — RD-FIG-02</span>
+                        <img class="rail-thumb" src="/assets/diagrams/rd-fig-02.png" alt="Preview" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWJlYmViOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNzciPkRJQUdSQU0gUFJFVklFVyAobWlzc2luZyk8L3RleHQ+PC9zdmc+'">
+                    </div>
+
+                    <div class="rail-item" onclick="openModal('/diag-layers-substrate.html?embed=1')">
+                        <span class="rail-label">DIAGRAM — RD-FIG-03</span>
+                        <img class="rail-thumb" src="/assets/diagrams/rd-fig-03.png" alt="Substrate" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjAwIiBzdHlsZT0iYmFja2dyb3VuZDojZWJlYmViOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNzciPkRJQUdSQU0gUFJFVklFVyAobWlzc2luZyk8L3RleHQ+PC9zdmc+'">
+                    </div>
+
+                </div>
+            </div></main>
+    </div>
+
+    <div id="diagram-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">Close [ESC]</button>
             <iframe id="modal-iframe" class="modal-iframe"></iframe>
@@ -568,14 +522,14 @@
     </div>
 
     <script>
+        // --- MODE SWITCH ---
         function setMode(mode, label) {
             document.body.setAttribute('data-mode', mode);
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${mode}`).classList.add('active');
             const banner = document.getElementById('mode-banner');
             banner.innerText = (mode === 'reader') ? "READER MODE" : mode.toUpperCase() + " MODE ACTIVE";
-            
-            if(window.innerWidth <= 1100) closeSidebar();
+            if(window.innerWidth <= 1100) document.getElementById('sidebar').classList.remove('open');
         }
         
         // --- SCRAMBLE LOGIC ---
@@ -616,27 +570,7 @@
             if (e.key === "Escape") closeModal();
         });
 
-        // --- SIDEBAR LOGIC ---
-        let __scrollY = 0;
-        function openSidebar() {
-            __scrollY = window.scrollY;
-            document.body.style.top = `-${__scrollY}px`;
-            document.getElementById('sidebar').classList.add('open');
-            document.body.classList.add('sidebar-open');
-        }
-        function closeSidebar() {
-            document.getElementById('sidebar').classList.remove('open');
-            document.body.classList.remove('sidebar-open');
-            const y = __scrollY;
-            document.body.style.top = '';
-            window.scrollTo(0, y);
-        }
-        function toggleSidebar() {
-            const sb = document.getElementById('sidebar');
-            sb.classList.contains('open') ? closeSidebar() : openSidebar();
-        }
-
-        // --- DARK MODE ---
+        // --- DARK MODE LOGIC ---
         function setTheme(theme) {
             document.body.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
