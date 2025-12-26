@@ -79,7 +79,7 @@
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         
-        /* [CRITICAL LAYOUT FIX - Matches data.html] */
+        /* [CRITICAL LAYOUT FIX - Matches data.html structure] */
         body {
             margin: 0; padding: 0;
             font-family: "Inter", sans-serif;
@@ -516,7 +516,9 @@ artifact_id = hash(record_id + run_id)
                             <div class="rail-id">RD-FIG-01</div>
                         </div>
                         <div class="rail-thumbframe">
-                            <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="Coverage Map" loading="lazy">
+                            <object data="assets/diag-samples/coverage-map.svg" type="image/svg+xml" class="rail-thumbimg" aria-label="Coverage Map">
+                                <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="Coverage Map">
+                            </object>
                         </div>
                         <div class="rail-desc">See which tests are implemented vs planned — and where each evidence artifact lives.</div>
                     </div>
