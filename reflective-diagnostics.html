@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="assets/css/footer.css">
 
     <script type="application/json" id="audit-manifest">
@@ -50,7 +49,7 @@
 
             /* SPACING */
             --sidebar-width: 280px;
-            --rail-width: 500px; 
+            --rail-width: 450px; 
         }
 
         /* DARK MODE */
@@ -154,7 +153,7 @@
             min-width: 0;
         }
 
-        /* RIGHT RAIL (Sticky Diagrams) */
+        /* RIGHT RAIL */
         .diagram-rail {
             width: var(--rail-width);
             flex-shrink: 0;
@@ -164,53 +163,49 @@
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
-        /* === RAIL: LIVE PREVIEW IFRAMES === */
+        /* === RAIL: LIVE IFRAME PREVIEWS (FIXED) === */
         .rail-item { margin-bottom: 3rem; cursor: zoom-in; transition: transform 0.2s; }
         .rail-item:hover { transform: scale(1.02); }
+        
         .rail-label {
             font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); 
             font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;
         }
-        
-        .rail-preview {
+
+        /* The window into the diagram */
+        .rail-thumbframe {
             width: 100%;
-            height: 250px; /* Fixed height for clean grid */
+            height: 260px; /* Fixed height for consistent cards */
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: #fff;
-            padding: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            background: #ffffff; /* FORCE WHITE BACKGROUND */
             overflow: hidden;
+            border-radius: 4px;
             position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        /* High contrast for dark mode previews */
-        body[data-theme="dark"] .rail-preview {
-            background: #0b0b0b;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-        }
-
+        /* The Scaled Diagram */
         .rail-iframe {
-            width: 1400px;
-            height: 900px;
+            width: 1400px;      /* Native width of your diagrams */
+            height: 900px;      /* Native height */
             border: 0;
-
-            /* CRISP in Chrome/Edge */
-            zoom: 0.28;
-
-            /* Fallback (Firefox ignores zoom) */
-            transform: scale(0.28);
+            
+            /* SCALING MATH: 1400px * 0.27 ≈ 378px (Fits inside rail) */
+            transform: scale(0.27);
             transform-origin: top left;
-
-            pointer-events: none;
+            
+            pointer-events: none; /* Clicks pass to the .rail-item */
             display: block;
-
+            background: #ffffff; /* Crucial: prevents transparent wash-out */
+            
             position: absolute;
-            top: 10px;
-            left: 10px;
-
-            /* optional: slight punch */
-            filter: contrast(1.08) saturate(1.02);
+            top: 0; left: 0;
+        }
+        
+        /* Dark mode override for the FRAME only, not the diagram content */
+        body[data-theme="dark"] .rail-thumbframe {
+            border-color: #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         }
 
         /* FOOTER */
@@ -254,7 +249,7 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
 
-        /* --- VISIBILITY RULES --- */
+        /* --- VISIBILITY RULES (NUCLEAR OPTION) --- */
         .diff-tag { display: none; }
 
         /* FORCE NORMAL VIEW */
@@ -555,21 +550,21 @@
                     
                     <div class="rail-item" onclick="openModal('diag-coverage-map-v1.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-01</span>
-                        <div class="rail-preview">
+                        <div class="rail-thumbframe">
                             <iframe class="rail-iframe" src="diag-coverage-map-v1.html?embed=1" loading="lazy"></iframe>
                         </div>
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-diagram-preview.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-02</span>
-                        <div class="rail-preview">
+                        <div class="rail-thumbframe">
                             <iframe class="rail-iframe" src="diag-diagram-preview.html?embed=1" loading="lazy"></iframe>
                         </div>
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-layers-substrate.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-03</span>
-                        <div class="rail-preview">
+                        <div class="rail-thumbframe">
                             <iframe class="rail-iframe" src="diag-layers-substrate.html?embed=1" loading="lazy"></iframe>
                         </div>
                     </div>
