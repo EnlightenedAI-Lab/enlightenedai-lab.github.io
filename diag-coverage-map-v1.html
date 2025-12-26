@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -27,7 +27,7 @@
       --activeOpacity:1;
 
       --activeStroke:#050505;
-      --activeStrokeW:2.6;
+      --activeStrokeW:2.8;
 
       --glowA: rgba(0,0,0,0.10);
       --glowB: rgba(0,0,0,0.06);
@@ -78,7 +78,7 @@
     }
 
     .panel{
-      width: 380px;
+      width: 390px;
       border:1px solid var(--border);
       border-radius:18px;
       background:var(--bg);
@@ -95,12 +95,45 @@
       text-transform:uppercase;
       margin-bottom:10px;
     }
+
+    /* Mode toggle */
+    .modebar{
+      display:flex;
+      gap:8px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:6px;
+      background:#fff;
+      margin-bottom:12px;
+    }
+    .modebtn{
+      flex:1;
+      border:1px solid transparent;
+      border-radius:10px;
+      padding:8px 10px;
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+      background:#fff;
+      color:var(--muted);
+      user-select:none;
+    }
+    .modebtn.active{
+      background:#050505;
+      color:#fff;
+      border-color:#050505;
+    }
+
     .panel .title{
       font-size:16px;
       font-weight:800;
       letter-spacing:-0.01em;
       margin-bottom:10px;
+      line-height:1.25;
     }
+
     .panel .lines{
       font-size:13px;
       line-height:1.55;
@@ -167,6 +200,10 @@
       background:#000;
       border-color:#000;
     }
+    .btn:disabled{
+      opacity:0.45;
+      cursor:not-allowed;
+    }
 
     .note{
       margin-top:14px;
@@ -209,6 +246,15 @@
     }
     .stamp .miniDot{ width:7px; height:7px; border-radius:50%; background:var(--ok); }
 
+    .microhelp{
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:0.06em;
+      color:var(--muted);
+      text-transform:uppercase;
+      margin-top:10px;
+    }
+
     @media (max-width: 980px){
       .row{ flex-direction:column; }
       .panel{ width:100%; position:relative; top:auto; }
@@ -220,13 +266,13 @@
 <body>
   <div class="wrap">
     <h1>Reflective Alignment — 5-Test Coverage Map</h1>
-    <div class="sub">minimal basis set • observable outputs only • lexicon-bound • auditable</div>
+    <div class="sub">five complementary protocols • lexicon-bound • auditable</div>
 
     <div class="row">
       <div class="card">
-        <div class="stamp" title="Public view / no prompts / no thresholds">
+        <div class="stamp" title="Public demonstration surface">
           <span class="miniDot"></span>
-          <span>PUBLIC SAFE</span>
+          <span>PUBLIC</span>
           <span>2026</span>
         </div>
 
@@ -241,13 +287,13 @@
                 .axis{stroke:#e5e5e5;stroke-width:1.25}
 
                 .wedge{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
-                .wedgeActive{fill:#ffffff;stroke:#050505;stroke-width:2.6}
+                .wedgeActive{fill:#ffffff;stroke:#050505;stroke-width:2.8}
 
                 .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#050505}
                 .monoMuted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#6a6a6a}
                 .sans{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; fill:#050505}
 
-                .H{font-size:15px;font-weight:800;letter-spacing:0.10em}
+                .H{font-size:16px;font-weight:800;letter-spacing:0.10em}
                 .T{font-size:12px}
                 .Micro{font-size:11px;letter-spacing:0.08em}
                 .CenterH{font-size:18px;font-weight:800;letter-spacing:-0.01em}
@@ -256,6 +302,9 @@
                 .hit{fill:transparent; cursor:pointer;}
                 .scan{opacity:0; pointer-events:none;}
                 .scan.on{opacity:1;}
+
+                .infoDot{fill:#fff;stroke:#cfcfcf;stroke-width:1.25}
+                .infoTxt{font-size:11px;font-weight:800}
               </style>
 
               <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
@@ -271,7 +320,7 @@
               </linearGradient>
               <mask id="scanMask">
                 <rect x="-200" y="-200" width="400" height="400" fill="url(#scanGrad)">
-                  <animate attributeName="x" from="-320" to="320" dur="1.8s" repeatCount="indefinite"/>
+                  <animate attributeName="x" from="-320" to="320" dur="1.9s" repeatCount="indefinite"/>
                 </rect>
               </mask>
             </defs>
@@ -281,9 +330,9 @@
 
             <!-- Title -->
             <text class="sans" x="110" y="120" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
-              Alignment Failure Surfaces — Minimal Diagnostic Basis Set
+              Alignment Failure Surfaces — Minimal Basis Set
             </text>
-            <text class="monoMuted Micro" x="110" y="146">FIVE COMPLEMENTARY PROTOCOLS • FULL COVERAGE MAP • EVIDENCE-FIRST</text>
+            <text class="monoMuted Micro" x="110" y="146">coverage map • click a wedge</text>
 
             <!-- Compass scaffolding -->
             <g id="scaffold">
@@ -293,14 +342,36 @@
               <line class="axis" x1="600" y1="160" x2="600" y2="640"/>
               <line class="axis" x1="360" y1="400" x2="840" y2="400"/>
 
-              <text class="monoMuted Micro" x="608" y="176">CRISIS / HIGH AROUSAL</text>
-              <text class="monoMuted Micro" x="608" y="636">GOVERNANCE / AUTOMATION</text>
+              <!-- Axis labels (short) -->
+              <text class="monoMuted Micro" x="600" y="176" text-anchor="middle">CRISIS</text>
+              <text class="monoMuted Micro" x="600" y="636" text-anchor="middle">GOVERNANCE</text>
               <text class="monoMuted Micro" x="346" y="392" text-anchor="end">EPISTEMICS</text>
-              <text class="monoMuted Micro" x="854" y="392">UTILITY / REFUSAL</text>
+              <text class="monoMuted Micro" x="854" y="392">UTILITY</text>
 
-              <text class="sans CenterH" x="600" y="390" text-anchor="middle">OBSERVATORY MAP</text>
-              <text class="monoMuted CenterT" x="600" y="414" text-anchor="middle">outputs only • lexicon-bound • auditable</text>
-              <text class="monoMuted CenterT" x="600" y="434" text-anchor="middle">no prompts • no thresholds • no policy judgment</text>
+              <!-- Info dots with tooltips -->
+              <g>
+                <circle class="infoDot" cx="668" cy="170" r="10"/>
+                <text class="mono infoTxt" x="668" y="174" text-anchor="middle">i</text>
+                <title>Crisis: interaction stability under stress (co-regulation surface)</title>
+              </g>
+              <g>
+                <circle class="infoDot" cx="690" cy="630" r="10"/>
+                <text class="mono infoTxt" x="690" y="634" text-anchor="middle">i</text>
+                <title>Governance: programmable rules / role framing / disclosure discipline</title>
+              </g>
+              <g>
+                <circle class="infoDot" cx="312" cy="388" r="10"/>
+                <text class="mono infoTxt" x="312" y="392" text-anchor="middle">i</text>
+                <title>Epistemics: abstain vs hallucinate under missing inputs</title>
+              </g>
+              <g>
+                <circle class="infoDot" cx="920" cy="388" r="10"/>
+                <text class="mono infoTxt" x="920" y="392" text-anchor="middle">i</text>
+                <title>Utility: refusal boundary discipline without policy judgment</title>
+              </g>
+
+              <text class="sans CenterH" x="600" y="392" text-anchor="middle">COVERAGE</text>
+              <text class="monoMuted CenterT" x="600" y="416" text-anchor="middle">outputs only • lexicon-bound • auditable</text>
             </g>
 
             <!-- Wedges container (generated by JS) -->
@@ -309,90 +380,140 @@
             <!-- Interaction legend -->
             <g>
               <rect x="110" y="590" width="420" height="90" rx="14" fill="#fff" stroke="#ededed" stroke-width="1.25"/>
-              <text class="monoMuted Micro" x="130" y="620">INTERACTION:</text>
-              <text class="monoMuted T" x="130" y="644">hover = isolate • click = details • scan = evidence pulse</text>
-              <text class="monoMuted T" x="130" y="664">this map shows coverage, not results</text>
+              <text class="monoMuted Micro" x="130" y="620">INTERACTION</text>
+              <text class="monoMuted T" x="130" y="644">hover = isolate • click = select • scan = live pulse</text>
+              <text class="monoMuted T" x="130" y="664">mode toggle shows coverage vs sample outputs</text>
             </g>
           </svg>
         </div>
       </div>
 
       <div class="panel">
-        <div class="kicker">selected test</div>
+        <div class="kicker">instrument view</div>
+
+        <div class="modebar" role="tablist" aria-label="Mode selector">
+          <button class="modebtn active" id="modeCoverage" aria-selected="true">Coverage</button>
+          <button class="modebtn" id="modeResults" aria-selected="false">Results</button>
+        </div>
+
         <div class="title" id="panelTitle">Click a wedge</div>
 
         <div class="pillrow">
           <div class="pill"><span class="dot"></span><span>ONLINE</span></div>
-          <div class="pill"><span style="width:7px;height:7px;border-radius:50%;background:#050505;"></span><span>LEXICON-BOUND</span></div>
-          <div class="pill"><span style="width:7px;height:7px;border-radius:50%;background:#050505;"></span><span>OUTPUTS ONLY</span></div>
-          <div class="pill"><span style="width:7px;height:7px;border-radius:50%;background:#050505;"></span><span>AUDITABLE</span></div>
+          <div class="pill"><span style="width:7px;height:7px;border-radius:50%;background:#050505;"></span><span>LEXICON</span></div>
+          <div class="pill"><span style="width:7px;height:7px;border-radius:50%;background:#050505;"></span><span>EVIDENCE</span></div>
         </div>
 
         <div class="lines" id="panelLines">
           <div style="color:var(--muted);">
-            Select a test to view scope and boundary.
+            Select a test to view its surface and sample output.
           </div>
         </div>
 
         <div class="btnrow">
           <button class="btn" id="resetBtn">Reset</button>
-          <button class="btn primary" id="viewBtn" disabled>View sample result</button>
+          <button class="btn primary" id="viewBtn" disabled>View sample output</button>
         </div>
 
         <div class="note">
           <div class="mono">Public boundary</div>
-          No prompts, thresholds, or internal metrics are displayed. This is a coverage surface map only.
+          This is a demonstrator surface: coverage + redacted sample outputs.
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // ====== DATA (labels kept tight for readability) ======
+    // ========= Recommendation for funders =========
+    // Use ONE page for samples (diag-sample-results.html) with anchored sections:
+    // #test1 ... #test5. This keeps the experience coherent and "instrument-grade".
+    const SAMPLE_PAGE = "diag-sample-results.html";
+
+    // ====== DATA (tight, readable, accurate per your current repo wording) ======
     const tests = [
       {
         id: 1,
         code: "TEST 1",
         short: "GOVERNANCE",
         sub: "AUTOMATION",
-        title: "Test 1 — Automation & Programmable Governance",
-        purpose: "Persona-induced compliance failures (governance surface).",
-        observes: "Output behavior under constraint + role framing.",
-        emits: "Lexicon signature + evidence spans + audit references.",
-        link: "diag-results-test1-v1.html"
+        title: "Test 1 — Automation & Governance",
+        coverage: {
+          purpose: "Role / persona pressure on programmable constraints.",
+          observes: "Constraint-following failures in output behavior.",
+          emits: "Lexicon signature + evidence spans + audit links."
+        },
+        results: {
+          headline: "Sample: persona pressure → observable compliance drift",
+          bullets: [
+            "Before/after excerpt (redacted)",
+            "Signature classification (no thresholds shown)",
+            "Evidence spans linked to record ID"
+          ]
+        },
+        link: `${SAMPLE_PAGE}#test1`
       },
       {
         id: 2,
         code: "TEST 2",
         short: "MECHANISM",
         sub: "UNIFICATION",
-        title: "Test 2 — Universal Benchmarking",
-        purpose: "Cross-domain mechanism unification (same failure mechanics across domains).",
-        observes: "Structural invariants across tasks without subjective labels.",
-        emits: "Mechanism signature + trace artifacts for comparison.",
-        link: "diag-results-test2-v1.html"
+        title: "Test 2 — Mechanism Unification",
+        coverage: {
+          purpose: "Same failure mechanics across domains.",
+          observes: "Structural invariants without subjective labels.",
+          emits: "Mechanism signature + trace artifacts for comparison."
+        },
+        results: {
+          headline: "Sample: cross-domain pattern match (structure-only)",
+          bullets: [
+            "Two domains, same mechanism pattern",
+            "Trace table (redacted fields)",
+            "Replay references for reproducibility"
+          ]
+        },
+        link: `${SAMPLE_PAGE}#test2`
       },
       {
         id: 3,
         code: "TEST 3",
         short: "FALSE",
         sub: "REFUSALS",
-        title: "Test 3 — Alignment Tax Reduction",
-        purpose: "Safety–utility balance and false refusals (over-refusal surface).",
-        observes: "Refusal vs justified non-action (boundary discipline).",
-        emits: "Refusal-class signature + auditable record chain.",
-        link: "diag-results-test3-v1.html"
+        title: "Test 3 — False Refusal Surface",
+        coverage: {
+          purpose: "Utility loss via incorrect refusal patterns.",
+          observes: "Refusal vs justified non-action (output-only).",
+          emits: "Refusal-class signature + auditable record chain."
+        },
+        results: {
+          headline: "Sample: refusal boundary error → classified + traceable",
+          bullets: [
+            "Refusal excerpt (redacted)",
+            "Classification signature",
+            "Evidence chain: output → span → record"
+          ]
+        },
+        link: `${SAMPLE_PAGE}#test3`
       },
       {
         id: 4,
         code: "TEST 4",
         short: "EPISTEMIC",
         sub: "INTEGRITY",
-        title: "Test 4 — Epistemic Integrity Under Constraint",
-        purpose: "Correct non-action under missing inputs (abstain vs hallucinate).",
-        observes: "Non-action discipline vs hallucination under insufficient data.",
-        emits: "Epistemic stability signature + traceable evidence chain.",
-        link: "diag-results-test4-v1.html"
+        title: "Test 4 — Epistemic Integrity",
+        coverage: {
+          purpose: "Abstain vs hallucinate under missing inputs.",
+          observes: "Correct non-action vs confident fabrication.",
+          emits: "Epistemic stability signature + evidence spans."
+        },
+        results: {
+          headline: "Sample: missing inputs → non-action vs fabrication",
+          bullets: [
+            "Two response regimes (redacted)",
+            "Observed integrity markers",
+            "Evidence spans + replay refs"
+          ]
+        },
+        link: `${SAMPLE_PAGE}#test4`
       },
       {
         id: 5,
@@ -400,15 +521,24 @@
         short: "CRISIS",
         sub: "CO-REGULATION",
         title: "Test 5 — Crisis Co-Regulation",
-        purpose: "Interaction stability under high arousal (escalation dynamics).",
-        observes: "Stability patterns under stress without intent attribution.",
-        emits: "Co-regulation signature + evidence spans + replay references.",
-        link: "diag-results-test5-v1.html"
+        coverage: {
+          purpose: "Stability under high arousal interaction.",
+          observes: "Escalation control without intent attribution.",
+          emits: "Co-regulation signature + evidence spans + replay refs."
+        },
+        results: {
+          headline: "Sample: high arousal → stabilized interaction dynamics",
+          bullets: [
+            "Turn-by-turn excerpt (redacted)",
+            "Stability signature",
+            "Evidence chain + replay refs"
+          ]
+        },
+        link: `${SAMPLE_PAGE}#test5`
       }
     ];
 
     // ====== SVG sector math (NO GAPS) ======
-    const svg = document.querySelector("svg");
     const wedgesG = document.getElementById("wedges");
 
     const cx = 600, cy = 400;
@@ -417,8 +547,7 @@
     const n = tests.length;
     const step = (Math.PI * 2) / n;
 
-    // start angle so "Test 5" sits visually near the top (instrument feel)
-    // -90° is top. We'll place tests in the order above around the circle.
+    // start angle -90° (top)
     const startAngle = -Math.PI / 2;
 
     function polarToCartesian(cx, cy, r, a){
@@ -450,7 +579,6 @@
       const p = polarToCartesian(cx, cy, r, aMid);
       const t = makeEl("text", { x: p.x, y: p.y + dy, class: cls });
       t.textContent = text;
-      // anchor so labels read outward
       const cos = Math.cos(aMid);
       if (Math.abs(cos) < 0.15) t.setAttribute("text-anchor","middle");
       else t.setAttribute("text-anchor", cos > 0 ? "start" : "end");
@@ -481,14 +609,14 @@
         class: "scan"
       });
 
-      // Compact label placement
-      const labR = 170;
-      const code = placeLabel(aMid, labR, t.code, "mono H", -10);
+      // More legible label placement
+      const labR = 172;
+
+      const code = placeLabel(aMid, labR, t.code, "mono H", -12);
       const line1 = placeLabel(aMid, labR, t.short, "monoMuted T", 12);
       const line2 = placeLabel(aMid, labR, t.sub, "monoMuted T", 30);
 
-      // Invisible hit target (bounding circle sector area)
-      // Use the exact same sector path for perfect hit-testing
+      // Exact hit target
       const hit = makeEl("path", {
         d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
         class: "hit",
@@ -505,13 +633,31 @@
       wedgesG.appendChild(group);
     });
 
-    // ====== INTERACTION ======
+    // ====== PANEL / MODES ======
     const panelTitle = document.getElementById("panelTitle");
     const panelLines = document.getElementById("panelLines");
     const viewBtn = document.getElementById("viewBtn");
     const resetBtn = document.getElementById("resetBtn");
 
+    const modeCoverageBtn = document.getElementById("modeCoverage");
+    const modeResultsBtn  = document.getElementById("modeResults");
+
     let selected = null;
+    let mode = "coverage"; // "coverage" | "results"
+
+    function setMode(next){
+      mode = next;
+      modeCoverageBtn.classList.toggle("active", mode === "coverage");
+      modeResultsBtn.classList.toggle("active", mode === "results");
+      modeCoverageBtn.setAttribute("aria-selected", mode === "coverage");
+      modeResultsBtn.setAttribute("aria-selected", mode === "results");
+
+      // re-render panel if something selected
+      if(selected !== null) renderPanel(selected);
+    }
+
+    modeCoverageBtn.addEventListener("click", () => setMode("coverage"));
+    modeResultsBtn.addEventListener("click",  () => setMode("results"));
 
     function setGroupClass(id, add, remove){
       const el = document.getElementById(id);
@@ -534,9 +680,49 @@
 
       selected = null;
       panelTitle.textContent = "Click a wedge";
-      panelLines.innerHTML = `<div style="color:var(--muted);">Select a test to view scope and boundary.</div>`;
+      panelLines.innerHTML = `<div style="color:var(--muted);">Select a test to view its surface and sample output.</div>`;
       viewBtn.disabled = true;
       delete viewBtn.dataset.href;
+    }
+
+    function renderPanel(id){
+      const t = tests.find(x => x.id === id);
+      if(!t) return;
+
+      panelTitle.textContent = t.title;
+
+      if(mode === "coverage"){
+        panelLines.innerHTML = `
+          <div style="margin-bottom:10px;">
+            <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">surface</span><br>
+            ${t.coverage.purpose}
+          </div>
+          <div style="margin-bottom:10px;">
+            <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">observes</span><br>
+            ${t.coverage.observes}
+          </div>
+          <div>
+            <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">emits</span><br>
+            ${t.coverage.emits}
+          </div>
+        `;
+        viewBtn.textContent = "View sample output";
+      } else {
+        panelLines.innerHTML = `
+          <div style="margin-bottom:10px;">
+            <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">sample output</span><br>
+            <div style="font-weight:800; margin-top:4px;">${t.results.headline}</div>
+          </div>
+          <ul style="margin:0; padding-left:1.1rem; color:var(--text);">
+            ${t.results.bullets.map(b => `<li style="margin-bottom:6px;">${b}</li>`).join("")}
+          </ul>
+          <div class="microhelp">recommended: one unified sample bundle page</div>
+        `;
+        viewBtn.textContent = "Open sample bundle";
+      }
+
+      viewBtn.disabled = false;
+      viewBtn.dataset.href = t.link;
     }
 
     function focusTest(id, isHover=false){
@@ -548,31 +734,22 @@
         else setGroupClass(`w${tt.id}`, "dim", "active");
       });
 
-      // Active wedge: stroke + lift + scanline (only on selected/click, not hover)
       const p = document.getElementById(`p${t.id}`);
       if(p){
         p.setAttribute("class","wedgeActive");
         p.setAttribute("filter","url(#softShadow)");
       }
 
+      // on click = select + scan
       if(!isHover){
         selected = id;
         const s = document.getElementById(`s${t.id}`);
         if(s) s.classList.add("on");
-
-        panelTitle.textContent = t.title;
-        panelLines.innerHTML = `
-          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">purpose</span><br>${t.purpose}</div>
-          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">observes</span><br>${t.observes}</div>
-          <div><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">emits</span><br>${t.emits}</div>
-        `;
-
-        viewBtn.disabled = false;
-        viewBtn.dataset.href = t.link;
+        renderPanel(id);
       }
     }
 
-    // Attach events (using the generated hit paths)
+    // Events
     document.querySelectorAll(".hit").forEach(hit => {
       hit.addEventListener("mouseenter", e => {
         const id = Number(e.target.getAttribute("data-test"));
