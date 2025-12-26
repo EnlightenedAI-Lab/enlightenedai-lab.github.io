@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RD Diagram 2 — Substrate & Lenses (v3)</title>
+  <title>RD Diagram 2 — Substrate & Lenses (v4)</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,29 +30,18 @@
     body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); }
     .wrap{ max-width:1280px; margin:0 auto; padding:48px 24px 72px; }
 
-    h1{ margin:0 0 8px 0; font-size:32px; font-weight:600; letter-spacing:-0.02em; }
+    /* Title refinements: slightly smaller + heavier so it reads like a diagram caption */
+    h1{ margin:0 0 8px 0; font-size:30px; font-weight:700; letter-spacing:-0.02em; }
     .sub{
       font-family:var(--mono);
       font-size:12px;
       color:var(--muted);
       letter-spacing:0.08em;
       text-transform:uppercase;
-      margin-bottom:14px;
+      margin-bottom:18px; /* a touch more air now that intro is removed */
     }
 
-    .intro{
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:12px 14px;
-      background:#fff;
-      margin-bottom:18px;
-      max-width: 980px;
-      line-height: 1.5;
-      font-size: 13px;
-      color: var(--text);
-    }
-    .intro strong{ font-weight:800; }
-
+    /* Intro removed per request */
     .row{ display:flex; gap:18px; align-items:flex-start; }
 
     .card{
@@ -152,8 +141,9 @@
     }
     .meta b{ color:var(--text); font-weight:800; }
 
-    .svg-wrap{ width:100%; overflow:auto; }
-    svg{ display:block; width:100%; height:auto; min-width:1100px; }
+    /* FULL-SCREEN RENDER (no grey bar): remove overflow + remove min-width */
+    .svg-wrap{ width:100%; overflow:hidden; }
+    svg{ display:block; width:100%; height:auto; min-width:0; }
 
     /* SVG state hooks */
     .fade{ opacity:0.22; transition: opacity 180ms ease; }
@@ -269,19 +259,13 @@
     @media (max-width: 980px){
       .row{ flex-direction:column; }
       .panel{ width:100%; position:relative; top:auto; }
-      svg{ min-width: 980px; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Reflective Diagnostics — Substrate & Lenses</h1>
+    <h1>Reflective Diagnostics — Evidence Substrate & Analytic Lenses</h1>
     <div class="sub">PUBLIC SYSTEM MAP • 2026 • ACTIVE DEV</div>
-
-    <div class="intro">
-      <strong>What this is:</strong> a system map showing <strong>L1 (records)</strong> and <strong>L2–L7 (analytic lenses)</strong> over the same evidence.<br>
-      <strong>What this is not:</strong> the live dashboard UI. Interactive probes and assists are intentionally omitted.
-    </div>
 
     <div class="row">
       <div class="card" id="card">
@@ -290,7 +274,7 @@
         <div class="toast" id="toast">TRACE ACTIVE</div>
 
         <div class="svg-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520" role="img" aria-label="Measurement substrate and analytic lenses">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 520" role="img" aria-label="Evidence substrate and analytic lenses">
             <defs>
               <style>
                 .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
@@ -318,7 +302,7 @@
             <text class="mono" x="78" y="92" style="font-size:20px;font-weight:700;letter-spacing:-0.01em;">
               One Evidence Substrate → Multiple Lenses
             </text>
-            <text class="muted micro" x="78" y="116">BUILD v5 • 2026 • PUBLIC MAP (REDacted)</text>
+            <text class="muted micro" x="78" y="116">BUILD v5 • 2026 • PUBLIC MAP (REDACTED)</text>
 
             <text class="muted micro" x="78" y="138" id="telemetryLine">
               TELEMETRY: cycle 0215 • phase 02/06
@@ -477,7 +461,6 @@
   </div>
 
   <script>
-    // ===== MODULE DEFINITIONS (short text) =====
     const MODULES = [
       { key:"L2", label:"L2", title:"L2 — Reflection",
         text:"Baseline ↔ reflective deltas. Stability signatures. No truth / intent claims.",
@@ -504,7 +487,6 @@
         chips:["STATE: DEV","OUTPUT: context packets","EVIDENCE: sources"] }
     ];
 
-    // ===== STATE =====
     let active = "L2";
     let mode = "MAP";
     let playing = false;
@@ -513,11 +495,9 @@
     let motion = true;
     let tick = 7;
 
-    // Synthetic telemetry (safe)
     let phase = 2;
     let cycle = 215;
 
-    // ===== DOM =====
     const lensbar = document.getElementById("lensbar");
     const moduleTitle = document.getElementById("moduleTitle");
     const moduleText = document.getElementById("moduleText");
@@ -564,7 +544,6 @@
     }
 
     function setTelemetry(tag=""){
-      if(!telemetryLine) return;
       telemetryLine.textContent =
         `TELEMETRY: cycle ${String(cycle).padStart(4,"0")} • phase ${String(phase).padStart(2,"0")}/06${tag ? " • " + tag : ""}`;
     }
@@ -575,7 +554,6 @@
       setTelemetry(tag);
     }
 
-    // Spotlight
     if(card && spotlight){
       card.addEventListener("mousemove", (e) => {
         const r = card.getBoundingClientRect();
@@ -586,7 +564,6 @@
       });
     }
 
-    // Verify ticks
     function clearVerify(){
       ["vt1","vt2","vt3","vt4"].forEach(id => {
         const t = el(id);
@@ -607,7 +584,6 @@
       });
     }
 
-    // Motion toggle
     function setMotion(on){
       motion = !!on;
       motionBtn.classList.toggle("active", motion);
@@ -623,7 +599,6 @@
     }
     motionBtn.addEventListener("click", () => setMotion(!motion));
 
-    // Modes
     function setMode(next){
       mode = next;
 
@@ -661,7 +636,6 @@
       }
     }
 
-    // Lens activate
     function clearBeat(){
       ["L2","L3","L4","L5","L6","L7"].forEach(k => el(k)?.classList.remove("beat"));
     }
@@ -693,7 +667,6 @@
       bumpTelemetry(key.toLowerCase());
     }
 
-    // Play (cycles lenses)
     function startPlay(){
       if(!motion) return;
       if(playTimer) return;
@@ -738,8 +711,7 @@
 
     playBtn.addEventListener("click", () => playing ? stopPlay() : startPlay());
 
-    // Lens pills + hover preview
-    MODULES.forEach((m, idx) => {
+    MODULES.forEach((m) => {
       const p = document.createElement("div");
       p.className = "pill";
       p.innerHTML = `<span class="dot"></span><span>${m.label}</span>`;
@@ -766,7 +738,6 @@
     modeMapBtn.addEventListener("click", () => setMode("MAP"));
     modeTraceBtn.addEventListener("click", () => setMode("TRACE"));
 
-    // Init
     document.querySelectorAll(".pill")[0].classList.add("active");
     setTelemetry();
     activateLens("L2");
