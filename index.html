@@ -87,7 +87,6 @@
             line-height: 1.6;
             transition: background 0.2s ease, color 0.2s ease;
             overflow-x: hidden;
-            /* Layout: Sidebar + Main Column */
             display: flex;
             min-height: 100vh;
         }
@@ -107,7 +106,7 @@
         /* --- LAYOUT STRUCTURE --- */
         .layout-wrapper { display: flex; width: 100%; min-height: 100vh; }
 
-        /* SIDEBAR */
+        /* SIDEBAR (Sticky) */
         aside#sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -155,7 +154,7 @@
             min-width: 0;
         }
 
-        /* RIGHT RAIL */
+        /* RIGHT RAIL (Sticky) */
         .diagram-rail {
             width: var(--rail-width);
             flex-shrink: 0;
@@ -165,7 +164,7 @@
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
-        /* DIAGRAM THUMBNAILS (Static Images) */
+        /* DIAGRAM THUMBNAILS */
         .rail-item { margin-bottom: 3rem; cursor: zoom-in; transition: transform 0.2s; }
         .rail-item:hover { transform: scale(1.02); }
         
@@ -174,7 +173,6 @@
             font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;
         }
         
-        /* The container for the image */
         .rail-thumbframe {
             width: 100%;
             height: auto;
@@ -185,7 +183,6 @@
             overflow: hidden;
         }
         
-        /* The image itself - using high contrast class if needed */
         .rail-thumbimg {
             width: 100%;
             height: auto;
@@ -193,7 +190,6 @@
             object-fit: contain;
         }
 
-        /* Dark mode overrides */
         body[data-theme="dark"] .rail-thumbframe {
             border-color: #333;
             background: #0b0b0b;
@@ -206,8 +202,8 @@
             width: 100%;
             border-top: 1px solid var(--border-color);
             background: var(--bg-color);
-            margin-top: auto; /* Pushes to bottom */
-            /* ALIGNMENT FIX: Matches .content-col padding so text aligns */
+            margin-top: auto; 
+            /* ALIGNMENT: Match .content-col padding so text aligns */
             padding: 3rem 4rem; 
         }
 
@@ -542,21 +538,21 @@
                     <div class="rail-item" onclick="openModal('diag-coverage-map-v1.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-01</span>
                         <div class="rail-thumbframe">
-                            <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="RD-FIG-01 Coverage Map">
+                            <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="RD-FIG-01 Coverage Map" loading="lazy">
                         </div>
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-diagram-preview.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-02</span>
                         <div class="rail-thumbframe">
-                            <img class="rail-thumbimg" src="assets/diag-samples/deterministic-record-flow-public-skeleton.png" alt="RD-FIG-02 Deterministic Workflow">
+                            <img class="rail-thumbimg" src="assets/diag-samples/deterministic-record-flow-public-skeleton.png" alt="RD-FIG-02 Deterministic Workflow" loading="lazy">
                         </div>
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-layers-substrate.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-03</span>
                         <div class="rail-thumbframe">
-                            <img class="rail-thumbimg" src="assets/diag-samples/diag-substrate-lenses.png" alt="RD-FIG-03 Substrate & Lenses">
+                            <img class="rail-thumbimg" src="assets/diag-samples/diag-substrate-lenses.png" alt="RD-FIG-03 Substrate & Lenses" loading="lazy">
                         </div>
                     </div>
 
