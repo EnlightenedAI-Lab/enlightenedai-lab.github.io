@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/footer.css">
 
     <script type="application/json" id="audit-manifest">
@@ -19,7 +19,7 @@
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V54 (MATCHING INDEX.HTML) --- */
+        /* --- THEME: INSTITUTE STANDARD V54 --- */
         :root {
             --bg-color: #ffffff;
             --text-main: #050505;
@@ -155,13 +155,14 @@
 
         .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
         .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
-        .toggle-btn.active { color: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+        .toggle-btn:hover { color: var(--text-main); }
+        .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
         
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { margin-bottom: 4px; }
         nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 2px 0 2px 10px; border-left: 2px solid transparent; display: block; }
         nav a:hover { color: #000; }
-        nav a.active { color: #000; font-weight: 700; border-left: 3px solid #000; background: linear-gradient(90deg, #f9f9f9, #fff); }
+        nav a.active { color: #000; font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
 
         /* --- THEME & EXPORT --- */
         .theme-switch {
@@ -209,7 +210,9 @@
         h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 0.5rem; display:flex; align-items:center; }
         .doc-subtitle { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 3rem; letter-spacing: 0.02em; }
         h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; display:flex; align-items:center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-        p { margin-bottom: 1.5rem; max-width: 65ch; color: inherit; position: relative; }
+        p { margin-bottom: 1.5rem; max-width: 65ch; color: inherit; position: relative; font-size: 0.95rem; }
+        ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
+        li { margin-bottom: 0.5rem; font-size: 0.95rem; }
         
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; }
         .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; }
@@ -220,7 +223,7 @@
         /* --- VISIBILITY RULES --- */
         del, ins, .diff-tag { display: none; } 
 
-        /* READER MODE */
+        /* 1. READER MODE: Show Ins, Hide Del */
         body[data-mode="reader"] .audit-marker,
         body[data-mode="reader"] .logic-block,
         body[data-mode="reader"] .diff-del,
@@ -230,20 +233,22 @@
         body[data-mode="reader"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="reader"] del { display: none; }
 
-        /* DIFF MODE */
+        /* 2. DIFF MODE: Show All */
         body[data-mode="diff"] del { display: inline; background: #ffebeb; color: #cc0000; text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
         body[data-mode="diff"] ins { display: inline; background: #e6ffec; color: #006600; border-bottom: 2px solid #00cc00; text-decoration: none; padding: 0 2px; }
         body[data-mode="diff"] .diff-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
+        
         .diff-header { display: none; font-family: var(--font-mono); font-size: 0.65rem; color: #000; border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
         body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
         body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; pointer-events: none; }
 
-        /* AUDIT MODE */
+        /* 3. AUDIT MODE: Show Ins, Hide Del */
         .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: #fff; }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         body[data-mode="audit"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="audit"] del { display: none; }
+        
         body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="audit"] .audit-rail { display: block; }
         
@@ -254,16 +259,38 @@
         .metric-tag { font-weight: 600; color: #000; }
         .claim-text { color: #333; line-height: 1.4; }
 
-        /* LOGIC MODE */
+        /* 4. LOGIC MODE: Show Ins, Hide Del */
         .logic-block { display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; background-color: #fcfcfc; border: 1px solid var(--border-color); border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
-        .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: var(--bg-color); color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid var(--border-color); border-left: 1px solid var(--border-color); padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
+        
+        .logic-block::before {
+            content: "FORMAL BACKING — NON-EXECUTABLE";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--bg-color);
+            color: var(--mode-logic);
+            font-size: 0.55rem;
+            border-bottom: 1px solid var(--border-color);
+            border-left: 1px solid var(--border-color);
+            padding: 4px 8px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
         body[data-mode="logic"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="logic"] del { display: none; }
+
         @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- MODE BANNER --- */
-        #mode-banner { position: fixed; top: 120px; right: 5rem; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; padding: 8px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        #mode-banner { 
+            position: fixed; top: 120px; right: 5rem; 
+            font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; 
+            padding: 8px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; 
+            opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; z-index: 100; 
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+        }
         body:not([data-mode="reader"]) #mode-banner { opacity: 1; transform: translateY(0); }
         body[data-mode="audit"] #mode-banner { border: 1px solid var(--mode-audit); color: var(--mode-audit); border-left-width: 4px; }
         body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
@@ -274,10 +301,8 @@
             .layout-wrapper { display: block; }
             body { overflow-x: hidden; }
             .mobile-bar { display: flex; }
-            
             aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); transition: transform 0.25s ease; border-right: none; padding: 2rem; background: var(--bg-color); overflow-y: auto; z-index: 10000; }
             aside.open { transform: translateX(0); }
-            
             main { padding: 1.5rem; margin-top: 50px; width: 100%; max-width: 100vw; }
             section { margin-bottom: 4rem; grid-template-columns: 1fr !important; }
             .audit-rail { display: none !important; }
@@ -347,9 +372,9 @@
             <div class="doc-header mono">
                 <div class="doc-meta"><span class="doc-label">DOC_ID</span><span class="doc-val">RD-DIAG-0001</span></div>
                 <div class="doc-meta"><span class="doc-label">CLASSIFICATION</span><span class="doc-val">PUBLIC</span></div>
-                <div class="integrity-seal verified"><span class="status-dot"></span><span>INTEGRITY: VERIFIED</span></div>
+                <div class="integrity-seal"><span class="status-dot"></span><span>INTEGRITY: VERIFIED</span></div>
             </div>
-
+            
             <div style="margin-bottom: 4rem;">
                 <h1>Reflective Diagnostics</h1>
                 <div class="doc-subtitle">Internal diagnostic dashboard — limited public view</div>
@@ -362,7 +387,7 @@
                     <div class="prose-content">
                         <p>
                             <span class="audit-marker">[D1.0]</span>
-                            Reflective Diagnostics is an internal, <del>dashboard</del> <ins>evidence-first instrument</ins> for analyzing language-model behavior, stability, and failure dynamics across structured analytical layers.
+                            Reflective Diagnostics is an internal, <del>dashboard</del> <ins>evidence-first instrument</ins> for <del>analyzing</del> <ins>verifying</ins> language-model behavior, stability, and failure dynamics across structured analytical layers.
                         </p>
                         <p>
                             The system operates exclusively on stored records and evidence artifacts. It is designed for measurement, traceability, and audit, not for live interaction or public evaluation.
@@ -391,7 +416,7 @@
                 <div class="content-col">
                     <h2><span class="scramble">02 //</span> Scope</h2>
                     <div class="prose-content">
-                        <p>This public page provides a limited, illustrative view of the system. Full dashboard access is intentionally restricted.</p>
+                        <p>This public page provides a <del>basic</del> <ins>limited, illustrative</ins> <del>public page</del> <ins>interface surface</ins>. Full dashboard access is <del>intentionally restricted</del> <ins>gated by cryptographic role verification</ins>.</p>
                     </div>
                 </div>
             </section>
@@ -401,12 +426,12 @@
                     <h2><span class="scramble">03 //</span> What the Dashboard Does</h2>
                     <div class="prose-content">
                         <ul>
-                            <li>Deterministic ingestion of model outputs and interaction records.</li>
-                            <li>Computation of structure-only diagnostics independent of truth, intent, or policy judgment.</li>
+                            <li><del>Ingests</del> <ins>Deterministic ingestion</ins> of model outputs and interaction records.</li>
+                            <li><del>Computes</del> <ins>Derives</ins> structure-only diagnostics independent of truth, intent, or policy judgment.</li>
                             <li>Production of traceable evidence artifacts bound to canonical lexicon terms.</li>
                             <li>Separation between measurement, interpretation, and governance specification.</li>
                         </ul>
-                        <p>All reported signals are anchored to stored evidence and reproducible runs.</p>
+                        <p>All reported <del>metrics</del> <ins>signals</ins> are anchored to stored evidence and reproducible runs.</p>
                         
                         <div class="logic-block">
 <span class="logic-comment"># Invariant: Output Determinism</span>
@@ -431,10 +456,10 @@
                     <h2><span class="scramble">04 //</span> Architectural Characteristics</h2>
                     <div class="prose-content">
                         <ul>
-                            <li><strong>Lexicon-bound:</strong> diagnostic terms and schemas are defined by a frozen, versioned specification.</li>
+                            <li><strong>Lexicon-bound:</strong> diagnostic terms and schemas are defined by a <del>standard</del> <ins>frozen, versioned specification</ins>.</li>
                             <li><strong>Deterministic:</strong> identical inputs produce identical records and outputs.</li>
-                            <li><strong>Layer-separated:</strong> analytic layers operate on a shared record substrate.</li>
-                            <li><strong>Evidence-anchored:</strong> outputs link directly to stored artifacts and source records.</li>
+                            <li><strong>Layer-separated:</strong> analytic layers operate on a <del>shared</del> <ins>immutable</ins> record substrate.</li>
+                            <li><strong>Evidence-anchored:</strong> outputs <del>link</del> <ins>anchor</ins> directly to stored artifacts and source records.</li>
                             <li><strong>Governance-compatible:</strong> supports audit without exposing implementation internals.</li>
                         </ul>
                         
@@ -516,10 +541,6 @@
             if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
         }
         
-        // Helper functions for hover interactions (if needed later)
-        function highlightText(id) {} 
-        function unhighlightText(id) {}
-        
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         function scrambleText(element) {
             let iterations = 0; const originalText = element.dataset.value; 
@@ -537,9 +558,6 @@
             h.dataset.value = h.innerText;
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
-        
-        function copyCite(text) { navigator.clipboard.writeText(text); }
-        function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`); }
         
         // --- DARK MODE LOGIC ---
         function setTheme(theme) {
