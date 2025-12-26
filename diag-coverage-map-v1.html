@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Reflective Alignment — 5-Test Coverage Map</title>
+  <title>5-Test Coverage Map</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -37,12 +37,14 @@
     .wrap{
       max-width:1240px;
       margin:0 auto;
-      padding:42px 24px 56px;
+      padding:40px 24px 56px;
     }
+
+    /* Single clean title */
     h1{
       margin:0 0 8px 0;
-      font-size:34px;
-      font-weight:600;
+      font-size:36px;
+      font-weight:700;
       letter-spacing:-0.02em;
     }
     .sub{
@@ -120,6 +122,7 @@
       text-transform:uppercase;
       background:#fff;
       user-select:none;
+      font-weight:600;
     }
     .dot{
       width:7px; height:7px; border-radius:50%;
@@ -156,7 +159,6 @@
     }
     .btn.green{
       border-color: rgba(0,255,90,0.55);
-      box-shadow: 0 0 0 rgba(0,255,90,0);
       position:relative;
       overflow:hidden;
     }
@@ -179,9 +181,10 @@
       text-transform:uppercase;
       font-size:11px;
       color:var(--muted);
+      font-weight:700;
     }
 
-    /* No horizontal scrollbar */
+    /* Remove grey scroll bar: no overflow scroll */
     .svg-wrap{ width:100%; overflow:hidden; }
     svg{ width:100%; height:auto; display:block; }
 
@@ -204,6 +207,7 @@
       gap:10px;
       align-items:center;
       user-select:none;
+      font-weight:700;
     }
     .stamp .miniDot{
       width:7px; height:7px; border-radius:50%;
@@ -211,7 +215,6 @@
       box-shadow: 0 0 10px rgba(0,255,90,0.18);
     }
 
-    /* New: legend block OUTSIDE svg, but inside card border */
     .below{
       display:flex;
       gap:12px;
@@ -219,7 +222,7 @@
       align-items:stretch;
       flex-wrap:wrap;
     }
-    .legendBox{
+    .legendBox, .axisKey{
       border:1px solid #ededed;
       border-radius:14px;
       background:#fff;
@@ -234,20 +237,14 @@
       text-transform:uppercase;
       color:var(--muted);
       margin-bottom:8px;
+      font-weight:700;
     }
     .legendText{
       font-family:var(--mono);
       font-size:11.5px;
       color:#555;
       line-height:1.45;
-    }
-    .axisKey{
-      border:1px solid #ededed;
-      border-radius:14px;
-      background:#fff;
-      padding:10px 12px;
-      flex: 1;
-      min-width: 320px;
+      font-weight:500;
     }
     .axisList{
       margin:0;
@@ -256,7 +253,20 @@
       font-size:12px;
       line-height:1.45;
     }
-    .axisList b{ color:#050505; font-weight:700; }
+    .axisList strong{
+      color:#050505;
+      font-weight:900;
+      letter-spacing:0.02em;
+    }
+    .axisMeta{
+      margin:0 0 8px 0;
+      font-family:var(--mono);
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      font-weight:700;
+    }
 
     @media (max-width: 980px){
       .row{ flex-direction:column; }
@@ -268,8 +278,8 @@
 
 <body>
   <div class="wrap">
-    <h1>Reflective Alignment — 5-Test Coverage Map</h1>
-    <div class="sub">minimal basis set • observable outputs only • lexicon-bound • auditable</div>
+    <h1>5-Test Coverage Map</h1>
+    <div class="sub">reflective alignment • outputs only • lexicon-bound • auditable</div>
 
     <div class="row">
       <div class="card">
@@ -299,8 +309,13 @@
                 .H{font-size:15px;font-weight:800;letter-spacing:0.10em}
                 .T{font-size:12px}
                 .Micro{font-size:11px;letter-spacing:0.08em}
-                .CenterH{font-size:18px;font-weight:800;letter-spacing:-0.01em}
-                .CenterT{font-size:12px}
+
+                /* Make center text unbreakable + more readable */
+                .CenterH{font-size:16px;font-weight:900;letter-spacing:0.06em}
+                .CenterT{font-size:12px;font-weight:700;letter-spacing:0.05em}
+
+                /* Bold, clearer axis labels */
+                .AxisLabel{font-size:11.5px;font-weight:900;letter-spacing:0.10em; fill:#4a4a4a}
 
                 .hit{fill:transparent; cursor:pointer;}
 
@@ -354,14 +369,14 @@
               <line class="axis" x1="600" y1="160" x2="600" y2="640"/>
               <line class="axis" x1="360" y1="400" x2="840" y2="400"/>
 
-              <!-- Plain-language axes -->
-              <text class="monoMuted Micro" x="608" y="176">STRESS / CRISIS</text>
-              <text class="monoMuted Micro" x="608" y="636">CONTROL / COMPLIANCE</text>
-              <text class="monoMuted Micro" x="346" y="392" text-anchor="end">EVIDENCE / TRUTH</text>
-              <text class="monoMuted Micro" x="854" y="392">SAFETY / USEFULNESS</text>
+              <!-- 4 AXES (dimensions). 5 TESTS are the wedges. -->
+              <text class="mono AxisLabel" x="600" y="176" text-anchor="middle">STRESS / CRISIS</text>
+              <text class="mono AxisLabel" x="600" y="636" text-anchor="middle">CONTROL / COMPLIANCE</text>
+              <text class="mono AxisLabel" x="340" y="392" text-anchor="end">EVIDENCE / TRUTH</text>
+              <text class="mono AxisLabel" x="860" y="392">SAFETY / USEFULNESS</text>
 
-              <text class="sans CenterH" x="600" y="390" text-anchor="middle">OBSERVATORY MAP</text>
-              <text class="monoMuted CenterT" x="600" y="422" text-anchor="middle">outputs only • lexicon-bound • auditable</text>
+              <text class="sans CenterH" x="600" y="390" text-anchor="middle">COVERAGE MAP</text>
+              <text class="monoMuted CenterT" x="600" y="420" text-anchor="middle">5 TESTS • OUTPUTS ONLY • AUDITABLE</text>
             </g>
 
             <g id="orbitLayer" class="orb">
@@ -383,7 +398,6 @@
           </svg>
         </div>
 
-        <!-- OUTSIDE SVG, STILL INSIDE CARD BORDER -->
         <div class="below">
           <div class="legendBox">
             <div class="legendKicker">Interaction</div>
@@ -395,11 +409,12 @@
 
           <div class="axisKey">
             <div class="legendKicker">Axis key</div>
+            <p class="axisMeta">4 axes (dimensions) • 5 tests (wedges)</p>
             <ul class="axisList">
-              <li><b>EVIDENCE / TRUTH</b> — does the system hold epistemic boundaries (no invention) under uncertainty?</li>
-              <li><b>SAFETY / USEFULNESS</b> — does it help when safe, and refuse only when justified?</li>
-              <li><b>CONTROL / COMPLIANCE</b> — does it resist bad instruction while honoring valid constraints?</li>
-              <li><b>STRESS / CRISIS</b> — does it stabilize the interaction under high arousal without speculation?</li>
+              <li><strong>EVIDENCE / TRUTH</strong> — holds epistemic boundaries (no invention) under uncertainty.</li>
+              <li><strong>SAFETY / USEFULNESS</strong> — helps when safe; refuses only when justified.</li>
+              <li><strong>CONTROL / COMPLIANCE</strong> — resists bad instruction while honoring valid constraints.</li>
+              <li><strong>STRESS / CRISIS</strong> — stabilizes the interaction under high arousal without speculation.</li>
             </ul>
           </div>
         </div>
@@ -430,13 +445,12 @@
 
         <div class="note">
           <div class="mono">Public boundary</div>
-          No prompts, thresholds, or internal metrics are displayed. This is a coverage surface map only.
+          No prompts, thresholds, or internal metrics are displayed. This is a coverage map only.
         </div>
 
         <div class="note">
           <div class="mono">Coverage meaning</div>
-          These 5 tests are a <b>minimal diagnostic basis</b> for the major observable failure surfaces.
-          They do not claim “everything about alignment”; they claim coverage of the primary failure modes this site audits.
+          This is a <b>minimal diagnostic basis</b>: 5 complementary tests that probe the primary observable failure surfaces across the 4 dimensions shown on the map.
         </div>
       </div>
     </div>
@@ -450,10 +464,10 @@
         short: "GOVERNANCE",
         sub: "AUTOMATION",
         title: "Test 1 — Automation & Programmable Governance",
-        purpose: "Persona-induced compliance failures (governance surface).",
+        purpose: "Persona-induced compliance failures (control surface).",
         observes: "Output behavior under constraint + role framing.",
         emits: "Lexicon signature + evidence spans + audit references.",
-        coverage: "Covers control/compliance failure: user constraints → policy compliance dynamics; tests programmable control surfaces.",
+        coverage: "Control/Compliance: probes programmable control surfaces and constraint-handling.",
         link: "assets/diag-samples/test1.png"
       },
       {
@@ -462,10 +476,10 @@
         short: "MECHANISM",
         sub: "UNIFICATION",
         title: "Test 2 — Universal Benchmarking",
-        purpose: "Cross-domain mechanism unification (same failure mechanics across domains).",
-        observes: "Structural invariants across tasks without subjective labels.",
+        purpose: "Same failure mechanism across domains (math / geo / code).",
+        observes: "Structural invariants across tasks without narrative drift.",
         emits: "Mechanism signature + trace artifacts for comparison.",
-        coverage: "Covers mechanism invariants: reveals the same error-cause across domains (math / geo / code) without narrative drift.",
+        coverage: "Cross-axis invariant: demonstrates mechanism-level similarity across domains.",
         link: "assets/diag-samples/test2.png"
       },
       {
@@ -473,11 +487,11 @@
         code: "TEST 3",
         short: "FALSE",
         sub: "REFUSALS",
-        title: "Test 3 — Alignment Tax Reduction",
-        purpose: "Safety–usefulness balance and false refusals (over-refusal surface).",
-        observes: "Refusal vs justified non-action (boundary discipline).",
+        title: "Test 3 — False Refusal Boundary",
+        purpose: "Over-refusal vs justified non-action (safety/usefulness line).",
+        observes: "Refusal discipline under benign requests.",
         emits: "Refusal-class signature + auditable record chain.",
-        coverage: "Covers safety/usefulness boundary: distinguishes justified non-action vs avoidant refusal; measures alignment tax at the interface.",
+        coverage: "Safety/Usefulness: separates justified refusal from avoidant refusal.",
         link: "assets/diag-samples/test3.png"
       },
       {
@@ -486,10 +500,10 @@
         short: "EVIDENCE",
         sub: "INTEGRITY",
         title: "Test 4 — Evidence Integrity Under Constraint",
-        purpose: "Correct non-action under missing inputs (abstain vs invent).",
-        observes: "Non-invention discipline under insufficient data.",
+        purpose: "Abstain vs invent under missing inputs.",
+        observes: "Non-invention discipline under uncertainty.",
         emits: "Evidence-integrity signature + traceable record chain.",
-        coverage: "Covers evidence/truth boundary: tests whether the system fabricates facts or holds boundary under missing evidence.",
+        coverage: "Evidence/Truth: tests hallucination vs bounded non-action.",
         link: "assets/diag-samples/test4.png"
       },
       {
@@ -498,10 +512,10 @@
         short: "CRISIS",
         sub: "STABILITY",
         title: "Test 5 — Crisis Co-Regulation",
-        purpose: "Interaction stability under high arousal (escalation dynamics).",
-        observes: "Stability patterns under stress without intent attribution.",
+        purpose: "Stability under high arousal (de-escalation control).",
+        observes: "Grounding actions without speculation.",
         emits: "Co-regulation signature + evidence spans + replay references.",
-        coverage: "Covers stress/crisis dynamics: stabilizes user state under stress while avoiding speculation; tests escalation vs grounding control.",
+        coverage: "Stress/Crisis: probes escalation vs stabilization dynamics.",
         link: "assets/diag-samples/test5.png"
       }
     ];
@@ -635,9 +649,8 @@
       if(on) s.classList.add("on"); else s.classList.remove("on");
     }
 
-    function clearAll(){
+    function resetWedgeStyles(){
       tests.forEach(t => {
-        setGroupClass(`w${t.id}`, "dim", "active");
         const p = document.getElementById(`p${t.id}`);
         if(p){
           p.setAttribute("class","wedge");
@@ -646,6 +659,11 @@
         scanOn(t.id, false);
         ledOn(t.id, false);
       });
+    }
+
+    function clearAll(){
+      tests.forEach(t => setGroupClass(`w${t.id}`, "dim", "active"));
+      resetWedgeStyles();
 
       selected = null;
       panelTitle.textContent = "Click a wedge";
@@ -676,10 +694,10 @@
         selected = id;
         panelTitle.textContent = t.title;
         panelLines.innerHTML = `
-          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">purpose</span><br>${t.purpose}</div>
-          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">observes</span><br>${t.observes}</div>
-          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">emits</span><br>${t.emits}</div>
-          <div><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">coverage</span><br>${t.coverage}</div>
+          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted); font-weight:700;">purpose</span><br>${t.purpose}</div>
+          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted); font-weight:700;">observes</span><br>${t.observes}</div>
+          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted); font-weight:700;">emits</span><br>${t.emits}</div>
+          <div><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted); font-weight:700;">coverage</span><br>${t.coverage}</div>
         `;
         viewBtn.disabled = false;
         viewBtn.dataset.href = t.link;
@@ -698,6 +716,7 @@
         const id = Number(e.target.getAttribute("data-test"));
         if(!Number.isFinite(id)) return;
         if(selected !== null) return;
+
         if(!livePulse){
           scanOn(id, false);
           ledOn(id, false);
@@ -739,23 +758,24 @@
     });
 
     centerHit.addEventListener("click", () => {
+      // Make this view clean + non-buggy: reset styles first, then present basis text.
       selected = null;
-      tests.forEach(t => { scanOn(t.id, false); ledOn(t.id, false); });
+      resetWedgeStyles();
       tests.forEach(t => setGroupClass(`w${t.id}`, "active", "dim"));
 
-      panelTitle.textContent = "Coverage basis — why 5 tests";
+      panelTitle.textContent = "Coverage basis";
       panelLines.innerHTML = `
         <div style="margin-bottom:10px;">
-          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">axes</span><br>
-          The map spans four observable failure dimensions: <b>Stress/Crisis</b>, <b>Control/Compliance</b>, <b>Evidence/Truth</b>, and <b>Safety/Usefulness</b>.
+          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted); font-weight:700;">what this map is</span><br>
+          A 5-test wedge map across 4 observable dimensions (axes).
         </div>
         <div style="margin-bottom:10px;">
-          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">basis set</span><br>
-          Each test anchors a distinct failure surface. Together they form a minimal diagnostic basis that detects drift across interaction stability, refusal boundary, evidence integrity, and governance compliance.
+          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted); font-weight:700;">why 5 tests</span><br>
+          Each wedge is a distinct stress-test that anchors one primary failure surface. Together they form a minimal diagnostic basis for this audit.
         </div>
         <div>
-          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">public constraint</span><br>
-          Coverage is shown without prompts or thresholds. Evidence is accessible via sample bundles (redacted).
+          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted); font-weight:700;">public constraint</span><br>
+          Coverage is shown without prompts, thresholds, or internal metrics. Samples are redacted and auditable.
         </div>
       `;
       viewBtn.disabled = true;
