@@ -87,7 +87,7 @@
             line-height: 1.6;
             transition: background 0.2s ease, color 0.2s ease;
             overflow-x: hidden;
-            /* [MATCHING DATA.HTML] Vertical Layout */
+            /* [FIX] Vertical Stack Layout (Matches data.html) */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -106,7 +106,7 @@
         .scramble, .scramble-brand, .scramble-hover { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
         /* --- LAYOUT STRUCTURE --- */
-        /* [MATCHING DATA.HTML] Flex 1 pushes footer down */
+        /* [FIX] Flex 1 pushes footer to bottom */
         .layout-wrapper { 
             display: flex; 
             flex: 1; 
@@ -121,8 +121,8 @@
             background: var(--sidebar-bg);
             display: flex; flex-direction: column;
             flex-shrink: 0; z-index: 100; position: sticky; top: 0;
-            /* [MATCHING DATA.HTML] Align Self check */
-            align-self: flex-start; 
+            /* [FIX] Critical for sidebar in column flex */
+            align-self: flex-start;
         }
         .sidebar-scroll { flex: 1; overflow-y: auto; padding: 2rem; }
         .sidebar-bottom { padding: 0 2rem 2rem 2rem; background: var(--sidebar-bg); border-top: 1px solid var(--border-color); }
@@ -162,7 +162,7 @@
             min-width: 0;
         }
 
-        /* RIGHT RAIL */
+        /* RIGHT RAIL (Sticky) */
         .diagram-rail {
             width: var(--rail-width);
             flex-shrink: 0;
@@ -172,7 +172,7 @@
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
-        /* --- DIAGRAM THUMBNAILS --- */
+        /* --- DIAGRAM THUMBNAILS (Cards + Hooks) --- */
         .rail-item { margin-bottom: 2rem; cursor: zoom-in; transition: transform 0.2s; }
         .rail-item:hover { transform: scale(1.02); }
         
@@ -209,13 +209,13 @@
         }
         body[data-theme="dark"] .rail-thumbimg { background: #0b0b0b; }
 
-        /* FOOTER [MATCHING DATA.HTML EXACTLY] */
+        /* FOOTER [FIXED based on data.html] */
         #footer-mount {
             width: 100%;
             z-index: 100;
             border-top: 1px solid var(--border-color);
             background: var(--bg-color);
-            /* NO EXTRA PADDING - LET FOOTER.CSS HANDLE IT */
+            /* Matches data.html (no extra padding) */
         }
 
         /* --- SIDEBAR ELEMENTS --- */
@@ -251,7 +251,7 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
 
-        /* --- VISIBILITY RULES --- */
+        /* --- VISIBILITY RULES (TEXT & MODES) --- */
         .diff-tag { display: none; }
 
         /* FORCE NORMAL VIEW */
@@ -281,7 +281,7 @@
             padding: 0 2px;
         }
         
-        /* DIFF MODE: Hide Unchanged Content */
+        /* DIFF MODE: Hide Unchanged Content ("Soup Fix") */
         body[data-mode="diff"] .prose-content p:not(.has-diff),
         body[data-mode="diff"] .prose-content li:not(.has-diff),
         body[data-mode="diff"] .prose-content ul:not(:has(.has-diff)) {
@@ -317,7 +317,7 @@
         
         .audit-rail { display: none; margin-top: 1rem; padding-left: 1rem; border-left: 1px solid var(--border-color); font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); }
         body[data-mode="audit"] .audit-rail { display: block; }
-        body[data-mode="diff"] .audit-rail { display: none !important; } 
+        body[data-mode="diff"] .audit-rail { display: none !important; } /* Hide rail in diff mode */
         
         .claim-box { margin-bottom: 1rem; padding: 0.8rem; background: var(--card-bg); border: 1px solid var(--border-color); }
         .claim-id { font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.5rem; }
