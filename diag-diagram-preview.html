@@ -1,4 +1,4 @@
-<!-- SAVE AS: /docs/diag-diagram-preview.html  -->
+<!-- SAVE AS: /docs/diag-diagram-preview.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,8 +16,6 @@
       --text:#050505;
       --muted:#6a6a6a;
       --border:#e5e5e5;
-      --border2:#cfcfcf;
-
       --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
@@ -26,7 +24,6 @@
       --inactiveOpacity:0.22;
       --activeOpacity:1;
 
-      /* Selection (NOT success) */
       --activeStroke:#050505;
       --activeStrokeW:2.5;
 
@@ -40,20 +37,8 @@
     body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); }
     .wrap{ max-width:1240px; margin:0 auto; padding:42px 24px 60px; }
 
-    /* Page title: shorter */
-    h1{
-      margin:0 0 6px 0;
-      font-size:34px;
-      font-weight:650;
-      letter-spacing:-0.02em;
-    }
-    .sub{
-      font-family:var(--mono);
-      color:var(--muted);
-      font-size:12px;
-      letter-spacing:0.06em;
-      text-transform:uppercase;
-    }
+    h1{ margin:0 0 8px 0; font-size:40px; font-weight:700; letter-spacing:-0.02em; }
+    .sub{ font-family:var(--mono); color:var(--muted); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; }
 
     .row{
       display:flex;
@@ -68,14 +53,14 @@
       border-radius:var(--radius);
       padding:18px;
       background:var(--bg);
+      overflow:hidden; /* prevents any accidental scroll bars */
     }
 
-    /* Panel: more readable */
     .panel{
-      width: 420px;
+      width: 360px;
       border:1px solid var(--border);
       border-radius:var(--radius);
-      padding:16px 16px 14px;
+      padding:16px;
       background:var(--bg);
       position: sticky;
       top: 16px;
@@ -92,136 +77,48 @@
 
     .stepnum{
       font-family:var(--mono);
-      font-size:13px;
+      font-size:12px;
       letter-spacing:0.10em;
       color:var(--muted);
-      margin-bottom:12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .stepnum .smallHint{
-      font-size:11px;
-      letter-spacing:0.08em;
-      text-transform:uppercase;
-      color:var(--muted);
-      opacity:0.85;
-      white-space:nowrap;
+      margin-bottom:10px;
     }
 
     .steptitle{
-      font-size:18px;
+      font-size:16px;
       font-weight:800;
       letter-spacing:-0.01em;
-      margin:0 0 10px 0;
-      line-height:1.15;
+      margin-bottom:10px;
     }
 
     .steptext{
-      font-family:var(--sans);
-      font-size:14px;
+      font-size:13px;
       color:var(--text);
       line-height:1.6;
-      margin-bottom:12px;
     }
 
-    /* Progress: bigger, numbered, clickable */
+    /* Progress ticks (more readable) */
     .progress{
       display:flex;
-      gap:10px;
-      margin:12px 0 12px;
+      gap:8px;
+      margin:14px 0 12px;
       align-items:center;
       flex-wrap:wrap;
     }
     .tick{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      width:46px;
-      height:28px;
+      width:44px;
+      height:8px;
       border:1px solid var(--border);
-      border-radius:10px;
+      border-radius:999px;
       background:#fff;
       cursor:pointer;
-      user-select:none;
-      font-family:var(--mono);
-      font-size:12px;
-      font-weight:700;
-      color:#777;
-      transition: border-color 140ms ease, background 140ms ease, color 140ms ease, transform 140ms ease;
     }
-    .tick:hover{ border-color:#bdbdbd; transform: translateY(-1px); }
     .tick.on{
-      border-color:#d2d2d2;
-      background:#f5f5f5;
-      color:#6a6a6a;
+      border-color:#bdbdbd;
+      background:#f1f1f1;
     }
     .tick.active{
       border-color:#050505;
       background:#050505;
-      color:#fff;
-      transform:none;
-    }
-
-    /* Optional: mini list for clarity */
-    .stepList{
-      border-top:1px solid var(--border);
-      padding-top:12px;
-      margin-top:10px;
-    }
-    .stepRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:8px 10px;
-      border:1px solid transparent;
-      border-radius:12px;
-      cursor:pointer;
-      user-select:none;
-      transition: background 140ms ease, border-color 140ms ease;
-    }
-    .stepRow:hover{ background:#fafafa; border-color:#ededed; }
-    .stepRow.active{ background:#f7f7f7; border-color:#e6e6e6; }
-    .stepRow .left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-    }
-    .stepRow .n{
-      width:26px; height:26px;
-      border:1px solid var(--border2);
-      border-radius:9px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-family:var(--mono);
-      font-size:12px;
-      font-weight:800;
-      color:#050505;
-      flex:0 0 auto;
-      background:#fff;
-    }
-    .stepRow.active .n{
-      border-color:#050505;
-      background:#050505;
-      color:#fff;
-    }
-    .stepRow .label{
-      font-size:13px;
-      font-weight:700;
-      color:#222;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .stepRow .chev{
-      font-family:var(--mono);
-      font-size:12px;
-      color:#8a8a8a;
-      flex:0 0 auto;
     }
 
     .controls{
@@ -234,7 +131,7 @@
     .btn{
       font-family:var(--mono);
       font-size:12px;
-      padding:9px 11px;
+      padding:8px 10px;
       border:1px solid var(--border);
       background:var(--bg);
       color:var(--text);
@@ -244,8 +141,9 @@
     }
     .btn:hover{ border-color: #bdbdbd; }
 
-    .svg-wrap{ width:100%; overflow:auto; }
-    svg{ display:block; width:100%; height:auto; min-width:1200px; }
+    /* NO grey bar (no scroll). Fit-to-card. */
+    .svg-wrap{ width:100%; overflow:hidden; }
+    svg{ display:block; width:100%; height:auto; }
 
     /* Guided emphasis */
     .dim { opacity: var(--inactiveOpacity); transition: opacity 180ms ease; }
@@ -254,7 +152,6 @@
     .badge { display:none; }
     .badge.show { display:block; }
 
-    /* subtle lift for active element */
     .lift{
       filter: drop-shadow(0 12px 18px rgba(0,0,0,0.16)) drop-shadow(0 2px 0 rgba(0,0,0,0.05));
       transform: translateY(-1px);
@@ -276,7 +173,7 @@
     <div class="row">
       <div class="card">
         <div class="svg-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Deterministic workflow">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Deterministic record flow">
             <defs>
               <style>
                 .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
@@ -293,16 +190,16 @@
                 .arrowDash{stroke:#b8b8b8;stroke-width:1.5;fill:none;stroke-dasharray:6 6}
 
                 .pill{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5; rx:6}
-                .pillText{font-size:12px;font-weight:600;letter-spacing:0.10em}
+                .pillText{font-size:12px;font-weight:700;letter-spacing:0.12em}
                 .okDot{fill:#00cc00}
 
                 .stepbox-hit{fill:transparent; cursor:pointer;}
 
                 .chip{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.25}
-                .chipText{font-size:12px;font-weight:700;letter-spacing:0.12em}
+                .chipText{font-size:12px;font-weight:800;letter-spacing:0.12em}
 
                 .miniBtn{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.25}
-                .miniBtnText{font-size:11px;font-weight:700;letter-spacing:0.10em}
+                .miniBtnText{font-size:11px;font-weight:800;letter-spacing:0.10em}
               </style>
 
               <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
@@ -321,19 +218,16 @@
             <!-- OUTER -->
             <rect class="frame" x="70" y="50" width="1460" height="620" rx="18"/>
 
-            <!-- Title (shorter, less dense) -->
-            <text class="mono" x="120" y="108" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
+            <!-- Title (keep one title + remove the extra subtitle line) -->
+            <text class="mono" x="120" y="108" style="font-size:22px;font-weight:800;letter-spacing:-0.01em;">
               Deterministic Record Flow (Public Skeleton)
             </text>
-            <text class="monoMuted micro" x="120" y="134">POST-EXECUTION • NON-CAUSAL • NAMES & THRESHOLDS OMITTED</text>
-            <text class="monoMuted micro" x="120" y="156">BUILD v5 • 2026 • PUBLIC PREVIEW</text>
+            <!-- REMOVED: POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED -->
+            <text class="monoMuted micro" x="120" y="134">BUILD v5 • 2026 • PUBLIC PREVIEW</text>
 
-            <!-- Compact note (kept, but cleaner) -->
-            <text class="monoMuted micro" x="120" y="188">
-              Shows the evidence-formation contract: what must exist before any module can report results.
-            </text>
-            <text class="monoMuted micro" x="120" y="208">
-              Interactive regimes + oracle assistance exist downstream and are intentionally omitted.
+            <!-- Compact view note (kept, but short) -->
+            <text class="monoMuted micro" x="120" y="170">
+              Evidence-formation contract: what must exist before any module can report results.
             </text>
 
             <!-- AUDIT MODE chip (top-right) -->
@@ -344,7 +238,7 @@
             </g>
 
             <!-- TELEMETRY line -->
-            <text class="monoMuted micro" x="120" y="242">TELEMETRY: CYCLE 0215 • PHASE 01/06 • T+00:13</text>
+            <text class="monoMuted micro" x="120" y="214">TELEMETRY: CYCLE 0215 • PHASE 01/06 • T+00:13</text>
 
             <!-- BOXES -->
             <g id="step1" class="dim">
@@ -356,7 +250,7 @@
 
               <g class="badge" id="badge1">
                 <rect x="128" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="142" y="323" style="font-size:12px;font-weight:700;">01</text>
+                <text class="mono" x="142" y="323" style="font-size:12px;font-weight:800;">01</text>
               </g>
               <rect class="stepbox-hit" x="120" y="300" width="210" height="150" rx="12" data-step="0"/>
             </g>
@@ -370,7 +264,7 @@
 
               <g class="badge" id="badge2">
                 <rect x="366" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="380" y="323" style="font-size:12px;font-weight:700;">02</text>
+                <text class="mono" x="380" y="323" style="font-size:12px;font-weight:800;">02</text>
               </g>
               <rect class="stepbox-hit" x="358" y="300" width="210" height="150" rx="12" data-step="1"/>
             </g>
@@ -384,7 +278,7 @@
 
               <g class="badge" id="badge3">
                 <rect x="604" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="618" y="323" style="font-size:12px;font-weight:700;">03</text>
+                <text class="mono" x="618" y="323" style="font-size:12px;font-weight:800;">03</text>
               </g>
               <rect class="stepbox-hit" x="596" y="300" width="210" height="150" rx="12" data-step="2"/>
             </g>
@@ -398,7 +292,7 @@
 
               <g class="badge" id="badge4">
                 <rect x="842" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="856" y="323" style="font-size:12px;font-weight:700;">04</text>
+                <text class="mono" x="856" y="323" style="font-size:12px;font-weight:800;">04</text>
               </g>
               <rect class="stepbox-hit" x="834" y="300" width="210" height="150" rx="12" data-step="3"/>
             </g>
@@ -412,7 +306,7 @@
 
               <g class="badge" id="badge5">
                 <rect x="1080" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="1094" y="323" style="font-size:12px;font-weight:700;">05</text>
+                <text class="mono" x="1094" y="323" style="font-size:12px;font-weight:800;">05</text>
               </g>
               <rect class="stepbox-hit" x="1072" y="300" width="210" height="150" rx="12" data-step="4"/>
             </g>
@@ -427,7 +321,7 @@
 
               <g class="badge" id="badge6">
                 <rect x="1318" y="308" width="42" height="22" rx="6" fill="#fff" stroke="#cfcfcf" stroke-width="1.25"/>
-                <text class="mono" x="1332" y="323" style="font-size:12px;font-weight:700;">06</text>
+                <text class="mono" x="1332" y="323" style="font-size:12px;font-weight:800;">06</text>
               </g>
               <rect class="stepbox-hit" x="1310" y="300" width="210" height="150" rx="12" data-step="5"/>
             </g>
@@ -468,18 +362,18 @@
             <!-- RESULT TRAY (appears at step 6) -->
             <g id="resultTray" style="opacity:0; transition: opacity 220ms ease;">
               <rect x="120" y="630" width="1400" height="56" rx="12" fill="#fff" stroke="#ededed" stroke-width="1.25"/>
-              <text class="mono" x="142" y="664" style="font-size:12px;font-weight:800;letter-spacing:0.14em;">AUDIT PACKET PREVIEW</text>
+              <text class="mono" x="142" y="664" style="font-size:12px;font-weight:900;letter-spacing:0.14em;">AUDIT PACKET PREVIEW</text>
 
               <text class="monoMuted" x="380" y="663" style="font-size:11px;letter-spacing:0.05em;">
-                record_id: <tspan class="mono" style="font-weight:700;">RD-REC-0215-0A7C</tspan> •
-                hashes: <tspan class="mono" style="font-weight:700;">sha256: 9f2c…b18e</tspan>
+                record_id: <tspan class="mono" style="font-weight:800;">RD-REC-0215-0A7C</tspan> •
+                hashes: <tspan class="mono" style="font-weight:800;">sha256: 9f2c…b18e</tspan>
               </text>
 
               <text class="monoMuted" x="900" y="663" style="font-size:11px;letter-spacing:0.05em;">
-                artifacts: <tspan class="mono" style="font-weight:700;">3 screenshots</tspan> •
-                <tspan class="mono" style="font-weight:700;">2 tables</tspan> •
-                <tspan class="mono" style="font-weight:700;">1 json</tspan>
-                • trace: <tspan class="mono" style="font-weight:700;">metric → span → source</tspan>
+                artifacts: <tspan class="mono" style="font-weight:800;">3 screenshots</tspan> •
+                <tspan class="mono" style="font-weight:800;">2 tables</tspan> •
+                <tspan class="mono" style="font-weight:800;">1 json</tspan>
+                • trace: <tspan class="mono" style="font-weight:800;">metric → span → source</tspan>
               </text>
 
               <g transform="translate(1320,642)">
@@ -500,11 +394,7 @@
 
       <div class="panel">
         <div class="kicker">guided sequence</div>
-
-        <div class="stepnum">
-          <span id="stepNum">STEP 1 / 6</span>
-          <span class="smallHint">Click 1–6</span>
-        </div>
+        <div class="stepnum" id="stepNum">STEP 1 / 6</div>
 
         <div class="progress" id="progress"></div>
 
@@ -520,29 +410,22 @@
           <button class="btn" id="pauseBtn">Pause</button>
           <button class="btn" id="restartBtn">Restart</button>
         </div>
-
-        <div class="stepList" id="stepList"></div>
       </div>
     </div>
   </div>
 
   <script>
     const steps = [
-      { id:"step1", box:"box1", badge:"badge1", arrow:null,  title:"Record Intake",
+      { id:"step1", box:"box1", badge:"badge1", arrow:null, title:"Record Intake",
         text:"Immutable capture of model I/O, transcripts, and artifacts. Establishes a stable record boundary before any analysis." },
-
       { id:"step2", box:"box2", badge:"badge2", arrow:"a12", title:"Canonicalize",
         text:"Deterministic normalization and span indexing. Converts raw artifacts into a stable measurement substrate." },
-
       { id:"step3", box:"box3", badge:"badge3", arrow:"a23", title:"Lexicon Bind",
         text:"Binds records to a frozen, versioned term and schema specification. Constrains measurement semantics pre-computation." },
-
       { id:"step4", box:"box4", badge:"badge4", arrow:"a34", title:"Structural Diagnostics",
         text:"Computes structure-only signals (invariants, integrity checks) without truth, intent, or policy judgment." },
-
       { id:"step5", box:"box5", badge:"badge5", arrow:"a45", title:"Audit Packet",
         text:"Produces a traceable audit packet: provenance, hashes, evidence links, and replay references." },
-
       { id:"step6", box:"box6", badge:"badge6", arrow:"a56", title:"Evidence Artifacts",
         text:"Exports an auditable bundle (screenshots + CSV/JSON) suitable for controlled technical review." }
     ];
@@ -555,35 +438,15 @@
     const stepTitle = document.getElementById("stepTitle");
     const stepText = document.getElementById("stepText");
     const progress = document.getElementById("progress");
-    const stepList = document.getElementById("stepList");
     const resultTray = document.getElementById("resultTray");
 
-    // Build numbered ticks
-    const ticks = steps.map((s, i) => {
+    const ticks = steps.map((_, i) => {
       const t = document.createElement("div");
       t.className = "tick";
-      t.textContent = String(i + 1);
-      t.title = `Step ${i+1}: ${s.title}`;
+      t.title = `Step ${i+1}`;
       t.addEventListener("click", () => activate(i));
       progress.appendChild(t);
       return t;
-    });
-
-    // Build readable list (same click behavior)
-    const rows = steps.map((s, i) => {
-      const r = document.createElement("div");
-      r.className = "stepRow";
-      r.innerHTML = `
-        <div class="left">
-          <div class="n">${String(i+1)}</div>
-          <div class="label">${s.title}</div>
-        </div>
-        <div class="chev">›</div>
-      `;
-      r.title = `Go to step ${i+1}`;
-      r.addEventListener("click", () => activate(i));
-      stepList.appendChild(r);
-      return r;
     });
 
     function setClass(el, add, remove){
@@ -631,14 +494,10 @@
     function activate(i){
       idx = (i + steps.length) % steps.length;
 
-      // Dim all groups + hide badges
       steps.forEach(s => {
         setClass(document.getElementById(s.id), "dim", "active");
-        const b = document.getElementById(s.badge);
-        if(b) b.classList.remove("show");
+        document.getElementById(s.badge).classList.remove("show");
       });
-
-      // Dim arrows + lex side
       ["a12","a23","a34","a45","a56"].forEach(a => setClass(document.getElementById(a), "dim", "active"));
       setClass(document.getElementById("lexSide"), "dim", "active");
 
@@ -646,23 +505,18 @@
       resetArrows();
       clearLift();
 
-      // Activate current
       const s = steps[idx];
       const g = document.getElementById(s.id);
       setClass(g, "active", "dim");
       g.classList.add("lift");
+      document.getElementById(s.badge).classList.add("show");
 
-      const b = document.getElementById(s.badge);
-      if(b) b.classList.add("show");
-
-      // Thicken active box border (selection only)
       const box = document.getElementById(s.box);
       if(box){
         box.style.stroke = getComputedStyle(document.documentElement).getPropertyValue("--activeStroke").trim() || "#050505";
         box.style.strokeWidth = getComputedStyle(document.documentElement).getPropertyValue("--activeStrokeW").trim() || "2.5";
       }
 
-      // Light arrow into current step (if any)
       if(s.arrow){
         const a = document.getElementById(s.arrow);
         if(a){
@@ -672,27 +526,20 @@
         }
       }
 
-      // Lexicon side only during step 3
       if(s.id === "step3"){
         setClass(document.getElementById("lexSide"), "active", "dim");
       }
 
-      // Result tray only at step 6
       showResultTray(s.id === "step6");
 
-      // Panel text
       stepNum.textContent = `STEP ${idx+1} / ${steps.length}`;
       stepTitle.textContent = s.title;
       stepText.textContent = s.text;
 
-      // Ticks
       ticks.forEach((t, j) => {
         t.classList.toggle("on", j <= idx);
         t.classList.toggle("active", j === idx);
       });
-
-      // List highlight
-      rows.forEach((r, j) => r.classList.toggle("active", j === idx));
     }
 
     function next(){ activate(idx + 1); }
@@ -709,23 +556,18 @@
       timer = null;
     }
 
-    // Buttons
     document.getElementById("nextBtn").addEventListener("click", next);
     document.getElementById("prevBtn").addEventListener("click", prev);
     document.getElementById("autoBtn").addEventListener("click", auto);
     document.getElementById("pauseBtn").addEventListener("click", pause);
     document.getElementById("restartBtn").addEventListener("click", () => activate(0));
 
-    // Keyboard
     document.addEventListener("keydown", (e) => {
       if(e.key === "ArrowRight") next();
       if(e.key === "ArrowLeft") prev();
       if(e.key.toLowerCase() === "r") activate(0);
-      if(e.key.toLowerCase() === "a") auto();
-      if(e.key.toLowerCase() === "p") pause();
     });
 
-    // Click boxes to jump
     document.querySelectorAll(".stepbox-hit").forEach(el => {
       el.addEventListener("click", (e) => {
         const n = Number(e.target.getAttribute("data-step"));
@@ -733,7 +575,6 @@
       });
     });
 
-    // Init
     activate(0);
   </script>
 </body>
