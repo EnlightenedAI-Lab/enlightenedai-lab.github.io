@@ -222,7 +222,9 @@
       align-items:stretch;
       flex-wrap:wrap;
     }
-    .legendBox, .axisKey{
+
+    /* ONLY ONE BOX BELOW (Interaction). Axis key removed. */
+    .legendBox{
       border:1px solid #ededed;
       border-radius:14px;
       background:#fff;
@@ -230,6 +232,7 @@
       flex: 1;
       min-width: 320px;
     }
+
     .legendKicker{
       font-family:var(--mono);
       font-size:11px;
@@ -246,32 +249,11 @@
       line-height:1.45;
       font-weight:500;
     }
-    .axisList{
-      margin:0;
-      padding-left:18px;
-      color:#555;
-      font-size:12px;
-      line-height:1.45;
-    }
-    .axisList strong{
-      color:#050505;
-      font-weight:900;
-      letter-spacing:0.02em;
-    }
-    .axisMeta{
-      margin:0 0 8px 0;
-      font-family:var(--mono);
-      font-size:11px;
-      color:var(--muted);
-      letter-spacing:0.06em;
-      text-transform:uppercase;
-      font-weight:700;
-    }
 
     @media (max-width: 980px){
       .row{ flex-direction:column; }
       .panel{ width:100%; position:relative; top:auto; }
-      .legendBox, .axisKey{ min-width: 100%; }
+      .legendBox{ min-width: 100%; }
     }
   </style>
 </head>
@@ -296,7 +278,11 @@
                 .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
 
                 .ring{fill:none;stroke:#e5e5e5;stroke-width:1.25}
-                .ring2{fill:none;stroke:#cfcfcf;stroke-width:1.25}
+                /* Center ring is more pronounced by default */
+                .ring2{fill:none;stroke:#9a9a9a;stroke-width:2.2; transition: all 160ms ease;}
+                /* But becomes lighter when a wedge is selected */
+                svg.has-selection .ring2{ stroke:#dedede; stroke-width:1.25; opacity:0.9; }
+
                 .axis{stroke:#e5e5e5;stroke-width:1.25}
 
                 .wedge{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
@@ -310,11 +296,9 @@
                 .T{font-size:12px}
                 .Micro{font-size:11px;letter-spacing:0.08em}
 
-                /* Make center text unbreakable + more readable */
                 .CenterH{font-size:16px;font-weight:900;letter-spacing:0.06em}
                 .CenterT{font-size:12px;font-weight:700;letter-spacing:0.05em}
 
-                /* Bold, clearer axis labels */
                 .AxisLabel{font-size:11.5px;font-weight:900;letter-spacing:0.10em; fill:#4a4a4a}
 
                 .hit{fill:transparent; cursor:pointer;}
@@ -365,11 +349,11 @@
             <g id="scaffold">
               <circle class="ring" cx="600" cy="400" r="240"/>
               <circle class="ring" cx="600" cy="400" r="160"/>
-              <circle class="ring2" cx="600" cy="400" r="86"/>
+              <!-- bigger inner circle -->
+              <circle class="ring2" cx="600" cy="400" r="96"/>
               <line class="axis" x1="600" y1="160" x2="600" y2="640"/>
               <line class="axis" x1="360" y1="400" x2="840" y2="400"/>
 
-              <!-- 4 AXES (dimensions). 5 TESTS are the wedges. -->
               <text class="mono AxisLabel" x="600" y="176" text-anchor="middle">STRESS / CRISIS</text>
               <text class="mono AxisLabel" x="600" y="636" text-anchor="middle">CONTROL / COMPLIANCE</text>
               <text class="mono AxisLabel" x="340" y="392" text-anchor="end">EVIDENCE / TRUTH</text>
@@ -394,7 +378,8 @@
 
             <g id="wedges"></g>
 
-            <circle id="centerHit" cx="600" cy="400" r="78" fill="transparent" style="cursor:pointer"/>
+            <!-- bigger center hit area -->
+            <circle id="centerHit" cx="600" cy="400" r="88" fill="transparent" style="cursor:pointer"/>
           </svg>
         </div>
 
@@ -405,17 +390,6 @@
               hover = isolate &nbsp;•&nbsp; click = lock &nbsp;•&nbsp; live pulse = orbit scan<br/>
               center click = explain coverage basis
             </div>
-          </div>
-
-          <div class="axisKey">
-            <div class="legendKicker">Axis key</div>
-            <p class="axisMeta">4 axes (dimensions) • 5 tests (wedges)</p>
-            <ul class="axisList">
-              <li><strong>EVIDENCE / TRUTH</strong> — holds epistemic boundaries (no invention) under uncertainty.</li>
-              <li><strong>SAFETY / USEFULNESS</strong> — helps when safe; refuses only when justified.</li>
-              <li><strong>CONTROL / COMPLIANCE</strong> — resists bad instruction while honoring valid constraints.</li>
-              <li><strong>STRESS / CRISIS</strong> — stabilizes the interaction under high arousal without speculation.</li>
-            </ul>
           </div>
         </div>
       </div>
@@ -521,9 +495,12 @@
     ];
 
     const wedgesG = document.getElementById("wedges");
+    const svgEl = document.querySelector("svg");
     const cx = 600, cy = 400;
+
     const rOuter = 240;
-    const rInner = 86;
+    const rInner = 96;   // bigger center hole
+
     const n = tests.length;
     const step = (Math.PI * 2) / n;
     const startAngle = -Math.PI / 2;
@@ -662,6 +639,7 @@
     }
 
     function clearAll(){
+      svgEl.classList.remove("has-selection"); // center ring strong again
       tests.forEach(t => setGroupClass(`w${t.id}`, "dim", "active"));
       resetWedgeStyles();
 
@@ -675,6 +653,9 @@
     function focusTest(id, mode){
       const t = tests.find(x => x.id === id);
       if(!t) return;
+
+      // when selecting/hovering a wedge, de-emphasize the center ring
+      svgEl.classList.add("has-selection");
 
       tests.forEach(tt => {
         if(tt.id === id) setGroupClass(`w${tt.id}`, "active", "dim");
@@ -747,6 +728,7 @@
       orbitLayer.classList.toggle("on", livePulse);
 
       if(livePulse && selected === null){
+        // pulse without selecting: keep center ring strong (no has-selection)
         tests.forEach(t => ledOn(t.id, true));
         setTimeout(()=>{ if(selected===null){ tests.forEach(t => ledOn(t.id, false)); } }, 900);
       }
@@ -758,7 +740,9 @@
     });
 
     centerHit.addEventListener("click", () => {
-      // Make this view clean + non-buggy: reset styles first, then present basis text.
+      // Coverage basis view should NOT look "selected"
+      svgEl.classList.remove("has-selection");
+
       selected = null;
       resetWedgeStyles();
       tests.forEach(t => setGroupClass(`w${t.id}`, "active", "dim"));
