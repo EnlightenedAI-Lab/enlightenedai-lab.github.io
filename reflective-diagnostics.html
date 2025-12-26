@@ -50,7 +50,7 @@
 
             /* SPACING */
             --sidebar-width: 280px;
-            --rail-width: 500px; 
+            --rail-width: 450px; 
         }
 
         /* DARK MODE */
@@ -106,7 +106,7 @@
         /* --- LAYOUT STRUCTURE --- */
         .layout-wrapper { display: flex; width: 100%; min-height: 100vh; }
 
-        /* SIDEBAR */
+        /* SIDEBAR (Fixed Left) */
         aside#sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -118,7 +118,7 @@
         .sidebar-scroll { flex: 1; overflow-y: auto; padding: 2rem; }
         .sidebar-bottom { padding: 0 2rem 2rem 2rem; background: var(--sidebar-bg); border-top: 1px solid var(--border-color); }
 
-        /* MAIN COLUMN */
+        /* MAIN COLUMN (Right of Sidebar) */
         .main-column {
             flex: 1;
             display: flex;
@@ -141,7 +141,7 @@
             border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
         }
 
-        /* SPLIT VIEW */
+        /* SPLIT VIEW (Content Left | Diagrams Right) */
         .split-view {
             display: flex;
             flex: 1;
@@ -154,7 +154,7 @@
             min-width: 0;
         }
 
-        /* RIGHT RAIL */
+        /* RIGHT RAIL (Sticky Diagrams) */
         .diagram-rail {
             width: var(--rail-width);
             flex-shrink: 0;
@@ -164,7 +164,7 @@
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
-        /* === RAIL: PNG THUMBNAILS (instead of iframes) === */
+        /* --- DIAGRAM THUMBNAILS (FIXED STYLE) --- */
         .rail-item { margin-bottom: 3rem; cursor: zoom-in; transition: transform 0.2s; }
         .rail-item:hover { transform: scale(1.02); }
         
@@ -173,39 +173,33 @@
             font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;
         }
         
+        /* The container for the image */
         .rail-thumbframe {
             width: 100%;
-            height: 260px; /* consistent card height */
+            height: auto;
             border: 1px solid var(--border-color);
             background: #ffffff;
-            overflow: hidden;
             border-radius: 4px;
-            position: relative;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
         }
         
+        /* The image itself */
         .rail-thumbimg {
             width: 100%;
-            height: 100%;
-            object-fit: contain; /* show the whole diagram */
+            height: auto;
             display: block;
-            background: #ffffff;
-        }
-        
-        /* Dark mode: frame only */
-        body[data-theme="dark"] .rail-thumbframe {
-            border-color: #333;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            background: #0b0b0b;
-        }
-        body[data-theme="dark"] .rail-thumbimg {
-            background: #0b0b0b;
+            object-fit: contain;
         }
 
-        /* FOOTER */
+        /* Dark mode overrides */
+        body[data-theme="dark"] .rail-thumbframe {
+            border-color: #333;
+            background: #0b0b0b;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+        }
+
+        /* FOOTER MOUNT (PUSHED TO BOTTOM) */
         #footer-mount {
             width: 100%;
             border-top: 1px solid var(--border-color);
@@ -246,7 +240,7 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
 
-        /* --- VISIBILITY RULES (NUCLEAR OPTION) --- */
+        /* --- VISIBILITY RULES --- */
         .diff-tag { display: none; }
 
         /* FORCE NORMAL VIEW */
@@ -548,21 +542,21 @@
                     <div class="rail-item" onclick="openModal('diag-coverage-map-v1.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-01</span>
                         <div class="rail-thumbframe">
-                            <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="RD-FIG-01 Coverage Map" loading="lazy">
+                            <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="Coverage Map">
                         </div>
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-diagram-preview.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-02</span>
                         <div class="rail-thumbframe">
-                            <img class="rail-thumbimg" src="assets/diag-samples/deterministic-record-flow-public-skeleton.png" alt="RD-FIG-02 Deterministic Workflow" loading="lazy">
+                            <img class="rail-thumbimg" src="assets/diag-samples/deterministic-record-flow-public-skeleton.png" alt="Deterministic Workflow">
                         </div>
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-layers-substrate.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-03</span>
                         <div class="rail-thumbframe">
-                            <img class="rail-thumbimg" src="assets/diag-samples/diag-substrate-lenses.png" alt="RD-FIG-03 Substrate & Lenses" loading="lazy">
+                            <img class="rail-thumbimg" src="assets/diag-samples/diag-substrate-lenses.png" alt="Substrate Lenses">
                         </div>
                     </div>
 
