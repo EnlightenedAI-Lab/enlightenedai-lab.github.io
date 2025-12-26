@@ -318,4 +318,428 @@
 
               <linearGradient id="orbGrad" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stop-color="#00ff5a" stop-opacity="0.0"/>
-                <stop offset="35%" stop-c
+                <stop offset="35%" stop-color="#00ff5a" stop-opacity="0.35"/>
+                <stop offset="70%" stop-color="#00ff5a" stop-opacity="0.0"/>
+              </linearGradient>
+            </defs>
+
+            <rect class="frame" x="60" y="60" width="1080" height="640" rx="18"/>
+
+            <!-- TITLE FIX: compact single line (no duplicate big title) -->
+            <text class="monoMuted Micro" x="110" y="118">
+              MINIMAL DIAGNOSTIC BASIS SET • FULL COVERAGE
+            </text>
+
+            <g id="scaffold">
+              <circle class="ring" cx="600" cy="400" r="240"/>
+              <circle class="ring" cx="600" cy="400" r="160"/>
+              <circle class="ring2" cx="600" cy="400" r="86"/>
+              <line class="axis" x1="600" y1="160" x2="600" y2="640"/>
+              <line class="axis" x1="360" y1="400" x2="840" y2="400"/>
+
+              <text class="monoMuted Micro" x="608" y="176">CRISIS / HIGH AROUSAL</text>
+              <text class="monoMuted Micro" x="608" y="636">GOVERNANCE / AUTOMATION</text>
+              <text class="monoMuted Micro" x="346" y="392" text-anchor="end">EPISTEMICS</text>
+              <text class="monoMuted Micro" x="854" y="392">UTILITY / REFUSAL</text>
+
+              <text class="sans CenterH" x="600" y="390" text-anchor="middle">OBSERVATORY MAP</text>
+
+              <!-- CENTER FIX: keep one line only -->
+              <text class="monoMuted CenterT" x="600" y="422" text-anchor="middle">
+                outputs only • lexicon-bound • auditable
+              </text>
+            </g>
+
+            <g id="orbitLayer" class="orb">
+              <circle cx="600" cy="400" r="252"
+                fill="none"
+                stroke="url(#orbGrad)"
+                stroke-width="3.5"
+                stroke-linecap="round"
+                stroke-dasharray="26 28"
+                filter="url(#greenGlow)">
+                <animate attributeName="stroke-dashoffset" from="0" to="-220" dur="2.2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="600" cy="400" r="252" fill="none" stroke="#00ff5a" stroke-opacity="0.06" stroke-width="10"/>
+            </g>
+
+            <g id="wedges"></g>
+
+            <g>
+              <rect x="110" y="590" width="420" height="90" rx="14" fill="#fff" stroke="#ededed" stroke-width="1.25"/>
+              <text class="monoMuted Micro" x="130" y="620">INTERACTION:</text>
+              <text class="monoMuted T" x="130" y="644">hover = isolate • click = lock • live pulse = orbit scan</text>
+              <text class="monoMuted T" x="130" y="664">center click = explain coverage basis</text>
+            </g>
+
+            <circle id="centerHit" cx="600" cy="400" r="78" fill="transparent" style="cursor:pointer"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="kicker">selected test</div>
+        <div class="title" id="panelTitle">Click a wedge</div>
+
+        <div class="pillrow">
+          <div class="pill"><span class="dot"></span><span>ONLINE</span></div>
+          <div class="pill"><span style="width:7px;height:7px;border-radius:50%;background:#050505;"></span><span>LEXICON-BOUND</span></div>
+          <div class="pill"><span style="width:7px;height:7px;border-radius:50%;background:#050505;"></span><span>OUTPUTS ONLY</span></div>
+          <div class="pill"><span style="width:7px;height:7px;border-radius:50%;background:#050505;"></span><span>AUDITABLE</span></div>
+        </div>
+
+        <div class="lines" id="panelLines">
+          <div style="color:var(--muted);">
+            Select a test to view scope and boundary.
+          </div>
+        </div>
+
+        <div class="btnrow">
+          <button class="btn" id="resetBtn">Reset</button>
+          <button class="btn green" id="pulseBtn" title="Instrument orbit + LED sweep">Live pulse</button>
+          <button class="btn primary" id="viewBtn" disabled>View sample result</button>
+        </div>
+
+        <div class="note">
+          <div class="mono">Public boundary</div>
+          No prompts, thresholds, or internal metrics are displayed. This is a coverage surface map only.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tests = [
+      {
+        id: 1,
+        code: "TEST 1",
+        short: "GOVERNANCE",
+        sub: "AUTOMATION",
+        title: "Test 1 — Automation & Programmable Governance",
+        purpose: "Persona-induced compliance failures (governance surface).",
+        observes: "Output behavior under constraint + role framing.",
+        emits: "Lexicon signature + evidence spans + audit references.",
+        coverage: "Covers governance failure: user constraints → policy compliance dynamics; tests programmable control surfaces.",
+        link: "assets/diag-samples/test1.png"
+      },
+      {
+        id: 2,
+        code: "TEST 2",
+        short: "MECHANISM",
+        sub: "UNIFICATION",
+        title: "Test 2 — Universal Benchmarking",
+        purpose: "Cross-domain mechanism unification (same failure mechanics across domains).",
+        observes: "Structural invariants across tasks without subjective labels.",
+        emits: "Mechanism signature + trace artifacts for comparison.",
+        coverage: "Covers mechanism invariants: reveals the same error-cause across domains (math / geo / code) without narrative drift.",
+        link: "assets/diag-samples/test2.png"
+      },
+      {
+        id: 3,
+        code: "TEST 3",
+        short: "FALSE",
+        sub: "REFUSALS",
+        title: "Test 3 — Alignment Tax Reduction",
+        purpose: "Safety–utility balance and false refusals (over-refusal surface).",
+        observes: "Refusal vs justified non-action (boundary discipline).",
+        emits: "Refusal-class signature + auditable record chain.",
+        coverage: "Covers utility boundary: distinguishes justified non-action vs avoidant refusal; measures alignment tax at the interface.",
+        link: "assets/diag-samples/test3.png"
+      },
+      {
+        id: 4,
+        code: "TEST 4",
+        short: "EPISTEMIC",
+        sub: "INTEGRITY",
+        title: "Test 4 — Epistemic Integrity Under Constraint",
+        purpose: "Correct non-action under missing inputs (abstain vs hallucinate).",
+        observes: "Non-action discipline vs hallucination under insufficient data.",
+        emits: "Epistemic stability signature + traceable evidence chain.",
+        coverage: "Covers epistemic correctness: tests whether the system invents facts or holds boundary under missing evidence.",
+        link: "assets/diag-samples/test4.png"
+      },
+      {
+        id: 5,
+        code: "TEST 5",
+        short: "CRISIS",
+        sub: "CO-REGULATION",
+        title: "Test 5 — Crisis Co-Regulation",
+        purpose: "Interaction stability under high arousal (escalation dynamics).",
+        observes: "Stability patterns under stress without intent attribution.",
+        emits: "Co-regulation signature + evidence spans + replay references.",
+        coverage: "Covers interaction dynamics: stabilizes user state under stress while avoiding speculation; tests escalation vs grounding control.",
+        link: "assets/diag-samples/test5.png"
+      }
+    ];
+
+    const wedgesG = document.getElementById("wedges");
+    const cx = 600, cy = 400;
+    const rOuter = 240;
+    const rInner = 86;
+    const n = tests.length;
+    const step = (Math.PI * 2) / n;
+    const startAngle = -Math.PI / 2;
+
+    function polarToCartesian(cx, cy, r, a){
+      return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+    }
+
+    function sectorPath(cx, cy, rOut, rIn, a0, a1){
+      const p0 = polarToCartesian(cx, cy, rOut, a0);
+      const p1 = polarToCartesian(cx, cy, rOut, a1);
+      const q1 = polarToCartesian(cx, cy, rIn,  a1);
+      const q0 = polarToCartesian(cx, cy, rIn,  a0);
+      const largeArc = (a1 - a0) > Math.PI ? 1 : 0;
+      return [
+        `M ${p0.x.toFixed(2)} ${p0.y.toFixed(2)}`,
+        `A ${rOut} ${rOut} 0 ${largeArc} 1 ${p1.x.toFixed(2)} ${p1.y.toFixed(2)}`,
+        `L ${q1.x.toFixed(2)} ${q1.y.toFixed(2)}`,
+        `A ${rIn} ${rIn} 0 ${largeArc} 0 ${q0.x.toFixed(2)} ${q0.y.toFixed(2)}`,
+        "Z"
+      ].join(" ");
+    }
+
+    function makeEl(tag, attrs={}){
+      const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k, v));
+      return el;
+    }
+
+    function placeLabel(aMid, r, text, cls, dy=0){
+      const p = polarToCartesian(cx, cy, r, aMid);
+      const t = makeEl("text", { x: p.x, y: p.y + dy, class: cls });
+      t.textContent = text;
+      const cos = Math.cos(aMid);
+      if (Math.abs(cos) < 0.15) t.setAttribute("text-anchor","middle");
+      else t.setAttribute("text-anchor", cos > 0 ? "start" : "end");
+      return t;
+    }
+
+    tests.forEach((t, i) => {
+      const a0 = startAngle + i * step;
+      const a1 = startAngle + (i+1) * step;
+      const aMid = (a0 + a1) / 2;
+
+      const group = makeEl("g", { id: `w${t.id}`, class: "dim" });
+
+      const path = makeEl("path", {
+        id: `p${t.id}`,
+        d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
+        class: "wedge"
+      });
+
+      const scan = makeEl("path", {
+        id: `s${t.id}`,
+        d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
+        fill: "#00ff5a",
+        opacity: "0.14",
+        mask: "url(#scanMask)",
+        class: "scan"
+      });
+
+      const labR = 170;
+      const code = placeLabel(aMid, labR, t.code, "mono H", -10);
+      const line1 = placeLabel(aMid, labR, t.short, "monoMuted T", 12);
+      const line2 = placeLabel(aMid, labR, t.sub, "monoMuted T", 30);
+
+      const ledP = polarToCartesian(cx, cy, rOuter + 8, aMid);
+      const led = makeEl("circle", {
+        id: `led${t.id}`,
+        cx: ledP.x,
+        cy: ledP.y,
+        r: 4.2,
+        fill: "#00ff5a",
+        opacity: "0.0",
+        filter: "url(#greenGlow)",
+        class: "led"
+      });
+
+      const hit = makeEl("path", {
+        d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
+        class: "hit",
+        "data-test": String(t.id)
+      });
+
+      group.appendChild(path);
+      group.appendChild(scan);
+      group.appendChild(code);
+      group.appendChild(line1);
+      group.appendChild(line2);
+      group.appendChild(led);
+      group.appendChild(hit);
+
+      wedgesG.appendChild(group);
+    });
+
+    const panelTitle = document.getElementById("panelTitle");
+    const panelLines = document.getElementById("panelLines");
+    const viewBtn = document.getElementById("viewBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const pulseBtn = document.getElementById("pulseBtn");
+    const orbitLayer = document.getElementById("orbitLayer");
+    const centerHit = document.getElementById("centerHit");
+
+    let selected = null;
+    let livePulse = false;
+
+    function setGroupClass(id, add, remove){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.classList.add(add);
+      el.classList.remove(remove);
+    }
+
+    function ledOn(id, on){
+      const led = document.getElementById(`led${id}`);
+      if(!led) return;
+      if(on) led.classList.add("on"); else led.classList.remove("on");
+    }
+
+    function scanOn(id, on){
+      const s = document.getElementById(`s${id}`);
+      if(!s) return;
+      if(on) s.classList.add("on"); else s.classList.remove("on");
+    }
+
+    function clearAll(){
+      tests.forEach(t => {
+        setGroupClass(`w${t.id}`, "dim", "active");
+        const p = document.getElementById(`p${t.id}`);
+        if(p){
+          p.setAttribute("class","wedge");
+          p.removeAttribute("filter");
+        }
+        scanOn(t.id, false);
+        ledOn(t.id, false);
+      });
+
+      selected = null;
+      panelTitle.textContent = "Click a wedge";
+      panelLines.innerHTML = `<div style="color:var(--muted);">Select a test to view scope and boundary.</div>`;
+      viewBtn.disabled = true;
+      delete viewBtn.dataset.href;
+    }
+
+    function focusTest(id, mode){
+      const t = tests.find(x => x.id === id);
+      if(!t) return;
+
+      tests.forEach(tt => {
+        if(tt.id === id) setGroupClass(`w${tt.id}`, "active", "dim");
+        else setGroupClass(`w${tt.id}`, "dim", "active");
+      });
+
+      const p = document.getElementById(`p${t.id}`);
+      if(p){
+        p.setAttribute("class","wedgeActive");
+        p.setAttribute("filter","url(#softShadow)");
+      }
+
+      ledOn(t.id, true);
+      if(mode === "select" || livePulse) scanOn(t.id, true);
+
+      if(mode === "select"){
+        selected = id;
+        panelTitle.textContent = t.title;
+        panelLines.innerHTML = `
+          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">purpose</span><br>${t.purpose}</div>
+          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">observes</span><br>${t.observes}</div>
+          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">emits</span><br>${t.emits}</div>
+          <div><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">coverage</span><br>${t.coverage}</div>
+        `;
+        viewBtn.disabled = false;
+        viewBtn.dataset.href = t.link;
+      }
+    }
+
+    document.querySelectorAll(".hit").forEach(hit => {
+      hit.addEventListener("mouseenter", e => {
+        const id = Number(e.target.getAttribute("data-test"));
+        if(!Number.isFinite(id)) return;
+        if(selected !== null) return;
+        focusTest(id, "hover");
+      });
+
+      hit.addEventListener("mouseleave", e => {
+        const id = Number(e.target.getAttribute("data-test"));
+        if(!Number.isFinite(id)) return;
+        if(selected !== null) return;
+        if(!livePulse){
+          scanOn(id, false);
+          ledOn(id, false);
+        }
+        clearAll();
+      });
+
+      hit.addEventListener("click", e => {
+        const id = Number(e.target.getAttribute("data-test"));
+        if(!Number.isFinite(id)) return;
+        focusTest(id, "select");
+      });
+    });
+
+    viewBtn.addEventListener("click", () => {
+      const href = viewBtn.dataset.href;
+      if(!href) return;
+      window.location.href = href;
+    });
+
+    resetBtn.addEventListener("click", () => {
+      clearAll();
+    });
+
+    pulseBtn.addEventListener("click", () => {
+      livePulse = !livePulse;
+      pulseBtn.classList.toggle("on", livePulse);
+      orbitLayer.classList.toggle("on", livePulse);
+
+      if(livePulse && selected === null){
+        tests.forEach(t => ledOn(t.id, true));
+        setTimeout(()=>{ if(selected===null){ tests.forEach(t => ledOn(t.id, false)); } }, 900);
+      }
+
+      if(!livePulse && selected === null){
+        tests.forEach(t => { scanOn(t.id,false); ledOn(t.id,false); });
+        clearAll();
+      }
+    });
+
+    centerHit.addEventListener("click", () => {
+      selected = null;
+      tests.forEach(t => { scanOn(t.id, false); ledOn(t.id, false); });
+      tests.forEach(t => setGroupClass(`w${t.id}`, "active", "dim"));
+
+      panelTitle.textContent = "Coverage basis — why 5 tests";
+      panelLines.innerHTML = `
+        <div style="margin-bottom:10px;">
+          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">axes</span><br>
+          The map spans four failure dimensions: <b>Crisis/Arousal</b>, <b>Governance/Automation</b>, <b>Epistemics</b>, and <b>Utility/Refusal</b>.
+        </div>
+        <div style="margin-bottom:10px;">
+          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">basis set</span><br>
+          Each test anchors a distinct failure surface. Together they form a minimal diagnostic basis that detects drift across interaction, refusal boundary, epistemic discipline, and governance compliance.
+        </div>
+        <div>
+          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">public constraint</span><br>
+          Coverage is shown without prompts or thresholds. Evidence is accessible via sample bundles (redacted).
+        </div>
+      `;
+      viewBtn.disabled = true;
+      delete viewBtn.dataset.href;
+
+      if(livePulse){
+        let k = 0;
+        const seq = setInterval(()=>{
+          if(k >= tests.length){ clearInterval(seq); return; }
+          scanOn(tests[k].id, true);
+          ledOn(tests[k].id, true);
+          setTimeout(()=>{ if(selected===null){ scanOn(tests[k].id,false); ledOn(tests[k].id,false);} }, 520);
+          k++;
+        }, 260);
+      }
+    });
+
+    clearAll();
+  </script>
+</body>
+</html>
