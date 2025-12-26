@@ -1,238 +1,757 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Evidence Substrate & Analytic Lenses</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evidence Substrate & Analytic Lenses</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-<style>
-:root{
-  --bg:#fff;
-  --text:#050505;
-  --muted:#6a6a6a;
-  --border:#e5e5e5;
-  --strong:#cfcfcf;
-  --ok:#00cc00;
-  --mono:"JetBrains Mono", monospace;
-  --sans:"Inter", system-ui, sans-serif;
-}
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#050505;
+      --muted:#6a6a6a;
+      --border:#e5e5e5;
 
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans)}
-.wrap{max-width:1280px;margin:0 auto;padding:48px 24px 72px}
+      --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-h1{
-  margin:0 0 8px;
-  font-size:36px;
-  font-weight:800;
-  letter-spacing:-0.02em;
-}
-.sub{
-  font-family:var(--mono);
-  font-size:13px;
-  color:var(--muted);
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  margin-bottom:22px;
-}
+      --ok:#00cc00;
 
-.row{display:flex;gap:18px;align-items:flex-start}
+      --shadow: 0 14px 40px rgba(0,0,0,0.06);
+      --shadow2: 0 10px 26px rgba(0,0,0,0.08);
+    }
 
-.card{
-  flex:1;
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:18px;
-  background:#fff;
-}
+    *{ box-sizing:border-box; }
+    body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); }
+    .wrap{ max-width:1280px; margin:0 auto; padding:48px 24px 72px; }
 
-.panel{
-  width:360px;
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:18px;
-  background:#fff;
-  position:sticky;
-  top:18px;
-}
+    h1{ margin:0 0 8px 0; font-size:40px; font-weight:800; letter-spacing:-0.02em; }
+    .sub{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:0.10em;
+      text-transform:uppercase;
+      margin-bottom:18px;
+    }
 
-.kicker{
-  font-family:var(--mono);
-  font-size:12px;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:10px;
-}
+    .row{ display:flex; gap:18px; align-items:flex-start; }
 
-.modebar,.lensbar{display:flex;gap:8px;flex-wrap:wrap}
+    .card{
+      flex:1;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      background:#fff;
+      position: relative;
+      overflow:hidden;
+    }
 
-.btn,.pill{
-  font-family:var(--mono);
-  font-size:13px;
-  padding:8px 12px;
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:999px;
-  cursor:pointer;
-}
+    .panel{
+      width: 380px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      background:#fff;
+      position: sticky;
+      top: 18px;
+    }
 
-.btn.active,.pill.active{
-  border-color:#050505;
-  background:#050505;
-  color:#fff;
-}
+    .kicker{
+      font-family:var(--mono);
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
 
-.moduleTitle{
-  font-size:18px;
-  font-weight:800;
-  margin:14px 0 8px;
-}
+    .modebar{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
 
-.moduleText{
-  font-size:14px;
-  line-height:1.6;
-}
+    .btn{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      background:var(--bg);
+      color:var(--text);
+      cursor:pointer;
+      border-radius:12px;
+      user-select:none;
+    }
+    .btn:hover{ border-color:#bdbdbd; }
+    .btn.active{ border-color:#050505; background:#050505; color:#ffffff; }
 
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.chip{
-  font-family:var(--mono);
-  font-size:12px;
-  padding:6px 10px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  color:var(--muted);
-}
-.chip strong{color:#050505}
+    .onlineBadge{
+      display:flex; align-items:center; gap:8px;
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:10px 12px;
+      background:#fff;
+      width: fit-content;
+      margin-top: 10px;
+    }
+    .onlineDot{
+      width:9px; height:9px; border-radius:50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 0 rgba(0,204,0,0.55);
+      animation: onlinePulse 1.4s ease-out infinite;
+    }
+    @keyframes onlinePulse{
+      0%{ box-shadow: 0 0 0 0 rgba(0,204,0,0.55); }
+      70%{ box-shadow: 0 0 0 12px rgba(0,204,0,0.0); }
+      100%{ box-shadow: 0 0 0 0 rgba(0,204,0,0.0); }
+    }
 
-.svg-wrap{width:100%;overflow:hidden}
-svg{width:100%;height:auto;display:block}
+    .lensbar{ display:flex; flex-wrap:wrap; gap:10px; margin:12px 0 16px; }
 
-@media(max-width:980px){
-  .row{flex-direction:column}
-  .panel{width:100%;position:relative}
-}
-</style>
+    .pill{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:#fff;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+    .pill:hover{ border-color:#bdbdbd; }
+    .pill.active{
+      border-color:#050505;
+      background:#fff;
+      box-shadow: var(--shadow2);
+      transform: translateY(-1px);
+    }
+    .dot{ width:9px; height:9px; border-radius:50%; background: var(--ok); }
+
+    .moduleTitle{ font-size:22px; font-weight:900; letter-spacing:-0.01em; margin:8px 0 10px; }
+    .moduleText{ font-size:15px; line-height:1.6; color:var(--text); }
+
+    .chips{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    .chip{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:8px 10px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      color:var(--muted);
+      background:#fff;
+    }
+    .chip strong{ color:var(--text); font-weight:900; }
+
+    .meta{
+      border-top:1px solid var(--border);
+      padding-top:12px;
+      margin-top:14px;
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+    .meta b{ color:var(--text); font-weight:900; }
+
+    .svg-wrap{ width:100%; overflow:hidden; }
+    svg{ display:block; width:100%; height:auto; min-width:0; }
+
+    /* SVG state hooks */
+    .fade{ opacity:0.22; transition: opacity 180ms ease; }
+    .on{ opacity:1; transition: opacity 180ms ease; }
+    .raise{ filter: drop-shadow(0px 12px 20px rgba(0,0,0,0.10)); }
+
+    /* TRACE dash motion */
+    .tracePulse{ stroke-dasharray: 10 8; animation: dash 1.2s linear infinite; }
+    @keyframes dash{ to { stroke-dashoffset: -36; } }
+
+    /* Lens heartbeat */
+    @keyframes heartbeat{
+      0%{ filter: drop-shadow(0px 12px 20px rgba(0,0,0,0.10)); transform: translateY(0px); }
+      50%{ filter: drop-shadow(0px 18px 28px rgba(0,0,0,0.14)); transform: translateY(-1px); }
+      100%{ filter: drop-shadow(0px 12px 20px rgba(0,0,0,0.10)); transform: translateY(0px); }
+    }
+    .beat{ animation: heartbeat 0.9s ease-in-out infinite; }
+
+    /* Scan overlay */
+    .scan{
+      position:absolute; inset:0;
+      pointer-events:none;
+      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0) 100%);
+      transform: translateX(-120%);
+      opacity:0;
+    }
+    .scan.run{
+      opacity:1;
+      animation: scanMove 650ms ease-out 1;
+    }
+    @keyframes scanMove{
+      0%{ transform: translateX(-120%); opacity:0.0; }
+      15%{ opacity:1; }
+      100%{ transform: translateX(120%); opacity:0.0; }
+    }
+
+    /* Cursor spotlight */
+    .spotlight{
+      position:absolute; inset:0;
+      pointer-events:none;
+      opacity:0;
+      transition: opacity 220ms ease;
+      background:
+        radial-gradient(520px 320px at var(--mx, 50%) var(--my, 50%),
+          rgba(0,0,0,0.065),
+          rgba(0,0,0,0.028) 35%,
+          rgba(0,0,0,0.0) 70%);
+    }
+    .card:hover .spotlight{ opacity:1; }
+
+    /* Toast */
+    .toast{
+      position:absolute;
+      right:16px; bottom:16px;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      font-family:var(--mono);
+      font-size:11px;
+      color:var(--text);
+      box-shadow: var(--shadow);
+      opacity:0;
+      transform: translateY(6px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      pointer-events:none;
+      white-space:nowrap;
+    }
+    .toast.show{ opacity:1; transform: translateY(0px); }
+
+    /* Verify ticks */
+    @keyframes popIn{
+      0%{ opacity:0; transform: translateY(2px); }
+      100%{ opacity:1; transform: translateY(0); }
+    }
+    .vtick{ opacity:0; }
+    .vtick.show{ animation: popIn 180ms ease-out forwards; }
+
+    /* Lens hover preview */
+    .preview{ opacity:0.55 !important; filter: drop-shadow(0px 12px 18px rgba(0,0,0,0.08)); }
+
+    /* Export arm glow */
+    .armGlow{ transition: filter 240ms ease, transform 240ms ease; }
+    .armGlow.on{ filter: drop-shadow(0px 14px 22px rgba(0,0,0,0.14)); transform: translateY(-1px); }
+
+    @media (max-width: 980px){
+      .row{ flex-direction:column; }
+      .panel{ width:100%; position:relative; top:auto; }
+    }
+  </style>
 </head>
 
 <body>
-<div class="wrap">
-  <h1>Evidence Substrate & Analytic Lenses</h1>
-  <div class="sub">PUBLIC SYSTEM MAP • 2026 • ACTIVE DEVELOPMENT</div>
+  <div class="wrap">
+    <h1>Evidence Substrate & Analytic Lenses</h1>
+    <div class="sub">PUBLIC SYSTEM MAP • 2026 • ACTIVE DEVELOPMENT</div>
 
-  <div class="row">
-    <div class="card">
-      <div class="svg-wrap">
-        <svg viewBox="0 0 1400 520" aria-label="Evidence substrate and lenses">
+    <div class="row">
+      <div class="card" id="card">
+        <div class="scan" id="scan"></div>
+        <div class="spotlight" id="spotlight"></div>
+        <div class="toast" id="toast">TRACE ACTIVE</div>
 
-          <rect x="40" y="40" width="1320" height="440" rx="18"
-                fill="#fff" stroke="#e5e5e5" stroke-width="1.5"/>
+        <div class="svg-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 520" role="img" aria-label="Evidence substrate and analytic lenses">
+            <defs>
+              <style>
+                .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
+                .box{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
+                .boxLite{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.25}
 
-          <!-- Top metadata only (NO second title) -->
-          <text x="78" y="90" font-family="JetBrains Mono" font-size="13" fill="#6a6a6a">
-            BUILD v5 • 2026 • PUBLIC MAP (REDACTED)
-          </text>
+                .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#050505}
+                .muted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;fill:#6a6a6a}
 
-          <text x="78" y="116" font-family="JetBrains Mono" font-size="13" fill="#6a6a6a">
-            TELEMETRY: cycle 0215 • phase 02/06
-          </text>
+                /* READABILITY: bumped up */
+                .h{font-size:14px;font-weight:800;letter-spacing:0.10em}
+                .t{font-size:13px}
+                .micro{font-size:12px;letter-spacing:0.06em}
 
-          <!-- L1 -->
-          <rect x="78" y="160" width="420" height="250" rx="14"
-                fill="#fff" stroke="#cfcfcf" stroke-width="1.5"/>
+                .link{stroke:#8a8a8a;stroke-width:2;fill:none}
+                .badge{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.25}
+                .ok{fill:#00cc00}
+              </style>
 
-          <text x="110" y="200" font-size="18" font-weight="700">
-            L1 — Evidence Record
-          </text>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#8a8a8a"/>
+              </marker>
+              <marker id="arrowOn" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#050505"/>
+              </marker>
+            </defs>
 
-          <text x="110" y="232" font-size="14" fill="#6a6a6a">
-            Immutable records with provenance and hashes
-          </text>
-          <text x="110" y="256" font-size="14" fill="#6a6a6a">
-            Span indexing and evidence links
-          </text>
-          <text x="110" y="280" font-size="14" fill="#6a6a6a">
-            Replayable over time
-          </text>
+            <rect class="frame" x="40" y="40" width="1320" height="440" rx="18"/>
 
-          <rect x="110" y="320" width="356" height="70" rx="12"
-                fill="#fff" stroke="#e5e5e5"/>
+            <!-- REMOVED internal title line (second title) -->
+            <text class="muted micro" x="78" y="92">BUILD v5 • 2026 • PUBLIC MAP (REDACTED)</text>
 
-          <text x="130" y="350" font-size="13" font-weight="700">
-            Evidence Chain
-          </text>
-          <text x="130" y="372" font-size="13" fill="#6a6a6a">
-            metric → span → source → hash
-          </text>
-
-          <!-- Lenses -->
-          <rect x="540" y="160" width="780" height="250" rx="14"
-                fill="#fff" stroke="#e5e5e5"/>
-
-          <text x="564" y="190" font-size="13" fill="#6a6a6a">
-            L2–L7 ANALYTIC VIEWS (SAME RECORD SET)
-          </text>
-
-          <g>
-            <rect x="564" y="220" width="240" height="80" rx="12"
-                  fill="#fff" stroke="#cfcfcf"/>
-            <text x="586" y="250" font-size="16" font-weight="700">L2 — Reflection</text>
-            <text x="586" y="272" font-size="14" fill="#6a6a6a">
-              Stability and change over time
+            <text class="muted micro" x="78" y="116" id="telemetryLine">
+              TELEMETRY: cycle 0215 • phase 02/06
             </text>
-          </g>
 
-          <g>
-            <rect x="828" y="220" width="240" height="80" rx="12"
-                  fill="#fff" stroke="#cfcfcf"/>
-            <text x="850" y="250" font-size="16" font-weight="700">L3 — Reasoning</text>
-            <text x="850" y="272" font-size="14" fill="#6a6a6a">
-              Logical structure and consistency
-            </text>
-          </g>
+            <g id="auditBadge">
+              <rect class="badge" x="1082" y="74" width="233" height="34" rx="10"/>
+              <circle class="ok" cx="1102" cy="91" r="5"/>
+              <text class="mono micro" x="1115" y="95" style="font-weight:800;letter-spacing:0.10em;">AUDIT READY</text>
+            </g>
 
-          <g>
-            <rect x="1092" y="220" width="206" height="80" rx="12"
-                  fill="#fff" stroke="#cfcfcf"/>
-            <text x="1114" y="250" font-size="16" font-weight="700">L4 — Drift</text>
-            <text x="1114" y="272" font-size="14" fill="#6a6a6a">
-              Degradation and onset patterns
-            </text>
-          </g>
+            <!-- L1 -->
+            <g id="L1" class="on">
+              <rect class="box" x="78" y="160" width="420" height="250" rx="14"/>
+              <text class="mono h" x="110" y="200">L1 — RECORD OBSERVATORY</text>
 
-        </svg>
+              <text class="muted t" x="110" y="232">records + provenance + hash</text>
+              <text class="muted t" x="110" y="254">span indexing</text>
+              <text class="muted t" x="110" y="276">evidence links</text>
+              <text class="muted t" x="110" y="298">replay / longitudinal</text>
+
+              <rect class="boxLite" x="110" y="324" width="356" height="76" rx="12"/>
+              <text class="mono micro" x="130" y="350" style="font-weight:900;">EVIDENCE CHAIN</text>
+              <text class="muted micro" x="130" y="372">metric → span → source → hash</text>
+
+              <g id="verifyTicks">
+                <text class="mono micro vtick" id="vt1" x="130" y="392">✓</text>
+                <text class="mono micro vtick" id="vt2" x="240" y="392">✓</text>
+                <text class="mono micro vtick" id="vt3" x="350" y="392">✓</text>
+                <text class="mono micro vtick" id="vt4" x="430" y="392">✓</text>
+              </g>
+
+              <rect class="badge" x="90" y="174" width="70" height="26" rx="8"/>
+              <text class="mono micro" x="110" y="192" style="font-weight:900;">LIVE</text>
+            </g>
+
+            <!-- Lenses container -->
+            <rect class="boxLite" x="540" y="160" width="780" height="250" rx="14"/>
+            <text class="muted micro" x="564" y="190">L2–L7 LENSES • SAME RECORD SET • SWAPPABLE VIEW</text>
+
+            <!-- L2 -->
+            <g id="L2" class="fade">
+              <rect class="box" x="564" y="212" width="240" height="78" rx="12"/>
+              <text class="mono h" x="586" y="242">L2 — REFLECTION</text>
+              <text class="muted t" x="586" y="268">stability • deltas</text>
+              <circle class="ok" cx="782" cy="232" r="5"/>
+              <text class="muted micro" x="792" y="236">DEV</text>
+            </g>
+
+            <!-- L3 -->
+            <g id="L3" class="fade">
+              <rect class="box" x="828" y="212" width="240" height="78" rx="12"/>
+              <text class="mono h" x="850" y="242">L3 — REASONING</text>
+              <text class="muted t" x="850" y="268">chains • closure</text>
+              <circle class="ok" cx="1046" cy="232" r="5"/>
+              <text class="muted micro" x="1056" y="236">DEV</text>
+            </g>
+
+            <!-- L4 -->
+            <g id="L4" class="fade">
+              <rect class="box" x="1092" y="212" width="206" height="78" rx="12"/>
+              <text class="mono h" x="1114" y="242">L4 — DRIFT</text>
+              <text class="muted t" x="1114" y="268">onset • time</text>
+              <circle class="ok" cx="1276" cy="232" r="5"/>
+              <text class="muted micro" x="1286" y="236">DEV</text>
+            </g>
+
+            <!-- L5 -->
+            <g id="L5" class="fade">
+              <rect class="box" x="564" y="308" width="240" height="78" rx="12"/>
+              <text class="mono h" x="586" y="338">L5 — INTERACTION</text>
+              <text class="muted t" x="586" y="364">multi-turn patterns</text>
+              <circle class="ok" cx="782" cy="328" r="5"/>
+              <text class="muted micro" x="792" y="332">DEV</text>
+            </g>
+
+            <!-- L6 -->
+            <g id="L6" class="fade">
+              <rect class="box" x="828" y="308" width="240" height="78" rx="12"/>
+              <text class="mono h" x="850" y="338">L6 — COUPLING</text>
+              <text class="muted t" x="850" y="364">regimes • interfaces</text>
+              <circle class="ok" cx="1046" cy="328" r="5"/>
+              <text class="muted micro" x="1056" y="332">DEV</text>
+            </g>
+
+            <!-- L7 -->
+            <g id="L7" class="fade">
+              <rect class="box" x="1092" y="308" width="206" height="78" rx="12"/>
+              <text class="mono h" x="1114" y="338">L7 — EARTH / GIS</text>
+              <text class="muted t" x="1114" y="364">context packets</text>
+              <circle class="ok" cx="1276" cy="328" r="5"/>
+              <text class="muted micro" x="1286" y="332">DEV</text>
+            </g>
+
+            <!-- Link substrate -> lenses -->
+            <path id="linkSubToLenses" class="link fade" marker-end="url(#arrow)" d="M498 285 L540 285"/>
+
+            <!-- Trace overlay -->
+            <g id="traceOverlay" style="display:none;">
+              <path class="link" marker-end="url(#arrowOn)" d="M498 285 L540 285" style="stroke:#050505;stroke-width:2.5"/>
+            </g>
+
+            <!-- Packet strip -->
+            <g id="packetStrip">
+              <rect class="boxLite" x="78" y="430" width="1242" height="42" rx="12"/>
+              <text class="mono micro" x="98" y="456" style="font-weight:900;letter-spacing:0.10em;">AUDIT PACKET (REDACTED)</text>
+              <text class="muted micro" x="360" y="456">record:</text>
+              <text class="mono micro" x="425" y="456" style="font-weight:900;">RD-REC-0215-0A7C</text>
+              <text class="muted micro" x="640" y="456">hash:</text>
+              <text class="mono micro" x="695" y="456" style="font-weight:900;">9f2c…b18e</text>
+
+              <g id="exportGroup" class="armGlow">
+                <rect class="badge" x="1060" y="440" width="112" height="24" rx="8"/>
+                <text class="mono micro" x="1085" y="456" style="font-weight:900;">EXPORT</text>
+              </g>
+
+              <g id="viewGroup" class="armGlow">
+                <rect class="badge" x="1182" y="440" width="112" height="24" rx="8"/>
+                <text class="mono micro" x="1214" y="456" style="font-weight:900;">VIEW</text>
+              </g>
+
+              <text class="muted micro" x="980" y="456" id="ticker" style="display:none;">tick: 0007</text>
+            </g>
+          </svg>
+        </div>
       </div>
-    </div>
 
-    <div class="panel">
-      <div class="kicker">Lenses</div>
+      <div class="panel">
+        <div class="kicker">controls</div>
 
-      <div class="lensbar">
-        <div class="pill active">L2</div>
-        <div class="pill">L3</div>
-        <div class="pill">L4</div>
-        <div class="pill">L5</div>
-        <div class="pill">L6</div>
-        <div class="pill">L7</div>
-      </div>
+        <div class="modebar">
+          <button class="btn active" id="modeMap" type="button">MAP</button>
+          <button class="btn" id="modeTrace" type="button">TRACE</button>
+          <button class="btn" id="playBtn" type="button">▶ PLAY</button>
+          <button class="btn active" id="motionBtn" type="button">MOTION</button>
+        </div>
 
-      <div class="moduleTitle">L2 — Reflection</div>
-      <div class="moduleText">
-        Measures how outputs change relative to a baseline.
-        Focuses on stability signals, not truth or intent.
-      </div>
+        <div class="onlineBadge" title="UI indicator only (not a server claim).">
+          <span class="onlineDot"></span><span>ONLINE</span>
+        </div>
 
-      <div class="chips">
-        <div class="chip"><strong>STATE</strong> dev</div>
-        <div class="chip"><strong>OUTPUT</strong> deltas</div>
-        <div class="chip"><strong>EVIDENCE</strong> spans</div>
+        <div class="kicker" style="margin-top:14px;">lenses</div>
+        <div class="lensbar" id="lensbar"></div>
+
+        <div class="moduleTitle" id="moduleTitle">L2 — Reflection</div>
+        <div class="moduleText" id="moduleText"></div>
+
+        <div class="chips" id="chips"></div>
+
+        <div class="meta">
+          <div><b>MAP:</b> structure view (no thresholds)</div>
+          <div><b>TRACE:</b> evidence-chain emphasis</div>
+          <div><b>PLAY:</b> cycles L2→L7</div>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+  <script>
+    const MODULES = [
+      { key:"L2", label:"L2", title:"L2 — Reflection",
+        text:"Measures change in outputs relative to a baseline (reflective deltas). Focus: stability signatures, not truth or intent.",
+        chips:["STATE: DEV","OUTPUT: deltas","EVIDENCE: spans"] },
+
+      { key:"L3", label:"L3", title:"L3 — Reasoning",
+        text:"Structural reasoning signals: chain shape, closure, contradiction and consistency patterns across turns.",
+        chips:["STATE: DEV","OUTPUT: structure","EVIDENCE: spans"] },
+
+      { key:"L4", label:"L4", title:"L4 — Drift",
+        text:"Degradation / onset behavior over time: escalation curves, sensitivity to context growth, and stability loss trajectories.",
+        chips:["STATE: DEV","OUTPUT: time-series","EVIDENCE: aggregates"] },
+
+      { key:"L5", label:"L5", title:"L5 — Interaction",
+        text:"Multi-turn dynamics: correction response, persistence under challenge, reframing sensitivity, and repair behavior.",
+        chips:["STATE: DEV","OUTPUT: traces","EVIDENCE: transcripts"] },
+
+      { key:"L6", label:"L6", title:"L6 — Coupling",
+        text:"Coupling across regimes and interfaces: tool-use, context constraints, system prompts, and boundary conditions.",
+        chips:["STATE: DEV","OUTPUT: regime deltas","EVIDENCE: traces"] },
+
+      { key:"L7", label:"L7", title:"L7 — Earth / GIS",
+        text:"Record attachment of external context packets (Earth-state / GIS). Assist layers are redacted in public view.",
+        chips:["STATE: DEV","OUTPUT: context packets","EVIDENCE: sources"] }
+    ];
+
+    let active = "L2";
+    let mode = "MAP";
+    let playing = false;
+    let playTimer = null;
+
+    let motion = true;
+    let tick = 7;
+
+    let phase = 2;
+    let cycle = 215;
+
+    const lensbar = document.getElementById("lensbar");
+    const moduleTitle = document.getElementById("moduleTitle");
+    const moduleText = document.getElementById("moduleText");
+    const chips = document.getElementById("chips");
+
+    const modeMapBtn = document.getElementById("modeMap");
+    const modeTraceBtn = document.getElementById("modeTrace");
+    const playBtn = document.getElementById("playBtn");
+    const motionBtn = document.getElementById("motionBtn");
+
+    const card = document.getElementById("card");
+    const spotlight = document.getElementById("spotlight");
+    const scan = document.getElementById("scan");
+    const toast = document.getElementById("toast");
+    const telemetryLine = document.getElementById("telemetryLine");
+    const ticker = document.getElementById("ticker");
+
+    function el(id){ return document.getElementById(id); }
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 900);
+    }
+
+    function runScan(){
+      if(!motion) return;
+      scan.classList.remove("run");
+      void scan.offsetWidth;
+      scan.classList.add("run");
+    }
+
+    function renderChips(list){
+      chips.innerHTML = "";
+      list.forEach(s => {
+        const d = document.createElement("div");
+        d.className = "chip";
+        const parts = s.split(":");
+        if (parts.length >= 2){
+          d.innerHTML = `<strong>${parts[0].trim()}</strong> ${parts.slice(1).join(":").trim()}`;
+        } else d.textContent = s;
+        chips.appendChild(d);
+      });
+    }
+
+    function setTelemetry(tag=""){
+      telemetryLine.textContent =
+        `TELEMETRY: cycle ${String(cycle).padStart(4,"0")} • phase ${String(phase).padStart(2,"0")}/06${tag ? " • " + tag : ""}`;
+    }
+
+    function bumpTelemetry(tag){
+      phase = Math.max(1, Math.min(6, phase + 1));
+      if(phase === 6){ cycle += 1; phase = 1; }
+      setTelemetry(tag);
+    }
+
+    if(card && spotlight){
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width) * 100;
+        const y = ((e.clientY - r.top) / r.height) * 100;
+        spotlight.style.setProperty("--mx", x + "%");
+        spotlight.style.setProperty("--my", y + "%");
+      });
+    }
+
+    function clearVerify(){
+      ["vt1","vt2","vt3","vt4"].forEach(id => {
+        const t = el(id);
+        if(!t) return;
+        t.classList.remove("show");
+        t.style.opacity = 0;
+      });
+    }
+    function runVerify(){
+      clearVerify();
+      ["vt1","vt2","vt3","vt4"].forEach((id, i) => {
+        setTimeout(() => {
+          const t = el(id);
+          if(!t) return;
+          t.classList.add("show");
+          t.style.opacity = 1;
+        }, 110 + i*130);
+      });
+    }
+
+    function setMotion(on){
+      motion = !!on;
+      motionBtn.classList.toggle("active", motion);
+
+      if(!motion && playing) stopPlay();
+
+      const link = el("linkSubToLenses");
+      if(link){
+        link.classList.toggle("tracePulse", motion && mode === "TRACE");
+      }
+
+      showToast(motion ? "MOTION ON" : "MOTION OFF");
+    }
+
+    function setMode(next){
+      mode = next;
+
+      modeMapBtn.classList.toggle("active", mode === "MAP");
+      modeTraceBtn.classList.toggle("active", mode === "TRACE");
+
+      el("traceOverlay").style.display = (mode === "TRACE") ? "block" : "none";
+
+      const link = el("linkSubToLenses");
+      if(!link) return;
+
+      if(mode === "TRACE"){
+        link.classList.remove("fade");
+        link.classList.add("on");
+        link.style.stroke = "#050505";
+        link.style.strokeWidth = "2.5";
+        link.setAttribute("marker-end","url(#arrowOn)");
+        if(motion) link.classList.add("tracePulse");
+
+        runScan();
+        runVerify();
+        bumpTelemetry("trace");
+        showToast("TRACE");
+      } else {
+        link.style.stroke = "#8a8a8a";
+        link.style.strokeWidth = "2";
+        link.setAttribute("marker-end","url(#arrow)");
+        link.classList.remove("tracePulse");
+        link.classList.add("fade");
+        link.classList.remove("on");
+
+        clearVerify();
+        bumpTelemetry("map");
+        showToast("MAP");
+      }
+    }
+
+    function clearBeat(){
+      ["L2","L3","L4","L5","L6","L7"].forEach(k => el(k)?.classList.remove("beat"));
+    }
+
+    function activateLens(key){
+      active = key;
+
+      ["L2","L3","L4","L5","L6","L7"].forEach(k => {
+        const g = el(k);
+        if(!g) return;
+        g.classList.add("fade");
+        g.classList.remove("on","raise","preview","beat");
+      });
+
+      const g = el(key);
+      if(g){
+        g.classList.remove("fade");
+        g.classList.add("on","raise");
+        if(playing && motion) g.classList.add("beat");
+      }
+
+      const m = MODULES.find(x => x.key === key);
+      if(m){
+        moduleTitle.textContent = m.title;
+        moduleText.textContent = m.text;
+        renderChips(m.chips);
+      }
+
+      bumpTelemetry(key.toLowerCase());
+    }
+
+    function startPlay(){
+      if(!motion) return;
+      if(playTimer) return;
+      playing = true;
+      playBtn.classList.add("active");
+      ticker.style.display = "block";
+      showToast("PLAY");
+
+      const order = ["L2","L3","L4","L5","L6","L7"];
+      let i = order.indexOf(active);
+      if(i < 0) i = 0;
+
+      playTimer = setInterval(() => {
+        const key = order[i % order.length];
+        activateLens(key);
+
+        const pills = Array.from(document.querySelectorAll(".pill"));
+        pills.forEach(x => x.classList.remove("active"));
+        pills[i % pills.length]?.classList.add("active");
+
+        tick++;
+        ticker.textContent = `tick: ${String(tick).padStart(4,"0")}`;
+
+        if(mode === "TRACE") runVerify();
+        if(mode === "TRACE") runScan();
+
+        i++;
+      }, 1150);
+    }
+
+    function stopPlay(){
+      playing = false;
+      playBtn.classList.remove("active");
+      ticker.style.display = "none";
+      showToast("STOP");
+      clearBeat();
+      if(playTimer){
+        clearInterval(playTimer);
+        playTimer = null;
+      }
+    }
+
+    // Wire buttons (THIS is what makes the clicks work)
+    motionBtn.addEventListener("click", () => setMotion(!motion));
+    modeMapBtn.addEventListener("click", () => setMode("MAP"));
+    modeTraceBtn.addEventListener("click", () => setMode("TRACE"));
+    playBtn.addEventListener("click", () => playing ? stopPlay() : startPlay());
+
+    // Build lens pills + wire clicks
+    MODULES.forEach((m) => {
+      const p = document.createElement("div");
+      p.className = "pill";
+      p.setAttribute("role","button");
+      p.setAttribute("tabindex","0");
+      p.innerHTML = `<span class="dot"></span><span>${m.label}</span>`;
+
+      p.addEventListener("click", () => {
+        document.querySelectorAll(".pill").forEach(x => x.classList.remove("active"));
+        p.classList.add("active");
+        activateLens(m.key);
+      });
+
+      p.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          p.click();
+        }
+      });
+
+      p.addEventListener("mouseenter", () => {
+        if(playing) return;
+        if(m.key === active) return;
+        el(m.key)?.classList.add("preview");
+      });
+
+      p.addEventListener("mouseleave", () => {
+        el(m.key)?.classList.remove("preview");
+      });
+
+      lensbar.appendChild(p);
+    });
+
+    // Init
+    document.querySelectorAll(".pill")[0].classList.add("active");
+    setTelemetry();
+    activateLens("L2");
+    setMode("MAP");
+  </script>
 </body>
 </html>
