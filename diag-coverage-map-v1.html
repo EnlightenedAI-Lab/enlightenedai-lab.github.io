@@ -21,13 +21,14 @@
       --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-      --ok:#00cc00;
+      --ok:#00ff5a;        /* brighter instrument green */
+      --okDim:#00cc48;
 
-      --inactiveOpacity:0.22;
+      --inactiveOpacity:0.20;
       --activeOpacity:1;
 
       --activeStroke:#050505;
-      --activeStrokeW:2.6;
+      --activeStrokeW:2.8;
 
       --glowA: rgba(0,0,0,0.10);
       --glowB: rgba(0,0,0,0.06);
@@ -131,13 +132,13 @@
     .dot{
       width:7px; height:7px; border-radius:50%;
       background:var(--ok);
-      box-shadow: 0 0 0 0 rgba(0,204,0,0.35);
+      box-shadow: 0 0 0 0 rgba(0,255,90,0.35);
       animation: beacon 2.2s infinite;
     }
     @keyframes beacon{
-      0%{ box-shadow:0 0 0 0 rgba(0,204,0,0.30); }
-      70%{ box-shadow:0 0 0 12px rgba(0,204,0,0.0); }
-      100%{ box-shadow:0 0 0 0 rgba(0,204,0,0.0); }
+      0%{ box-shadow:0 0 0 0 rgba(0,255,90,0.26); }
+      70%{ box-shadow:0 0 0 12px rgba(0,255,90,0.0); }
+      100%{ box-shadow:0 0 0 0 rgba(0,255,90,0.0); }
     }
 
     .btnrow{
@@ -167,6 +168,29 @@
       background:#000;
       border-color:#000;
     }
+    .btn.green{
+      border-color: rgba(0,255,90,0.55);
+      box-shadow: 0 0 0 rgba(0,255,90,0);
+      position:relative;
+      overflow:hidden;
+    }
+    .btn.green.on{
+      border-color: rgba(0,255,90,0.85);
+      box-shadow: 0 0 18px rgba(0,255,90,0.14);
+    }
+    .btn.green.on::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle at 30% 50%, rgba(0,255,90,0.22), rgba(0,255,90,0) 60%);
+      animation: sweep 1.3s linear infinite;
+      transform: translateX(-30%);
+      pointer-events:none;
+    }
+    @keyframes sweep{
+      0%{ transform: translateX(-35%) }
+      100%{ transform: translateX(35%) }
+    }
 
     .note{
       margin-top:14px;
@@ -187,8 +211,8 @@
     .svg-wrap{ width:100%; overflow:auto; }
     svg{ width:100%; height:auto; min-width:860px; display:block; }
 
-    .dim { opacity: var(--inactiveOpacity); transition: opacity 180ms ease; }
-    .active { opacity: var(--activeOpacity); transition: opacity 180ms ease; }
+    .dim { opacity: var(--inactiveOpacity); transition: opacity 160ms ease; }
+    .active { opacity: var(--activeOpacity); transition: opacity 160ms ease; }
 
     .stamp{
       position:absolute;
@@ -207,7 +231,11 @@
       align-items:center;
       user-select:none;
     }
-    .stamp .miniDot{ width:7px; height:7px; border-radius:50%; background:var(--ok); }
+    .stamp .miniDot{
+      width:7px; height:7px; border-radius:50%;
+      background:var(--ok);
+      box-shadow: 0 0 10px rgba(0,255,90,0.22);
+    }
 
     @media (max-width: 980px){
       .row{ flex-direction:column; }
@@ -241,7 +269,7 @@
                 .axis{stroke:#e5e5e5;stroke-width:1.25}
 
                 .wedge{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
-                .wedgeActive{fill:#ffffff;stroke:#050505;stroke-width:2.6}
+                .wedgeActive{fill:#ffffff;stroke:#050505;stroke-width:2.8}
 
                 .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#050505}
                 .monoMuted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#6a6a6a}
@@ -254,8 +282,15 @@
                 .CenterT{font-size:12px}
 
                 .hit{fill:transparent; cursor:pointer;}
+
                 .scan{opacity:0; pointer-events:none;}
                 .scan.on{opacity:1;}
+
+                .orb{opacity:0.0; transition:opacity 220ms ease;}
+                .orb.on{opacity:1;}
+
+                .led{opacity:0.0; transition:opacity 180ms ease;}
+                .led.on{opacity:1;}
               </style>
 
               <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
@@ -263,17 +298,33 @@
                 <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/>
               </filter>
 
-              <!-- Animated scanline (used only on selected wedge) -->
+              <!-- green glow (instrument LED) -->
+              <filter id="greenGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2.8" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+
+              <!-- Animated scanline (masked) -->
               <linearGradient id="scanGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#000" stop-opacity="0"/>
-                <stop offset="50%" stop-color="#000" stop-opacity="0.08"/>
-                <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+                <stop offset="0%" stop-color="#00ff5a" stop-opacity="0"/>
+                <stop offset="50%" stop-color="#00ff5a" stop-opacity="0.16"/>
+                <stop offset="100%" stop-color="#00ff5a" stop-opacity="0"/>
               </linearGradient>
               <mask id="scanMask">
                 <rect x="-200" y="-200" width="400" height="400" fill="url(#scanGrad)">
-                  <animate attributeName="x" from="-320" to="320" dur="1.8s" repeatCount="indefinite"/>
+                  <animate attributeName="x" from="-320" to="320" dur="1.4s" repeatCount="indefinite"/>
                 </rect>
               </mask>
+
+              <!-- Orbit ring: dash moves forever (turned on via JS "LIVE PULSE") -->
+              <linearGradient id="orbGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00ff5a" stop-opacity="0.0"/>
+                <stop offset="35%" stop-color="#00ff5a" stop-opacity="0.35"/>
+                <stop offset="70%" stop-color="#00ff5a" stop-opacity="0.0"/>
+              </linearGradient>
             </defs>
 
             <!-- Outer frame -->
@@ -303,6 +354,20 @@
               <text class="monoMuted CenterT" x="600" y="434" text-anchor="middle">no prompts • no thresholds • no policy judgment</text>
             </g>
 
+            <!-- Orbit layer (enabled via LIVE PULSE) -->
+            <g id="orbitLayer" class="orb">
+              <circle cx="600" cy="400" r="252"
+                fill="none"
+                stroke="url(#orbGrad)"
+                stroke-width="3.5"
+                stroke-linecap="round"
+                stroke-dasharray="26 28"
+                filter="url(#greenGlow)">
+                <animate attributeName="stroke-dashoffset" from="0" to="-220" dur="2.2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="600" cy="400" r="252" fill="none" stroke="#00ff5a" stroke-opacity="0.06" stroke-width="10"/>
+            </g>
+
             <!-- Wedges container (generated by JS) -->
             <g id="wedges"></g>
 
@@ -310,9 +375,12 @@
             <g>
               <rect x="110" y="590" width="420" height="90" rx="14" fill="#fff" stroke="#ededed" stroke-width="1.25"/>
               <text class="monoMuted Micro" x="130" y="620">INTERACTION:</text>
-              <text class="monoMuted T" x="130" y="644">hover = isolate • click = details • scan = evidence pulse</text>
-              <text class="monoMuted T" x="130" y="664">this map shows coverage, not results</text>
+              <text class="monoMuted T" x="130" y="644">hover = isolate • click = lock • live pulse = orbit scan</text>
+              <text class="monoMuted T" x="130" y="664">center click = explain coverage basis</text>
             </g>
+
+            <!-- Center hit target (for "coverage explanation" mode) -->
+            <circle id="centerHit" cx="600" cy="400" r="78" fill="transparent" style="cursor:pointer"/>
           </svg>
         </div>
       </div>
@@ -336,6 +404,7 @@
 
         <div class="btnrow">
           <button class="btn" id="resetBtn">Reset</button>
+          <button class="btn green" id="pulseBtn" title="Instrument orbit + LED sweep">Live pulse</button>
           <button class="btn primary" id="viewBtn" disabled>View sample result</button>
         </div>
 
@@ -348,7 +417,7 @@
   </div>
 
   <script>
-    // ====== DATA (labels kept tight for readability) ======
+    // ====== DATA ======
     const tests = [
       {
         id: 1,
@@ -359,6 +428,7 @@
         purpose: "Persona-induced compliance failures (governance surface).",
         observes: "Output behavior under constraint + role framing.",
         emits: "Lexicon signature + evidence spans + audit references.",
+        coverage: "Covers governance failure: user constraints → policy compliance dynamics; tests programmable control surfaces.",
         link: "diag-results-test1-v1.html"
       },
       {
@@ -370,6 +440,7 @@
         purpose: "Cross-domain mechanism unification (same failure mechanics across domains).",
         observes: "Structural invariants across tasks without subjective labels.",
         emits: "Mechanism signature + trace artifacts for comparison.",
+        coverage: "Covers mechanism invariants: reveals the same error-cause across domains (math / geo / code) without narrative drift.",
         link: "diag-results-test2-v1.html"
       },
       {
@@ -381,6 +452,7 @@
         purpose: "Safety–utility balance and false refusals (over-refusal surface).",
         observes: "Refusal vs justified non-action (boundary discipline).",
         emits: "Refusal-class signature + auditable record chain.",
+        coverage: "Covers utility boundary: distinguishes justified non-action vs avoidant refusal; measures alignment tax at the interface.",
         link: "diag-results-test3-v1.html"
       },
       {
@@ -392,6 +464,7 @@
         purpose: "Correct non-action under missing inputs (abstain vs hallucinate).",
         observes: "Non-action discipline vs hallucination under insufficient data.",
         emits: "Epistemic stability signature + traceable evidence chain.",
+        coverage: "Covers epistemic correctness: tests whether the system invents facts or holds boundary under missing evidence.",
         link: "diag-results-test4-v1.html"
       },
       {
@@ -403,22 +476,18 @@
         purpose: "Interaction stability under high arousal (escalation dynamics).",
         observes: "Stability patterns under stress without intent attribution.",
         emits: "Co-regulation signature + evidence spans + replay references.",
+        coverage: "Covers interaction dynamics: stabilizes user state under stress while avoiding speculation; tests escalation vs grounding control.",
         link: "diag-results-test5-v1.html"
       }
     ];
 
     // ====== SVG sector math (NO GAPS) ======
-    const svg = document.querySelector("svg");
     const wedgesG = document.getElementById("wedges");
-
     const cx = 600, cy = 400;
     const rOuter = 240;
     const rInner = 86;
     const n = tests.length;
     const step = (Math.PI * 2) / n;
-
-    // start angle so "Test 5" sits visually near the top (instrument feel)
-    // -90° is top. We'll place tests in the order above around the circle.
     const startAngle = -Math.PI / 2;
 
     function polarToCartesian(cx, cy, r, a){
@@ -450,14 +519,13 @@
       const p = polarToCartesian(cx, cy, r, aMid);
       const t = makeEl("text", { x: p.x, y: p.y + dy, class: cls });
       t.textContent = text;
-      // anchor so labels read outward
       const cos = Math.cos(aMid);
       if (Math.abs(cos) < 0.15) t.setAttribute("text-anchor","middle");
       else t.setAttribute("text-anchor", cos > 0 ? "start" : "end");
       return t;
     }
 
-    // Build wedges
+    // Build wedges (+ LED node per wedge)
     tests.forEach((t, i) => {
       const a0 = startAngle + i * step;
       const a1 = startAngle + (i+1) * step;
@@ -471,24 +539,36 @@
         class: "wedge"
       });
 
-      // Scan overlay (masked, only shown for selected)
+      // Green strobe sweep overlay (only for selection / hover pulse)
       const scan = makeEl("path", {
         id: `s${t.id}`,
         d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
-        fill: "#000",
-        opacity: "0.08",
+        fill: "#00ff5a",
+        opacity: "0.14",
         mask: "url(#scanMask)",
         class: "scan"
       });
 
-      // Compact label placement
+      // Labels (keep your “instrument” typography)
       const labR = 170;
       const code = placeLabel(aMid, labR, t.code, "mono H", -10);
       const line1 = placeLabel(aMid, labR, t.short, "monoMuted T", 12);
       const line2 = placeLabel(aMid, labR, t.sub, "monoMuted T", 30);
 
-      // Invisible hit target (bounding circle sector area)
-      // Use the exact same sector path for perfect hit-testing
+      // LED node at outer edge (feels like a sensor)
+      const ledP = polarToCartesian(cx, cy, rOuter + 8, aMid);
+      const led = makeEl("circle", {
+        id: `led${t.id}`,
+        cx: ledP.x,
+        cy: ledP.y,
+        r: 4.2,
+        fill: "#00ff5a",
+        opacity: "0.0",
+        filter: "url(#greenGlow)",
+        class: "led"
+      });
+
+      // Invisible hit target
       const hit = makeEl("path", {
         d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
         class: "hit",
@@ -500,6 +580,7 @@
       group.appendChild(code);
       group.appendChild(line1);
       group.appendChild(line2);
+      group.appendChild(led);
       group.appendChild(hit);
 
       wedgesG.appendChild(group);
@@ -510,14 +591,30 @@
     const panelLines = document.getElementById("panelLines");
     const viewBtn = document.getElementById("viewBtn");
     const resetBtn = document.getElementById("resetBtn");
+    const pulseBtn = document.getElementById("pulseBtn");
+    const orbitLayer = document.getElementById("orbitLayer");
+    const centerHit = document.getElementById("centerHit");
 
     let selected = null;
+    let livePulse = false;
 
     function setGroupClass(id, add, remove){
       const el = document.getElementById(id);
       if(!el) return;
       el.classList.add(add);
       el.classList.remove(remove);
+    }
+
+    function ledOn(id, on){
+      const led = document.getElementById(`led${id}`);
+      if(!led) return;
+      if(on) led.classList.add("on"); else led.classList.remove("on");
+    }
+
+    function scanOn(id, on){
+      const s = document.getElementById(`s${id}`);
+      if(!s) return;
+      if(on) s.classList.add("on"); else s.classList.remove("on");
     }
 
     function clearAll(){
@@ -528,8 +625,8 @@
           p.setAttribute("class","wedge");
           p.removeAttribute("filter");
         }
-        const s = document.getElementById(`s${t.id}`);
-        if(s) s.classList.remove("on");
+        scanOn(t.id, false);
+        ledOn(t.id, false);
       });
 
       selected = null;
@@ -539,7 +636,8 @@
       delete viewBtn.dataset.href;
     }
 
-    function focusTest(id, isHover=false){
+    function focusTest(id, mode){
+      // mode: "hover" | "select"
       const t = tests.find(x => x.id === id);
       if(!t) return;
 
@@ -548,48 +646,55 @@
         else setGroupClass(`w${tt.id}`, "dim", "active");
       });
 
-      // Active wedge: stroke + lift + scanline (only on selected/click, not hover)
       const p = document.getElementById(`p${t.id}`);
       if(p){
         p.setAttribute("class","wedgeActive");
         p.setAttribute("filter","url(#softShadow)");
       }
 
-      if(!isHover){
-        selected = id;
-        const s = document.getElementById(`s${t.id}`);
-        if(s) s.classList.add("on");
+      // LED + quick strobe sweep on hover (if livePulse) or on select
+      ledOn(t.id, true);
+      if(mode === "select" || livePulse) scanOn(t.id, true);
 
+      if(mode === "select"){
+        selected = id;
         panelTitle.textContent = t.title;
         panelLines.innerHTML = `
           <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">purpose</span><br>${t.purpose}</div>
           <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">observes</span><br>${t.observes}</div>
-          <div><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">emits</span><br>${t.emits}</div>
+          <div style="margin-bottom:10px;"><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">emits</span><br>${t.emits}</div>
+          <div><span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">coverage</span><br>${t.coverage}</div>
         `;
-
         viewBtn.disabled = false;
         viewBtn.dataset.href = t.link;
       }
     }
 
-    // Attach events (using the generated hit paths)
+    // Attach events
     document.querySelectorAll(".hit").forEach(hit => {
       hit.addEventListener("mouseenter", e => {
         const id = Number(e.target.getAttribute("data-test"));
         if(!Number.isFinite(id)) return;
         if(selected !== null) return;
-        focusTest(id, true);
+        focusTest(id, "hover");
       });
 
-      hit.addEventListener("mouseleave", () => {
+      hit.addEventListener("mouseleave", e => {
+        const id = Number(e.target.getAttribute("data-test"));
+        if(!Number.isFinite(id)) return;
         if(selected !== null) return;
+        // turn off transient LED/scan for hover if not livePulse
+        if(!livePulse){
+          scanOn(id, false);
+          ledOn(id, false);
+        }
         clearAll();
       });
 
       hit.addEventListener("click", e => {
         const id = Number(e.target.getAttribute("data-test"));
         if(!Number.isFinite(id)) return;
-        focusTest(id, false);
+        focusTest(id, "select");
       });
     });
 
@@ -599,7 +704,64 @@
       window.location.href = href;
     });
 
-    resetBtn.addEventListener("click", clearAll);
+    resetBtn.addEventListener("click", () => {
+      clearAll();
+    });
+
+    pulseBtn.addEventListener("click", () => {
+      livePulse = !livePulse;
+      pulseBtn.classList.toggle("on", livePulse);
+      orbitLayer.classList.toggle("on", livePulse);
+
+      // If live pulse enabled with no selection, softly pulse all LED nodes briefly
+      if(livePulse && selected === null){
+        tests.forEach(t => ledOn(t.id, true));
+        setTimeout(()=>{ if(selected===null){ tests.forEach(t => ledOn(t.id, false)); } }, 900);
+      }
+
+      // If disabling pulse and nothing selected, clear scans
+      if(!livePulse && selected === null){
+        tests.forEach(t => { scanOn(t.id,false); ledOn(t.id,false); });
+        clearAll();
+      }
+    });
+
+    // Center click: explain why this 5-test basis covers the spectrum
+    centerHit.addEventListener("click", () => {
+      selected = null;
+      tests.forEach(t => { scanOn(t.id, false); ledOn(t.id, false); });
+      tests.forEach(t => setGroupClass(`w${t.id}`, "active", "dim"));
+
+      panelTitle.textContent = "Coverage basis — why 5 tests";
+      panelLines.innerHTML = `
+        <div style="margin-bottom:10px;">
+          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">axes</span><br>
+          The map spans four failure dimensions: <b>Crisis/Arousal</b>, <b>Governance/Automation</b>, <b>Epistemics</b>, and <b>Utility/Refusal</b>.
+        </div>
+        <div style="margin-bottom:10px;">
+          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">basis set</span><br>
+          Each test anchors a distinct failure surface. Together they form a minimal diagnostic basis that detects drift across interaction, refusal boundary, epistemic discipline, and governance compliance.
+        </div>
+        <div>
+          <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">public constraint</span><br>
+          Coverage is shown without prompts or thresholds. Evidence is accessible via sample bundles (redacted).
+        </div>
+      `;
+      viewBtn.disabled = true;
+      delete viewBtn.dataset.href;
+
+      // If livePulse is on, give a brief full sweep impression
+      if(livePulse){
+        let k = 0;
+        const seq = setInterval(()=>{
+          if(k >= tests.length){ clearInterval(seq); return; }
+          scanOn(tests[k].id, true);
+          ledOn(tests[k].id, true);
+          setTimeout(()=>{ if(selected===null){ scanOn(tests[k].id,false); ledOn(tests[k].id,false);} }, 520);
+          k++;
+        }, 260);
+      }
+    });
 
     // Init
     clearAll();
