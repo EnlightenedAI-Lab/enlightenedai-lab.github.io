@@ -50,7 +50,7 @@
 
             /* SPACING */
             --sidebar-width: 280px;
-            --rail-width: 450px; 
+            --rail-width: 500px; 
         }
 
         /* DARK MODE */
@@ -141,7 +141,7 @@
             border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
         }
 
-        /* SPLIT VIEW */
+        /* SPLIT VIEW (Content + Rail) */
         .split-view {
             display: flex;
             flex: 1;
@@ -164,43 +164,41 @@
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
-        /* === RAIL: LIVE PREVIEW IFRAMES === */
+        /* --- DIAGRAM THUMBNAILS (PUNCHY FIX) --- */
         .rail-item { margin-bottom: 3rem; cursor: zoom-in; transition: transform 0.2s; }
-        .rail-item:hover { transform: scale(1.02); }
+        
         .rail-label {
             font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); 
             font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;
         }
         
-        .rail-preview {
+        .rail-thumb {
             width: 100%;
-            height: 250px; /* Fixed height for clean grid */
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            height: auto;
+            display: block;
+
             background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             padding: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-            overflow: hidden;
-            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+
+            /* PUNCH (not washed) */
+            filter: contrast(1.25) saturate(1.05) brightness(0.92);
+            image-rendering: -webkit-optimize-contrast;
+            transition: all 0.2s ease;
         }
 
-        /* High contrast for dark mode previews */
-        body[data-theme="dark"] .rail-preview {
+        .rail-item:hover .rail-thumb {
+            filter: contrast(1.35) saturate(1.08) brightness(0.90);
+            transform: scale(1.01);
+        }
+
+        body[data-theme="dark"] .rail-thumb {
             background: #0b0b0b;
             box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-        }
-
-        .rail-iframe {
-            width: 1400px;      /* Virtual canvas width */
-            height: 900px;      /* Virtual canvas height */
-            border: 0;
-            transform: scale(0.28); /* Shrink to fit rail */
-            transform-origin: top left;
-            pointer-events: none; /* Pass clicks to parent div */
-            display: block;
-            background: var(--bg-color);
-            position: absolute;
-            top: 10px; left: 10px;
+            /* Less brightness reduction in dark mode so it stands out */
+            filter: contrast(1.1) brightness(0.9);
         }
 
         /* FOOTER */
@@ -244,7 +242,7 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
 
-        /* --- VISIBILITY RULES --- */
+        /* --- VISIBILITY RULES (NUCLEAR OPTION) --- */
         .diff-tag { display: none; }
 
         /* FORCE NORMAL VIEW */
@@ -274,6 +272,20 @@
             padding: 0 2px;
         }
         
+        /* Revision trace headers: only in DIFF mode */
+        .diff-header {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--text-muted);
+            padding-bottom: 8px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        body:not([data-mode="diff"]) .diff-header { display: none !important; }
+
+        /* Other Modes */
         .audit-marker { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--bg-color); }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         
@@ -531,23 +543,17 @@
                     
                     <div class="rail-item" onclick="openModal('diag-coverage-map-v1.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-01</span>
-                        <div class="rail-preview">
-                            <iframe class="rail-iframe" src="diag-coverage-map-v1.html?embed=1" loading="lazy"></iframe>
-                        </div>
+                        <img class="rail-thumb" src="assets/images/image_79b414.png" alt="Coverage Map">
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-diagram-preview.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-02</span>
-                        <div class="rail-preview">
-                            <iframe class="rail-iframe" src="diag-diagram-preview.html?embed=1" loading="lazy"></iframe>
-                        </div>
+                        <img class="rail-thumb" src="assets/images/fig11_static.jpg" alt="Preview">
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-layers-substrate.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-03</span>
-                        <div class="rail-preview">
-                            <iframe class="rail-iframe" src="diag-layers-substrate.html?embed=1" loading="lazy"></iframe>
-                        </div>
+                        <img class="rail-thumb" src="assets/images/fig10_static.jpg" alt="Substrate">
                     </div>
 
                 </div>
