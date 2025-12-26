@@ -87,6 +87,7 @@
             line-height: 1.6;
             transition: background 0.2s ease, color 0.2s ease;
             overflow-x: hidden;
+            /* [FIX] Vertical Layout to push footer down */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -105,9 +106,14 @@
         .scramble, .scramble-brand, .scramble-hover { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
         /* --- LAYOUT STRUCTURE --- */
-        .layout-wrapper { display: flex; flex: 1; width: 100%; }
+        /* [FIX] Flex 1 allows this wrapper to grow and push footer to bottom */
+        .layout-wrapper { 
+            display: flex; 
+            flex: 1; 
+            width: 100%; 
+        }
 
-        /* SIDEBAR */
+        /* SIDEBAR (Sticky) */
         aside#sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -141,7 +147,7 @@
             border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
         }
 
-        /* SPLIT VIEW */
+        /* SPLIT VIEW (Content + Rail) */
         .split-view {
             display: flex;
             flex: 1;
@@ -154,7 +160,7 @@
             min-width: 0;
         }
 
-        /* RIGHT RAIL */
+        /* RIGHT RAIL (Sticky) */
         .diagram-rail {
             width: var(--rail-width);
             flex-shrink: 0;
@@ -164,7 +170,7 @@
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
-        /* DIAGRAM THUMBNAILS */
+        /* --- DIAGRAM THUMBNAILS (Cards + Hooks) --- */
         .rail-item { margin-bottom: 2rem; cursor: zoom-in; transition: transform 0.2s; }
         .rail-item:hover { transform: scale(1.02); }
         
@@ -201,13 +207,12 @@
         }
         body[data-theme="dark"] .rail-thumbimg { background: #0b0b0b; }
 
-        /* FOOTER */
+        /* FOOTER [FIXED based on data.html] */
         #footer-mount {
             width: 100%;
+            z-index: 100;
             border-top: 1px solid var(--border-color);
             background: var(--bg-color);
-            margin-top: auto; 
-            padding: 3rem 4rem; 
         }
 
         /* --- SIDEBAR ELEMENTS --- */
@@ -243,7 +248,7 @@
         .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
 
-        /* --- VISIBILITY RULES --- */
+        /* --- VISIBILITY RULES (TEXT & MODES) --- */
         .diff-tag { display: none; }
 
         /* FORCE NORMAL VIEW */
@@ -737,7 +742,7 @@ artifact_id = hash(record_id + run_id)
         const savedTheme = localStorage.getItem('theme') || 'light';
         setTheme(savedTheme);
         
-        // [UPDATED] Absolute Path for Footer Fetch
+        // [FIX] Absolute Path for Footer Fetch
         fetch('/partials/footer.html')
         .then(r => r.ok ? r.text() : '')
         .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
