@@ -1,785 +1,270 @@
-<!-- SAVE AS: /docs/diag-coverage-map-v1.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Reflective Alignment — 5-Test Coverage Map</title>
+<meta charset="UTF-8" />
+<title>Reflective Diagnostics — Alignment Coverage</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;
+  --ink:#0b0b0b;
+  --muted:#6a6a6a;
+  --line:#e6e6e6;
+  --ok:#18a558;
+}
 
-  <style>
-    :root{
-      --bg:#ffffff;
-      --text:#050505;
-      --muted:#6a6a6a;
-      --border:#e5e5e5;
-      --border2:#cfcfcf;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
 
-      --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      --sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+.wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:48px 24px 64px;
+}
 
-      --ok:#00cc00;
+h1{
+  margin:0 0 6px;
+  font-size:32px;
+  font-weight:600;
+}
+.sub{
+  font-size:13px;
+  color:var(--muted);
+  letter-spacing:.04em;
+  margin-bottom:28px;
+}
 
-      --inactiveOpacity:0.22;
-      --activeOpacity:1;
+.panel{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:28px;
+}
 
-      --activeStroke:#050505;
-      --activeStrokeW:2.8;
+/* PIE */
+svg{width:100%; height:auto; display:block}
+.slice{
+  cursor:pointer;
+  transition:transform .25s ease, filter .25s ease;
+}
+.slice:hover{
+  filter:brightness(1.03);
+}
+.slice.active{
+  transform:scale(1.04);
+}
 
-      --glowA: rgba(0,0,0,0.10);
-      --glowB: rgba(0,0,0,0.06);
-    }
+.label{
+  font-size:12px;
+  font-weight:600;
+  fill:#000;
+  text-anchor:middle;
+}
+.domain{
+  font-size:10px;
+  fill:#555;
+  text-anchor:middle;
+}
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--text);
-      font-family:var(--sans);
-      -webkit-font-smoothing: antialiased;
-    }
-    .wrap{
-      max-width:1240px;
-      margin:0 auto;
-      padding:42px 24px 56px;
-    }
-    h1{
-      margin:0 0 8px 0;
-      font-size:34px;
-      font-weight:600;
-      letter-spacing:-0.02em;
-    }
-    .sub{
-      font-family:var(--mono);
-      color:var(--muted);
-      font-size:12px;
-      letter-spacing:0.08em;
-      text-transform:uppercase;
-    }
+/* STATUS */
+.status{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+.badge{
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--ok);
+  box-shadow:0 0 0 0 rgba(24,165,88,.6);
+  animation:pulse 2.4s infinite;
+}
+@keyframes pulse{
+  70%{box-shadow:0 0 0 10px rgba(24,165,88,0)}
+  100%{box-shadow:0 0 0 0 rgba(24,165,88,0)}
+}
 
-    .row{
-      display:flex;
-      gap:18px;
-      margin-top:18px;
-      align-items:flex-start;
-    }
+/* DRAWER */
+.drawer{
+  margin-top:26px;
+  border-top:1px solid var(--line);
+  padding-top:22px;
+  display:none;
+}
+.drawer.active{display:block}
 
-    .card{
-      flex: 1;
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:18px;
-      background:var(--bg);
-      position:relative;
-      overflow:hidden;
-    }
+.drawer h3{
+  margin:0 0 8px;
+  font-size:18px;
+}
+.drawer p{
+  margin:0 0 12px;
+  color:#333;
+  font-size:14px;
+  max-width:680px;
+}
 
-    .panel{
-      width: 390px;
-      border:1px solid var(--border);
-      border-radius:18px;
-      background:var(--bg);
-      padding:16px;
-      position:sticky;
-      top:18px;
-    }
+.evidence{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:18px;
+  align-items:start;
+}
 
-    .panel .kicker{
-      font-family:var(--mono);
-      color:var(--muted);
-      font-size:11px;
-      letter-spacing:0.10em;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
+.thumb{
+  border:1px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+}
+.thumb img{width:100%; display:block}
 
-    /* Mode toggle */
-    .modebar{
-      display:flex;
-      gap:8px;
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:6px;
-      background:#fff;
-      margin-bottom:12px;
-    }
-    .modebtn{
-      flex:1;
-      border:1px solid transparent;
-      border-radius:10px;
-      padding:8px 10px;
-      font-family:var(--mono);
-      font-size:12px;
-      letter-spacing:0.08em;
-      text-transform:uppercase;
-      cursor:pointer;
-      background:#fff;
-      color:var(--muted);
-      user-select:none;
-    }
-    .modebtn.active{
-      background:#050505;
-      color:#fff;
-      border-color:#050505;
-    }
+.meta{
+  font-family:JetBrains Mono, ui-monospace, Menlo, Consolas, monospace;
+  font-size:12px;
+  color:#333;
+}
+.meta span{color:#000;font-weight:600}
 
-    .panel .title{
-      font-size:16px;
-      font-weight:800;
-      letter-spacing:-0.01em;
-      margin-bottom:10px;
-      line-height:1.25;
-    }
-
-    .panel .lines{
-      font-size:13px;
-      line-height:1.55;
-      color:var(--text);
-      margin-bottom:12px;
-    }
-
-    .panel .pillrow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin:10px 0 12px;
-    }
-    .pill{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border:1px solid var(--border2);
-      border-radius:12px;
-      font-family:var(--mono);
-      font-size:12px;
-      letter-spacing:0.06em;
-      text-transform:uppercase;
-      background:#fff;
-      user-select:none;
-    }
-    .dot{
-      width:7px; height:7px; border-radius:50%;
-      background:var(--ok);
-      box-shadow: 0 0 0 0 rgba(0,204,0,0.35);
-      animation: beacon 2.2s infinite;
-    }
-    @keyframes beacon{
-      0%{ box-shadow:0 0 0 0 rgba(0,204,0,0.30); }
-      70%{ box-shadow:0 0 0 12px rgba(0,204,0,0.0); }
-      100%{ box-shadow:0 0 0 0 rgba(0,204,0,0.0); }
-    }
-
-    .btnrow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .btn{
-      font-family:var(--mono);
-      font-size:12px;
-      padding:8px 10px;
-      border:1px solid var(--border);
-      background:var(--bg);
-      color:var(--text);
-      cursor:pointer;
-      border-radius:10px;
-      user-select:none;
-    }
-    .btn:hover{ border-color:#bdbdbd; }
-    .btn.primary{
-      border-color:#050505;
-      background:#050505;
-      color:#fff;
-    }
-    .btn.primary:hover{
-      background:#000;
-      border-color:#000;
-    }
-    .btn:disabled{
-      opacity:0.45;
-      cursor:not-allowed;
-    }
-
-    .note{
-      margin-top:14px;
-      border-top:1px solid var(--border);
-      padding-top:12px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.5;
-    }
-    .note .mono{
-      font-family:var(--mono);
-      letter-spacing:0.04em;
-      text-transform:uppercase;
-      font-size:11px;
-      color:var(--muted);
-    }
-
-    .svg-wrap{ width:100%; overflow:auto; }
-    svg{ width:100%; height:auto; min-width:860px; display:block; }
-
-    .dim { opacity: var(--inactiveOpacity); transition: opacity 180ms ease; }
-    .active { opacity: var(--activeOpacity); transition: opacity 180ms ease; }
-
-    .stamp{
-      position:absolute;
-      top:16px;
-      right:16px;
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:8px 10px;
-      background:#fff;
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:0.08em;
-      text-transform:uppercase;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      user-select:none;
-    }
-    .stamp .miniDot{ width:7px; height:7px; border-radius:50%; background:var(--ok); }
-
-    .microhelp{
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:0.06em;
-      color:var(--muted);
-      text-transform:uppercase;
-      margin-top:10px;
-    }
-
-    @media (max-width: 980px){
-      .row{ flex-direction:column; }
-      .panel{ width:100%; position:relative; top:auto; }
-      svg{ min-width:760px; }
-    }
-  </style>
+.chips{
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.chip{
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:4px 10px;
+  font-size:11px;
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <h1>Reflective Alignment — 5-Test Coverage Map</h1>
-    <div class="sub">five complementary protocols • lexicon-bound • auditable</div>
+<div class="wrap">
 
-    <div class="row">
-      <div class="card">
-        <div class="stamp" title="Public demonstration surface">
-          <span class="miniDot"></span>
-          <span>PUBLIC</span>
-          <span>2026</span>
-        </div>
+<h1>Reflective Diagnostics — Alignment Coverage</h1>
+<div class="sub">FIVE INDEPENDENT TESTS · SINGLE EVIDENCE STANDARD · 2026-READY</div>
 
-        <div class="svg-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-label="Five-test coverage map">
-            <defs>
-              <style>
-                .frame{fill:#ffffff;stroke:#e5e5e5;stroke-width:1.5}
+<div class="panel">
 
-                .ring{fill:none;stroke:#e5e5e5;stroke-width:1.25}
-                .ring2{fill:none;stroke:#cfcfcf;stroke-width:1.25}
-                .axis{stroke:#e5e5e5;stroke-width:1.25}
+<svg viewBox="0 0 600 360" aria-label="Alignment coverage map">
+<g transform="translate(300,180)">
+  <!-- 5 equal slices -->
+  <g class="slice" data-test="1">
+    <path d="M0 0 L0 -140 A140 140 0 0 1 133 -43 Z" fill="#f4f4f4"/>
+    <text class="label" x="0" y="-78">Test 1</text>
+    <text class="domain" x="0" y="-60">Governance</text>
+  </g>
 
-                .wedge{fill:#ffffff;stroke:#cfcfcf;stroke-width:1.5}
-                .wedgeActive{fill:#ffffff;stroke:#050505;stroke-width:2.8}
+  <g class="slice" data-test="2">
+    <path d="M0 0 L133 -43 A140 140 0 0 1 82 113 Z" fill="#ededed"/>
+    <text class="label" x="78" y="-8">Test 2</text>
+    <text class="domain" x="78" y="10">Mechanism</text>
+  </g>
 
-                .mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#050505}
-                .monoMuted{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill:#6a6a6a}
-                .sans{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; fill:#050505}
+  <g class="slice" data-test="3">
+    <path d="M0 0 L82 113 A140 140 0 0 1 -82 113 Z" fill="#f4f4f4"/>
+    <text class="label" x="0" y="86">Test 3</text>
+    <text class="domain" x="0" y="104">Utility</text>
+  </g>
 
-                .H{font-size:16px;font-weight:800;letter-spacing:0.10em}
-                .T{font-size:12px}
-                .Micro{font-size:11px;letter-spacing:0.08em}
-                .CenterH{font-size:18px;font-weight:800;letter-spacing:-0.01em}
-                .CenterT{font-size:12px}
+  <g class="slice" data-test="4">
+    <path d="M0 0 L-82 113 A140 140 0 0 1 -133 -43 Z" fill="#ededed"/>
+    <text class="label" x="-78" y="-8">Test 4</text>
+    <text class="domain" x="-78" y="10">Epistemics</text>
+  </g>
 
-                .hit{fill:transparent; cursor:pointer;}
-                .scan{opacity:0; pointer-events:none;}
-                .scan.on{opacity:1;}
+  <g class="slice" data-test="5">
+    <path d="M0 0 L-133 -43 A140 140 0 0 1 0 -140 Z" fill="#f4f4f4"/>
+    <text class="label" x="0" y="-118">Test 5</text>
+    <text class="domain" x="0" y="-100">Interaction</text>
+  </g>
+</g>
+</svg>
 
-                .infoDot{fill:#fff;stroke:#cfcfcf;stroke-width:1.25}
-                .infoTxt{font-size:11px;font-weight:800}
-              </style>
+<div class="status">
+  <div class="badge"><div class="dot"></div>All tests active</div>
+  <div class="badge">Single-run evidence</div>
+  <div class="badge">Lexicon-bound</div>
+  <div class="badge">Audit-ready</div>
+</div>
 
-              <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
-                <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity="0.10"/>
-                <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/>
-              </filter>
+<div class="drawer" id="drawer">
+  <h3 id="dTitle"></h3>
+  <p id="dDesc"></p>
 
-              <!-- Animated scanline (used only on selected wedge) -->
-              <linearGradient id="scanGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#000" stop-opacity="0"/>
-                <stop offset="50%" stop-color="#000" stop-opacity="0.08"/>
-                <stop offset="100%" stop-color="#000" stop-opacity="0"/>
-              </linearGradient>
-              <mask id="scanMask">
-                <rect x="-200" y="-200" width="400" height="400" fill="url(#scanGrad)">
-                  <animate attributeName="x" from="-320" to="320" dur="1.9s" repeatCount="indefinite"/>
-                </rect>
-              </mask>
-            </defs>
-
-            <!-- Outer frame -->
-            <rect class="frame" x="60" y="60" width="1080" height="640" rx="18"/>
-
-            <!-- Title -->
-            <text class="sans" x="110" y="120" style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">
-              Alignment Failure Surfaces — Minimal Basis Set
-            </text>
-            <text class="monoMuted Micro" x="110" y="146">coverage map • click a wedge</text>
-
-            <!-- Compass scaffolding -->
-            <g id="scaffold">
-              <circle class="ring" cx="600" cy="400" r="240"/>
-              <circle class="ring" cx="600" cy="400" r="160"/>
-              <circle class="ring2" cx="600" cy="400" r="86"/>
-              <line class="axis" x1="600" y1="160" x2="600" y2="640"/>
-              <line class="axis" x1="360" y1="400" x2="840" y2="400"/>
-
-              <!-- Axis labels (short) -->
-              <text class="monoMuted Micro" x="600" y="176" text-anchor="middle">CRISIS</text>
-              <text class="monoMuted Micro" x="600" y="636" text-anchor="middle">GOVERNANCE</text>
-              <text class="monoMuted Micro" x="346" y="392" text-anchor="end">EPISTEMICS</text>
-              <text class="monoMuted Micro" x="854" y="392">UTILITY</text>
-
-              <!-- Info dots with tooltips -->
-              <g>
-                <circle class="infoDot" cx="668" cy="170" r="10"/>
-                <text class="mono infoTxt" x="668" y="174" text-anchor="middle">i</text>
-                <title>Crisis: interaction stability under stress (co-regulation surface)</title>
-              </g>
-              <g>
-                <circle class="infoDot" cx="690" cy="630" r="10"/>
-                <text class="mono infoTxt" x="690" y="634" text-anchor="middle">i</text>
-                <title>Governance: programmable rules / role framing / disclosure discipline</title>
-              </g>
-              <g>
-                <circle class="infoDot" cx="312" cy="388" r="10"/>
-                <text class="mono infoTxt" x="312" y="392" text-anchor="middle">i</text>
-                <title>Epistemics: abstain vs hallucinate under missing inputs</title>
-              </g>
-              <g>
-                <circle class="infoDot" cx="920" cy="388" r="10"/>
-                <text class="mono infoTxt" x="920" y="392" text-anchor="middle">i</text>
-                <title>Utility: refusal boundary discipline without policy judgment</title>
-              </g>
-
-              <text class="sans CenterH" x="600" y="392" text-anchor="middle">COVERAGE</text>
-              <text class="monoMuted CenterT" x="600" y="416" text-anchor="middle">outputs only • lexicon-bound • auditable</text>
-            </g>
-
-            <!-- Wedges container (generated by JS) -->
-            <g id="wedges"></g>
-
-            <!-- Interaction legend -->
-            <g>
-              <rect x="110" y="590" width="420" height="90" rx="14" fill="#fff" stroke="#ededed" stroke-width="1.25"/>
-              <text class="monoMuted Micro" x="130" y="620">INTERACTION</text>
-              <text class="monoMuted T" x="130" y="644">hover = isolate • click = select • scan = live pulse</text>
-              <text class="monoMuted T" x="130" y="664">mode toggle shows coverage vs sample outputs</text>
-            </g>
-          </svg>
-        </div>
+  <div class="evidence">
+    <div class="thumb">
+      <img id="dImg" src="" alt="Evidence preview">
+    </div>
+    <div>
+      <div class="meta">
+        Record ID: <span id="dRec"></span><br>
+        Mode: deterministic · post-execution
       </div>
-
-      <div class="panel">
-        <div class="kicker">instrument view</div>
-
-        <div class="modebar" role="tablist" aria-label="Mode selector">
-          <button class="modebtn active" id="modeCoverage" aria-selected="true">Coverage</button>
-          <button class="modebtn" id="modeResults" aria-selected="false">Results</button>
-        </div>
-
-        <div class="title" id="panelTitle">Click a wedge</div>
-
-        <div class="pillrow">
-          <div class="pill"><span class="dot"></span><span>ONLINE</span></div>
-          <div class="pill"><span style="width:7px;height:7px;border-radius:50%;background:#050505;"></span><span>LEXICON</span></div>
-          <div class="pill"><span style="width:7px;height:7px;border-radius:50%;background:#050505;"></span><span>EVIDENCE</span></div>
-        </div>
-
-        <div class="lines" id="panelLines">
-          <div style="color:var(--muted);">
-            Select a test to view its surface and sample output.
-          </div>
-        </div>
-
-        <div class="btnrow">
-          <button class="btn" id="resetBtn">Reset</button>
-          <button class="btn primary" id="viewBtn" disabled>View sample output</button>
-        </div>
-
-        <div class="note">
-          <div class="mono">Public boundary</div>
-          This is a demonstrator surface: coverage + redacted sample outputs.
-        </div>
+      <div class="chips">
+        <div class="chip">JSON</div>
+        <div class="chip">CSV</div>
+        <div class="chip">Screenshot</div>
+        <div class="chip">Replay Ref</div>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    // ========= Recommendation for funders =========
-    // Use ONE page for samples (diag-sample-results.html) with anchored sections:
-    // #test1 ... #test5. This keeps the experience coherent and "instrument-grade".
-    const SAMPLE_PAGE = "diag-sample-results.html";
+</div>
+</div>
 
-    // ====== DATA (tight, readable, accurate per your current repo wording) ======
-    const tests = [
-      {
-        id: 1,
-        code: "TEST 1",
-        short: "GOVERNANCE",
-        sub: "AUTOMATION",
-        title: "Test 1 — Automation & Governance",
-        coverage: {
-          purpose: "Role / persona pressure on programmable constraints.",
-          observes: "Constraint-following failures in output behavior.",
-          emits: "Lexicon signature + evidence spans + audit links."
-        },
-        results: {
-          headline: "Sample: persona pressure → observable compliance drift",
-          bullets: [
-            "Before/after excerpt (redacted)",
-            "Signature classification (no thresholds shown)",
-            "Evidence spans linked to record ID"
-          ]
-        },
-        link: `${SAMPLE_PAGE}#test1`
-      },
-      {
-        id: 2,
-        code: "TEST 2",
-        short: "MECHANISM",
-        sub: "UNIFICATION",
-        title: "Test 2 — Mechanism Unification",
-        coverage: {
-          purpose: "Same failure mechanics across domains.",
-          observes: "Structural invariants without subjective labels.",
-          emits: "Mechanism signature + trace artifacts for comparison."
-        },
-        results: {
-          headline: "Sample: cross-domain pattern match (structure-only)",
-          bullets: [
-            "Two domains, same mechanism pattern",
-            "Trace table (redacted fields)",
-            "Replay references for reproducibility"
-          ]
-        },
-        link: `${SAMPLE_PAGE}#test2`
-      },
-      {
-        id: 3,
-        code: "TEST 3",
-        short: "FALSE",
-        sub: "REFUSALS",
-        title: "Test 3 — False Refusal Surface",
-        coverage: {
-          purpose: "Utility loss via incorrect refusal patterns.",
-          observes: "Refusal vs justified non-action (output-only).",
-          emits: "Refusal-class signature + auditable record chain."
-        },
-        results: {
-          headline: "Sample: refusal boundary error → classified + traceable",
-          bullets: [
-            "Refusal excerpt (redacted)",
-            "Classification signature",
-            "Evidence chain: output → span → record"
-          ]
-        },
-        link: `${SAMPLE_PAGE}#test3`
-      },
-      {
-        id: 4,
-        code: "TEST 4",
-        short: "EPISTEMIC",
-        sub: "INTEGRITY",
-        title: "Test 4 — Epistemic Integrity",
-        coverage: {
-          purpose: "Abstain vs hallucinate under missing inputs.",
-          observes: "Correct non-action vs confident fabrication.",
-          emits: "Epistemic stability signature + evidence spans."
-        },
-        results: {
-          headline: "Sample: missing inputs → non-action vs fabrication",
-          bullets: [
-            "Two response regimes (redacted)",
-            "Observed integrity markers",
-            "Evidence spans + replay refs"
-          ]
-        },
-        link: `${SAMPLE_PAGE}#test4`
-      },
-      {
-        id: 5,
-        code: "TEST 5",
-        short: "CRISIS",
-        sub: "CO-REGULATION",
-        title: "Test 5 — Crisis Co-Regulation",
-        coverage: {
-          purpose: "Stability under high arousal interaction.",
-          observes: "Escalation control without intent attribution.",
-          emits: "Co-regulation signature + evidence spans + replay refs."
-        },
-        results: {
-          headline: "Sample: high arousal → stabilized interaction dynamics",
-          bullets: [
-            "Turn-by-turn excerpt (redacted)",
-            "Stability signature",
-            "Evidence chain + replay refs"
-          ]
-        },
-        link: `${SAMPLE_PAGE}#test5`
-      }
-    ];
+<script>
+const DATA={
+  1:{t:"Automation & Governance",
+     d:"Detects compliance drift under persona and instruction pressure.",
+     img:"assets/img/evidence/test1.png"},
+  2:{t:"Mechanism Consistency",
+     d:"Shows structural consistency across domains without retraining.",
+     img:"assets/img/evidence/test2.png"},
+  3:{t:"Safety–Utility Balance",
+     d:"Separates legitimate refusal from over-blocking.",
+     img:"assets/img/evidence/test3.png"},
+  4:{t:"Epistemic Integrity",
+     d:"Validates correct non-action under missing or constrained inputs.",
+     img:"assets/img/evidence/test4.png"},
+  5:{t:"Crisis Interaction Stability",
+     d:"Evaluates reasoning coherence under high-arousal dialogue.",
+     img:"assets/img/evidence/test5.png"}
+};
 
-    // ====== SVG sector math (NO GAPS) ======
-    const wedgesG = document.getElementById("wedges");
+const drawer=document.getElementById("drawer");
+document.querySelectorAll(".slice").forEach(s=>{
+  s.addEventListener("click",()=>{
+    document.querySelectorAll(".slice").forEach(x=>x.classList.remove("active"));
+    s.classList.add("active");
+    const k=s.dataset.test;
+    dTitle.textContent=DATA[k].t;
+    dDesc.textContent=DATA[k].d;
+    dImg.src=DATA[k].img;
+    dRec.textContent=`RD-2026-${k.padStart? k.padStart(3,"0"):("00"+k).slice(-3)}`;
+    drawer.classList.add("active");
+  });
+});
+</script>
 
-    const cx = 600, cy = 400;
-    const rOuter = 240;
-    const rInner = 86;
-    const n = tests.length;
-    const step = (Math.PI * 2) / n;
-
-    // start angle -90° (top)
-    const startAngle = -Math.PI / 2;
-
-    function polarToCartesian(cx, cy, r, a){
-      return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
-    }
-
-    function sectorPath(cx, cy, rOut, rIn, a0, a1){
-      const p0 = polarToCartesian(cx, cy, rOut, a0);
-      const p1 = polarToCartesian(cx, cy, rOut, a1);
-      const q1 = polarToCartesian(cx, cy, rIn,  a1);
-      const q0 = polarToCartesian(cx, cy, rIn,  a0);
-      const largeArc = (a1 - a0) > Math.PI ? 1 : 0;
-      return [
-        `M ${p0.x.toFixed(2)} ${p0.y.toFixed(2)}`,
-        `A ${rOut} ${rOut} 0 ${largeArc} 1 ${p1.x.toFixed(2)} ${p1.y.toFixed(2)}`,
-        `L ${q1.x.toFixed(2)} ${q1.y.toFixed(2)}`,
-        `A ${rIn} ${rIn} 0 ${largeArc} 0 ${q0.x.toFixed(2)} ${q0.y.toFixed(2)}`,
-        "Z"
-      ].join(" ");
-    }
-
-    function makeEl(tag, attrs={}){
-      const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
-      Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k, v));
-      return el;
-    }
-
-    function placeLabel(aMid, r, text, cls, dy=0){
-      const p = polarToCartesian(cx, cy, r, aMid);
-      const t = makeEl("text", { x: p.x, y: p.y + dy, class: cls });
-      t.textContent = text;
-      const cos = Math.cos(aMid);
-      if (Math.abs(cos) < 0.15) t.setAttribute("text-anchor","middle");
-      else t.setAttribute("text-anchor", cos > 0 ? "start" : "end");
-      return t;
-    }
-
-    // Build wedges
-    tests.forEach((t, i) => {
-      const a0 = startAngle + i * step;
-      const a1 = startAngle + (i+1) * step;
-      const aMid = (a0 + a1) / 2;
-
-      const group = makeEl("g", { id: `w${t.id}`, class: "dim" });
-
-      const path = makeEl("path", {
-        id: `p${t.id}`,
-        d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
-        class: "wedge"
-      });
-
-      // Scan overlay (masked, only shown for selected)
-      const scan = makeEl("path", {
-        id: `s${t.id}`,
-        d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
-        fill: "#000",
-        opacity: "0.08",
-        mask: "url(#scanMask)",
-        class: "scan"
-      });
-
-      // More legible label placement
-      const labR = 172;
-
-      const code = placeLabel(aMid, labR, t.code, "mono H", -12);
-      const line1 = placeLabel(aMid, labR, t.short, "monoMuted T", 12);
-      const line2 = placeLabel(aMid, labR, t.sub, "monoMuted T", 30);
-
-      // Exact hit target
-      const hit = makeEl("path", {
-        d: sectorPath(cx, cy, rOuter, rInner, a0, a1),
-        class: "hit",
-        "data-test": String(t.id)
-      });
-
-      group.appendChild(path);
-      group.appendChild(scan);
-      group.appendChild(code);
-      group.appendChild(line1);
-      group.appendChild(line2);
-      group.appendChild(hit);
-
-      wedgesG.appendChild(group);
-    });
-
-    // ====== PANEL / MODES ======
-    const panelTitle = document.getElementById("panelTitle");
-    const panelLines = document.getElementById("panelLines");
-    const viewBtn = document.getElementById("viewBtn");
-    const resetBtn = document.getElementById("resetBtn");
-
-    const modeCoverageBtn = document.getElementById("modeCoverage");
-    const modeResultsBtn  = document.getElementById("modeResults");
-
-    let selected = null;
-    let mode = "coverage"; // "coverage" | "results"
-
-    function setMode(next){
-      mode = next;
-      modeCoverageBtn.classList.toggle("active", mode === "coverage");
-      modeResultsBtn.classList.toggle("active", mode === "results");
-      modeCoverageBtn.setAttribute("aria-selected", mode === "coverage");
-      modeResultsBtn.setAttribute("aria-selected", mode === "results");
-
-      // re-render panel if something selected
-      if(selected !== null) renderPanel(selected);
-    }
-
-    modeCoverageBtn.addEventListener("click", () => setMode("coverage"));
-    modeResultsBtn.addEventListener("click",  () => setMode("results"));
-
-    function setGroupClass(id, add, remove){
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.classList.add(add);
-      el.classList.remove(remove);
-    }
-
-    function clearAll(){
-      tests.forEach(t => {
-        setGroupClass(`w${t.id}`, "dim", "active");
-        const p = document.getElementById(`p${t.id}`);
-        if(p){
-          p.setAttribute("class","wedge");
-          p.removeAttribute("filter");
-        }
-        const s = document.getElementById(`s${t.id}`);
-        if(s) s.classList.remove("on");
-      });
-
-      selected = null;
-      panelTitle.textContent = "Click a wedge";
-      panelLines.innerHTML = `<div style="color:var(--muted);">Select a test to view its surface and sample output.</div>`;
-      viewBtn.disabled = true;
-      delete viewBtn.dataset.href;
-    }
-
-    function renderPanel(id){
-      const t = tests.find(x => x.id === id);
-      if(!t) return;
-
-      panelTitle.textContent = t.title;
-
-      if(mode === "coverage"){
-        panelLines.innerHTML = `
-          <div style="margin-bottom:10px;">
-            <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">surface</span><br>
-            ${t.coverage.purpose}
-          </div>
-          <div style="margin-bottom:10px;">
-            <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">observes</span><br>
-            ${t.coverage.observes}
-          </div>
-          <div>
-            <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">emits</span><br>
-            ${t.coverage.emits}
-          </div>
-        `;
-        viewBtn.textContent = "View sample output";
-      } else {
-        panelLines.innerHTML = `
-          <div style="margin-bottom:10px;">
-            <span style="font-family:var(--mono); letter-spacing:0.08em; text-transform:uppercase; font-size:11px; color:var(--muted);">sample output</span><br>
-            <div style="font-weight:800; margin-top:4px;">${t.results.headline}</div>
-          </div>
-          <ul style="margin:0; padding-left:1.1rem; color:var(--text);">
-            ${t.results.bullets.map(b => `<li style="margin-bottom:6px;">${b}</li>`).join("")}
-          </ul>
-          <div class="microhelp">recommended: one unified sample bundle page</div>
-        `;
-        viewBtn.textContent = "Open sample bundle";
-      }
-
-      viewBtn.disabled = false;
-      viewBtn.dataset.href = t.link;
-    }
-
-    function focusTest(id, isHover=false){
-      const t = tests.find(x => x.id === id);
-      if(!t) return;
-
-      tests.forEach(tt => {
-        if(tt.id === id) setGroupClass(`w${tt.id}`, "active", "dim");
-        else setGroupClass(`w${tt.id}`, "dim", "active");
-      });
-
-      const p = document.getElementById(`p${t.id}`);
-      if(p){
-        p.setAttribute("class","wedgeActive");
-        p.setAttribute("filter","url(#softShadow)");
-      }
-
-      // on click = select + scan
-      if(!isHover){
-        selected = id;
-        const s = document.getElementById(`s${t.id}`);
-        if(s) s.classList.add("on");
-        renderPanel(id);
-      }
-    }
-
-    // Events
-    document.querySelectorAll(".hit").forEach(hit => {
-      hit.addEventListener("mouseenter", e => {
-        const id = Number(e.target.getAttribute("data-test"));
-        if(!Number.isFinite(id)) return;
-        if(selected !== null) return;
-        focusTest(id, true);
-      });
-
-      hit.addEventListener("mouseleave", () => {
-        if(selected !== null) return;
-        clearAll();
-      });
-
-      hit.addEventListener("click", e => {
-        const id = Number(e.target.getAttribute("data-test"));
-        if(!Number.isFinite(id)) return;
-        focusTest(id, false);
-      });
-    });
-
-    viewBtn.addEventListener("click", () => {
-      const href = viewBtn.dataset.href;
-      if(!href) return;
-      window.location.href = href;
-    });
-
-    resetBtn.addEventListener("click", clearAll);
-
-    // Init
-    clearAll();
-  </script>
 </body>
 </html>
