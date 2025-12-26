@@ -48,20 +48,15 @@
             --mode-diff-ins-bg: #e6ffec;
             --mode-diff-ins-text: #006600;
 
-            /* SPACING & DIMS */
+            /* SPACING */
             --sidebar-width: 280px;
-            --rail-width: 450px; 
-
-            /* === RAIL: FULL MINI DIAGRAM (EMBED THUMB) === */
-            --thumb-scale: 0.28;          /* Scales the 1400px diagram down to rail width */
-            --thumb-native-w: 1400px;     /* Native width of the diagram HTML */
-            --thumb-native-h: 900px;      /* Native height of the diagram HTML */
+            --rail-width: 500px; 
         }
 
         /* DARK MODE */
         [data-theme="dark"] {
-            --bg-color: #050505;
-            --sidebar-bg: #050505;
+            --bg-color: #0a0a0a;
+            --sidebar-bg: #0a0a0a;
             --text-main: #e0e0e0;
             --text-muted: #888888;
             --border-color: #333333;
@@ -74,6 +69,7 @@
             --mode-audit: #ffaa00;
             --mode-logic: #66aaff;
             
+            /* DIFF COLORS DARK */
             --mode-diff-del-bg: #330000;
             --mode-diff-del-text: #ff6666;
             --mode-diff-ins-bg: #003300;
@@ -158,7 +154,7 @@
             min-width: 0;
         }
 
-        /* RIGHT RAIL (Sticky Diagrams) */
+        /* RIGHT RAIL */
         .diagram-rail {
             width: var(--rail-width);
             flex-shrink: 0;
@@ -168,7 +164,7 @@
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
-        /* RAIL ITEM & EMBED STYLES */
+        /* --- DIAGRAM THUMBNAILS (Visual Fix) --- */
         .rail-item { margin-bottom: 3rem; cursor: zoom-in; transition: transform 0.2s; }
         .rail-item:hover { transform: scale(1.02); }
         .rail-label {
@@ -176,26 +172,25 @@
             font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;
         }
         
-        .rail-thumbframe {
+        .rail-thumb {
             width: 100%;
-            /* Height is calculated based on native aspect ratio * scale */
-            height: calc(var(--thumb-native-h) * var(--thumb-scale));
+            height: auto;
+            display: block;
+            /* Defined Card Style */
+            background: #fff;
             border: 1px solid var(--border-color);
-            background: var(--bg-color);
-            overflow: hidden;
-            border-radius: 2px;
-            position: relative;
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            /* Contrast boost for light UI screenshots */
+            filter: contrast(1.08) brightness(0.98);
+            object-fit: contain;
         }
 
-        .rail-thumbframe iframe {
-            width: var(--thumb-native-w);
-            height: var(--thumb-native-h);
-            border: 0;
-            transform: scale(var(--thumb-scale));
-            transform-origin: 0 0;
-            pointer-events: none; /* Clicks pass through to the rail-item onclick */
-            display: block;
-            background: var(--bg-color);
+        body[data-theme="dark"] .rail-thumb {
+            background: #0b0b0b;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            filter: none;
         }
 
         /* FOOTER */
@@ -269,6 +264,20 @@
             padding: 0 2px;
         }
         
+        /* Revision trace headers: only in DIFF mode */
+        .diff-header {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--text-muted);
+            padding-bottom: 8px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        body:not([data-mode="diff"]) .diff-header { display: none !important; }
+
+        /* Other Modes */
         .audit-marker { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--bg-color); }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         
@@ -526,23 +535,17 @@
                     
                     <div class="rail-item" onclick="openModal('diag-coverage-map-v1.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-01</span>
-                        <div class="rail-thumbframe">
-                            <iframe src="diag-coverage-map-v1.html?embed=1" loading="lazy"></iframe>
-                        </div>
+                        <img class="rail-thumb" src="assets/images/image_79b414.png" alt="Coverage Map" onerror="this.style.background='#eee'">
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-diagram-preview.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-02</span>
-                        <div class="rail-thumbframe">
-                            <iframe src="diag-diagram-preview.html?embed=1" loading="lazy"></iframe>
-                        </div>
+                        <img class="rail-thumb" src="assets/images/fig11_static.jpg" alt="Preview" onerror="this.style.background='#eee'">
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-layers-substrate.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-03</span>
-                        <div class="rail-thumbframe">
-                            <iframe src="diag-layers-substrate.html?embed=1" loading="lazy"></iframe>
-                        </div>
+                        <img class="rail-thumb" src="assets/images/fig10_static.jpg" alt="Substrate" onerror="this.style.background='#eee'">
                     </div>
 
                 </div>
