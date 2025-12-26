@@ -50,7 +50,7 @@
 
             /* SPACING */
             --sidebar-width: 280px;
-            --rail-width: 500px; 
+            --rail-width: 450px; 
         }
 
         /* DARK MODE */
@@ -141,7 +141,7 @@
             border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
         }
 
-        /* SPLIT VIEW (Content + Rail) */
+        /* SPLIT VIEW */
         .split-view {
             display: flex;
             flex: 1;
@@ -164,7 +164,7 @@
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
-        /* --- DIAGRAM THUMBNAILS (Visual Fix) --- */
+        /* === RAIL: LIVE PREVIEW IFRAMES === */
         .rail-item { margin-bottom: 3rem; cursor: zoom-in; transition: transform 0.2s; }
         .rail-item:hover { transform: scale(1.02); }
         .rail-label {
@@ -172,25 +172,35 @@
             font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;
         }
         
-        .rail-thumb {
+        .rail-preview {
             width: 100%;
-            height: auto;
-            display: block;
-            /* Defined Card Style */
-            background: #fff;
+            height: 250px; /* Fixed height for clean grid */
             border: 1px solid var(--border-color);
             border-radius: 6px;
+            background: #fff;
             padding: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-            /* Contrast boost for light UI screenshots */
-            filter: contrast(1.08) brightness(0.98);
-            object-fit: contain;
+            overflow: hidden;
+            position: relative;
         }
 
-        body[data-theme="dark"] .rail-thumb {
+        /* High contrast for dark mode previews */
+        body[data-theme="dark"] .rail-preview {
             background: #0b0b0b;
             box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-            filter: none;
+        }
+
+        .rail-iframe {
+            width: 1400px;      /* Virtual canvas width */
+            height: 900px;      /* Virtual canvas height */
+            border: 0;
+            transform: scale(0.28); /* Shrink to fit rail */
+            transform-origin: top left;
+            pointer-events: none; /* Pass clicks to parent div */
+            display: block;
+            background: var(--bg-color);
+            position: absolute;
+            top: 10px; left: 10px;
         }
 
         /* FOOTER */
@@ -264,20 +274,6 @@
             padding: 0 2px;
         }
         
-        /* Revision trace headers: only in DIFF mode */
-        .diff-header {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--text-muted);
-            padding-bottom: 8px;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        body:not([data-mode="diff"]) .diff-header { display: none !important; }
-
-        /* Other Modes */
         .audit-marker { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--bg-color); }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         
@@ -535,17 +531,23 @@
                     
                     <div class="rail-item" onclick="openModal('diag-coverage-map-v1.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-01</span>
-                        <img class="rail-thumb" src="assets/images/image_79b414.png" alt="Coverage Map" onerror="this.style.background='#eee'">
+                        <div class="rail-preview">
+                            <iframe class="rail-iframe" src="diag-coverage-map-v1.html?embed=1" loading="lazy"></iframe>
+                        </div>
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-diagram-preview.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-02</span>
-                        <img class="rail-thumb" src="assets/images/fig11_static.jpg" alt="Preview" onerror="this.style.background='#eee'">
+                        <div class="rail-preview">
+                            <iframe class="rail-iframe" src="diag-diagram-preview.html?embed=1" loading="lazy"></iframe>
+                        </div>
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-layers-substrate.html?embed=1')">
                         <span class="rail-label">DIAGRAM — RD-FIG-03</span>
-                        <img class="rail-thumb" src="assets/images/fig10_static.jpg" alt="Substrate" onerror="this.style.background='#eee'">
+                        <div class="rail-preview">
+                            <iframe class="rail-iframe" src="diag-layers-substrate.html?embed=1" loading="lazy"></iframe>
+                        </div>
                     </div>
 
                 </div>
