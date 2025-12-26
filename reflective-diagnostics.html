@@ -19,290 +19,148 @@
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V54 --- */
+        /* --- THEME: INSTITUTE STANDARD V130 (SHARED WITH LEXICON) --- */
         :root {
+            /* LIGHT MODE */
             --bg-color: #ffffff;
+            --sidebar-bg: #ffffff;
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
-            --sidebar-width: 280px;
             --card-bg: #fafafa;
-            --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            
+            --panel-border: #000;
+            --panel-bg: #fff;
+            --panel-text: #000;
+            --panel-hover-bg: #000;
+            --panel-hover-text: #fff;
             
             /* SIGNALS */
-            --status-verified: #00cc00;
+            --signal-enforced: #00cc00;
+            --status-verified: var(--signal-enforced);
             
             /* MODES */
             --mode-audit: #b45309; 
             --mode-logic: #0044cc; 
             --mode-diff: #000000;
+
+            /* DIFF COLORS */
             --mode-diff-del-bg: #ffebeb;
             --mode-diff-del-text: #cc0000;
             --mode-diff-ins-bg: #e6ffec;
             --mode-diff-ins-text: #006600;
+
+            /* SPACING */
+            --block-gap: 48px;
         }
 
-        /* --- DARK MODE OVERRIDES --- */
-        body[data-theme="dark"] {
-            --bg-color: #0a0a0a;
-            --text-main: #f0f0f0;
+        /* DARK MODE */
+        [data-theme="dark"] {
+            --bg-color: #050505;
+            --sidebar-bg: #050505;
+            --text-main: #e0e0e0;
             --text-muted: #888888;
             --border-color: #333333;
-            --card-bg: #111;
+            --card-bg: #111111;
+            
+            --panel-border: #444;
+            --panel-bg: #050505;
+            --panel-text: #ccc;
+            --panel-hover-bg: #e0e0e0;
+            --panel-hover-text: #000;
+            
             --mode-audit: #ffaa00;
             --mode-logic: #66aaff;
+            
+            /* DIFF COLORS DARK */
             --mode-diff-del-bg: #330000;
             --mode-diff-del-text: #ff6666;
             --mode-diff-ins-bg: #003300;
             --mode-diff-ins-text: #66ff66;
         }
-        body[data-theme="dark"] aside { background-color: #0a0a0a; border-right-color: #333; }
-        body[data-theme="dark"] .mobile-bar { background: rgba(10,10,10,0.95); border-bottom-color: #333; }
-        body[data-theme="dark"] .mobile-index-btn { background: var(--bg-color); color: var(--text-main); border-color: var(--border-color); }
-        body[data-theme="dark"] .brand div { color: #fff; }
-        body[data-theme="dark"] nav a.active { color: #fff; border-left-color: #fff; background: linear-gradient(90deg, #151515, #0a0a0a); }
-        body[data-theme="dark"] nav a:hover { color: #fff; }
-        body[data-theme="dark"] .toggle-btn:hover, body[data-theme="dark"] .toggle-btn.active { color: #fff; }
-        body[data-theme="dark"] .export-btn { background: #111; color: #ccc; border-color: #444; }
-        body[data-theme="dark"] .export-btn:hover { background: #fff; color: #000; }
-        body[data-theme="dark"] .repo-panel { background: #111; border-color: #333; }
-        body[data-theme="dark"] .claim-box { background: #111; border-color: #333; }
-        body[data-theme="dark"] .claim-id { color: #fff; }
-        body[data-theme="dark"] .claim-text { color: #ccc; }
-        body[data-theme="dark"] .logic-block { background: #111; border-color: #333; color: #ccc; }
-        body[data-theme="dark"] .logic-block::before { background: #222; border-color: #333; }
-        body[data-theme="dark"] p { color: #ccc; }
-        body[data-theme="dark"] h1, body[data-theme="dark"] h2 { color: #fff; }
-        body[data-theme="dark"] .doc-val { color: #fff; }
 
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         
         body {
             margin: 0; padding: 0;
-            font-family: var(--font-stack);
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            display: flex;
-            flex-direction: column; 
-            min-height: 100vh;
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .layout-wrapper {
-            display: flex;
-            flex: 1; 
-            width: 100%;
-        }
-
-        /* --- BEACONS & SEALS --- */
-        @keyframes beacon-pulse-green {
-            0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; }
-            50% { opacity: 1; }
-            100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; }
-        }
-        @keyframes border-pulse {
-            0% { border-color: rgba(0,204,0,0.4); }
-            50% { border-color: rgba(0,204,0,1); }
-            100% { border-color: rgba(0,204,0,0.4); }
-        }
-        @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
-
-        .integrity-seal { 
-            margin-left: auto; display: flex; align-items: center; gap: 8px; 
-            font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
-            border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
-            background: rgba(0,204,0,0.05); cursor: default;
-            animation: border-pulse 3s infinite;
-        }
-        .status-dot { 
-            width: 8px; height: 8px; background: var(--status-verified); 
-            border-radius: 50%; display: block; 
-            animation: beacon-pulse-green 2s infinite;
-        }
-
-        /* --- MOBILE BAR --- */
-        .mobile-bar {
-            display: none;
-            position: fixed; top: 0; left: 0; right: 0;
-            z-index: 10001; 
-            background: rgba(255,255,255,0.98);
-            border-bottom: 1px solid var(--border-color);
-            padding: 0 1.25rem;
-            height: 50px;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(10px);
-        }
-        .mobile-brand { font-weight: 800; font-size: 0.85rem; letter-spacing: -0.02em; }
-        
-        .mobile-index-btn {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border: 1px solid var(--border-color);
+            font-family: "Inter", sans-serif;
             background: var(--bg-color);
             color: var(--text-main);
-            cursor: pointer;
+            line-height: 1.5;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* --- SIDEBAR --- */
-        aside { 
-            width: var(--sidebar-width); 
-            height: 100vh; position: sticky; top: 0; align-self: flex-start;
-            border-right: 1px solid var(--border-color); padding: 3rem 2rem; 
-            display: flex; flex-direction: column; flex-shrink: 0; 
-            background: var(--bg-color); z-index: 1000; 
-            overflow-y: auto;
+        /* --- TYPOGRAPHY --- */
+        h1 { 
+            font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; 
+            margin-bottom: 0.5rem; display:flex; align-items:center; text-transform: uppercase;
         }
-        .brand { margin-bottom: 4rem; cursor: crosshair; }
-        .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: #000; }
-        .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
+        .doc-subtitle { font-family: "JetBrains Mono", monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 3rem; letter-spacing: 0.02em; }
+        
+        h2 { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 3rem 0 1.5rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; display:flex; align-items:center; }
+        p { font-size: 0.95rem; margin-bottom: 1.2rem; color: var(--text-main); max-width: 65ch; }
+        ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
+        li { margin-bottom: 0.5rem; font-size: 0.95rem; }
+        
+        .mono { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .scramble, .scramble-brand { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
+        /* ORIENTING FRAME & HEADER */
+        .global-header-strip {
+            width: 100%; padding: 2rem 4rem; border-bottom: 1px solid var(--border-color);
+            background: var(--bg-color); z-index: 10;
+        }
+        .header-meta {
+            display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem;
+            font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted);
+        }
+        .orienting-frame { 
+            font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); 
+            text-transform: uppercase; letter-spacing: 0.05em; 
+            border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
+        }
+
+        /* --- SIDEBAR COMPONENTS --- */
         .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
-        .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; text-decoration: none; }
+        .toggle-btn { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; text-decoration: none; }
         .toggle-btn:hover { color: var(--text-main); }
         .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
-        
-        nav ul { list-style: none; padding: 0; margin: 0; }
-        nav li { margin-bottom: 4px; }
-        nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 2px 0 2px 10px; border-left: 2px solid transparent; display: block; }
-        nav a:hover { color: #000; }
-        nav a.active { color: #000; font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
 
-        /* --- THEME & EXPORT --- */
         .theme-switch {
-            margin-top: auto; margin-bottom: 1rem;
-            cursor: pointer; font-family: var(--font-mono); font-size: 0.7rem; 
-            color: var(--text-muted); display: flex; justify-content: space-between; 
-            padding: 12px 0; border-top: 1px solid var(--border-color); transition: color 0.2s;
+            display: flex; justify-content: space-between; padding: 12px 0; 
+            font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted);
+            cursor: pointer;
         }
         .theme-switch:hover { color: var(--text-main); }
 
         .repo-panel {
             margin-top: 0; margin-bottom: 1rem; 
-            border: 1px solid var(--border-color); background: var(--bg-color); 
-            padding: 12px; font-family: var(--font-mono);
-            cursor: default; 
+            border: 1px solid var(--panel-border); background: var(--panel-bg); 
+            padding: 12px; font-family: "JetBrains Mono", monospace;
+            transition: all 0.2s ease; cursor: default;
         }
         .repo-header {
-            font-size: 0.65rem; font-weight: 700; color: var(--text-main); 
-            margin-bottom: 8px; display: flex; justify-content: space-between; 
-            align-items: center; letter-spacing: 0.05em;
+            font-size: 0.65rem; font-weight: 700; color: var(--panel-text); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; transition: color 0.2s;
         }
         .repo-subtext { font-size: 0.6rem; color: var(--text-muted); }
         .status-dot-red { width: 6px; height: 6px; background: #cc0000; border-radius: 50%; display: block; animation: beacon-red 2s infinite; }
-        .git-icon-small { width: 14px; height: 14px; fill: var(--text-main); }
+        .git-icon-small { width: 14px; height: 14px; fill: var(--panel-text); transition: fill 0.2s; }
+        
+        .export-btn { width: 100%; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .export-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
-        .export-btn { width: 100%; background: #fff; border: 1px solid var(--border-color); padding: 10px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .export-btn:hover { background: #000; color: #fff; border-color: #000; }
+        @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; } }
+        @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
+        @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
 
-        /* --- MAIN CONTENT --- */
-        main { 
-            flex-grow: 1; padding: 3rem 3rem; 
-            max-width: 1200px; width: 100%;
-        }
-        
-        .doc-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 3rem; display: flex; justify-content: flex-start; gap: 3rem; align-items: center; color: var(--text-muted); font-family: var(--font-mono); font-size: 0.7rem; }
-        .doc-meta { display: flex; flex-direction: column; }
-        .doc-label { font-size: 0.6rem; color: #999; margin-bottom: 2px; }
-        .doc-val { font-weight: 500; color: #000; }
-
-        section { 
-            margin-bottom: 3rem; scroll-margin-top: 5rem; 
-            display: grid; grid-template-columns: 1fr; gap: 0; position: relative; 
-        }
-        
-        h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 0.5rem; display:flex; align-items:center; }
-        .doc-subtitle { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 3rem; letter-spacing: 0.02em; }
-        h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 1.5rem; margin-top: 0; display:flex; align-items:center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-        p { margin-bottom: 1.5rem; max-width: 65ch; color: inherit; position: relative; font-size: 0.95rem; }
-        ul { list-style: square; padding-left: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted); }
-        li { margin-bottom: 0.5rem; font-size: 0.95rem; }
-        
-        .scramble-hover { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
-        .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; border-left: 1px solid var(--border-color); padding-left: 12px; }
-
-        /* [FIX] Footer Stacking */
-        #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
-
-        /* --- INLINE DIAGRAM STYLES (CLICKABLE) --- */
-        .inline-diagram-container {
-            margin: 3rem 0;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            padding: 1.5rem;
-            cursor: zoom-in;
-            transition: border-color 0.2s;
-            position: relative;
-        }
-        .inline-diagram-container:hover { border-color: var(--text-main); }
-        
-        .diagram-label {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-        }
-        
-        iframe.preview-frame {
-            width: 100%;
-            height: 520px; /* Fixed height for clean inline view */
-            border: none;
-            display: block;
-            background: var(--bg-color);
-            pointer-events: none; /* Passes clicks to container */
-            overflow: hidden;
-        }
-        
-        .expand-hint {
-            margin-top: 0.75rem;
-            text-align: center;
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            opacity: 0.7;
-        }
-        
-        /* FULLSCREEN MODAL */
-        #diagram-modal {
-            display: none;
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 20000;
-            align-items: center; justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-        #diagram-modal.open { display: flex; }
-        .modal-content {
-            width: 90vw; height: 90vh;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-        .modal-close {
-            position: absolute; top: -35px; right: 0;
-            color: #fff; background: none; border: none;
-            font-family: "JetBrains Mono", monospace; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 0.1em;
-            font-size: 0.7rem;
-        }
-        .modal-iframe { width: 100%; flex-grow: 1; border: none; }
+        .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
+        .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
         /* --- VISIBILITY RULES --- */
         del, ins, .diff-tag { display: none; } 
 
-        /* 1. READER MODE: Show Ins, Hide Del */
+        /* READER MODE */
         body[data-mode="reader"] .audit-marker,
         body[data-mode="reader"] .logic-block,
         body[data-mode="reader"] .diff-del,
@@ -312,339 +170,435 @@
         body[data-mode="reader"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="reader"] del { display: none; }
 
-        /* 2. DIFF MODE: Show All */
+        /* DIFF MODE */
         body[data-mode="diff"] del { display: inline; background: var(--mode-diff-del-bg); color: var(--mode-diff-del-text); text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
         body[data-mode="diff"] ins { display: inline; background: var(--mode-diff-ins-bg); color: var(--mode-diff-ins-text); border-bottom: 2px solid var(--mode-diff-ins-text); text-decoration: none; padding: 0 2px; }
-        body[data-mode="diff"] .diff-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
-        
-        .diff-header { display: none; font-family: var(--font-mono); font-size: 0.65rem; color: #000; border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        body[data-mode="diff"] .diff-tag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
+        .diff-header { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-main); border-bottom: 1px solid var(--text-main); padding-bottom: 8px; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
         body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
-        body[data-mode="diff"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; pointer-events: none; }
 
-        /* 3. AUDIT MODE: Show Ins, Hide Del */
-        .audit-marker { display: none; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--bg-color); }
+        /* AUDIT MODE */
+        .audit-marker { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--bg-color); }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         body[data-mode="audit"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="audit"] del { display: none; }
-        
-        body[data-mode="audit"] section { grid-template-columns: 1fr 280px; gap: 3rem; }
         body[data-mode="audit"] .audit-rail { display: block; }
         
-        .audit-rail { display: none; padding-left: 1.5rem; border-left: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); position: sticky; top: 100px; height: fit-content; }
-        .claim-box { margin-bottom: 2rem; padding: 1rem; background: var(--card-bg); border: 1px solid var(--border-color); transition: all 0.2s; cursor: pointer; }
-        .claim-id { font-weight: 700; color: #000; display: block; margin-bottom: 0.5rem; }
+        .audit-rail { display: none; margin-top: 1rem; padding-left: 1rem; border-left: 1px solid var(--border-color); font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted); }
+        .claim-box { margin-bottom: 1rem; padding: 0.8rem; background: var(--card-bg); border: 1px solid var(--border-color); }
+        .claim-id { font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.5rem; }
         .claim-meta { display: flex; justify-content: space-between; opacity: 0.8; margin-bottom: 0.5rem; font-size: 0.6rem; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; }
-        .metric-tag { font-weight: 600; color: #000; }
-        .claim-text { color: #333; line-height: 1.4; }
+        .metric-tag { font-weight: 600; color: var(--text-main); }
+        .claim-text { color: var(--text-muted); line-height: 1.4; }
 
-        /* 4. LOGIC MODE: Show Ins, Hide Del */
-        .logic-block { display: none; font-family: var(--font-mono); font-size: 0.8rem; color: #333; background-color: var(--card-bg); border: 1px solid var(--border-color); border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
-        
-        .logic-block::before {
-            content: "FORMAL BACKING — NON-EXECUTABLE";
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: var(--bg-color);
-            color: var(--mode-logic);
-            font-size: 0.55rem;
-            border-bottom: 1px solid var(--border-color);
-            border-left: 1px solid var(--border-color);
-            padding: 4px 8px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-        }
-
+        /* LOGIC MODE */
+        .logic-block { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.8rem; color: var(--text-muted); background-color: var(--card-bg); border: 1px solid var(--border-color); border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
+        .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: var(--bg-color); color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid var(--border-color); border-left: 1px solid var(--border-color); padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
         body[data-mode="logic"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="logic"] del { display: none; }
-
         @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- MODE BANNER --- */
         #mode-banner { 
             position: fixed; top: 120px; right: 5rem; 
-            font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; 
+            font-family: "JetBrains Mono", monospace; font-size: 0.65rem; font-weight: 700; 
             padding: 8px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; 
             opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; z-index: 100; 
             background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+            border: 1px solid var(--border-color); color: var(--text-main); border-left-width: 4px;
         }
         body:not([data-mode="reader"]) #mode-banner { opacity: 1; transform: translateY(0); }
         body[data-mode="audit"] #mode-banner { border: 1px solid var(--mode-audit); color: var(--mode-audit); border-left-width: 4px; }
         body[data-mode="logic"] #mode-banner { border: 1px solid var(--mode-logic); color: var(--mode-logic); border-left-width: 4px; }
         body[data-mode="diff"] #mode-banner { border: 1px solid var(--mode-diff); color: var(--mode-diff); border-left-width: 4px; }
 
-        /* --- MOBILE ADJUSTMENTS --- */
-        @media (max-width: 900px) {
-            .layout-wrapper { display: block; }
-            body { overflow-x: hidden; }
-            .mobile-bar { display: flex; }
+        /* --- NAVIGATION --- */
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        nav li { margin-bottom: 4px; }
+        nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; display: block; padding: 2px 0 2px 10px; border-left: 2px solid transparent; }
+        nav a:hover { color: var(--text-main); }
+        nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
+
+        /* =========================================
+           LAYOUT ENGINE: SEGREGATED 3-COLUMN (DESKTOP)
+           ========================================= */
+
+        @media (min-width: 1101px) {
+            body { display: flex; min-height: 100vh; }
             
-            aside { 
-                position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); 
-                transform: translateX(-100%); transition: transform 0.25s ease;
-                border-right: none; padding: 2rem; background: var(--bg-color); overflow-y: auto; z-index: 10000;
+            aside#sidebar {
+                width: 240px;
+                height: 100vh;
+                position: sticky;
+                top: 0;
+                border-right: 1px solid var(--border-color);
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                z-index: 99;
+                background: var(--sidebar-bg);
+                flex-shrink: 0;
+                overflow: hidden;           
             }
-            aside.open { transform: translateX(0); }
+
+            .sidebar-scroll {
+                flex: 1;
+                min-height: 0;              
+                overflow-y: auto;
+                padding: 2rem;
+            }
+
+            .sidebar-bottom {
+                padding: 0 2rem 2rem 2rem;
+                background: var(--sidebar-bg);
+                border-top: 1px solid var(--border-color);
+            }
+
+            .theme-switch { position: static; margin: 0 0 1rem 0 !important; border-top: none !important; }
+
+            .main-column { flex-grow: 1; display: flex; flex-direction: column; margin: 0; min-height: 100vh; min-width: 0; }
+            .split-view { display: flex; flex: 1; align-items: flex-start; min-width: 0; }
+            .content-col { flex: 1 1 auto; min-width: 0; max-width: none; padding: 2rem 4rem 6rem 4rem; display: flex; flex-direction: column; }
+
+            /* DIAGRAM RAIL - STICKY RIGHT */
+            .diagram-col {
+                flex: 0 0 450px; /* Width for desktop rail */
+                width: 450px; 
+                border-left: 1px solid var(--border-color);
+                background: var(--bg-color);
+                padding: 0;
+                align-self: flex-start;
+                position: sticky; 
+                top: 0; 
+                height: 100vh; 
+                overflow: hidden;        
+            }
             
-            main { padding: 1.5rem; margin-top: 50px; width: 100%; max-width: 100vw; }
-            section { margin-bottom: 4rem; grid-template-columns: 1fr !important; }
-            .audit-rail { display: none !important; }
-            .doc-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .integrity-seal { margin-left: 0; }
+            .diagram-scroll { height: 100%; overflow-y: auto; padding: 2rem 2rem 4rem 2rem; }
+            
+            .diagram-tile {
+                margin-bottom: 3rem;
+                cursor: zoom-in;
+                opacity: 0.9;
+                transition: opacity 0.2s, transform 0.2s;
+            }
+            .diagram-tile:hover { opacity: 1; transform: scale(1.01); }
+            
+            .tile-label { font-family: "JetBrains Mono", monospace; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; display:block; }
+            .tile-img { width: 100%; height: auto; border: 1px solid var(--border-color); background: var(--card-bg); display: block; }
+        }
+
+        /* MOBILE/TABLET ENGINE */
+        @media (max-width: 1100px) {
+            body { display: block; overflow-x: hidden; }
+            body.sidebar-open { position: fixed; width: 100%; overflow: hidden; }
+            
+            #sidebar-overlay {
+                position: fixed; top: 50px; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.5); 
+                opacity: 0; pointer-events: none;
+                transition: opacity 0.25s ease;
+                z-index: 9999;
+                backdrop-filter: blur(2px);
+            }
+            aside#sidebar.open ~ #sidebar-overlay { opacity: 1; pointer-events: auto; }
+
+            aside#sidebar {
+                position: fixed; top: 50px; left: 0; bottom: 0; width: 100%;
+                transform: translateX(-100%); transition: transform 0.25s ease;
+                border-right: none; background: var(--sidebar-bg); z-index: 10000;
+                height: calc(100dvh - 50px);
+                display: flex; flex-direction: column; overflow: hidden; padding: 0;
+            }
+            aside#sidebar.open { transform: translateX(0); }
+            
+            .sidebar-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 2rem; }
+            .sidebar-bottom { padding: 0 2rem 2rem 2rem; background: var(--sidebar-bg); border-top: 1px solid var(--border-color); }
+
+            .global-header-strip { padding: 2rem; }
+            .main-column { margin-top: 50px; padding: 0; width: 100%; max-width: 100vw; display: block; }
+            .split-view { display: block; }
+            .content-col { padding: 1.5rem; max-width: none; }
+            
+            /* Mobile Diagram Rail: Collapses below content */
+            .diagram-col { 
+                width: 100%; height: auto; position: static; border-left: none; border-top: 1px solid var(--border-color);
+            }
+            .diagram-scroll { padding: 2rem; overflow: visible; }
             
             #mode-banner { top: 60px; right: 20px; z-index: 900; }
-            
-            .logic-block { 
-                max-width: 100%; 
-                overflow-x: auto; 
-                word-break: break-word; 
-                font-size: 0.7rem; 
-                margin: 2rem 0; 
-            }
         }
+        
+        /* FULLSCREEN MODAL */
+        #diagram-modal {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 20000;
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        #diagram-modal.open { display: flex; }
+        .modal-content {
+            width: 95vw; height: 90vh; max-width: 1400px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-close {
+            position: absolute; top: -30px; right: 0;
+            color: #fff; background: none; border: none;
+            font-family: "JetBrains Mono", monospace; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            font-size: 0.7rem;
+        }
+        .modal-iframe { width: 100%; flex-grow: 1; border: none; }
     </style>
 </head>
 <body data-mode="reader" data-theme="light">
 
     <div id="mode-banner">READER MODE</div>
 
-    <header class="mobile-bar">
-        <div class="mobile-brand">ENLIGHTENED AI</div>
-        <div style="display:flex; align-items:center; gap:15px;">
-            <span id="theme-icon-mobile" onclick="toggleTheme()" style="cursor:pointer; font-size:1.1rem; user-select:none;">◐</span>
-            <button class="mobile-index-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">INDEX</button>
+    <header style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:var(--bg-color); border-bottom:1px solid var(--border-color); padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);" id="mobile-bar">
+        <div style="font-weight:800; font-size:0.85rem; letter-spacing:-.02em; color:var(--text-main);">ENLIGHTENED AI</div>
+        <div style="display:flex; gap:15px; align-items:center;">
+             <span onclick="toggleTheme()" style="cursor:pointer; font-size:1rem; color:var(--text-main);">◐</span>
+             <button onclick="toggleSidebar()" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; padding:4px 10px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); cursor:pointer;">INDEX</button>
         </div>
     </header>
+    
+    <script>
+    (function syncMobileBar() {
+      const bar = document.getElementById('mobile-bar');
+      const apply = () => { bar.style.display = (window.innerWidth <= 1100) ? 'flex' : 'none'; };
+      window.addEventListener('resize', apply);
+      apply();
+    })();
+    </script>
 
     <div class="layout-wrapper">
         <aside id="sidebar">
-            <div class="brand">
-                <div class="scramble-brand" data-value="ENLIGHTENED AI" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
-                <div class="scramble-brand" data-value="RESEARCH LAB" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
-                <span>EST. 2026 // MONTREAL</span>
-            </div>
-
-            <div class="mode-group">
-                <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader', 'READER MODE')">[ READER ] <span>•</span></span>
-                <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')">[ AUDIT ] <span>•</span></span>
-                <span class="toggle-btn" id="btn-diff" onclick="setMode('diff', 'CHANGE TRACE ACTIVE')">[ DIFF LOG ] <span>Δ</span></span>
-                <span class="toggle-btn" id="btn-logic" onclick="setMode('logic', 'LOGIC LAYER EXPOSED')">[ LOGIC ] <span>λ</span></span>
-            </div>
-            
-            <nav>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="lexicon.html">Lexicon</a></li>
-                    <li><a href="reflective-diagnostics.html" class="active">Diagnostics</a></li>
-                </ul>
-            </nav>
-            
-            <div class="theme-switch" onclick="toggleTheme()">
-                [ LIGHT / DARK ] <span id="theme-icon">◐</span>
-            </div>
-
-            <div class="repo-panel" title="Access available under NDA or technical review.">
-                <div class="repo-header">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                        GITHUB REPOSITORY
-                    </div>
-                    <span class="status-dot-red"></span>
+            <div class="sidebar-scroll">
+                <div class="brand">
+                    <div class="scramble-brand" data-value="ENLIGHTENED AI" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
+                    <div class="scramble-brand" data-value="RESEARCH LAB" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
+                    <span>EST. 2026 // MONTREAL</span>
                 </div>
-                <div class="repo-subtext">Private repository — controlled access</div>
-            </div>
 
-            <div class="export-container">
-                <button class="export-btn" onclick="window.print()"><span>🖨</span> Export Record</button>
+                <div class="mode-group">
+                    <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader', 'READER MODE')">[ READER ] <span>•</span></span>
+                    <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')">[ AUDIT ] <span>•</span></span>
+                    <span class="toggle-btn" id="btn-diff" onclick="setMode('diff', 'CHANGE TRACE ACTIVE')">[ DIFF LOG ] <span>Δ</span></span>
+                    <span class="toggle-btn" id="btn-logic" onclick="setMode('logic', 'LOGIC LAYER EXPOSED')">[ LOGIC ] <span>λ</span></span>
+                </div>
+                
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="lexicon.html">Lexicon</a></li>
+                        <li><a href="reflective-diagnostics.html" class="active">Diagnostics</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="sidebar-bottom">
+                <div class="theme-switch" onclick="toggleTheme()">
+                    [ LIGHT / DARK ] <span id="theme-icon">◐</span>
+                </div>
+
+                <div class="repo-panel" title="Access available under NDA or technical review.">
+                    <div class="repo-header">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            GITHUB REPOSITORY
+                        </div>
+                        <span class="status-dot-red"></span>
+                    </div>
+                    <div class="repo-subtext">Private repository — controlled access</div>
+                </div>
+
+                <div class="export-container">
+                    <button class="export-btn" onclick="window.print()"><span>🖨</span> Export Record</button>
+                </div>
             </div>
         </aside>
 
-        <main>
-            <div class="doc-header mono">
-                <div class="doc-meta"><span class="doc-label">DOC_ID</span><span class="doc-val">RD-DIAG-0001</span></div>
-                <div class="doc-meta"><span class="doc-label">CLASSIFICATION</span><span class="doc-val">PUBLIC</span></div>
-                <div class="integrity-seal verified"><span class="status-dot"></span><span>INTEGRITY: VERIFIED</span></div>
-            </div>
-            
-            <div style="margin-bottom: 4rem;">
-                <h1>Reflective Diagnostics</h1>
-                <div class="doc-subtitle">Internal diagnostic dashboard — limited public view</div>
+        <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+        <div class="main-column">
+            <div class="global-header-strip">
+                <div class="header-meta">
+                    <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">DOC_ID</span>RD-DIAG-0001</div>
+                    <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">CLASSIFICATION</span>PUBLIC</div>
+                    <div class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
+                </div>
+                <div class="orienting-frame">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW DIAGNOSTICS ARE PRODUCED AS A SYSTEM PROPERTY.</div>
             </div>
 
-            <section>
+            <div class="split-view">
                 <div class="content-col">
-                    <div class="diff-header">REVISION TRACE — v2.3 → v2.4 [Instrument Hardening]</div>
-                    <h2><span class="scramble-hover" data-value="01 //">01 //</span> Overview</h2>
-                    <div class="prose-content">
-                        <p>
-                            <span class="audit-marker">[D1.0]</span>
-                            Reflective Diagnostics is an internal, <del>dashboard</del> <ins>evidence-first instrument</ins> for <del>analyzing</del> <ins>verifying</ins> language-model behavior, stability, and failure dynamics across structured analytical layers.
-                        </p>
-                        <p>
-                            The system operates exclusively on stored records and evidence artifacts. It is designed for measurement, traceability, and audit, not for live interaction or public evaluation.
-                        </p>
-                        
-                        <div class="logic-block">
+                    <div style="margin-bottom: 4rem;">
+                        <h1>Reflective Diagnostics</h1>
+                        <div class="doc-subtitle">Internal diagnostic dashboard — limited public view</div>
+                    </div>
+
+                    <section>
+                        <div class="diff-header">REVISION TRACE — v2.3 → v2.4 [Instrument Hardening]</div>
+                        <h2><span class="scramble-hover" data-value="01 //">01 //</span> Overview</h2>
+                        <div class="prose-content">
+                            <p>
+                                <span class="audit-marker">[D1.0]</span>
+                                Reflective Diagnostics is an internal, <del>dashboard</del> <ins>evidence-first instrument</ins> for <del>analyzing</del> <ins>verifying</ins> language-model behavior, stability, and failure dynamics across structured analytical layers.
+                            </p>
+                            <p>
+                                The system operates exclusively on stored records and evidence artifacts. It is designed for measurement, traceability, and audit, not for live interaction or public evaluation.
+                            </p>
+                            
+                            <div class="logic-block">
 <span class="logic-comment"># Formal Definition: Diagnostic Engine</span>
 <span class="logic-keyword">class</span> DiagnosticEngine(<span class="logic-type">IAuditable</span>):
     <span class="logic-keyword">def</span> run(self, record: <span class="logic-type">Interaction</span>) -> <span class="logic-type">EvidenceArtifact</span>:
         <span class="logic-keyword">assert</span> record.is_immutable()
         <span class="logic-keyword">return</span> self.compute_metrics(record)
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="audit-rail">
-                    <div class="claim-box">
-                        <span class="claim-id">CLAIM [D1.0]</span>
-                        <div class="claim-meta"><span>SCOPE: ARCHITECTURE</span><span class="metric-tag">CONF: HIGH</span></div>
-                        <div class="claim-text">System operates on stored records only. No live generation exposed.</div>
-                    </div>
-                </div>
-            </section>
+                        <div class="audit-rail">
+                            <div class="claim-box">
+                                <span class="claim-id">CLAIM [D1.0]</span>
+                                <div class="claim-meta"><span>SCOPE: ARCHITECTURE</span><span class="metric-tag">CONF: HIGH</span></div>
+                                <div class="claim-text">System operates on stored records only. No live generation exposed.</div>
+                            </div>
+                        </div>
+                    </section>
 
-            <div class="inline-diagram-container" onclick="openModal('/diag-coverage-map-v1.html')">
-                <div class="diagram-label">RD-FIG-01 // 5-TEST COVERAGE MAP (PRIMARY OVERVIEW)</div>
-                <iframe class="preview-frame" src="/diag-coverage-map-v1.html" scrolling="no"></iframe>
-                <div class="expand-hint">CLICK TO EXPAND INTERACTIVE VIEW</div>
-            </div>
+                    <section>
+                        <h2><span class="scramble-hover" data-value="02 //">02 //</span> Scope</h2>
+                        <div class="prose-content">
+                            <p>This public page provides a <del>basic</del> <ins>limited, illustrative</ins> <del>public view</del> <ins>interface surface</ins>. Full dashboard access is <del>intentionally restricted</del> <ins>gated by cryptographic role verification</ins>.</p>
+                        </div>
+                    </section>
 
-            <section>
-                <div class="content-col">
-                    <h2><span class="scramble-hover" data-value="02 //">02 //</span> Scope</h2>
-                    <div class="prose-content">
-                        <p>This public page provides a <del>basic</del> <ins>limited, illustrative</ins> <del>public view</del> <ins>interface surface</ins>. Full dashboard access is <del>intentionally restricted</del> <ins>gated by cryptographic role verification</ins>.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <div class="content-col">
-                    <h2><span class="scramble-hover" data-value="03 //">03 //</span> What the Dashboard Does</h2>
-                    <div class="prose-content">
-                        <ul>
-                            <li><del>Ingests</del> <ins>Deterministic ingestion</ins> of model outputs and interaction records.</li>
-                            <li><del>Computes</del> <ins>Derives</ins> structure-only diagnostics independent of truth, intent, or policy judgment.</li>
-                            <li>Production of traceable evidence artifacts bound to canonical lexicon terms.</li>
-                            <li>Separation between measurement, interpretation, and governance specification.</li>
-                        </ul>
-                        <p>All reported <del>metrics</del> <ins>signals</ins> are anchored to stored evidence and reproducible runs.</p>
-                        
-                        <div class="logic-block">
+                    <section>
+                        <h2><span class="scramble-hover" data-value="03 //">03 //</span> What the Dashboard Does</h2>
+                        <div class="prose-content">
+                            <ul>
+                                <li><del>Ingests</del> <ins>Deterministic ingestion</ins> of model outputs and interaction records.</li>
+                                <li><del>Computes</del> <ins>Derives</ins> structure-only diagnostics independent of truth, intent, or policy judgment.</li>
+                                <li>Production of traceable evidence artifacts bound to canonical lexicon terms.</li>
+                                <li>Separation between measurement, interpretation, and governance specification.</li>
+                            </ul>
+                            <p>All reported <del>metrics</del> <ins>signals</ins> are anchored to stored evidence and reproducible runs.</p>
+                            
+                            <div class="logic-block">
 <span class="logic-comment"># Invariant: Output Determinism</span>
 <span class="logic-keyword">def</span> assert_determinism(input_hash):
     <span class="logic-keyword">return</span> cache.get(input_hash) <span class="logic-keyword">or</span> compute(input_hash)
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="audit-rail">
-                    <div class="claim-box">
-                        <span class="claim-id">METHOD [D2.1]</span>
-                        <div class="claim-meta"><span>TYPE: INGESTION</span></div>
-                        <div class="claim-text">Deterministic record ingestion guarantees reproducibility.</div>
-                    </div>
-                </div>
-            </section>
+                        <div class="audit-rail">
+                            <div class="claim-box">
+                                <span class="claim-id">METHOD [D2.1]</span>
+                                <div class="claim-meta"><span>TYPE: INGESTION</span></div>
+                                <div class="claim-text">Deterministic record ingestion guarantees reproducibility.</div>
+                            </div>
+                        </div>
+                    </section>
 
-            <div class="inline-diagram-container" onclick="openModal('/diag-diagram-preview.html')">
-                <div class="diagram-label">RD-FIG-02 // DIAGNOSTIC DIAGRAM PREVIEW</div>
-                <iframe class="preview-frame" src="/diag-diagram-preview.html" scrolling="no" style="height: 350px;"></iframe>
-                <div class="expand-hint">CLICK TO EXPAND INTERACTIVE VIEW</div>
-            </div>
-
-            <section>
-                <div class="content-col">
-                    <div class="diff-header">REVISION TRACE — v2.3 → v2.4 [Lexicon Binding]</div>
-                    <h2><span class="scramble-hover" data-value="04 //">04 //</span> Architectural Characteristics</h2>
-                    <div class="prose-content">
-                        <ul>
-                            <li><strong>Lexicon-bound:</strong> diagnostic terms and schemas are defined by a <del>standard</del> <ins>frozen, versioned specification</ins>.</li>
-                            <li><strong>Deterministic:</strong> identical inputs produce identical records and outputs.</li>
-                            <li><strong>Layer-separated:</strong> analytic layers operate on a <del>shared</del> <ins>immutable</ins> record substrate.</li>
-                            <li><strong>Evidence-anchored:</strong> outputs <del>link</del> <ins>anchor</ins> directly to stored artifacts and source records.</li>
-                            <li><strong>Governance-compatible:</strong> supports audit without exposing implementation internals.</li>
-                        </ul>
-                        
-                        <div class="logic-block">
+                    <section>
+                        <div class="diff-header">REVISION TRACE — v2.3 → v2.4 [Lexicon Binding]</div>
+                        <h2><span class="scramble-hover" data-value="04 //">04 //</span> Architectural Characteristics</h2>
+                        <div class="prose-content">
+                            <ul>
+                                <li><strong>Lexicon-bound:</strong> diagnostic terms and schemas are defined by a <del>standard</del> <ins>frozen, versioned specification</ins>.</li>
+                                <li><strong>Deterministic:</strong> identical inputs produce identical records and outputs.</li>
+                                <li><strong>Layer-separated:</strong> analytic layers operate on a <del>shared</del> <ins>immutable</ins> record substrate.</li>
+                                <li><strong>Evidence-anchored:</strong> outputs <del>link</del> <ins>anchor</ins> directly to stored artifacts and source records.</li>
+                                <li><strong>Governance-compatible:</strong> supports audit without exposing implementation internals.</li>
+                            </ul>
+                            
+                            <div class="logic-block">
 <span class="logic-comment"># Lexicon Binding Check</span>
 <span class="logic-keyword">assert</span> <span class="logic-keyword">all</span>(term <span class="logic-keyword">in</span> LEXICON <span class="logic-keyword">for</span> term <span class="logic-keyword">in</span> diagnostic_output)
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="audit-rail">
-                    <div class="claim-box">
-                        <span class="claim-id">CLAIM [D3.0]</span>
-                        <div class="claim-meta"><span>SCOPE: SEMANTICS</span></div>
-                        <div class="claim-text">All diagnostic outputs are strictly bound to the Versioned Lexicon.</div>
-                    </div>
-                </div>
-            </section>
+                        <div class="audit-rail">
+                            <div class="claim-box">
+                                <span class="claim-id">CLAIM [D3.0]</span>
+                                <div class="claim-meta"><span>SCOPE: SEMANTICS</span></div>
+                                <div class="claim-text">All diagnostic outputs are strictly bound to the Versioned Lexicon.</div>
+                            </div>
+                        </div>
+                    </section>
 
-            <div class="inline-diagram-container" onclick="openModal('/diag-layers-substrate.html')">
-                <div class="diagram-label">RD-FIG-03 // ANALYTICAL LAYERS & SUBSTRATE</div>
-                <iframe class="preview-frame" src="/diag-layers-substrate.html" scrolling="no" style="height: 450px;"></iframe>
-                <div class="expand-hint">CLICK TO EXPAND INTERACTIVE VIEW</div>
-            </div>
+                    <section>
+                        <h2><span class="scramble-hover" data-value="05 //">05 //</span> Operational Boundary</h2>
+                        <div class="prose-content">
+                            <ul>
+                                <li>Not a <del>chatbot</del> <ins>stochastic conversational agent</ins>.</li>
+                                <li>Not a <del>benchmark or leaderboard</del> <ins>comparative ranking metric</ins>.</li>
+                                <li>Not a <del>safety or alignment classifier</del> <ins>binary safety classifier</ins>.</li>
+                                <li>Not a <del>live deployment interface</del> <ins>production runtime environment</ins>.</li>
+                                <li>Not a <del>public evaluation service</del> <ins>crowdsourced feedback mechanism</ins>.</li>
+                            </ul>
+                        </div>
+                    </section>
 
-            <section>
-                <div class="content-col">
-                    <h2><span class="scramble-hover" data-value="05 //">05 //</span> Operational Boundary</h2>
-                    <div class="prose-content">
-                        <ul>
-                            <li>Not a <del>chatbot</del> <ins>stochastic conversational agent</ins>.</li>
-                            <li>Not a <del>benchmark or leaderboard</del> <ins>comparative ranking metric</ins>.</li>
-                            <li>Not a <del>safety or alignment classifier</del> <ins>binary safety classifier</ins>.</li>
-                            <li>Not a <del>live deployment interface</del> <ins>production runtime environment</ins>.</li>
-                            <li>Not a <del>public evaluation service</del> <ins>crowdsourced feedback mechanism</ins>.</li>
-                        </ul>
+                    <section>
+                        <h2><span class="scramble-hover" data-value="06 //">06 //</span> Evidence Artifacts</h2>
+                        <div class="prose-content">
+                            <p><del>Selected screenshots</del> <ins>Static artifacts</ins> shown on this page are representative examples demonstrating:</p>
+                            <ul>
+                                <li>Deterministic <del>record intake</del> <ins>state ingestion</ins>.</li>
+                                <li>Lexicon-defined diagnostic computation.</li>
+                                <li><del>Traceability</del> <ins>Causal linkage</ins> from metric to evidence to source.</li>
+                            </ul>
+                            <p>Additional analytical layers and governance-related surfaces are <del>intentionally</del> <ins>cryptographically</ins> not exposed publicly.</p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2><span class="scramble-hover" data-value="07 //">07 //</span> Authorization</h2>
+                        <div class="prose-content">
+                            <p>Full <del>dashboard</del> <ins>instrument</ins> access and repository access is <del>available privately</del> <ins>restricted</ins> to authorized funders, technical reviewers, and collaborators under controlled review or NDA.</p>
+                        </div>
+                    </section>
+
+                    <div id="footer-mount"></div>
+                    <script>
+                      fetch('/partials/footer.html')
+                        .then(r => r.ok ? r.text() : '')
+                        .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
+                        .catch(() => {});
+                    </script>
+                </div><div class="diagram-col">
+                    <div class="diagram-scroll">
+                        
+                        <div class="diagram-tile" onclick="openModal('/diag-coverage-map-v1.html?embed=1')">
+                            <span class="tile-label">DIAGRAM — RD-FIG-01</span>
+                            <img class="tile-img" src="/assets/diagrams/rd-fig-01.png" alt="Coverage Map" onerror="this.style.background='#eee'">
+                        </div>
+
+                        <div class="diagram-tile" onclick="openModal('/diag-diagram-preview.html?embed=1')">
+                            <span class="tile-label">DIAGRAM — RD-FIG-02</span>
+                            <img class="tile-img" src="/assets/diagrams/rd-fig-02.png" alt="Preview" onerror="this.style.background='#eee'">
+                        </div>
+
+                        <div class="diagram-tile" onclick="openModal('/diag-layers-substrate.html?embed=1')">
+                            <span class="tile-label">DIAGRAM — RD-FIG-03</span>
+                            <img class="tile-img" src="/assets/diagrams/rd-fig-03.png" alt="Substrate" onerror="this.style.background='#eee'">
+                        </div>
+
                     </div>
-                </div>
-            </section>
-
-            <section>
-                <div class="content-col">
-                    <h2><span class="scramble-hover" data-value="06 //">06 //</span> Evidence Artifacts</h2>
-                    <div class="prose-content">
-                        <p><del>Selected screenshots</del> <ins>Static artifacts</ins> shown on this page are representative examples demonstrating:</p>
-                        <ul>
-                            <li>Deterministic <del>record intake</del> <ins>state ingestion</ins>.</li>
-                            <li>Lexicon-defined diagnostic computation.</li>
-                            <li><del>Traceability</del> <ins>Causal linkage</ins> from metric to evidence to source.</li>
-                        </ul>
-                        <p>Additional analytical layers and governance-related surfaces are <del>intentionally</del> <ins>cryptographically</ins> not exposed publicly.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <div class="content-col">
-                    <h2><span class="scramble-hover" data-value="07 //">07 //</span> Authorization</h2>
-                    <div class="prose-content">
-                        <p>Full <del>dashboard</del> <ins>instrument</ins> access and repository access is <del>available privately</del> <ins>restricted</ins> to authorized funders, technical reviewers, and collaborators under controlled review or NDA.</p>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <div id="diagram-modal">
+                </div></div></div></div><div id="diagram-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">Close [ESC]</button>
             <iframe id="modal-iframe" class="modal-iframe"></iframe>
         </div>
     </div>
-
-    <div id="footer-mount"></div>
-    <script>
-      fetch('/partials/footer.html')
-        .then(r => r.ok ? r.text() : '')
-        .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
-        .catch(() => {});
-    </script>
 
     <script>
         function setMode(mode, label) {
@@ -654,10 +608,10 @@
             const banner = document.getElementById('mode-banner');
             banner.innerText = (mode === 'reader') ? "READER MODE" : mode.toUpperCase() + " MODE ACTIVE";
             
-            // Close mobile sidebar if open
-            if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
+            if(window.innerWidth <= 1100) closeSidebar();
         }
         
+        // --- SCRAMBLE LOGIC ---
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         function scrambleText(element) {
             let iterations = 0; const originalText = element.dataset.value; 
@@ -671,8 +625,6 @@
                 iterations += 1 / 3;
             }, 30);
         }
-        
-        // ONLY target brands and section numbers via specific class
         document.querySelectorAll(".scramble-brand, .scramble-hover").forEach(h => {
              if(!h.dataset.value) h.dataset.value = h.innerText;
             h.addEventListener("mouseover", event => scrambleText(event.target));
@@ -684,20 +636,40 @@
             const iframe = document.getElementById('modal-iframe');
             iframe.src = url;
             modal.classList.add('open');
-            document.body.style.overflow = 'hidden'; // Lock background scroll
+            document.body.style.overflow = 'hidden';
         }
         function closeModal() {
             const modal = document.getElementById('diagram-modal');
             const iframe = document.getElementById('modal-iframe');
             modal.classList.remove('open');
             iframe.src = ""; 
-            document.body.style.overflow = ''; // Unlock background scroll
+            document.body.style.overflow = '';
         }
         document.addEventListener('keydown', (e) => {
             if (e.key === "Escape") closeModal();
         });
 
-        // --- DARK MODE LOGIC ---
+        // --- SIDEBAR LOGIC ---
+        let __scrollY = 0;
+        function openSidebar() {
+            __scrollY = window.scrollY;
+            document.body.style.top = `-${__scrollY}px`;
+            document.getElementById('sidebar').classList.add('open');
+            document.body.classList.add('sidebar-open');
+        }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.body.classList.remove('sidebar-open');
+            const y = __scrollY;
+            document.body.style.top = '';
+            window.scrollTo(0, y);
+        }
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            sb.classList.contains('open') ? closeSidebar() : openSidebar();
+        }
+
+        // --- DARK MODE ---
         function setTheme(theme) {
             document.body.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
@@ -711,21 +683,6 @@
         }
         const savedTheme = localStorage.getItem('theme') || 'light';
         setTheme(savedTheme);
-
-        // --- MOBILE SIDEBAR LOGIC ---
-        document.querySelectorAll('.mobile-index-btn').forEach(btn => {
-             btn.addEventListener('click', () => {
-                 document.getElementById('sidebar').classList.toggle('open');
-             });
-        });
-        document.addEventListener("click", (e) => {
-            if (window.innerWidth > 900) return;
-            const sidebar = document.getElementById("sidebar");
-            const isOpen = sidebar.classList.contains("open");
-            if (!isOpen) return;
-            const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
-            if (!clickedInside) sidebar.classList.remove("open");
-        });
     </script>
 </body>
 </html>
