@@ -53,7 +53,7 @@
       border-radius:var(--radius);
       padding:18px;
       background:var(--bg);
-      overflow:hidden; /* prevents any accidental scroll bars */
+      overflow:hidden; /* prevents scrollbars */
     }
 
     .panel{
@@ -96,7 +96,6 @@
       line-height:1.6;
     }
 
-    /* Progress ticks (more readable) */
     .progress{
       display:flex;
       gap:8px;
@@ -145,7 +144,6 @@
     .svg-wrap{ width:100%; overflow:hidden; }
     svg{ display:block; width:100%; height:auto; }
 
-    /* Guided emphasis */
     .dim { opacity: var(--inactiveOpacity); transition: opacity 180ms ease; }
     .active { opacity: var(--activeOpacity); transition: opacity 180ms ease; }
 
@@ -218,27 +216,17 @@
             <!-- OUTER -->
             <rect class="frame" x="70" y="50" width="1460" height="620" rx="18"/>
 
-            <!-- Title (keep one title + remove the extra subtitle line) -->
-            <text class="mono" x="120" y="108" style="font-size:22px;font-weight:800;letter-spacing:-0.01em;">
-              Deterministic Record Flow (Public Skeleton)
-            </text>
-            <!-- REMOVED: POST-EXECUTION • NON-CAUSAL • METRIC NAMES & THRESHOLDS OMITTED -->
-            <text class="monoMuted micro" x="120" y="134">BUILD v5 • 2026 • PUBLIC PREVIEW</text>
-
-            <!-- Compact view note (kept, but short) -->
-            <text class="monoMuted micro" x="120" y="170">
-              Evidence-formation contract: what must exist before any module can report results.
-            </text>
+            <!-- (REMOVED) Internal diagram title + subtitle block -->
 
             <!-- AUDIT MODE chip (top-right) -->
             <g id="auditChip">
-              <rect class="chip" x="1248" y="90" width="260" height="34" rx="10"/>
-              <circle class="okDot" cx="1268" cy="107" r="5"/>
-              <text class="mono chipText" x="1282" y="112">AUDIT MODE ACTIVE</text>
+              <rect class="chip" x="1248" y="86" width="260" height="34" rx="10"/>
+              <circle class="okDot" cx="1268" cy="103" r="5"/>
+              <text class="mono chipText" x="1282" y="108">AUDIT MODE ACTIVE</text>
             </g>
 
-            <!-- TELEMETRY line -->
-            <text class="monoMuted micro" x="120" y="214">TELEMETRY: CYCLE 0215 • PHASE 01/06 • T+00:13</text>
+            <!-- TELEMETRY line (pulled up) -->
+            <text class="monoMuted micro" x="120" y="118">TELEMETRY: CYCLE 0215 • PHASE 01/06 • T+00:13</text>
 
             <!-- BOXES -->
             <g id="step1" class="dim">
@@ -386,7 +374,6 @@
               </g>
             </g>
 
-            <!-- Omitted line -->
             <text class="monoMuted micro" x="120" y="706">OMITTED: interactive modules • oracle assistance • analytic regimes • live API surfaces</text>
           </svg>
         </div>
