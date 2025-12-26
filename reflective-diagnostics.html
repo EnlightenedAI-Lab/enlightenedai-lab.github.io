@@ -19,7 +19,7 @@
     </script>
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V130 --- */
+        /* --- THEME: INSTITUTE STANDARD V130 (MATCHING LEXICON LAYOUT) --- */
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
@@ -49,7 +49,7 @@
 
             /* SPACING */
             --sidebar-width: 280px;
-            --rail-width: 420px; 
+            --rail-width: 450px; 
         }
 
         /* DARK MODE */
@@ -166,12 +166,12 @@
         /* --- VISIBILITY RULES --- */
         del, ins, .diff-tag { display: none; } 
 
-        /* READER MODE */
+        /* 1. READER MODE */
         body[data-mode="reader"] .audit-marker, body[data-mode="reader"] .logic-block, body[data-mode="reader"] .diff-del, body[data-mode="reader"] .diff-tag, body[data-mode="reader"] .audit-rail, body[data-mode="reader"] .diff-header { display: none !important; }
         body[data-mode="reader"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
         body[data-mode="reader"] del { display: none; }
 
-        /* DIFF MODE */
+        /* 2. DIFF MODE */
         body[data-mode="diff"] del { display: inline; background: var(--mode-diff-del-bg); color: var(--mode-diff-del-text); text-decoration: line-through; padding: 0 4px; opacity: 0.7; }
         body[data-mode="diff"] ins { display: inline; background: var(--mode-diff-ins-bg); color: var(--mode-diff-ins-text); border-bottom: 2px solid var(--mode-diff-ins-text); text-decoration: none; padding: 0 2px; }
         body[data-mode="diff"] .diff-tag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; color: #006600; margin-left: 4px; vertical-align: 1px; }
@@ -179,7 +179,7 @@
         body[data-mode="diff"] .diff-header { display: flex; justify-content: space-between; }
         body[data-mode="diff"] .audit-rail { display: block; opacity: 0.5; pointer-events: none; }
 
-        /* AUDIT MODE */
+        /* 3. AUDIT MODE */
         .audit-marker { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.6rem; font-weight: 700; color: var(--mode-audit); border: 1px solid var(--mode-audit); padding: 1px 4px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--bg-color); }
         body[data-mode="audit"] .audit-marker { display: inline-block; }
         body[data-mode="audit"] ins { display: inline; text-decoration: none; border-bottom: none; background: transparent; color: inherit; padding: 0; }
@@ -193,7 +193,7 @@
         .metric-tag { font-weight: 600; color: var(--text-main); }
         .claim-text { color: var(--text-muted); line-height: 1.4; }
 
-        /* LOGIC MODE */
+        /* 4. LOGIC MODE */
         .logic-block { display: none; font-family: "JetBrains Mono", monospace; font-size: 0.8rem; color: var(--text-muted); background-color: var(--card-bg); border: 1px solid var(--border-color); border-left: 3px solid var(--mode-logic); padding: 1.5rem; margin: 2rem 0; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; position: relative; }
         .logic-block::before { content: "FORMAL BACKING — NON-EXECUTABLE"; position: absolute; top: 0; right: 0; background: var(--bg-color); color: var(--mode-logic); font-size: 0.55rem; border-bottom: 1px solid var(--border-color); border-left: 1px solid var(--border-color); padding: 4px 8px; font-weight: 700; letter-spacing: 0.05em; }
         body[data-mode="logic"] .logic-block { display: block; animation: slideIn 0.3s ease; }
@@ -259,14 +259,16 @@
                 font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); 
                 font-weight: 700; margin-bottom: 0.5rem; display: block; text-transform: uppercase; letter-spacing: 0.05em;
             }
+            
             /* Clean Thumbnail Image Style (Matched to Lexicon) */
             .rail-thumb {
                 width: 100%; 
                 height: auto; 
                 display: block;
                 border: 1px solid var(--border-color); 
-                background: #000; /* Dark bg for diagrams */
+                background: #fff; /* White background for diagrams */
                 object-fit: contain;
+                max-height: 400px;
             }
         }
 
@@ -289,7 +291,7 @@
             width: 100%;
             border-top: 1px solid var(--border-color);
             background: var(--bg-color);
-            margin-top: auto; /* Pushes to bottom if content is short */
+            margin-top: auto; 
         }
 
         /* FULLSCREEN MODAL */
@@ -509,26 +511,33 @@
                         </div>
                     </section>
 
+                    <div id="footer-mount"></div>
+                    <script>
+                      fetch('/partials/footer.html')
+                        .then(r => r.ok ? r.text() : '')
+                        .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
+                        .catch(() => {});
+                    </script>
                 </div><div class="diagram-rail">
-                    
-                    <div class="rail-item" onclick="openModal('/diag-coverage-map-v1.html?embed=1')">
-                        <span class="rail-label">DIAGRAM — RD-FIG-01</span>
-                        <img class="rail-thumb" src="assets/images/image_79b414.png" alt="Coverage Map" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
-                    </div>
+                    <div class="rail-scroll">
+                        
+                        <div class="rail-item" onclick="openModal('/diag-coverage-map-v1.html?embed=1')">
+                            <span class="rail-label">DIAGRAM — RD-FIG-01</span>
+                            <img class="rail-thumb" src="/assets/images/image_79b414.png" alt="Coverage Map" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
+                        </div>
 
-                    <div class="rail-item" onclick="openModal('/diag-diagram-preview.html?embed=1')">
-                        <span class="rail-label">DIAGRAM — RD-FIG-02</span>
-                        <img class="rail-thumb" src="assets/images/fig11_static.jpg" alt="Preview" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
-                    </div>
+                        <div class="rail-item" onclick="openModal('/diag-diagram-preview.html?embed=1')">
+                            <span class="rail-label">DIAGRAM — RD-FIG-02</span>
+                            <img class="rail-thumb" src="/assets/images/fig11_static.jpg" alt="Preview" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
+                        </div>
 
-                    <div class="rail-item" onclick="openModal('/diag-layers-substrate.html?embed=1')">
-                        <span class="rail-label">DIAGRAM — RD-FIG-03</span>
-                        <img class="rail-thumb" src="assets/images/fig10_static.jpg" alt="Substrate" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
-                    </div>
+                        <div class="rail-item" onclick="openModal('/diag-layers-substrate.html?embed=1')">
+                            <span class="rail-label">DIAGRAM — RD-FIG-03</span>
+                            <img class="rail-thumb" src="/assets/images/fig10_static.jpg" alt="Substrate" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjUwIiBzdHlsZT0iYmFja2dyb3VuZDojMTExOyI+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGR5PSIuM2VtIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNTU1Ij5OTyBTSUdOQUw8L3RleHQ+PC9zdmc+'">
+                        </div>
 
-                </div></div><div id="footer-mount"></div>
-            
-        </main>
+                    </div>
+                </div></div></main>
     </div><div id="diagram-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">Close [ESC]</button>
@@ -619,12 +628,6 @@
         }
         const savedTheme = localStorage.getItem('theme') || 'light';
         setTheme(savedTheme);
-        
-        // --- FOOTER INJECT ---
-        fetch('/partials/footer.html')
-        .then(r => r.ok ? r.text() : '')
-        .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
-        .catch(() => {});
     </script>
 </body>
 </html>
