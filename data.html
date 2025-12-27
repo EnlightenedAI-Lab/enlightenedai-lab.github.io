@@ -40,6 +40,7 @@
     body[data-theme="dark"] h1, body[data-theme="dark"] h2 { color: #fff; }
     body[data-theme="dark"] .card { background:#111; border-color:#333; }
     body[data-theme="dark"] .pill { background:#111; border-color:#333; }
+    body[data-theme="dark"] .note { border-color:#333; }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -88,9 +89,19 @@
       background: var(--bg-color); z-index: 1000;
       overflow-y: auto;
     }
+
     .brand { margin-bottom: 4rem; }
-    .brand div { font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
+    .brand div { font-family: var(--font-mono); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
     .brand span { display:block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
+
+    .scramble-brand, .scramble-hover {
+      font-family: var(--font-mono);
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-right: 0.75rem;
+      cursor: crosshair;
+      user-select: none;
+    }
 
     nav ul { list-style: none; padding: 0; margin: 0; }
     nav li { margin-bottom: 4px; }
@@ -120,6 +131,7 @@
       letter-spacing: 0.05em; margin: 0 0 1rem 0;
       border-bottom: 1px solid var(--border-color);
       padding-bottom: 0.5rem;
+      display:flex; align-items:center;
     }
 
     p { margin: 0 0 1.25rem 0; max-width: 70ch; font-size: 0.95rem; }
@@ -146,6 +158,7 @@
       font-size: 0.72rem;
       letter-spacing: 0.06em;
       color: var(--text-main);
+      user-select:none;
     }
     .dot { width:8px; height:8px; border-radius:50%; background: var(--status-ok); }
 
@@ -157,6 +170,7 @@
       font-size: 0.78rem;
       color: var(--text-muted);
       margin-top: 14px;
+      max-width: 90ch;
     }
 
     #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
@@ -190,8 +204,8 @@
   <div class="layout-wrapper">
     <aside id="sidebar">
       <div class="brand">
-        <div style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
-        <div style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
+        <div class="scramble-brand" data-value="ENLIGHTENED AI">ENLIGHTENED AI</div>
+        <div class="scramble-brand" data-value="RESEARCH LAB">RESEARCH LAB</div>
         <span>EST. 2026 // MONTREAL</span>
       </div>
 
@@ -212,86 +226,86 @@
     <main>
       <div style="margin-bottom: 2.25rem;">
         <h1>DATA</h1>
-        <div class="doc-subtitle">Machine-operational semantic assets — controlled access</div>
+        <div class="doc-subtitle">Machine-operational semantic assets — controlled release</div>
 
         <div class="pills">
-          <div class="pill"><span class="dot"></span>LEXICON-COMPILED</div>
-          <div class="pill"><span class="dot"></span>VERSIONED</div>
-          <div class="pill"><span class="dot"></span>GOVERNANCE-ALIGNED</div>
-          <div class="pill"><span class="dot"></span>CONTROLLED LICENSING</div>
+          <div class="pill"><span class="dot"></span>LEXICON-BOUND</div>
+          <div class="pill"><span class="dot"></span>DETERMINISTIC</div>
+          <div class="pill"><span class="dot"></span>TRACEABLE</div>
+          <div class="pill"><span class="dot"></span>CONTROLLED ACCESS</div>
         </div>
       </div>
 
       <section>
-        <h2>Overview</h2>
+        <h2><span class="scramble-hover" data-value="01 //">01 //</span> Overview</h2>
         <p>
-          Enlightened AI Research Lab produces machine-operational semantic assets derived from the Reflective Alignment
-          Lexicon and diagnostic frameworks. These assets are not conventional datasets. They are structured, versioned
-          semantic substrates designed to make meaning, constraints, and diagnostic boundaries computable by machines.
-        </p>
-        <p>
-          Public materials describe structure and intent only. Machine-operational assets are shared selectively under
-          controlled agreements to preserve reproducibility, governance discipline, and misuse prevention.
+          Enlightened AI Research Lab produces machine-operational semantic assets derived from its Reflective Alignment Lexicon
+          and diagnostic instruments. These assets are designed for downstream research, benchmarking, and governance review,
+          while preserving traceability and versioned meaning.
         </p>
 
         <div class="note">
-          This page documents the existence and role of semantic assets. It does not expose records, identifiers, or operational interfaces.
+          Public disclosure is intentionally limited. Machine-operational assets derived from the Lexicon exist and can be generated.
+          Release is discretionary and evaluated case-by-case under controlled agreements, based on a clear research, governance,
+          or evaluative rationale.
         </div>
       </section>
 
       <section style="margin-top: 2.5rem;">
-        <h2>Asset Classes</h2>
+        <h2><span class="scramble-hover" data-value="02 //">02 //</span> Asset Families</h2>
 
         <div class="grid">
           <div class="card">
-            <div class="k">Asset Class A</div>
-            <div class="t">Compiled Lexicon Layer</div>
-            <p class="d">Machine-readable lexicon terms, identifiers, relations, and constraints compiled into operational form (versioned).</p>
+            <div class="k">Family A</div>
+            <div class="t">Machine Lexicon Exports</div>
+            <p class="d">Canonical IDs, relations, constraints, and schema-valid term bindings (versioned).</p>
           </div>
 
           <div class="card">
-            <div class="k">Asset Class B</div>
-            <div class="t">Semantic Bindings & Constraints</div>
-            <p class="d">Formal bindings that map signals and observations to lexicon identifiers, enabling constraint-aware interpretation.</p>
+            <div class="k">Family B</div>
+            <div class="t">Record Observatory</div>
+            <p class="d">Immutable records capturing model I/O boundaries, provenance metadata, and content hashes.</p>
           </div>
 
           <div class="card">
-            <div class="k">Asset Class C</div>
-            <div class="t">Diagnostic Signals (Structure-Only)</div>
-            <p class="d">Structure-only diagnostics referencing lexicon identifiers and evidence anchors; no truth/intent claims and no prompt exposure.</p>
+            <div class="k">Family C</div>
+            <div class="t">Diagnostic Signals</div>
+            <p class="d">Structure-only signals (no truth/intent claims), deltas, signatures, and evidence pointers.</p>
           </div>
 
           <div class="card">
-            <div class="k">Asset Class D</div>
-            <div class="t">Longitudinal Semantic Traces</div>
-            <p class="d">Aggregated trajectories across runs and conditions to study drift, stability, and boundary crossings.</p>
+            <div class="k">Family D</div>
+            <div class="t">Longitudinal Trajectories</div>
+            <p class="d">Aggregated record sets across runs/conditions to study drift, stability, and onset patterns.</p>
           </div>
 
           <div class="card">
-            <div class="k">Asset Class E</div>
-            <div class="t">EARTH (Contextual Substrates)</div>
-            <p class="d">Observational geospatial and contextual layers designed to be linkable to records without semantic contamination.</p>
+            <div class="k">Family E</div>
+            <div class="t">EARTH Context Layer</div>
+            <p class="d">Geospatial and contextual substrates designed to link external context to stored records.</p>
           </div>
 
           <div class="card">
-            <div class="k">Asset Class F</div>
-            <div class="t">RID (Resonant Intelligence Dataset)</div>
-            <p class="d">Internal curated collection of lexicon-anchored semantic artifacts generated under controlled experiments; not a public training corpus.</p>
+            <div class="k">Family F</div>
+            <div class="t">RID (Internal Collection)</div>
+            <p class="d">Curated, lexicon-anchored artifacts generated across controlled experiments and validation runs.</p>
           </div>
         </div>
       </section>
 
       <section style="margin-top: 2.5rem;">
-        <h2>Access & Licensing</h2>
+        <h2><span class="scramble-hover" data-value="03 //">03 //</span> Access</h2>
         <p>
-          Access is scoped by agreement for academic, industrial, or public-sector use. Public pages describe structure only.
-          Operational assets are shared selectively under NDA or research agreements to preserve governance discipline and reduce misuse risk.
+          Access to machine-operational semantic assets is scoped by agreement and governance constraints.
+          Requests are evaluated based on alignment with research, benchmarking, or review objectives,
+          and may require controlled review or NDA.
         </p>
       </section>
     </main>
   </div>
 
   <div id="footer-mount"></div>
+
   <script>
     fetch('/partials/footer.html')
       .then(r => r.ok ? r.text() : '')
@@ -300,6 +314,7 @@
   </script>
 
   <script>
+    // Theme
     function setTheme(theme) {
       document.body.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
@@ -314,6 +329,7 @@
     }
     setTheme(localStorage.getItem('theme') || 'light');
 
+    // Mobile: close sidebar when clicking outside
     document.addEventListener("click", (e) => {
       if (window.innerWidth > 900) return;
       const sidebar = document.getElementById("sidebar");
@@ -321,6 +337,29 @@
       if (!isOpen) return;
       const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
       if (!clickedInside) sidebar.classList.remove("open");
+    });
+
+    // Scramble (brand + headings)
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+    function scrambleText(element) {
+      let iterations = 0;
+      const originalText = element.dataset.value || element.innerText;
+      if (element.interval) clearInterval(element.interval);
+
+      element.interval = setInterval(() => {
+        element.innerText = originalText.split("").map((ch, idx) => {
+          if (idx < iterations) return originalText[idx];
+          return letters[Math.floor(Math.random() * letters.length)];
+        }).join("");
+
+        if (iterations >= originalText.length) clearInterval(element.interval);
+        iterations += 1 / 3;
+      }, 30);
+    }
+
+    document.querySelectorAll(".scramble-brand, .scramble-hover").forEach(el => {
+      if (!el.dataset.value) el.dataset.value = el.innerText;
+      el.addEventListener("mouseover", (e) => scrambleText(e.currentTarget));
     });
   </script>
 </body>
