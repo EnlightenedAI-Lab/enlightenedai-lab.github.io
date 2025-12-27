@@ -14,7 +14,7 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RD-DIAG-0001",
-        "version": "12.5.0",
+        "version": "12.6.0",
         "status": "OPERATIONAL"
     }
     </script>
@@ -76,10 +76,17 @@
             --mode-diff-ins-text: #66ff66;
         }
 
+        /* [FIX] SMART DIAGRAM INVERSION FOR DARK MODE */
+        /* This turns white backgrounds black and black text white automatically */
+        body[data-theme="dark"] .rail-thumbimg {
+            filter: invert(0.93) hue-rotate(180deg);
+            opacity: 0.9;
+        }
+
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         
-        /* [CRITICAL LAYOUT FIX - Matches data.html] */
+        /* LAYOUT STRUCTURE */
         body {
             margin: 0; padding: 0;
             font-family: "Inter", sans-serif;
@@ -87,27 +94,23 @@
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
-            
-            /* Vertical Stack: Wrapper on top, Footer on bottom */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        /* The Wrapper pushes the footer down */
         .layout-wrapper { 
             display: flex; 
             flex: 1; 
             width: 100%; 
         }
 
-        /* SIDEBAR (Simple Structure) */
+        /* SIDEBAR */
         aside#sidebar {
             width: var(--sidebar-width);
             height: 100vh;
             border-right: 1px solid var(--border-color);
             background: var(--sidebar-bg);
-            /* Sticky Logic */
             position: sticky; top: 0; align-self: flex-start;
             z-index: 100;
             overflow-y: auto;
@@ -116,12 +119,12 @@
             flex-shrink: 0;
         }
 
-        /* MAIN CONTENT AREA */
+        /* MAIN COLUMN */
         .main-column {
             flex: 1;
             display: flex;
             flex-direction: column;
-            min-width: 0; /* Prevents overflow blowout */
+            min-width: 0;
         }
 
         .global-header-strip {
@@ -138,7 +141,7 @@
             border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
         }
 
-        /* SPLIT VIEW (Inner Layout) */
+        /* SPLIT VIEW */
         .split-view {
             display: flex;
             flex: 1;
@@ -161,7 +164,7 @@
             position: sticky; top: 0; height: 100vh; overflow-y: auto;
         }
 
-        /* FOOTER MOUNT (No Padding - Matches data.html) */
+        /* FOOTER MOUNT */
         #footer-mount {
             width: 100%;
             z-index: 100;
@@ -189,8 +192,7 @@
         .rail-thumbframe { width: 100%; height: 260px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); background: #ffffff; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .rail-thumbimg { width: 100%; height: 100%; object-fit: contain; display: block; }
         body[data-theme="dark"] .rail-thumbframe { border-color: #333; background: #0b0b0b; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
-        body[data-theme="dark"] .rail-thumbimg { background: #0b0b0b; }
-
+        
         /* Sidebar Internals */
         .brand { margin-bottom: 4rem; }
         .brand div { font-family: "JetBrains Mono", monospace; font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
@@ -516,9 +518,11 @@ artifact_id = hash(record_id + run_id)
                             <div class="rail-id">RD-FIG-01</div>
                         </div>
                         <div class="rail-thumbframe">
-                            <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="Coverage Map" loading="lazy">
+                            <object data="assets/diag-samples/coverage-map.svg" type="image/svg+xml" class="rail-thumbimg" aria-label="Coverage Map">
+                                <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="Coverage Map">
+                            </object>
                         </div>
-                        <div class="rail-desc">See which tests are implemented vs planned — and where each evidence artifact lives.</div>
+                        <div class="rail-desc">See which tests are implemented vs planned and where each evidence artifact lives.</div>
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-diagram-preview.html?embed=1')">
@@ -529,7 +533,7 @@ artifact_id = hash(record_id + run_id)
                         <div class="rail-thumbframe">
                             <img class="rail-thumbimg" src="assets/diag-samples/deterministic-record-flow-public-skeleton.png" alt="Deterministic Workflow" loading="lazy">
                         </div>
-                        <div class="rail-desc">Follow one run from prompt → immutable record → hashed evidence — fully reproducible.</div>
+                        <div class="rail-desc">Follow one run from prompt → immutable record → hashed evidence fully reproducible.</div>
                     </div>
 
                     <div class="rail-item" onclick="openModal('diag-layers-substrate.html?embed=1')">
@@ -540,12 +544,16 @@ artifact_id = hash(record_id + run_id)
                         <div class="rail-thumbframe">
                             <img class="rail-thumbimg" src="assets/diag-samples/diag-substrate-lenses.png" alt="Evidence Substrate & Lenses" loading="lazy">
                         </div>
-                        <div class="rail-desc">One evidence record, multiple analytic lenses (L2–L7) — no re-run, no reinterpretation drift.</div>
+                        <div class="rail-desc">One evidence record, multiple analytic lenses (L2–L7) no re-run, no reinterpretation drift.</div>
                     </div>
 
                 </div>
             </div>
-        </main> </div> <div id="footer-mount"></div>
+
+            <div id="footer-mount"></div>
+            
+        </main>
+    </div>
 
     <div id="diagram-modal">
         <div class="modal-content">
@@ -555,22 +563,17 @@ artifact_id = hash(record_id + run_id)
     </div>
 
     <script>
-        // Mode Persistence
         function setMode(mode) {
             document.body.setAttribute('data-mode', mode);
             localStorage.setItem('mode', mode);
-
             document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
             const btn = document.getElementById(`btn-${mode}`);
             if (btn) btn.classList.add('active');
-
             const banner = document.getElementById('mode-banner');
             banner.innerText = (mode === 'reader') ? "READER MODE" : mode.toUpperCase() + " MODE ACTIVE";
-
             if (window.innerWidth <= 1100) document.getElementById('sidebar').classList.remove('open');
         }
         
-        // --- JS for Diff Marking ---
         function markDiffBlocks() {
             const candidates = document.querySelectorAll('.prose-content p, .prose-content li, .prose-content ul');
             candidates.forEach(el => {
@@ -585,11 +588,9 @@ artifact_id = hash(record_id + run_id)
         }
         document.addEventListener('DOMContentLoaded', markDiffBlocks);
 
-        // Initialize Mode
         const savedMode = localStorage.getItem('mode') || 'reader';
         setMode(savedMode);
         
-        // Text Scramble Effect
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
         function scrambleText(element) {
             let iterations = 0; const originalText = element.dataset.value; 
@@ -608,7 +609,6 @@ artifact_id = hash(record_id + run_id)
             h.addEventListener("mouseover", event => scrambleText(event.target));
         });
         
-        // Modal Logic
         function openModal(url) {
             const modal = document.getElementById('diagram-modal');
             const iframe = document.getElementById('modal-iframe');
@@ -627,7 +627,6 @@ artifact_id = hash(record_id + run_id)
             if (e.key === "Escape") closeModal();
         });
 
-        // Theme Logic
         function setTheme(theme) {
             document.body.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
@@ -642,14 +641,12 @@ artifact_id = hash(record_id + run_id)
         const savedTheme = localStorage.getItem('theme') || 'light';
         setTheme(savedTheme);
         
-        // [FAILSAFE] Auto-Fix Footer Position
         fetch('/partials/footer.html')
         .then(r => r.ok ? r.text() : '')
         .then(html => { 
             const mount = document.getElementById('footer-mount');
             if (mount) {
                 mount.innerHTML = html;
-                // Safety check: if mount is somehow trapped inside layout-wrapper, move it out
                 const wrapper = document.querySelector('.layout-wrapper');
                 if (wrapper && wrapper.contains(mount)) {
                     document.body.appendChild(mount);
