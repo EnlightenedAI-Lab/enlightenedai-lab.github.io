@@ -8,21 +8,28 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: #0a0a0a; --sidebar-bg: #000; --text: #f0f0f0; --accent: #00ff00; --border: #222; --sidebar-w: 350px; }
+    :root { --bg: #0a0a0a; --sidebar-bg: #000; --text: #f0f0f0; --accent: #00ff00; --border: #222; --sidebar-w: 380px; }
     body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+    
+    /* SYLLABUS SIDEBAR */
     aside { width: var(--sidebar-w); border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--sidebar-bg); flex-shrink: 0; }
     .sidebar-header { padding: 1.5rem; border-bottom: 1px solid var(--border); }
-    .sidebar-header h1 { font-size: 0.8rem; font-family: 'JetBrains Mono'; color: var(--accent); margin: 0; text-transform: uppercase; letter-spacing: 0.1em; }
+    .sidebar-header h1 { font-size: 0.85rem; font-family: 'JetBrains Mono'; color: var(--accent); margin: 0; text-transform: uppercase; letter-spacing: 0.1em; }
+    .sidebar-header .duration { font-size: 0.65rem; color: #666; margin-top: 8px; font-family: 'JetBrains Mono'; }
+    
     .video-list { flex: 1; overflow-y: auto; padding: 0; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
-    .video-item { padding: 14px 20px; border-bottom: 1px solid #111; cursor: pointer; display: flex; gap: 15px; align-items: flex-start; }
+    .level-heading { padding: 15px 20px 5px 20px; font-size: 0.65rem; font-weight: 800; color: #444; text-transform: uppercase; letter-spacing: 0.1em; font-family: 'JetBrains Mono'; }
+    .video-item { padding: 12px 20px; border-bottom: 1px solid #111; cursor: pointer; display: flex; gap: 15px; align-items: flex-start; transition: 0.2s; }
     .video-item:hover { background: #080808; }
     .video-item.active { background: #111; border-left: 3px solid var(--accent); }
     .v-num { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: var(--accent); opacity: 0.6; min-width: 35px; }
     .v-title { font-size: 0.75rem; font-weight: 500; color: #ccc; line-height: 1.4; }
     .video-item.active .v-title { color: #fff; }
+
+    /* THEATRE AREA */
     main { flex: 1; display: flex; flex-direction: column; background: #050505; position: relative; }
     .player-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; }
-    .video-wrapper { width: 100%; max-width: 1100px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); }
+    .video-wrapper { width: 100%; max-width: 1100px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); box-shadow: 0 0 50px rgba(0,255,0,0.05); }
     iframe { width: 100%; height: 100%; border: none; }
     .lecture-bar { padding: 1.5rem 3rem; background: #000; border-top: 1px solid var(--border); }
   </style>
@@ -31,7 +38,7 @@
   <aside>
     <div class="sidebar-header">
       <h1>Inside Alignment</h1>
-      <div style="font-size:0.6rem; color:#555; margin-top:5px;">57 MODULE FULL SEQUENCE // VERIFIED</div>
+      <div class="duration">TOTAL DURATION: ~24 MIN // 57 MODULES</div>
     </div>
     <div class="video-list" id="syllabus"></div>
   </aside>
@@ -40,52 +47,62 @@
       <div class="video-wrapper" id="player"></div>
     </div>
     <div class="lecture-bar">
-        <div id="active-tag" style="font-family:'JetBrains Mono'; font-size:0.65rem; color:var(--accent); margin-bottom:5px;">MODULE 1</div>
-        <h2 id="active-title" style="margin:0; font-size:1.1rem; color:#fff;">Initialising Masterclass...</h2>
+        <div id="active-tag" style="font-family:'JetBrains Mono'; font-size:0.65rem; color:var(--accent); margin-bottom:5px;">MODULE 0.1</div>
+        <h2 id="active-title" style="margin:0; font-size:1.1rem; color:#fff;">Initialising Interface...</h2>
     </div>
   </main>
   <script>
-    // THE ONLY THING THAT MATTERS: Your Playlist ID
     const playlistID = "PL0TbB-9Inn_UAIRt19B9DYhAOlnMb_Cmh";
     
-    // We only need the titles for the ones we want to name specifically.
-    // The player will handle the rest automatically.
+    // Exact Titles from your Research Lab records
     const namedModules = {
-      1: "0.1 What Intelligence Really Is",
-      2: "0.2 Why Minds Drift",
-      3: "0.3 Where Stability Comes From",
-      4: "0.4 Intelligence vs Behavior",
-      5: "0.5 Why This Matters for AI",
-      6: "1.1 Alignment Is Not Obedience",
-      7: "1.2 Output Filters Can Make Behavior Look Safe",
-      8: "1.3 The Difference Between 'Safe Answers' and Stable Thinking"
+      1: { lvl: 0, num: "0.1", title: "What Intelligence Really Is" },
+      2: { lvl: 0, num: "0.2", title: "Why Minds Drift" },
+      3: { lvl: 0, num: "0.3", title: "Where Stability Comes From" },
+      4: { lvl: 0, num: "0.4", title: "Intelligence vs Behavior" },
+      5: { lvl: 0, num: "0.5", title: "Why This Matters for AI" },
+      6: { lvl: 1, num: "1.1", title: "Alignment Is Not Obedience" },
+      7: { lvl: 1, num: "1.2", title: "Output Filters and False Safety" },
+      8: { lvl: 1, num: "1.3", title: "Safe Answers vs Stable Thinking" },
+      52: { lvl: 8, num: "8.2", title: "How RAA + RDL Work Together" },
+      53: { lvl: 8, num: "8.3", title: "The Mindset Shift Needed" },
+      54: { lvl: 8, num: "8.4", title: "Blind Spots in Internal Dynamics" },
+      55: { lvl: 8, num: "8.5", title: "Alignment as a Science" },
+      56: { lvl: 9, num: "9.1", title: "What Aligned Intelligence Feels Like" }
     };
+
+    const levelNames = ["Foundations", "What is Alignment?", "Level 2", "Level 3", "Level 4", "Level 5", "Level 6", "Level 7", "Implications Today", "The Vision"];
 
     function loadVideo(index) {
         const moduleNum = index + 1;
-        const title = namedModules[moduleNum] || "Module " + moduleNum;
+        const v = namedModules[moduleNum] || { num: moduleNum, title: "Module " + moduleNum };
         const p = document.getElementById('player');
-        
-        // This command tells YouTube: "Play the video at position X in this playlist"
         p.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=${playlistID}&index=${moduleNum}&autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        
-        document.getElementById('active-tag').innerText = "MODULE " + moduleNum;
-        document.getElementById('active-title').innerText = title;
+        document.getElementById('active-tag').innerText = "MODULE " + v.num;
+        document.getElementById('active-title').innerText = v.title;
         document.querySelectorAll('.video-item').forEach((el, i) => { el.classList.toggle('active', i === index); });
     }
 
-    // This loop creates all 57 slots for you instantly
+    let currentLvl = -1;
     for(let i = 0; i < 57; i++) {
         const moduleNum = i + 1;
-        const title = namedModules[moduleNum] || "Module " + moduleNum;
+        const v = namedModules[moduleNum] || { lvl: Math.floor(i/6), num: moduleNum, title: "Module " + moduleNum };
+        
+        if (v.lvl !== currentLvl) {
+            const h = document.createElement('div');
+            h.className = 'level-heading';
+            h.innerText = `LEVEL ${v.lvl}: ${levelNames[v.lvl] || ''}`;
+            document.getElementById('syllabus').appendChild(h);
+            currentLvl = v.lvl;
+        }
+
         const item = document.createElement('div');
         item.className = 'video-item';
-        item.innerHTML = `<div class="v-num">${moduleNum}</div><div class="v-title">${title}</div>`;
+        item.innerHTML = `<div class="v-num">${v.num}</div><div class="v-title">${v.title}</div>`;
         item.onclick = () => loadVideo(i);
         document.getElementById('syllabus').appendChild(item);
     }
-    
-    loadVideo(0); // Start with the first video
+    loadVideo(0);
   </script>
 </body>
 </html>
