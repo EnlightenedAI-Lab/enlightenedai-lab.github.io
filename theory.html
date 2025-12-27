@@ -23,6 +23,7 @@
     /* --- THEME VARIABLES --- */
     :root {
       --bg-color: #ffffff;
+      --sidebar-bg: #f8f9fa; /* Distinct sidebar color for light mode */
       --text-main: #050505;
       --text-muted: #5e5e5e;
       --border-color: #e5e5e5;
@@ -37,6 +38,7 @@
 
     body[data-theme="dark"] {
       --bg-color: #0a0a0a;
+      --sidebar-bg: #0a0a0a; /* Sidebar matches bg in dark mode */
       --text-main: #f0f0f0;
       --text-muted: #888888;
       --border-color: #333333;
@@ -70,10 +72,11 @@
       height: 100vh; position: sticky; top: 0; align-self: flex-start;
       border-right: 1px solid var(--border-color); padding: 3rem 2rem;
       display: flex; flex-direction: column; flex-shrink: 0;
-      background: var(--bg-color); z-index: 1000;
+      background: var(--sidebar-bg); /* Updated to use distinct variable */
+      z-index: 1000;
       overflow-y: auto;
     }
-    body[data-theme="dark"] aside { background-color: #0a0a0a; border-right-color: #333; }
+    body[data-theme="dark"] aside { border-right-color: #333; }
 
     .brand { margin-bottom: 4rem; }
     .brand div { font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
@@ -87,8 +90,8 @@
       padding: 2px 0 2px 10px; border-left: 2px solid transparent; display:block;
     }
     nav a:hover { color: var(--text-main); }
-    nav a.active { color: var(--text-main); font-weight: 700; border-left: 3px solid var(--text-main); background: linear-gradient(90deg, #f9f9f9, #fff); }
-    body[data-theme="dark"] nav a.active { color: #fff; border-left-color: #fff; background: linear-gradient(90deg, #151515, #0a0a0a); }
+    nav a.active { color: var(--text-main); font-weight: 700; border-left: 3px solid var(--text-main); background: linear-gradient(90deg, transparent, var(--bg-color)); }
+    body[data-theme="dark"] nav a.active { color: #fff; border-left-color: #fff; background: linear-gradient(90deg, transparent, #0a0a0a); }
     body[data-theme="dark"] nav a:hover { color: #fff; }
 
     .theme-switch {
@@ -266,28 +269,22 @@
 
     <main>
       <section style="margin-bottom: 4rem; border-bottom: 1px solid var(--border-color); padding-bottom: 4rem;">
-        <div style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: start;">
-            <div style="flex: 1; min-width: 300px;">
-                <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-blue); margin-bottom: 1rem;">
-                    PUBLISHED: NOV 2025 // ENLIGHTENED AI LAB
-                </div>
-                <h1 style="font-size: 2.2rem; line-height: 1.1; margin-bottom: 1.5rem;">
-                    Reflective Alignment Architecture (RAA) & <br>
-                    Reflective Duality Layer (RDL)
-                </h1>
-                <p style="font-size: 0.9rem; color: var(--text-muted); font-style: italic; border-left: 2px solid var(--accent-blue); padding-left: 1rem; margin-bottom: 2rem;">
-                    "Frontier AI systems now exhibit structured reasoning... yet current alignment practices evaluate only surface outputs. This paper introduces a model-agnostic scientific framework for observing and quantifying coherence stability."
-                </p>
-                
-                <a href="https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing" target="_blank" 
-                   style="background: var(--text-main); color: var(--bg-color); padding: 12px 24px; text-decoration: none; font-size: 0.8rem; font-weight: 700; border-radius: 2px; display: inline-block;">
-                   READ FULL PAPER (PDF) →
-                </a>
+        <div style="max-width: 800px;">
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-blue); margin-bottom: 1rem;">
+                PUBLISHED: NOV 2025 // ENLIGHTENED AI LAB
             </div>
-
-            <div style="width: 180px; flex-shrink: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid var(--border-color); transform: rotate(2deg); background: #fff;">
-                <img src="assets/img/theory/paper_cover.png" alt="Paper Cover" style="width: 100%; display: block; opacity: 0.9;" onerror="this.src='assets/img/theory/fig1.png'">
-            </div>
+            <h1 style="font-size: 2.2rem; line-height: 1.1; margin-bottom: 1.5rem;">
+                Reflective Alignment Architecture (RAA) & <br>
+                Reflective Duality Layer (RDL)
+            </h1>
+            <p style="font-size: 0.9rem; color: var(--text-muted); font-style: italic; border-left: 2px solid var(--accent-blue); padding-left: 1rem; margin-bottom: 2rem;">
+                "Frontier AI systems now exhibit structured reasoning... yet current alignment practices evaluate only surface outputs. This paper introduces a model-agnostic scientific framework for observing and quantifying coherence stability."
+            </p>
+            
+            <a href="https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing" target="_blank" 
+               style="background: var(--text-main); color: var(--bg-color); padding: 12px 24px; text-decoration: none; font-size: 0.8rem; font-weight: 700; border-radius: 2px; display: inline-block;">
+               READ FULL PAPER (PDF) →
+            </a>
         </div>
       </section>
 
