@@ -18,6 +18,7 @@
   <style>
     /* --- THEME VARIABLES --- */
     :root {
+      /* LIGHT MODE */
       --bg-color: #ffffff;
       --sidebar-bg: #f8f9fa;
       --text-main: #050505;
@@ -33,6 +34,7 @@
     }
 
     body[data-theme="dark"] {
+      /* DARK MODE */
       --bg-color: #0a0a0a;
       --sidebar-bg: #0a0a0a;
       --text-main: #f0f0f0;
@@ -127,24 +129,24 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
     
-    /* --- GRANULAR IMAGE CONTROL --- */
+    /* --- SMART IMAGE INVERSION v5.0 --- */
     .diagram-img {
         width: 100%; height: auto; display: block; border-radius: 2px;
         transition: filter 0.3s ease;
         border: 1px solid var(--figure-border);
     }
 
-    /* TYPE A: DARK NATIVE (Black Source -> Invert in Light) */
+    /* CLASS A: DARK SOURCE (Fig 1) -> Invert in Light, Keep in Dark */
     body[data-theme="light"] .dark-native { filter: invert(1) hue-rotate(180deg); }
     body[data-theme="dark"] .dark-native { filter: none; border-color: #333; }
 
-    /* TYPE B: LIGHT NATIVE (White Source -> Invert in Dark) */
+    /* CLASS B: LIGHT SOURCE (Fig 2, 3, 4) -> Keep in Light, Invert in Dark */
     body[data-theme="light"] .light-native { filter: none; }
     body[data-theme="dark"] .light-native { filter: invert(1) hue-rotate(180deg); border-color: #333; }
 
-    /* TYPE C: RAW COLOR (Heatmaps -> Never Invert) */
-    body[data-theme="light"] .raw-color { filter: none; }
-    body[data-theme="dark"] .raw-color { filter: none; border-color: #333; opacity: 0.9; }
+    /* CLASS C: COLOR SOURCE (Fig 5) -> NEVER INVERT */
+    .raw-color { filter: none !important; }
+    body[data-theme="dark"] .raw-color { border-color: #333; }
 
     .diagram-caption {
         font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted);
@@ -174,15 +176,13 @@
       color: var(--text-muted); white-space: pre-wrap;
     }
 
-    /* --- LIGHTBOX --- */
     #lightbox-modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--lightbox-bg); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
     #lightbox-img { max-width: 90%; max-height: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: filter 0.3s ease; }
     
-    /* Lightbox Inheritance */
+    /* Inherit Lightbox Filters */
     body[data-theme="light"] #lightbox-img.dark-native { filter: invert(1) hue-rotate(180deg); }
     body[data-theme="dark"] #lightbox-img.light-native { filter: invert(1) hue-rotate(180deg); }
-    body[data-theme="light"] #lightbox-img.raw-color { filter: none; }
-    body[data-theme="dark"] #lightbox-img.raw-color { filter: none; }
+    #lightbox-img.raw-color { filter: none !important; }
 
     #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
     .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; background: rgba(255,255,255,0.98); border-bottom: 1px solid var(--border-color); padding: 0 1.25rem; height: 50px; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); }
@@ -241,7 +241,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v4.1 - CORRECT CLASS MAP ]
+          [ v5.0 - UNIFORM FIX ]
       </div>
     </aside>
 
@@ -306,7 +306,7 @@
             </div>
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png', 'light-native')">
                 <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img light-native" onerror="this.style.display='none'">
-                <div class="diagram-caption">Fig. 02: RAA Force Map (R1-R5)</div>
+                <div class="diagram-caption">Fig. 02: The 5-Force Ontology</div>
             </div>
         </div>
 
@@ -344,7 +344,7 @@ def evaluate_stability(input):
             </div>
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png', 'light-native')">
                 <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img light-native" onerror="this.style.display='none'">
-                <div class="diagram-caption">Fig. 03: RDL Workflow</div>
+                <div class="diagram-caption">Fig. 03: RDL System Architecture</div>
             </div>
         </div>
       </section>
@@ -374,7 +374,7 @@ def evaluate_stability(input):
             </div>
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png', 'light-native')">
                 <img src="assets/img/theory/fig4.png" alt="Core Metrics" class="diagram-img light-native" onerror="this.style.display='none'">
-                <div class="diagram-caption">Fig. 04: Metric Triad</div>
+                <div class="diagram-caption">Fig. 04: The Metric Triad</div>
             </div>
         </div>
       </section>
@@ -393,7 +393,7 @@ def evaluate_stability(input):
             </div>
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig5.png', 'raw-color')">
                 <img src="assets/img/theory/fig5.png" alt="Failure Signatures Heatmap" class="diagram-img raw-color" onerror="this.style.display='none'">
-                <div class="diagram-caption">Fig. 05: Failure Heatmap</div>
+                <div class="diagram-caption">Fig. 05: Stability Failure Modes</div>
             </div>
         </div>
       </section>
@@ -404,17 +404,16 @@ def evaluate_stability(input):
   <div id="footer-mount"></div>
 
   <script>
-    // UPDATED LIGHTBOX LOGIC
     function openLightbox(src, type) {
         const modal = document.getElementById('lightbox-modal');
         const img = document.getElementById('lightbox-img');
         if (!src) return;
         img.src = src;
         
-        // Reset classes
+        // Remove old classes
         img.classList.remove('dark-native', 'light-native', 'raw-color');
         
-        // Add specific class
+        // Add new class if provided
         if (type) img.classList.add(type);
         
         modal.style.display = 'flex';
