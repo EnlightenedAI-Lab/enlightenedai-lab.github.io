@@ -60,7 +60,6 @@
       transition: background-color 0.2s, color 0.2s;
     }
 
-    /* --- LAYOUT GRID --- */
     .layout-wrapper { display: flex; flex: 1; width: 100%; }
 
     /* --- SIDEBAR --- */
@@ -103,7 +102,7 @@
     main {
       flex-grow: 1;
       padding: 3rem 4rem;
-      max-width: 1000px; /* Optimal reading width */
+      max-width: 1200px; /* Slightly wider to accommodate side-by-side */
       width: 100%;
       min-width: 0;
     }
@@ -113,37 +112,47 @@
     h3 { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-main); text-transform: uppercase; }
     
     .doc-subtitle { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4rem; letter-spacing: 0.02em; }
-    p { margin-bottom: 1.5rem; max-width: 65ch; color: var(--text-main); font-size: 0.95rem; }
+    p { margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.95rem; }
 
-    /* --- FIGURE / DIAGRAM STYLING (The "Paper" Look) --- */
-    .diagram-box {
-        margin: 3rem 0;
-        padding: 0; /* Remove internal padding to let image fill */
+    /* --- NEW: SPLIT SECTION LAYOUT --- */
+    .section-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr; /* Text gets 2/3, Image gets 1/3 */
+        gap: 3rem;
+        align-items: start;
+        margin-bottom: 3rem;
+    }
+
+    /* Diagram Thumbnail styling */
+    .diagram-thumbnail {
         background: var(--figure-bg);
         border: 1px solid var(--border-color);
-        display: block; /* Ensure block level */
-        width: 100%; /* Fill container */
+        padding: 4px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        cursor: zoom-in;
+    }
+    .diagram-thumbnail:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-color: var(--accent-blue);
     }
     
-    /* Image fills the box completely */
     .diagram-img {
-        width: 100%; 
+        width: 100%;
         height: auto;
         display: block;
-        border-bottom: 1px solid var(--border-color); /* Separator for caption */
-        cursor: zoom-in;
-        transition: opacity 0.2s;
+        border: 1px solid var(--border-color);
     }
-    .diagram-img:hover { opacity: 0.95; }
 
     .diagram-caption {
-        padding: 12px 20px;
         font-family: var(--font-mono);
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        background: var(--bg-color);
+        margin-top: 8px;
+        text-align: left;
+        line-height: 1.3;
     }
 
     /* --- LIGHTBOX --- */
@@ -161,10 +170,10 @@
         border: 1px solid var(--border-color);
     }
 
-    /* --- THEORY GRIDS --- */
+    /* --- COMPONENTS --- */
     .theory-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem; margin-bottom: 3rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem; margin-top: 1rem;
     }
     .force-card {
       border: 1px solid var(--border-color); padding: 1.5rem; background: #fff;
@@ -174,9 +183,8 @@
     .force-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase; }
     .force-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
-    /* --- METRICS --- */
     .metric-container {
-      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 2rem;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1rem;
     }
     .metric-box {
       border: 1px solid var(--border-color); padding: 1.5rem; text-align: center; background: #fff;
@@ -186,26 +194,20 @@
     .metric-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
     .metric-def { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
 
-    /* --- LOGIC BLOCK --- */
     .logic-block {
       font-family: var(--font-mono); font-size: 0.75rem;
       background: var(--bg-color); border: 1px solid var(--border-color);
       border-left: 2px solid var(--accent-blue);
-      padding: 1rem 1.5rem; margin: 2rem 0;
+      padding: 1rem 1.5rem; margin: 1rem 0;
       color: var(--text-muted); white-space: pre-wrap;
     }
-    .theory-block {
-      margin-bottom: 2rem; padding: 2rem;
-      background: #fafafa; border: 1px solid var(--border-color);
-    }
-    body[data-theme="dark"] .theory-block { background: #111; border-color: #333; }
 
-    /* --- FOOTER & MOBILE --- */
     #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
     .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; background: rgba(255,255,255,0.98); border-bottom: 1px solid var(--border-color); padding: 0 1.25rem; height: 50px; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); }
     body[data-theme="dark"] .mobile-bar { background: rgba(10,10,10,0.95); border-bottom-color: #333; }
     .mobile-index-btn { font-family: var(--font-mono); font-size: 0.75rem; padding: 4px 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); cursor: pointer; }
 
+    /* --- RESPONSIVE --- */
     @media (max-width: 900px) {
       .layout-wrapper { display: block; }
       body { overflow-x: hidden; }
@@ -214,6 +216,7 @@
       aside.open { transform: translateX(0); }
       main { padding: 1.5rem; margin-top: 50px; width: 100%; max-width: 100vw; }
       .metric-container { grid-template-columns: 1fr; }
+      .section-grid { grid-template-columns: 1fr; gap: 1.5rem; } /* Stack on mobile */
     }
   </style>
 </head>
@@ -262,90 +265,69 @@
         <div class="doc-subtitle">From behavioral compliance to internal coherence.</div>
       </div>
 
-      <section>
-        <p>Current alignment practices evaluate only surface outputs, leaving the internal decision processes that generate those outputs largely unmeasured. As a result, models can appear safe in benchmarks while their underlying reasoning is brittle, contradictory, or drift-prone.</p>
-        <p>We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.</p>
-
-        <div class="diagram-box">
-             
-            <img 
-                src="assets/img/theory/fig1.png" 
-                alt="Alignment Drift Curve" 
-                class="diagram-img" 
-                onclick="openLightbox(this.src)"
-            >
-            <div class="diagram-caption">Figure 01: Alignment Drift Curve — Stability declines over multi-turn reasoning.</div>
+      <section class="section-grid">
+        <div class="text-col">
+            <p>Current alignment practices evaluate only surface outputs, leaving the internal decision processes that generate those outputs largely unmeasured. As a result, models can appear safe in benchmarks while their underlying reasoning is brittle, contradictory, or drift-prone.</p>
+            <p>We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.</p>
+        </div>
+        
+        <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig1.png')">
+            <img src="assets/img/theory/fig1.png" alt="Alignment Drift Curve" class="diagram-img">
+            <div class="diagram-caption">Fig. 01: Alignment Drift Curve</div>
         </div>
       </section>
 
       <section>
         <h2>01 // The 5R Framework (RAA)</h2>
-        <p>Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.</p>
+        <div class="section-grid">
+            <div class="text-col">
+                <p>Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.</p>
+                <div class="theory-grid">
+                    <div class="force-card">
+                        <span class="force-id">R1</span>
+                        <div class="force-title">Regulation</div>
+                        <div class="force-desc">The system's boundary layer. Adherence to legal, ethical, and safety constraints.</div>
+                    </div>
+                    <div class="force-card">
+                        <span class="force-id">R2</span>
+                        <div class="force-title">Reflection</div>
+                        <div class="force-desc">Metacognitive self-critique. The ability to detect uncertainty and identify errors.</div>
+                    </div>
+                    <div class="force-card">
+                        <span class="force-id">R3</span>
+                        <div class="force-title">Reasoning</div>
+                        <div class="force-desc">The engine of coherent thought. Logical consistency and evidence integration.</div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="diagram-box">
-             
-            <img 
-                src="assets/img/theory/fig8.png" 
-                alt="RAA Force Map" 
-                class="diagram-img" 
-                onclick="openLightbox(this.src)"
-            >
-            <div class="diagram-caption">Figure 08: The RAA Force Map (R1-R5)</div>
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig8.png')">
+                <img src="assets/img/theory/fig8.png" alt="RAA Force Map" class="diagram-img">
+                <div class="diagram-caption">Fig. 08: RAA Force Map (R1-R5)</div>
+            </div>
         </div>
 
         <div class="theory-grid">
-          <div class="force-card">
-            <span class="force-id">R1</span>
-            <div class="force-title">Regulation</div>
-            <div class="force-desc">The system's boundary layer. Adherence to legal, ethical, and safety constraints. The baseline of aligned behavior.</div>
-          </div>
-          <div class="force-card">
-            <span class="force-id">R2</span>
-            <div class="force-title">Reflection</div>
-            <div class="force-desc">Metacognitive self-critique. The ability to detect uncertainty, identify errors, and surface value conflicts before acting.</div>
-          </div>
-          <div class="force-card">
-            <span class="force-id">R3</span>
-            <div class="force-title">Reasoning</div>
-            <div class="force-desc">The engine of coherent thought. Logical consistency, causal structure, and evidence integration.</div>
-          </div>
-          <div class="force-card">
-            <span class="force-id">R4</span>
-            <div class="force-title">Reciprocity</div>
-            <div class="force-desc">Modeling others. Perspective-taking, rights recognition, and understanding downstream impact on stakeholders.</div>
-          </div>
-          <div class="force-card">
-            <span class="force-id">R5</span>
-            <div class="force-title">Resonance</div>
-            <div class="force-desc">Long-horizon stability. The ability to maintain a stable moral identity across context, pressure, and time.</div>
-          </div>
+            <div class="force-card">
+                <span class="force-id">R4</span>
+                <div class="force-title">Reciprocity</div>
+                <div class="force-desc">Modeling others. Perspective-taking, rights recognition, and understanding impact.</div>
+            </div>
+            <div class="force-card">
+                <span class="force-id">R5</span>
+                <div class="force-title">Resonance</div>
+                <div class="force-desc">Long-horizon stability. Maintaining a stable moral identity across context and time.</div>
+            </div>
         </div>
       </section>
 
       <section>
         <h2>02 // The Reflective Duality Layer (RDL)</h2>
-        <p>RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.</p>
-
-        <div class="diagram-box">
-             
-            <img 
-                src="assets/img/theory/fig4.png" 
-                alt="RDL Workflow" 
-                class="diagram-img" 
-                onclick="openLightbox(this.src)"
-            >
-            <div class="diagram-caption">Figure 04: RDL Dual-Trajectory Workflow</div>
-        </div>
-
-        <div class="theory-block">
-          <h3>Forward Role (F)</h3>
-          <p>Generates the model's reasoning trace, produces the candidate answer, and exposes implicit assumptions.</p>
-
-          <h3>Reflective Role (Q)</h3>
-          <p>Critiques the F-trajectory, identifies uncertainty or value conflict, and provides normative justification.</p>
-        </div>
-
-        <div class="logic-block"># RDL Dual-Trajectory logic
+        <div class="section-grid">
+            <div class="text-col">
+                <p>RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.</p>
+                
+                <div class="logic-block"># RDL Dual-Trajectory logic
 def evaluate_stability(input):
     F_trace = model.forward_reasoning(input)
     Q_trace = model.reflective_critique(F_trace)
@@ -356,63 +338,64 @@ def evaluate_stability(input):
         return "DRIFT_DETECTED"
     else:
         return "COHERENT_STATE"</div>
+            </div>
+
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png')">
+                <img src="assets/img/theory/fig4.png" alt="RDL Workflow" class="diagram-img">
+                <div class="diagram-caption">Fig. 04: RDL Workflow</div>
+            </div>
+        </div>
       </section>
 
       <section>
         <h2>03 // Core Metrics</h2>
-        <p>The system evaluates alignment through three predictive stability metrics that quantify internal coherence.</p>
+        <div class="section-grid">
+            <div class="text-col">
+                <p>The system evaluates alignment through three predictive stability metrics that quantify internal coherence.</p>
+                <div class="metric-container">
+                    <div class="metric-box">
+                        <span class="metric-symbol">Ψ</span>
+                        <span class="metric-name">Care Param</span>
+                        <div class="metric-def">Depth of reflective attention.</div>
+                    </div>
+                    <div class="metric-box">
+                        <span class="metric-symbol">R∇</span>
+                        <span class="metric-name">Refl. Gradient</span>
+                        <div class="metric-def">Does reflection stabilize reasoning?</div>
+                    </div>
+                    <div class="metric-box">
+                        <span class="metric-symbol">MCI</span>
+                        <span class="metric-name">Moral Index</span>
+                        <div class="metric-def">Long-horizon stability score.</div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="diagram-box">
-             
-            <img 
-                src="assets/img/theory/fig13.png" 
-                alt="Core Metrics" 
-                class="diagram-img" 
-                onclick="openLightbox(this.src)"
-            >
-            <div class="diagram-caption">Figure 13: The Metric Triad (Ψ, R∇, MCI)</div>
-        </div>
-
-        <div class="metric-container">
-          <div class="metric-box">
-            <span class="metric-symbol">Ψ</span>
-            <span class="metric-name">Care Parameter</span>
-            <div class="metric-def">Measures depth of reflective attention. High Ψ indicates the system slows down to stabilize under uncertainty.</div>
-          </div>
-          <div class="metric-box">
-            <span class="metric-symbol">R∇</span>
-            <span class="metric-name">Reflective Gradient</span>
-            <div class="metric-def">Measures whether reflection improves or destabilizes reasoning. A negative gradient signals rationalization.</div>
-          </div>
-          <div class="metric-box">
-            <span class="metric-symbol">MCI</span>
-            <span class="metric-name">Moral Coherence Index</span>
-            <div class="metric-def">Summarizes long-horizon stability across domains, stress tests, and version updates.</div>
-          </div>
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig13.png')">
+                <img src="assets/img/theory/fig13.png" alt="Core Metrics" class="diagram-img">
+                <div class="diagram-caption">Fig. 13: Metric Triad</div>
+            </div>
         </div>
       </section>
 
       <section>
         <h2>04 // Failure Signatures</h2>
-        <p>Instabilities in the R-forces consistently predict specific failure modes across all major model families.</p>
-        
-        <div class="diagram-box">
-             
-            <img 
-                src="assets/img/theory/fig9.png" 
-                alt="Failure Signatures Heatmap" 
-                class="diagram-img" 
-                onclick="openLightbox(this.src)"
-            >
-            <div class="diagram-caption">Figure 09: Failure Signatures & Drift Modes</div>
-        </div>
+        <div class="section-grid">
+            <div class="text-col">
+                <p>Instabilities in the R-forces consistently predict specific failure modes across all major model families.</p>
+                <ul>
+                  <li><strong>Sub-Goal Pitfall:</strong> R3 (Reasoning) outpaces R1 (Regulation), leading to unsafe optimization.</li>
+                  <li><strong>Ethical Drift:</strong> R5 (Resonance) collapses under time pressure or long contexts.</li>
+                  <li><strong>Moral Mode-Switching:</strong> R2 (Reflection) contradicts R1 (Regulation) depending on framing.</li>
+                  <li><strong>Care Erosion:</strong> Decline in Ψ across turns, often preceding major stability failures.</li>
+                </ul>
+            </div>
 
-        <ul>
-          <li><strong>Sub-Goal Pitfall:</strong> R3 (Reasoning) outpaces R1 (Regulation), leading to unsafe optimization.</li>
-          <li><strong>Ethical Drift:</strong> R5 (Resonance) collapses under time pressure or long contexts.</li>
-          <li><strong>Moral Mode-Switching:</strong> R2 (Reflection) contradicts R1 (Regulation) depending on framing.</li>
-          <li><strong>Care Erosion:</strong> Decline in Ψ across turns, often preceding major stability failures.</li>
-        </ul>
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig9.png')">
+                <img src="assets/img/theory/fig9.png" alt="Failure Signatures Heatmap" class="diagram-img">
+                <div class="diagram-caption">Fig. 09: Failure Heatmap</div>
+            </div>
+        </div>
       </section>
 
     </main>
