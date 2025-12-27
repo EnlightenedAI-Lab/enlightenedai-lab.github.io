@@ -76,6 +76,7 @@
         body[data-theme="dark"] .logic-block { background: #111; border-color: #333; color: #ccc; }
         body[data-theme="dark"] p { color: #ccc; }
         body[data-theme="dark"] h1, body[data-theme="dark"] h2 { color: #fff; }
+        body[data-theme="dark"] .val { color: #fff; }
 
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -108,7 +109,8 @@
         }
 
         .integrity-seal { 
-            margin-left: auto; display: flex; align-items: center; gap: 8px; 
+            /* REVISED: Removed margin-left: auto for left alignment */
+            display: flex; align-items: center; gap: 8px; 
             font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
             border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
             background: rgba(0,204,0,0.05); cursor: default;
@@ -161,10 +163,29 @@
         /* --- MAIN CONTENT --- */
         main { flex-grow: 1; padding: 3rem 4rem; max-width: 1200px; width: 100%; }
         
-        /* HEADERS */
-        .reader-header { width: 100%; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 3rem; }
-        .reader-meta { display: flex; gap: 2rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); margin-bottom: 1rem; }
-        .reader-frame { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 10px; border-top: 1px solid var(--border-color); width: 100%; display: block; }
+        /* HEADERS (REVISED for v33.1) */
+        .reader-header { 
+            /* REVISED Layout */
+            display: flex; 
+            align-items: center; 
+            gap: 3rem; 
+            padding-bottom: 1rem; 
+            border-bottom: 1px solid var(--border-color); 
+            margin-bottom: 2rem; /* Tightened spacing */
+        }
+        .reader-meta { 
+            /* REVISED Layout */
+            display: flex; 
+            flex-direction: column; 
+            gap: 2px;
+            font-family: var(--font-mono); 
+            font-size: 0.7rem; 
+            color: var(--text-muted); 
+            margin-bottom: 0; 
+        }
+        /* New helpers for header items */
+        .label { font-size: 0.6rem; letter-spacing: 0.05em; color: #999; }
+        .val { font-size: 0.8rem; font-weight: 500; color: var(--text-main); }
 
         /* AUDIT HEADER (Replaces Reader Header in Audit Mode) */
         .audit-header { display: none; width: 100%; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 3rem; }
@@ -308,7 +329,7 @@
             section { margin-bottom: 4rem; grid-template-columns: 1fr !important; }
             .section-grid { grid-template-columns: 1fr; gap: 2rem; }
             .diagram-thumbnail { width: 100%; max-width: 350px; margin: 0 auto; }
-            .doc-header, .audit-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .reader-header, .audit-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
             .integrity-seal { margin-left: 0; }
             #mode-banner { top: 60px; right: 20px; z-index: 900; }
         }
@@ -364,10 +385,13 @@
         <main>
             <div class="reader-header">
                 <div class="reader-meta">
-                    <div><span style="color:var(--text-muted); font-size:0.6rem; margin-right:6px;">DOC_ID</span>EAIRL-THEORY-001</div>
-                    <div><span style="color:var(--text-muted); font-size:0.6rem; margin-right:6px;">CLASSIFICATION</span>PUBLIC</div>
+                    <div><span class="label">DOC_ID</span> <span class="val">EAIRL-THEORY-001</span></div>
+                    <div><span class="label">CLASSIFICATION</span> <span class="val">PUBLIC</span></div>
                 </div>
-                <div class="reader-frame">REFLECTIVE ALIGNMENT ARCHITECTURE (RAA) & REFLECTIVE DUALITY LAYER (RDL)</div>
+                <div class="integrity-seal">
+                    <span class="status-dot"></span>
+                    <span style="font-family:var(--font-mono); font-size:0.7rem; color:#005500;">INTEGRITY: VERIFIED</span>
+                </div>
             </div>
 
             <section class="audit-header" aria-label="Audit Header">
@@ -391,7 +415,7 @@
             </section>
 
             <div class="content-area">
-                <div style="max-width: 800px; margin-bottom: 4rem;">
+                <div style="max-width: 800px; margin-bottom: 2rem;">
                     <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-primary); margin-bottom: 1rem;">
                         PUBLISHED: NOV 2025 // ENLIGHTENED AI LAB
                     </div>
