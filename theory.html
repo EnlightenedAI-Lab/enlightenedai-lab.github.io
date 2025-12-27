@@ -133,7 +133,7 @@
         display: block;
         margin-bottom: 1rem;
         border: 1px solid var(--border-color);
-        cursor: zoom-in; /* Indicates clickability */
+        cursor: zoom-in;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     
@@ -156,7 +156,7 @@
 
     /* --- LIGHTBOX OVERLAY --- */
     #lightbox-modal {
-        display: none; /* Hidden by default */
+        display: none;
         position: fixed;
         z-index: 9999;
         top: 0; left: 0;
@@ -301,13 +301,11 @@
         <p>We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.</p>
 
         <div class="diagram-box">
-             
             <img 
                 src="assets/theory/fig1.png" 
                 alt="Alignment Drift Curve" 
                 class="diagram-img" 
                 onclick="openLightbox(this.src)"
-                onerror="this.style.display='none'; this.nextElementSibling.innerText += ' [IMAGE PENDING]';"
             >
             <div class="diagram-caption">Figure 01: Alignment Drift Curve — Stability declines over multi-turn reasoning.</div>
         </div>
@@ -318,8 +316,7 @@
         <p>Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.</p>
 
         <div class="diagram-box">
-             
-            <img src="assets/theory/fig8.png" alt="RAA Force Map" class="diagram-img" onclick="openLightbox(this.src)" onerror="this.style.display='none'">
+            <img src="assets/theory/fig8.png" alt="RAA Force Map" class="diagram-img" onclick="openLightbox(this.src)">
             <div class="diagram-caption">Figure 08: The RAA Force Map (R1-R5)</div>
         </div>
 
@@ -357,8 +354,7 @@
         <p>RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.</p>
 
         <div class="diagram-box">
-             
-            <img src="assets/theory/fig4.png" alt="RDL Workflow" class="diagram-img" onclick="openLightbox(this.src)" onerror="this.style.display='none'">
+            <img src="assets/theory/fig4.png" alt="RDL Workflow" class="diagram-img" onclick="openLightbox(this.src)">
             <div class="diagram-caption">Figure 04: RDL Dual-Trajectory Workflow</div>
         </div>
 
@@ -388,8 +384,7 @@ def evaluate_stability(input):
         <p>The system evaluates alignment through three predictive stability metrics that quantify internal coherence.</p>
 
         <div class="diagram-box">
-             
-            <img src="assets/theory/fig13.png" alt="Core Metrics" class="diagram-img" onclick="openLightbox(this.src)" onerror="this.style.display='none'">
+            <img src="assets/theory/fig13.png" alt="Core Metrics" class="diagram-img" onclick="openLightbox(this.src)">
             <div class="diagram-caption">Figure 13: The Metric Triad (Ψ, R∇, MCI)</div>
         </div>
 
@@ -417,8 +412,7 @@ def evaluate_stability(input):
         <p>Instabilities in the R-forces consistently predict specific failure modes across all major model families.</p>
         
         <div class="diagram-box">
-             
-            <img src="assets/theory/fig9.png" alt="Failure Signatures Heatmap" class="diagram-img" onclick="openLightbox(this.src)" onerror="this.style.display='none'">
+            <img src="assets/theory/fig9.png" alt="Failure Signatures Heatmap" class="diagram-img" onclick="openLightbox(this.src)">
             <div class="diagram-caption">Figure 09: Failure Signatures & Drift Modes</div>
         </div>
 
