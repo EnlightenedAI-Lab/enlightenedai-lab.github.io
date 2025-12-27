@@ -30,7 +30,8 @@
       --font-stack: "Inter", sans-serif;
       --font-mono: "JetBrains Mono", monospace;
       --accent-blue: #0044cc;
-      --lightbox-bg: rgba(255, 255, 255, 0.95);
+      --lightbox-bg: rgba(255, 255, 255, 0.98);
+      --figure-bg: #fdfdfd;
     }
 
     body[data-theme="dark"] {
@@ -39,7 +40,8 @@
       --text-muted: #888888;
       --border-color: #333333;
       --accent-blue: #66aaff;
-      --lightbox-bg: rgba(0, 0, 0, 0.95);
+      --lightbox-bg: rgba(0, 0, 0, 0.98);
+      --figure-bg: #111;
     }
 
     /* --- GLOBAL STYLES --- */
@@ -101,7 +103,7 @@
     main {
       flex-grow: 1;
       padding: 3rem 4rem;
-      max-width: 1000px;
+      max-width: 1000px; /* Optimal reading width */
       width: 100%;
       min-width: 0;
     }
@@ -113,124 +115,88 @@
     .doc-subtitle { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4rem; letter-spacing: 0.02em; }
     p { margin-bottom: 1.5rem; max-width: 65ch; color: var(--text-main); font-size: 0.95rem; }
 
-    /* --- COMPONENT: DIAGRAM BOX --- */
+    /* --- FIGURE / DIAGRAM STYLING (The "Paper" Look) --- */
     .diagram-box {
         margin: 3rem 0;
-        padding: 1rem;
-        background: #fafafa;
+        padding: 0; /* Remove internal padding to let image fill */
+        background: var(--figure-bg);
         border: 1px solid var(--border-color);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transition: border-color 0.2s;
-    }
-    body[data-theme="dark"] .diagram-box { background: #111; border-color: #333; }
-
-    /* Interactive Image Styles */
-    .diagram-img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin-bottom: 1rem;
-        border: 1px solid var(--border-color);
-        cursor: zoom-in;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: block; /* Ensure block level */
+        width: 100%; /* Fill container */
     }
     
-    .diagram-img:hover {
-        transform: scale(1.01);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    /* Image fills the box completely */
+    .diagram-img {
+        width: 100%; 
+        height: auto;
+        display: block;
+        border-bottom: 1px solid var(--border-color); /* Separator for caption */
+        cursor: zoom-in;
+        transition: opacity 0.2s;
     }
-    body[data-theme="dark"] .diagram-img:hover {
-        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
+    .diagram-img:hover { opacity: 0.95; }
 
     .diagram-caption {
+        padding: 12px 20px;
         font-family: var(--font-mono);
-        font-size: 0.65rem;
+        font-size: 0.7rem;
         color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        margin-top: 8px;
+        background: var(--bg-color);
     }
 
-    /* --- LIGHTBOX OVERLAY --- */
+    /* --- LIGHTBOX --- */
     #lightbox-modal {
         display: none;
-        position: fixed;
-        z-index: 9999;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
+        position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%;
         background-color: var(--lightbox-bg);
         backdrop-filter: blur(5px);
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
-        cursor: zoom-out;
+        align-items: center; justify-content: center;
+        padding: 2rem; cursor: zoom-out;
     }
-    
     #lightbox-img {
-        max-width: 90%;
-        max-height: 90%;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        max-width: 95%; max-height: 95%;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         border: 1px solid var(--border-color);
-        border-radius: 4px;
     }
 
-    /* --- THEORY CARDS --- */
+    /* --- THEORY GRIDS --- */
     .theory-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 3rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-bottom: 3rem;
     }
     .force-card {
-      border: 1px solid var(--border-color);
-      padding: 1.5rem;
-      background: #fff;
+      border: 1px solid var(--border-color); padding: 1.5rem; background: #fff;
     }
     body[data-theme="dark"] .force-card { background: #0f0f0f; }
-    
     .force-id { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-blue); font-weight: 700; display:block; margin-bottom: 0.5rem; }
     .force-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase; }
     .force-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
     /* --- METRICS --- */
     .metric-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 1rem;
-      margin-top: 2rem;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 2rem;
     }
     .metric-box {
-      border: 1px solid var(--border-color);
-      padding: 1.5rem;
-      text-align: center;
-      background: #fff;
+      border: 1px solid var(--border-color); padding: 1.5rem; text-align: center; background: #fff;
     }
     body[data-theme="dark"] .metric-box { background: #151515; border-color: #333; }
-
     .metric-symbol { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; display: block; }
     .metric-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
     .metric-def { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
 
     /* --- LOGIC BLOCK --- */
     .logic-block {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
+      font-family: var(--font-mono); font-size: 0.75rem;
+      background: var(--bg-color); border: 1px solid var(--border-color);
       border-left: 2px solid var(--accent-blue);
-      padding: 1rem 1.5rem;
-      margin: 2rem 0;
-      color: var(--text-muted);
-      white-space: pre-wrap;
+      padding: 1rem 1.5rem; margin: 2rem 0;
+      color: var(--text-muted); white-space: pre-wrap;
     }
     .theory-block {
-      margin-bottom: 2rem;
-      padding: 2rem;
-      background: #fafafa;
-      border: 1px solid var(--border-color);
+      margin-bottom: 2rem; padding: 2rem;
+      background: #fafafa; border: 1px solid var(--border-color);
     }
     body[data-theme="dark"] .theory-block { background: #111; border-color: #333; }
 
@@ -301,8 +267,9 @@
         <p>We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.</p>
 
         <div class="diagram-box">
+             
             <img 
-                src="assets/theory/fig1.png" 
+                src="assets/img/theory/fig1.png" 
                 alt="Alignment Drift Curve" 
                 class="diagram-img" 
                 onclick="openLightbox(this.src)"
@@ -316,7 +283,13 @@
         <p>Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.</p>
 
         <div class="diagram-box">
-            <img src="assets/theory/fig8.png" alt="RAA Force Map" class="diagram-img" onclick="openLightbox(this.src)">
+             
+            <img 
+                src="assets/img/theory/fig8.png" 
+                alt="RAA Force Map" 
+                class="diagram-img" 
+                onclick="openLightbox(this.src)"
+            >
             <div class="diagram-caption">Figure 08: The RAA Force Map (R1-R5)</div>
         </div>
 
@@ -354,7 +327,13 @@
         <p>RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.</p>
 
         <div class="diagram-box">
-            <img src="assets/theory/fig4.png" alt="RDL Workflow" class="diagram-img" onclick="openLightbox(this.src)">
+             
+            <img 
+                src="assets/img/theory/fig4.png" 
+                alt="RDL Workflow" 
+                class="diagram-img" 
+                onclick="openLightbox(this.src)"
+            >
             <div class="diagram-caption">Figure 04: RDL Dual-Trajectory Workflow</div>
         </div>
 
@@ -384,7 +363,13 @@ def evaluate_stability(input):
         <p>The system evaluates alignment through three predictive stability metrics that quantify internal coherence.</p>
 
         <div class="diagram-box">
-            <img src="assets/theory/fig13.png" alt="Core Metrics" class="diagram-img" onclick="openLightbox(this.src)">
+             
+            <img 
+                src="assets/img/theory/fig13.png" 
+                alt="Core Metrics" 
+                class="diagram-img" 
+                onclick="openLightbox(this.src)"
+            >
             <div class="diagram-caption">Figure 13: The Metric Triad (Ψ, R∇, MCI)</div>
         </div>
 
@@ -412,7 +397,13 @@ def evaluate_stability(input):
         <p>Instabilities in the R-forces consistently predict specific failure modes across all major model families.</p>
         
         <div class="diagram-box">
-            <img src="assets/theory/fig9.png" alt="Failure Signatures Heatmap" class="diagram-img" onclick="openLightbox(this.src)">
+             
+            <img 
+                src="assets/img/theory/fig9.png" 
+                alt="Failure Signatures Heatmap" 
+                class="diagram-img" 
+                onclick="openLightbox(this.src)"
+            >
             <div class="diagram-caption">Figure 09: Failure Signatures & Drift Modes</div>
         </div>
 
@@ -430,7 +421,6 @@ def evaluate_stability(input):
   <div id="footer-mount"></div>
 
   <script>
-    // --- LIGHTBOX LOGIC ---
     function openLightbox(src) {
         const modal = document.getElementById('lightbox-modal');
         const img = document.getElementById('lightbox-img');
@@ -443,7 +433,6 @@ def evaluate_stability(input):
         document.getElementById('lightbox-modal').style.display = 'none';
     }
 
-    // --- STANDARD UTILS ---
     fetch('partials/footer.html')
       .then(r => r.text())
       .then(html => { document.getElementById('footer-mount').innerHTML = html; });
