@@ -40,6 +40,11 @@
       
       --card:#fff;
       --cardShadow:0 4px 20px rgba(0,0,0,0.03);
+
+      /* BADGE COLORS */
+      --badge-bg: rgba(0, 204, 0, 0.05);
+      --badge-border: #00cc00;
+      --badge-text: #008800;
     }
 
     body[data-theme="dark"]{
@@ -57,6 +62,10 @@
       
       --card:#0f0f0f;
       --cardShadow:0 10px 30px rgba(0,0,0,0.3);
+
+      --badge-bg: rgba(0, 255, 0, 0.05);
+      --badge-border: #00ff00;
+      --badge-text: #00ff00;
     }
 
     *{box-sizing:border-box}
@@ -143,27 +152,81 @@
       padding:3rem 4rem;
     }
 
-    .kicker{
-      font-family:var(--mono);
-      font-size:.7rem;
-      letter-spacing:.05em;
-      color:var(--accent);
-      margin-bottom:1rem;
+    /* HEADER LAYOUT (New 3-Column Grid) */
+    .pub-header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2rem;
+    }
+
+    .ph-left {
+      text-align: left;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      text-transform: uppercase;
+      line-height: 1.4;
+    }
+
+    .ph-center {
+      text-align: center;
+    }
+
+    .ph-right {
+      text-align: right;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .ph-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0 0 6px 0;
+      color: var(--text);
+      /* Keeping it Standard Case per "like the rest" request, not ALL CAPS */
+    }
+
+    .ph-sub {
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* BADGE STYLES */
+    @keyframes pulse-green {
+      0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.4); opacity: 1; }
+      100% { box-shadow: 0 0 0 8px rgba(0, 204, 0, 0); opacity: 1; }
+    }
+    
+    .integrity-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border: 1px solid var(--badge-border);
+      border-radius: 999px;
+      background: var(--badge-bg);
+      font-family: var(--mono);
+      font-size: 0.65rem;
       font-weight: 700;
+      color: var(--badge-text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      user-select: none;
     }
-    h1{
-      margin:0 0 .75rem 0;
-      font-size:2.2rem;
-      line-height:1.1;
-      letter-spacing:-.03em;
-      text-transform:uppercase;
-    }
-    .subtitle{
-      font-family:var(--mono);
-      color:var(--muted);
-      font-size:.75rem;
-      margin-bottom:2.25rem;
-      letter-spacing:.02em;
+    
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse-green 2s infinite;
     }
 
     /* TOOLBAR */
@@ -176,7 +239,7 @@
       border:1px solid var(--border);
       background:transparent;
       border-radius:2px;
-      margin:1.25rem 0 2rem 0;
+      margin:0 0 2rem 0;
     }
     .search{
       flex:1;
@@ -214,6 +277,10 @@
       main{padding:1.5rem}
       .grid{grid-template-columns:1fr}
       aside{display:none}
+      /* Mobile Header Stack */
+      .pub-header { grid-template-columns: 1fr; gap: 1rem; text-align: left; }
+      .ph-center, .ph-right { text-align: left; justify-content: flex-start; }
+      .ph-left { display: none; } /* Hide breadcrumb on mobile to save space */
     }
 
     /* CARD STYLES */
@@ -423,9 +490,25 @@
     </aside>
 
     <main>
-      <div class="kicker">ENLIGHTENED AI LAB // PUBLIC RECORD</div>
-      <h1>Publications</h1>
-      <div class="subtitle">All public artifacts (PDFs, preprints, timestamps, and links) in one place.</div>
+      
+      <div class="pub-header">
+        <div class="ph-left">
+          ENLIGHTENED AI RESEARCH LAB<br>
+          // PUBLIC RECORD
+        </div>
+        
+        <div class="ph-center">
+          <div class="ph-title">Publications</div>
+          <div class="ph-sub">All public research artifacts, disclosures, and long-form works.</div>
+        </div>
+        
+        <div class="ph-right">
+          <div class="integrity-badge">
+            <span class="status-dot"></span>
+            INTEGRITY: VERIFIED
+          </div>
+        </div>
+      </div>
 
       <div class="toolbar">
         <input id="search" class="search" type="text" placeholder="Search titles, keywords, venues..." />
@@ -517,7 +600,7 @@
             <span class="chip">BOOK</span>
             <span class="date">2025</span>
           </div>
-          <h3 class="title">DATA AT THE EDGE: PREMIER SOURCES</h3>
+          <h3 class="title">Data at the Edge: Premier Sources</h3>
           <p class="desc">A curated collection of premier sources and reference materials.</p>
           <div class="links">
             <a class="btn primary" href="https://www.amazon.com/DATA-AT-EDGE-PREMIER-SOURCES-ebook/dp/B0DX3G8XH1?ref_=ast_author_dp" target="_blank" rel="noopener">[ VIEW ON AMAZON ]</a>
