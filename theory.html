@@ -129,18 +129,18 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
     
-    /* --- SMART IMAGE INVERSION v5.0 --- */
+    /* --- SMART IMAGE INVERSION v5.1 --- */
     .diagram-img {
         width: 100%; height: auto; display: block; border-radius: 2px;
         transition: filter 0.3s ease;
         border: 1px solid var(--figure-border);
     }
 
-    /* CLASS A: DARK SOURCE (Fig 1) -> Invert in Light, Keep in Dark */
+    /* CLASS A: DARK SOURCE (Fig 1 & 3) -> Invert in Light, Keep in Dark */
     body[data-theme="light"] .dark-native { filter: invert(1) hue-rotate(180deg); }
     body[data-theme="dark"] .dark-native { filter: none; border-color: #333; }
 
-    /* CLASS B: LIGHT SOURCE (Fig 2, 3, 4) -> Keep in Light, Invert in Dark */
+    /* CLASS B: LIGHT SOURCE (Fig 2 & 4) -> Keep in Light, Invert in Dark */
     body[data-theme="light"] .light-native { filter: none; }
     body[data-theme="dark"] .light-native { filter: invert(1) hue-rotate(180deg); border-color: #333; }
 
@@ -241,7 +241,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v5.0 - UNIFORM FIX ]
+          [ v5.1 - FIG 3 DARK NATIVE ]
       </div>
     </aside>
 
@@ -342,8 +342,8 @@ def evaluate_stability(input):
     else:
         return "COHERENT_STATE"</div>
             </div>
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png', 'light-native')">
-                <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img light-native" onerror="this.style.display='none'">
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png', 'dark-native')">
+                <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img dark-native" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 03: RDL System Architecture</div>
             </div>
         </div>
@@ -410,10 +410,7 @@ def evaluate_stability(input):
         if (!src) return;
         img.src = src;
         
-        // Remove old classes
         img.classList.remove('dark-native', 'light-native', 'raw-color');
-        
-        // Add new class if provided
         if (type) img.classList.add(type);
         
         modal.style.display = 'flex';
