@@ -26,13 +26,15 @@
       --sidebar-width: 280px;
       --font-stack: "Inter", sans-serif;
       --font-mono: "JetBrains Mono", monospace;
-      --accent-primary: #0044cc; /* Blue by default */
-      --audit-color: #ff4400;    /* Orange for Audit Mode */
+      
+      /* Colors */
+      --accent-primary: #0044cc; /* Reader Blue */
+      --audit-color: #C04000;    /* Regulatory Amber/Red */
+      --signal-green: #00cc00;   /* Verified Status */
+      
       --lightbox-bg: rgba(255, 255, 255, 0.98);
       --figure-bg: transparent;
       --figure-border: #e5e5e5;
-      
-      --signal-green: #00cc00;
     }
 
     body[data-theme="dark"] {
@@ -42,43 +44,57 @@
       --text-muted: #888888;
       --border-color: #333333;
       --accent-primary: #66aaff;
-      --audit-color: #ff6600;
+      --audit-color: #ff5500;
       --lightbox-bg: rgba(0, 0, 0, 0.98);
       --figure-bg: #111;
       --figure-border: #333;
     }
 
-    /* --- AUDIT MODE OVERRIDES --- */
+    /* --- AUDIT MODE BEHAVIOR --- */
+    
+    /* 1. Theme Override */
     body[data-mode="audit"] {
         --accent-primary: var(--audit-color) !important;
     }
-    
-    /* Reveal Audit Elements */
+
+    /* 2. Reveal Badges (Hidden by default) */
     .audit-badge { display: none; }
-    .audit-source { display: none; }
     
     body[data-mode="audit"] .audit-badge { 
         display: inline-block; 
         font-family: var(--font-mono); 
-        font-size: 0.65rem; 
+        font-size: 0.6rem; 
         color: var(--audit-color); 
-        background: rgba(255, 68, 0, 0.05);
+        background: rgba(192, 64, 0, 0.08); /* Faint orange bg */
         border: 1px solid var(--audit-color);
-        padding: 0 4px;
-        margin-right: 6px;
+        padding: 1px 5px;
+        margin-right: 8px;
+        border-radius: 2px;
         vertical-align: middle;
         cursor: help;
+        font-weight: 500;
+        transform: translateY(-1px);
     }
+
+    /* 3. Reveal Image Sources (Hidden by default) */
+    .audit-source { display: none; }
+    
     body[data-mode="audit"] .audit-source { 
         display: block; 
         font-family: var(--font-mono); 
         font-size: 0.55rem; 
         color: var(--audit-color); 
-        margin-top: 4px; 
+        margin-top: 6px; 
         word-break: break-all;
         border-top: 1px dashed var(--audit-color);
         padding-top: 4px;
+        opacity: 0.8;
     }
+
+    /* 4. Disable Animations in Audit */
+    body[data-mode="audit"] .integrity-seal { animation: none !important; }
+    body[data-mode="audit"] .status-dot { animation: none !important; }
+    body[data-mode="audit"] .scramble { cursor: default; }
 
     /* GLOBAL LAYOUT */
     * { box-sizing: border-box; }
@@ -113,9 +129,11 @@
     .brand div { font-weight: 800; font-size: 0.85rem; line-height: 1.0; color: var(--text-main); letter-spacing: -0.02em; }
     .brand span { display:block; margin-top: 6px; font-weight: 500; font-size: 0.65rem; letter-spacing: 0.05em; color: var(--text-muted); }
 
+    .scramble { font-family: var(--font-mono); cursor: crosshair; }
+
     /* MODE SELECTOR */
     .mode-selector { margin-bottom: 3rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
-    .mode-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; cursor: pointer; }
+    .mode-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; cursor: pointer; transition: color 0.2s; }
     .mode-row:hover { color: var(--text-main); }
     .mode-row.active { font-weight: 700; color: var(--accent-primary); border-bottom: 1px solid var(--accent-primary); }
     .mode-row.disabled { opacity: 0.3; cursor: not-allowed; }
@@ -134,7 +152,7 @@
 
     main { flex-grow: 1; padding: 0; max-width: 1200px; width: 100%; min-width: 0; }
 
-    /* --- HEADER STRIP (Based on Screenshot) --- */
+    /* HEADER STRIP */
     .global-header-strip {
         width: 100%;
         padding: 3rem 4rem 1.5rem 4rem;
@@ -149,7 +167,7 @@
     
     .header-meta {
         display: flex; gap: 2rem; 
-        font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted);
+        font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);
     }
     
     .integrity-seal {
@@ -180,16 +198,14 @@
     .content-area { padding: 0 4rem 4rem 4rem; }
     h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin: 0 0 0.5rem 0; text-transform: uppercase; }
     
-    /* SECTION ANCHORS */
+    /* SECTION HEADERS */
     h2 { 
         font-size: 1.1rem; font-weight: 700; margin-top: 4rem; margin-bottom: 1.5rem; 
         text-transform: uppercase; letter-spacing: 0.05em; 
         border-bottom: 1px solid var(--border-color); padding-bottom: 10px; 
         display: flex; align-items: center;
     }
-    .scramble { font-family: var(--font-mono); cursor: crosshair; }
     h2 .scramble { margin-right: 12px; color: var(--text-muted); font-weight: 400; }
-    
     h3 { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-main); text-transform: uppercase; }
     .doc-subtitle { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4rem; letter-spacing: 0.02em; }
     p { margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.95rem; }
@@ -206,12 +222,9 @@
     }
     .diagram-img { width: 100%; height: auto; display: block; border-radius: 2px; transition: filter 0.3s ease; border: 1px solid var(--figure-border); }
 
-    /* IMAGE LOGIC (v12 Preserved) */
-    /* Black Sources (1 & 5) -> Invert in Light */
+    /* IMAGE LOGIC (Preserved) */
     body[data-theme="light"] img[src*="fig1"], body[data-theme="light"] img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
     body[data-theme="dark"] img[src*="fig1"], body[data-theme="dark"] img[src*="fig5"] { filter: none !important; border-color: #333; }
-
-    /* White Sources (2, 3, 4) -> Invert in Dark */
     body[data-theme="light"] img[src*="fig2"], body[data-theme="light"] img[src*="fig3"], body[data-theme="light"] img[src*="fig4"] { filter: none !important; }
     body[data-theme="dark"] img[src*="fig2"], body[data-theme="dark"] img[src*="fig3"], body[data-theme="dark"] img[src*="fig4"] { filter: invert(1) hue-rotate(180deg) !important; border-color: #333; }
 
@@ -319,7 +332,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v18.0 - AUDIT + BADGES ]
+          [ v18.0 - AUDIT ENABLED ]
       </div>
     </aside>
 
@@ -378,7 +391,7 @@
         </section>
 
         <section>
-            <h2><span class="scramble" data-value="01 //">01 //</span> The 5R Framework (RAA)</h2>
+            <h2 id="sec-01"><span class="scramble" data-value="01 //">01 //</span> The 5R Framework (RAA)</h2>
             <div class="section-grid">
                 <div class="text-col">
                     <p>
@@ -424,7 +437,7 @@
         </section>
 
         <section>
-            <h2><span class="scramble" data-value="02 //">02 //</span> The Reflective Duality Layer (RDL)</h2>
+            <h2 id="sec-02"><span class="scramble" data-value="02 //">02 //</span> The Reflective Duality Layer (RDL)</h2>
             <div class="section-grid">
                 <div class="text-col">
                     <p>
@@ -452,7 +465,7 @@ def evaluate_stability(input):
         </section>
 
         <section>
-            <h2><span class="scramble" data-value="03 //">03 //</span> Core Metrics</h2>
+            <h2 id="sec-03"><span class="scramble" data-value="03 //">03 //</span> Core Metrics</h2>
             <div class="section-grid">
                 <div class="text-col">
                     <p>
@@ -485,7 +498,7 @@ def evaluate_stability(input):
         </section>
 
         <section>
-            <h2><span class="scramble" data-value="04 //">04 //</span> Failure Signatures</h2>
+            <h2 id="sec-04"><span class="scramble" data-value="04 //">04 //</span> Failure Signatures</h2>
             <div class="section-grid">
                 <div class="text-col">
                     <p>
@@ -505,9 +518,7 @@ def evaluate_stability(input):
                 </div>
             </div>
         </section>
-      </div>
-
-    </main>
+      </div> </main>
   </div>
 
   <div id="footer-mount"></div>
@@ -568,6 +579,7 @@ def evaluate_stability(input):
       .then(r => r.text())
       .then(html => { document.getElementById('footer-mount').innerHTML = html; });
 
+    // --- THEME ---
     function setTheme(theme) {
       document.body.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
