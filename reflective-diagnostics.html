@@ -14,7 +14,7 @@
     <script type="application/json" id="audit-manifest">
     {
         "doc_id": "RD-DIAG-0001",
-        "version": "12.6.0",
+        "version": "12.7.0",
         "status": "OPERATIONAL"
     }
     </script>
@@ -77,7 +77,7 @@
         }
 
         /* [FIX] SMART DIAGRAM INVERSION FOR DARK MODE */
-        /* This turns white backgrounds black and black text white automatically */
+        /* This keeps your PNGs but makes them look native in dark mode */
         body[data-theme="dark"] .rail-thumbimg {
             filter: invert(0.93) hue-rotate(180deg);
             opacity: 0.9;
@@ -518,9 +518,7 @@ artifact_id = hash(record_id + run_id)
                             <div class="rail-id">RD-FIG-01</div>
                         </div>
                         <div class="rail-thumbframe">
-                            <object data="assets/diag-samples/coverage-map.svg" type="image/svg+xml" class="rail-thumbimg" aria-label="Coverage Map">
-                                <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="Coverage Map">
-                            </object>
+                            <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="Coverage Map" loading="lazy">
                         </div>
                         <div class="rail-desc">See which tests are implemented vs planned and where each evidence artifact lives.</div>
                     </div>
