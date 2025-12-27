@@ -15,44 +15,44 @@
       --text-muted: #555;
       --accent: #00ff00;
       --border: #1a1a1a;
-      --sidebar-w: 400px;
+      --sidebar-w: 420px;
     }
 
     [data-theme="light"] {
-      --bg: #f9f9f9;
+      --bg: #fdfdfd;
       --sidebar-bg: #ffffff;
       --text: #121212;
       --text-muted: #999;
       --accent: #00aa00;
-      --border: #e0e0e0;
+      --border: #ececec;
     }
 
     body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: 0.3s; }
     
-    /* DISCRETE MOVING STATUS LINE (SIDEBAR TOP) */
-    .status-line-container { width: 100%; height: 2px; background: transparent; position: relative; overflow: hidden; margin-bottom: 1rem; }
-    .status-line { position: absolute; width: 40px; height: 100%; background: var(--accent); animation: slide 3s ease-in-out infinite; opacity: 0.5; }
-    @keyframes slide { 0% { left: -50px; } 50% { left: 100%; } 100% { left: -50px; } }
+    /* DISCRETE PULSE LINE - REPLACES THICK GREEN BAR */
+    .status-pulse-container { width: 100%; height: 2px; background: transparent; position: relative; overflow: hidden; }
+    .status-pulse { position: absolute; width: 60px; height: 100%; background: var(--accent); animation: slide 4s ease-in-out infinite; opacity: 0.4; }
+    @keyframes slide { 0% { left: -10%; } 50% { left: 100%; } 100% { left: -10%; } }
 
-    /* SIDEBAR NAVIGATION */
-    aside { width: var(--sidebar-w); border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--sidebar-bg); flex-shrink: 0; padding-top: 5px; }
-    .nav-top { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); }
-    .home-link { text-decoration: none; color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.6rem; display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.1em; }
-    .home-link:hover { color: var(--accent); }
-
-    .sidebar-header h1 { font-size: 0.85rem; font-family: 'JetBrains Mono'; color: var(--text); margin: 0; text-transform: uppercase; letter-spacing: 0.1em; }
-    .duration-meta { font-size: 0.6rem; color: var(--accent); margin-top: 4px; font-family: 'JetBrains Mono'; opacity: 0.7; }
+    aside { width: var(--sidebar-w); border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--sidebar-bg); flex-shrink: 0; }
     
-    .profile-toggle { margin-top: 10px; display: flex; gap: 6px; }
-    .profile-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.5rem; padding: 2px 5px; cursor: pointer; transition: 0.2s; }
-    .profile-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .nav-top { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .terminal-link { text-decoration: none; color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.6rem; display: block; margin-bottom: 0.8rem; transition: 0.2s; letter-spacing: 0.1em; }
+    .terminal-link:hover { color: var(--accent); }
+
+    .sidebar-header h1 { font-size: 0.9rem; font-family: 'JetBrains Mono'; color: var(--text); margin: 0; text-transform: uppercase; letter-spacing: 0.1em; }
+    .duration-meta { font-size: 0.65rem; color: var(--accent); margin-top: 5px; font-family: 'JetBrains Mono'; font-weight: 700; }
+    
+    .profile-switcher { margin-top: 12px; display: flex; gap: 8px; }
+    .p-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.55rem; padding: 4px 8px; cursor: pointer; border-radius: 2px; }
+    .p-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .video-list { flex: 1; overflow-y: auto; padding: 0; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
     
-    /* DISCRETE LEVEL HEADERS */
+    /* REFINED VISIBILITY HEADERS */
     .level-heading { 
-      padding: 18px 20px 6px 20px; 
-      font-size: 0.6rem; 
+      padding: 22px 20px 8px 20px; 
+      font-size: 0.65rem; 
       font-weight: 800; 
       color: var(--text-muted); 
       background: var(--sidebar-bg);
@@ -60,42 +60,40 @@
       text-transform: uppercase; letter-spacing: 0.15em; font-family: 'JetBrains Mono';
       border-bottom: 1px solid var(--border);
     }
-    .level-heading b { color: var(--accent); font-weight: 400; margin-right: 5px; }
+    .level-heading span { color: var(--accent); font-weight: 400; margin-right: 8px; }
 
-    .video-item { padding: 10px 20px; border-bottom: 1px solid #111; cursor: pointer; display: flex; gap: 12px; transition: 0.2s; border-left: 2px solid transparent; }
+    .video-item { padding: 12px 20px; border-bottom: 1px solid #111; cursor: pointer; display: flex; gap: 15px; transition: 0.15s; border-left: 3px solid transparent; }
     .video-item:hover { background: rgba(0,255,0,0.02); }
-    .video-item.active { background: rgba(0,255,0,0.04); border-left: 2px solid var(--accent); }
+    .video-item.active { background: rgba(0,255,0,0.04); border-left: 3px solid var(--accent); }
     
-    .v-num { font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--text-muted); min-width: 28px; padding-top: 2px; }
+    .v-num { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: var(--text-muted); min-width: 32px; padding-top: 2px; }
     .video-item.active .v-num { color: var(--accent); }
-    .v-title { font-size: 0.75rem; font-weight: 500; color: var(--text); line-height: 1.4; opacity: 0.7; }
+    .v-title { font-size: 0.8rem; font-weight: 500; color: var(--text); line-height: 1.4; opacity: 0.7; }
     .video-item.active .v-title { opacity: 1; font-weight: 700; }
 
-    /* MAIN THEATRE */
     main { flex: 1; display: flex; flex-direction: column; background: var(--bg); }
     .player-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-    .video-wrapper { width: 100%; max-width: 1050px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); box-shadow: 0 30px 80px rgba(0,0,0,0.8); }
+    .video-wrapper { width: 100%; max-width: 1000px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); box-shadow: 0 40px 100px rgba(0,0,0,0.9); }
     iframe { width: 100%; height: 100%; border: none; }
 
-    .lecture-bar { padding: 1.2rem 2.5rem; border-top: 1px solid var(--border); background: var(--sidebar-bg); display: flex; justify-content: space-between; align-items: center; }
-    .v-id-tag { font-family: 'JetBrains Mono'; font-size: 0.55rem; color: var(--accent); text-transform: uppercase; margin-bottom: 3px; }
-    .lecture-bar h2 { margin: 0; font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
-    .status-badge { font-family: 'JetBrains Mono'; font-size: 0.5rem; color: var(--accent); border: 1px solid var(--accent); padding: 3px 6px; border-radius: 1px; opacity: 0.5; letter-spacing: 0.1em; }
+    .info-footer { padding: 1.5rem 3rem; border-top: 1px solid var(--border); background: var(--sidebar-bg); display: flex; justify-content: space-between; align-items: center; }
+    .v-meta-tag { font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; }
+    .info-footer h2 { margin: 0; font-size: 1.1rem; font-weight: 800; }
   </style>
 </head>
 <body data-theme="dark">
 
   <aside>
-    <div class="status-line-container"><div class="status-line"></div></div>
+    <div class="status-pulse-container"><div class="status-pulse"></div></div>
     <div class="nav-top">
-      <a href="index.html" class="home-link">TERMINAL_EXIT // HOME</a>
+      <a href="index.html" class="terminal-link">EXIT_TO_HOME // SYSTEM_RETURN</a>
       <div class="sidebar-header">
         <h1>Inside Alignment</h1>
         <div class="duration-meta">RUNTIME: 24:15 // 57 MODULES</div>
       </div>
-      <div class="profile-toggle">
-        <button class="profile-btn" onclick="setTheme('dark')">NIGHT_OP</button>
-        <button class="profile-btn" onclick="setTheme('light')">PAPER_VIEW</button>
+      <div class="profile-switcher">
+        <button class="p-btn" onclick="setTheme('dark')">CORE_DARK</button>
+        <button class="p-btn" onclick="setTheme('light')">LAB_LIGHT</button>
       </div>
     </div>
     <div class="video-list" id="syllabus"></div>
@@ -105,19 +103,19 @@
     <div class="player-container">
       <div class="video-wrapper" id="player"></div>
     </div>
-    <div class="lecture-bar">
+    <div class="info-footer">
       <div>
-        <div id="active-tag" class="v-id-tag">DOC_REF: EAI-00.1</div>
-        <h2 id="active-title">Connecting...</h2>
+        <div id="active-tag" class="v-meta-tag">ENLIGHTENED AI // MODULE 0.1</div>
+        <h2 id="active-title">Connecting to Lab...</h2>
       </div>
-      <div class="status-badge">SECURE_SYNC</div>
+      <div style="font-family:'JetBrains Mono'; font-size:0.55rem; color:var(--accent); opacity:0.5; border:1px solid var(--accent); padding:4px 8px;">ENCRYPTED_FEED</div>
     </div>
   </main>
 
   <script>
     const playlistID = "PL0TbB-9Inn_UAIRt19B9DYhAOlnMb_Cmh";
-    const levelNames = ["Foundations", "What Is Alignment?", "Internal Dynamics", "Why We Need a Framework", "The 5R Framework", "RDL Logic", "RDL Prediction", "Measurability", "Implications Today", "The Vision"];
-
+    
+    // FULL TITLES RESTORED FROM YOUR PLAYLIST SCREENSHOTS
     const namedModules = {
       1: { lvl: 0, num: "0.1", title: "What Intelligence Really Is" },
       2: { lvl: 0, num: "0.2", title: "Why Minds Drift" },
@@ -125,30 +123,68 @@
       4: { lvl: 0, num: "0.4", title: "Intelligence vs Behavior" },
       5: { lvl: 0, num: "0.5", title: "Why This Matters for AI" },
       6: { lvl: 1, num: "1.1", title: "Alignment Is Not Obedience" },
-      7: { lvl: 1, num: "1.2", title: "Output Filters Can Make Behavior Look Safe" },
+      7: { lvl: 1, num: "1.2", title: "Output Filters and False Safety" },
       8: { lvl: 1, num: "1.3", title: "Safe Answers vs Stable Thinking" },
       9: { lvl: 1, num: "1.4", title: "Why Filters + Rules Cannot Give Stability" },
       10: { lvl: 1, num: "1.5", title: "Real Examples of Model Instability" },
       11: { lvl: 2, num: "2.1", title: "AI as a Moving System" },
-      12: { lvl: 2, num: "2.2", title: "Internal Reasoning Dynamics" },
-      13: { lvl: 2, num: "2.3", title: "Signatures of Moral Drift" },
-      14: { lvl: 2, num: "2.4", title: "Reflective Collapse Mechanics" },
-      15: { lvl: 2, num: "2.5", title: "Internal Observation Requirements" },
+      12: { lvl: 2, num: "2.2", title: "Internal Reasoning Matters More Than Output" },
+      13: { lvl: 2, num: "2.3", title: "What Moral Drift Looks Like" },
+      14: { lvl: 2, num: "2.4", title: "What Reflective Collapse Looks Like" },
+      15: { lvl: 2, num: "2.5", title: "Why We Must Look Inside the System" },
+      16: { lvl: 3, num: "3.1", title: "Why Benchmarks Fail" },
+      17: { lvl: 3, num: "3.2", title: "Why Scaling Doesn’t Produce Morality" },
+      18: { lvl: 3, num: "3.3", title: "Why Hope Is Not a Strategy" },
+      19: { lvl: 3, num: "3.4", title: "What a Real Alignment Framework Must Do" },
+      20: { lvl: 3, num: "3.5", title: "What We Actually Need to Measure" },
+      21: { lvl: 4, num: "4.1", title: "Why We Need a Map of the Mind" },
+      22: { lvl: 4, num: "4.2", title: "The Five Internal Forces" },
+      23: { lvl: 4, num: "4.3", title: "How Each R Stabilizes Intelligence" },
+      24: { lvl: 4, num: "4.4", title: "R1 — Regulation" },
+      25: { lvl: 4, num: "4.5", title: "R2 — Reflection" },
+      26: { lvl: 4, num: "4.6", title: "R3 — Reasoning" },
+      27: { lvl: 4, num: "4.7", title: "R4 — Relationships" },
+      28: { lvl: 4, num: "4.8", title: "R5 — Resilience" },
+      29: { lvl: 4, num: "4.9", title: "System Stability Dynamics" },
+      30: { lvl: 4, num: "4.10", title: "RAA System Overview" },
+      31: { lvl: 5, num: "5.1", title: "Why RDL Exists" },
+      32: { lvl: 5, num: "5.2", title: "The Two Trajectories" },
+      33: { lvl: 5, num: "5.3", title: "The Forward Role (F)" },
+      34: { lvl: 5, num: "5.4", title: "Systemic Self-Correction Path" },
+      35: { lvl: 5, num: "5.5", title: "Reflection as a Stabilizer" },
+      36: { lvl: 5, num: "5.6", title: "Early Warning Patterns" },
+      37: { lvl: 5, num: "5.7", title: "Collapse Signatures" },
+      38: { lvl: 5, num: "5.8", title: "Reflective Stability (Ψ)" },
+      39: { lvl: 5, num: "5.9", title: "Movement Toward Equilibrium" },
+      40: { lvl: 5, num: "5.10", title: "Moral Coherence Index (MCI★)" },
+      41: { lvl: 6, num: "6.1", title: "Why Prediction Matters" },
+      42: { lvl: 6, num: "6.2", title: "The Shape of Early Drift" },
+      43: { lvl: 6, num: "6.3", title: "Early Warning Signals" },
+      44: { lvl: 6, num: "6.4", title: "The Correction Loop" },
+      45: { lvl: 6, num: "6.5", title: "When Correction Fails" },
+      46: { lvl: 7, num: "7.1", title: "Behavior vs Dynamics" },
+      47: { lvl: 7, num: "7.2", title: "The Stability Window" },
+      48: { lvl: 7, num: "7.3", title: "Reading the Stability Curve" },
+      49: { lvl: 7, num: "7.4", title: "The Threshold of Collapse" },
+      50: { lvl: 7, num: "7.5", title: "Predictable Outcomes" },
+      51: { lvl: 8, num: "8.1", title: "Current Methodology Limits" },
       52: { lvl: 8, num: "8.2", title: "How RAA + RDL Work Together" },
-      53: { lvl: 8, num: "8.3", title: "The Mindset Shift the Field Hasn't Made" },
-      54: { lvl: 8, num: "8.4", title: "Blind Spots in Internal Dynamics" },
-      55: { lvl: 8, num: "8.5", title: "Alignment as a Science, Not a Guess" },
-      56: { lvl: 9, num: "9.1", title: "What Aligned Intelligence Feels Like" },
-      57: { lvl: 9, num: "9.2", title: "The Intelligence We Choose to Build" }
+      53: { lvl: 8, num: "8.3", title: "The Mindset Shift Needed" },
+      54: { lvl: 8, num: "8.4", title: "Internal Dynamics Blind Spots" },
+      55: { lvl: 8, num: "8.5", title: "Alignment as a Science" },
+      56: { lvl: 9, num: "9.1", title: "Aligned Intelligence Vision" },
+      57: { lvl: 9, num: "9.2", title: "The Future We Build" }
     };
+
+    const levelNames = ["Foundations", "What Is Alignment?", "Internal Dynamics", "Why a Framework?", "The 5R Framework", "RDL Logic", "RDL Prediction", "Measurability", "Implications Today", "The Vision"];
 
     function setTheme(t) { document.body.setAttribute('data-theme', t); }
 
     function loadVideo(index) {
         const moduleNum = index + 1;
-        const v = namedModules[moduleNum] || { title: "Research Module " + moduleNum, num: moduleNum, lvl: Math.floor(index/6) };
+        const v = namedModules[moduleNum];
         document.getElementById('player').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=${playlistID}&index=${moduleNum}&autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        document.getElementById('active-tag').innerText = "DOC_REF: EAI-" + v.num;
+        document.getElementById('active-tag').innerText = "ENLIGHTENED AI // MODULE " + v.num;
         document.getElementById('active-title').innerText = v.title;
         document.querySelectorAll('.video-item').forEach((el, i) => { el.classList.toggle('active', i === index); });
     }
@@ -156,11 +192,11 @@
     let currentLvl = -1;
     for(let i = 0; i < 57; i++) {
         const moduleNum = i + 1;
-        const v = namedModules[moduleNum] || { lvl: Math.floor(i/6), num: moduleNum, title: "Module " + moduleNum };
+        const v = namedModules[moduleNum];
         if (v.lvl !== currentLvl) {
             const h = document.createElement('div');
             h.className = 'level-heading';
-            h.innerHTML = `<b>//</b> LEVEL ${v.lvl}: ${levelNames[v.lvl]}`;
+            h.innerHTML = `<span>//</span> LEVEL ${v.lvl}: ${levelNames[v.lvl]}`;
             document.getElementById('syllabus').appendChild(h);
             currentLvl = v.lvl;
         }
