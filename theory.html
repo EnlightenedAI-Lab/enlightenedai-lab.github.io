@@ -5,24 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Theory | Enlightened AI</title>
 
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/footer.css">
 
-  <script type="application/json" id="theory-manifest">
-  {
-      "doc_id": "EAIRL-THEORY-001",
-      "version": "RAA-3.0",
-      "status": "PUBLISHED"
-  }
-  </script>
-
   <style>
     /* --- THEME VARIABLES --- */
     :root {
-      /* LIGHT MODE DEFAULTS */
+      /* LIGHT MODE SETTINGS */
       --bg-color: #ffffff;
       --sidebar-bg: #f8f9fa;
       --text-main: #050505;
@@ -36,13 +32,14 @@
       --figure-bg: transparent;
       --figure-border: transparent;
       
-      /* FORCE INVERT IN LIGHT MODE */
-      --img-filter: invert(1) hue-rotate(180deg); 
+      /* INVERT IMAGES IN LIGHT MODE */
+      /* This turns the black background white and flips cyan to deep blue */
+      --img-filter: invert(1) hue-rotate(180deg);
       --img-border: 1px solid #e5e5e5;
     }
 
     body[data-theme="dark"] {
-      /* DARK MODE OVERRIDES */
+      /* DARK MODE SETTINGS */
       --bg-color: #0a0a0a;
       --sidebar-bg: #0a0a0a;
       --text-main: #f0f0f0;
@@ -53,7 +50,7 @@
       --figure-bg: #111;
       --figure-border: #333;
       
-      /* NO INVERT IN DARK MODE (Keep original) */
+      /* DO NOT INVERT IN DARK MODE */
       --img-filter: none;
       --img-border: 1px solid #333;
     }
@@ -155,8 +152,8 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
     
-    /* --- SMART IMAGE INVERSION (ROBUST METHOD) --- */
-    /* We use CSS variables defined in :root to force the update */
+    /* --- SMART IMAGE INVERSION (THE FIX) --- */
+    /* This rule forces ALL diagram images to respect the theme variable */
     .diagram-img {
         width: 100%;
         height: auto;
@@ -164,7 +161,7 @@
         border-radius: 2px;
         transition: filter 0.3s ease, border-color 0.3s ease;
         
-        /* THE MAGIC: Uses the variable that flips based on theme */
+        /* THE CRITICAL LINE: Flips color in light mode */
         filter: var(--img-filter);
         border: var(--img-border);
     }
@@ -224,8 +221,7 @@
         max-width: 90%; max-height: 90%;
         box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         transition: filter 0.3s ease;
-        
-        /* Ensure lightbox image also respects the variable */
+        /* Ensure lightbox respects the theme filter */
         filter: var(--img-filter);
         border: var(--img-border);
     }
@@ -286,8 +282,8 @@
         [ LIGHT / DARK ] <span id="theme-icon">◐</span>
       </div>
       
-      <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); opacity:0.5;">
-          [ v3.0 ]
+      <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
+          [ v3.1 - LATEST ]
       </div>
     </aside>
 
