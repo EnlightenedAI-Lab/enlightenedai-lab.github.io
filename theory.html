@@ -23,7 +23,7 @@
     /* --- THEME VARIABLES --- */
     :root {
       --bg-color: #ffffff;
-      --sidebar-bg: #f8f9fa; /* Distinct sidebar color for light mode */
+      --sidebar-bg: #f8f9fa;
       --text-main: #050505;
       --text-muted: #5e5e5e;
       --border-color: #e5e5e5;
@@ -31,20 +31,20 @@
       --font-stack: "Inter", sans-serif;
       --font-mono: "JetBrains Mono", monospace;
       --accent-blue: #0044cc;
-      --lightbox-bg: rgba(255, 255, 255, 0.98);
-      --figure-bg: #f8f8f8;
-      --figure-border: #e0e0e0;
+      --lightbox-bg: rgba(255, 255, 255, 0.95);
+      --figure-bg: transparent; /* Transparent in light mode for seamless look */
+      --figure-border: transparent;
     }
 
     body[data-theme="dark"] {
       --bg-color: #0a0a0a;
-      --sidebar-bg: #0a0a0a; /* Sidebar matches bg in dark mode */
+      --sidebar-bg: #0a0a0a;
       --text-main: #f0f0f0;
       --text-muted: #888888;
       --border-color: #333333;
       --accent-blue: #66aaff;
-      --lightbox-bg: rgba(0, 0, 0, 0.98);
-      --figure-bg: #111;
+      --lightbox-bg: rgba(0, 0, 0, 0.95);
+      --figure-bg: #111; /* Dark background for figures in dark mode */
       --figure-border: #333;
     }
 
@@ -72,7 +72,7 @@
       height: 100vh; position: sticky; top: 0; align-self: flex-start;
       border-right: 1px solid var(--border-color); padding: 3rem 2rem;
       display: flex; flex-direction: column; flex-shrink: 0;
-      background: var(--sidebar-bg); /* Updated to use distinct variable */
+      background: var(--sidebar-bg);
       z-index: 1000;
       overflow-y: auto;
     }
@@ -139,20 +139,33 @@
         width: 280px; 
         flex-shrink: 0;
         border-radius: 4px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
     }
     .diagram-thumbnail:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        border-color: var(--accent-blue);
     }
+    
+    /* --- SMART IMAGE INVERSION --- */
     .diagram-img {
         width: 100%;
         height: auto;
         display: block;
-        border: 1px solid #222; 
         border-radius: 2px;
+        transition: filter 0.3s ease, border-color 0.3s ease;
     }
+
+    /* In LIGHT mode: Invert colors to make background white */
+    body[data-theme="light"] .diagram-img {
+        filter: invert(1) hue-rotate(180deg); /* Invert and color-correct */
+        border: 1px solid #e5e5e5;
+    }
+
+    /* In DARK mode: Keep original dark images */
+    body[data-theme="dark"] .diagram-img {
+        filter: none;
+        border: 1px solid #333;
+    }
+
     .diagram-caption {
         font-family: var(--font-mono);
         font-size: 0.65rem;
@@ -207,8 +220,18 @@
     #lightbox-img {
         max-width: 90%; max-height: 90%;
         box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        transition: filter 0.3s ease;
+    }
+    /* Ensure Lightbox also inverts in light mode */
+    body[data-theme="light"] #lightbox-img {
+        filter: invert(1) hue-rotate(180deg);
+        border: 1px solid #e5e5e5;
+    }
+    body[data-theme="dark"] #lightbox-img {
+        filter: none;
         border: 1px solid #333;
     }
+
 
     #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
     .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; background: rgba(255,255,255,0.98); border-bottom: 1px solid var(--border-color); padding: 0 1.25rem; height: 50px; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); }
