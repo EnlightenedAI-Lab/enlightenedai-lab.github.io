@@ -1,29 +1,196 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Videos | Enlightened AI Research Lab</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VIDEOS | Enlightened AI</title>
 
-  <!-- reuse same CSS as data page -->
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/footer.css">
+
+  <script type="application/json" id="audit-manifest">
+  {
+    "doc_id": "RD-VIDEO-0001",
+    "version": "1.0.0",
+    "status": "PUBLIC_VIEW"
+  }
+  </script>
+
+  <style>
+    :root{
+      --bg-color:#ffffff;
+      --sidebar-bg:#ffffff;
+      --text-main:#050505;
+      --text-muted:#5e5e5e;
+      --border-color:#e5e5e5;
+      --card-bg:#fafafa;
+      --signal-enforced:#00cc00;
+    }
+    [data-theme="dark"]{
+      --bg-color:#050505;
+      --sidebar-bg:#050505;
+      --text-main:#e0e0e0;
+      --text-muted:#888;
+      --border-color:#333;
+      --card-bg:#111;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Inter",sans-serif;
+      background:var(--bg-color);
+      color:var(--text-main);
+    }
+    h1{
+      font-size:1.1rem;
+      font-weight:700;
+      text-transform:uppercase;
+      margin:0 0 1.5rem 0;
+    }
+    h2{
+      font-size:0.9rem;
+      font-weight:700;
+      text-transform:uppercase;
+      margin:3rem 0 1.5rem 0;
+      border-bottom:1px solid var(--border-color);
+      padding-bottom:0.5rem;
+    }
+    p{max-width:70ch}
+    .scramble{
+      font-family:"JetBrains Mono",monospace;
+      color:var(--text-muted);
+      margin-right:0.75rem;
+    }
+    .layout-wrapper{display:flex}
+    aside{
+      width:240px;
+      border-right:1px solid var(--border-color);
+      padding:2rem;
+    }
+    nav a{
+      display:block;
+      color:var(--text-muted);
+      text-decoration:none;
+      font-size:0.85rem;
+      padding:4px 0 4px 10px;
+    }
+    nav a.active{
+      color:var(--text-main);
+      font-weight:600;
+      border-left:2px solid var(--text-main);
+    }
+    .main-column{flex:1}
+    .global-header-strip{
+      padding:2rem 4rem;
+      border-bottom:1px solid var(--border-color);
+    }
+    .orienting-frame{
+      font-family:"JetBrains Mono",monospace;
+      font-size:0.65rem;
+      color:var(--text-muted);
+      border-left:1px solid var(--border-color);
+      padding-left:12px;
+      max-width:900px;
+    }
+    .content-col{
+      padding:2rem 4rem 6rem 4rem;
+    }
+    .card{
+      border:1px solid var(--border-color);
+      border-radius:16px;
+      padding:16px;
+      background:var(--card-bg);
+      max-width:900px;
+    }
+    .k{
+      font-family:"JetBrains Mono",monospace;
+      font-size:0.7rem;
+      color:var(--text-muted);
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+    .t{
+      font-size:0.95rem;
+      font-weight:650;
+      margin-bottom:6px;
+    }
+    #footer-mount{
+      border-top:1px solid var(--border-color);
+      padding:2rem;
+    }
+  </style>
 </head>
 
-<body>
+<body data-theme="light">
 
-  <!-- HEADER -->
-  <!-- copy header block from data.html exactly -->
+<div class="layout-wrapper">
+  <aside>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="lexicon.html">Lexicon</a>
+      <a href="reflective-diagnostics.html">Diagnostics</a>
+      <a href="videos.html" class="active">Videos</a>
+      <a href="data.html">Data</a>
+    </nav>
+  </aside>
 
-  <main class="content">
-    <section class="page">
-      <h1>Videos</h1>
+  <div class="main-column">
 
-      <!-- videos will go here -->
-    </section>
-  </main>
+    <div class="global-header-strip">
+      <div class="orienting-frame">
+        THIS PAGE PRESENTS VISUAL AND ANIMATED ARTIFACTS USED TO ILLUSTRATE STRUCTURAL DYNAMICS,
+        COHERENCE FIELDS, AND DIAGNOSTIC BEHAVIOR.
+      </div>
+    </div>
 
-  <!-- FOOTER -->
-  <!-- copy footer block from data.html exactly -->
+    <div class="content-col">
+
+      <section id="overview">
+        <h1><span class="scramble">01 //</span>Overview</h1>
+        <p>
+          Videos on this page are treated as evidentiary figures.
+          They are used to illustrate system dynamics, not to provide narrative explanation.
+        </p>
+      </section>
+
+      <section id="videos">
+        <h2><span class="scramble">02 //</span>Figures (Video)</h2>
+
+        <div class="card">
+          <div class="k">FIGURE V-01</div>
+          <div class="t">Coherence Field Evolution</div>
+
+          <video
+            controls
+            muted
+            loop
+            playsinline
+            style="width:100%; border-radius:12px; margin-top:12px;"
+          >
+            <source src="/assets/video/grok-video-1de92487-f113-4f86-8147-d742d45c3b07.mp4" type="video/mp4">
+          </video>
+
+          <p style="margin-top:12px;">
+            Animated representation of coherence gradients evolving under recursive constraint.
+          </p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div id="footer-mount"></div>
+
+<script>
+  fetch('/partials/footer.html')
+    .then(r => r.ok ? r.text() : '')
+    .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
+    .catch(() => {});
+</script>
 
 </body>
 </html>
