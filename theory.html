@@ -32,7 +32,7 @@
       --font-mono: "JetBrains Mono", monospace;
       --accent-blue: #0044cc;
       --lightbox-bg: rgba(255, 255, 255, 0.95);
-      --figure-bg: transparent; /* Transparent in light mode for seamless look */
+      --figure-bg: transparent;
       --figure-border: transparent;
     }
 
@@ -44,7 +44,7 @@
       --border-color: #333333;
       --accent-blue: #66aaff;
       --lightbox-bg: rgba(0, 0, 0, 0.95);
-      --figure-bg: #111; /* Dark background for figures in dark mode */
+      --figure-bg: #111;
       --figure-border: #333;
     }
 
@@ -145,7 +145,7 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
     
-    /* --- SMART IMAGE INVERSION --- */
+    /* --- SMART IMAGE INVERSION (THE FIX) --- */
     .diagram-img {
         width: 100%;
         height: auto;
@@ -154,9 +154,9 @@
         transition: filter 0.3s ease, border-color 0.3s ease;
     }
 
-    /* In LIGHT mode: Invert colors to make background white */
+    /* In LIGHT mode: Invert ALL diagram images to make background white */
     body[data-theme="light"] .diagram-img {
-        filter: invert(1) hue-rotate(180deg); /* Invert and color-correct */
+        filter: invert(1) hue-rotate(180deg);
         border: 1px solid #e5e5e5;
     }
 
