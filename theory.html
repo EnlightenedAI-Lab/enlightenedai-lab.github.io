@@ -31,7 +31,8 @@
       --font-mono: "JetBrains Mono", monospace;
       --accent-blue: #0044cc;
       --lightbox-bg: rgba(255, 255, 255, 0.98);
-      --figure-bg: #fdfdfd;
+      --figure-bg: #f8f8f8; /* Light gray background for figure container */
+      --figure-border: #e0e0e0;
     }
 
     body[data-theme="dark"] {
@@ -42,6 +43,7 @@
       --accent-blue: #66aaff;
       --lightbox-bg: rgba(0, 0, 0, 0.98);
       --figure-bg: #111;
+      --figure-border: #333;
     }
 
     /* --- GLOBAL STYLES --- */
@@ -126,19 +128,23 @@
 
     .text-col { min-width: 0; }
 
-    /* --- DIAGRAM THUMBNAIL --- */
+    /* --- DIAGRAM THUMBNAIL (Fixed to look good in Light Mode) --- */
     .diagram-thumbnail {
         background: var(--figure-bg);
-        border: 1px solid var(--border-color);
-        padding: 4px;
+        border: 1px solid var(--figure-border);
+        padding: 6px;
         transition: transform 0.2s, box-shadow 0.2s;
         cursor: zoom-in;
-        width: 260px; /* Fixed width for margin consistency */
+        width: 280px; 
         flex-shrink: 0;
+        border-radius: 4px;
+        /* Slight shadow in light mode to make it pop */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
     }
+    
     .diagram-thumbnail:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         border-color: var(--accent-blue);
     }
     
@@ -146,16 +152,9 @@
         width: 100%;
         height: auto;
         display: block;
-        border: 1px solid var(--border-color);
-        transition: filter 0.3s ease;
-    }
-
-    /* SMART INVERT: Inverts black diagrams to white in light mode */
-    body[data-theme="light"] .diagram-img.dark-native {
-        filter: invert(1) hue-rotate(180deg) contrast(0.9);
-    }
-    body[data-theme="dark"] .diagram-img.dark-native {
-        filter: none;
+        border: 1px solid #222; /* Always dark border around the image itself */
+        border-radius: 2px;
+        /* NO INVERSION FILTER - Images stay dark */
     }
 
     .diagram-caption {
@@ -181,10 +180,7 @@
     #lightbox-img {
         max-width: 90%; max-height: 90%;
         box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        border: 1px solid var(--border-color);
-    }
-    body[data-theme="light"] #lightbox-img.dark-native {
-        filter: invert(1) hue-rotate(180deg) contrast(0.9);
+        border: 1px solid #333;
     }
 
     /* --- COMPONENTS --- */
@@ -288,8 +284,8 @@
             <p>We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.</p>
         </div>
         
-        <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig1.png', true)">
-            <img src="assets/img/theory/fig1.png" alt="Alignment Drift Curve" class="diagram-img dark-native" onerror="this.style.display='none'">
+        <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig1.png')">
+            <img src="assets/img/theory/fig1.png" alt="Alignment Drift Curve" class="diagram-img" onerror="this.style.display='none'">
             <div class="diagram-caption">Fig. 01: Alignment Drift Curve</div>
         </div>
       </section>
@@ -318,8 +314,8 @@
                 </div>
             </div>
 
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png', true)">
-                <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img dark-native" onerror="this.style.display='none'">
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png')">
+                <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 02: RAA Force Map (R1-R5)</div>
             </div>
         </div>
@@ -357,8 +353,8 @@ def evaluate_stability(input):
         return "COHERENT_STATE"</div>
             </div>
 
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png', true)">
-                <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img dark-native" onerror="this.style.display='none'">
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png')">
+                <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 03: RDL Workflow</div>
             </div>
         </div>
@@ -387,8 +383,9 @@ def evaluate_stability(input):
                     </div>
                 </div>
             </div>
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png', true)">
-                <img src="assets/img/theory/fig4.png" alt="Core Metrics" class="diagram-img dark-native" onerror="this.style.display='none'">
+            
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png')">
+                <img src="assets/img/theory/fig4.png" alt="Core Metrics" class="diagram-img" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 04: Metric Triad</div>
             </div>
         </div>
@@ -406,8 +403,9 @@ def evaluate_stability(input):
                   <li><strong>Care Erosion:</strong> Decline in Ψ across turns, often preceding major stability failures.</li>
                 </ul>
             </div>
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig5.png', true)">
-                <img src="assets/img/theory/fig5.png" alt="Failure Signatures Heatmap" class="diagram-img dark-native" onerror="this.style.display='none'">
+            
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig5.png')">
+                <img src="assets/img/theory/fig5.png" alt="Failure Signatures Heatmap" class="diagram-img" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 05: Failure Heatmap</div>
             </div>
         </div>
@@ -419,18 +417,11 @@ def evaluate_stability(input):
   <div id="footer-mount"></div>
 
   <script>
-    function openLightbox(src, isDarkNative) {
+    function openLightbox(src) {
         const modal = document.getElementById('lightbox-modal');
         const img = document.getElementById('lightbox-img');
         if (!src) return;
         img.src = src;
-        
-        if (isDarkNative) {
-            img.classList.add('dark-native');
-        } else {
-            img.classList.remove('dark-native');
-        }
-        
         modal.style.display = 'flex';
     }
     
