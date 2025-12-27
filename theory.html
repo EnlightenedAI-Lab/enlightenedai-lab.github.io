@@ -134,42 +134,36 @@
         border: 1px solid var(--figure-border);
     }
 
-    /* --- V10.0: FINAL TARGETING MAP --- */
+    /* --- V11.0: USER DIAGNOSTIC FIX --- */
+    /* REMOVED EXACT MATCHING (.png) */
+    /* ADDED FIG 5 TO INVERT LIST */
 
-    /* GROUP 1: BLACK SOURCE (Fig 1 ONLY) */
-    /* Light Mode: INVERT to White */
-    body[data-theme="light"] img[src*="fig1.png"] {
+    /* GROUP 1: INVERT IN LIGHT MODE */
+    /* (Fig 1, Fig 3, Fig 5) */
+    body[data-theme="light"] img[src*="fig1"], 
+    body[data-theme="light"] img[src*="fig3"],
+    body[data-theme="light"] img[src*="fig5"] {
         filter: invert(1) hue-rotate(180deg) !important;
     }
-    /* Dark Mode: NO INVERT (Stay Black) */
-    body[data-theme="dark"] img[src*="fig1.png"] {
+    /* Dark Mode: NO INVERT (Stay Original) */
+    body[data-theme="dark"] img[src*="fig1"], 
+    body[data-theme="dark"] img[src*="fig3"],
+    body[data-theme="dark"] img[src*="fig5"] {
         filter: none !important;
         border-color: #333;
     }
 
-    /* GROUP 2: WHITE SOURCE (Fig 2, Fig 3, Fig 4) */
-    /* Light Mode: NO INVERT (Stay White) */
-    body[data-theme="light"] img[src*="fig2.png"], 
-    body[data-theme="light"] img[src*="fig3.png"], 
-    body[data-theme="light"] img[src*="fig4.png"] {
+    /* GROUP 2: DO NOT INVERT IN LIGHT MODE */
+    /* (Fig 2, Fig 4) */
+    body[data-theme="light"] img[src*="fig2"], 
+    body[data-theme="light"] img[src*="fig4"] {
         filter: none !important;
     }
     /* Dark Mode: INVERT to Black */
-    body[data-theme="dark"] img[src*="fig2.png"], 
-    body[data-theme="dark"] img[src*="fig3.png"], 
-    body[data-theme="dark"] img[src*="fig4.png"] {
+    body[data-theme="dark"] img[src*="fig2"], 
+    body[data-theme="dark"] img[src*="fig4"] {
         filter: invert(1) hue-rotate(180deg) !important;
         border-color: #333;
-    }
-
-    /* GROUP 3: COLOR SOURCE (Fig 5) */
-    /* NEVER INVERT */
-    img[src*="fig5.png"] {
-        filter: none !important;
-    }
-    body[data-theme="dark"] img[src*="fig5.png"] {
-        border-color: #333;
-        opacity: 0.9;
     }
 
     .diagram-caption {
@@ -203,13 +197,12 @@
     #lightbox-img { max-width: 90%; max-height: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: filter 0.3s ease; }
     
     /* Lightbox Inheritance - Filenames */
-    body[data-theme="light"] #lightbox-img[src*="fig1.png"] { filter: invert(1) hue-rotate(180deg) !important; }
+    body[data-theme="light"] #lightbox-img[src*="fig1"],
+    body[data-theme="light"] #lightbox-img[src*="fig3"],
+    body[data-theme="light"] #lightbox-img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
     
-    body[data-theme="dark"] #lightbox-img[src*="fig2.png"],
-    body[data-theme="dark"] #lightbox-img[src*="fig3.png"],
-    body[data-theme="dark"] #lightbox-img[src*="fig4.png"] { filter: invert(1) hue-rotate(180deg) !important; }
-    
-    #lightbox-img[src*="fig5.png"] { filter: none !important; }
+    body[data-theme="dark"] #lightbox-img[src*="fig2"],
+    body[data-theme="dark"] #lightbox-img[src*="fig4"] { filter: invert(1) hue-rotate(180deg) !important; }
 
     #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
     .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; background: rgba(255,255,255,0.98); border-bottom: 1px solid var(--border-color); padding: 0 1.25rem; height: 50px; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); }
@@ -268,7 +261,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v10.0 - CORRECTED FIG 3 ]
+          [ v11.0 - HEATMAP UNLOCKED ]
       </div>
     </aside>
 
