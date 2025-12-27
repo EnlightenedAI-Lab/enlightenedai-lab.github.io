@@ -64,6 +64,7 @@
 
     .layout-wrapper { display: flex; flex: 1; width: 100%; }
 
+    /* --- SIDEBAR --- */
     aside {
       width: var(--sidebar-width);
       height: 100vh; position: sticky; top: 0; align-self: flex-start;
@@ -75,9 +76,10 @@
     }
     body[data-theme="dark"] aside { border-right-color: #333; }
 
+    /* SCALE FIX: Reduced size by 15% */
     .brand { margin-bottom: 4rem; }
-    .brand div { font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
-    .brand span { display:block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
+    .brand div { font-weight: 800; font-size: 0.85rem; line-height: 1.0; color: var(--text-main); letter-spacing: -0.02em; }
+    .brand span { display:block; margin-top: 6px; font-weight: 500; font-size: 0.65rem; letter-spacing: 0.05em; color: var(--text-muted); }
 
     nav ul { list-style: none; padding: 0; margin: 0; }
     nav li { margin-bottom: 4px; }
@@ -100,6 +102,7 @@
     .theme-switch:hover { color: var(--text-main); }
     body[data-theme="dark"] .theme-switch:hover { color: var(--text-main); }
 
+    /* --- MAIN CONTENT --- */
     main {
       flex-grow: 1; padding: 3rem 4rem; max-width: 1200px; width: 100%; min-width: 0;
     }
@@ -111,21 +114,26 @@
     .doc-subtitle { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4rem; letter-spacing: 0.02em; }
     p { margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.95rem; }
 
+    /* --- GOVERNANCE ANCHOR --- */
+    .gov-block {
+        display: flex; gap: 20px; font-family: var(--font-mono); 
+        font-size: 0.65rem; color: var(--text-muted); 
+        padding-bottom: 10px; border-bottom: 1px solid var(--border-color);
+        margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .gov-item strong { color: var(--text-main); margin-right: 5px; }
+
     .section-grid { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start; margin-bottom: 3rem; }
     .text-col { min-width: 0; }
 
+    /* --- STATIC IMAGES (READER MODE) --- */
     .diagram-thumbnail {
         background: var(--figure-bg);
         border: 1px solid var(--figure-border);
         padding: 6px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        cursor: zoom-in;
         width: 280px; flex-shrink: 0;
         border-radius: 4px;
-    }
-    .diagram-thumbnail:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        /* Removed Hover/Transform effects for static reader feel */
     }
     
     .diagram-img {
@@ -134,10 +142,8 @@
         border: 1px solid var(--figure-border);
     }
 
-    /* --- V12.0: MANUAL OVERRIDE (USER INSTRUCTION) --- */
-
-    /* GROUP 1: BLACK SOURCE -> INVERT IN LIGHT */
-    /* (Fig 1, Fig 5) */
+    /* --- FILENAME TARGETING LOGIC (v12.0 Logic Preserved) --- */
+    /* 1. BLACK SOURCE -> INVERT LIGHT */
     body[data-theme="light"] img[src*="fig1"], 
     body[data-theme="light"] img[src*="fig5"] {
         filter: invert(1) hue-rotate(180deg) !important;
@@ -148,14 +154,13 @@
         border-color: #333;
     }
 
-    /* GROUP 2: WHITE SOURCE -> DO NOT INVERT IN LIGHT */
-    /* (Fig 2, Fig 3, Fig 4) */
+    /* 2. WHITE SOURCE -> DO NOT INVERT LIGHT */
     body[data-theme="light"] img[src*="fig2"], 
     body[data-theme="light"] img[src*="fig3"],
     body[data-theme="light"] img[src*="fig4"] {
         filter: none !important;
     }
-    /* Dark Mode: INVERT to Black */
+    /* Dark Mode: INVERT */
     body[data-theme="dark"] img[src*="fig2"], 
     body[data-theme="dark"] img[src*="fig3"],
     body[data-theme="dark"] img[src*="fig4"] {
@@ -168,6 +173,7 @@
         text-transform: uppercase; letter-spacing: 0.05em; margin-top: 8px; text-align: left; line-height: 1.3;
     }
 
+    /* --- COMPONENTS --- */
     .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
     .force-card { border: 1px solid var(--border-color); padding: 1.25rem; background: #fff; }
     body[data-theme="dark"] .force-card { background: #0f0f0f; }
@@ -193,7 +199,7 @@
     #lightbox-modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--lightbox-bg); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
     #lightbox-img { max-width: 90%; max-height: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: filter 0.3s ease; }
     
-    /* Lightbox Inheritance - Filenames */
+    /* Lightbox Inheritance */
     body[data-theme="light"] #lightbox-img[src*="fig1"],
     body[data-theme="light"] #lightbox-img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
     
@@ -260,11 +266,18 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v12.0 - FIG 3 RESTORED ]
+          [ v13.0 - STRICT STANDARDS ]
       </div>
     </aside>
 
     <main>
+      <div class="gov-block">
+          <div class="gov-item"><strong>DOC_ID:</strong> EAIRL-THEORY-001</div>
+          <div class="gov-item"><strong>VERSION:</strong> RAA-3.0</div>
+          <div class="gov-item"><strong>STATUS:</strong> PUBLISHED</div>
+          <div class="gov-item">[ READER MODE ]</div>
+      </div>
+
       <section style="margin-bottom: 4rem; border-bottom: 1px solid var(--border-color); padding-bottom: 4rem;">
         <div style="max-width: 800px;">
             <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-blue); margin-bottom: 1rem;">
@@ -296,7 +309,7 @@
         </div>
         <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig1.png')">
             <img src="assets/img/theory/fig1.png" alt="Alignment Drift Curve" class="diagram-img" onerror="this.style.display='none'">
-            <div class="diagram-caption">Fig. 01: Alignment Drift Curve</div>
+            <div class="diagram-caption">FIG. 01: ALIGNMENT DRIFT CURVE</div>
         </div>
       </section>
 
@@ -325,7 +338,7 @@
             </div>
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png')">
                 <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img" onerror="this.style.display='none'">
-                <div class="diagram-caption">Fig. 02: The 5-Force Ontology</div>
+                <div class="diagram-caption">FIG. 02: RAA FORCE MAP (R1-R5)</div>
             </div>
         </div>
 
@@ -363,7 +376,7 @@ def evaluate_stability(input):
             </div>
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png')">
                 <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img" onerror="this.style.display='none'">
-                <div class="diagram-caption">Fig. 03: RDL System Architecture</div>
+                <div class="diagram-caption">FIG. 03: RDL SYSTEM ARCHITECTURE</div>
             </div>
         </div>
       </section>
@@ -393,7 +406,7 @@ def evaluate_stability(input):
             </div>
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png')">
                 <img src="assets/img/theory/fig4.png" alt="Core Metrics" class="diagram-img" onerror="this.style.display='none'">
-                <div class="diagram-caption">Fig. 04: The Metric Triad</div>
+                <div class="diagram-caption">FIG. 04: METRIC TRIAD (Ψ, R∇, MCI)</div>
             </div>
         </div>
       </section>
@@ -412,7 +425,7 @@ def evaluate_stability(input):
             </div>
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig5.png')">
                 <img src="assets/img/theory/fig5.png" alt="Failure Signatures Heatmap" class="diagram-img" onerror="this.style.display='none'">
-                <div class="diagram-caption">Fig. 05: Stability Failure Modes</div>
+                <div class="diagram-caption">FIG. 05: STABILITY FAILURE MODES</div>
             </div>
         </div>
       </section>
