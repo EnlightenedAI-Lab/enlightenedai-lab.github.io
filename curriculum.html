@@ -14,7 +14,7 @@
     .sidebar-header { padding: 1.5rem; border-bottom: 1px solid var(--border); }
     .sidebar-header h1 { font-size: 0.8rem; font-family: 'JetBrains Mono'; color: var(--accent); margin: 0; text-transform: uppercase; letter-spacing: 0.1em; }
     .video-list { flex: 1; overflow-y: auto; padding: 0; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
-    .video-item { padding: 14px 20px; border-bottom: 1px solid #111; cursor: pointer; display: flex; gap: 15px; align-items: flex-start; transition: 0.2s; }
+    .video-item { padding: 14px 20px; border-bottom: 1px solid #111; cursor: pointer; display: flex; gap: 15px; align-items: flex-start; }
     .video-item:hover { background: #080808; }
     .video-item.active { background: #111; border-left: 3px solid var(--accent); }
     .v-num { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: var(--accent); opacity: 0.6; min-width: 35px; }
@@ -22,7 +22,7 @@
     .video-item.active .v-title { color: #fff; }
     main { flex: 1; display: flex; flex-direction: column; background: #050505; position: relative; }
     .player-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; }
-    .video-wrapper { width: 100%; max-width: 1100px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); box-shadow: 0 0 50px rgba(0,255,0,0.05); }
+    .video-wrapper { width: 100%; max-width: 1100px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); }
     iframe { width: 100%; height: 100%; border: none; }
     .lecture-bar { padding: 1.5rem 3rem; background: #000; border-top: 1px solid var(--border); }
   </style>
@@ -40,51 +40,52 @@
       <div class="video-wrapper" id="player"></div>
     </div>
     <div class="lecture-bar">
-        <div id="active-tag" style="font-family:'JetBrains Mono'; font-size:0.65rem; color:var(--accent); margin-bottom:5px;">MODULE 0.1</div>
-        <h2 id="active-title" style="margin:0; font-size:1.1rem; color:#fff;">Initialising Interface...</h2>
+        <div id="active-tag" style="font-family:'JetBrains Mono'; font-size:0.65rem; color:var(--accent); margin-bottom:5px;">MODULE 1</div>
+        <h2 id="active-title" style="margin:0; font-size:1.1rem; color:#fff;">Initialising Masterclass...</h2>
     </div>
   </main>
   <script>
+    // THE ONLY THING THAT MATTERS: Your Playlist ID
     const playlistID = "PL0TbB-9Inn_UAIRt19B9DYhAOlnMb_Cmh";
     
-    // Explicitly mapping the known levels based on lab records
-    const knownVideos = {
-      0: { num: "0.1", title: "What Intelligence Really Is" },
-      1: { num: "0.2", title: "Why Minds Drift" },
-      2: { num: "0.3", title: "Where Stability Comes From" },
-      3: { num: "0.4", title: "Intelligence vs Behavior" },
-      4: { num: "0.5", title: "Why This Matters for AI" },
-      5: { num: "1.1", title: "Alignment Is Not Obedience" },
-      6: { num: "1.2", title: "The Boundary Problem" },
-      51: { num: "8.2", title: "How RAA + RDL Work Together" },
-      52: { num: "8.3", title: "The Mindset Shift the Field Hasn't Made" },
-      53: { num: "8.4", title: "The Blind Spot Around Internal Dynamics" },
-      54: { num: "8.5", title: "Alignment as a Science, Not a Guess" },
-      55: { num: "9.1", title: "What an Aligned Intelligence Feels Like" }
+    // We only need the titles for the ones we want to name specifically.
+    // The player will handle the rest automatically.
+    const namedModules = {
+      1: "0.1 What Intelligence Really Is",
+      2: "0.2 Why Minds Drift",
+      3: "0.3 Where Stability Comes From",
+      4: "0.4 Intelligence vs Behavior",
+      5: "0.5 Why This Matters for AI",
+      6: "1.1 Alignment Is Not Obedience",
+      7: "1.2 Output Filters Can Make Behavior Look Safe",
+      8: "1.3 The Difference Between 'Safe Answers' and Stable Thinking"
     };
 
     function loadVideo(index) {
-        const v = knownVideos[index] || { title: "Module " + (index + 1), num: (index + 1) };
+        const moduleNum = index + 1;
+        const title = namedModules[moduleNum] || "Module " + moduleNum;
         const p = document.getElementById('player');
-        // This dynamically loads the video from your playlist based on its position (index + 1)
-        p.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=${playlistID}&index=${index+1}&autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        document.getElementById('active-tag').innerText = "MODULE " + v.num;
-        document.getElementById('active-title').innerText = v.title;
+        
+        // This command tells YouTube: "Play the video at position X in this playlist"
+        p.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=${playlistID}&index=${moduleNum}&autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        
+        document.getElementById('active-tag').innerText = "MODULE " + moduleNum;
+        document.getElementById('active-title').innerText = title;
         document.querySelectorAll('.video-item').forEach((el, i) => { el.classList.toggle('active', i === index); });
     }
 
-    // Automate the sidebar creation for all 57 videos
+    // This loop creates all 57 slots for you instantly
     for(let i = 0; i < 57; i++) {
-        const v = knownVideos[i] || { title: "Research Module " + (i + 1), num: (i + 1) };
+        const moduleNum = i + 1;
+        const title = namedModules[moduleNum] || "Module " + moduleNum;
         const item = document.createElement('div');
         item.className = 'video-item';
-        item.innerHTML = `<div class="v-num">${v.num}</div><div class="v-title">${v.title}</div>`;
+        item.innerHTML = `<div class="v-num">${moduleNum}</div><div class="v-title">${title}</div>`;
         item.onclick = () => loadVideo(i);
         document.getElementById('syllabus').appendChild(item);
     }
     
-    // Auto-load the first video
-    loadVideo(0);
+    loadVideo(0); // Start with the first video
   </script>
 </body>
 </html>
