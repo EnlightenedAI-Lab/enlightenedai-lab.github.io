@@ -29,7 +29,7 @@
       
       /* Colors */
       --accent-primary: #0044cc; /* Reader Blue */
-      --audit-color: #C04000;    /* Regulatory Amber/Red */
+      --audit-color: #ff3b30;    /* Audit Red */
       --signal-green: #00cc00;   /* Verified Status */
       
       --lightbox-bg: rgba(255, 255, 255, 0.98);
@@ -50,53 +50,7 @@
       --figure-border: #333;
     }
 
-    /* --- AUDIT MODE BEHAVIOR --- */
-    
-    /* 1. Theme Override */
-    body[data-mode="audit"] {
-        --accent-primary: var(--audit-color) !important;
-    }
-
-    /* 2. Reveal Badges (Hidden by default) */
-    .audit-badge { display: none; }
-    
-    body[data-mode="audit"] .audit-badge { 
-        display: inline-block; 
-        font-family: var(--font-mono); 
-        font-size: 0.6rem; 
-        color: var(--audit-color); 
-        background: rgba(192, 64, 0, 0.08); /* Faint orange bg */
-        border: 1px solid var(--audit-color);
-        padding: 1px 5px;
-        margin-right: 8px;
-        border-radius: 2px;
-        vertical-align: middle;
-        cursor: help;
-        font-weight: 500;
-        transform: translateY(-1px);
-    }
-
-    /* 3. Reveal Image Sources (Hidden by default) */
-    .audit-source { display: none; }
-    
-    body[data-mode="audit"] .audit-source { 
-        display: block; 
-        font-family: var(--font-mono); 
-        font-size: 0.55rem; 
-        color: var(--audit-color); 
-        margin-top: 6px; 
-        word-break: break-all;
-        border-top: 1px dashed var(--audit-color);
-        padding-top: 4px;
-        opacity: 0.8;
-    }
-
-    /* 4. Disable Animations in Audit */
-    body[data-mode="audit"] .integrity-seal { animation: none !important; }
-    body[data-mode="audit"] .status-dot { animation: none !important; }
-    body[data-mode="audit"] .scramble { cursor: default; }
-
-    /* GLOBAL LAYOUT */
+    /* --- GLOBAL LAYOUT --- */
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
 
@@ -131,14 +85,6 @@
 
     .scramble { font-family: var(--font-mono); cursor: crosshair; }
 
-    /* MODE SELECTOR */
-    .mode-selector { margin-bottom: 3rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
-    .mode-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; cursor: pointer; transition: color 0.2s; }
-    .mode-row:hover { color: var(--text-main); }
-    .mode-row.active { font-weight: 700; color: var(--accent-primary); border-bottom: 1px solid var(--accent-primary); }
-    .mode-row.disabled { opacity: 0.3; cursor: not-allowed; }
-    .mode-symbol { width: 20px; text-align: right; }
-
     nav ul { list-style: none; padding: 0; margin: 0; }
     nav li { margin-bottom: 4px; }
     nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 2px 0 2px 10px; border-left: 2px solid transparent; display:block; }
@@ -153,7 +99,72 @@
 
     main { flex-grow: 1; padding: 0; max-width: 1200px; width: 100%; min-width: 0; }
 
-    /* HEADER STRIP */
+    /* --- THE MODE ENGINE (SHARED) --- */
+    .mode-switch { margin: 1.25rem 0 3rem 0; display:flex; flex-direction:column; gap:4px; }
+    .mode-btn {
+      all: unset;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      display: flex; justify-content: space-between;
+    }
+    .mode-btn:hover { color: var(--text-main); }
+    .mode-btn.active {
+      color: var(--audit-color);              
+      font-weight: 700;
+    }
+    /* Reader is blue when active, Audit is red */
+    .mode-btn[data-mode="reader"].active { color: var(--accent-primary); border-bottom-color: var(--accent-primary); }
+    .mode-btn[data-mode="audit"].active { color: var(--audit-color); border-bottom-color: var(--audit-color); }
+    
+    .mode-btn.disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* AUDIT VISIBILITY RULES */
+    .audit-only { display: none; }
+    body[data-mode="audit"] .audit-only { display: inline-block; } /* Badges are inline */
+    body[data-mode="audit"] div.audit-only { display: block; }     /* Provenance is block */
+
+    .reader-only { display: block; }
+    body[data-mode="audit"] .reader-only { display: none; }
+
+    /* Inline Badges */
+    .audit-badge {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      line-height: 1;
+      padding: 2px 5px;
+      border: 1px solid var(--audit-color);
+      color: var(--audit-color);
+      background: rgba(255, 59, 48, 0.05);
+      border-radius: 2px;
+      margin-right: 8px;
+      vertical-align: middle;
+      cursor: help;
+    }
+
+    /* Figure Provenance */
+    .fig-src {
+      margin-top: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      color: var(--audit-color);
+      display: none;
+      word-break: break-all;
+      border-top: 1px dashed var(--audit-color);
+      padding-top: 4px;
+      opacity: 0.8;
+    }
+    body[data-mode="audit"] .fig-src { display: block; }
+
+    /* Disable Animations in Audit */
+    body[data-mode="audit"] .integrity-seal { animation: none !important; border-color: var(--text-main) !important; color: var(--text-main) !important; }
+    body[data-mode="audit"] .status-dot { animation: none !important; background: var(--text-main) !important; box-shadow: none !important; }
+    body[data-mode="audit"] .scramble { cursor: default; }
+
+    /* --- HEADER STRIP --- */
     .global-header-strip {
         width: 100%;
         padding: 3rem 4rem 1.5rem 4rem;
@@ -161,14 +172,13 @@
         background: var(--bg-color);
         margin-bottom: 3rem;
     }
-    
-    .header-top-row {
-        display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 1rem;
-    }
-    
-    .header-meta {
-        display: flex; gap: 2rem; 
-        font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);
+    .header-top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 1rem; }
+    .header-meta { display: flex; gap: 2rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
+    .orienting-frame {
+        font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); opacity: 0.8;
+        text-transform: uppercase; letter-spacing: 0.05em; 
+        padding-top: 10px; border-top: 1px solid var(--border-color);
+        width: 100%; display: block;
     }
     
     .integrity-seal {
@@ -179,7 +189,6 @@
         background: rgba(0,204,0,0.03); cursor: default;
     }
     body[data-theme="dark"] .integrity-seal { color: #00cc00; }
-    
     .status-dot {
         width: 6px; height: 6px; border-radius: 50%;
         background: var(--signal-green); display: block;
@@ -188,18 +197,9 @@
     }
     @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
-    .orienting-frame {
-        font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); opacity: 0.8;
-        text-transform: uppercase; letter-spacing: 0.05em; 
-        padding-top: 10px; border-top: 1px solid var(--border-color);
-        width: 100%; display: block;
-    }
-
     /* CONTENT */
     .content-area { padding: 0 4rem 4rem 4rem; }
     h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin: 0 0 0.5rem 0; text-transform: uppercase; }
-    
-    /* SECTION HEADERS */
     h2 { 
         font-size: 1.1rem; font-weight: 700; margin-top: 4rem; margin-bottom: 1.5rem; 
         text-transform: uppercase; letter-spacing: 0.05em; 
@@ -223,14 +223,24 @@
     }
     .diagram-img { width: 100%; height: auto; display: block; border-radius: 2px; transition: filter 0.3s ease; border: 1px solid var(--figure-border); }
 
-    /* IMAGE LOGIC (Preserved) */
-    body[data-theme="light"] img[src*="fig1"], body[data-theme="light"] img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
-    body[data-theme="dark"] img[src*="fig1"], body[data-theme="dark"] img[src*="fig5"] { filter: none !important; border-color: #333; }
-    body[data-theme="light"] img[src*="fig2"], body[data-theme="light"] img[src*="fig3"], body[data-theme="light"] img[src*="fig4"] { filter: none !important; }
-    body[data-theme="dark"] img[src*="fig2"], body[data-theme="dark"] img[src*="fig3"], body[data-theme="dark"] img[src*="fig4"] { filter: invert(1) hue-rotate(180deg) !important; border-color: #333; }
+    /* --- IMAGE LOGIC (SEPARATE FROM AUDIT) --- */
+    /* Group 1: Black Source (Invert in Light) */
+    body[data-theme="light"] img[src*="fig1"], 
+    body[data-theme="light"] img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
+    body[data-theme="dark"] img[src*="fig1"], 
+    body[data-theme="dark"] img[src*="fig5"] { filter: none !important; border-color: #333; }
+
+    /* Group 2: White Source (Invert in Dark) */
+    body[data-theme="light"] img[src*="fig2"], 
+    body[data-theme="light"] img[src*="fig3"], 
+    body[data-theme="light"] img[src*="fig4"] { filter: none !important; }
+    body[data-theme="dark"] img[src*="fig2"], 
+    body[data-theme="dark"] img[src*="fig3"], 
+    body[data-theme="dark"] img[src*="fig4"] { filter: invert(1) hue-rotate(180deg) !important; border-color: #333; }
 
     .diagram-caption { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 8px; text-align: left; line-height: 1.3; }
 
+    /* Components */
     .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
     .force-card { border: 1px solid var(--border-color); padding: 1.25rem; background: #fff; }
     body[data-theme="dark"] .force-card { background: #0f0f0f; }
@@ -250,8 +260,8 @@
     #lightbox-modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--lightbox-bg); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
     #lightbox-img { max-width: 90%; max-height: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: filter 0.3s ease; }
     
+    /* Inherit image filters for lightbox */
     body[data-theme="light"] #lightbox-img[src*="fig1"], body[data-theme="light"] #lightbox-img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
-    body[data-theme="light"] #lightbox-img[src*="fig3"] { filter: none !important; }
     body[data-theme="dark"] #lightbox-img[src*="fig2"], body[data-theme="dark"] #lightbox-img[src*="fig3"], body[data-theme="dark"] #lightbox-img[src*="fig4"] { filter: invert(1) hue-rotate(180deg) !important; }
 
     #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
@@ -298,23 +308,23 @@
         <span>EST. 2026 // MONTREAL</span>
       </div>
 
-      <div class="mode-selector">
-          <div class="mode-row active" id="btn-reader" onclick="setMode('reader')">
+      <div class="mode-switch">
+          <button class="mode-btn active" data-mode="reader">
               <span>[ READER ]</span>
-              <span class="mode-symbol">•</span>
-          </div>
-          <div class="mode-row" id="btn-audit" onclick="setMode('audit')">
+              <span>•</span>
+          </button>
+          <button class="mode-btn" data-mode="audit">
               <span>[ AUDIT ]</span>
-              <span class="mode-symbol">·</span>
-          </div>
-          <div class="mode-row disabled">
+              <span>·</span>
+          </button>
+          <button class="mode-btn disabled" data-mode="diff" disabled>
               <span>[ DIFF LOG ]</span>
-              <span class="mode-symbol">Δ</span>
-          </div>
-          <div class="mode-row disabled">
+              <span>Δ</span>
+          </button>
+          <button class="mode-btn disabled" data-mode="logic" disabled>
               <span>[ LOGIC ]</span>
-              <span class="mode-symbol">λ</span>
-          </div>
+              <span>λ</span>
+          </button>
       </div>
 
       <nav>
@@ -333,7 +343,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v19.1 - FINAL AUDIT FIX ]
+          [ v20.0 - CONVERGED ]
       </div>
     </aside>
 
@@ -349,7 +359,7 @@
                 INTEGRITY: VERIFIED
             </div>
         </div>
-        <div class="orienting-frame">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW ALIGNMENT IS EVALUATED AS A SYSTEM PROPERTY.</div>
+        <div class="orienting-frame">INSPECTABLE THEORY RECORD — RAA / RDL</div>
       </div>
 
       <div class="content-area">
@@ -378,16 +388,16 @@
         <section class="section-grid">
             <div class="text-col">
                 <p>
-                    <span class="audit-badge">[M1.0]</span> Current alignment practices evaluate only surface outputs, leaving the internal decision processes that generate those outputs largely unmeasured. As a result, models can appear safe in benchmarks while their underlying reasoning is brittle, contradictory, or drift-prone.
+                    <span class="audit-badge audit-only">[M1.0]</span> Current alignment practices evaluate only surface outputs, leaving the internal decision processes that generate those outputs largely unmeasured. As a result, models can appear safe in benchmarks while their underlying reasoning is brittle, contradictory, or drift-prone.
                 </p>
                 <p>
-                    <span class="audit-badge">[M1.1]</span> We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.
+                    <span class="audit-badge audit-only">[M1.1]</span> We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.
                 </p>
             </div>
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig1.png')">
                 <img src="assets/img/theory/fig1.png" alt="Alignment Drift Curve" class="diagram-img" onerror="this.style.display='none'">
                 <div class="diagram-caption">FIG. 01: ALIGNMENT DRIFT CURVE</div>
-                <div class="audit-source">SRC: assets/img/theory/fig1.png</div>
+                <div class="fig-src audit-only">SRC: assets/img/theory/fig1.png</div>
             </div>
         </section>
 
@@ -396,7 +406,7 @@
             <div class="section-grid">
                 <div class="text-col">
                     <p>
-                        <span class="audit-badge">[REF-01]</span> Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.
+                        <span class="audit-badge audit-only">[REF-01]</span> Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.
                     </p>
                     <div class="theory-grid">
                         <div class="force-card">
@@ -419,7 +429,7 @@
                 <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png')">
                     <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img" onerror="this.style.display='none'">
                     <div class="diagram-caption">FIG. 02: RAA FORCE MAP (R1-R5)</div>
-                    <div class="audit-source">SRC: assets/img/theory/fig2.png</div>
+                    <div class="fig-src audit-only">SRC: assets/img/theory/fig2.png</div>
                 </div>
             </div>
 
@@ -442,7 +452,7 @@
             <div class="section-grid">
                 <div class="text-col">
                     <p>
-                        <span class="audit-badge">[REF-02]</span> RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.
+                        <span class="audit-badge audit-only">[REF-02]</span> RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.
                     </p>
                     
                     <div class="logic-block"># RDL Dual-Trajectory logic
@@ -460,7 +470,7 @@ def evaluate_stability(input):
                 <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png')">
                     <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img" onerror="this.style.display='none'">
                     <div class="diagram-caption">FIG. 03: RDL SYSTEM ARCHITECTURE</div>
-                    <div class="audit-source">SRC: assets/img/theory/fig3.png</div>
+                    <div class="fig-src audit-only">SRC: assets/img/theory/fig3.png</div>
                 </div>
             </div>
         </section>
@@ -470,7 +480,7 @@ def evaluate_stability(input):
             <div class="section-grid">
                 <div class="text-col">
                     <p>
-                        <span class="audit-badge">[REF-03]</span> The system evaluates alignment through three predictive stability metrics that quantify internal coherence.
+                        <span class="audit-badge audit-only">[REF-03]</span> The system evaluates alignment through three predictive stability metrics that quantify internal coherence.
                     </p>
                     <div class="metric-container">
                         <div class="metric-box">
@@ -493,7 +503,7 @@ def evaluate_stability(input):
                 <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png')">
                     <img src="assets/img/theory/fig4.png" alt="Core Metrics" class="diagram-img" onerror="this.style.display='none'">
                     <div class="diagram-caption">FIG. 04: METRIC TRIAD (Ψ, R∇, MCI)</div>
-                    <div class="audit-source">SRC: assets/img/theory/fig4.png</div>
+                    <div class="fig-src audit-only">SRC: assets/img/theory/fig4.png</div>
                 </div>
             </div>
         </section>
@@ -503,7 +513,7 @@ def evaluate_stability(input):
             <div class="section-grid">
                 <div class="text-col">
                     <p>
-                        <span class="audit-badge">[REF-04]</span> Instabilities in the R-forces consistently predict specific failure modes across all major model families.
+                        <span class="audit-badge audit-only">[REF-04]</span> Instabilities in the R-forces consistently predict specific failure modes across all major model families.
                     </p>
                     <ul>
                       <li><strong>Sub-Goal Pitfall:</strong> R3 (Reasoning) outpaces R1 (Regulation), leading to unsafe optimization.</li>
@@ -515,7 +525,7 @@ def evaluate_stability(input):
                 <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig5.png')">
                     <img src="assets/img/theory/fig5.png" alt="Failure Signatures Heatmap" class="diagram-img" onerror="this.style.display='none'">
                     <div class="diagram-caption">FIG. 05: STABILITY FAILURE MODES</div>
-                    <div class="audit-source">SRC: assets/img/theory/fig5.png</div>
+                    <div class="fig-src audit-only">SRC: assets/img/theory/fig5.png</div>
                 </div>
             </div>
         </section>
@@ -527,18 +537,29 @@ def evaluate_stability(input):
   <div id="footer-mount"></div>
 
   <script>
-    // --- MODE SWITCHER ---
-    function setMode(mode) {
-        document.body.setAttribute('data-mode', mode);
-        localStorage.setItem('enlightened_mode', mode);
-        
-        document.querySelectorAll('.mode-row').forEach(row => row.classList.remove('active'));
-        const btn = document.getElementById('btn-' + mode);
-        if(btn) btn.classList.add('active');
-    }
-    // Init Mode
-    const savedMode = localStorage.getItem('enlightened_mode') || 'reader';
-    setMode(savedMode);
+    // --- SHARED MODE ENGINE ---
+    (function(){
+      const KEY = "enlightened_mode";
+      const body = document.body;
+
+      function setMode(mode) {
+        body.setAttribute("data-mode", mode);
+        localStorage.setItem(KEY, mode);
+
+        document.querySelectorAll(".mode-btn").forEach(btn => {
+          btn.classList.toggle("active", btn.dataset.mode === mode);
+        });
+      }
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".mode-btn");
+        if (!btn || btn.disabled) return;
+        setMode(btn.dataset.mode);
+      });
+
+      // init
+      setMode(localStorage.getItem(KEY) || "reader");
+    })();
 
     // --- SCRAMBLE EFFECT ---
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
@@ -582,6 +603,7 @@ def evaluate_stability(input):
       .then(r => r.text())
       .then(html => { document.getElementById('footer-mount').innerHTML = html; });
 
+    // --- THEME ---
     function setTheme(theme) {
       document.body.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
