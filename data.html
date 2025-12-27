@@ -212,67 +212,71 @@
     <main>
       <div style="margin-bottom: 2.25rem;">
         <h1>DATA</h1>
-        <div class="doc-subtitle">Structured research assets — controlled access</div>
+        <div class="doc-subtitle">Machine-operational semantic assets — controlled access</div>
 
         <div class="pills">
-          <div class="pill"><span class="dot"></span>LEXICON-BOUND</div>
-          <div class="pill"><span class="dot"></span>DETERMINISTIC</div>
-          <div class="pill"><span class="dot"></span>TRACEABLE</div>
-          <div class="pill"><span class="dot"></span>LICENSABLE (CONTROLLED)</div>
+          <div class="pill"><span class="dot"></span>LEXICON-COMPILED</div>
+          <div class="pill"><span class="dot"></span>VERSIONED</div>
+          <div class="pill"><span class="dot"></span>GOVERNANCE-ALIGNED</div>
+          <div class="pill"><span class="dot"></span>CONTROLLED LICENSING</div>
         </div>
       </div>
 
       <section>
         <h2>Overview</h2>
         <p>
-          Enlightened AI Research Lab produces multiple classes of structured, reproducible data as a direct output of its
-          diagnostic instruments and canonical semantic infrastructure. These assets are designed for downstream research,
-          benchmarking, governance review, and licensed use under controlled agreements.
+          Enlightened AI Research Lab produces machine-operational semantic assets derived from the Reflective Alignment
+          Lexicon and diagnostic frameworks. These assets are not conventional datasets. They are structured, versioned
+          semantic substrates designed to make meaning, constraints, and diagnostic boundaries computable by machines.
+        </p>
+        <p>
+          Public materials describe structure and intent only. Machine-operational assets are shared selectively under
+          controlled agreements to preserve reproducibility, governance discipline, and misuse prevention.
         </p>
 
         <div class="note">
-          Placeholder page (draft). Detailed inventories and technical briefs are shared under NDA.
+          This page documents the existence and role of semantic assets. It does not expose records, identifiers, or operational interfaces.
         </div>
       </section>
 
       <section style="margin-top: 2.5rem;">
-        <h2>Data Families</h2>
+        <h2>Asset Classes</h2>
 
         <div class="grid">
           <div class="card">
-            <div class="k">Family A</div>
-            <div class="t">Record Observatory Data</div>
-            <p class="d">Immutable records capturing model I/O, provenance metadata, hashes, and stable record boundaries.</p>
+            <div class="k">Asset Class A</div>
+            <div class="t">Compiled Lexicon Layer</div>
+            <p class="d">Machine-readable lexicon terms, identifiers, relations, and constraints compiled into operational form (versioned).</p>
           </div>
 
           <div class="card">
-            <div class="k">Family B</div>
-            <div class="t">Lexicon-Bound Artifacts</div>
-            <p class="d">Canonical identifiers, schema-validated annotations, and machine-operational term bindings (versioned).</p>
+            <div class="k">Asset Class B</div>
+            <div class="t">Semantic Bindings & Constraints</div>
+            <p class="d">Formal bindings that map signals and observations to lexicon identifiers, enabling constraint-aware interpretation.</p>
           </div>
 
           <div class="card">
-            <div class="k">Family C</div>
-            <div class="t">Diagnostic Signals</div>
-            <p class="d">Structure-only diagnostics (no truth/intent claims), deltas, signatures, and traceable evidence links.</p>
+            <div class="k">Asset Class C</div>
+            <div class="t">Diagnostic Signals (Structure-Only)</div>
+            <p class="d">Structure-only diagnostics referencing lexicon identifiers and evidence anchors; no truth/intent claims and no prompt exposure.</p>
           </div>
 
           <div class="card">
-            <div class="k">Family D</div>
-            <div class="t">Longitudinal & Trajectory Sets</div>
-            <p class="d">Aggregated record sets across time, runs, and conditions to study drift, stability, and onset patterns.</p>
+            <div class="k">Asset Class D</div>
+            <div class="t">Longitudinal Semantic Traces</div>
+            <p class="d">Aggregated trajectories across runs and conditions to study drift, stability, and boundary crossings.</p>
           </div>
 
           <div class="card">
-            <div class="k">Family E</div>
-            <div class="t">EARTH (Geospatial Context)</div>
-            <p class="d">Live GIS layers and contextual datasets, designed as an observational substrate that can be linked to records.</p>
+            <div class="k">Asset Class E</div>
+            <div class="t">EARTH (Contextual Substrates)</div>
+            <p class="d">Observational geospatial and contextual layers designed to be linkable to records without semantic contamination.</p>
           </div>
 
           <div class="card">
-            <div class="k">Family F</div>
+            <div class="k">Asset Class F</div>
             <div class="t">RID (Resonant Intelligence Dataset)</div>
-            <p class="d">Curated internal collection of lexicon-anchored artifacts generated across controlled experiments and validation runs.</p>
+            <p class="d">Internal curated collection of lexicon-anchored semantic artifacts generated under controlled experiments; not a public training corpus.</p>
           </div>
         </div>
       </section>
@@ -280,8 +284,8 @@
       <section style="margin-top: 2.5rem;">
         <h2>Access & Licensing</h2>
         <p>
-          Data assets are made available under controlled agreements for academic, industrial, and public-sector research.
-          Access is scoped to preserve reproducibility, governance discipline, and misuse prevention.
+          Access is scoped by agreement for academic, industrial, or public-sector use. Public pages describe structure only.
+          Operational assets are shared selectively under NDA or research agreements to preserve governance discipline and reduce misuse risk.
         </p>
       </section>
     </main>
@@ -290,8 +294,9 @@
   <div id="footer-mount"></div>
   <script>
     fetch('/partials/footer.html')
-      .then(r => r.text())
-      .then(html => { document.getElementById('footer-mount').innerHTML = html; });
+      .then(r => r.ok ? r.text() : '')
+      .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
+      .catch(() => {});
   </script>
 
   <script>
