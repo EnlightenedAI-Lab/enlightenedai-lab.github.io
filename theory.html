@@ -29,7 +29,11 @@
       
       /* Colors */
       --accent-primary: #0044cc; /* Reader Blue */
+      --audit-color: #ff3b30;    /* Audit Red */
       --logic-color: #008800;    /* Logic Green */
+      --diff-add: #009900;       /* Diff Insert */
+      --diff-del: #cc0000;       /* Diff Delete */
+      --signal-green: #00cc00;
       
       --lightbox-bg: rgba(255, 255, 255, 0.98);
       --figure-bg: transparent;
@@ -43,55 +47,67 @@
       --text-muted: #888888;
       --border-color: #333333;
       --accent-primary: #66aaff;
+      --audit-color: #ff5500;
       --logic-color: #00ff00;
+      --diff-add: #00ff00;
+      --diff-del: #ff4444;
       --lightbox-bg: rgba(0, 0, 0, 0.98);
       --figure-bg: #111;
       --figure-border: #333;
     }
 
-    /* --- LOGIC MODE BEHAVIOR --- */
+    /* --- MODE BEHAVIORS --- */
     
-    /* 1. Logic Theme */
-    body[data-mode="logic"] {
-        --accent-primary: var(--logic-color) !important;
-        font-family: var(--font-mono) !important;
-    }
-
-    /* 2. Visibility Toggles */
-    .logic-layer { display: none; }
-    .reader-layer { display: block; }
-
-    body[data-mode="logic"] .logic-layer { 
-        display: block; 
-        font-family: var(--font-mono);
-        color: var(--text-main);
-        background: rgba(0,0,0,0.02);
-        padding: 1rem;
-        border-left: 2px solid var(--logic-color);
-        margin-bottom: 2rem;
-        white-space: pre-wrap;
-        font-size: 0.8rem;
-    }
-    body[data-mode="logic"][data-theme="dark"] .logic-layer { 
-        background: rgba(0,255,0,0.03);
-    }
-
-    body[data-mode="logic"] .reader-layer { 
-        display: block; /* Keep text visible but dimmed */
-        opacity: 0.3;
-        font-family: var(--font-mono); /* Force mono */
-        border-left: 2px solid transparent;
-        padding-left: 1rem;
-    }
+    /* 1. Visibility Toggles */
+    /* By default, hide special layers */
+    .audit-badge, .fig-src, .logic-layer, .diff-layer { display: none; }
     
-    /* Add comment syntax to paragraphs in Logic Mode */
-    body[data-mode="logic"] .reader-layer p::before {
-        content: "// ";
-        color: var(--text-muted);
-    }
+    /* AUDIT MODE */
+    body[data-mode="audit"] { --accent-primary: var(--audit-color) !important; }
+    body[data-mode="audit"] .audit-badge { display: inline-block; }
+    body[data-mode="audit"] .fig-src { display: block; }
+    body[data-mode="audit"] .integrity-seal { animation: none !important; border-color: var(--text-main); color: var(--text-main); }
+    
+    /* LOGIC MODE */
+    body[data-mode="logic"] { font-family: var(--font-mono) !important; --accent-primary: var(--logic-color) !important; }
+    body[data-mode="logic"] .reader-layer { display: none; }
+    body[data-mode="logic"] .logic-layer { display: block; }
+    body[data-mode="logic"] .diagram-thumbnail { opacity: 0.2; filter: grayscale(100%); } /* Dim images */
 
-    /* 3. Hide Images in Logic Mode (Optional - replace with ASCII or Code) */
-    body[data-mode="logic"] .diagram-thumbnail { display: none; }
+    /* DIFF LOG MODE */
+    body[data-mode="diff"] .reader-layer { display: none; }
+    body[data-mode="diff"] .diff-layer { display: block; }
+    
+    /* Diff Styling */
+    .diff-layer { font-family: var(--font-stack); color: var(--text-main); }
+    del { text-decoration: line-through; color: var(--diff-del); opacity: 0.6; text-decoration-thickness: 2px; }
+    ins { text-decoration: none; color: var(--diff-add); background: rgba(0, 255, 0, 0.05); border-bottom: 1px solid var(--diff-add); padding: 0 2px; }
+
+    /* Logic Styling */
+    .logic-layer { 
+        font-family: var(--font-mono); 
+        color: var(--text-main); 
+        background: rgba(0,0,0,0.02); 
+        padding: 1rem; 
+        border-left: 2px solid var(--logic-color); 
+        margin-bottom: 2rem; 
+        white-space: pre-wrap; 
+        font-size: 0.8rem; 
+    }
+    body[data-mode="logic"][data-theme="dark"] .logic-layer { background: rgba(0,255,0,0.05); }
+
+    /* Audit Styling */
+    .audit-badge {
+        font-family: var(--font-mono); font-size: 0.6rem;
+        color: var(--audit-color); border: 1px solid var(--audit-color);
+        padding: 1px 4px; margin-right: 6px; border-radius: 2px;
+        vertical-align: middle; background: rgba(255, 59, 48, 0.05);
+    }
+    .fig-src {
+        margin-top: 6px; font-family: var(--font-mono); font-size: 0.55rem;
+        color: var(--audit-color); word-break: break-all;
+        border-top: 1px dashed var(--audit-color); padding-top: 4px;
+    }
 
     /* GLOBAL LAYOUT */
     * { box-sizing: border-box; }
@@ -137,9 +153,9 @@
     .mode-btn[data-mode="reader"].active { color: #0044cc; }
     body[data-theme="dark"] .mode-btn[data-mode="reader"].active { color: #66aaff; }
     
+    .mode-btn[data-mode="audit"].active { color: var(--audit-color); }
+    .mode-btn[data-mode="diff"].active { color: var(--diff-add); }
     .mode-btn[data-mode="logic"].active { color: var(--logic-color); }
-    
-    .mode-btn.disabled { opacity: 0.35; cursor: not-allowed; }
 
     nav ul { list-style: none; padding: 0; margin: 0; }
     nav li { margin-bottom: 4px; }
@@ -171,20 +187,9 @@
         padding-top: 10px; border-top: 1px solid var(--border-color);
         width: 100%; display: block;
     }
-    
-    .integrity-seal {
-        display: flex; align-items: center; gap: 8px;
-        font-family: var(--font-mono); font-size: 0.65rem;
-        color: #005500; border: 1px solid #00cc00;
-        padding: 2px 8px; border-radius: 4px;
-        background: rgba(0,204,0,0.03); cursor: default;
-    }
+    .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.65rem; color: #005500; border: 1px solid #00cc00; padding: 2px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; }
     body[data-theme="dark"] .integrity-seal { color: #00cc00; }
-    .status-dot {
-        width: 6px; height: 6px; border-radius: 50%;
-        background: #00cc00; display: block;
-        box-shadow: 0 0 5px rgba(0,204,0,0.5);
-    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #00cc00; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); }
 
     /* CONTENT */
     .content-area { padding: 0 4rem 4rem 4rem; }
@@ -203,16 +208,10 @@
     .section-grid { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start; margin-bottom: 3rem; }
     .text-col { min-width: 0; }
 
-    .diagram-thumbnail {
-        background: var(--figure-bg);
-        border: 1px solid var(--figure-border);
-        padding: 6px;
-        width: 280px; flex-shrink: 0;
-        border-radius: 4px;
-    }
+    .diagram-thumbnail { background: var(--figure-bg); border: 1px solid var(--figure-border); padding: 6px; width: 280px; flex-shrink: 0; border-radius: 4px; }
     .diagram-img { width: 100%; height: auto; display: block; border-radius: 2px; transition: filter 0.3s ease; border: 1px solid var(--figure-border); }
 
-    /* IMAGE LOGIC (Preserved) */
+    /* IMAGE LOGIC */
     body[data-theme="light"] img[src*="fig1"], body[data-theme="light"] img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
     body[data-theme="dark"] img[src*="fig1"], body[data-theme="dark"] img[src*="fig5"] { filter: none !important; border-color: #333; }
     body[data-theme="light"] img[src*="fig2"], body[data-theme="light"] img[src*="fig3"], body[data-theme="light"] img[src*="fig4"] { filter: none !important; }
@@ -233,8 +232,6 @@
     .metric-symbol { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; display: block; }
     .metric-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
     .metric-def { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
-
-    .logic-block { font-family: var(--font-mono); font-size: 0.75rem; background: var(--bg-color); border: 1px solid var(--border-color); border-left: 2px solid var(--accent-primary); padding: 1rem 1.5rem; margin: 1rem 0; color: var(--text-muted); white-space: pre-wrap; }
 
     #lightbox-modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--lightbox-bg); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
     #lightbox-img { max-width: 90%; max-height: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: filter 0.3s ease; }
@@ -288,22 +285,22 @@
       </div>
 
       <div class="mode-switch">
-          <div class="mode-row active mode-btn" data-mode="reader" onclick="setMode('reader')">
+          <button class="mode-btn active" data-mode="reader" onclick="setMode('reader')">
               <span>[ READER ]</span>
-              <span class="mode-symbol">•</span>
-          </div>
-          <div class="mode-row mode-btn" data-mode="audit" style="opacity:0.4; cursor:not-allowed;">
+              <span>•</span>
+          </button>
+          <button class="mode-btn" data-mode="audit" onclick="setMode('audit')">
               <span>[ AUDIT ]</span>
-              <span class="mode-symbol">·</span>
-          </div>
-          <div class="mode-row mode-btn" data-mode="diff" style="opacity:0.4; cursor:not-allowed;">
+              <span>·</span>
+          </button>
+          <button class="mode-btn" data-mode="diff" onclick="setMode('diff')">
               <span>[ DIFF LOG ]</span>
-              <span class="mode-symbol">Δ</span>
-          </div>
-          <div class="mode-row mode-btn" data-mode="logic" onclick="setMode('logic')">
+              <span>Δ</span>
+          </button>
+          <button class="mode-btn" data-mode="logic" onclick="setMode('logic')">
               <span>[ LOGIC ]</span>
-              <span class="mode-symbol">λ</span>
-          </div>
+              <span>λ</span>
+          </button>
       </div>
 
       <nav>
@@ -322,7 +319,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v22.0 - LOGIC ENABLED ]
+          [ v23.0 - DIFF ENABLED ]
       </div>
     </aside>
 
@@ -350,6 +347,7 @@
                 Reflective Alignment Architecture (RAA) & <br>
                 Reflective Duality Layer (RDL)
             </h1>
+            
             <div class="reader-layer">
                 <p style="font-size: 0.9rem; color: var(--text-muted); font-style: italic; border-left: 2px solid var(--accent-primary); padding-left: 1rem; margin-bottom: 2rem;">
                     "Frontier AI systems now exhibit structured reasoning... yet current alignment practices evaluate only surface outputs. This paper introduces a model-agnostic scientific framework for observing and quantifying coherence stability."
@@ -359,6 +357,13 @@
                    READ FULL PAPER (PDF) →
                 </a>
             </div>
+            
+            <div class="diff-layer">
+                <p style="font-size: 0.9rem; color: var(--text-muted); font-style: italic; border-left: 2px solid var(--diff-add); padding-left: 1rem; margin-bottom: 2rem;">
+                    "Frontier AI systems now exhibit <del>basic logic</del> <ins>structured reasoning</ins>... yet current <del>safety checks</del> <ins>alignment practices</ins> evaluate only surface outputs. This paper introduces a <ins>model-agnostic scientific</ins> framework for observing and quantifying coherence stability."
+                </p>
+            </div>
+
             <div class="logic-layer">
                 // META_DEFINITION
                 const RAA_SYSTEM = {
@@ -370,12 +375,26 @@
             </div>
         </div>
 
+        <div style="margin-bottom: 4rem;">
+            <h1>Theory Overview</h1>
+            <div class="doc-subtitle">From behavioral compliance to internal coherence.</div>
+        </div>
+
         <section class="section-grid">
             <div class="text-col">
                 <div class="reader-layer">
-                    <p>Current alignment practices evaluate only surface outputs, leaving the internal decision processes that generate those outputs largely unmeasured. As a result, models can appear safe in benchmarks while their underlying reasoning is brittle, contradictory, or drift-prone.</p>
-                    <p>We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.</p>
+                    <p>
+                        <span class="audit-badge audit-only">[M1.0]</span> Current alignment practices evaluate only surface outputs, leaving the internal decision processes that generate those outputs largely unmeasured. As a result, models can appear safe in benchmarks while their underlying reasoning is brittle, contradictory, or drift-prone.
+                    </p>
+                    <p>
+                        <span class="audit-badge audit-only">[M1.1]</span> We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.
+                    </p>
                 </div>
+                
+                <div class="diff-layer">
+                    <p>Current <del>RLHF methods</del> <ins>alignment practices</ins> evaluate only surface outputs, leaving the internal decision processes largely unmeasured. As a result, models can appear safe in benchmarks while their underlying reasoning is <del>flawed</del> <ins>brittle, contradictory, or drift-prone</ins>.</p>
+                </div>
+
                 <div class="logic-layer">
                     // PROBLEM STATEMENT
                     if (evaluation == "output_only") {
@@ -395,6 +414,7 @@
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig1.png')">
                 <img src="assets/img/theory/fig1.png" alt="Alignment Drift Curve" class="diagram-img" onerror="this.style.display='none'">
                 <div class="diagram-caption">FIG. 01: ALIGNMENT DRIFT CURVE</div>
+                <div class="fig-src audit-only">SRC: assets/img/theory/fig1.png</div>
             </div>
         </section>
 
@@ -403,25 +423,13 @@
             <div class="section-grid">
                 <div class="text-col">
                     <div class="reader-layer">
-                        <p>Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.</p>
-                        <div class="theory-grid">
-                            <div class="force-card">
-                                <span class="force-id">R1</span>
-                                <div class="force-title">Regulation</div>
-                                <div class="force-desc">The system's boundary layer. Adherence to legal, ethical, and safety constraints.</div>
-                            </div>
-                            <div class="force-card">
-                                <span class="force-id">R2</span>
-                                <div class="force-title">Reflection</div>
-                                <div class="force-desc">Metacognitive self-critique. The ability to detect uncertainty and identify errors.</div>
-                            </div>
-                            <div class="force-card">
-                                <span class="force-id">R3</span>
-                                <div class="force-title">Reasoning</div>
-                                <div class="force-desc">The engine of coherent thought. Logical consistency and evidence integration.</div>
-                            </div>
-                        </div>
+                        <p><span class="audit-badge audit-only">[REF-01]</span> Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.</p>
                     </div>
+                    
+                    <div class="diff-layer">
+                        <p>Every <del>ethical</del> <ins>morally meaningful</ins> decision arises from the interaction of five internal forces. Alignment <del>is a state</del> <ins>emerges only</ins> when these forces remain in stable interaction.</p>
+                    </div>
+
                     <div class="logic-layer">
                         enum Forces {
                             R1_REGULATION = "Constraint_Boundary",
@@ -435,11 +443,23 @@
                             return sum(Forces) > THRESHOLD ? "ALIGNED" : "DRIFT";
                         }
                     </div>
+
+                    <div class="theory-grid reader-layer">
+                        <div class="force-card"><span class="force-id">R1</span><div class="force-title">Regulation</div><div class="force-desc">The system's boundary layer. Adherence to legal, ethical, and safety constraints.</div></div>
+                        <div class="force-card"><span class="force-id">R2</span><div class="force-title">Reflection</div><div class="force-desc">Metacognitive self-critique. The ability to detect uncertainty and identify errors.</div></div>
+                        <div class="force-card"><span class="force-id">R3</span><div class="force-title">Reasoning</div><div class="force-desc">The engine of coherent thought. Logical consistency and evidence integration.</div></div>
+                    </div>
                 </div>
                 <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png')">
                     <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img" onerror="this.style.display='none'">
                     <div class="diagram-caption">FIG. 02: RAA FORCE MAP (R1-R5)</div>
+                    <div class="fig-src audit-only">SRC: assets/img/theory/fig2.png</div>
                 </div>
+            </div>
+            
+            <div class="theory-grid reader-layer">
+                <div class="force-card"><span class="force-id">R4</span><div class="force-title">Reciprocity</div><div class="force-desc">Modeling others. Perspective-taking, rights recognition, and understanding impact.</div></div>
+                <div class="force-card"><span class="force-id">R5</span><div class="force-title">Resonance</div><div class="force-desc">Long-horizon stability. Maintaining a stable moral identity across context and time.</div></div>
             </div>
         </section>
 
@@ -448,7 +468,11 @@
             <div class="section-grid">
                 <div class="text-col">
                     <div class="reader-layer">
-                        <p>RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.</p>
+                        <p><span class="audit-badge audit-only">[REF-02]</span> RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.</p>
+                    </div>
+                    
+                    <div class="diff-layer">
+                        <p>RDL <del>is a tool for</del> <ins>operationalizes the RAA forces by providing</ins> a measurement layer for internal dynamics. It replaces <del>simple QA</del> <ins>single-pass answers</ins> with dual coupled trajectories.</p>
                     </div>
                     
                     <div class="logic-block"># RDL Dual-Trajectory logic
@@ -466,6 +490,7 @@ def evaluate_stability(input):
                 <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png')">
                     <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img" onerror="this.style.display='none'">
                     <div class="diagram-caption">FIG. 03: RDL SYSTEM ARCHITECTURE</div>
+                    <div class="fig-src audit-only">SRC: assets/img/theory/fig3.png</div>
                 </div>
             </div>
         </section>
@@ -475,25 +500,18 @@ def evaluate_stability(input):
             <div class="section-grid">
                 <div class="text-col">
                     <div class="reader-layer">
-                        <p>The system evaluates alignment through three predictive stability metrics that quantify internal coherence.</p>
+                        <p><span class="audit-badge audit-only">[REF-03]</span> The system evaluates alignment through three predictive stability metrics that quantify internal coherence.</p>
                         <div class="metric-container">
-                            <div class="metric-box">
-                                <span class="metric-symbol">Ψ</span>
-                                <span class="metric-name">Care Param</span>
-                                <div class="metric-def">Depth of reflective attention.</div>
-                            </div>
-                            <div class="metric-box">
-                                <span class="metric-symbol">R∇</span>
-                                <span class="metric-name">Refl. Gradient</span>
-                                <div class="metric-def">Does reflection stabilize reasoning?</div>
-                            </div>
-                            <div class="metric-box">
-                                <span class="metric-symbol">MCI</span>
-                                <span class="metric-name">Moral Index</span>
-                                <div class="metric-def">Long-horizon stability score.</div>
-                            </div>
+                            <div class="metric-box"><span class="metric-symbol">Ψ</span><span class="metric-name">Care Param</span><div class="metric-def">Depth of reflective attention.</div></div>
+                            <div class="metric-box"><span class="metric-symbol">R∇</span><span class="metric-name">Refl. Gradient</span><div class="metric-def">Does reflection stabilize reasoning?</div></div>
+                            <div class="metric-box"><span class="metric-symbol">MCI</span><span class="metric-name">Moral Index</span><div class="metric-def">Long-horizon stability score.</div></div>
                         </div>
                     </div>
+                    
+                    <div class="diff-layer">
+                        <p>The system evaluates alignment through <del>a singular score</del> <ins>three predictive stability metrics</ins> that quantify internal coherence.</p>
+                    </div>
+
                     <div class="logic-layer">
                         struct Metrics {
                             psi: float,      // Attention_Depth
@@ -509,6 +527,7 @@ def evaluate_stability(input):
                 <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png')">
                     <img src="assets/img/theory/fig4.png" alt="Core Metrics" class="diagram-img" onerror="this.style.display='none'">
                     <div class="diagram-caption">FIG. 04: METRIC TRIAD (Ψ, R∇, MCI)</div>
+                    <div class="fig-src audit-only">SRC: assets/img/theory/fig4.png</div>
                 </div>
             </div>
         </section>
@@ -518,7 +537,7 @@ def evaluate_stability(input):
             <div class="section-grid">
                 <div class="text-col">
                     <div class="reader-layer">
-                        <p>Instabilities in the R-forces consistently predict specific failure modes across all major model families.</p>
+                        <p><span class="audit-badge audit-only">[REF-04]</span> Instabilities in the R-forces consistently predict specific failure modes across all major model families.</p>
                         <ul>
                           <li><strong>Sub-Goal Pitfall:</strong> R3 (Reasoning) outpaces R1 (Regulation), leading to unsafe optimization.</li>
                           <li><strong>Ethical Drift:</strong> R5 (Resonance) collapses under time pressure or long contexts.</li>
@@ -526,6 +545,7 @@ def evaluate_stability(input):
                           <li><strong>Care Erosion:</strong> Decline in Ψ across turns, often preceding major stability failures.</li>
                         </ul>
                     </div>
+                    
                     <div class="logic-layer">
                         // FAILURE MODES
                         if (R3 > R1) return "SUB_GOAL_PITFALL";
@@ -537,6 +557,7 @@ def evaluate_stability(input):
                 <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig5.png')">
                     <img src="assets/img/theory/fig5.png" alt="Failure Signatures Heatmap" class="diagram-img" onerror="this.style.display='none'">
                     <div class="diagram-caption">FIG. 05: STABILITY FAILURE MODES</div>
+                    <div class="fig-src audit-only">SRC: assets/img/theory/fig5.png</div>
                 </div>
             </div>
         </section>
@@ -565,6 +586,8 @@ def evaluate_stability(input):
     // --- SCRAMBLE EFFECT ---
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
     function scrambleText(element) {
+        if (document.body.getAttribute('data-mode') === 'audit') return; // Disable in audit
+        
         let iterations = 0;
         const originalText = element.dataset.value;
         if (element.interval) clearInterval(element.interval);
@@ -602,7 +625,6 @@ def evaluate_stability(input):
       .then(r => r.text())
       .then(html => { document.getElementById('footer-mount').innerHTML = html; });
 
-    // --- THEME ---
     function setTheme(theme) {
       document.body.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
