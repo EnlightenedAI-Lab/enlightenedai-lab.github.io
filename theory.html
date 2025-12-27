@@ -137,6 +137,7 @@
     .mode-row:hover { color: var(--text-main); }
     .mode-row.active { font-weight: 700; color: var(--accent-primary); border-bottom: 1px solid var(--accent-primary); }
     .mode-row.disabled { opacity: 0.3; cursor: not-allowed; }
+    .mode-symbol { width: 20px; text-align: right; }
 
     nav ul { list-style: none; padding: 0; margin: 0; }
     nav li { margin-bottom: 4px; }
@@ -332,7 +333,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v18.0 - AUDIT ENABLED ]
+          [ v19.1 - FINAL AUDIT FIX ]
       </div>
     </aside>
 
@@ -391,7 +392,7 @@
         </section>
 
         <section>
-            <h2 id="sec-01"><span class="scramble" data-value="01 //">01 //</span> The 5R Framework (RAA)</h2>
+            <h2><span class="scramble" data-value="01 //">01 //</span> The 5R Framework (RAA)</h2>
             <div class="section-grid">
                 <div class="text-col">
                     <p>
@@ -437,7 +438,7 @@
         </section>
 
         <section>
-            <h2 id="sec-02"><span class="scramble" data-value="02 //">02 //</span> The Reflective Duality Layer (RDL)</h2>
+            <h2><span class="scramble" data-value="02 //">02 //</span> The Reflective Duality Layer (RDL)</h2>
             <div class="section-grid">
                 <div class="text-col">
                     <p>
@@ -465,7 +466,7 @@ def evaluate_stability(input):
         </section>
 
         <section>
-            <h2 id="sec-03"><span class="scramble" data-value="03 //">03 //</span> Core Metrics</h2>
+            <h2><span class="scramble" data-value="03 //">03 //</span> Core Metrics</h2>
             <div class="section-grid">
                 <div class="text-col">
                     <p>
@@ -498,7 +499,7 @@ def evaluate_stability(input):
         </section>
 
         <section>
-            <h2 id="sec-04"><span class="scramble" data-value="04 //">04 //</span> Failure Signatures</h2>
+            <h2><span class="scramble" data-value="04 //">04 //</span> Failure Signatures</h2>
             <div class="section-grid">
                 <div class="text-col">
                     <p>
@@ -518,7 +519,9 @@ def evaluate_stability(input):
                 </div>
             </div>
         </section>
-      </div> </main>
+      </div>
+
+    </main>
   </div>
 
   <div id="footer-mount"></div>
@@ -579,7 +582,6 @@ def evaluate_stability(input):
       .then(r => r.text())
       .then(html => { document.getElementById('footer-mount').innerHTML = html; });
 
-    // --- THEME ---
     function setTheme(theme) {
       document.body.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
