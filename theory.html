@@ -16,9 +16,8 @@
   <link rel="stylesheet" href="assets/css/footer.css">
 
   <style>
-    /* --- THEME VARIABLES --- */
+    /* --- THEME VARIABLES (PRESERVED FROM v13) --- */
     :root {
-      /* LIGHT MODE */
       --bg-color: #ffffff;
       --sidebar-bg: #f8f9fa;
       --text-main: #050505;
@@ -34,7 +33,6 @@
     }
 
     body[data-theme="dark"] {
-      /* DARK MODE */
       --bg-color: #0a0a0a;
       --sidebar-bg: #0a0a0a;
       --text-main: #f0f0f0;
@@ -46,7 +44,6 @@
       --figure-border: #333;
     }
 
-    /* --- GLOBAL STYLES --- */
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
 
@@ -64,7 +61,6 @@
 
     .layout-wrapper { display: flex; flex: 1; width: 100%; }
 
-    /* --- SIDEBAR --- */
     aside {
       width: var(--sidebar-width);
       height: 100vh; position: sticky; top: 0; align-self: flex-start;
@@ -76,10 +72,24 @@
     }
     body[data-theme="dark"] aside { border-right-color: #333; }
 
-    /* SCALE FIX: Reduced size by 15% */
-    .brand { margin-bottom: 4rem; }
+    .brand { margin-bottom: 3rem; }
     .brand div { font-weight: 800; font-size: 0.85rem; line-height: 1.0; color: var(--text-main); letter-spacing: -0.02em; }
     .brand span { display:block; margin-top: 6px; font-weight: 500; font-size: 0.65rem; letter-spacing: 0.05em; color: var(--text-muted); }
+
+    /* READER MODE SELECTOR (RESTORED) */
+    .mode-selector {
+      margin-bottom: 3rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .mode-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 4px 0; cursor: pointer;
+    }
+    .mode-row:hover { color: var(--text-main); }
+    .mode-row.active { font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--text-main); }
+    .mode-symbol { width: 20px; text-align: right; }
 
     nav ul { list-style: none; padding: 0; margin: 0; }
     nav li { margin-bottom: 4px; }
@@ -102,19 +112,40 @@
     .theme-switch:hover { color: var(--text-main); }
     body[data-theme="dark"] .theme-switch:hover { color: var(--text-main); }
 
-    /* --- MAIN CONTENT --- */
     main {
       flex-grow: 1; padding: 3rem 4rem; max-width: 1200px; width: 100%; min-width: 0;
     }
 
+    /* SCRAMBLE EFFECT STYLES */
+    .scramble {
+        font-family: var(--font-mono);
+        color: var(--text-muted);
+        margin-right: 10px;
+        cursor: crosshair;
+    }
+
     h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin: 0 0 0.5rem 0; text-transform: uppercase; }
-    h2 { font-size: 1.1rem; font-weight: 700; margin-top: 4rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+    
+    /* Updated H2 to include scramble support */
+    h2 { 
+        font-size: 1.1rem; 
+        font-weight: 700; 
+        margin-top: 4rem; 
+        margin-bottom: 1.5rem; 
+        text-transform: uppercase; 
+        letter-spacing: 0.05em; 
+        border-bottom: 1px solid var(--border-color); 
+        padding-bottom: 10px; 
+        display: flex; 
+        align-items: center; 
+    }
+    
     h3 { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-main); text-transform: uppercase; }
     
     .doc-subtitle { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4rem; letter-spacing: 0.02em; }
     p { margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.95rem; }
 
-    /* --- GOVERNANCE ANCHOR --- */
+    /* GOVERNANCE BLOCK (RESTORED FROM v13) */
     .gov-block {
         display: flex; gap: 20px; font-family: var(--font-mono); 
         font-size: 0.65rem; color: var(--text-muted); 
@@ -126,14 +157,12 @@
     .section-grid { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start; margin-bottom: 3rem; }
     .text-col { min-width: 0; }
 
-    /* --- STATIC IMAGES (READER MODE) --- */
     .diagram-thumbnail {
         background: var(--figure-bg);
         border: 1px solid var(--figure-border);
         padding: 6px;
         width: 280px; flex-shrink: 0;
         border-radius: 4px;
-        /* Removed Hover/Transform effects for static reader feel */
     }
     
     .diagram-img {
@@ -142,8 +171,7 @@
         border: 1px solid var(--figure-border);
     }
 
-    /* --- FILENAME TARGETING LOGIC (v12.0 Logic Preserved) --- */
-    /* 1. BLACK SOURCE -> INVERT LIGHT */
+    /* FILENAME LOGIC (PRESERVED FROM v13) */
     body[data-theme="light"] img[src*="fig1"], 
     body[data-theme="light"] img[src*="fig5"] {
         filter: invert(1) hue-rotate(180deg) !important;
@@ -154,13 +182,11 @@
         border-color: #333;
     }
 
-    /* 2. WHITE SOURCE -> DO NOT INVERT LIGHT */
     body[data-theme="light"] img[src*="fig2"], 
     body[data-theme="light"] img[src*="fig3"],
     body[data-theme="light"] img[src*="fig4"] {
         filter: none !important;
     }
-    /* Dark Mode: INVERT */
     body[data-theme="dark"] img[src*="fig2"], 
     body[data-theme="dark"] img[src*="fig3"],
     body[data-theme="dark"] img[src*="fig4"] {
@@ -173,7 +199,6 @@
         text-transform: uppercase; letter-spacing: 0.05em; margin-top: 8px; text-align: left; line-height: 1.3;
     }
 
-    /* --- COMPONENTS --- */
     .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
     .force-card { border: 1px solid var(--border-color); padding: 1.25rem; background: #fff; }
     body[data-theme="dark"] .force-card { background: #0f0f0f; }
@@ -199,7 +224,6 @@
     #lightbox-modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--lightbox-bg); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
     #lightbox-img { max-width: 90%; max-height: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: filter 0.3s ease; }
     
-    /* Lightbox Inheritance */
     body[data-theme="light"] #lightbox-img[src*="fig1"],
     body[data-theme="light"] #lightbox-img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
     
@@ -250,6 +274,25 @@
         <span>EST. 2026 // MONTREAL</span>
       </div>
 
+      <div class="mode-selector">
+          <div class="mode-row active">
+              <span>[ READER ]</span>
+              <span class="mode-symbol">•</span>
+          </div>
+          <div class="mode-row" style="opacity:0.4; cursor:not-allowed;">
+              <span>[ AUDIT ]</span>
+              <span class="mode-symbol">·</span>
+          </div>
+          <div class="mode-row" style="opacity:0.4; cursor:not-allowed;">
+              <span>[ DIFF LOG ]</span>
+              <span class="mode-symbol">Δ</span>
+          </div>
+          <div class="mode-row" style="opacity:0.4; cursor:not-allowed;">
+              <span>[ LOGIC ]</span>
+              <span class="mode-symbol">λ</span>
+          </div>
+      </div>
+
       <nav>
         <ul>
           <li><a href="index.html">Home</a></li>
@@ -266,7 +309,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v13.0 - STRICT STANDARDS ]
+          [ v15.0 - ADDITIONS ONLY ]
       </div>
     </aside>
 
@@ -314,7 +357,7 @@
       </section>
 
       <section>
-        <h2>01 // The 5R Framework (RAA)</h2>
+        <h2><span class="scramble">01 //</span>The 5R Framework (RAA)</h2>
         <div class="section-grid">
             <div class="text-col">
                 <p>Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.</p>
@@ -357,7 +400,7 @@
       </section>
 
       <section>
-        <h2>02 // The Reflective Duality Layer (RDL)</h2>
+        <h2><span class="scramble">02 //</span>The Reflective Duality Layer (RDL)</h2>
         <div class="section-grid">
             <div class="text-col">
                 <p>RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.</p>
@@ -382,7 +425,7 @@ def evaluate_stability(input):
       </section>
 
       <section>
-        <h2>03 // Core Metrics</h2>
+        <h2><span class="scramble">03 //</span>Core Metrics</h2>
         <div class="section-grid">
             <div class="text-col">
                 <p>The system evaluates alignment through three predictive stability metrics that quantify internal coherence.</p>
@@ -412,7 +455,7 @@ def evaluate_stability(input):
       </section>
 
       <section>
-        <h2>04 // Failure Signatures</h2>
+        <h2><span class="scramble">04 //</span>Failure Signatures</h2>
         <div class="section-grid">
             <div class="text-col">
                 <p>Instabilities in the R-forces consistently predict specific failure modes across all major model families.</p>
@@ -436,6 +479,29 @@ def evaluate_stability(input):
   <div id="footer-mount"></div>
 
   <script>
+    // SCRAMBLE EFFECT
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+    function scrambleText(element) {
+        let iterations = 0;
+        const originalText = element.dataset.value;
+        if (element.interval) clearInterval(element.interval);
+        
+        element.interval = setInterval(() => {
+            element.innerText = originalText.split("").map((ch, idx) => {
+                if (idx < iterations) return originalText[idx];
+                return letters[Math.floor(Math.random() * letters.length)];
+            }).join("");
+            
+            if (iterations >= originalText.length) clearInterval(element.interval);
+            iterations += 1 / 3;
+        }, 30);
+    }
+
+    document.querySelectorAll(".scramble").forEach(h => {
+        h.dataset.value = h.innerText;
+        h.addEventListener("mouseover", e => scrambleText(e.target));
+    });
+
     function openLightbox(src) {
         const modal = document.getElementById('lightbox-modal');
         const img = document.getElementById('lightbox-img');
