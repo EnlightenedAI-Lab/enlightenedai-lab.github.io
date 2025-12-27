@@ -28,7 +28,7 @@
       --mono:"JetBrains Mono", monospace;
       --sans:"Inter", sans-serif;
       
-      /* NEW NEON ACCENT */
+      /* NEON ACCENT */
       --accent:#00cc00; 
       
       --sidebar-w:280px;
@@ -39,7 +39,7 @@
       --chip-text:#000;
       
       --card:#fff;
-      --cardShadow:0 4px 20px rgba(0,0,0,0.03); /* Lighter, cleaner shadow */
+      --cardShadow:0 4px 20px rgba(0,0,0,0.03);
     }
 
     body[data-theme="dark"]{
@@ -49,7 +49,7 @@
       --muted:#8a8a8a;
       --border:#333;
       
-      --accent:#00ff00; /* Brighter neon for dark mode */
+      --accent:#00ff00;
       
       --chip:transparent;
       --chip-border:#444;
@@ -175,7 +175,7 @@
       padding:10px;
       border:1px solid var(--border);
       background:transparent;
-      border-radius:2px; /* Sharper corners */
+      border-radius:2px;
       margin:1.25rem 0 2rem 0;
     }
     .search{
@@ -220,7 +220,7 @@
     .card{
       background:var(--card);
       border:1px solid var(--border);
-      border-radius:4px; /* Slightly rounded, technical look */
+      border-radius:4px;
       padding:18px 18px 16px 18px;
       box-shadow:var(--cardShadow);
       display:flex;
@@ -275,51 +275,44 @@
       flex-grow:1;
     }
     
-    /* NEW BUTTON STYLES (Modern 2026 / Transparent / Neon) */
+    /* BUTTON STYLES */
     .links{
       display:flex;
       gap:12px;
       flex-wrap:wrap;
       margin-top:auto;
     }
-    
     .btn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
       padding:8px 14px;
-      border-radius:2px; /* Tech sharp */
+      border-radius:2px;
       text-decoration:none;
-      
-      font-family: var(--mono); /* Technical Font */
+      font-family: var(--mono);
       font-weight:600;
       font-size:.7rem;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      
       border:1px solid var(--border);
       background:transparent;
       color:var(--text);
       white-space:nowrap;
       transition: all 0.2s ease;
     }
-    
     .btn:hover {
         border-color: var(--text);
         background: rgba(125,125,125,0.05);
     }
-
-    /* Primary Neon Button */
     .btn.primary{
       color:var(--accent);
       border-color:var(--accent);
-      background: rgba(0, 204, 0, 0.03); /* Extremely faint tint */
+      background: rgba(0, 204, 0, 0.03);
     }
-    
     .btn.primary:hover{
       background:var(--accent);
-      color:#000; /* Black text on neon green */
-      box-shadow: 0 0 15px rgba(0, 204, 0, 0.4); /* Neon Glow */
+      color:#000;
+      box-shadow: 0 0 15px rgba(0, 204, 0, 0.4);
       border-color: var(--accent);
     }
 
@@ -462,6 +455,62 @@
         <div class="hint">High-signal entry points for reviewers</div>
       </div>
       <div id="gridFeatured" class="grid"></div>
+
+      <div class="section-head">
+        <h2>Books & Monographs</h2>
+        <div class="hint">Long-form works</div>
+      </div>
+      <div id="gridBooks" class="grid">
+        
+        <div class="card">
+          <div class="meta">
+            <span class="chip">BOOK</span>
+            <span class="date">2025</span>
+          </div>
+          <h3 class="title">Data at the Edge: Master Geospatial AI</h3>
+          <p class="desc">Comprehensive guide to mastering geospatial artificial intelligence and edge computing.</p>
+          <div class="links">
+            <a class="btn primary" href="https://www.amazon.com/Data-Edge-Master-Geospatial-AI/dp/1069204706/ref=sr_1_1?crid=19W63BAHUJK74&dib=eyJ2IjoiMSJ9.u8QKKvumpvKLVXtH-GOVxOCjsQEQdkCfP79sB0fG_JMeP0I3kzGL_k39C5TU7BpzGYUWYQpOEuXL435NcWg1yO64OV7YjfThTEHDtzo0CHDge8hC-Rt2wWUdvRG9EkUQ3Tt-mwjQnsfyl3fIyobmESBZgLHXHFHS0VzcS7yuTjDp92vPAdUxJesQiS6bTGrKiJO6IEJTVvo42UppOK_h71XVS6QX03iPidldVqZpNyw.cR0P19jGEKPhz6kZxtDUWlhSjNSzYMXZPZyNFMdC1dk&dib_tag=se&keywords=data+at+the+edge&qid=1739576723&sprefix=data+at+the+edge%2Caps%2C112&sr=8-1" target="_blank" rel="noopener">[ VIEW ON AMAZON ]</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="meta">
+            <span class="chip">BOOK</span>
+            <span class="date">2025</span>
+          </div>
+          <h3 class="title">Data at the Edge: Master Workbook Companion</h3>
+          <p class="desc">Practical workbook and companion exercises for the Data at the Edge curriculum.</p>
+          <div class="links">
+            <a class="btn primary" href="https://www.amazon.com/Data-Edge-Master-Workbook-Companion-ebook/dp/B0DX3CFMPC?ref_=ast_author_dp" target="_blank" rel="noopener">[ VIEW ON AMAZON ]</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="meta">
+            <span class="chip">BOOK</span>
+            <span class="date">2025</span>
+          </div>
+          <h3 class="title">Data at the Edge</h3>
+          <p class="desc">The core text defining the principles of edge-based data systems.</p>
+          <div class="links">
+            <a class="btn primary" href="https://www.amazon.com/dp/B0DX7BYL3G?ref_=ast_author_dp" target="_blank" rel="noopener">[ VIEW ON AMAZON ]</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="meta">
+            <span class="chip">BOOK</span>
+            <span class="date">2025</span>
+          </div>
+          <h3 class="title">DATA AT THE EDGE: PREMIER SOURCES</h3>
+          <p class="desc">A curated collection of premier sources and reference materials.</p>
+          <div class="links">
+            <a class="btn primary" href="https://www.amazon.com/DATA-AT-EDGE-PREMIER-SOURCES-ebook/dp/B0DX3G8XH1?ref_=ast_author_dp" target="_blank" rel="noopener">[ VIEW ON AMAZON ]</a>
+          </div>
+        </div>
+
+      </div>
 
       <div class="section-head">
         <h2>All Public Artifacts</h2>
