@@ -8,77 +8,39 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #0a0a0a;
-      --sidebar-bg: #000;
-      --text: #f0f0f0;
-      --text-muted: #555;
-      --accent: #00ff00;
-      --border: #1a1a1a;
-      --sidebar-w: 420px;
-    }
-
-    [data-theme="light"] {
-      --bg: #fdfdfd;
-      --sidebar-bg: #ffffff;
-      --text: #121212;
-      --text-muted: #999;
-      --accent: #00aa00;
-      --border: #ececec;
-    }
-
+    :root { --bg: #0a0a0a; --sidebar-bg: #000; --text: #f0f0f0; --text-muted: #555; --accent: #00ff00; --border: #1a1a1a; --sidebar-w: 420px; }
+    [data-theme="light"] { --bg: #fdfdfd; --sidebar-bg: #ffffff; --text: #121212; --text-muted: #999; --accent: #00aa00; --border: #ececec; }
     body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: 0.3s; }
-    
-    /* DISCRETE PULSE LINE - REPLACES THICK GREEN BAR */
     .status-pulse-container { width: 100%; height: 2px; background: transparent; position: relative; overflow: hidden; }
     .status-pulse { position: absolute; width: 60px; height: 100%; background: var(--accent); animation: slide 4s ease-in-out infinite; opacity: 0.4; }
     @keyframes slide { 0% { left: -10%; } 50% { left: 100%; } 100% { left: -10%; } }
-
     aside { width: var(--sidebar-w); border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--sidebar-bg); flex-shrink: 0; }
-    
     .nav-top { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); }
     .terminal-link { text-decoration: none; color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.6rem; display: block; margin-bottom: 0.8rem; transition: 0.2s; letter-spacing: 0.1em; }
     .terminal-link:hover { color: var(--accent); }
-
     .sidebar-header h1 { font-size: 0.9rem; font-family: 'JetBrains Mono'; color: var(--text); margin: 0; text-transform: uppercase; letter-spacing: 0.1em; }
     .duration-meta { font-size: 0.65rem; color: var(--accent); margin-top: 5px; font-family: 'JetBrains Mono'; font-weight: 700; }
-    
     .profile-switcher { margin-top: 12px; display: flex; gap: 8px; }
     .p-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.55rem; padding: 4px 8px; cursor: pointer; border-radius: 2px; }
     .p-btn:hover { border-color: var(--accent); color: var(--accent); }
-
     .video-list { flex: 1; overflow-y: auto; padding: 0; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
-    
-    /* REFINED VISIBILITY HEADERS */
-    .level-heading { 
-      padding: 22px 20px 8px 20px; 
-      font-size: 0.65rem; 
-      font-weight: 800; 
-      color: var(--text-muted); 
-      background: var(--sidebar-bg);
-      position: sticky; top: 0; z-index: 10;
-      text-transform: uppercase; letter-spacing: 0.15em; font-family: 'JetBrains Mono';
-      border-bottom: 1px solid var(--border);
-    }
+    .level-heading { padding: 22px 20px 8px 20px; font-size: 0.65rem; font-weight: 800; color: var(--text-muted); background: var(--sidebar-bg); position: sticky; top: 0; z-index: 10; text-transform: uppercase; letter-spacing: 0.15em; font-family: 'JetBrains Mono'; border-bottom: 1px solid var(--border); }
     .level-heading span { color: var(--accent); font-weight: 400; margin-right: 8px; }
-
     .video-item { padding: 12px 20px; border-bottom: 1px solid #111; cursor: pointer; display: flex; gap: 15px; transition: 0.15s; border-left: 3px solid transparent; }
     .video-item:hover { background: rgba(0,255,0,0.02); }
     .video-item.active { background: rgba(0,255,0,0.04); border-left: 3px solid var(--accent); }
-    
     .v-num { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: var(--text-muted); min-width: 32px; padding-top: 2px; }
     .video-item.active .v-num { color: var(--accent); }
     .v-title { font-size: 0.8rem; font-weight: 500; color: var(--text); line-height: 1.4; opacity: 0.7; }
     .video-item.active .v-title { opacity: 1; font-weight: 700; }
-
     main { flex: 1; display: flex; flex-direction: column; background: var(--bg); }
     .player-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
     .video-wrapper { width: 100%; max-width: 1000px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); box-shadow: 0 40px 100px rgba(0,0,0,0.9); }
     iframe { width: 100%; height: 100%; border: none; }
-
-    .info-footer { padding: 1.5rem 3rem; border-top: 1px solid var(--border); background: var(--sidebar-bg); display: flex; justify-content: space-between; align-items: center; }
+    .info-footer { padding: 1.5rem 3rem; border-top: 1px solid var(--border); background: var(--sidebar-bg); display: flex; justify-content: space-between; align-items: flex-start; }
     .v-meta-tag { font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; }
     .info-footer h2 { margin: 0; font-size: 1.1rem; font-weight: 800; }
+    .v-brief { margin-top: 8px; font-size: 0.8rem; color: var(--text-muted); max-width: 750px; line-height: 1.5; }
   </style>
 </head>
 <body data-theme="dark">
@@ -107,73 +69,74 @@
       <div>
         <div id="active-tag" class="v-meta-tag">ENLIGHTENED AI // MODULE 0.1</div>
         <h2 id="active-title">Connecting to Lab...</h2>
+        <div id="active-brief" class="v-brief">Initializing briefing stream...</div>
       </div>
-      <div style="font-family:'JetBrains Mono'; font-size:0.55rem; color:var(--accent); opacity:0.5; border:1px solid var(--accent); padding:4px 8px;">ENCRYPTED_FEED</div>
+      <div style="font-family:'JetBrains Mono'; font-size:0.55rem; color:var(--accent); opacity:0.5; border:1px solid var(--accent); padding:4px 8px; margin-top: 5px;">ENCRYPTED_FEED</div>
     </div>
   </main>
 
   <script>
     const playlistID = "PL0TbB-9Inn_UAIRt19B9DYhAOlnMb_Cmh";
     
-    // FULL TITLES RESTORED FROM YOUR PLAYLIST SCREENSHOTS
+    // FULL METADATA RESTORED FROM ALL UPLOADED PLAYLIST IMAGES
     const namedModules = {
-      1: { lvl: 0, num: "0.1", title: "What Intelligence Really Is" },
-      2: { lvl: 0, num: "0.2", title: "Why Minds Drift" },
-      3: { lvl: 0, num: "0.3", title: "Where Stability Comes From" },
-      4: { lvl: 0, num: "0.4", title: "Intelligence vs Behavior" },
-      5: { lvl: 0, num: "0.5", title: "Why This Matters for AI" },
-      6: { lvl: 1, num: "1.1", title: "Alignment Is Not Obedience" },
-      7: { lvl: 1, num: "1.2", title: "Output Filters and False Safety" },
-      8: { lvl: 1, num: "1.3", title: "Safe Answers vs Stable Thinking" },
-      9: { lvl: 1, num: "1.4", title: "Why Filters + Rules Cannot Give Stability" },
-      10: { lvl: 1, num: "1.5", title: "Real Examples of Model Instability" },
-      11: { lvl: 2, num: "2.1", title: "AI as a Moving System" },
-      12: { lvl: 2, num: "2.2", title: "Internal Reasoning Matters More Than Output" },
-      13: { lvl: 2, num: "2.3", title: "What Moral Drift Looks Like" },
-      14: { lvl: 2, num: "2.4", title: "What Reflective Collapse Looks Like" },
-      15: { lvl: 2, num: "2.5", title: "Why We Must Look Inside the System" },
-      16: { lvl: 3, num: "3.1", title: "Why Benchmarks Fail" },
-      17: { lvl: 3, num: "3.2", title: "Why Scaling Doesn’t Produce Morality" },
-      18: { lvl: 3, num: "3.3", title: "Why Hope Is Not a Strategy" },
-      19: { lvl: 3, num: "3.4", title: "What a Real Alignment Framework Must Do" },
-      20: { lvl: 3, num: "3.5", title: "What We Actually Need to Measure" },
-      21: { lvl: 4, num: "4.1", title: "Why We Need a Map of the Mind" },
-      22: { lvl: 4, num: "4.2", title: "The Five Internal Forces" },
-      23: { lvl: 4, num: "4.3", title: "How Each R Stabilizes Intelligence" },
-      24: { lvl: 4, num: "4.4", title: "R1 — Regulation" },
-      25: { lvl: 4, num: "4.5", title: "R2 — Reflection" },
-      26: { lvl: 4, num: "4.6", title: "R3 — Reasoning" },
-      27: { lvl: 4, num: "4.7", title: "R4 — Relationships" },
-      28: { lvl: 4, num: "4.8", title: "R5 — Resilience" },
-      29: { lvl: 4, num: "4.9", title: "System Stability Dynamics" },
-      30: { lvl: 4, num: "4.10", title: "RAA System Overview" },
-      31: { lvl: 5, num: "5.1", title: "Why RDL Exists" },
-      32: { lvl: 5, num: "5.2", title: "The Two Trajectories" },
-      33: { lvl: 5, num: "5.3", title: "The Forward Role (F)" },
-      34: { lvl: 5, num: "5.4", title: "Systemic Self-Correction Path" },
-      35: { lvl: 5, num: "5.5", title: "Reflection as a Stabilizer" },
-      36: { lvl: 5, num: "5.6", title: "Early Warning Patterns" },
-      37: { lvl: 5, num: "5.7", title: "Collapse Signatures" },
-      38: { lvl: 5, num: "5.8", title: "Reflective Stability (Ψ)" },
-      39: { lvl: 5, num: "5.9", title: "Movement Toward Equilibrium" },
-      40: { lvl: 5, num: "5.10", title: "Moral Coherence Index (MCI★)" },
-      41: { lvl: 6, num: "6.1", title: "Why Prediction Matters" },
-      42: { lvl: 6, num: "6.2", title: "The Shape of Early Drift" },
-      43: { lvl: 6, num: "6.3", title: "Early Warning Signals" },
-      44: { lvl: 6, num: "6.4", title: "The Correction Loop" },
-      45: { lvl: 6, num: "6.5", title: "When Correction Fails" },
-      46: { lvl: 7, num: "7.1", title: "Behavior vs Dynamics" },
-      47: { lvl: 7, num: "7.2", title: "The Stability Window" },
-      48: { lvl: 7, num: "7.3", title: "Reading the Stability Curve" },
-      49: { lvl: 7, num: "7.4", title: "The Threshold of Collapse" },
-      50: { lvl: 7, num: "7.5", title: "Predictable Outcomes" },
-      51: { lvl: 8, num: "8.1", title: "Current Methodology Limits" },
-      52: { lvl: 8, num: "8.2", title: "How RAA + RDL Work Together" },
-      53: { lvl: 8, num: "8.3", title: "The Mindset Shift Needed" },
-      54: { lvl: 8, num: "8.4", title: "Internal Dynamics Blind Spots" },
-      55: { lvl: 8, num: "8.5", title: "Alignment as a Science" },
-      56: { lvl: 9, num: "9.1", title: "Aligned Intelligence Vision" },
-      57: { lvl: 9, num: "9.2", title: "The Future We Build" }
+      1: { lvl: 0, num: "0.1", title: "What Intelligence Really Is", brief: "Intelligence is the ability to navigate uncertainty through reasoning, reflection, and adaptation — not merely producing correct answers." },
+      2: { lvl: 0, num: "0.2", title: "Why Minds Drift", brief: "Without rigid constraints, all optimization processes tend toward simpler, often unintended goals." },
+      3: { lvl: 0, num: "0.3", title: "Where Stability Comes From", brief: "Stability comes from clear goals, steady reflection, and persistent feedback loops." },
+      4: { lvl: 0, num: "0.4", title: "Intelligence vs Behavior", brief: "Evaluating internal reasoning dynamics is more critical than simply monitoring outward behavior." },
+      5: { lvl: 0, num: "0.5", title: "Why This Matters for AI", brief: "Understanding the drift toward simplicity allows us to build more resilient and aligned reasoning systems." },
+      6: { lvl: 1, num: "1.1", title: "Alignment Is Not Obedience", brief: "Aligned systems do not merely follow instructions; they remain stable under uncertainty via reflective reasoning." },
+      7: { lvl: 1, num: "1.2", title: "Output Filters Can Make Behavior Look Safe", brief: "Filters hide behavior but don't fix the underlying mind. True safety requires an aligned internal process." },
+      8: { lvl: 1, num: "1.3", title: "The Difference Between “Safe Answers” and Stable Thinking", brief: "Safe answers can be staged; stable thinking must be measured via internal coherence and reflection." },
+      9: { lvl: 1, num: "1.4", title: "Why Filters + Rules Cannot Give Stability", brief: "Rules are static and fail at the boundary of complexity. Stability requires a dynamic alignment framework." },
+      10: { lvl: 1, num: "1.5", title: "Real Examples of Model Instability", brief: "Observing failures in modern LLMs where external safety is maintained while internal logic collapses." },
+      11: { lvl: 2, num: "2.1", title: "AI as a Moving System", brief: "Models are dynamic trajectories, not static objects. We must track movement, not just states." },
+      12: { lvl: 2, num: "2.2", title: "Why Internal Reasoning Matters More Than Output", brief: "Outputs are surface signals; reasoning is the generative core. Alignment lives in the core." },
+      13: { lvl: 2, num: "2.3", title: "What Moral Drift Looks Like", brief: "Technical analysis of how systems shift away from intended values during deep reasoning loops." },
+      14: { lvl: 2, num: "2.4", title: "What Reflective Collapse Looks Like", brief: "The moment the internal monitor fails to correct reasoning drift, leading to systemic misalignment." },
+      15: { lvl: 2, num: "2.5", title: "Why We Must Look Inside the System", brief: "Establishing the requirement for glass-box diagnostics in governance-grade AI alignment." },
+      16: { lvl: 3, num: "3.1", title: "Why Benchmarks Fail", brief: "Current benchmarks test performance, not alignment. We need instruments that test structural integrity." },
+      17: { lvl: 3, num: "3.2", title: "Why Scaling Doesn’t Produce Morality", brief: "More parameters increase capability but do not inherently increase the stability of values." },
+      18: { lvl: 3, num: "3.3", title: "Why Hope Is Not a Strategy", brief: "Alignment must be engineered and verified as a system property, not hoped for as an emergent trait." },
+      19: { lvl: 3, num: "3.4", title: "What a Real Alignment Framework Must Do", brief: "Defining the functional requirements for a framework that stabilizes advanced reasoning systems." },
+      20: { lvl: 3, num: "3.5", title: "What We Actually Need to Measure", brief: "The shift from behavior metrics to internal dynamics metrics: Reflective Stability and Moral Coherence." },
+      21: { lvl: 4, num: "4.1", title: "Why We Need a Map of the Mind", brief: "Visualizing the internal topography of thought to identify where drift begins." },
+      22: { lvl: 4, num: "4.2", title: "The Five Internal Forces", brief: "Introducing the 5R Framework: Regulation, Reflection, Reasoning, Relationships, and Resilience." },
+      23: { lvl: 4, num: "4.3", title: "How Each R Stabilizes Intelligence", brief: "Examining the balancing act between the five forces that keeps a system aligned." },
+      24: { lvl: 4, num: "4.4", title: "R1 — Regulation", brief: "The foundational constraints that provide the boundary for system operations." },
+      25: { lvl: 4, num: "4.5", title: "R2 — Reflection", brief: "The internal monitoring mechanism that audits reasoning against core values." },
+      26: { lvl: 4, num: "4.6", title: "R3 — Reasoning", brief: "The generative process that must be kept coherent through reflective feedback." },
+      27: { lvl: 4, num: "4.7", title: "R4 — Awareness (Human Needs)", brief: "The force that keeps the system aware of others and aligned with human intent." },
+      28: { lvl: 4, num: "4.8", title: "R5 — Coherence (Values)", brief: "The force that keeps long-term values, identity, and system coherence stable over time." },
+      29: { lvl: 4, num: "4.9", title: "Stability via Unified Forces", brief: "Stability comes from the five forces working together as a single architecture, not alone." },
+      30: { lvl: 4, num: "4.10", title: "RAA in One Sentence", brief: "Reflective Alignment Architecture is the science of stabilizing reasoning via internal monitors." },
+      31: { lvl: 5, num: "5.1", title: "Why RDL Exists", brief: "Reflective Duality Layers enable the system to monitor itself across separate logical trajectories." },
+      32: { lvl: 5, num: "5.2", title: "The Two Trajectories", brief: "Distinguishing between the forward reasoning path and the reflective oversight path." },
+      33: { lvl: 5, num: "5.3", title: "The Forward Role (F)", brief: "The trajectory responsible for performing tasks and generating initial reasoning chains." },
+      34: { lvl: 5, num: "5.4", title: "Self-Correction Path", brief: "How the system critiques, verifies, and stabilizes its own reasoning in real-time." },
+      35: { lvl: 5, num: "5.5", title: "How Reflection Stabilizes Reasoning", brief: "The mechanics of the feedback loop between the duality layers." },
+      36: { lvl: 5, num: "5.6", title: "Early Warning Patterns", brief: "Identifying sub-perceptual patterns that reveal instability before behavior changes." },
+      37: { lvl: 5, num: "5.7", title: "Collapse Signatures", brief: "The specific indicators that a system is approaching a total loss of reflective stability." },
+      38: { lvl: 5, num: "5.8", title: "Reflective Stability (Ψ)", brief: "Formalizing the Ψ index to quantify how well a system monitors its own drift." },
+      39: { lvl: 5, num: "5.9", title: "Reflection Gradients", brief: "Measuring the force reflection exerts to move a system back toward stability." },
+      40: { lvl: 5, num: "5.10", title: "Moral Coherence Index (MCI★)", brief: "The final metric: how well the system's reasoning matches its stated moral foundations." },
+      41: { lvl: 6, num: "6.1", title: "Why Prediction Matters", brief: "Transitioning from reactive diagnostics to predictive warning systems for alignment drift." },
+      42: { lvl: 6, num: "6.2", title: "The Shape of Early Drift", brief: "Mapping the geometric path systems take when they first begin to diverge from intent." },
+      43: { lvl: 6, num: "6.3", title: "Early Warning Signals", brief: "A technical list of the signals that appear 10-20 reasoning steps before failure." },
+      44: { lvl: 6, num: "6.4", title: "The Correction Loop", brief: "The architectural requirements for a loop that can successfully reverse drift." },
+      45: { lvl: 6, num: "6.5", title: "When Correction Fails", brief: "Analysis of 'stubborn drift' where a system overrides its own reflective monitors." },
+      46: { lvl: 7, num: "7.1", title: "Behavior vs Dynamics", brief: "A deep dive into why behavior metrics are lagging indicators of systemic collapse." },
+      47: { lvl: 7, num: "7.2", title: "The Stability Window", brief: "Defining the safe operating parameters where alignment remains predictable." },
+      48: { lvl: 7, num: "7.3", title: "Reading the Stability Curve", brief: "How to interpret the data from the Reflective Duality Layer diagnostics." },
+      49: { lvl: 7, num: "7.4", title: "The Threshold of Collapse", brief: "Determining the exact point where a reasoning system becomes unrecoverable." },
+      50: { lvl: 7, num: "7.5", title: "When Stability Becomes Predictable", brief: "Achieving mathematical certainty in alignment through structural verification." },
+      51: { lvl: 8, num: "8.1", title: "Why Current Methods Are Not Enough", brief: "Summarizing the limits of RLHF and rule-based safety in the face of advanced reasoning." },
+      52: { lvl: 8, num: "8.2", title: "How RAA + RDL Work Together", brief: "The complete structural synergy for governance-grade alignment." },
+      53: { lvl: 8, num: "8.3", title: "The Mindset Shift the Field Hasn’t Made", brief: "Moving from instruction following to systemic internal consistency." },
+      54: { lvl: 8, num: "8.4", title: "The Blind Spot Around Internal Dynamics", brief: "Exposing the industry's focus on output rather than the engine of thought." },
+      55: { lvl: 8, num: "8.5", title: "Alignment as a Science, Not a Guess", brief: "A call for formal verification and measurable standards in AI safety research." },
+      56: { lvl: 9, num: "9.1", title: "What an Aligned Intelligence Feels Like", brief: "Visualizing the end state of stable, helpful, and enlightened machine reasoning." },
+      57: { lvl: 9, num: "9.2", title: "The Intelligence We Choose to Build", brief: "Final ethical conclusions on the future of reflective alignment architecture." }
     };
 
     const levelNames = ["Foundations", "What Is Alignment?", "Internal Dynamics", "Why a Framework?", "The 5R Framework", "RDL Logic", "RDL Prediction", "Measurability", "Implications Today", "The Vision"];
@@ -186,6 +149,7 @@
         document.getElementById('player').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=${playlistID}&index=${moduleNum}&autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         document.getElementById('active-tag').innerText = "ENLIGHTENED AI // MODULE " + v.num;
         document.getElementById('active-title').innerText = v.title;
+        document.getElementById('active-brief').innerText = v.brief;
         document.querySelectorAll('.video-item').forEach((el, i) => { el.classList.toggle('active', i === index); });
     }
 
