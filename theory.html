@@ -134,33 +134,30 @@
         border: 1px solid var(--figure-border);
     }
 
-    /* --- V11.0: USER DIAGNOSTIC FIX --- */
-    /* REMOVED EXACT MATCHING (.png) */
-    /* ADDED FIG 5 TO INVERT LIST */
+    /* --- V12.0: MANUAL OVERRIDE (USER INSTRUCTION) --- */
 
-    /* GROUP 1: INVERT IN LIGHT MODE */
-    /* (Fig 1, Fig 3, Fig 5) */
+    /* GROUP 1: BLACK SOURCE -> INVERT IN LIGHT */
+    /* (Fig 1, Fig 5) */
     body[data-theme="light"] img[src*="fig1"], 
-    body[data-theme="light"] img[src*="fig3"],
     body[data-theme="light"] img[src*="fig5"] {
         filter: invert(1) hue-rotate(180deg) !important;
     }
-    /* Dark Mode: NO INVERT (Stay Original) */
     body[data-theme="dark"] img[src*="fig1"], 
-    body[data-theme="dark"] img[src*="fig3"],
     body[data-theme="dark"] img[src*="fig5"] {
         filter: none !important;
         border-color: #333;
     }
 
-    /* GROUP 2: DO NOT INVERT IN LIGHT MODE */
-    /* (Fig 2, Fig 4) */
+    /* GROUP 2: WHITE SOURCE -> DO NOT INVERT IN LIGHT */
+    /* (Fig 2, Fig 3, Fig 4) */
     body[data-theme="light"] img[src*="fig2"], 
+    body[data-theme="light"] img[src*="fig3"],
     body[data-theme="light"] img[src*="fig4"] {
         filter: none !important;
     }
     /* Dark Mode: INVERT to Black */
     body[data-theme="dark"] img[src*="fig2"], 
+    body[data-theme="dark"] img[src*="fig3"],
     body[data-theme="dark"] img[src*="fig4"] {
         filter: invert(1) hue-rotate(180deg) !important;
         border-color: #333;
@@ -198,10 +195,12 @@
     
     /* Lightbox Inheritance - Filenames */
     body[data-theme="light"] #lightbox-img[src*="fig1"],
-    body[data-theme="light"] #lightbox-img[src*="fig3"],
     body[data-theme="light"] #lightbox-img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
     
+    body[data-theme="light"] #lightbox-img[src*="fig3"] { filter: none !important; }
+
     body[data-theme="dark"] #lightbox-img[src*="fig2"],
+    body[data-theme="dark"] #lightbox-img[src*="fig3"],
     body[data-theme="dark"] #lightbox-img[src*="fig4"] { filter: invert(1) hue-rotate(180deg) !important; }
 
     #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
@@ -261,7 +260,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v11.0 - HEATMAP UNLOCKED ]
+          [ v12.0 - FIG 3 RESTORED ]
       </div>
     </aside>
 
