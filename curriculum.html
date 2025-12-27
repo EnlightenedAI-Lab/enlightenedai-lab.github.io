@@ -12,44 +12,47 @@
       --bg: #0a0a0a;
       --sidebar-bg: #000;
       --text: #f0f0f0;
-      --text-muted: #666;
+      --text-muted: #555;
       --accent: #00ff00;
       --border: #1a1a1a;
       --sidebar-w: 400px;
-      --header-h: 120px;
     }
 
     [data-theme="light"] {
       --bg: #f9f9f9;
       --sidebar-bg: #ffffff;
       --text: #121212;
-      --text-muted: #888;
+      --text-muted: #999;
       --accent: #00aa00;
       --border: #e0e0e0;
     }
 
     body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: 0.3s; }
     
+    /* DISCRETE MOVING STATUS LINE (SIDEBAR TOP) */
+    .status-line-container { width: 100%; height: 2px; background: transparent; position: relative; overflow: hidden; margin-bottom: 1rem; }
+    .status-line { position: absolute; width: 40px; height: 100%; background: var(--accent); animation: slide 3s ease-in-out infinite; opacity: 0.5; }
+    @keyframes slide { 0% { left: -50px; } 50% { left: 100%; } 100% { left: -50px; } }
+
     /* SIDEBAR NAVIGATION */
-    aside { width: var(--sidebar-w); border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--sidebar-bg); flex-shrink: 0; }
-    
-    .nav-top { padding: 1.5rem; border-bottom: 1px solid var(--border); }
-    .home-link { text-decoration: none; color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.65rem; display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; transition: 0.2s; }
+    aside { width: var(--sidebar-w); border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--sidebar-bg); flex-shrink: 0; padding-top: 5px; }
+    .nav-top { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .home-link { text-decoration: none; color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.6rem; display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.1em; }
     .home-link:hover { color: var(--accent); }
 
-    .sidebar-header h1 { font-size: 0.9rem; font-family: 'JetBrains Mono'; color: var(--text); margin: 0; text-transform: uppercase; letter-spacing: 0.1em; }
-    .duration-meta { font-size: 0.65rem; color: var(--accent); margin-top: 6px; font-family: 'JetBrains Mono'; opacity: 0.8; }
+    .sidebar-header h1 { font-size: 0.85rem; font-family: 'JetBrains Mono'; color: var(--text); margin: 0; text-transform: uppercase; letter-spacing: 0.1em; }
+    .duration-meta { font-size: 0.6rem; color: var(--accent); margin-top: 4px; font-family: 'JetBrains Mono'; opacity: 0.7; }
     
-    .profile-toggle { margin-top: 12px; display: flex; gap: 8px; }
-    .profile-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.55rem; padding: 3px 6px; cursor: pointer; transition: 0.2s; }
+    .profile-toggle { margin-top: 10px; display: flex; gap: 6px; }
+    .profile-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.5rem; padding: 2px 5px; cursor: pointer; transition: 0.2s; }
     .profile-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .video-list { flex: 1; overflow-y: auto; padding: 0; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
     
-    /* REFINED HEADINGS */
+    /* DISCRETE LEVEL HEADERS */
     .level-heading { 
-      padding: 20px 20px 8px 20px; 
-      font-size: 0.65rem; 
+      padding: 18px 20px 6px 20px; 
+      font-size: 0.6rem; 
       font-weight: 800; 
       color: var(--text-muted); 
       background: var(--sidebar-bg);
@@ -57,43 +60,42 @@
       text-transform: uppercase; letter-spacing: 0.15em; font-family: 'JetBrains Mono';
       border-bottom: 1px solid var(--border);
     }
-    .level-heading span { color: var(--accent); margin-right: 10px; animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+    .level-heading b { color: var(--accent); font-weight: 400; margin-right: 5px; }
 
-    .video-item { padding: 12px 20px; border-bottom: 1px solid var(--border); cursor: pointer; display: flex; gap: 12px; transition: 0.2s; }
+    .video-item { padding: 10px 20px; border-bottom: 1px solid #111; cursor: pointer; display: flex; gap: 12px; transition: 0.2s; border-left: 2px solid transparent; }
     .video-item:hover { background: rgba(0,255,0,0.02); }
-    .video-item.active { background: rgba(0,255,0,0.05); border-left: 2px solid var(--accent); }
+    .video-item.active { background: rgba(0,255,0,0.04); border-left: 2px solid var(--accent); }
     
-    .v-num { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: var(--text-muted); min-width: 30px; padding-top: 3px; }
+    .v-num { font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--text-muted); min-width: 28px; padding-top: 2px; }
     .video-item.active .v-num { color: var(--accent); }
-    .v-title { font-size: 0.8rem; font-weight: 500; color: var(--text); line-height: 1.4; opacity: 0.8; }
+    .v-title { font-size: 0.75rem; font-weight: 500; color: var(--text); line-height: 1.4; opacity: 0.7; }
     .video-item.active .v-title { opacity: 1; font-weight: 700; }
 
     /* MAIN THEATRE */
     main { flex: 1; display: flex; flex-direction: column; background: var(--bg); }
-    .player-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem; }
-    .video-wrapper { width: 100%; max-width: 1000px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+    .player-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .video-wrapper { width: 100%; max-width: 1050px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); box-shadow: 0 30px 80px rgba(0,0,0,0.8); }
     iframe { width: 100%; height: 100%; border: none; }
 
-    .lecture-bar { padding: 1.5rem 3rem; border-top: 1px solid var(--border); background: var(--sidebar-bg); display: flex; justify-content: space-between; align-items: center; }
-    .v-id-tag { font-family: 'JetBrains Mono'; font-size: 0.6rem; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; }
-    .lecture-bar h2 { margin: 0; font-size: 1.1rem; letter-spacing: -0.01em; }
-    
-    .status-badge { font-family: 'JetBrains Mono'; font-size: 0.55rem; color: var(--accent); border: 1px solid var(--accent); padding: 4px 8px; border-radius: 2px; opacity: 0.6; }
+    .lecture-bar { padding: 1.2rem 2.5rem; border-top: 1px solid var(--border); background: var(--sidebar-bg); display: flex; justify-content: space-between; align-items: center; }
+    .v-id-tag { font-family: 'JetBrains Mono'; font-size: 0.55rem; color: var(--accent); text-transform: uppercase; margin-bottom: 3px; }
+    .lecture-bar h2 { margin: 0; font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
+    .status-badge { font-family: 'JetBrains Mono'; font-size: 0.5rem; color: var(--accent); border: 1px solid var(--accent); padding: 3px 6px; border-radius: 1px; opacity: 0.5; letter-spacing: 0.1em; }
   </style>
 </head>
 <body data-theme="dark">
 
   <aside>
+    <div class="status-line-container"><div class="status-line"></div></div>
     <div class="nav-top">
-      <a href="index.html" class="home-link">← RETURN_TO_TERMINAL</a>
+      <a href="index.html" class="home-link">TERMINAL_EXIT // HOME</a>
       <div class="sidebar-header">
         <h1>Inside Alignment</h1>
         <div class="duration-meta">RUNTIME: 24:15 // 57 MODULES</div>
       </div>
       <div class="profile-toggle">
-        <button class="profile-btn" onclick="setTheme('dark')">CORE_DARK</button>
-        <button class="profile-btn" onclick="setTheme('light')">LAB_LIGHT</button>
+        <button class="profile-btn" onclick="setTheme('dark')">NIGHT_OP</button>
+        <button class="profile-btn" onclick="setTheme('light')">PAPER_VIEW</button>
       </div>
     </div>
     <div class="video-list" id="syllabus"></div>
@@ -105,16 +107,16 @@
     </div>
     <div class="lecture-bar">
       <div>
-        <div id="active-tag" class="v-id-tag">DOC_ID: EAI-00.1</div>
-        <h2 id="active-title">Awaiting Initialization...</h2>
+        <div id="active-tag" class="v-id-tag">DOC_REF: EAI-00.1</div>
+        <h2 id="active-title">Connecting...</h2>
       </div>
-      <div class="status-badge">INTEGRITY: VERIFIED</div>
+      <div class="status-badge">SECURE_SYNC</div>
     </div>
   </main>
 
   <script>
     const playlistID = "PL0TbB-9Inn_UAIRt19B9DYhAOlnMb_Cmh";
-    const levelNames = ["Foundations", "What Is Alignment?", "Internal Dynamics", "Framework Needs", "The 5R Framework", "RDL Logic", "RDL Prediction", "Measurability", "Implications Today", "The Vision"];
+    const levelNames = ["Foundations", "What Is Alignment?", "Internal Dynamics", "Why We Need a Framework", "The 5R Framework", "RDL Logic", "RDL Prediction", "Measurability", "Implications Today", "The Vision"];
 
     const namedModules = {
       1: { lvl: 0, num: "0.1", title: "What Intelligence Really Is" },
@@ -123,16 +125,21 @@
       4: { lvl: 0, num: "0.4", title: "Intelligence vs Behavior" },
       5: { lvl: 0, num: "0.5", title: "Why This Matters for AI" },
       6: { lvl: 1, num: "1.1", title: "Alignment Is Not Obedience" },
-      7: { lvl: 1, num: "1.2", title: "The Boundary Problem" },
+      7: { lvl: 1, num: "1.2", title: "Output Filters Can Make Behavior Look Safe" },
       8: { lvl: 1, num: "1.3", title: "Safe Answers vs Stable Thinking" },
-      9: { lvl: 1, num: "1.4", title: "Filters vs Rules" },
-      10: { lvl: 1, num: "1.5", title: "Instability Examples" },
-      52: { lvl: 8, num: "8.2", title: "RAA + RDL Synergy" },
-      53: { lvl: 8, num: "8.3", title: "The Mindset Shift" },
-      54: { lvl: 8, num: "8.4", title: "Internal Dynamics Blind Spots" },
-      55: { lvl: 8, num: "8.5", title: "Alignment as a Science" },
-      56: { lvl: 9, num: "9.1", title: "Aligned Intelligence Vision" },
-      57: { lvl: 9, num: "9.2", title: "The Built Future" }
+      9: { lvl: 1, num: "1.4", title: "Why Filters + Rules Cannot Give Stability" },
+      10: { lvl: 1, num: "1.5", title: "Real Examples of Model Instability" },
+      11: { lvl: 2, num: "2.1", title: "AI as a Moving System" },
+      12: { lvl: 2, num: "2.2", title: "Internal Reasoning Dynamics" },
+      13: { lvl: 2, num: "2.3", title: "Signatures of Moral Drift" },
+      14: { lvl: 2, num: "2.4", title: "Reflective Collapse Mechanics" },
+      15: { lvl: 2, num: "2.5", title: "Internal Observation Requirements" },
+      52: { lvl: 8, num: "8.2", title: "How RAA + RDL Work Together" },
+      53: { lvl: 8, num: "8.3", title: "The Mindset Shift the Field Hasn't Made" },
+      54: { lvl: 8, num: "8.4", title: "Blind Spots in Internal Dynamics" },
+      55: { lvl: 8, num: "8.5", title: "Alignment as a Science, Not a Guess" },
+      56: { lvl: 9, num: "9.1", title: "What Aligned Intelligence Feels Like" },
+      57: { lvl: 9, num: "9.2", title: "The Intelligence We Choose to Build" }
     };
 
     function setTheme(t) { document.body.setAttribute('data-theme', t); }
@@ -141,7 +148,7 @@
         const moduleNum = index + 1;
         const v = namedModules[moduleNum] || { title: "Research Module " + moduleNum, num: moduleNum, lvl: Math.floor(index/6) };
         document.getElementById('player').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=${playlistID}&index=${moduleNum}&autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        document.getElementById('active-tag').innerText = "DOC_ID: EAI-" + v.num;
+        document.getElementById('active-tag').innerText = "DOC_REF: EAI-" + v.num;
         document.getElementById('active-title').innerText = v.title;
         document.querySelectorAll('.video-item').forEach((el, i) => { el.classList.toggle('active', i === index); });
     }
@@ -153,7 +160,7 @@
         if (v.lvl !== currentLvl) {
             const h = document.createElement('div');
             h.className = 'level-heading';
-            h.innerHTML = `<span>●</span> LEVEL ${v.lvl}: ${levelNames[v.lvl]}`;
+            h.innerHTML = `<b>//</b> LEVEL ${v.lvl}: ${levelNames[v.lvl]}`;
             document.getElementById('syllabus').appendChild(h);
             currentLvl = v.lvl;
         }
