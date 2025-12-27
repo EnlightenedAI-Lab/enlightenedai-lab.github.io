@@ -308,6 +308,8 @@
             section { margin-bottom: 4rem; grid-template-columns: 1fr !important; }
             .section-grid { grid-template-columns: 1fr; gap: 2rem; }
             .diagram-thumbnail { width: 100%; max-width: 350px; margin: 0 auto; }
+            .doc-header, .audit-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .integrity-seal { margin-left: 0; }
             #mode-banner { top: 60px; right: 20px; z-index: 900; }
         }
     </style>
@@ -338,7 +340,7 @@
 
             <div class="mode-group">
                 <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader', 'READER MODE')">[ READER ] <span>•</span></span>
-                <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')">[ AUDIT ] <span>•</span></span>
+                <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')" style="display:none">[ AUDIT ] <span>•</span></span>
                 <span class="toggle-btn" id="btn-diff" onclick="setMode('diff', 'CHANGE TRACE ACTIVE')">[ DIFF LOG ] <span>Δ</span></span>
                 <span class="toggle-btn" id="btn-logic" onclick="setMode('logic', 'LOGIC LAYER EXPOSED')">[ LOGIC ] <span>λ</span></span>
             </div>
@@ -356,10 +358,6 @@
             
             <div class="theme-switch" onclick="toggleTheme()">
                 [ LIGHT / DARK ] <span id="theme-icon">◐</span>
-            </div>
-            
-            <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-                [ v28.0 - ALL MODES ]
             </div>
         </aside>
 
