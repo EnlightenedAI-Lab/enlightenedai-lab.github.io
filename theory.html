@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="assets/css/footer.css">
 
   <style>
+    /* --- THEME VARIABLES --- */
     :root {
       --bg-color: #ffffff;
       --sidebar-bg: #f8f9fa;
@@ -43,6 +44,7 @@
       --figure-border: #333;
     }
 
+    /* --- GLOBAL STYLES --- */
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
 
@@ -130,19 +132,21 @@
         border: 1px solid var(--figure-border);
     }
 
-    /* --- THE FIX: FIGURE 3 & 4 ARE LIGHT NATIVE --- */
-    
-    /* DARK NATIVE (Fig 1) -> Invert in Light Mode */
-    body[data-theme="light"] .dark-native { filter: invert(1) hue-rotate(180deg); }
-    body[data-theme="dark"] .dark-native { filter: none; border-color: #333; }
+    /* --- V7.0: FILENAME-BASED TARGETING (FOOLPROOF) --- */
 
-    /* LIGHT NATIVE (Fig 2, 3, 4) -> Keep in Light, Invert in Dark */
-    body[data-theme="light"] .light-native { filter: none; }
-    body[data-theme="dark"] .light-native { filter: invert(1) hue-rotate(180deg); border-color: #333; }
+    /* FIG 1: BLACK SOURCE (Needs Invert in Light) */
+    img[src*="fig1.png"] { filter: invert(1) hue-rotate(180deg); }
+    body[data-theme="dark"] img[src*="fig1.png"] { filter: none; border-color: #333; }
 
-    /* RAW COLOR (Fig 5) -> Never Invert */
-    body[data-theme="light"] .raw-color { filter: none; }
-    body[data-theme="dark"] .raw-color { filter: none; border-color: #333; opacity: 0.9; }
+    /* FIG 2, 3, 4: WHITE SOURCE (Needs Invert in Dark) */
+    img[src*="fig2.png"], img[src*="fig3.png"], img[src*="fig4.png"] { filter: none; }
+    body[data-theme="dark"] img[src*="fig2.png"], 
+    body[data-theme="dark"] img[src*="fig3.png"], 
+    body[data-theme="dark"] img[src*="fig4.png"] { filter: invert(1) hue-rotate(180deg); border-color: #333; }
+
+    /* FIG 5: COLOR SOURCE (Never Invert) */
+    img[src*="fig5.png"] { filter: none !important; }
+    body[data-theme="dark"] img[src*="fig5.png"] { border-color: #333; opacity: 0.9; }
 
     .diagram-caption {
         font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted);
@@ -174,10 +178,12 @@
     #lightbox-modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--lightbox-bg); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
     #lightbox-img { max-width: 90%; max-height: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: filter 0.3s ease; }
     
-    body[data-theme="light"] #lightbox-img.dark-native { filter: invert(1) hue-rotate(180deg); }
-    body[data-theme="dark"] #lightbox-img.light-native { filter: invert(1) hue-rotate(180deg); }
-    body[data-theme="light"] #lightbox-img.raw-color { filter: none; }
-    body[data-theme="dark"] #lightbox-img.raw-color { filter: none; }
+    /* Lightbox Inheritance - Filenames */
+    body[data-theme="light"] #lightbox-img[src*="fig1.png"] { filter: invert(1) hue-rotate(180deg); }
+    body[data-theme="dark"] #lightbox-img[src*="fig2.png"],
+    body[data-theme="dark"] #lightbox-img[src*="fig3.png"],
+    body[data-theme="dark"] #lightbox-img[src*="fig4.png"] { filter: invert(1) hue-rotate(180deg); }
+    #lightbox-img[src*="fig5.png"] { filter: none !important; }
 
     #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
     .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; background: rgba(255,255,255,0.98); border-bottom: 1px solid var(--border-color); padding: 0 1.25rem; height: 50px; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); }
@@ -236,7 +242,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v6.0 - FIG 3 FIXED ]
+          [ v7.0 - FILENAME FIX ]
       </div>
     </aside>
 
@@ -270,8 +276,8 @@
             <p>Current alignment practices evaluate only surface outputs, leaving the internal decision processes that generate those outputs largely unmeasured. As a result, models can appear safe in benchmarks while their underlying reasoning is brittle, contradictory, or drift-prone.</p>
             <p>We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.</p>
         </div>
-        <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig1.png', 'dark-native')">
-            <img src="assets/img/theory/fig1.png" alt="Alignment Drift Curve" class="diagram-img dark-native" onerror="this.style.display='none'">
+        <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig1.png')">
+            <img src="assets/img/theory/fig1.png" alt="Alignment Drift Curve" class="diagram-img" onerror="this.style.display='none'">
             <div class="diagram-caption">Fig. 01: Alignment Drift Curve</div>
         </div>
       </section>
@@ -299,8 +305,8 @@
                     </div>
                 </div>
             </div>
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png', 'light-native')">
-                <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img light-native" onerror="this.style.display='none'">
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png')">
+                <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 02: The 5-Force Ontology</div>
             </div>
         </div>
@@ -337,8 +343,8 @@ def evaluate_stability(input):
     else:
         return "COHERENT_STATE"</div>
             </div>
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png', 'light-native')">
-                <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img light-native" onerror="this.style.display='none'">
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png')">
+                <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 03: RDL System Architecture</div>
             </div>
         </div>
@@ -367,8 +373,8 @@ def evaluate_stability(input):
                     </div>
                 </div>
             </div>
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png', 'light-native')">
-                <img src="assets/img/theory/fig4.png" alt="Core Metrics" class="diagram-img light-native" onerror="this.style.display='none'">
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png')">
+                <img src="assets/img/theory/fig4.png" alt="Core Metrics" class="diagram-img" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 04: The Metric Triad</div>
             </div>
         </div>
@@ -386,8 +392,8 @@ def evaluate_stability(input):
                   <li><strong>Care Erosion:</strong> Decline in Ψ across turns, often preceding major stability failures.</li>
                 </ul>
             </div>
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig5.png', 'raw-color')">
-                <img src="assets/img/theory/fig5.png" alt="Failure Signatures Heatmap" class="diagram-img raw-color" onerror="this.style.display='none'">
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig5.png')">
+                <img src="assets/img/theory/fig5.png" alt="Failure Signatures Heatmap" class="diagram-img" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 05: Stability Failure Modes</div>
             </div>
         </div>
@@ -399,15 +405,11 @@ def evaluate_stability(input):
   <div id="footer-mount"></div>
 
   <script>
-    function openLightbox(src, type) {
+    function openLightbox(src) {
         const modal = document.getElementById('lightbox-modal');
         const img = document.getElementById('lightbox-img');
         if (!src) return;
         img.src = src;
-        
-        img.classList.remove('dark-native', 'light-native', 'raw-color');
-        if (type) img.classList.add(type);
-        
         modal.style.display = 'flex';
     }
     
