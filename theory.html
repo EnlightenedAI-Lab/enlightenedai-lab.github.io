@@ -14,7 +14,7 @@
   <script type="application/json" id="theory-manifest">
   {
       "doc_id": "EAIRL-THEORY-001",
-      "version": "RAA-2.0",
+      "version": "RAA-3.0",
       "status": "PUBLISHED"
   }
   </script>
@@ -22,6 +22,7 @@
   <style>
     /* --- THEME VARIABLES --- */
     :root {
+      /* LIGHT MODE DEFAULTS */
       --bg-color: #ffffff;
       --sidebar-bg: #f8f9fa;
       --text-main: #050505;
@@ -31,21 +32,30 @@
       --font-stack: "Inter", sans-serif;
       --font-mono: "JetBrains Mono", monospace;
       --accent-blue: #0044cc;
-      --lightbox-bg: rgba(255, 255, 255, 0.95);
+      --lightbox-bg: rgba(255, 255, 255, 0.98);
       --figure-bg: transparent;
       --figure-border: transparent;
+      
+      /* FORCE INVERT IN LIGHT MODE */
+      --img-filter: invert(1) hue-rotate(180deg); 
+      --img-border: 1px solid #e5e5e5;
     }
 
     body[data-theme="dark"] {
+      /* DARK MODE OVERRIDES */
       --bg-color: #0a0a0a;
       --sidebar-bg: #0a0a0a;
       --text-main: #f0f0f0;
       --text-muted: #888888;
       --border-color: #333333;
       --accent-blue: #66aaff;
-      --lightbox-bg: rgba(0, 0, 0, 0.95);
+      --lightbox-bg: rgba(0, 0, 0, 0.98);
       --figure-bg: #111;
       --figure-border: #333;
+      
+      /* NO INVERT IN DARK MODE (Keep original) */
+      --img-filter: none;
+      --img-border: 1px solid #333;
     }
 
     /* --- GLOBAL STYLES --- */
@@ -145,25 +155,18 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
     
-    /* --- SMART IMAGE INVERSION (THE FIX) --- */
+    /* --- SMART IMAGE INVERSION (ROBUST METHOD) --- */
+    /* We use CSS variables defined in :root to force the update */
     .diagram-img {
         width: 100%;
         height: auto;
         display: block;
         border-radius: 2px;
         transition: filter 0.3s ease, border-color 0.3s ease;
-    }
-
-    /* In LIGHT mode: Invert ALL diagram images to make background white */
-    body[data-theme="light"] .diagram-img {
-        filter: invert(1) hue-rotate(180deg);
-        border: 1px solid #e5e5e5;
-    }
-
-    /* In DARK mode: Keep original dark images */
-    body[data-theme="dark"] .diagram-img {
-        filter: none;
-        border: 1px solid #333;
+        
+        /* THE MAGIC: Uses the variable that flips based on theme */
+        filter: var(--img-filter);
+        border: var(--img-border);
     }
 
     .diagram-caption {
@@ -221,17 +224,11 @@
         max-width: 90%; max-height: 90%;
         box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         transition: filter 0.3s ease;
+        
+        /* Ensure lightbox image also respects the variable */
+        filter: var(--img-filter);
+        border: var(--img-border);
     }
-    /* Ensure Lightbox also inverts in light mode */
-    body[data-theme="light"] #lightbox-img {
-        filter: invert(1) hue-rotate(180deg);
-        border: 1px solid #e5e5e5;
-    }
-    body[data-theme="dark"] #lightbox-img {
-        filter: none;
-        border: 1px solid #333;
-    }
-
 
     #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
     .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; background: rgba(255,255,255,0.98); border-bottom: 1px solid var(--border-color); padding: 0 1.25rem; height: 50px; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); }
@@ -287,6 +284,10 @@
 
       <div class="theme-switch" onclick="toggleTheme()">
         [ LIGHT / DARK ] <span id="theme-icon">◐</span>
+      </div>
+      
+      <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:var(--text-muted); opacity:0.5;">
+          [ v3.0 ]
       </div>
     </aside>
 
