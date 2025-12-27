@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -198,6 +197,8 @@
       border-radius:12px;
       padding:18px 18px 16px 18px;
       box-shadow:var(--cardShadow);
+      display:flex;
+      flex-direction:column;
     }
     .meta{
       display:flex;
@@ -234,11 +235,13 @@
       color:var(--muted);
       font-size:.92rem;
       line-height:1.55;
+      flex-grow:1;
     }
     .links{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      margin-top:auto;
     }
     .btn{
       display:inline-flex;
@@ -376,7 +379,6 @@
       <h1>Publications</h1>
       <div class="subtitle">All public artifacts (PDFs, preprints, timestamps, and links) in one place.</div>
 
-      <!-- TOOLBAR -->
       <div class="toolbar">
         <input id="search" class="search" type="text" placeholder="Search titles, keywords, venues..." />
         <select id="filterType" class="select">
@@ -393,27 +395,25 @@
           <option value="ssrn">SSRN</option>
           <option value="arxiv">arXiv</option>
           <option value="eaforum">EA Forum</option>
+          <option value="medium">Medium</option>
           <option value="github">GitHub</option>
           <option value="huggingface">Hugging Face</option>
           <option value="pdf">PDF</option>
         </select>
       </div>
 
-      <!-- FEATURED -->
       <div class="section-head">
         <h2>Featured</h2>
         <div class="hint">High-signal entry points for reviewers</div>
       </div>
       <div id="gridFeatured" class="grid"></div>
 
-      <!-- ALL -->
       <div class="section-head">
         <h2>All Public Artifacts</h2>
         <div class="hint">Chronological + searchable</div>
       </div>
       <div id="gridAll" class="grid"></div>
 
-      <!-- OPTIONAL: add a short “How to cite” block -->
       <div class="section-head">
         <h2>Citation</h2>
         <div class="hint">Stable IDs for referencing</div>
@@ -429,10 +429,9 @@
 
   <div id="footer-mount"></div>
 
-  <!-- DATA (EDIT THIS LIST ONLY) -->
   <script type="application/json" id="pub-manifest">
   {
-    "featured_ids": ["rai-core-raa-rdl", "little-book", "zenodo-raa-rdl"],
+    "featured_ids": ["rai-core-raa-rdl", "little-book", "zenodo-raa-rdl", "eaforum-raa-overview"],
     "items": [
       {
         "id": "little-book",
@@ -440,10 +439,10 @@
         "venue": "pdf",
         "date": "2026-01",
         "title": "The Little Book of AI Alignment",
-        "desc": "Compact primer and public-facing entry point.",
+        "desc": "Compact primer and public-facing entry point (v1.0).",
         "tags": ["overview", "alignment", "primer"],
         "links": [
-          { "label": "Download PDF", "url": "REPLACE_WITH_PDF_URL", "style": "primary" }
+          { "label": "Download PDF", "url": "https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171", "style": "primary" }
         ]
       },
       {
@@ -455,8 +454,8 @@
         "desc": "Core framework paper describing reflective stability and the RDL measurement layer.",
         "tags": ["RAA", "RDL", "stability"],
         "links": [
-          { "label": "Read PDF", "url": "REPLACE_WITH_CORE_PDF_URL", "style": "primary" },
-          { "label": "GitHub", "url": "REPLACE_WITH_GITHUB_URL", "style": "default" }
+          { "label": "Read PDF", "url": "https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing", "style": "primary" },
+          { "label": "GitHub", "url": "https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/", "style": "default" }
         ]
       },
       {
@@ -464,12 +463,35 @@
         "type": "timestamp",
         "venue": "zenodo",
         "date": "2026-01",
-        "title": "Zenodo Timestamp — RAA/RDL Release",
-        "desc": "Immutable timestamp for public verification (DOI).",
+        "title": "Zenodo Record — RAA Core Framework",
+        "desc": "Immutable timestamp for public verification. DOI: 10.5281/zenodo.17665613",
         "tags": ["timestamp", "doi", "verification"],
         "links": [
-          { "label": "Zenodo Record", "url": "REPLACE_WITH_ZENODO_RECORD_URL", "style": "primary" },
-          { "label": "DOI", "url": "REPLACE_WITH_DOI_URL", "style": "default" }
+          { "label": "Zenodo Record", "url": "https://zenodo.org/records/17665613", "style": "primary" }
+        ]
+      },
+      {
+        "id": "zenodo-rdl-extension",
+        "type": "timestamp",
+        "venue": "zenodo",
+        "date": "2026-01",
+        "title": "Zenodo Record — RDL Extension",
+        "desc": "Measurement layer extension timestamp. DOI: 10.5281/zenodo.17664094",
+        "tags": ["timestamp", "doi", "rdl"],
+        "links": [
+          { "label": "Zenodo Record", "url": "https://zenodo.org/records/17664094", "style": "primary" }
+        ]
+      },
+      {
+        "id": "zenodo-failure-signatures",
+        "type": "timestamp",
+        "venue": "zenodo",
+        "date": "2026-01",
+        "title": "Zenodo Record — Failure Signatures",
+        "desc": "Alignment failure modes dataset timestamp. DOI: 10.5281/zenodo.17575613",
+        "tags": ["timestamp", "doi", "data"],
+        "links": [
+          { "label": "Zenodo Record", "url": "https://zenodo.org/records/17575613", "style": "primary" }
         ]
       },
       {
@@ -481,7 +503,7 @@
         "desc": "SSRN preprint applying the 5R framework to education contexts.",
         "tags": ["5R", "education", "SSRN"],
         "links": [
-          { "label": "SSRN", "url": "REPLACE_WITH_SSRN_URL", "style": "primary" }
+          { "label": "Read on SSRN", "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708262", "style": "primary" }
         ]
       },
       {
@@ -493,7 +515,7 @@
         "desc": "SSRN preprint on care as stabilizing parameter for moral coherence.",
         "tags": ["care", "stability", "SSRN"],
         "links": [
-          { "label": "SSRN", "url": "REPLACE_WITH_SSRN_URL_2", "style": "primary" }
+          { "label": "Read on SSRN", "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708265", "style": "primary" }
         ]
       },
       {
@@ -505,7 +527,7 @@
         "desc": "Canonical public repository for code, artifacts, and record integrity.",
         "tags": ["repo", "code", "record"],
         "links": [
-          { "label": "Open GitHub", "url": "REPLACE_WITH_GITHUB_URL", "style": "primary" }
+          { "label": "Open GitHub", "url": "https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/", "style": "primary" }
         ]
       },
       {
@@ -514,10 +536,10 @@
         "venue": "huggingface",
         "date": "2026-01",
         "title": "Hugging Face Model Card",
-        "desc": "Model card / dataset card entry point (if applicable).",
+        "desc": "Model card and dataset entry point.",
         "tags": ["huggingface", "card"],
         "links": [
-          { "label": "Open Hugging Face", "url": "REPLACE_WITH_HF_URL", "style": "primary" }
+          { "label": "Open Hugging Face", "url": "https://huggingface.co/EnlightenedAI-Lab/RAA-Reflective-Alignment-Architecture", "style": "primary" }
         ]
       },
       {
@@ -529,7 +551,31 @@
         "desc": "Public post summarizing the framework and positioning.",
         "tags": ["EA Forum", "overview"],
         "links": [
-          { "label": "Read Post", "url": "REPLACE_WITH_EAFORUM_URL", "style": "primary" }
+          { "label": "Read Post", "url": "https://forum.effectivealtruism.org/posts/mek7nYqrYdJqwgrjs/reflective-alignment-architecture-raa-a-framework-for-moral?utm_campaign=post_share&utm_source=link", "style": "primary" }
+        ]
+      },
+      {
+        "id": "medium-shaping-ai",
+        "type": "post",
+        "venue": "medium",
+        "date": "2026-01",
+        "title": "Shaping AI with Care",
+        "desc": "A Covenant for Ethical Coevolution.",
+        "tags": ["medium", "ethics"],
+        "links": [
+          { "label": "Read on Medium", "url": "https://medium.com/@nicolas_91820/shaping-ai-with-care-a-covenant-for-ethical-coevolution-c7f7d9d73543", "style": "primary" }
+        ]
+      },
+      {
+        "id": "medium-living-code",
+        "type": "post",
+        "venue": "medium",
+        "date": "2026-01",
+        "title": "The Living Code",
+        "desc": "Perspectives on AI development.",
+        "tags": ["medium", "reflection"],
+        "links": [
+          { "label": "Read on Medium", "url": "https://medium.com/@nicolas_91820/shaping-ai-with-care-a-covenant-for-ethical-coevolution-c7f7d9d73543", "style": "primary" }
         ]
       }
     ]
