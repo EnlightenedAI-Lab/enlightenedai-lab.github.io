@@ -134,15 +134,15 @@
         border: 1px solid var(--figure-border);
     }
 
-    /* TYPE A: DARK NATIVE (Fig 1, 2, 4) -> Invert in Light Mode */
+    /* TYPE A: DARK NATIVE (Black Source -> Invert in Light) */
     body[data-theme="light"] .dark-native { filter: invert(1) hue-rotate(180deg); }
     body[data-theme="dark"] .dark-native { filter: none; border-color: #333; }
 
-    /* TYPE B: LIGHT NATIVE (Fig 3) -> Do NOT invert in Light, Invert in Dark */
+    /* TYPE B: LIGHT NATIVE (White Source -> Invert in Dark) */
     body[data-theme="light"] .light-native { filter: none; }
     body[data-theme="dark"] .light-native { filter: invert(1) hue-rotate(180deg); border-color: #333; }
 
-    /* TYPE C: RAW COLOR (Fig 5 Heatmap) -> Never invert colors */
+    /* TYPE C: RAW COLOR (Heatmaps -> Never Invert) */
     body[data-theme="light"] .raw-color { filter: none; }
     body[data-theme="dark"] .raw-color { filter: none; border-color: #333; opacity: 0.9; }
 
@@ -241,7 +241,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v4.0 - GRANULAR FIX ]
+          [ v4.1 - CORRECT CLASS MAP ]
       </div>
     </aside>
 
@@ -304,8 +304,8 @@
                     </div>
                 </div>
             </div>
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png', 'dark-native')">
-                <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img dark-native" onerror="this.style.display='none'">
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png', 'light-native')">
+                <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img light-native" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 02: RAA Force Map (R1-R5)</div>
             </div>
         </div>
@@ -372,8 +372,8 @@ def evaluate_stability(input):
                     </div>
                 </div>
             </div>
-            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png', 'dark-native')">
-                <img src="assets/img/theory/fig4.png" alt="Core Metrics" class="diagram-img dark-native" onerror="this.style.display='none'">
+            <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig4.png', 'light-native')">
+                <img src="assets/img/theory/fig4.png" alt="Core Metrics" class="diagram-img light-native" onerror="this.style.display='none'">
                 <div class="diagram-caption">Fig. 04: Metric Triad</div>
             </div>
         </div>
@@ -404,17 +404,17 @@ def evaluate_stability(input):
   <div id="footer-mount"></div>
 
   <script>
-    // UPDATED LIGHTBOX LOGIC FOR GRANULAR CONTROL
+    // UPDATED LIGHTBOX LOGIC
     function openLightbox(src, type) {
         const modal = document.getElementById('lightbox-modal');
         const img = document.getElementById('lightbox-img');
         if (!src) return;
         img.src = src;
         
-        // Reset all specific classes
+        // Reset classes
         img.classList.remove('dark-native', 'light-native', 'raw-color');
         
-        // Add the specific class for this image
+        // Add specific class
         if (type) img.classList.add(type);
         
         modal.style.display = 'flex';
