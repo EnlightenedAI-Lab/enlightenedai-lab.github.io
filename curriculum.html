@@ -8,48 +8,101 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: #0a0a0a; --sidebar-bg: #000; --text: #f0f0f0; --accent: #00ff00; --border: #222; --sidebar-w: 400px; }
-    body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
-    aside { width: var(--sidebar-w); border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--sidebar-bg); flex-shrink: 0; }
-    .sidebar-header { padding: 1.5rem; border-bottom: 1px solid var(--border); }
-    .sidebar-header h1 { font-size: 0.85rem; font-family: 'JetBrains Mono'; color: var(--accent); margin: 0; text-transform: uppercase; letter-spacing: 0.1em; }
-    .duration { font-size: 0.65rem; color: #666; margin-top: 8px; font-family: 'JetBrains Mono'; }
-    .video-list { flex: 1; overflow-y: auto; padding: 0; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
-    .level-heading { padding: 20px 20px 5px 20px; font-size: 0.65rem; font-weight: 800; color: #444; text-transform: uppercase; letter-spacing: 0.1em; font-family: 'JetBrains Mono'; border-top: 1px solid #111; }
-    .video-item { padding: 12px 20px; border-bottom: 1px solid #111; cursor: pointer; display: flex; gap: 15px; align-items: flex-start; transition: 0.2s; }
-    .video-item:hover { background: #080808; }
-    .video-item.active { background: #111; border-left: 3px solid var(--accent); }
-    .v-num { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: var(--accent); opacity: 0.6; min-width: 35px; }
-    .v-title { font-size: 0.75rem; font-weight: 500; color: #ccc; line-height: 1.4; }
-    .video-item.active .v-title { color: #fff; }
-    main { flex: 1; display: flex; flex-direction: column; background: #050505; position: relative; }
+    /* --- READER PROFILES --- */
+    :root {
+      --bg: #0a0a0a;
+      --sidebar-bg: #000;
+      --text: #f0f0f0;
+      --text-muted: #888;
+      --accent: #00ff00;
+      --border: #222;
+      --sidebar-w: 420px;
+      --item-hover: #0d0d0d;
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f5f5;
+      --sidebar-bg: #ffffff;
+      --text: #111111;
+      --text-muted: #555;
+      --accent: #008800;
+      --border: #ddd;
+      --item-hover: #f0f0f0;
+    }
+
+    body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s, color 0.3s; }
+    
+    /* SYLLABUS SIDEBAR */
+    aside { width: var(--sidebar-w); border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--sidebar-bg); flex-shrink: 0; transition: background 0.3s; }
+    .sidebar-header { padding: 1.5rem; border-bottom: 2px solid var(--accent); }
+    .sidebar-header h1 { font-size: 0.9rem; font-family: 'JetBrains Mono'; color: var(--accent); margin: 0; text-transform: uppercase; letter-spacing: 0.15em; }
+    
+    .profile-toggle { margin-top: 15px; display: flex; gap: 10px; }
+    .profile-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: 'JetBrains Mono'; font-size: 0.6rem; padding: 4px 8px; cursor: pointer; border-radius: 3px; }
+    .profile-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .video-list { flex: 1; overflow-y: auto; padding: 0; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+    
+    /* HIGH VISIBILITY LEVEL HEADERS */
+    .level-heading { 
+      padding: 25px 20px 10px 20px; 
+      font-size: 0.75rem; 
+      font-weight: 800; 
+      color: var(--accent); 
+      background: var(--sidebar-bg);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      text-transform: uppercase; 
+      letter-spacing: 0.2em; 
+      font-family: 'JetBrains Mono'; 
+      border-bottom: 1px solid var(--border);
+    }
+
+    .video-item { padding: 14px 20px; border-bottom: 1px solid var(--border); cursor: pointer; display: flex; gap: 15px; align-items: flex-start; transition: 0.2s; }
+    .video-item:hover { background: var(--item-hover); }
+    .video-item.active { background: var(--item-hover); border-left: 4px solid var(--accent); }
+    
+    .v-num { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--accent); font-weight: 700; min-width: 40px; }
+    .v-title { font-size: 0.85rem; font-weight: 500; color: var(--text); line-height: 1.4; }
+
+    /* THEATRE AREA */
+    main { flex: 1; display: flex; flex-direction: column; background: var(--bg); position: relative; }
     .player-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; }
-    .video-wrapper { width: 100%; max-width: 1100px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); box-shadow: 0 0 50px rgba(0,255,0,0.05); }
+    .video-wrapper { width: 100%; max-width: 1100px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); box-shadow: 0 10px 50px rgba(0,0,0,0.5); }
     iframe { width: 100%; height: 100%; border: none; }
-    .lecture-bar { padding: 1.5rem 3rem; background: #000; border-top: 1px solid var(--border); }
+
+    .lecture-bar { padding: 1.5rem 3rem; background: var(--sidebar-bg); border-top: 1px solid var(--border); }
+    .v-id-tag { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: var(--accent); margin-bottom: 5px; }
+    .lecture-bar h2 { margin: 0; font-size: 1.2rem; font-weight: 800; }
   </style>
 </head>
-<body>
+<body data-theme="dark">
+
   <aside>
     <div class="sidebar-header">
       <h1>Inside Alignment</h1>
-      <div class="duration">TOTAL DURATION: ~24 MIN // 57 MODULES</div>
+      <div class="profile-toggle">
+        <button class="profile-btn" onclick="setTheme('dark')">DARK_CORE</button>
+        <button class="profile-btn" onclick="setTheme('light')">LIGHT_READER</button>
+      </div>
     </div>
     <div class="video-list" id="syllabus"></div>
   </aside>
+
   <main>
     <div class="player-container">
       <div class="video-wrapper" id="player"></div>
     </div>
     <div class="lecture-bar">
-        <div id="active-tag" style="font-family:'JetBrains Mono'; font-size:0.65rem; color:var(--accent); margin-bottom:5px;">MODULE 0.1</div>
-        <h2 id="active-title" style="margin:0; font-size:1.1rem; color:#fff;">Initialising Interface...</h2>
+        <div id="active-tag" class="v-id-tag">MODULE 0.1</div>
+        <h2 id="active-title">Initialising...</h2>
     </div>
   </main>
+
   <script>
     const playlistID = "PL0TbB-9Inn_UAIRt19B9DYhAOlnMb_Cmh";
     
-    // VERIFIED DATA FOR ALL 57 MODULES
     const namedModules = {
       1: { lvl: 0, num: "0.1", title: "What Intelligence Really Is" },
       2: { lvl: 0, num: "0.2", title: "Why Minds Drift" },
@@ -57,8 +110,8 @@
       4: { lvl: 0, num: "0.4", title: "Intelligence vs Behavior" },
       5: { lvl: 0, num: "0.5", title: "Why This Matters for AI" },
       6: { lvl: 1, num: "1.1", title: "Alignment Is Not Obedience" },
-      7: { lvl: 1, num: "1.2", title: "Output Filters Can Make Behavior Look Safe" },
-      8: { lvl: 1, num: "1.3", title: "The Difference Between 'Safe Answers' and Stable Thinking" },
+      7: { lvl: 1, num: "1.2", title: "Output Filters & False Safety" },
+      8: { lvl: 1, num: "1.3", title: "Safe Answers vs Stable Thinking" },
       9: { lvl: 1, num: "1.4", title: "Why Filters + Rules Cannot Give Stability" },
       10: { lvl: 1, num: "1.5", title: "Real Examples of Model Instability" },
       11: { lvl: 2, num: "2.1", title: "AI as a Moving System" },
@@ -77,46 +130,47 @@
       24: { lvl: 4, num: "4.4", title: "R1 — Regulation" },
       25: { lvl: 4, num: "4.5", title: "R2 — Reflection" },
       26: { lvl: 4, num: "4.6", title: "R3 — Reasoning" },
-      27: { lvl: 4, num: "4.7", title: "The Force That Keeps the System Aware" },
-      28: { lvl: 4, num: "4.8", title: "The Force That Keeps Long-Term Values Stable" },
-      29: { lvl: 4, num: "4.9", title: "Stability Comes From the Five Forces Together" },
-      30: { lvl: 4, num: "4.10", title: "RAA in One Sentence" },
+      27: { lvl: 4, num: "4.7", title: "R4 — Relationships" },
+      28: { lvl: 4, num: "4.8", title: "R5 — Resilience" },
+      29: { lvl: 4, num: "4.9", title: "Systemic Stability via 5R" },
+      30: { lvl: 4, num: "4.10", title: "RAA Executive Summary" },
       31: { lvl: 5, num: "5.1", title: "Why RDL Exists" },
       32: { lvl: 5, num: "5.2", title: "The Two Trajectories" },
       33: { lvl: 5, num: "5.3", title: "The Forward Role (F)" },
-      34: { lvl: 5, num: "5.4", title: "The System’s Self-Correction Path" },
-      35: { lvl: 5, num: "5.5", title: "How Reflection Stabilizes Reasoning" },
-      36: { lvl: 5, num: "5.6", title: "The Early Warning Patterns" },
+      34: { lvl: 5, num: "5.4", title: "The Self-Correction Path" },
+      35: { lvl: 5, num: "5.5", title: "Stability via Reflection" },
+      36: { lvl: 5, num: "5.6", title: "Early Warning Patterns" },
       37: { lvl: 5, num: "5.7", title: "Collapse Signatures" },
       38: { lvl: 5, num: "5.8", title: "Reflective Stability (Ψ)" },
-      39: { lvl: 5, num: "5.9", title: "Reflection and Movement Toward Stability" },
+      39: { lvl: 5, num: "5.9", title: "Reflection Gradients" },
       40: { lvl: 5, num: "5.10", title: "Moral Coherence Index (MCI★)" },
       41: { lvl: 6, num: "6.1", title: "Why Prediction Matters" },
       42: { lvl: 6, num: "6.2", title: "The Shape of Early Drift" },
-      43: { lvl: 6, num: "6.3", title: "The Early Warning Signals" },
+      43: { lvl: 6, num: "6.3", title: "Early Warning Signals" },
       44: { lvl: 6, num: "6.4", title: "The Correction Loop" },
       45: { lvl: 6, num: "6.5", title: "When Correction Fails" },
       46: { lvl: 7, num: "7.1", title: "Behavior vs Dynamics" },
       47: { lvl: 7, num: "7.2", title: "The Stability Window" },
       48: { lvl: 7, num: "7.3", title: "Reading the Stability Curve" },
       49: { lvl: 7, num: "7.4", title: "The Threshold of Collapse" },
-      50: { lvl: 7, num: "7.5", title: "When Stability Becomes Predictable" },
-      51: { lvl: 8, num: "8.1", title: "Why Current Methods Are Not Enough" },
+      50: { lvl: 7, num: "7.5", title: "Predictable Stability" },
+      51: { lvl: 8, num: "8.1", title: "Why Current Methods Fail" },
       52: { lvl: 8, num: "8.2", title: "How RAA + RDL Work Together" },
-      53: { lvl: 8, num: "8.3", title: "The Mindset Shift the Field Hasn’t Made" },
-      54: { lvl: 8, num: "8.4", title: "The Blind Spot Around Internal Dynamics" },
-      55: { lvl: 8, num: "8.5", title: "Alignment as a Science, Not a Guess" },
-      56: { lvl: 9, num: "9.1", title: "What an Aligned Intelligence Feels Like" },
-      57: { lvl: 9, num: "9.2", title: "The Intelligence We Choose to Build" }
+      53: { lvl: 8, num: "8.3", title: "The Mindset Shift" },
+      54: { lvl: 8, num: "8.4", title: "Internal Dynamics Blind Spots" },
+      55: { lvl: 8, num: "8.5", title: "Alignment as a Science" },
+      56: { lvl: 9, num: "9.1", title: "Aligned Intelligence Vision" },
+      57: { lvl: 9, num: "9.2", title: "Building the Chosen Future" }
     };
 
-    const levelNames = ["Foundations", "What Is Alignment?", "Internal Dynamics", "Why We Need a Framework", "The 5R Framework", "RDL Logic", "RDL Prediction", "Measurability", "Implications Today", "The Vision"];
+    const levelNames = ["Foundations", "What Is Alignment?", "Internal Dynamics", "Framework Needs", "The 5R Framework", "RDL Logic", "RDL Prediction", "Measurability", "Implications Today", "The Vision"];
+
+    function setTheme(theme) { document.body.setAttribute('data-theme', theme); }
 
     function loadVideo(index) {
         const moduleNum = index + 1;
         const v = namedModules[moduleNum];
-        const p = document.getElementById('player');
-        p.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=${playlistID}&index=${moduleNum}&autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        document.getElementById('player').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=${playlistID}&index=${moduleNum}&autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         document.getElementById('active-tag').innerText = "MODULE " + v.num;
         document.getElementById('active-title').innerText = v.title;
         document.querySelectorAll('.video-item').forEach((el, i) => { el.classList.toggle('active', i === index); });
