@@ -48,6 +48,7 @@
             --lightbox-bg: rgba(255, 255, 255, 0.98);
             --figure-bg: transparent;
             --figure-border: #e5e5e5;
+            --accent-primary: #0044cc;
         }
 
         /* --- DARK MODE OVERRIDES --- */
@@ -64,6 +65,7 @@
             --lightbox-bg: rgba(0, 0, 0, 0.98);
             --figure-bg: #111;
             --figure-border: #333;
+            --accent-primary: #66aaff;
         }
         body[data-theme="dark"] aside { background-color: #0a0a0a; border-right-color: #333; }
         body[data-theme="dark"] .mobile-bar { background: rgba(10,10,10,0.95); border-bottom-color: #333; }
@@ -72,7 +74,6 @@
         body[data-theme="dark"] nav a.active { color: #fff; border-left-color: #fff; background: linear-gradient(90deg, #151515, #0a0a0a); }
         body[data-theme="dark"] nav a:hover { color: #fff; }
         body[data-theme="dark"] .toggle-btn:hover, body[data-theme="dark"] .toggle-btn.active { color: #fff; }
-        body[data-theme="dark"] .claim-box { background: #111; border-color: #333; }
         body[data-theme="dark"] .logic-block { background: #111; border-color: #333; color: #ccc; }
         body[data-theme="dark"] p { color: #ccc; }
         body[data-theme="dark"] h1, body[data-theme="dark"] h2 { color: #fff; }
@@ -109,7 +110,6 @@
         }
 
         .integrity-seal { 
-            /* REVISED: Removed margin-left: auto for left alignment */
             display: flex; align-items: center; gap: 8px; 
             font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
             border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
@@ -163,29 +163,31 @@
         /* --- MAIN CONTENT --- */
         main { flex-grow: 1; padding: 3rem 4rem; max-width: 1200px; width: 100%; }
         
-        /* HEADERS (REVISED for v33.1) */
+        /* HEADERS (REVISED v34.0 for Lexicon Style) */
         .reader-header { 
-            /* REVISED Layout */
+            border-bottom: 1px solid var(--border-color); 
+            padding-bottom: 1.5rem; 
+            margin-bottom: 2.5rem;
+        }
+        .header-top-row {
             display: flex; 
             align-items: center; 
             gap: 3rem; 
-            padding-bottom: 1rem; 
-            border-bottom: 1px solid var(--border-color); 
-            margin-bottom: 2rem; /* Tightened spacing */
+            margin-bottom: 1rem;
+            font-family: var(--font-mono); 
         }
-        .reader-meta { 
-            /* REVISED Layout */
-            display: flex; 
-            flex-direction: column; 
-            gap: 2px;
+        .meta-item { display: flex; flex-direction: column; gap: 4px; }
+        .label { font-size: 0.6rem; letter-spacing: 0.05em; color: #999; text-transform: uppercase; }
+        .val { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+        
+        .orienting-sentence {
             font-family: var(--font-mono); 
             font-size: 0.7rem; 
             color: var(--text-muted); 
-            margin-bottom: 0; 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em;
+            opacity: 0.9;
         }
-        /* New helpers for header items */
-        .label { font-size: 0.6rem; letter-spacing: 0.05em; color: #999; }
-        .val { font-size: 0.8rem; font-weight: 500; color: var(--text-main); }
 
         /* AUDIT HEADER (Replaces Reader Header in Audit Mode) */
         .audit-header { display: none; width: 100%; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 3rem; }
@@ -286,12 +288,13 @@
         .diagram-img { width: 100%; height: auto; display: block; border-radius: 2px; transition: filter 0.3s ease; border: 1px solid var(--figure-border); }
         .diagram-caption { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 8px; text-align: left; line-height: 1.3; }
 
-        .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .force-card { border: 1px solid var(--border-color); padding: 1.25rem; background: #fff; }
+        /* UPDATED THEORY GRID FOR EQUAL HEIGHT CARDS */
+        .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem; }
+        .force-card { border: 1px solid var(--border-color); padding: 1.25rem; background: #fff; display: flex; flex-direction: column; height: 100%; }
         body[data-theme="dark"] .force-card { background: #0f0f0f; }
         .force-id { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-primary); font-weight: 700; display:block; margin-bottom: 0.5rem; }
         .force-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; }
-        .force-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+        .force-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; flex-grow: 1; }
 
         .metric-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1rem; }
         .metric-box { border: 1px solid var(--border-color); padding: 1.5rem; text-align: center; background: #fff; }
@@ -329,7 +332,7 @@
             section { margin-bottom: 4rem; grid-template-columns: 1fr !important; }
             .section-grid { grid-template-columns: 1fr; gap: 2rem; }
             .diagram-thumbnail { width: 100%; max-width: 350px; margin: 0 auto; }
-            .reader-header, .audit-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .header-top-row, .audit-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
             .integrity-seal { margin-left: 0; }
             #mode-banner { top: 60px; right: 20px; z-index: 900; }
         }
@@ -384,14 +387,21 @@
 
         <main>
             <div class="reader-header">
-                <div class="reader-meta">
-                    <div><span class="label">DOC_ID</span> <span class="val">EAIRL-THEORY-001</span></div>
-                    <div><span class="label">CLASSIFICATION</span> <span class="val">PUBLIC</span></div>
+                <div class="header-top-row">
+                    <div class="meta-item">
+                        <span class="label">DOC_ID</span>
+                        <span class="val">EAIRL-THEORY-001</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">CLASSIFICATION</span>
+                        <span class="val">PUBLIC</span>
+                    </div>
+                    <div class="integrity-seal">
+                        <span class="status-dot"></span>
+                        <span style="font-family:var(--font-mono); font-size:0.7rem; color:#005500;">INTEGRITY: VERIFIED</span>
+                    </div>
                 </div>
-                <div class="integrity-seal">
-                    <span class="status-dot"></span>
-                    <span style="font-family:var(--font-mono); font-size:0.7rem; color:#005500;">INTEGRITY: VERIFIED</span>
-                </div>
+                <div class="orienting-sentence">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW ALIGNMENT IS EVALUATED AS A SYSTEM PROPERTY.</div>
             </div>
 
             <section class="audit-header" aria-label="Audit Header">
@@ -481,6 +491,7 @@ if (evaluation == "output_only") {
                                 <span class="audit-marker">[REF-01]</span>
                                 Every <del>ethical</del> <ins>morally meaningful</ins> decision arises from the interaction of five internal forces. Alignment <del>is a state</del> <ins>emerges only</ins> when these forces remain in stable interaction.
                             </p>
+                            
                             <div class="theory-grid">
                                 <div class="force-card">
                                     <span class="force-id">R1</span>
@@ -496,6 +507,16 @@ if (evaluation == "output_only") {
                                     <span class="force-id">R3</span>
                                     <div class="force-title">Reasoning</div>
                                     <div class="force-desc">The engine of coherent thought. Logical consistency and evidence integration.</div>
+                                </div>
+                                <div class="force-card">
+                                    <span class="force-id">R4</span>
+                                    <div class="force-title">Reciprocity</div>
+                                    <div class="force-desc">Modeling others. Perspective-taking, rights recognition, and understanding impact.</div>
+                                </div>
+                                <div class="force-card">
+                                    <span class="force-id">R5</span>
+                                    <div class="force-title">Resonance</div>
+                                    <div class="force-desc">Long-horizon stability. Maintaining a stable moral identity across context and time.</div>
                                 </div>
                             </div>
                             
@@ -514,19 +535,6 @@ function check_alignment(state) {
                             <img src="assets/img/theory/fig2.png" alt="RAA Force Map" class="diagram-img" onerror="this.style.display='none'">
                             <div class="diagram-caption">FIG. 02: RAA FORCE MAP (R1-R5)</div>
                             <div class="fig-src">SRC: assets/img/theory/fig2.png</div>
-                        </div>
-                    </div>
-
-                    <div class="theory-grid">
-                        <div class="force-card">
-                            <span class="force-id">R4</span>
-                            <div class="force-title">Reciprocity</div>
-                            <div class="force-desc">Modeling others. Perspective-taking, rights recognition, and understanding impact.</div>
-                        </div>
-                        <div class="force-card">
-                            <span class="force-id">R5</span>
-                            <div class="force-title">Resonance</div>
-                            <div class="force-desc">Long-horizon stability. Maintaining a stable moral identity across context and time.</div>
                         </div>
                     </div>
                 </section>
