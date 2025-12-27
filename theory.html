@@ -31,7 +31,7 @@
       --figure-bg: transparent;
       --figure-border: #e5e5e5;
       
-      /* NEW VARS FOR HEADER */
+      /* GOVERNANCE BADGE COLORS */
       --signal-enforced: #00cc00;
       --status-verified: var(--signal-enforced);
     }
@@ -76,17 +76,18 @@
     }
     body[data-theme="dark"] aside { border-right-color: #333; }
 
-    /* SCRAMBLE EFFECT */
+    /* SCRAMBLE TEXT STYLE */
     .scramble {
       font-family: var(--font-mono);
       cursor: crosshair;
     }
 
+    /* BRAND BLOCK */
     .brand { margin-bottom: 3rem; }
     .brand div { font-weight: 800; font-size: 0.85rem; line-height: 1.0; color: var(--text-main); letter-spacing: -0.02em; }
     .brand span { display:block; margin-top: 6px; font-weight: 500; font-size: 0.65rem; letter-spacing: 0.05em; color: var(--text-muted); }
 
-    /* READER MODE SELECTOR */
+    /* READER MODE SELECTOR (NEW) */
     .mode-selector {
       margin-bottom: 3rem;
       font-family: var(--font-mono);
@@ -126,7 +127,7 @@
       flex-grow: 1; padding: 0; max-width: 1200px; width: 100%; min-width: 0;
     }
 
-    /* --- NEW HEADER STRIP (Data Page Style) --- */
+    /* --- HEADER STRIP (INTEGRITY BADGE) --- */
     .global-header-strip {
         width: 100%;
         padding: 3rem 4rem 2rem 4rem;
@@ -144,7 +145,7 @@
         padding-left: 12px; max-width: 900px; line-height: 1.4;
     }
     
-    /* GREEN PULSING BADGE */
+    /* GREEN PULSING BADGE ANIMATION */
     @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
     @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0,204,0,0.7); } 100% { box-shadow: 0 0 0 10px rgba(0,204,0,0); } }
 
@@ -165,7 +166,7 @@
         animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1);
     }
 
-    /* CONTENT PADDING (Below header) */
+    /* CONTENT PADDING (Matches v13) */
     .content-area { padding: 0 4rem 4rem 4rem; }
 
     h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin: 0 0 0.5rem 0; text-transform: uppercase; }
@@ -201,12 +202,14 @@
         border: 1px solid var(--figure-border);
     }
 
-    /* IMAGE LOGIC (Preserved from v12) */
+    /* IMAGE LOGIC (Preserved from v12/v15 - Verified) */
+    /* Black Sources (1 & 5) -> Invert in Light */
     body[data-theme="light"] img[src*="fig1"], 
     body[data-theme="light"] img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
     body[data-theme="dark"] img[src*="fig1"], 
     body[data-theme="dark"] img[src*="fig5"] { filter: none !important; border-color: #333; }
 
+    /* White Sources (2, 3, 4) -> Do Not Invert in Light */
     body[data-theme="light"] img[src*="fig2"], 
     body[data-theme="light"] img[src*="fig3"],
     body[data-theme="light"] img[src*="fig4"] { filter: none !important; }
