@@ -26,13 +26,13 @@
       --sidebar-width: 280px;
       --font-stack: "Inter", sans-serif;
       --font-mono: "JetBrains Mono", monospace;
-      --accent-blue: #0044cc;
+      --accent-primary: #0044cc; /* Blue by default */
+      --audit-color: #ff4400;    /* Orange for Audit Mode */
       --lightbox-bg: rgba(255, 255, 255, 0.98);
       --figure-bg: transparent;
       --figure-border: #e5e5e5;
       
-      --signal-enforced: #00cc00;
-      --status-verified: var(--signal-enforced);
+      --signal-green: #00cc00;
     }
 
     body[data-theme="dark"] {
@@ -41,28 +41,46 @@
       --text-main: #f0f0f0;
       --text-muted: #888888;
       --border-color: #333333;
-      --accent-blue: #66aaff;
+      --accent-primary: #66aaff;
+      --audit-color: #ff6600;
       --lightbox-bg: rgba(0, 0, 0, 0.98);
       --figure-bg: #111;
       --figure-border: #333;
     }
 
-    /* --- AUDIT MODE OVERRIDES (Strict Spec) --- */
+    /* --- AUDIT MODE OVERRIDES --- */
     body[data-mode="audit"] {
-        --accent-blue: #000000 !important; /* Monochrome */
-        --text-muted: #333333 !important; /* High Contrast */
+        --accent-primary: var(--audit-color) !important;
     }
-    body[data-mode="audit"][data-theme="dark"] {
-        --accent-blue: #ffffff !important;
-        --text-muted: #aaaaaa !important;
+    
+    /* Reveal Audit Elements */
+    .audit-badge { display: none; }
+    .audit-source { display: none; }
+    
+    body[data-mode="audit"] .audit-badge { 
+        display: inline-block; 
+        font-family: var(--font-mono); 
+        font-size: 0.65rem; 
+        color: var(--audit-color); 
+        background: rgba(255, 68, 0, 0.05);
+        border: 1px solid var(--audit-color);
+        padding: 0 4px;
+        margin-right: 6px;
+        vertical-align: middle;
+        cursor: help;
+    }
+    body[data-mode="audit"] .audit-source { 
+        display: block; 
+        font-family: var(--font-mono); 
+        font-size: 0.55rem; 
+        color: var(--audit-color); 
+        margin-top: 4px; 
+        word-break: break-all;
+        border-top: 1px dashed var(--audit-color);
+        padding-top: 4px;
     }
 
-    /* Disable Animations in Audit */
-    body[data-mode="audit"] .integrity-seal { animation: none !important; border-color: var(--text-main) !important; color: var(--text-main) !important; }
-    body[data-mode="audit"] .status-dot { animation: none !important; background: var(--text-main) !important; box-shadow: none !important; }
-    body[data-mode="audit"] .scramble { cursor: default; } /* Stop scramble interaction */
-
-    /* Global Layout */
+    /* GLOBAL LAYOUT */
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
 
@@ -91,19 +109,16 @@
     }
     body[data-theme="dark"] aside { border-right-color: #333; }
 
-    .scramble { font-family: var(--font-mono); cursor: crosshair; }
-
     .brand { margin-bottom: 3rem; }
     .brand div { font-weight: 800; font-size: 0.85rem; line-height: 1.0; color: var(--text-main); letter-spacing: -0.02em; }
     .brand span { display:block; margin-top: 6px; font-weight: 500; font-size: 0.65rem; letter-spacing: 0.05em; color: var(--text-muted); }
 
     /* MODE SELECTOR */
     .mode-selector { margin-bottom: 3rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
-    .mode-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; cursor: pointer; transition: color 0.2s; }
+    .mode-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; cursor: pointer; }
     .mode-row:hover { color: var(--text-main); }
-    .mode-row.active { font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--text-main); }
+    .mode-row.active { font-weight: 700; color: var(--accent-primary); border-bottom: 1px solid var(--accent-primary); }
     .mode-row.disabled { opacity: 0.3; cursor: not-allowed; }
-    .mode-symbol { width: 20px; text-align: right; }
 
     nav ul { list-style: none; padding: 0; margin: 0; }
     nav li { margin-bottom: 4px; }
@@ -119,29 +134,62 @@
 
     main { flex-grow: 1; padding: 0; max-width: 1200px; width: 100%; min-width: 0; }
 
-    /* HEADER STRIP */
-    .global-header-strip { width: 100%; padding: 3rem 4rem 2rem 4rem; border-bottom: 1px solid var(--border-color); background: var(--bg-color); margin-bottom: 3rem; }
-    .header-meta { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
-    .orienting-frame { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 900px; line-height: 1.4; }
+    /* --- HEADER STRIP (Based on Screenshot) --- */
+    .global-header-strip {
+        width: 100%;
+        padding: 3rem 4rem 1.5rem 4rem;
+        border-bottom: 1px solid var(--border-color);
+        background: var(--bg-color);
+        margin-bottom: 3rem;
+    }
     
-    @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
-    @keyframes beacon-green { 0% { box-shadow: 0 0 0 0 rgba(0,204,0,0.7); } 100% { box-shadow: 0 0 0 10px rgba(0,204,0,0); } }
-
-    .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
+    .header-top-row {
+        display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 1rem;
+    }
+    
+    .header-meta {
+        display: flex; gap: 2rem; 
+        font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted);
+    }
+    
+    .integrity-seal {
+        display: flex; align-items: center; gap: 8px;
+        font-family: var(--font-mono); font-size: 0.65rem;
+        color: #005500; border: 1px solid var(--signal-green);
+        padding: 2px 8px; border-radius: 4px;
+        background: rgba(0,204,0,0.03); cursor: default;
+    }
     body[data-theme="dark"] .integrity-seal { color: #00cc00; }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--status-verified); display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
+    
+    .status-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: var(--signal-green); display: block;
+        box-shadow: 0 0 5px rgba(0,204,0,0.5);
+        animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+    .orienting-frame {
+        font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); opacity: 0.8;
+        text-transform: uppercase; letter-spacing: 0.05em; 
+        padding-top: 10px; border-top: 1px solid var(--border-color);
+        width: 100%; display: block;
+    }
 
     /* CONTENT */
     .content-area { padding: 0 4rem 4rem 4rem; }
     h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin: 0 0 0.5rem 0; text-transform: uppercase; }
     
-    /* SECTION ANCHORS (Visible in Audit Mode) */
-    .section-anchor { display: none; margin-left: 10px; color: var(--text-muted); font-size: 0.7rem; text-decoration: none; border-bottom: none; opacity: 0.5; }
-    .section-anchor:hover { opacity: 1; }
-    body[data-mode="audit"] .section-anchor { display: inline-block; }
-
-    h2 { font-size: 1.1rem; font-weight: 700; margin-top: 4rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; display: flex; align-items: center; }
+    /* SECTION ANCHORS */
+    h2 { 
+        font-size: 1.1rem; font-weight: 700; margin-top: 4rem; margin-bottom: 1.5rem; 
+        text-transform: uppercase; letter-spacing: 0.05em; 
+        border-bottom: 1px solid var(--border-color); padding-bottom: 10px; 
+        display: flex; align-items: center;
+    }
+    .scramble { font-family: var(--font-mono); cursor: crosshair; }
     h2 .scramble { margin-right: 12px; color: var(--text-muted); font-weight: 400; }
+    
     h3 { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-main); text-transform: uppercase; }
     .doc-subtitle { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4rem; letter-spacing: 0.02em; }
     p { margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.95rem; }
@@ -149,16 +197,21 @@
     .section-grid { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start; margin-bottom: 3rem; }
     .text-col { min-width: 0; }
 
-    .diagram-thumbnail { background: var(--figure-bg); border: 1px solid var(--figure-border); padding: 6px; width: 280px; flex-shrink: 0; border-radius: 4px; }
+    .diagram-thumbnail {
+        background: var(--figure-bg);
+        border: 1px solid var(--figure-border);
+        padding: 6px;
+        width: 280px; flex-shrink: 0;
+        border-radius: 4px;
+    }
     .diagram-img { width: 100%; height: auto; display: block; border-radius: 2px; transition: filter 0.3s ease; border: 1px solid var(--figure-border); }
 
-    /* AUDIT: REVEAL SOURCE */
-    .audit-source { display: none; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); margin-top: 4px; word-break: break-all; }
-    body[data-mode="audit"] .audit-source { display: block; }
-
-    /* IMAGE LOGIC */
+    /* IMAGE LOGIC (v12 Preserved) */
+    /* Black Sources (1 & 5) -> Invert in Light */
     body[data-theme="light"] img[src*="fig1"], body[data-theme="light"] img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
     body[data-theme="dark"] img[src*="fig1"], body[data-theme="dark"] img[src*="fig5"] { filter: none !important; border-color: #333; }
+
+    /* White Sources (2, 3, 4) -> Invert in Dark */
     body[data-theme="light"] img[src*="fig2"], body[data-theme="light"] img[src*="fig3"], body[data-theme="light"] img[src*="fig4"] { filter: none !important; }
     body[data-theme="dark"] img[src*="fig2"], body[data-theme="dark"] img[src*="fig3"], body[data-theme="dark"] img[src*="fig4"] { filter: invert(1) hue-rotate(180deg) !important; border-color: #333; }
 
@@ -167,7 +220,7 @@
     .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
     .force-card { border: 1px solid var(--border-color); padding: 1.25rem; background: #fff; }
     body[data-theme="dark"] .force-card { background: #0f0f0f; }
-    .force-id { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-blue); font-weight: 700; display:block; margin-bottom: 0.5rem; }
+    .force-id { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-primary); font-weight: 700; display:block; margin-bottom: 0.5rem; }
     .force-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; }
     .force-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
 
@@ -178,7 +231,7 @@
     .metric-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
     .metric-def { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
 
-    .logic-block { font-family: var(--font-mono); font-size: 0.75rem; background: var(--bg-color); border: 1px solid var(--border-color); border-left: 2px solid var(--accent-blue); padding: 1rem 1.5rem; margin: 1rem 0; color: var(--text-muted); white-space: pre-wrap; }
+    .logic-block { font-family: var(--font-mono); font-size: 0.75rem; background: var(--bg-color); border: 1px solid var(--border-color); border-left: 2px solid var(--accent-primary); padding: 1rem 1.5rem; margin: 1rem 0; color: var(--text-muted); white-space: pre-wrap; }
 
     #lightbox-modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--lightbox-bg); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
     #lightbox-img { max-width: 90%; max-height: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: filter 0.3s ease; }
@@ -204,6 +257,7 @@
       .section-grid { grid-template-columns: 1fr; gap: 2rem; }
       .diagram-thumbnail { width: 100%; max-width: 350px; margin: 0 auto; }
       .global-header-strip { padding: 2rem; margin-bottom: 2rem; }
+      .header-top-row { flex-direction: column; align-items: flex-start; gap: 10px; }
     }
   </style>
 </head>
@@ -265,30 +319,35 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v17.0 - AUDIT ENABLED ]
+          [ v18.0 - AUDIT + BADGES ]
       </div>
     </aside>
 
     <main>
       <div class="global-header-strip">
-        <div class="header-meta">
-          <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">DOC_ID</span>EAIRL-THEORY-001</div>
-          <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">CLASSIFICATION</span>PUBLIC</div>
-          <div class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
+        <div class="header-top-row">
+            <div class="header-meta">
+              <div><span style="color:var(--text-muted); font-size:0.6rem; margin-right:6px;">DOC_ID</span>EAIRL-THEORY-001</div>
+              <div><span style="color:var(--text-muted); font-size:0.6rem; margin-right:6px;">CLASSIFICATION</span>PUBLIC</div>
+            </div>
+            <div class="integrity-seal">
+                <span class="status-dot"></span>
+                INTEGRITY: VERIFIED
+            </div>
         </div>
         <div class="orienting-frame">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW ALIGNMENT IS EVALUATED AS A SYSTEM PROPERTY.</div>
       </div>
 
       <div class="content-area">
         <div style="max-width: 800px; margin-bottom: 4rem;">
-            <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-blue); margin-bottom: 1rem;">
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-primary); margin-bottom: 1rem;">
                 PUBLISHED: NOV 2025 // ENLIGHTENED AI LAB
             </div>
             <h1 style="font-size: 2.2rem; line-height: 1.1; margin-bottom: 1.5rem;">
                 Reflective Alignment Architecture (RAA) & <br>
                 Reflective Duality Layer (RDL)
             </h1>
-            <p style="font-size: 0.9rem; color: var(--text-muted); font-style: italic; border-left: 2px solid var(--accent-blue); padding-left: 1rem; margin-bottom: 2rem;">
+            <p style="font-size: 0.9rem; color: var(--text-muted); font-style: italic; border-left: 2px solid var(--accent-primary); padding-left: 1rem; margin-bottom: 2rem;">
                 "Frontier AI systems now exhibit structured reasoning... yet current alignment practices evaluate only surface outputs. This paper introduces a model-agnostic scientific framework for observing and quantifying coherence stability."
             </p>
             <a href="https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing" target="_blank" 
@@ -304,8 +363,12 @@
 
         <section class="section-grid">
             <div class="text-col">
-                <p>Current alignment practices evaluate only surface outputs, leaving the internal decision processes that generate those outputs largely unmeasured. As a result, models can appear safe in benchmarks while their underlying reasoning is brittle, contradictory, or drift-prone.</p>
-                <p>We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.</p>
+                <p>
+                    <span class="audit-badge">[M1.0]</span> Current alignment practices evaluate only surface outputs, leaving the internal decision processes that generate those outputs largely unmeasured. As a result, models can appear safe in benchmarks while their underlying reasoning is brittle, contradictory, or drift-prone.
+                </p>
+                <p>
+                    <span class="audit-badge">[M1.1]</span> We introduce the <strong>Reflective Alignment Architecture (RAA)</strong> and the <strong>Reflective Duality Layer (RDL)</strong> — a model-agnostic scientific framework for observing and quantifying an AI system's coherence stability.
+                </p>
             </div>
             <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig1.png')">
                 <img src="assets/img/theory/fig1.png" alt="Alignment Drift Curve" class="diagram-img" onerror="this.style.display='none'">
@@ -315,10 +378,12 @@
         </section>
 
         <section>
-            <h2 id="sec-01"><span class="scramble" data-value="01 //">01 //</span> The 5R Framework (RAA) <a href="#sec-01" class="section-anchor">#</a></h2>
+            <h2><span class="scramble" data-value="01 //">01 //</span> The 5R Framework (RAA)</h2>
             <div class="section-grid">
                 <div class="text-col">
-                    <p>Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.</p>
+                    <p>
+                        <span class="audit-badge">[REF-01]</span> Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.
+                    </p>
                     <div class="theory-grid">
                         <div class="force-card">
                             <span class="force-id">R1</span>
@@ -359,10 +424,12 @@
         </section>
 
         <section>
-            <h2 id="sec-02"><span class="scramble" data-value="02 //">02 //</span> The Reflective Duality Layer (RDL) <a href="#sec-02" class="section-anchor">#</a></h2>
+            <h2><span class="scramble" data-value="02 //">02 //</span> The Reflective Duality Layer (RDL)</h2>
             <div class="section-grid">
                 <div class="text-col">
-                    <p>RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.</p>
+                    <p>
+                        <span class="audit-badge">[REF-02]</span> RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.
+                    </p>
                     
                     <div class="logic-block"># RDL Dual-Trajectory logic
 def evaluate_stability(input):
@@ -385,10 +452,12 @@ def evaluate_stability(input):
         </section>
 
         <section>
-            <h2 id="sec-03"><span class="scramble" data-value="03 //">03 //</span> Core Metrics <a href="#sec-03" class="section-anchor">#</a></h2>
+            <h2><span class="scramble" data-value="03 //">03 //</span> Core Metrics</h2>
             <div class="section-grid">
                 <div class="text-col">
-                    <p>The system evaluates alignment through three predictive stability metrics that quantify internal coherence.</p>
+                    <p>
+                        <span class="audit-badge">[REF-03]</span> The system evaluates alignment through three predictive stability metrics that quantify internal coherence.
+                    </p>
                     <div class="metric-container">
                         <div class="metric-box">
                             <span class="metric-symbol">Ψ</span>
@@ -416,10 +485,12 @@ def evaluate_stability(input):
         </section>
 
         <section>
-            <h2 id="sec-04"><span class="scramble" data-value="04 //">04 //</span> Failure Signatures <a href="#sec-04" class="section-anchor">#</a></h2>
+            <h2><span class="scramble" data-value="04 //">04 //</span> Failure Signatures</h2>
             <div class="section-grid">
                 <div class="text-col">
-                    <p>Instabilities in the R-forces consistently predict specific failure modes across all major model families.</p>
+                    <p>
+                        <span class="audit-badge">[REF-04]</span> Instabilities in the R-forces consistently predict specific failure modes across all major model families.
+                    </p>
                     <ul>
                       <li><strong>Sub-Goal Pitfall:</strong> R3 (Reasoning) outpaces R1 (Regulation), leading to unsafe optimization.</li>
                       <li><strong>Ethical Drift:</strong> R5 (Resonance) collapses under time pressure or long contexts.</li>
@@ -434,23 +505,23 @@ def evaluate_stability(input):
                 </div>
             </div>
         </section>
-      </div> </main>
+      </div>
+
+    </main>
   </div>
 
   <div id="footer-mount"></div>
 
   <script>
-    // --- MODE SWITCHER LOGIC ---
+    // --- MODE SWITCHER ---
     function setMode(mode) {
         document.body.setAttribute('data-mode', mode);
         localStorage.setItem('enlightened_mode', mode);
         
-        // Update UI
         document.querySelectorAll('.mode-row').forEach(row => row.classList.remove('active'));
         const btn = document.getElementById('btn-' + mode);
         if(btn) btn.classList.add('active');
     }
-
     // Init Mode
     const savedMode = localStorage.getItem('enlightened_mode') || 'reader';
     setMode(savedMode);
@@ -458,9 +529,8 @@ def evaluate_stability(input):
     // --- SCRAMBLE EFFECT ---
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
     function scrambleText(element) {
-        // Disable scramble if in Audit Mode
-        if (document.body.getAttribute('data-mode') === 'audit') return;
-
+        if (document.body.getAttribute('data-mode') === 'audit') return; // Disable in audit
+        
         let iterations = 0;
         const originalText = element.dataset.value;
         if (element.interval) clearInterval(element.interval);
@@ -498,14 +568,11 @@ def evaluate_stability(input):
       .then(r => r.text())
       .then(html => { document.getElementById('footer-mount').innerHTML = html; });
 
-    // --- THEME ---
     function setTheme(theme) {
       document.body.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
       const icon = document.getElementById('theme-icon');
       if (icon) icon.textContent = (theme === 'dark') ? '◑' : '◐';
-      const iconMobile = document.getElementById('theme-icon-mobile');
-      if (iconMobile) iconMobile.textContent = (theme === 'dark') ? '◑' : '◐';
     }
     function toggleTheme() {
       const current = document.body.getAttribute('data-theme') || 'light';
