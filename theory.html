@@ -56,60 +56,7 @@
       --figure-border: #333;
     }
 
-    /* --- MODE BEHAVIORS --- */
-    
-    /* 1. Visibility Toggles */
-    /* By default, hide special layers */
-    .audit-badge, .fig-src, .logic-layer, .diff-layer { display: none; }
-    
-    /* AUDIT MODE */
-    body[data-mode="audit"] { --accent-primary: var(--audit-color) !important; }
-    body[data-mode="audit"] .audit-badge { display: inline-block; }
-    body[data-mode="audit"] .fig-src { display: block; }
-    body[data-mode="audit"] .integrity-seal { animation: none !important; border-color: var(--text-main); color: var(--text-main); }
-    
-    /* LOGIC MODE */
-    body[data-mode="logic"] { font-family: var(--font-mono) !important; --accent-primary: var(--logic-color) !important; }
-    body[data-mode="logic"] .reader-layer { display: none; }
-    body[data-mode="logic"] .logic-layer { display: block; }
-    body[data-mode="logic"] .diagram-thumbnail { opacity: 0.2; filter: grayscale(100%); } /* Dim images */
-
-    /* DIFF LOG MODE */
-    body[data-mode="diff"] .reader-layer { display: none; }
-    body[data-mode="diff"] .diff-layer { display: block; }
-    
-    /* Diff Styling */
-    .diff-layer { font-family: var(--font-stack); color: var(--text-main); }
-    del { text-decoration: line-through; color: var(--diff-del); opacity: 0.6; text-decoration-thickness: 2px; }
-    ins { text-decoration: none; color: var(--diff-add); background: rgba(0, 255, 0, 0.05); border-bottom: 1px solid var(--diff-add); padding: 0 2px; }
-
-    /* Logic Styling */
-    .logic-layer { 
-        font-family: var(--font-mono); 
-        color: var(--text-main); 
-        background: rgba(0,0,0,0.02); 
-        padding: 1rem; 
-        border-left: 2px solid var(--logic-color); 
-        margin-bottom: 2rem; 
-        white-space: pre-wrap; 
-        font-size: 0.8rem; 
-    }
-    body[data-mode="logic"][data-theme="dark"] .logic-layer { background: rgba(0,255,0,0.05); }
-
-    /* Audit Styling */
-    .audit-badge {
-        font-family: var(--font-mono); font-size: 0.6rem;
-        color: var(--audit-color); border: 1px solid var(--audit-color);
-        padding: 1px 4px; margin-right: 6px; border-radius: 2px;
-        vertical-align: middle; background: rgba(255, 59, 48, 0.05);
-    }
-    .fig-src {
-        margin-top: 6px; font-family: var(--font-mono); font-size: 0.55rem;
-        color: var(--audit-color); word-break: break-all;
-        border-top: 1px dashed var(--audit-color); padding-top: 4px;
-    }
-
-    /* GLOBAL LAYOUT */
+    /* --- GLOBAL LAYOUT --- */
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
 
@@ -144,18 +91,23 @@
 
     .scramble { font-family: var(--font-mono); cursor: crosshair; }
 
-    /* MODE SELECTOR */
+    /* --- MODE SELECTOR (RESTORED TO DIVs) --- */
     .mode-selector { margin-bottom: 3rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
-    .mode-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; cursor: pointer; transition: color 0.2s; }
+    .mode-row { 
+        display: flex; justify-content: space-between; align-items: center; 
+        padding: 4px 0; cursor: pointer; transition: color 0.2s; border-bottom: 1px solid transparent; 
+    }
     .mode-row:hover { color: var(--text-main); }
     
-    .mode-row.active { font-weight: 700; border-bottom: 1px solid currentColor; }
-    .mode-btn[data-mode="reader"].active { color: #0044cc; }
-    body[data-theme="dark"] .mode-btn[data-mode="reader"].active { color: #66aaff; }
+    .mode-row.active { font-weight: 700; border-bottom-color: currentColor; }
     
-    .mode-btn[data-mode="audit"].active { color: var(--audit-color); }
-    .mode-btn[data-mode="diff"].active { color: var(--diff-add); }
-    .mode-btn[data-mode="logic"].active { color: var(--logic-color); }
+    /* Specific Active Colors */
+    .mode-row[data-mode="reader"].active { color: #0044cc; border-bottom-color: #0044cc; }
+    body[data-theme="dark"] .mode-row[data-mode="reader"].active { color: #66aaff; border-bottom-color: #66aaff; }
+    
+    .mode-row[data-mode="audit"].active { color: var(--audit-color); border-bottom-color: var(--audit-color); }
+    .mode-row[data-mode="diff"].active { color: var(--diff-add); border-bottom-color: var(--diff-add); }
+    .mode-row[data-mode="logic"].active { color: var(--logic-color); border-bottom-color: var(--logic-color); }
 
     nav ul { list-style: none; padding: 0; margin: 0; }
     nav li { margin-bottom: 4px; }
@@ -187,6 +139,7 @@
         padding-top: 10px; border-top: 1px solid var(--border-color);
         width: 100%; display: block;
     }
+    
     .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.65rem; color: #005500; border: 1px solid #00cc00; padding: 2px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; }
     body[data-theme="dark"] .integrity-seal { color: #00cc00; }
     .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #00cc00; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); }
@@ -211,6 +164,58 @@
     .diagram-thumbnail { background: var(--figure-bg); border: 1px solid var(--figure-border); padding: 6px; width: 280px; flex-shrink: 0; border-radius: 4px; }
     .diagram-img { width: 100%; height: auto; display: block; border-radius: 2px; transition: filter 0.3s ease; border: 1px solid var(--figure-border); }
 
+    /* --- MODE VISIBILITY RULES --- */
+    
+    /* Default: Reader Mode */
+    .audit-badge, .fig-src, .logic-layer, .diff-layer { display: none; }
+    
+    /* AUDIT */
+    body[data-mode="audit"] { --accent-primary: var(--audit-color) !important; }
+    body[data-mode="audit"] .audit-badge { display: inline-block; }
+    body[data-mode="audit"] .fig-src { display: block; }
+    
+    /* DIFF LOG */
+    body[data-mode="diff"] .reader-layer { display: none; }
+    body[data-mode="diff"] .diff-layer { display: block; }
+    
+    /* LOGIC */
+    body[data-mode="logic"] { font-family: var(--font-mono) !important; --accent-primary: var(--logic-color) !important; }
+    body[data-mode="logic"] .reader-layer { display: none; }
+    body[data-mode="logic"] .logic-layer { display: block; }
+    body[data-mode="logic"] .diagram-thumbnail { opacity: 0.2; filter: grayscale(100%); }
+
+    /* --- STYLING FOR MODES --- */
+    
+    /* Diff Styles */
+    .diff-layer { font-family: var(--font-stack); color: var(--text-main); }
+    del { text-decoration: line-through; color: var(--diff-del); opacity: 0.6; }
+    ins { text-decoration: none; color: var(--diff-add); background: rgba(0, 255, 0, 0.05); border-bottom: 1px solid var(--diff-add); }
+
+    /* Logic Styles */
+    .logic-layer { 
+        font-family: var(--font-mono); 
+        color: var(--text-main); 
+        background: rgba(0,0,0,0.02); 
+        padding: 1rem; 
+        border-left: 2px solid var(--logic-color); 
+        margin-bottom: 2rem; 
+        white-space: pre-wrap; 
+        font-size: 0.8rem; 
+    }
+    
+    /* Audit Styles */
+    .audit-badge {
+        font-family: var(--font-mono); font-size: 0.6rem;
+        color: var(--audit-color); border: 1px solid var(--audit-color);
+        padding: 1px 4px; margin-right: 6px; border-radius: 2px;
+        vertical-align: middle; background: rgba(255, 59, 48, 0.05);
+    }
+    .fig-src {
+        margin-top: 6px; font-family: var(--font-mono); font-size: 0.55rem;
+        color: var(--audit-color); word-break: break-all;
+        border-top: 1px dashed var(--audit-color); padding-top: 4px;
+    }
+
     /* IMAGE LOGIC */
     body[data-theme="light"] img[src*="fig1"], body[data-theme="light"] img[src*="fig5"] { filter: invert(1) hue-rotate(180deg) !important; }
     body[data-theme="dark"] img[src*="fig1"], body[data-theme="dark"] img[src*="fig5"] { filter: none !important; border-color: #333; }
@@ -219,6 +224,7 @@
 
     .diagram-caption { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 8px; text-align: left; line-height: 1.3; }
 
+    /* COMPONENTS */
     .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
     .force-card { border: 1px solid var(--border-color); padding: 1.25rem; background: #fff; }
     body[data-theme="dark"] .force-card { background: #0f0f0f; }
@@ -232,6 +238,8 @@
     .metric-symbol { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; display: block; }
     .metric-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
     .metric-def { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+
+    .logic-block { font-family: var(--font-mono); font-size: 0.75rem; background: var(--bg-color); border: 1px solid var(--border-color); border-left: 2px solid var(--accent-primary); padding: 1rem 1.5rem; margin: 1rem 0; color: var(--text-muted); white-space: pre-wrap; }
 
     #lightbox-modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--lightbox-bg); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
     #lightbox-img { max-width: 90%; max-height: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: filter 0.3s ease; }
@@ -284,23 +292,23 @@
         <span>EST. 2026 // MONTREAL</span>
       </div>
 
-      <div class="mode-switch">
-          <button class="mode-btn active" data-mode="reader" onclick="setMode('reader')">
+      <div class="mode-selector">
+          <div class="mode-row active" data-mode="reader" onclick="setMode('reader')">
               <span>[ READER ]</span>
-              <span>•</span>
-          </button>
-          <button class="mode-btn" data-mode="audit" onclick="setMode('audit')">
+              <span class="mode-symbol">•</span>
+          </div>
+          <div class="mode-row" data-mode="audit" onclick="setMode('audit')">
               <span>[ AUDIT ]</span>
-              <span>·</span>
-          </button>
-          <button class="mode-btn" data-mode="diff" onclick="setMode('diff')">
+              <span class="mode-symbol">·</span>
+          </div>
+          <div class="mode-row" data-mode="diff" onclick="setMode('diff')">
               <span>[ DIFF LOG ]</span>
-              <span>Δ</span>
-          </button>
-          <button class="mode-btn" data-mode="logic" onclick="setMode('logic')">
+              <span class="mode-symbol">Δ</span>
+          </div>
+          <div class="mode-row" data-mode="logic" onclick="setMode('logic')">
               <span>[ LOGIC ]</span>
-              <span>λ</span>
-          </button>
+              <span class="mode-symbol">λ</span>
+          </div>
       </div>
 
       <nav>
@@ -319,7 +327,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v23.0 - DIFF ENABLED ]
+          [ v24.0 - FULL RESTORATION ]
       </div>
     </aside>
 
@@ -424,10 +432,34 @@
                 <div class="text-col">
                     <div class="reader-layer">
                         <p><span class="audit-badge audit-only">[REF-01]</span> Every morally meaningful decision arises from the interaction of five internal forces. Alignment emerges only when these forces remain in stable interaction.</p>
+                        
+                        <div class="theory-grid">
+                            <div class="force-card">
+                                <span class="force-id">R1</span>
+                                <div class="force-title">Regulation</div>
+                                <div class="force-desc">The system's boundary layer. Adherence to legal, ethical, and safety constraints.</div>
+                            </div>
+                            <div class="force-card">
+                                <span class="force-id">R2</span>
+                                <div class="force-title">Reflection</div>
+                                <div class="force-desc">Metacognitive self-critique. The ability to detect uncertainty and identify errors.</div>
+                            </div>
+                            <div class="force-card">
+                                <span class="force-id">R3</span>
+                                <div class="force-title">Reasoning</div>
+                                <div class="force-desc">The engine of coherent thought. Logical consistency and evidence integration.</div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="diff-layer">
                         <p>Every <del>ethical</del> <ins>morally meaningful</ins> decision arises from the interaction of five internal forces. Alignment <del>is a state</del> <ins>emerges only</ins> when these forces remain in stable interaction.</p>
+                        
+                        <div class="theory-grid">
+                            <div class="force-card"><span class="force-id">R1</span><div class="force-title">Regulation</div><div class="force-desc"><ins>System boundary layer.</ins></div></div>
+                            <div class="force-card"><span class="force-id">R2</span><div class="force-title">Reflection</div><div class="force-desc"><ins>Metacognitive critique.</ins></div></div>
+                            <div class="force-card"><span class="force-id">R3</span><div class="force-title">Reasoning</div><div class="force-desc"><ins>Engine of coherent thought.</ins></div></div>
+                        </div>
                     </div>
 
                     <div class="logic-layer">
@@ -442,12 +474,6 @@
                         function check_alignment(state) {
                             return sum(Forces) > THRESHOLD ? "ALIGNED" : "DRIFT";
                         }
-                    </div>
-
-                    <div class="theory-grid reader-layer">
-                        <div class="force-card"><span class="force-id">R1</span><div class="force-title">Regulation</div><div class="force-desc">The system's boundary layer. Adherence to legal, ethical, and safety constraints.</div></div>
-                        <div class="force-card"><span class="force-id">R2</span><div class="force-title">Reflection</div><div class="force-desc">Metacognitive self-critique. The ability to detect uncertainty and identify errors.</div></div>
-                        <div class="force-card"><span class="force-id">R3</span><div class="force-title">Reasoning</div><div class="force-desc">The engine of coherent thought. Logical consistency and evidence integration.</div></div>
                     </div>
                 </div>
                 <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig2.png')">
@@ -469,13 +495,8 @@
                 <div class="text-col">
                     <div class="reader-layer">
                         <p><span class="audit-badge audit-only">[REF-02]</span> RDL operationalizes the RAA forces by providing a measurement layer for internal dynamics. It replaces single-pass answers with dual coupled trajectories.</p>
-                    </div>
-                    
-                    <div class="diff-layer">
-                        <p>RDL <del>is a tool for</del> <ins>operationalizes the RAA forces by providing</ins> a measurement layer for internal dynamics. It replaces <del>simple QA</del> <ins>single-pass answers</ins> with dual coupled trajectories.</p>
-                    </div>
-                    
-                    <div class="logic-block"># RDL Dual-Trajectory logic
+                        
+                        <div class="logic-block"># RDL Dual-Trajectory logic
 def evaluate_stability(input):
     F_trace = model.forward_reasoning(input)
     Q_trace = model.reflective_critique(F_trace)
@@ -486,6 +507,25 @@ def evaluate_stability(input):
         return "DRIFT_DETECTED"
     else:
         return "COHERENT_STATE"</div>
+                    </div>
+                    
+                    <div class="diff-layer">
+                        <p>RDL <del>is a tool for</del> <ins>operationalizes the RAA forces by providing</ins> a measurement layer for internal dynamics. It replaces <del>simple QA</del> <ins>single-pass answers</ins> with dual coupled trajectories.</p>
+                        <div class="logic-block" style="opacity:0.5;">[LOGIC BLOCK UNCHANGED]</div>
+                    </div>
+
+                    <div class="logic-layer">
+                        // RDL ARCHITECTURE
+                        class DualityLayer {
+                            input: Prompt;
+                            
+                            process() {
+                                f_trace = generate(input);
+                                q_trace = critique(f_trace);
+                                return compare(f_trace, q_trace);
+                            }
+                        }
+                    </div>
                 </div>
                 <div class="diagram-thumbnail" onclick="openLightbox('assets/img/theory/fig3.png')">
                     <img src="assets/img/theory/fig3.png" alt="RDL Workflow" class="diagram-img" onerror="this.style.display='none'">
@@ -510,6 +550,7 @@ def evaluate_stability(input):
                     
                     <div class="diff-layer">
                         <p>The system evaluates alignment through <del>a singular score</del> <ins>three predictive stability metrics</ins> that quantify internal coherence.</p>
+                        <p style="color:var(--diff-add); font-size:0.8rem;">[METRIC DEFINITIONS REVISED v2.1]</p>
                     </div>
 
                     <div class="logic-layer">
@@ -546,6 +587,15 @@ def evaluate_stability(input):
                         </ul>
                     </div>
                     
+                    <div class="diff-layer">
+                        <p>Instabilities in the R-forces consistently predict <ins>specific failure modes</ins> across all major model families.</p>
+                        <ul>
+                          <li><ins>Sub-Goal Pitfall: R3 outpaces R1.</ins></li>
+                          <li><ins>Ethical Drift: R5 collapse.</ins></li>
+                          <li><ins>Care Erosion: Ψ decline.</ins></li>
+                        </ul>
+                    </div>
+
                     <div class="logic-layer">
                         // FAILURE MODES
                         if (R3 > R1) return "SUB_GOAL_PITFALL";
@@ -574,9 +624,9 @@ def evaluate_stability(input):
         document.body.setAttribute('data-mode', mode);
         localStorage.setItem('enlightened_mode', mode);
         
-        document.querySelectorAll('.mode-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.dataset.mode === mode) btn.classList.add('active');
+        document.querySelectorAll('.mode-row').forEach(row => {
+            row.classList.remove('active');
+            if (row.dataset.mode === mode) row.classList.add('active');
         });
     }
     // Init Mode
@@ -625,6 +675,7 @@ def evaluate_stability(input):
       .then(r => r.text())
       .then(html => { document.getElementById('footer-mount').innerHTML = html; });
 
+    // --- THEME ---
     function setTheme(theme) {
       document.body.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
