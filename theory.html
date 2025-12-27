@@ -134,36 +134,35 @@
         border: 1px solid var(--figure-border);
     }
 
-    /* --- V9.0: FILENAME TARGETING (THE NUCLEAR OPTION) --- */
-    /* This overrides everything by targeting the file name directly */
+    /* --- V10.0: FINAL TARGETING MAP --- */
 
-    /* GROUP 1: BLACK FILES (Fig 1 & Fig 3) */
+    /* GROUP 1: BLACK SOURCE (Fig 1 ONLY) */
     /* Light Mode: INVERT to White */
-    body[data-theme="light"] img[src*="fig1.png"], 
-    body[data-theme="light"] img[src*="fig3.png"] {
+    body[data-theme="light"] img[src*="fig1.png"] {
         filter: invert(1) hue-rotate(180deg) !important;
     }
     /* Dark Mode: NO INVERT (Stay Black) */
-    body[data-theme="dark"] img[src*="fig1.png"], 
-    body[data-theme="dark"] img[src*="fig3.png"] {
+    body[data-theme="dark"] img[src*="fig1.png"] {
         filter: none !important;
         border-color: #333;
     }
 
-    /* GROUP 2: WHITE FILES (Fig 2 & Fig 4) */
+    /* GROUP 2: WHITE SOURCE (Fig 2, Fig 3, Fig 4) */
     /* Light Mode: NO INVERT (Stay White) */
     body[data-theme="light"] img[src*="fig2.png"], 
+    body[data-theme="light"] img[src*="fig3.png"], 
     body[data-theme="light"] img[src*="fig4.png"] {
         filter: none !important;
     }
     /* Dark Mode: INVERT to Black */
     body[data-theme="dark"] img[src*="fig2.png"], 
+    body[data-theme="dark"] img[src*="fig3.png"], 
     body[data-theme="dark"] img[src*="fig4.png"] {
         filter: invert(1) hue-rotate(180deg) !important;
         border-color: #333;
     }
 
-    /* GROUP 3: COLOR FILES (Fig 5) */
+    /* GROUP 3: COLOR SOURCE (Fig 5) */
     /* NEVER INVERT */
     img[src*="fig5.png"] {
         filter: none !important;
@@ -204,10 +203,10 @@
     #lightbox-img { max-width: 90%; max-height: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: filter 0.3s ease; }
     
     /* Lightbox Inheritance - Filenames */
-    body[data-theme="light"] #lightbox-img[src*="fig1.png"],
-    body[data-theme="light"] #lightbox-img[src*="fig3.png"] { filter: invert(1) hue-rotate(180deg) !important; }
+    body[data-theme="light"] #lightbox-img[src*="fig1.png"] { filter: invert(1) hue-rotate(180deg) !important; }
     
     body[data-theme="dark"] #lightbox-img[src*="fig2.png"],
+    body[data-theme="dark"] #lightbox-img[src*="fig3.png"],
     body[data-theme="dark"] #lightbox-img[src*="fig4.png"] { filter: invert(1) hue-rotate(180deg) !important; }
     
     #lightbox-img[src*="fig5.png"] { filter: none !important; }
@@ -269,7 +268,7 @@
       </div>
       
       <div style="margin-top:20px; font-family:var(--font-mono); font-size:0.6rem; color:red; font-weight:700;">
-          [ v9.0 - HARDCODED FIX ]
+          [ v10.0 - CORRECTED FIG 3 ]
       </div>
     </aside>
 
