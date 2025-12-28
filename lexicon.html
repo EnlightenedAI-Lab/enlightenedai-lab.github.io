@@ -12,7 +12,7 @@
 
     <script type="application/json" id="audit-manifest">
     {
-        "doc_id": "RAL-LEX-0002",
+        "doc_id": "EAI-LEXICON-0001",
         "version": "17.0.0",
         "status": "ALIGNMENT_STANDARDIZED"
     }
@@ -23,7 +23,7 @@
         :root {
             /* LIGHT MODE */
             --bg-color: #ffffff;
-            --sidebar-bg: #ffffff;
+            --sidebar-bg: #f8f9fa; /* Standardized with Shell */
             --text-main: #050505;
             --text-muted: #5e5e5e;
             --border-color: #e5e5e5;
@@ -53,13 +53,14 @@
 
             /* SPACING VARS */
             --block-gap: 48px;
+            --sidebar-width: 280px; /* Standardized */
         }
 
         /* DARK MODE */
         [data-theme="dark"] {
-            --bg-color: #050505;
-            --sidebar-bg: #050505;
-            --text-main: #e0e0e0;
+            --bg-color: #0a0a0a; /* Standardized */
+            --sidebar-bg: #0a0a0a;
+            --text-main: #f0f0f0;
             --text-muted: #888888;
             --border-color: #333333;
             --card-bg: #111111;
@@ -72,7 +73,7 @@
             
             /* SIGNALS */
             --signal-enforced: #00cc00;
-            --signal-eval: #00eaff;       
+            --signal-eval: #00eaff;        
             --signal-struct: #333333;
 
             /* Define Verified Status Color */
@@ -115,22 +116,39 @@
         .mono { font-family: "JetBrains Mono", monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .scramble { font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
 
-        /* ORIENTING FRAME & HEADER */
-        .global-header-strip {
-            width: 100%;
-            padding: 2rem 4rem;
-            border-bottom: 1px solid var(--border-color);
-            background: var(--bg-color);
-            z-index: 10;
+        /* HEADERS (Standardized Home Shell Alignment) */
+        .reader-header { 
+            border-bottom: 1px solid var(--border-color); 
+            padding-bottom: 1rem; 
+            margin-bottom: 2rem;
         }
-        .header-meta {
-            display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem;
-            font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: var(--text-muted);
+        .header-top-row {
+            display: flex; 
+            align-items: center; 
+            gap: 3rem; 
+            margin-bottom: 1rem;
+            font-family: "JetBrains Mono", monospace; 
         }
-        .orienting-frame { 
-            font-family: "JetBrains Mono", monospace; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; 
-            border-left: 1px solid var(--border-color); padding-left: 12px; max-width: 800px; line-height: 1.4;
+        .meta-item { display: flex; flex-direction: column; gap: 4px; }
+        .label { font-size: 0.6rem; letter-spacing: 0.05em; color: #999; text-transform: uppercase; }
+        .val { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+        
+        .orienting-sentence {
+            font-family: "JetBrains Mono", monospace; 
+            font-size: 0.7rem; 
+            color: var(--text-muted); 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em;
+            opacity: 0.9;
         }
+
+        /* AUDIT HEADER (Standardized Home Shell Alignment) */
+        .audit-header { display: none; width: 100%; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 3rem; }
+        .audit-meta { display: flex; gap: 2rem; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+        .audit-cell { min-width: 100px; }
+        .audit-k { font-family: "JetBrains Mono", monospace; font-size: 0.65rem; letter-spacing: 0.10em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+        .audit-v { font-family: "JetBrains Mono", monospace; font-size: 0.8rem; color: var(--text-main); font-weight: 700; }
+        .audit-statement { margin-top: 1.5rem; padding-top: 0.85rem; border-top: 1px solid var(--border-color); font-family: "JetBrains Mono", monospace; font-size: 0.65rem; letter-spacing: 0.10em; text-transform: uppercase; color: var(--text-muted); }
 
         /* --- SIDEBAR COMPONENTS --- */
         .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
@@ -186,7 +204,7 @@
         @keyframes beacon-red { 0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); opacity: 1; } 50% { opacity: 1; } 100% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); opacity: 1; } }
         @keyframes border-pulse { 0% { border-color: rgba(0,204,0,0.4); } 50% { border-color: rgba(0,204,0,1); } 100% { border-color: rgba(0,204,0,0.4); } }
 
-        .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
+        .integrity-seal { margin-left: auto; display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.03); cursor: default; animation: border-pulse 3s infinite; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,204,0,0.5); animation: beacon-green 2s infinite cubic-bezier(0.66, 0, 0, 1); }
 
         /* --- MODES & VIEWS --- */
@@ -224,6 +242,9 @@
         body[data-mode="audit"] .view-human { display: none; }
         body[data-mode="audit"] .view-logic { display: none; }
         body[data-mode="audit"] .view-audit { display: block; animation: fadeIn 0.3s ease; }
+        
+        body[data-mode="audit"] .reader-header { display: none !important; }
+        body[data-mode="audit"] .audit-header { display: block !important; }
 
         /* LOGIC MODE: EXCLUSIVE VIEW */
         body[data-mode="logic"] .view-human { display: none; }
@@ -249,7 +270,7 @@
         nav a:hover { color: var(--text-main); }
         nav a.active { color: var(--text-main); font-weight: 600; border-left-color: var(--text-main); background: linear-gradient(90deg, var(--card-bg), transparent); }
 
-        .brand { margin-bottom: 6rem; cursor: crosshair !important; }
+        .brand { margin-bottom: 4rem; cursor: crosshair !important; }
         .brand div { font-family: "JetBrains Mono", monospace; font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
         .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
 
@@ -274,7 +295,6 @@
             
             aside#sidebar {
                 width: 240px;
-                /* height: 100vh; Removed to allow scrolling with footer */
                 position: sticky;
                 top: 0;
                 border-right: 1px solid var(--border-color);
@@ -313,7 +333,6 @@
                 display: flex;
                 flex-direction: column;
                 margin: 0;
-                /* min-height: 100vh; Removed */
                 min-width: 0; 
             }
 
@@ -344,7 +363,6 @@
                 
                 position: sticky; 
                 top: 0; 
-                /* height: 100vh; Removed to allow scrolling with footer */
                 max-height: 100vh; /* Ensure it doesn't exceed viewport height */
                 overflow: hidden;
             }
@@ -667,14 +685,13 @@
                 <nav>
                     <ul>
                         <li><a href="index.html">Home</a></li>
+                        <li><a href="theory.html">Theory</a></li>
                         <li><a href="lexicon.html" class="active">Lexicon</a></li>
-                        <li style="margin-top:1rem; opacity:0.5; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; padding-left:10px;">Sections</li>
-                        <li><a href="#overview">Overview</a></li>
-                        <li><a href="#what-it-does">What It Does</a></li>
-                        <li><a href="#core-terms">Core Terms</a></li>
-                        <li><a href="#invariants">Invariants</a></li>
-                        <li><a href="#drift">Drift</a></li>
-                        <li><a href="#status">Status</a></li>
+                        <li><a href="reflective-diagnostics.html">Diagnostics</a></li>
+                        <li><a href="data.html">Data</a></li>
+                        <li><a href="curriculum.html">Curriculum</a></li>
+                        <li><a href="videos.html">Videos</a></li>
+                        <li><a href="publications.html">Publications</a></li>
                     </ul>
                 </nav>
             </div><div class="sidebar-bottom">
@@ -703,11 +720,14 @@
         <div class="main-column">
             <div class="global-header-strip">
                 <div class="header-meta">
-                    <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">DOC_ID</span>RAL-LEX-0002</div>
+                    <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">DOC_ID</span>EAI-LEXICON-0001</div>
                     <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">CLASSIFICATION</span>PUBLIC</div>
-                    <div class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
+                    <div class="integrity-seal" style="margin-left: auto;"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
                 </div>
-                <div class="orienting-frame">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW ALIGNMENT IS EVALUATED AS A SYSTEM PROPERTY.</div>
+                <div class="orienting-frame">
+                    THIS DOCUMENT IS AN INSPECTABLE RECORD OF<br>
+                    THE DEFINITIONS AND CONTROLLED VOCABULARY OF THE LAB.
+                </div>
             </div>
 
             <div class="split-view">
@@ -928,7 +948,7 @@
     <script>
         // DATA RECORD
         const LEXICON_RECORD = {
-            meta: { doc_id: "RAL-LEX-0002", version: "17.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
+            meta: { doc_id: "EAI-LEXICON-0001", version: "17.0.0", classification: "PUBLIC", status: "ACTIVE", last_update: new Date().toISOString().split('T')[0] },
             core_terms: [
                 { id: "RA-001", label: "Reflective Alignment", type: "Global Property", definition: "Capacity to preserve goal coherence during recursive self-modification." },
                 { id: "RS-001", label: "Reasoning Stability", type: "Local Property", definition: "Resistance of internal reasoning chains to degradation under scale pressure." },
