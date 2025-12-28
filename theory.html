@@ -110,6 +110,8 @@
         }
 
         .integrity-seal { 
+            /* [FIX] margin-left: auto pushes this element to the far right */
+            margin-left: auto; 
             display: flex; align-items: center; gap: 8px; 
             font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
             border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
