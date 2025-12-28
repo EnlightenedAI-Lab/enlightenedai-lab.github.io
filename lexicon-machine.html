@@ -695,7 +695,42 @@ HASH:       0x881D92F</pre>
             const a = document.createElement('a'); a.href = url; a.download = `report.${t}`; a.click();
         }
 
-        window.onload = init;
+        // Deep-linking: allow footer links to open specific machine subviews
+        // Supported:
+        //   lexicon-machine.html#cards
+        //   lexicon-machine.html#serial
+        //   lexicon-machine.html#serial/transform|diff|snap
+        //   lexicon-machine.html?mode=serial&sub=diff
+        function applyDeepLink() {
+            const params = new URLSearchParams(window.location.search || "");
+            const modeParam = (params.get("mode") || params.get("view") || "").toLowerCase();
+            const subParam  = (params.get("sub") || "").toLowerCase();
+
+            const hashRaw = (window.location.hash || "").replace(/^#/, "").trim().toLowerCase();
+            let hashMode = "";
+            let hashSub = "";
+
+            if (hashRaw) {
+                const parts = hashRaw.split("/").filter(Boolean);
+                hashMode = parts[0] || "";
+                hashSub  = parts[1] || "";
+            }
+
+            const mode = modeParam || hashMode;
+            const sub  = subParam  || hashSub;
+
+            if (mode === "serial" || mode === "serialization") {
+                switchMode("serial");
+                if (sub === "transform" || sub === "diff" || sub === "snap") {
+                    switchSub(sub);
+                }
+            } else if (mode === "cards" || mode === "card") {
+                switchMode("cards");
+            }
+        }
+
+        window.onload = () => { init(); applyDeepLink(); };
+        window.addEventListener('hashchange', applyDeepLink);
     </script>
 </body>
 </html>
