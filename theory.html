@@ -12,7 +12,7 @@
 
     <script type="application/json" id="audit-manifest">
     {
-        "doc_id": "EAIRL-THEORY-001",
+        "doc_id": "EAI-THEORY-0001",
         "version": "3.1.1",
         "status": "SEMANTIC_INTEGRITY_VERIFIED"
     }
@@ -370,7 +370,7 @@
 
             <div class="mode-group">
                 <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader', 'READER MODE')">[ READER ] <span>•</span></span>
-                <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')" style="display:none">[ AUDIT ] <span>•</span></span>
+                <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')">[ AUDIT ] <span>•</span></span>
                 <span class="toggle-btn" id="btn-diff" onclick="setMode('diff', 'CHANGE TRACE ACTIVE')">[ DIFF LOG ] <span>Δ</span></span>
                 <span class="toggle-btn" id="btn-logic" onclick="setMode('logic', 'LOGIC LAYER EXPOSED')">[ LOGIC ] <span>λ</span></span>
             </div>
@@ -382,7 +382,9 @@
                     <li><a href="lexicon.html">Lexicon</a></li>
                     <li><a href="reflective-diagnostics.html">Diagnostics</a></li>
                     <li><a href="data.html">Data</a></li>
+                    <li><a href="curriculum.html">Curriculum</a></li>
                     <li><a href="videos.html">Videos</a></li>
+                    <li><a href="publications.html">Publications</a></li>
                 </ul>
             </nav>
             
@@ -396,7 +398,7 @@
                 <div class="header-top-row">
                     <div class="meta-item">
                         <span class="label">DOC_ID</span>
-                        <span class="val">EAIRL-THEORY-001</span>
+                        <span class="val">EAI-THEORY-0001</span>
                     </div>
                     <div class="meta-item">
                         <span class="label">CLASSIFICATION</span>
@@ -407,14 +409,17 @@
                         <span style="font-family:var(--font-mono); font-size:0.7rem; color:#005500;">INTEGRITY: VERIFIED</span>
                     </div>
                 </div>
-                <div class="orienting-sentence">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW ALIGNMENT IS EVALUATED AS A SYSTEM PROPERTY.</div>
+                <div class="orienting-sentence">
+                    THIS DOCUMENT IS AN INSPECTABLE RECORD OF<br>
+                    THE THEORETICAL FOUNDATIONS USED BY THE LAB.
+                </div>
             </div>
 
             <section class="audit-header" aria-label="Audit Header">
                 <div class="audit-meta">
                     <div class="audit-cell">
                         <div class="audit-k">DOC_ID</div>
-                        <div class="audit-v">EAIRL-THEORY-001</div>
+                        <div class="audit-v">EAI-THEORY-0001</div>
                     </div>
                     <div class="audit-cell">
                         <div class="audit-k">CLASSIFICATION</div>
@@ -426,7 +431,8 @@
                     </div>
                 </div>
                 <div class="audit-statement">
-                    THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW ALIGNMENT IS EVALUATED AS A SYSTEM PROPERTY.
+                    THIS DOCUMENT IS AN INSPECTABLE RECORD OF<br>
+                    THE THEORETICAL FOUNDATIONS USED BY THE LAB.
                 </div>
             </section>
 
@@ -682,7 +688,6 @@ if (psi_gradient < 0) return "CARE_EROSION";
             if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
         }
         
-        // Prevent ReferenceErrors
         function highlightText(id) {} 
         function unhighlightText(id) {}
         function highlightClaim(id) {}
@@ -710,7 +715,6 @@ if (psi_gradient < 0) return "CARE_EROSION";
         function copyCite(text) { navigator.clipboard.writeText(text); }
         function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`); }
         
-        // Lightbox
         function openLightbox(src) {
             const modal = document.getElementById('lightbox-modal');
             const img = document.getElementById('lightbox-img');
@@ -722,7 +726,6 @@ if (psi_gradient < 0) return "CARE_EROSION";
             document.getElementById('lightbox-modal').style.display = 'none';
         }
         
-        // Theme
         function setTheme(theme) {
             document.body.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
@@ -746,7 +749,6 @@ if (psi_gradient < 0) return "CARE_EROSION";
             if (!clickedInside) sidebar.classList.remove("open");
         });
         
-        // Restore last mode
         const savedMode = localStorage.getItem('enlightened_mode') || 'reader';
         setMode(savedMode);
     </script>
