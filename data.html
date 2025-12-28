@@ -2,17 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Data | Enlightened AI</title>
-
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DATA | Enlightened AI</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/footer.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
 
   <script type="application/json" id="audit-manifest">
   {
@@ -23,767 +19,574 @@
   </script>
 
   <style>
-    /* --- THEME: INSTITUTE STANDARD V54 (MATCHING MASTER SHELL) --- */
-    :root {
+    /* THEME: INSTITUTE STANDARD V54 (MATCHING MASTER SHELL) */
+    :root{
       /* LIGHT MODE */
-      --bg-color: #ffffff;
-      --sidebar-bg: #f8f9fa;
-      --text-main: #050505;
-      --text-muted: #5e5e5e;
-      --border-color: #e5e5e5;
-      --sidebar-width: 280px;
-      --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      
-      /* SIGNALS */
-      --status-verified: #00cc00;
-      --signal-blue: #0066ff;
-      --accent-primary: #00cc00;
-      
-      /* MODES */
-      --mode-audit: #b45309; 
-      
-      /* CARD VARS */
-      --card-bg: #ffffff;
-      --card-shadow: 0 4px 20px rgba(0,0,0,0.03);
-      --chip-bg: transparent;
-      --chip-border: #000;
-      --chip-text: #000;
+      --bg-color:#ffffff;
+      --sidebar-bg:#f8f9fa; /* Standardized */
+      --text-main:#050505;
+      --text-muted:#5e5e5e;
+      --border-color:#e5e5e5;
+      --card-bg:#fafafa;
+
+      --signal-enforced:#00cc00;
+      --status-verified:var(--signal-enforced);
+
+      --panel-border:#000;
+      --panel-bg:#fff;
+      --panel-text:#000;
+      --panel-hover-bg:#000;
+      --panel-hover-text:#fff;
+
+      --block-gap:48px;
     }
 
-    /* --- DARK MODE OVERRIDES --- */
-    body[data-theme="dark"] {
-      --bg-color: #0a0a0a;
-      --sidebar-bg: #0a0a0a;
-      --text-main: #f0f0f0;
-      --text-muted: #888888;
-      --border-color: #333333;
-      --mode-audit: #ffaa00;
-      --accent-primary: #00ff00;
-      --card-bg: #0f0f0f;
-      --card-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      --chip-border: #444;
-      --chip-text: #ccc;
-    }
-    body[data-theme="dark"] aside { background-color: #0a0a0a; border-right-color: #333; }
-    body[data-theme="dark"] .mobile-bar { background: rgba(10,10,10,0.95); border-bottom-color: #333; }
-    body[data-theme="dark"] .mobile-index-btn { background: var(--bg-color); color: var(--text-main); border-color: var(--border-color); }
-    body[data-theme="dark"] .brand div { color: #fff; }
-    body[data-theme="dark"] nav a.active { color: #fff; border-left-color: #fff; background: linear-gradient(90deg, #151515, #0a0a0a); }
-    body[data-theme="dark"] nav a:hover { color: #fff; }
-    body[data-theme="dark"] .toggle-btn:hover, body[data-theme="dark"] .toggle-btn.active { color: #fff; }
-    body[data-theme="dark"] h1, body[data-theme="dark"] h2 { color: #fff; }
-    body[data-theme="dark"] .val { color: #fff; }
+    [data-theme="dark"]{
+      --bg-color:#0a0a0a;
+      --sidebar-bg:#0a0a0a;
+      --text-main:#e0e0e0;
+      --text-muted:#888888;
+      --border-color:#333333;
+      --card-bg:#111111;
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    
-    body {
-      margin: 0; padding: 0;
-      font-family: var(--font-stack);
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      display: flex;
-      flex-direction: column; 
-      min-height: 100vh;
-      transition: background-color 0.2s, color 0.2s;
+      --panel-border:#444;
+      --panel-bg:#050505;
+      --panel-text:#ccc;
+      --panel-hover-bg:#e0e0e0;
+      --panel-hover-text:#000;
+
+      --signal-enforced:#00cc00;
+      --status-verified:var(--signal-enforced);
     }
 
-    .layout-wrapper { display: flex; flex: 1; width: 100%; }
-
-    /* --- BEACONS --- */
-    @keyframes beacon-pulse-green {
-      0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; }
-      50% { opacity: 1; }
-      100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; }
-    }
-    @keyframes border-pulse {
-      0% { border-color: rgba(0,204,0,0.4); }
-      50% { border-color: rgba(0,204,0,1); }
-      100% { border-color: rgba(0,204,0,0.4); }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;padding:0;
+      font-family:"Inter",sans-serif;
+      background:var(--bg-color);
+      color:var(--text-main);
+      line-height:1.5;
+      transition:background .3s ease,color .3s ease;
     }
 
-    .integrity-seal { 
-      /* FIXED: Pushed to right, same CSS as Theory */
+    /* TYPOGRAPHY */
+    h1{
+      font-size:1.1rem;
+      font-weight:700;
+      letter-spacing:-0.01em;
+      margin:0 0 1.5rem 0;
+      display:flex;
+      align-items:center;
+      text-transform:uppercase;
+    }
+    h2{
+      font-size:0.9rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      margin:3rem 0 1.5rem 0;
+      border-bottom:1px solid var(--border-color);
+      padding-bottom:0.5rem;
+      display:flex;
+      align-items:center;
+    }
+    p{
+      font-size:0.95rem;
+      margin:0 0 1.2rem 0;
+      color:var(--text-main);
+      max-width:70ch;
+    }
+    .mono{font-family:"JetBrains Mono",monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em}
+    .scramble{
+      font-family:"JetBrains Mono",monospace;
+      font-weight:400;
+      color:var(--text-muted);
+      margin-right:0.75rem;
+      cursor:crosshair;
+      user-select:none;
+    }
+
+    /* HEADER STRIP */
+    .global-header-strip{
+      width:100%;
+      padding:2rem 4rem;
+      border-bottom:1px solid var(--border-color);
+      background:var(--bg-color);
+      z-index:10;
+    }
+    .header-meta{
+      display:flex;
+      align-items:center;
+      gap:1.5rem;
+      flex-wrap:wrap;
+      margin-bottom:1rem;
+      font-family:"JetBrains Mono",monospace;
+      font-size:0.7rem;
+      color:var(--text-muted);
+    }
+    .orienting-frame{
+      font-family:"JetBrains Mono",monospace;
+      font-size:0.65rem;
+      color:var(--text-muted);
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      /* removed border-left/padding to match home style exactly if needed, 
+         but keeping per your previous data.html style request */
+      border-left:1px solid var(--border-color);
+      padding-left:12px;
+      max-width:900px;
+      line-height:1.4;
+    }
+
+    @keyframes beacon-green{0%{box-shadow:0 0 0 0 rgba(0,204,0,0.7)}100%{box-shadow:0 0 0 10px rgba(0,204,0,0)}}
+    @keyframes border-pulse{0%{border-color:rgba(0,204,0,0.4)}50%{border-color:rgba(0,204,0,1)}100%{border-color:rgba(0,204,0,0.4)}}
+
+    .integrity-seal{
+      /* PUSH RIGHT FIX */
       margin-left: auto;
-      display: flex; align-items: center; gap: 8px; 
-      font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
-      border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
-      background: rgba(0,204,0,0.05); cursor: default;
-      animation: border-pulse 3s infinite;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-family:"JetBrains Mono",monospace;
+      font-size:0.7rem;
+      color:#005500;
+      border:1px solid var(--status-verified);
+      padding:4px 8px;
+      border-radius:4px;
+      background:rgba(0,204,0,0.03);
+      cursor:default;
+      animation:border-pulse 3s infinite;
     }
-    body[data-theme="dark"] .integrity-seal { color: #00ff00; }
-    
-    .status-dot { 
-      width: 8px; height: 8px; background: var(--status-verified); 
-      border-radius: 50%; display: block; 
-      animation: beacon-pulse-green 2s infinite;
-    }
-
-    /* --- MOBILE BAR --- */
-    .mobile-bar {
-      display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; 
-      background: rgba(255,255,255,0.98); border-bottom: 1px solid var(--border-color);
-      padding: 0 1.25rem; height: 50px; align-items: center; justify-content: space-between;
-      backdrop-filter: blur(10px);
-    }
-    .mobile-brand { font-weight: 800; font-size: 0.85rem; letter-spacing: -0.02em; }
-    .mobile-index-btn { font-family: var(--font-mono); font-size: 0.75rem; padding: 4px 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); cursor: pointer; }
-
-    /* --- SIDEBAR --- */
-    aside { 
-      width: var(--sidebar-width); height: 100vh; position: sticky; top: 0; align-self: flex-start;
-      border-right: 1px solid var(--border-color); padding: 3rem 2rem; 
-      display: flex; flex-direction: column; flex-shrink: 0; background: var(--sidebar-bg); z-index: 1000; overflow-y: auto;
-    }
-    .brand { margin-bottom: 4rem; }
-    .brand div { font-family: var(--font-stack); font-weight: 800; font-size: 0.95rem; line-height: 1.0; color: var(--text-main); }
-    .brand span { display: block; margin-top: 6px; font-weight: 500; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted); }
-
-    .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
-    .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
-    .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
-    
-    nav ul { list-style: none; padding: 0; margin: 0; }
-    nav li { margin-bottom: 4px; }
-    nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 2px 0 2px 10px; border-left: 2px solid transparent; display: block; }
-    nav a:hover { color: var(--text-main); }
-    nav a.active { color: var(--text-main); font-weight: 700; border-left: 3px solid var(--text-main); background: linear-gradient(90deg, transparent, var(--bg-color)); }
-
-    .theme-switch { margin-top: auto; margin-bottom: 1rem; cursor: pointer; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid var(--border-color); transition: color 0.2s; }
-    .theme-switch:hover { color: var(--text-main); }
-
-    /* --- MAIN CONTENT --- */
-    main { flex-grow: 1; padding: 3rem 4rem; max-width: 1200px; width: 100%; }
-    
-    /* FIXED HEADER STRUCTURE (Identical to Theory) */
-    .reader-header { 
-      border-bottom: 1px solid var(--border-color); 
-      padding-bottom: 1rem; 
-      margin-bottom: 2rem;
-    }
-    .header-top-row {
-      display: flex; 
-      align-items: center; 
-      gap: 3rem; 
-      margin-bottom: 1rem;
-      font-family: var(--font-mono); 
-    }
-    .meta-item { display: flex; flex-direction: column; gap: 4px; }
-    .label { font-size: 0.6rem; letter-spacing: 0.05em; color: #999; text-transform: uppercase; }
-    .val { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
-    
-    .orienting-sentence {
-        font-family: var(--font-mono); 
-        font-size: 0.7rem; 
-        color: var(--text-muted); 
-        text-transform: uppercase; 
-        letter-spacing: 0.05em;
-        opacity: 0.9;
-        line-height: 1.4;
-    }
-    
-    /* TOOLBAR & CARDS */
-    .toolbar {
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-      padding:10px; border:1px solid var(--border-color);
-      background:transparent; border-radius:2px; margin:2rem 0 3rem 0;
-    }
-    .search {
-      flex:1; min-width:220px; padding:10px 12px;
-      border:1px solid var(--border-color); border-radius:2px;
-      background:var(--bg-color); color:var(--text-main);
-      font-family: var(--font-mono); font-size:.8rem; outline:none;
-    }
-    .search:focus { border-color: var(--accent-primary); }
-    .select {
-      padding:10px 12px; border:1px solid var(--border-color);
-      border-radius:2px; background:var(--bg-color);
-      color:var(--text-main); font-family: var(--font-mono);
-      font-size:.8rem; outline:none; cursor: pointer;
-    }
-    .select:focus { border-color: var(--accent-primary); }
-
-    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-bottom:2.5rem; }
-    
-    .card {
-      background:var(--card-bg); border:1px solid var(--border-color);
-      border-radius:4px; padding:18px; box-shadow:var(--card-shadow);
-      display:flex; flex-direction:column;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-    .card:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
-
-    .meta { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
-    .chip {
-      font-family:var(--font-mono); font-size:.6rem; font-weight: 700;
-      letter-spacing:.05em; padding:4px 8px; border-radius:2px;
-      border: 1px solid var(--chip-border); background:var(--chip-bg);
-      color:var(--chip-text); text-transform:uppercase;
-    }
-    .date {
-      font-family:var(--font-mono); font-size:.6rem; letter-spacing:.05em;
-      color:var(--text-muted); text-transform:uppercase;
-      border-left: 1px solid var(--border-color); padding-left: 8px;
-    }
-    .title { font-weight:700; font-size:1.0rem; line-height:1.3; margin:0 0 8px 0; letter-spacing: -0.01em; color: var(--text-main); }
-    .desc { margin:0 0 16px 0; color:var(--text-muted); font-size:.85rem; line-height:1.6; flex-grow:1; }
-    
-    .links { display:flex; gap:12px; flex-wrap:wrap; margin-top:auto; }
-    .btn {
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:8px 14px; border-radius:2px; text-decoration:none;
-      font-family: var(--font-mono); font-weight:600; font-size:.7rem;
-      letter-spacing: 0.05em; text-transform: uppercase;
-      border:1px solid var(--border-color); background:transparent;
-      color:var(--text-main); white-space:nowrap; transition: all 0.2s ease;
-    }
-    .btn:hover { border-color: var(--text-main); background: rgba(125,125,125,0.05); }
-    .btn.primary { color:var(--accent-primary); border-color:var(--accent-primary); background: rgba(0, 204, 0, 0.03); }
-    .btn.primary:hover {
-      background:var(--accent-primary); color:#000;
-      box-shadow: 0 0 15px rgba(0, 204, 0, 0.4); border-color: var(--accent-primary);
+    .status-dot{
+      width:8px;height:8px;border-radius:50%;
+      background:var(--status-verified);
+      display:block;
+      box-shadow:0 0 5px rgba(0,204,0,0.5);
+      animation:beacon-green 2s infinite cubic-bezier(0.66,0,0,1);
     }
 
-    .section-head {
-      margin:2.5rem 0 1rem 0; display:flex; align-items:flex-end;
-      justify-content:space-between; gap:12px;
-      border-bottom:1px solid var(--border-color); padding-bottom:10px;
+    /* SIDEBAR */
+    nav ul{list-style:none;padding:0;margin:0}
+    nav li{margin-bottom:4px}
+    nav a{
+      text-decoration:none;
+      color:var(--text-muted);
+      font-size:0.85rem;
+      display:block;
+      padding:2px 0 2px 10px;
+      border-left:2px solid transparent;
     }
-    .section-head h2 { margin:0; font-size:1.05rem; letter-spacing:.05em; text-transform:uppercase; color: var(--text-main); }
-    .section-head .hint { font-family:var(--font-mono); font-size:.7rem; color:var(--text-muted); }
+    nav a:hover{color:var(--text-main)}
+    nav a.active{
+      color:var(--text-main);
+      font-weight:600;
+      border-left-color:var(--text-main);
+      background:linear-gradient(90deg,var(--card-bg),transparent);
+    }
 
-    #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
+    .brand{margin-bottom:6rem;cursor:crosshair !important}
+    .brand div{
+      font-family:"JetBrains Mono",monospace;
+      font-weight:800;
+      font-size:0.95rem;
+      line-height:1.0;
+      color:var(--text-main);
+    }
+    .brand span{
+      display:block;
+      margin-top:6px;
+      font-weight:500;
+      font-size:0.7rem;
+      letter-spacing:0.05em;
+      color:var(--text-muted);
+    }
 
-    @media (max-width: 900px) {
-      .layout-wrapper { display: block; }
-      body { overflow-x: hidden; }
-      .mobile-bar { display: flex; }
-      aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); transition: transform 0.25s ease; border-right: none; padding: 2rem; background: var(--bg-color); overflow-y: auto; z-index: 10000; }
-      aside.open { transform: translateX(0); }
-      main { padding: 1.5rem; margin-top: 50px; width: 100%; max-width: 100vw; }
-      section { margin-bottom: 4rem; grid-template-columns: 1fr !important; }
-      .grid { grid-template-columns: 1fr; gap: 2rem; }
-      .header-top-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      .integrity-seal { margin-left: 0; }
+    .theme-switch{
+      display:flex;
+      justify-content:space-between;
+      padding:12px 0;
+      font-family:"JetBrains Mono",monospace;
+      font-size:0.7rem;
+      color:var(--text-muted);
+      cursor:pointer;
+    }
+    .theme-switch:hover{color:var(--text-main)}
+
+    /* CONTENT */
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:12px;
+    }
+    .card{
+      border:1px solid var(--border-color);
+      border-radius:16px;
+      padding:14px;
+      background:var(--card-bg);
+    }
+    .k{
+      font-family:"JetBrains Mono",monospace;
+      font-size:0.7rem;
+      color:var(--text-muted);
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+    .t{font-size:0.95rem;font-weight:650;letter-spacing:-0.01em;margin-bottom:6px}
+    .d{font-size:0.9rem;color:var(--text-muted);line-height:1.5;margin:0}
+
+    .note{
+      border:1px dashed var(--border-color);
+      border-radius:14px;
+      padding:12px;
+      font-family:"JetBrains Mono",monospace;
+      font-size:0.78rem;
+      color:var(--text-muted);
+      margin-top:14px;
+      max-width:90ch;
+    }
+
+    /* REPO PANEL (From Master Shell) */
+    .repo-panel{
+        margin-top:0;margin-bottom:1rem;border:1px solid var(--panel-border);
+        background:var(--panel-bg);padding:12px;font-family:"JetBrains Mono",monospace;
+        cursor:default;
+    }
+    .repo-header{font-size:0.65rem;font-weight:700;color:var(--panel-text);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;letter-spacing:0.05em}
+    .repo-subtext{font-size:0.6rem;color:var(--text-muted)}
+    .status-dot-red{width:6px;height:6px;background:#cc0000;border-radius:50%;display:block;animation:beacon-red 2s infinite}
+    .git-icon-small{width:14px;height:14px;fill:var(--panel-text)}
+    .export-btn{width:100%;background:var(--bg-color);border:1px solid var(--border-color);color:var(--text-main);padding:10px;font-family:"JetBrains Mono",monospace;font-size:0.7rem;text-transform:uppercase;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s}
+    .export-btn:hover{background:var(--text-main);color:var(--bg-color)}
+    @keyframes beacon-red{0%{box-shadow:0 0 0 0 rgba(204,0,0,0.7)}50%{opacity:1}100%{box-shadow:0 0 0 10px rgba(204,0,0,0);opacity:1}}
+
+    /* LAYOUT ENGINE */
+    @media (min-width:1101px){
+      body{display:flex;flex-direction:column;min-height:100vh}
+      .layout-wrapper{display:flex;flex:1;width:100%}
+
+      aside#sidebar{
+        width:240px;
+        position:sticky;
+        top:0;
+        border-right:1px solid var(--border-color);
+        padding:0;
+        display:flex;
+        flex-direction:column;
+        z-index:99;
+        background:var(--sidebar-bg);
+        flex-shrink:0;
+        overflow:hidden;
+        align-self:flex-start;
+        max-height:100vh;
+      }
+      .sidebar-scroll{flex:1;min-height:0;overflow-y:auto;padding:2rem}
+      .sidebar-bottom{padding:0 2rem 2rem 2rem;background:var(--sidebar-bg);border-top:1px solid var(--border-color)}
+      .theme-switch{position:static;margin:0 0 1rem 0 !important;border-top:none !important}
+
+      .main-column{flex-grow:1;display:flex;flex-direction:column;min-width:0}
+      .split-view{display:flex;flex:1;align-items:flex-start;min-width:0}
+      .content-col{
+        flex:1 1 auto;
+        min-width:0;
+        padding:2rem 4rem 6rem 4rem;
+        display:flex;
+        flex-direction:column;
+      }
+
+      #footer-mount{
+        width:100%;
+        border-top:1px solid var(--border-color);
+        background:var(--bg-color);
+        position:relative;
+        z-index:100;
+      }
+    }
+
+    /* MOBILE */
+    @media (max-width:1100px){
+      body{display:block;overflow-x:hidden}
+      .layout-wrapper{display:block}
+
+      body.sidebar-open{position:fixed;width:100%;overflow:hidden}
+
+      #sidebar-overlay{
+        position:fixed;top:50px;left:0;right:0;bottom:0;
+        background:rgba(0,0,0,0.5);
+        opacity:0;pointer-events:none;
+        transition:opacity .25s ease;
+        z-index:9999;
+        backdrop-filter:blur(2px);
+      }
+      aside#sidebar.open ~ #sidebar-overlay{opacity:1;pointer-events:auto}
+
+      aside#sidebar{
+        position:fixed;
+        top:50px;left:0;bottom:0;
+        width:100%;
+        transform:translateX(-100%);
+        transition:transform .25s ease;
+        border-right:none;
+        background:var(--sidebar-bg);
+        z-index:10000;
+        height:calc(100dvh - 50px);
+        display:flex;
+        flex-direction:column;
+        overflow:hidden;
+        padding:0;
+      }
+      aside#sidebar.open{transform:translateX(0)}
+      .sidebar-scroll{flex:1;min-height:0;overflow-y:auto;padding:2rem}
+      .sidebar-bottom{padding:0 2rem 2rem 2rem;background:var(--sidebar-bg);border-top:1px solid var(--border-color)}
+
+      .global-header-strip{padding:2rem}
+      .main-column{margin-top:50px;padding:0;width:100%;max-width:100vw;display:block}
+      .content-col{padding:1.5rem;max-width:none}
+      #footer-mount{width:100%}
+      .grid{grid-template-columns:1fr}
     }
   </style>
 </head>
-<body data-mode="reader" data-theme="light">
 
-  <header class="mobile-bar">
-    <div class="mobile-brand">ENLIGHTENED AI</div>
-    <div style="display:flex; align-items:center; gap:15px;">
-      <span id="theme-icon-mobile" onclick="toggleTheme()" style="cursor:pointer; font-size:1.1rem; user-select:none;">◐</span>
-      <button class="mobile-index-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">INDEX</button>
+<body data-theme="light">
+
+  <header
+    style="display:none; position:fixed; top:0; left:0; right:0; z-index:10001; background:var(--bg-color); border-bottom:1px solid var(--border-color); padding:0 1.25rem; height:50px; align-items:center; justify-content:space-between; backdrop-filter:blur(10px);"
+    id="mobile-bar"
+  >
+    <div style="font-weight:800; font-size:0.85rem; letter-spacing:-0.02em; color:var(--text-main);">ENLIGHTENED AI</div>
+    <div style="display:flex; gap:15px; align-items:center;">
+      <span onclick="toggleTheme()" style="cursor:pointer; font-size:1rem; color:var(--text-main);">◐</span>
+      <button onclick="toggleSidebar()" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; padding:4px 10px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); cursor:pointer;">INDEX</button>
     </div>
   </header>
 
+  <script>
+    (function syncMobileBar() {
+      const bar = document.getElementById('mobile-bar');
+      const apply = () => { bar.style.display = (window.innerWidth <= 1100) ? 'flex' : 'none'; };
+      window.addEventListener('resize', apply);
+      apply();
+    })();
+  </script>
+
   <div class="layout-wrapper">
     <aside id="sidebar">
-      <div class="brand">
-        <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
-        <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
-        <span>EST. 2026 // MONTREAL</span>
+      <div class="sidebar-scroll">
+        <div class="brand">
+          <div class="scramble" style="font-weight:800; font-size:0.95rem;">ENLIGHTENED AI</div>
+          <div class="scramble" style="font-weight:800; font-size:0.95rem;">RESEARCH LAB</div>
+          <span>EST. 2026 // MONTREAL</span>
+        </div>
+
+        <nav>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="theory.html">Theory</a></li>
+            <li><a href="lexicon.html">Lexicon</a></li>
+            <li><a href="reflective-diagnostics.html">Diagnostics</a></li>
+            <li><a href="data.html" class="active">Data</a></li>
+            <li><a href="curriculum.html">Curriculum</a></li>
+            <li><a href="videos.html">Videos</a></li>
+            <li><a href="publications.html">Publications</a></li>
+            
+            <li style="margin-top:1rem; opacity:0.5; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; padding-left:10px;">Sections</li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#families">Asset Families</a></li>
+            <li><a href="#access">Access</a></li>
+          </ul>
+        </nav>
       </div>
 
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="theory.html">Theory</a></li>
-          <li><a href="lexicon.html">Lexicon</a></li>
-          <li><a href="reflective-diagnostics.html">Diagnostics</a></li>
-          <li><a href="data.html">Data</a></li>
-          <li><a href="curriculum.html">Curriculum</a></li>
-          <li><a href="videos.html">Videos</a></li>
-          <li><a href="publications.html" class="active">Publications</a></li>
-        </ul>
-      </nav>
-      
-      <div class="theme-switch" onclick="toggleTheme()">
-        [ LIGHT / DARK ] <span id="theme-icon">◐</span>
+      <div class="sidebar-bottom">
+        <div class="theme-switch" onclick="toggleTheme()">
+          [ LIGHT / DARK ] <span id="theme-icon">◐</span>
+        </div>
+
+        <div class="repo-panel" onclick="window.open('https://github.com/EnlightenedAI-Lab/access-requests/issues/new?title=Research%20Access%20Request&body=Affiliation:%0A%0AIntended%20use:%0A%0AGitHub%20username:%0A%0AWhy%20access%20is%20needed:', '_blank')">
+            <div class="repo-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <svg class="git-icon-small" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GITHUB REPOSITORY
+                </div>
+                <span class="status-dot-red"></span>
+            </div>
+            <div class="repo-subtext">Private repository — controlled access</div>
+        </div>
+
+        <div class="export-container">
+            <button class="export-btn" onclick="window.print()"><span>🖨</span> Export Record</button>
+        </div>
       </div>
     </aside>
 
-    <main>
-      
-      <div class="reader-header">
-        <div class="header-top-row">
-            <div class="meta-item">
-                <span class="label">DOC_ID</span>
-                <span class="val">EAI-PUB-0001</span>
-            </div>
-            <div class="meta-item">
-                <span class="label">CLASSIFICATION</span>
-                <span class="val">PUBLIC</span>
-            </div>
-            <div class="integrity-seal">
-                <span class="status-dot"></span>
-                <span style="font-family:var(--font-mono); font-size:0.7rem; color:#005500;">INTEGRITY: VERIFIED</span>
-            </div>
+    <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <div class="main-column">
+
+      <div class="global-header-strip">
+        <div class="header-meta">
+          <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">DOC_ID</span>RD-DATA-0001</div>
+          <div><span style="color:var(--text-muted); font-size:0.6rem; display:inline-block; margin-right:6px;">CLASSIFICATION</span>PUBLIC</div>
+          <div class="integrity-seal"><span class="status-dot"></span>INTEGRITY: VERIFIED</div>
         </div>
-        <div class="orienting-sentence">
-            THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW MACHINE-READABLE ALIGNMENT DATA IS DERIVED FROM CANONICAL SEMANTIC STRUCTURES.
-        </div>
+        <div class="orienting-frame">THIS DOCUMENT IS AN INSPECTABLE RECORD OF HOW MACHINE-READABLE ALIGNMENT DATA IS DERIVED FROM CANONICAL SEMANTIC STRUCTURES.</div>
       </div>
 
-      <div class="content-area" style="padding-left:0; padding-right:0;">
-        <div style="max-width: 800px; margin-bottom: 2rem;">
-          <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-primary); margin-bottom: 0.5rem; letter-spacing: 0.05em; font-weight: 600;">
-            ENLIGHTENED AI LAB // PUBLIC RECORD
-          </div>
-          <h1 style="font-size: 2.2rem; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.25rem;">
-            Publications
-          </h1>
-          <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
-            Public artifacts, timestamps (DOI), and long-form works in one place.
-          </p>
-        </div>
+      <div class="split-view">
+        <div class="content-col">
 
-        <div class="toolbar">
-          <input id="search" class="search" type="text" placeholder="Search titles, keywords, venues..." />
-          <select id="filterType" class="select">
-            <option value="all">All types</option>
-            <option value="paper">Paper</option>
-            <option value="preprint">Preprint</option>
-            <option value="timestamp">Timestamp</option>
-            <option value="resource">Resource</option>
-            <option value="post">Post</option>
-          </select>
-          <select id="filterVenue" class="select">
-            <option value="all">All venues</option>
-            <option value="zenodo">Zenodo</option>
-            <option value="ssrn">SSRN</option>
-            <option value="osf">OSF</option>
-            <option value="academia">Academia.edu</option>
-            <option value="arxiv">arXiv</option>
-            <option value="eaforum">EA Forum</option>
-            <option value="medium">Medium</option>
-            <option value="github">GitHub</option>
-            <option value="huggingface">Hugging Face</option>
-            <option value="pdf">PDF</option>
-          </select>
-        </div>
+          <section id="overview">
+            <h1><span class="scramble">01 //</span>Overview</h1>
+            <p>
+              Enlightened AI Research Lab produces machine-operational semantic assets derived from its Reflective Alignment Lexicon and diagnostic instruments.
+              These assets support downstream research, benchmarking, and governance review while preserving traceability and versioned meaning.
+            </p>
 
-        <div class="section-head">
-          <h2>Featured</h2>
-          <div class="hint">High-signal entry points for reviewers</div>
-        </div>
-        <div id="gridFeatured" class="grid"></div>
-
-        <div class="section-head">
-          <h2>Books & Monographs</h2>
-          <div class="hint">Long-form works</div>
-        </div>
-        <div id="gridBooks" class="grid">
-          
-          <div class="card">
-            <div class="meta">
-              <span class="chip">BOOK</span>
-              <span class="date">2025</span>
+            <div class="note">
+              Public disclosure is intentionally limited. Machine-operational assets derived from the Lexicon exist and can be generated.
+              Release is discretionary and evaluated case-by-case under controlled agreements, based on a clear research, governance, or evaluative rationale.
             </div>
-            <h3 class="title">Data at the Edge: Master Geospatial AI</h3>
-            <p class="desc">Comprehensive guide to mastering geospatial artificial intelligence and edge computing.</p>
-            <div class="links">
-              <a class="btn primary" href="https://www.amazon.com/Data-Edge-Master-Geospatial-AI/dp/1069204706/ref=sr_1_1" target="_blank" rel="noopener">[ VIEW ON AMAZON ]</a>
-            </div>
-          </div>
+          </section>
 
-          <div class="card">
-            <div class="meta">
-              <span class="chip">BOOK</span>
-              <span class="date">2025</span>
-            </div>
-            <h3 class="title">Data at the Edge: Master Workbook Companion</h3>
-            <p class="desc">Practical workbook and companion exercises for the Data at the Edge curriculum.</p>
-            <div class="links">
-              <a class="btn primary" href="https://www.amazon.com/Data-Edge-Master-Workbook-Companion-ebook/dp/B0DX3CFMPC?ref_=ast_author_dp" target="_blank" rel="noopener">[ VIEW ON AMAZON ]</a>
-            </div>
-          </div>
+          <section id="families">
+            <h2><span class="scramble">02 //</span>Asset Families</h2>
 
-          <div class="card">
-            <div class="meta">
-              <span class="chip">BOOK</span>
-              <span class="date">2025</span>
-            </div>
-            <h3 class="title">Data at the Edge</h3>
-            <p class="desc">The core text defining the principles of edge-based data systems.</p>
-            <div class="links">
-              <a class="btn primary" href="https://www.amazon.com/dp/B0DX7BYL3G?ref_=ast_author_dp" target="_blank" rel="noopener">[ VIEW ON AMAZON ]</a>
-            </div>
-          </div>
+            <div class="grid">
+              <div class="card">
+                <div class="k">Family A</div>
+                <div class="t">Machine Lexicon Exports</div>
+                <p class="d">Canonical IDs, relations, constraints, and schema-valid term bindings (versioned).</p>
+              </div>
 
-          <div class="card">
-            <div class="meta">
-              <span class="chip">BOOK</span>
-              <span class="date">2025</span>
+              <div class="card">
+                <div class="k">Family B</div>
+                <div class="t">Record Observatory</div>
+                <p class="d">Immutable records capturing model I/O boundaries, provenance metadata, and content hashes.</p>
+              </div>
+
+              <div class="card">
+                <div class="k">Family C</div>
+                <div class="t">Diagnostic Signals</div>
+                <p class="d">Structure-only signals (no truth/intent claims), deltas, signatures, and evidence pointers.</p>
+              </div>
+
+              <div class="card">
+                <div class="k">Family D</div>
+                <div class="t">Longitudinal Trajectories</div>
+                <p class="d">Aggregated record sets across runs/conditions to study drift, stability, and onset patterns.</p>
+              </div>
+
+              <div class="card">
+                <div class="k">Family E</div>
+                <div class="t">EARTH Context Layer</div>
+                <p class="d">Geospatial and contextual substrates designed to link external context to stored records.</p>
+              </div>
+
+              <div class="card">
+                <div class="k">Family F</div>
+                <div class="t">RID (Internal Collection)</div>
+                <p class="d">Curated, lexicon-anchored artifacts generated across controlled experiments and validation runs.</p>
+              </div>
             </div>
-            <h3 class="title">Data at the Edge: Practical ArcGIS</h3>
-            <p class="desc">A practical guide to implementing edge data strategies using ArcGIS.</p>
-            <div class="links">
-              <a class="btn primary" href="https://www.amazon.com/DATA-AT-EDGE-PRACTICAL-ArcGIS-ebook/dp/B0DX3DB57T?ref_=ast_author_dp" target="_blank" rel="noopener">[ VIEW ON AMAZON ]</a>
-            </div>
-          </div>
+          </section>
 
-          <div class="card">
-            <div class="meta">
-              <span class="chip">BOOK</span>
-              <span class="date">2025</span>
-            </div>
-            <h3 class="title">Data at the Edge: Premier Sources</h3>
-            <p class="desc">A curated collection of premier sources and reference materials.</p>
-            <div class="links">
-              <a class="btn primary" href="https://www.amazon.com/DATA-AT-EDGE-PREMIER-SOURCES-ebook/dp/B0DX3G8XH1?ref_=ast_author_dp" target="_blank" rel="noopener">[ VIEW ON AMAZON ]</a>
-            </div>
-          </div>
+          <section id="access">
+            <h2><span class="scramble">03 //</span>Access</h2>
+            <p>
+              Access to machine-operational semantic assets is scoped by agreement and governance constraints.
+              Requests are evaluated based on alignment with research, benchmarking, or review objectives,
+              and may require controlled review or NDA.
+            </p>
+          </section>
 
-        </div>
-
-        <div class="section-head">
-          <h2>Press & Public Mentions</h2>
-          <div class="hint">External coverage</div>
-        </div>
-        <div id="gridPress" class="grid"></div>
-
-        <div class="section-head">
-          <h2>All Public Artifacts</h2>
-          <div class="hint">Chronological + searchable</div>
-        </div>
-        <div id="gridAll" class="grid"></div>
-
-        <div class="section-head">
-          <h2>Citation</h2>
-          <div class="hint">Stable IDs for referencing</div>
-        </div>
-        <div class="card">
-          <p class="desc" style="margin-bottom:0;">
-            Use Zenodo DOIs where available. Otherwise cite the canonical PDF link and the GitHub commit hash for the corresponding release.
-          </p>
         </div>
       </div>
-    </main>
+    </div>
   </div>
 
   <div id="footer-mount"></div>
 
-  <script type="application/json" id="pub-manifest">
-  {
-    "featured_ids": ["rai-core-raa-rdl", "little-book", "zenodo-raa-rdl", "eaforum-raa-overview"],
-    "press_ids": ["press-dicaprio"],
-    "items": [
-      {
-        "id": "press-dicaprio",
-        "type": "post",
-        "venue": "press",
-        "date": "2025-02",
-        "title": "Leonardo DiCaprio Foreword — Data at the Edge",
-        "desc": "Announcement: Leonardo DiCaprio pens foreword to 'Data at the Edge' series (PR Newswire).",
-        "tags": ["press", "dicaprio", "series"],
-        "links": [
-          { "label": "Read Release", "url": "https://www.prnewswire.com/news-releases/leonardo-dicaprio-pens-foreword-to-data-at-the-edge-a-five-book-series-on-finding-trusted-gis-data-302544731.html", "style": "primary" }
-        ]
-      },
-      {
-        "id": "little-book",
-        "type": "paper",
-        "venue": "pdf",
-        "date": "2026-01",
-        "title": "The Little Book of AI Alignment",
-        "desc": "Compact primer and public-facing entry point (v1.0).",
-        "tags": ["overview", "alignment", "primer"],
-        "links": [
-          { "label": "Download PDF", "url": "https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171", "style": "primary" }
-        ]
-      },
-      {
-        "id": "rai-core-raa-rdl",
-        "type": "paper",
-        "venue": "pdf",
-        "date": "2025-11",
-        "title": "Reflective Alignment Architecture (RAA) & Reflective Duality Layer (RDL)",
-        "desc": "Core framework paper describing reflective stability and the RDL measurement layer.",
-        "tags": ["RAA", "RDL", "stability"],
-        "links": [
-          { "label": "Read PDF", "url": "https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing", "style": "primary" },
-          { "label": "GitHub", "url": "https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/", "style": "default" }
-        ]
-      },
-      {
-        "id": "osf-framework",
-        "type": "resource",
-        "venue": "osf",
-        "date": "2025-11",
-        "title": "RAA & RDL: Scientific Framework (OSF)",
-        "desc": "Public project hosting the core archival version of the RAA/RDL framework.",
-        "tags": ["osf", "framework", "archive"],
-        "links": [
-          { "label": "View on OSF", "url": "https://osf.io/8e2wx/", "style": "primary" }
-        ]
-      },
-      {
-        "id": "osf-supplements",
-        "type": "resource",
-        "venue": "osf",
-        "date": "2025-11",
-        "title": "RAA v1.1 — Figures & Supplements",
-        "desc": "Repository for diagrams, figures, and supplementary materials associated with RAA v1.1.",
-        "tags": ["osf", "figures", "data"],
-        "links": [
-          { "label": "View on OSF", "url": "https://osf.io/5bzmu/", "style": "primary" }
-        ]
-      },
-      {
-        "id": "academia-raa",
-        "type": "preprint",
-        "venue": "academia",
-        "date": "2025-11",
-        "title": "RAA & RDL Framework (Academia.edu)",
-        "desc": "Scientific framework for measuring moral coherence in AI systems.",
-        "tags": ["academia", "preprint"],
-        "links": [
-          { "label": "View on Academia", "url": "https://www.academia.edu/145222632", "style": "primary" }
-        ]
-      },
-      {
-        "id": "zenodo-raa-rdl",
-        "type": "timestamp",
-        "venue": "zenodo",
-        "date": "2026-01",
-        "title": "Zenodo Record — RAA Core Framework",
-        "desc": "Immutable timestamp for public verification. DOI: 10.5281/zenodo.17665613",
-        "tags": ["timestamp", "doi", "verification"],
-        "links": [
-          { "label": "Zenodo Record", "url": "https://zenodo.org/records/17665613", "style": "primary" }
-        ]
-      },
-      {
-        "id": "zenodo-rdl-extension",
-        "type": "timestamp",
-        "venue": "zenodo",
-        "date": "2026-01",
-        "title": "Zenodo Record — RDL Extension",
-        "desc": "Measurement layer extension timestamp. DOI: 10.5281/zenodo.17664094",
-        "tags": ["timestamp", "doi", "rdl"],
-        "links": [
-          { "label": "Zenodo Record", "url": "https://zenodo.org/records/17664094", "style": "primary" }
-        ]
-      },
-      {
-        "id": "zenodo-failure-signatures",
-        "type": "timestamp",
-        "venue": "zenodo",
-        "date": "2026-01",
-        "title": "Zenodo Record — Failure Signatures",
-        "desc": "Alignment failure modes dataset timestamp. DOI: 10.5281/zenodo.17575613",
-        "tags": ["timestamp", "doi", "data"],
-        "links": [
-          { "label": "Zenodo Record", "url": "https://zenodo.org/records/17575613", "style": "primary" }
-        ]
-      },
-      {
-        "id": "ssrn-5r-education",
-        "type": "preprint",
-        "venue": "ssrn",
-        "date": "2026-01",
-        "title": "5R Framework on Education",
-        "desc": "SSRN preprint applying the 5R framework to education contexts.",
-        "tags": ["5R", "education", "SSRN"],
-        "links": [
-          { "label": "Read on SSRN", "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708262", "style": "primary" }
-        ]
-      },
-      {
-        "id": "ssrn-care",
-        "type": "preprint",
-        "venue": "ssrn",
-        "date": "2026-01",
-        "title": "Teaching the Machine to Care",
-        "desc": "SSRN preprint on care as stabilizing parameter for moral coherence.",
-        "tags": ["care", "stability", "SSRN"],
-        "links": [
-          { "label": "Read on SSRN", "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708265", "style": "primary" }
-        ]
-      },
-      {
-        "id": "github-raa",
-        "type": "resource",
-        "venue": "github",
-        "date": "2026-01",
-        "title": "RAA Repository (GitHub)",
-        "desc": "Canonical public repository for code, artifacts, and record integrity.",
-        "tags": ["repo", "code", "record"],
-        "links": [
-          { "label": "Open GitHub", "url": "https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/", "style": "primary" }
-        ]
-      },
-      {
-        "id": "hf-model-card",
-        "type": "resource",
-        "venue": "huggingface",
-        "date": "2026-01",
-        "title": "Hugging Face Model Card",
-        "desc": "Model card and dataset entry point.",
-        "tags": ["huggingface", "card"],
-        "links": [
-          { "label": "Open Hugging Face", "url": "https://huggingface.co/EnlightenedAI-Lab/RAA-Reflective-Alignment-Architecture", "style": "primary" }
-        ]
-      },
-      {
-        "id": "eaforum-raa-overview",
-        "type": "post",
-        "venue": "eaforum",
-        "date": "2026-01",
-        "title": "EA Forum — RAA Overview",
-        "desc": "Public post summarizing the framework and positioning.",
-        "tags": ["EA Forum", "overview"],
-        "links": [
-          { "label": "Read Post", "url": "https://forum.effectivealtruism.org/posts/mek7nYqrYdJqwgrjs/reflective-alignment-architecture-raa-a-framework-for-moral?utm_campaign=post_share&utm_source=link", "style": "primary" }
-        ]
-      },
-      {
-        "id": "medium-shaping-ai",
-        "type": "post",
-        "venue": "medium",
-        "date": "2026-01",
-        "title": "Shaping AI with Care",
-        "desc": "A Covenant for Ethical Coevolution.",
-        "tags": ["medium", "ethics"],
-        "links": [
-          { "label": "Read on Medium", "url": "https://medium.com/@nicolas_91820/shaping-ai-with-care-a-covenant-for-ethical-coevolution-c7f7d9d73543", "style": "primary" }
-        ]
-      },
-      {
-        "id": "medium-living-code",
-        "type": "post",
-        "venue": "medium",
-        "date": "2026-01",
-        "title": "The Living Code",
-        "desc": "Perspectives on AI development.",
-        "tags": ["medium", "reflection"],
-        "links": [
-          { "label": "Read on Medium", "url": "https://medium.com/@nicolas_91820/shaping-ai-with-care-a-covenant-for-ethical-coevolution-c7f7d9d73543", "style": "primary" }
-        ]
-      }
-    ]
-  }
+  <script>
+    fetch('/partials/footer.html')
+      .then(r => r.ok ? r.text() : '')
+      .then(html => { if (html) document.getElementById('footer-mount').innerHTML = html; })
+      .catch(() => {});
   </script>
 
   <script>
-    // Footer mount
-    fetch('partials/footer.html')
-      .then(r => r.text())
-      .then(html => { document.getElementById('footer-mount').innerHTML = html; });
-
-    // Theme
-    function setTheme(theme){
-      document.body.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
+    // THEME (match lexicon storage key)
+    function toggleTheme() {
+      const body = document.body;
+      const current = body.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', next);
+      localStorage.setItem('enlightened_theme', next);
       const icon = document.getElementById('theme-icon');
-      if(icon) icon.textContent = (theme === 'dark') ? '◑' : '◐';
-      const iconMobile = document.getElementById('theme-icon-mobile');
-      if(iconMobile) iconMobile.textContent = (theme === 'dark') ? '◑' : '◐';
+      if (icon) icon.textContent = (next === 'dark') ? '◑' : '◐';
     }
-    function toggleTheme(){
-      const current = document.body.getAttribute('data-theme') || 'light';
-      setTheme(current === 'dark' ? 'light' : 'dark');
-    }
-    setTheme(localStorage.getItem('theme') || 'light');
 
-    // Mobile: close sidebar on outside click
-    document.addEventListener("click", (e) => {
-      if (window.innerWidth > 900) return;
-      const sidebar = document.getElementById("sidebar");
-      const isOpen = sidebar && sidebar.classList.contains("open");
-      if (!isOpen) return;
-      const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
-      if (!clickedInside) sidebar.classList.remove("open");
+    const savedTheme = localStorage.getItem('enlightened_theme');
+    if (savedTheme) {
+      document.body.setAttribute('data-theme', savedTheme);
+      const icon = document.getElementById('theme-icon');
+      if (icon) icon.textContent = (savedTheme === 'dark') ? '◑' : '◐';
+    }
+
+    // SCRAMBLE (same as lexicon)
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+    function scrambleText(element) {
+      let iterations = 0;
+      const originalText = element.dataset.value;
+      if (element.interval) clearInterval(element.interval);
+
+      element.interval = setInterval(() => {
+        element.innerText = originalText.split("").map((ch, idx) => {
+          if (idx < iterations) return originalText[idx];
+          return letters[Math.floor(Math.random() * letters.length)];
+        }).join("");
+
+        if (iterations >= originalText.length) clearInterval(element.interval);
+        iterations += 1 / 3;
+      }, 30);
+    }
+
+    document.querySelectorAll(".scramble").forEach(h => {
+      h.dataset.value = h.innerText;
+      h.addEventListener("mouseover", e => scrambleText(e.target));
     });
 
-    // Render publications
-    const data = JSON.parse(document.getElementById('pub-manifest').textContent);
-    const items = data.items || [];
-    const featuredIds = new Set(data.featured_ids || []);
-    const pressIds = new Set(data.press_ids || []);
+    // SIDEBAR (mobile overlay + scroll lock)
+    let __scrollY = 0;
 
-    const gridFeatured = document.getElementById('gridFeatured');
-    const gridPress = document.getElementById('gridPress');
-    const gridAll = document.getElementById('gridAll');
-
-    const searchEl = document.getElementById('search');
-    const filterTypeEl = document.getElementById('filterType');
-    const filterVenueEl = document.getElementById('filterVenue');
-
-    function chipLabel(type){
-      const map = {
-        paper: "Paper",
-        preprint: "Preprint",
-        timestamp: "Timestamp",
-        resource: "Resource",
-        post: "Post",
-        press: "Press"
-      };
-      return map[type] || "Item";
+    function openSidebar() {
+      __scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      document.body.style.top = `-${__scrollY}px`;
+      document.getElementById('sidebar').classList.add('open');
+      document.body.classList.add('sidebar-open');
     }
 
-    function cardHTML(it){
-      const tags = (it.tags || []).slice(0,4).map(t => `<span class="chip">${t}</span>`).join('');
-      const links = (it.links || []).map(l => {
-        const cls = l.style === "primary" ? "btn primary" : "btn";
-        return `<a class="${cls}" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`;
-      }).join('');
-
-      return `
-        <div class="card" data-type="${it.type||''}" data-venue="${it.venue||''}">
-          <div class="meta">
-            <span class="chip">${chipLabel(it.type)}</span>
-            <span class="date">${it.date || ''}</span>
-            ${tags}
-          </div>
-          <h3 class="title">${it.title || ''}</h3>
-          <p class="desc">${it.desc || ''}</p>
-          <div class="links">${links}</div>
-        </div>
-      `;
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.body.classList.remove('sidebar-open');
+      const y = __scrollY;
+      document.body.style.top = '';
+      window.scrollTo(0, y);
     }
 
-    function render(){
-      const q = (searchEl.value || '').toLowerCase().trim();
-      const type = filterTypeEl.value;
-      const venue = filterVenueEl.value;
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      sb.classList.contains('open') ? closeSidebar() : openSidebar();
+    }
 
-      const filtered = items.filter(it => {
-        const hay = [
-          it.title || '',
-          it.desc || '',
-          (it.tags || []).join(' '),
-          it.type || '',
-          it.venue || ''
-        ].join(' ').toLowerCase();
-        if (q && !hay.includes(q)) return false;
-        if (type !== 'all' && (it.type || '') !== type) return false;
-        if (venue !== 'all' && (it.venue || '') !== venue) return false;
-        return true;
+    // Close sidebar after clicking links on mobile
+    document.querySelectorAll('#sidebar a[href^="#"], #sidebar a[href$=".html"]').forEach(a => {
+      a.addEventListener('click', () => {
+        if (window.innerWidth <= 1100) closeSidebar();
       });
-
-      // Filter Groups
-      const featured = filtered.filter(it => featuredIds.has(it.id));
-      const press = filtered.filter(it => pressIds.has(it.id));
-      // "All" excludes featured/press/books(implicit in HTML) so we don't duplicate visually
-      const rest = filtered.filter(it => !featuredIds.has(it.id) && !pressIds.has(it.id));
-
-      gridFeatured.innerHTML = featured.map(cardHTML).join('') || `<div class="card"><p class="desc" style="margin:0;">No featured items match.</p></div>`;
-      gridPress.innerHTML = press.map(cardHTML).join('') || `<div class="card"><p class="desc" style="margin:0;">No press items match.</p></div>`;
-      gridAll.innerHTML = rest.map(cardHTML).join('') || `<div class="card"><p class="desc" style="margin:0;">No items match.</p></div>`;
-    }
-
-    searchEl.addEventListener('input', render);
-    filterTypeEl.addEventListener('change', render);
-    filterVenueEl.addEventListener('change', render);
-
-    render();
+    });
   </script>
-
 </body>
 </html>
