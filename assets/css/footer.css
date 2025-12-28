@@ -218,3 +218,11 @@
         padding-right: 1.5rem;
     }
 }
+/* === Machine / Serialization Status Dots === */
+#system-footer .status-dot.purple {
+  background-color: #7c6cff;
+}
+
+#system-footer .status-dot.orange {
+  background-color: #f59e0b;
+}
