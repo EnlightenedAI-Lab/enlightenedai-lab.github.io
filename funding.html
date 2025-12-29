@@ -3,542 +3,531 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Alignment Funding Master Index (v2.1)</title>
+    <title>Funding CRM | Enlightened AI</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
     <style>
+        /* --- THEME: INSTITUTE STANDARD V54 --- */
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --accent: #10b981;
-            --bg: #f8fafc;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            /* LIGHT MODE */
+            --bg-color: #ffffff;
+            --sidebar-bg: #f8f9fa;
+            --text-main: #050505;
+            --text-muted: #5e5e5e;
+            --border-color: #e5e5e5;
+            --accent-primary: #0044cc;
+            --accent-hover: #003399;
+            --status-verified: #00cc00;
+            
+            --tag-apply: #e0f2fe; --text-apply: #0369a1;
+            --tag-monitor: #f3f4f6; --text-monitor: #4b5563;
+            --tag-contract: #fef3c7; --text-contract: #92400e;
+            --tag-partner: #dcfce7; --text-partner: #166534;
+            --tag-archive: #f1f5f9; --text-archive: #94a3b8;
+            --tag-applied: #dcfce7; --text-applied: #166534; /* New applied style */
+
+            --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         }
 
-        /* ACCESSIBILITY & BASE STYLES */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text);
-            background: var(--bg);
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
+        /* DARK MODE SUPPORT */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0a0a0a;
+                --sidebar-bg: #111111;
+                --text-main: #f0f0f0;
+                --text-muted: #888888;
+                --border-color: #333333;
+                --accent-primary: #66aaff;
+                --accent-hover: #4488dd;
+                
+                --tag-apply: #0c4a6e; --text-apply: #bae6fd;
+                --tag-monitor: #374151; --text-monitor: #d1d5db;
+                --tag-contract: #78350f; --text-contract: #fde68a;
+                --tag-partner: #14532d; --text-partner: #bbf7d0;
+                --tag-archive: #1e293b; --text-archive: #94a3b8;
+                --tag-applied: #14532d; --text-applied: #bbf7d0;
+            }
         }
 
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: #000;
-            color: white;
-            padding: 8px;
-            z-index: 100;
-            transition: top 0.2s;
-        }
-
-        .skip-link:focus {
-            top: 0;
-        }
-
-        h1, h2, h3 {
-            color: #0f172a;
-            margin-top: 0;
-        }
+        * { box-sizing: border-box; }
         
-        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        h2 { font-size: 1.8rem; margin-bottom: 1rem; }
-        h3 { font-size: 1.3rem; margin-bottom: 1rem; }
-
-        .subtitle {
-            font-size: 1.25rem;
-            color: var(--text-light);
-            margin-bottom: 0.5rem;
-        }
-
-        .meta-info {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 2rem;
-            font-family: monospace;
-        }
-
-        /* CARD STYLES */
-        .strategy-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 3rem;
-            border-left: 6px solid var(--accent);
-        }
-
-        .strategy-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        /* UTILITY BAR (Link Check) */
-        .utility-bar {
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-stack);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
             display: flex;
-            justify-content: flex-end;
-            margin-bottom: 1rem;
-            gap: 10px;
+            flex-direction: column;
         }
 
-        .btn-utility {
-            background: white;
-            border: 1px solid var(--border);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            color: var(--text);
-        }
-
-        .btn-utility:hover { background: #f1f5f9; }
-
-        #link-status-panel {
-            display: none;
-            background: #f1f5f9;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            border: 1px solid var(--border);
-        }
-
-        /* TABLE STYLES */
-        .table-container {
-            overflow-x: auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 3rem;
-        }
-
-        table {
+        /* --- LAYOUT --- */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
             width: 100%;
-            border-collapse: collapse;
-            min-width: 800px; /* Force scroll on desktop if constrained */
+            flex: 1;
         }
 
+        /* --- HEADER --- */
+        .header-row {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem; margin-bottom: 2rem;
+        }
+        .brand {
+            font-weight: 800; font-size: 1.5rem; letter-spacing: -0.03em;
+            text-transform: uppercase;
+        }
+        .brand span { color: var(--text-muted); font-weight: 400; margin-left: 0.5rem; font-size: 1rem; }
+        
+        .stats-bar {
+            display: flex; gap: 1.5rem; font-family: var(--font-mono); font-size: 0.75rem;
+        }
+        .stat-item span { font-weight: 700; color: var(--text-main); }
+        .stat-label { color: var(--text-muted); margin-right: 6px; }
+
+        /* --- CONTROLS --- */
+        .controls-area {
+            display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;
+        }
+        .search-row {
+            display: flex; gap: 1rem; flex-wrap: wrap;
+        }
+        .search-input {
+            flex: 1; min-width: 250px;
+            padding: 10px 12px;
+            font-family: var(--font-stack); font-size: 0.9rem;
+            background: var(--bg-color); color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+        .search-input:focus { outline: 2px solid var(--accent-primary); border-color: transparent; }
+
+        .btn {
+            padding: 8px 16px; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600;
+            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color);
+            cursor: pointer; border-radius: 4px; transition: all 0.1s;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn:hover { background: var(--sidebar-bg); border-color: var(--text-muted); }
+        .btn-primary { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+        .btn-primary:hover { opacity: 0.9; background: var(--text-main); }
+
+        .filters-row {
+            display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+        }
+        .filter-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); margin-right: 8px; text-transform: uppercase; }
+        .chip {
+            padding: 4px 10px; border-radius: 99px;
+            font-size: 0.75rem; font-weight: 500;
+            border: 1px solid var(--border-color);
+            cursor: pointer; user-select: none;
+            transition: all 0.1s;
+        }
+        .chip:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+        .chip.active { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
+
+        /* --- TABLE --- */
+        .table-wrapper {
+            overflow-x: auto; border: 1px solid var(--border-color); border-radius: 4px;
+        }
+        table {
+            width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;
+        }
         th {
-            background: #f1f5f9;
-            text-align: left;
-            padding: 16px;
-            font-weight: 700;
-            border-bottom: 2px solid var(--border);
-            color: #334155;
+            background: var(--sidebar-bg); color: var(--text-muted);
+            font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase;
+            padding: 12px 16px; border-bottom: 1px solid var(--border-color);
+            cursor: pointer; user-select: none; white-space: nowrap;
         }
-
+        th:hover { color: var(--text-main); background: rgba(0,0,0,0.05); }
+        th.sort-asc::after { content: " ▲"; }
+        th.sort-desc::after { content: " ▼"; }
+        
         td {
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
+            padding: 12px 16px; border-bottom: 1px solid var(--border-color);
             vertical-align: top;
         }
-
         tr:last-child td { border-bottom: none; }
-        tr:hover { background-color: #f8fafc; }
+        tr:hover td { background: rgba(0,0,0,0.01); }
 
-        .org-name {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 1.1rem;
-            display: block;
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: 700; /* Higher contrast */
-            background: #e0f2fe;
-            color: #0c4a6e; /* Darker blue for contrast */
-            margin-top: 4px;
-        }
-
-        .btn-apply {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 10px 18px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: background 0.2s;
-            text-align: center;
-        }
-
-        .btn-apply:hover, .btn-apply:focus {
-            background: var(--primary-dark);
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
-        }
-
-        /* MOBILE RESPONSIVE TABLE (Stacked Cards) */
-        @media screen and (max-width: 768px) {
-            table, thead, tbody, th, td, tr { display: block; }
-            thead tr { position: absolute; top: -9999px; left: -9999px; }
-            
-            tr { 
-                margin-bottom: 1.5rem; 
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                background: white;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            }
-
-            td { 
-                border: none;
-                border-bottom: 1px solid #f1f5f9; 
-                position: relative;
-                padding-left: 1rem;
-            }
-
-            td:last-child { border-bottom: none; }
-
-            .table-container {
-                box-shadow: none;
-                background: transparent;
-            }
-        }
-
-        /* EXCLUDED SECTION */
-        .excluded-section {
-            background: #e2e8f0;
-            padding: 2rem;
-            border-radius: 12px;
-            color: var(--text-light);
-            margin-bottom: 3rem;
-        }
-
-        .excluded-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .excluded-item {
-            background: white;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            border: 1px solid #cbd5e1;
-            display: flex;
-            align-items: center;
-            color: var(--text);
-        }
-
-        .excluded-item::before {
-            content: "✕";
-            color: #ef4444;
-            margin-right: 8px;
-            font-weight: bold;
-        }
-
-        /* COPY PROMPT BOX */
-        .copy-box {
-            background: #1e293b;
-            color: #cbd5e1;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 2rem;
-            font-size: 0.9rem;
-        }
-
-        .copy-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .copy-header h3 { margin: 0; color: white; font-size: 1rem; }
-
-        .copy-content {
-            background: #0f172a;
-            padding: 10px;
-            border-radius: 4px;
-            font-family: monospace;
-            white-space: pre-wrap;
-            max-height: 150px;
-            overflow-y: auto;
-            border: 1px solid #334155;
-            margin-bottom: 10px;
-        }
-
-        .btn-copy {
-            background: #475569;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn-copy:hover { background: #64748b; }
-
-        /* METRICS FOOTER */
-        footer {
-            margin-top: 4rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
-            font-size: 0.85rem;
-            color: var(--text-light);
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
+        /* --- CELLS --- */
+        .cell-org { font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
+        .cell-sub { font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 2px; }
         
-        .metrics-block {
-            font-family: monospace;
+        .status-select {
+            padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;
+            border: 1px solid transparent; cursor: pointer; appearance: none;
+            font-family: var(--font-stack); width: 100%; text-align: center;
         }
+        .status-select:focus { outline: 2px solid var(--accent-primary); }
+        
+        /* Status Colors */
+        .st-apply { background: var(--tag-apply); color: var(--text-apply); }
+        .st-monitor { background: var(--tag-monitor); color: var(--text-monitor); }
+        .st-contract { background: var(--tag-contract); color: var(--text-contract); }
+        .st-partner { background: var(--tag-partner); color: var(--text-partner); }
+        .st-archive { background: var(--tag-archive); color: var(--text-archive); }
+        .st-applied { background: var(--tag-applied); color: var(--text-applied); border: 1px solid var(--text-applied); }
+
+        .notes-input {
+            width: 100%; border: 1px solid transparent; background: transparent;
+            font-family: var(--font-stack); font-size: 0.8rem; color: var(--text-main);
+            padding: 4px; resize: vertical; min-height: 30px;
+        }
+        .notes-input:focus { background: var(--bg-color); border-color: var(--border-color); outline: none; }
+        .notes-input:placeholder-shown { font-style: italic; }
+
+        .actions-cell { display: flex; gap: 8px; justify-content: flex-end; }
+        .icon-btn {
+            background: none; border: 1px solid var(--border-color); padding: 6px;
+            border-radius: 4px; cursor: pointer; color: var(--text-muted);
+            transition: all 0.1s; display: flex; align-items: center; justify-content: center;
+        }
+        .icon-btn:hover { border-color: var(--text-main); color: var(--text-main); background: var(--bg-color); }
+        
+        /* Toast Notification */
+        #toast {
+            position: fixed; bottom: 20px; right: 20px;
+            background: var(--text-main); color: var(--bg-color);
+            padding: 10px 20px; border-radius: 4px; font-size: 0.8rem;
+            font-family: var(--font-mono); opacity: 0; pointer-events: none;
+            transition: opacity 0.3s; z-index: 1000;
+        }
+        #toast.show { opacity: 1; }
+
+        /* Hidden File Input */
+        #file-input { display: none; }
+
     </style>
 </head>
 <body>
 
-    <a href="#main-content" class="skip-link">Skip to content</a>
+    <div class="app-container">
+        <header class="header-row">
+            <div class="brand">
+                Funding CRM <span>/ Enlightened AI</span>
+            </div>
+            <div class="stats-bar" id="statsBar">
+                </div>
+        </header>
 
-    <header>
-        <h1>AI Alignment Funding Master Index</h1>
-        <div class="subtitle">Focus: Independent Tooling, Diagnostics & Infrastructure (Canada/Global)</div>
-        <div class="meta-info" id="last-updated">Last Updated: Loading...</div>
-    </header>
+        <div class="controls-area">
+            <div class="search-row">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search funds, types, notes...">
+                <button class="btn" onclick="exportData()">↓ Export JSON</button>
+                <button class="btn" onclick="document.getElementById('file-input').click()">↑ Import JSON</button>
+                <input type="file" id="file-input" accept=".json" onchange="importData(this)">
+            </div>
 
-    <section class="strategy-card">
-        <span class="strategy-title">🚀 Execution Strategy: The "Priority 6"</span>
-        <p>
-            Based on constraints and prior coverage, these are the <strong>6 highest-leverage remaining targets</strong>.
-            80% of your application effort should focus on these "Green Light" targets.
-        </p>
-        <p>These organizations prioritize <strong>artifacts, high-agency builders, and open infrastructure</strong> over academic theory.</p>
-    </section>
-
-    <main id="main-content">
-        <div class="utility-bar">
-            <button class="btn-utility" onclick="checkLinks()">Check Links</button>
+            <div class="filters-row">
+                <span class="filter-label">Status:</span>
+                <div id="statusFilters" style="display:contents">
+                    </div>
+            </div>
+            <div class="filters-row">
+                <span class="filter-label">Type:</span>
+                <div id="typeFilters" style="display:contents">
+                    </div>
+            </div>
         </div>
-        <div id="link-status-panel">Checking links...</div>
 
-        <h2>✅ Active Funding Targets (Apply Here)</h2>
-        <div class="table-container">
-            <table>
+        <div class="table-wrapper">
+            <table id="fundingTable">
                 <thead>
                     <tr>
-                        <th scope="col" style="width: 20%;">Organization</th>
-                        <th scope="col" style="width: 15%;">Range / Type</th>
-                        <th scope="col" style="width: 35%;">Why This Fits (Strategy)</th>
-                        <th scope="col" style="width: 15%;">Eligibility</th>
-                        <th scope="col" style="width: 15%;">Action</th>
+                        <th onclick="sortTable('name')" style="width: 25%">Organization</th>
+                        <th onclick="sortTable('type')" style="width: 10%">Type</th>
+                        <th onclick="sortTable('range')" style="width: 12%">Range</th>
+                        <th onclick="sortTable('status')" style="width: 12%">Status</th>
+                        <th style="width: 30%">Notes (Auto-Saved)</th>
+                        <th style="width: 11%; text-align: right;">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <span class="org-name">NLnet Foundation</span>
-                            <small>NGI Zero Commons</small>
-                        </td>
-                        <td>
-                            <div>€5K – €50K</div>
-                            <span class="tag">Foundation</span>
-                        </td>
-                        <td>
-                            <strong>Top Priority.</strong> Funds "open trustworthiness" tools. Frame the dashboard as "public infrastructure for AI accountability" and the lexicon as an open standard.
-                        </td>
-                        <td>Global<br>Independent</td>
-                        <td><a href="https://nlnet.nl/commonsfund" target="_blank" rel="noopener noreferrer" class="btn-apply" aria-label="Apply to NLnet Foundation" onclick="trackClick('NLnet')">Apply Now &rarr;</a></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="org-name">Emergent Ventures</span>
-                            <small>Mercatus Center</small>
-                        </td>
-                        <td>
-                            <div>$10K – $50K+</div>
-                            <span class="tag">Fellowship</span>
-                        </td>
-                        <td>
-                            <strong>Top Priority.</strong> Tyler Cowen funds "outliers." Frame your RAA/RDL theory as a high-upside, non-consensus bet on safety instrumentation.
-                        </td>
-                        <td>Global<br>Independent</td>
-                        <td><a href="https://www.mercatus.org/emergent-ventures" target="_blank" rel="noopener noreferrer" class="btn-apply" aria-label="Apply to Emergent Ventures" onclick="trackClick('Emergent Ventures')">Apply Now &rarr;</a></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="org-name">Aligned Studies Foundation</span>
-                            <small>ASF</small>
-                        </td>
-                        <td>
-                            <div>$5K – $50K</div>
-                            <span class="tag">Regrantor</span>
-                        </td>
-                        <td>
-                            <strong>High Priority.</strong> Specifically designed for independent technical researchers. They want "infrastructure" and "specs"—perfect for your lexicon.
-                        </td>
-                        <td>Global<br>Independent</td>
-                        <td><a href="https://alignedstudies.com/apply" target="_blank" rel="noopener noreferrer" class="btn-apply" aria-label="Apply to Aligned Studies Foundation" onclick="trackClick('ASF')">Apply Now &rarr;</a></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="org-name">AI Safety Campus</span>
-                            <small>AISC</small>
-                        </td>
-                        <td>
-                            <div>$1K – $30K</div>
-                            <span class="tag">Microgrants</span>
-                        </td>
-                        <td>
-                            <strong>High Priority.</strong> Fast, agile grants for "technical projects with immediate applicability." Good for covering hosting/compute costs immediately.
-                        </td>
-                        <td>Global<br>Independent</td>
-                        <td><a href="https://www.aisafety.campus/grants" target="_blank" rel="noopener noreferrer" class="btn-apply" aria-label="Apply to AI Safety Campus" onclick="trackClick('AISC')">Apply Now &rarr;</a></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="org-name">AE Studio</span>
-                            <small>Alignment Grants</small>
-                        </td>
-                        <td>
-                            <div>$10K – $25K</div>
-                            <span class="tag">Private Corp</span>
-                        </td>
-                        <td>
-                            <strong>High Priority.</strong> They seek "neglected approaches." Pitch your dashboard as a practical diagnostic tool that theory-heavy labs are missing.
-                        </td>
-                        <td>Global<br>Independent</td>
-                        <td><a href="https://research.ae.studio/" target="_blank" rel="noopener noreferrer" class="btn-apply" aria-label="Apply to AE Studio" onclick="trackClick('AE Studio')">Apply Now &rarr;</a></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="org-name">BlueDot Impact</span>
-                            <small>AGI Strategy Fund</small>
-                        </td>
-                        <td>
-                            <div>$5K – $50K</div>
-                            <span class="tag">Regrantor</span>
-                        </td>
-                        <td>
-                            <strong>High Priority.</strong> Strong focus on governance & strategy. Frame the dashboard as a tool for "policymakers to measure alignment."
-                        </td>
-                        <td>Global<br>(Course Alumni)</td>
-                        <td><a href="https://www.aisafety.com/funding" target="_blank" rel="noopener noreferrer" class="btn-apply" aria-label="Apply to BlueDot Impact" onclick="trackClick('BlueDot')">Apply Now &rarr;</a></td>
-                    </tr>
-                </tbody>
+                <tbody id="tableBody">
+                    </tbody>
             </table>
         </div>
-    </main>
+    </div>
 
-    <section class="excluded-section">
-        <h3>Already Covered / Do Not Repeat (Reference)</h3>
-        <p>These have been reviewed already. Do not include them in future ‘funding discovery’ outputs.</p>
-        
-        <div class="excluded-grid">
-            <div class="excluded-item">NRC IRAP</div>
-            <div class="excluded-item">SR&ED</div>
-            <div class="excluded-item">Mitacs</div>
-            <div class="excluded-item">CIFAR</div>
-            <div class="excluded-item">NSERC Alliance</div>
-            <div class="excluded-item">Open Philanthropy</div>
-            <div class="excluded-item">Longview Philanthropy</div>
-            <div class="excluded-item">Foresight Institute</div>
-            <div class="excluded-item">Survival and Flourishing Fund</div>
-            <div class="excluded-item">OpenAI (Superalignment)</div>
-            <div class="excluded-item">Anthropic (Evals)</div>
-            <div class="excluded-item">Jaan Tallinn / LTFF</div>
-            <div class="excluded-item">AI Compute Access Fund</div>
-            <div class="excluded-item">Prompt Quebec</div>
-            <div class="excluded-item">Manifund</div>
-            <div class="excluded-item">ARC (Alignment Research Center)</div>
-            <div class="excluded-item">Redwood Research</div>
-            <div class="excluded-item">DeepMind</div>
-            <div class="excluded-item">EleutherAI</div>
-
-            <div class="excluded-item">Huberman Family Charitable Fund</div>
-            <div class="excluded-item">Mozilla Technology Fund</div>
-            <div class="excluded-item">Cooperative AI Foundation</div>
-            <div class="excluded-item">SingularityNET (Deep Funding)</div>
-            <div class="excluded-item">AI Objectives Institute</div>
-            <div class="excluded-item">METR (formerly ARC Evals)</div>
-        </div>
-
-        <div class="copy-box">
-            <div class="copy-header">
-                <h3>Research Prompt Helper</h3>
-                <button class="btn-copy" onclick="copyExclusions()">Copy List</button>
-            </div>
-            <div class="copy-content" id="exclusion-text">NRC IRAP, SR&ED, Mitacs, CIFAR, NSERC Alliance, Open Philanthropy, Longview Philanthropy, Foresight Institute, Survival and Flourishing Fund, OpenAI, Anthropic, Jaan Tallinn / LTFF, AI Compute Access Fund, Prompt Quebec, Manifund, ARC, Redwood Research, DeepMind, EleutherAI, Huberman Family Charitable Fund, Mozilla Technology Fund, Cooperative AI Foundation, SingularityNET (Deep Funding), AI Objectives Institute, METR (formerly ARC Evals).</div>
-            <small>Use this list in future prompts to prevent duplicate results.</small>
-        </div>
-    </section>
-
-    <footer>
-        <div class="metrics-block">
-            Page Load: <span id="load-time">...</span>
-        </div>
-        <div class="metrics-block">
-            Total Apply Clicks: <span id="click-count">0</span>
-        </div>
-    </footer>
+    <div id="toast">Action Saved</div>
 
     <script>
-        // 1. TIMESTAMP
-        document.getElementById('last-updated').textContent = 'Last Updated: ' + new Date().toLocaleString();
-        document.getElementById('load-time').textContent = new Date().toLocaleTimeString();
+        // --- DATA MODEL ---
+        const STATUS_OPTIONS = ['Apply Now', 'Applied', 'Monitor', 'Contract', 'Partner', 'Archive'];
+        const TYPE_OPTIONS = ['Foundation', 'Regrantor', 'Lab', 'University', 'DAO', 'Think Tank', 'Private'];
 
-        // 2. USER METRICS (LocalStorage)
-        function updateMetricsDisplay() {
-            const clicks = JSON.parse(localStorage.getItem('funding_clicks') || '{}');
-            const total = Object.values(clicks).reduce((a, b) => a + b, 0);
-            document.getElementById('click-count').textContent = total;
+        // Initial Seed Data (21 Entries)
+        const seedData = [
+            { id: 1, name: "NLnet Foundation", sub: "NGI Zero Commons", type: "Foundation", range: "€5K–€50K", status: "Apply Now", link: "https://nlnet.nl/commonsfund", pitch: "Open source infrastructure for AI accountability.", notes: "Top Priority. Focus on public utility tools." },
+            { id: 2, name: "Emergent Ventures", sub: "Mercatus Center", type: "Foundation", range: "$10K–$50K+", status: "Apply Now", link: "https://www.mercatus.org/emergent-ventures", pitch: "High-upside, non-consensus bet on safety instrumentation.", notes: "Write 1-pager. Focus on 'outlier' ideas." },
+            { id: 3, name: "Aligned Studies Foundation (ASF)", sub: "", type: "Regrantor", range: "$5K–$50K", status: "Apply Now", link: "https://alignedstudies.com/apply", pitch: "Infrastructure and specs for independent researchers.", notes: "Check eligibility requirements." },
+            { id: 4, name: "AI Safety Campus (AISC)", sub: "", type: "Regrantor", range: "$1K–$30K", status: "Apply Now", link: "https://www.aisafety.campus/grants", pitch: "Fast agile grant for immediate tooling.", notes: "Good for server costs." },
+            { id: 5, name: "AE Studio", sub: "Alignment Research Grants", type: "Private", range: "$10K–$25K", status: "Apply Now", link: "https://research.ae.studio/", pitch: "Neglected approaches in alignment diagnostics.", notes: "Emphasize 'neglected approach'." },
+            { id: 6, name: "BlueDot Impact", sub: "AGI Strategy Fund", type: "Regrantor", range: "$5K–$50K", status: "Apply Now", link: "https://www.aisafety.com/funding", pitch: "Governance and strategy tooling for policymakers.", notes: "Check alumni requirements." },
+            { id: 7, name: "Huberman Family Charitable Fund", sub: "AI Safety Stream", type: "Foundation", range: "$25K–$75K", status: "Monitor", link: "mailto:grants@huberman.org", pitch: "Evaluation and monitoring of AI systems.", notes: "Need intro or direct email pitch." },
+            { id: 8, name: "Mozilla Technology Fund", sub: "", type: "Foundation", range: "$50K", status: "Monitor", link: "https://foundation.mozilla.org/en/what-we-fund/technologies/", pitch: "Open source audit tools and algorithmic accountability.", notes: "Watch for open calls." },
+            { id: 9, name: "Cooperative AI Foundation (CAIF)", sub: "", type: "Foundation", range: "£20K–£50K", status: "Monitor", link: "https://www.cooperativeai.com/grants", pitch: "Benchmarks for multi-agent cooperation.", notes: "Fit for R4 (Reciprocity) work." },
+            { id: 10, name: "SingularityNET", sub: "Deep Funding", type: "DAO", range: "~$40K", status: "Monitor", link: "https://deepfunding.ai/all-rfps/", pitch: "Decentralized reasoning and neural-symbolic tools.", notes: "Web3/Crypto focus." },
+            { id: 11, name: "AI Objectives Institute", sub: "", type: "Think Tank", range: "$15K–$40K", status: "Monitor", link: "https://www.aioi.org/contact", pitch: "Human values metrics and moral coherence.", notes: "Good fit for Moral Index (MCI)." },
+            { id: 12, name: "Patrick J. McGovern Foundation", sub: "", type: "Foundation", range: "Unknown", status: "Monitor", link: "https://www.mcgovern.org/", pitch: "AI for public good and data sovereignty.", notes: "Large grants, harder to access." },
+            { id: 13, name: "Coefficient Giving", sub: "Entrepreneurial Grants", type: "Regrantor", range: "Variable", status: "Apply Now", link: "https://coefficientgiving.org/", pitch: "Entrepreneurial approaches to safety.", notes: "Fast turnaround." },
+            { id: 14, name: "FAR AI", sub: "Alignment Grants", type: "Lab", range: "Variable", status: "Monitor", link: "https://far.ai/", pitch: "Interpretability and robustness research.", notes: "Usually for academic/PhD level." },
+            { id: 15, name: "Future Fund", sub: "Infrastructure Stream", type: "Foundation", range: "$10K–$100K", status: "Archive", link: "https://ftx.com/foundation", pitch: "Paused.", notes: "Currently inactive." },
+            { id: 16, name: "Lightcone Infrastructure", sub: "LessWrong Projects", type: "Regrantor", range: "$5K–$20K", status: "Monitor", link: "https://www.lesswrong.com/", pitch: "Rationality and alignment community tooling.", notes: "Community-based funding." },
+            { id: 17, name: "Rethink Priorities", sub: "Worldview Investigation", type: "Think Tank", range: "Variable", status: "Monitor", link: "https://rethinkpriorities.org/", pitch: "Research into moral weights and AI welfare.", notes: "Research heavy." },
+            { id: 18, name: "QURI", sub: "Quantified Uncertainty", type: "Lab", range: "Variable", status: "Monitor", link: "https://quantifieduncertainty.org/", pitch: "Forecasting and epistemics tools.", notes: "Good for 'Oracle' validation." },
+            { id: 19, name: "METR", sub: "Contract Work", type: "Lab", range: "Contract", status: "Contract", link: "https://metr.org/contact/", pitch: "Third-party evaluation environment.", notes: "Sales pitch, not grant." },
+            { id: 20, name: "MIRI", sub: "", type: "Lab", range: "Variable", status: "Monitor", link: "https://intelligence.org/", pitch: "Mathematical alignment theory.", notes: "Very theoretical." },
+            { id: 21, name: "SERI Microgrants", sub: "Stanford", type: "University", range: "$5K", status: "Monitor", link: "https://seri.stanford.edu/", pitch: "Existential risk reduction projects.", notes: "Often student focused." }
+        ];
+
+        // --- STATE MANAGEMENT ---
+        let db = [];
+        let activeFilters = {
+            status: [],
+            type: []
+        };
+        let sortConfig = { key: 'id', dir: 'asc' };
+
+        // --- INITIALIZATION ---
+        function init() {
+            // Load from LocalStorage or Seed
+            const saved = localStorage.getItem('fundingDB_v1');
+            if (saved) {
+                db = JSON.parse(saved);
+            } else {
+                db = JSON.parse(JSON.stringify(seedData)); // Deep copy
+                save();
+            }
+
+            renderFilters();
+            renderTable();
+            updateStats();
         }
 
-        function trackClick(orgName) {
-            const clicks = JSON.parse(localStorage.getItem('funding_clicks') || '{}');
-            clicks[orgName] = (clicks[orgName] || 0) + 1;
-            localStorage.setItem('funding_clicks', JSON.stringify(clicks));
-            updateMetricsDisplay();
+        function save() {
+            localStorage.setItem('fundingDB_v1', JSON.stringify(db));
+            updateStats();
         }
 
-        updateMetricsDisplay();
+        // --- RENDERING ---
+        function renderFilters() {
+            // Status Filters
+            const statusContainer = document.getElementById('statusFilters');
+            statusContainer.innerHTML = STATUS_OPTIONS.map(s => 
+                `<span class="chip ${activeFilters.status.includes(s) ? 'active' : ''}" 
+                       onclick="toggleFilter('status', '${s}')">${s}</span>`
+            ).join('');
 
-        // 3. INTERNAL LINK CHECKER (HEAD request)
-        async function checkLinks() {
-            const panel = document.getElementById('link-status-panel');
-            panel.style.display = 'block';
-            panel.innerHTML = 'Starting check... (Note: Some valid sites may block this via CORS)';
-            
-            const links = document.querySelectorAll('.table-container a');
-            let results = [];
+            // Type Filters
+            const typeContainer = document.getElementById('typeFilters');
+            typeContainer.innerHTML = TYPE_OPTIONS.map(t => 
+                `<span class="chip ${activeFilters.type.includes(t) ? 'active' : ''}" 
+                       onclick="toggleFilter('type', '${t}')">${t}</span>`
+            ).join('');
+        }
 
-            for (let link of links) {
-                try {
-                    // Try simple fetch. If CORS blocks it, it throws or returns opaque.
-                    // This is a "best effort" check from the client side.
-                    await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
-                    results.push(`✅ ${link.getAttribute('aria-label')}: OK/Reachable`);
-                } catch (e) {
-                    results.push(`⚠️ ${link.getAttribute('aria-label')}: Check manually (Network Error)`);
-                }
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+
+            // Filter
+            let filtered = db.filter(item => {
+                const matchesSearch = 
+                    item.name.toLowerCase().includes(search) || 
+                    item.notes.toLowerCase().includes(search) ||
+                    item.type.toLowerCase().includes(search);
+                
+                const matchesStatus = activeFilters.status.length === 0 || activeFilters.status.includes(item.status);
+                const matchesType = activeFilters.type.length === 0 || activeFilters.type.includes(item.type);
+
+                return matchesSearch && matchesStatus && matchesType;
+            });
+
+            // Sort
+            filtered.sort((a, b) => {
+                let valA = a[sortConfig.key] || '';
+                let valB = b[sortConfig.key] || '';
+                if (typeof valA === 'string') valA = valA.toLowerCase();
+                if (typeof valB === 'string') valB = valB.toLowerCase();
+
+                if (valA < valB) return sortConfig.dir === 'asc' ? -1 : 1;
+                if (valA > valB) return sortConfig.dir === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            // Render Rows
+            tbody.innerHTML = filtered.map(item => `
+                <tr>
+                    <td>
+                        <div class="cell-org">${item.name}</div>
+                        <span class="cell-sub">${item.sub}</span>
+                    </td>
+                    <td>${item.type}</td>
+                    <td style="font-family:var(--font-mono); font-size:0.75rem;">${item.range}</td>
+                    <td>
+                        <select class="status-select ${getStatusClass(item.status)}" onchange="updateStatus(${item.id}, this.value)">
+                            ${STATUS_OPTIONS.map(opt => `<option value="${opt}" ${item.status === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="notes-input" value="${item.notes}" 
+                               onchange="updateNotes(${item.id}, this.value)" placeholder="Add notes...">
+                    </td>
+                    <td>
+                        <div class="actions-cell">
+                            <button class="icon-btn" onclick="copyPitch('${item.pitch.replace(/'/g, "\\'")}')" title="Copy Pitch">
+                                📋
+                            </button>
+                            <a href="${item.link}" target="_blank" class="icon-btn" title="Open Link">
+                                ↗
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats() {
+            const total = db.length;
+            const apply = db.filter(i => i.status === 'Apply Now').length;
+            const applied = db.filter(i => i.status === 'Applied').length;
+            const monitor = db.filter(i => i.status === 'Monitor').length;
+
+            document.getElementById('statsBar').innerHTML = `
+                <div class="stat-item"><span class="stat-label">Total:</span><span>${total}</span></div>
+                <div class="stat-item"><span class="stat-label">Apply Now:</span><span style="color:var(--accent-primary)">${apply}</span></div>
+                <div class="stat-item"><span class="stat-label">Applied:</span><span style="color:var(--status-verified)">${applied}</span></div>
+                <div class="stat-item"><span class="stat-label">Monitor:</span><span>${monitor}</span></div>
+            `;
+        }
+
+        // --- ACTIONS ---
+        function toggleFilter(category, value) {
+            const idx = activeFilters[category].indexOf(value);
+            if (idx > -1) {
+                activeFilters[category].splice(idx, 1);
+            } else {
+                activeFilters[category].push(value);
+            }
+            renderFilters();
+            renderTable();
+        }
+
+        function sortTable(key) {
+            if (sortConfig.key === key) {
+                sortConfig.dir = sortConfig.dir === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortConfig.key = key;
+                sortConfig.dir = 'asc';
             }
             
-            panel.innerHTML = results.join('<br>');
+            // Update UI indicators
+            document.querySelectorAll('th').forEach(th => th.className = '');
+            const activeTh = document.querySelector(`th[onclick="sortTable('${key}')"]`);
+            if (activeTh) activeTh.classList.add(`sort-${sortConfig.dir}`);
+            
+            renderTable();
         }
 
-        // 4. COPY PROMPT FUNCTION
-        function copyExclusions() {
-            const text = document.getElementById('exclusion-text').innerText;
+        function updateStatus(id, newVal) {
+            const item = db.find(i => i.id === id);
+            if (item) {
+                item.status = newVal;
+                save();
+                renderTable(); // Re-render to update color
+                showToast(`Status updated to: ${newVal}`);
+            }
+        }
+
+        function updateNotes(id, newVal) {
+            const item = db.find(i => i.id === id);
+            if (item) {
+                item.notes = newVal;
+                save();
+                // No re-render needed for notes to prevent focus loss
+            }
+        }
+
+        function copyPitch(text) {
             navigator.clipboard.writeText(text).then(() => {
-                const btn = document.querySelector('.btn-copy');
-                btn.textContent = 'Copied!';
-                setTimeout(() => btn.textContent = 'Copy List', 2000);
+                showToast("Pitch copied to clipboard!");
             });
         }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'Apply Now': return 'st-apply';
+                case 'Monitor': return 'st-monitor';
+                case 'Contract': return 'st-contract';
+                case 'Partner': return 'st-partner';
+                case 'Archive': return 'st-archive';
+                case 'Applied': return 'st-applied';
+                default: return '';
+            }
+        }
+
+        // --- IMPORT / EXPORT ---
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "funding_data_" + new Date().toISOString().slice(0,10) + ".json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    if (Array.isArray(json)) {
+                        db = json;
+                        save();
+                        renderTable();
+                        showToast("Data imported successfully!");
+                    } else {
+                        alert("Invalid JSON format.");
+                    }
+                } catch (err) {
+                    alert("Error parsing file.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Event Listeners
+        document.getElementById('searchInput').addEventListener('input', renderTable);
+
+        // --- BOOT ---
+        init();
+
+        // Theme Toggle
+        function toggleTheme() {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        }
+
     </script>
 </body>
 </html>
