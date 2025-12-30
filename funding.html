@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>EAIRL | FUNDING CMD v14.3</title>
+    <title>EAIRL | FUNDING CMD v14.4</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,8 +40,7 @@
             --badge-partner: #ffedd5; --text-partner: #c2410c;
 
             /* LOGISTICS PILLS */
-            --pill-bg: #ffffff; --pill-border: #e4e4e7; --pill-text: #52525b;
-            --pill-cash: #059669; --pill-credits: #7c3aed;
+            --pill-bg: #f4f4f5; --pill-text: #52525b;
         }
 
         body[data-theme="dark"] {
@@ -56,8 +55,7 @@
             --badge-accel: #4a044e; --text-accel: #f0abfc;
             --badge-uni: #172554; --text-uni: #bfdbfe;
             --badge-partner: #431407; --text-partner: #fdba74;
-            --pill-bg: #18181b; --pill-border: #3f3f46; --pill-text: #d4d4d8;
-            --pill-cash: #34d399; --pill-credits: #a78bfa;
+            --pill-bg: #27272a; --pill-text: #d4d4d8;
         }
 
         * { box-sizing: border-box; }
@@ -86,11 +84,9 @@
         }
         
         .pill {
-            font-size: 9px; padding: 1px 4px; border: 1px solid var(--pill-border); border-radius: 3px; font-family: "JetBrains Mono", monospace; 
-            margin-right: 3px; display: inline-block; background: var(--pill-bg); color: var(--pill-text);
+            font-size: 9px; padding: 1px 4px; border-radius: 3px; font-family: "JetBrains Mono", monospace; 
+            margin-right: 2px; display: inline-block; background: var(--pill-bg); color: var(--pill-text);
         }
-        .pill-val.cash { color: var(--pill-cash); font-weight: 700; border-color: var(--pill-cash); }
-        .pill-val.credits { color: var(--pill-credits); font-weight: 700; border-color: var(--pill-credits); }
 
         /* --- SEARCH & FILTERS --- */
         .search-container { margin-bottom: 20px; position: sticky; top: 0; background: var(--bg); z-index: 20; padding-top: 5px; }
@@ -208,7 +204,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
                 <div>
                     <h1>Funding Command</h1>
-                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v14.3</div>
+                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v14.4</div>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn" style="border-color:var(--highlight); color:var(--highlight);" onclick="openAddTargetModal()">+ ADD TARGET</button>
@@ -246,6 +242,16 @@
             </div>
 
             <div class="stat-bar" id="stats-mount"></div>
+
+            <details open style="margin-bottom:20px; border:1px solid var(--border);">
+                <summary class="section-header"><span>// MISSION CONTROL</span></summary>
+                <div style="padding:15px; background:var(--surface);">
+                    <div style="margin-bottom:10px;">
+                        <input id="secondary-search" class="search-input" style="border-color:var(--highlight);" placeholder="> SECONDARY COMMAND LINE (Drill down search / Quick Filter)..." oninput="renderApp()">
+                    </div>
+                    <textarea id="global-scratchpad" style="width:100%; height:100px; padding:10px; border:1px solid var(--border); resize:vertical; outline:none; background:var(--bg); color:var(--text-main); font-family:'JetBrains Mono', monospace; font-size:12px;" placeholder="Global strategic notes / Scratchpad..."></textarea>
+                </div>
+            </details>
 
             <div id="pipeline-container"></div>
         </div>
@@ -364,10 +370,10 @@
         </div>
     </div>
 
-    <div class="ver-tag">[ v14.3 ]</div>
+    <div class="ver-tag">[ v14.4 ]</div>
 
     <script>
-        const DB_KEY = 'eairl_funding_v14_3'; // FRESH KEY FOR LOGISTICS FIX
+        const DB_KEY = 'eairl_funding_v14_3'; 
         
         const seedData = [
             // A: ACTIVE OPS
@@ -428,7 +434,6 @@
                 let currentDB = [];
                 if (saved) {
                     currentDB = JSON.parse(saved);
-                    // MERGE LOGIC FOR SAFETY
                     seedData.forEach(seedItem => {
                         const exists = currentDB.some(d => String(d.id) === String(seedItem.id) && d.sec === seedItem.sec);
                         if (!exists) currentDB.push(seedItem);
@@ -468,6 +473,7 @@
 
         function renderApp() {
             const searchVal = document.getElementById('global-search').value.toLowerCase();
+            const secSearchVal = document.getElementById('secondary-search') ? document.getElementById('secondary-search').value.toLowerCase() : '';
             const filterStat = document.getElementById('filter-status').value.toLowerCase();
             const filterType = document.getElementById('filter-type').value.toLowerCase();
             
@@ -489,18 +495,19 @@
             for (const [key, title] of Object.entries(sections)) {
                 let items = db.filter(i => i.sec === key);
                 
-                if (searchVal || filterStat || filterType) {
+                if (searchVal || secSearchVal || filterStat || filterType) {
                     items = items.filter(i => {
                         const matchesSearch = !searchVal || (i.name.toLowerCase().includes(searchVal) || (i.notes && i.notes.toLowerCase().includes(searchVal)));
+                        const matchesSec = !secSearchVal || (i.name + (i.notes||'') + (i.mode||'')).toLowerCase().includes(secSearchVal);
                         const matchesStat = !filterStat || i.status.toLowerCase() === filterStat;
                         const matchesType = !filterType || i.type.toLowerCase().includes(filterType);
-                        return matchesSearch && matchesStat && matchesType;
+                        return matchesSearch && matchesSec && matchesStat && matchesType;
                     });
                 }
 
                 if (items.length === 0) continue;
 
-                const isOpen = openSections[key] || (searchVal || filterStat || filterType) ? 'open' : '';
+                const isOpen = openSections[key] || (searchVal || secSearchVal || filterStat || filterType) ? 'open' : '';
                 
                 let html = `
                     <details ${isOpen} style="margin-bottom:20px; border:1px solid var(--border);" ontoggle="toggleSection('${key}')">
@@ -589,7 +596,7 @@
             }
         }
 
-        // ... [Rest of functions are same as before: renderStats, update, openFileModal, etc.] ...
+        // --- UTILS ---
         function renderStats() {
             const total = db.length;
             const submitted = db.filter(i => i.status === 'Submitted').length;
