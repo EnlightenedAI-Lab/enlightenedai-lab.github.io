@@ -4,530 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Funding CRM | Enlightened AI</title>
-    
+    <link rel="stylesheet" href="assets/funding.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
-    <style>
-        /* --- THEME: INSTITUTE STANDARD V54 --- */
-        :root {
-            /* LIGHT MODE */
-            --bg-color: #ffffff;
-            --sidebar-bg: #f8f9fa;
-            --text-main: #050505;
-            --text-muted: #5e5e5e;
-            --border-color: #e5e5e5;
-            --accent-primary: #0044cc;
-            --accent-hover: #003399;
-            --status-verified: #00cc00;
-            
-            --tag-apply: #e0f2fe; --text-apply: #0369a1;
-            --tag-monitor: #f3f4f6; --text-monitor: #4b5563;
-            --tag-contract: #fef3c7; --text-contract: #92400e;
-            --tag-partner: #dcfce7; --text-partner: #166534;
-            --tag-archive: #f1f5f9; --text-archive: #94a3b8;
-            --tag-applied: #dcfce7; --text-applied: #166534; /* New applied style */
-
-            --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        }
-
-        /* DARK MODE SUPPORT */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #0a0a0a;
-                --sidebar-bg: #111111;
-                --text-main: #f0f0f0;
-                --text-muted: #888888;
-                --border-color: #333333;
-                --accent-primary: #66aaff;
-                --accent-hover: #4488dd;
-                
-                --tag-apply: #0c4a6e; --text-apply: #bae6fd;
-                --tag-monitor: #374151; --text-monitor: #d1d5db;
-                --tag-contract: #78350f; --text-contract: #fde68a;
-                --tag-partner: #14532d; --text-partner: #bbf7d0;
-                --tag-archive: #1e293b; --text-archive: #94a3b8;
-                --tag-applied: #14532d; --text-applied: #bbf7d0;
-            }
-        }
-
-        * { box-sizing: border-box; }
-        
-        body {
-            margin: 0; padding: 0;
-            font-family: var(--font-stack);
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- LAYOUT --- */
-        .app-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            width: 100%;
-            flex: 1;
-        }
-
-        /* --- HEADER --- */
-        .header-row {
-            display: flex; justify-content: space-between; align-items: flex-end;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1.5rem; margin-bottom: 2rem;
-        }
-        .brand {
-            font-weight: 800; font-size: 1.5rem; letter-spacing: -0.03em;
-            text-transform: uppercase;
-        }
-        .brand span { color: var(--text-muted); font-weight: 400; margin-left: 0.5rem; font-size: 1rem; }
-        
-        .stats-bar {
-            display: flex; gap: 1.5rem; font-family: var(--font-mono); font-size: 0.75rem;
-        }
-        .stat-item span { font-weight: 700; color: var(--text-main); }
-        .stat-label { color: var(--text-muted); margin-right: 6px; }
-
-        /* --- CONTROLS --- */
-        .controls-area {
-            display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;
-        }
-        .search-row {
-            display: flex; gap: 1rem; flex-wrap: wrap;
-        }
-        .search-input {
-            flex: 1; min-width: 250px;
-            padding: 10px 12px;
-            font-family: var(--font-stack); font-size: 0.9rem;
-            background: var(--bg-color); color: var(--text-main);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-        }
-        .search-input:focus { outline: 2px solid var(--accent-primary); border-color: transparent; }
-
-        .btn {
-            padding: 8px 16px; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600;
-            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color);
-            cursor: pointer; border-radius: 4px; transition: all 0.1s;
-            display: inline-flex; align-items: center; gap: 6px;
-        }
-        .btn:hover { background: var(--sidebar-bg); border-color: var(--text-muted); }
-        .btn-primary { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
-        .btn-primary:hover { opacity: 0.9; background: var(--text-main); }
-
-        .filters-row {
-            display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
-        }
-        .filter-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); margin-right: 8px; text-transform: uppercase; }
-        .chip {
-            padding: 4px 10px; border-radius: 99px;
-            font-size: 0.75rem; font-weight: 500;
-            border: 1px solid var(--border-color);
-            cursor: pointer; user-select: none;
-            transition: all 0.1s;
-        }
-        .chip:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
-        .chip.active { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
-
-        /* --- TABLE --- */
-        .table-wrapper {
-            overflow-x: auto; border: 1px solid var(--border-color); border-radius: 4px;
-        }
-        table {
-            width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;
-        }
-        th {
-            background: var(--sidebar-bg); color: var(--text-muted);
-            font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase;
-            padding: 12px 16px; border-bottom: 1px solid var(--border-color);
-            cursor: pointer; user-select: none; white-space: nowrap;
-        }
-        th:hover { color: var(--text-main); background: rgba(0,0,0,0.05); }
-        th.sort-asc::after { content: " ▲"; }
-        th.sort-desc::after { content: " ▼"; }
-        
-        td {
-            padding: 12px 16px; border-bottom: 1px solid var(--border-color);
-            vertical-align: top;
-        }
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: rgba(0,0,0,0.01); }
-
-        /* --- CELLS --- */
-        .cell-org { font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
-        .cell-sub { font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 2px; }
-        
-        .status-select {
-            padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;
-            border: 1px solid transparent; cursor: pointer; appearance: none;
-            font-family: var(--font-stack); width: 100%; text-align: center;
-        }
-        .status-select:focus { outline: 2px solid var(--accent-primary); }
-        
-        /* Status Colors */
-        .st-apply { background: var(--tag-apply); color: var(--text-apply); }
-        .st-monitor { background: var(--tag-monitor); color: var(--text-monitor); }
-        .st-contract { background: var(--tag-contract); color: var(--text-contract); }
-        .st-partner { background: var(--tag-partner); color: var(--text-partner); }
-        .st-archive { background: var(--tag-archive); color: var(--text-archive); }
-        .st-applied { background: var(--tag-applied); color: var(--text-applied); border: 1px solid var(--text-applied); }
-
-        .notes-input {
-            width: 100%; border: 1px solid transparent; background: transparent;
-            font-family: var(--font-stack); font-size: 0.8rem; color: var(--text-main);
-            padding: 4px; resize: vertical; min-height: 30px;
-        }
-        .notes-input:focus { background: var(--bg-color); border-color: var(--border-color); outline: none; }
-        .notes-input:placeholder-shown { font-style: italic; }
-
-        .actions-cell { display: flex; gap: 8px; justify-content: flex-end; }
-        .icon-btn {
-            background: none; border: 1px solid var(--border-color); padding: 6px;
-            border-radius: 4px; cursor: pointer; color: var(--text-muted);
-            transition: all 0.1s; display: flex; align-items: center; justify-content: center;
-        }
-        .icon-btn:hover { border-color: var(--text-main); color: var(--text-main); background: var(--bg-color); }
-        
-        /* Toast Notification */
-        #toast {
-            position: fixed; bottom: 20px; right: 20px;
-            background: var(--text-main); color: var(--bg-color);
-            padding: 10px 20px; border-radius: 4px; font-size: 0.8rem;
-            font-family: var(--font-mono); opacity: 0; pointer-events: none;
-            transition: opacity 0.3s; z-index: 1000;
-        }
-        #toast.show { opacity: 1; }
-
-        /* Hidden File Input */
-        #file-input { display: none; }
-
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="app-container">
-        <header class="header-row">
-            <div class="brand">
-                Funding CRM <span>/ Enlightened AI</span>
-            </div>
-            <div class="stats-bar" id="statsBar">
+    <aside>
+        <div style="margin-bottom: 2rem;">
+            <h2 style="font-size:1.2rem;">FUNDING CRM</h2>
+            <div class="small muted">Enlightened AI Research Lab</div>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <h3 class="small muted" style="margin-bottom:0.5rem; text-transform:uppercase;">Pipeline Stats</h3>
+            <div id="stats-container" style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                 </div>
-        </header>
+        </div>
 
-        <div class="controls-area">
-            <div class="search-row">
-                <input type="text" id="searchInput" class="search-input" placeholder="Search funds, types, notes...">
-                <button class="btn" onclick="exportData()">↓ Export JSON</button>
-                <button class="btn" onclick="document.getElementById('file-input').click()">↑ Import JSON</button>
-                <input type="file" id="file-input" accept=".json" onchange="importData(this)">
-            </div>
+        <div class="exclusions-box">
+            <h3 class="small muted" style="margin-bottom:0.5rem; text-transform:uppercase;">Excluded / Covered</h3>
+            <div id="exclusions-list">
+                </div>
+        </div>
+    </aside>
 
-            <div class="filters-row">
-                <span class="filter-label">Status:</span>
-                <div id="statusFilters" style="display:contents">
-                    </div>
-            </div>
-            <div class="filters-row">
-                <span class="filter-label">Type:</span>
-                <div id="typeFilters" style="display:contents">
-                    </div>
+    <main>
+        <div class="toolbar">
+            <input type="text" id="search" class="search-box" placeholder="Search organization, program, or notes...">
+            
+            <div style="display:flex; gap:8px;">
+                <button class="btn" onclick="exportJSON()">↓ Export</button>
+                <button class="btn" onclick="document.getElementById('importFile').click()">↑ Import</button>
+                <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(this)">
             </div>
         </div>
 
-        <div class="table-wrapper">
-            <table id="fundingTable">
+        <div class="table-container">
+            <table>
                 <thead>
                     <tr>
-                        <th onclick="sortTable('name')" style="width: 25%">Organization</th>
-                        <th onclick="sortTable('type')" style="width: 10%">Type</th>
-                        <th onclick="sortTable('range')" style="width: 12%">Range</th>
-                        <th onclick="sortTable('status')" style="width: 12%">Status</th>
-                        <th style="width: 30%">Notes (Auto-Saved)</th>
-                        <th style="width: 11%; text-align: right;">Actions</th>
+                        <th style="width:30%">Organization / Program</th>
+                        <th style="width:8%">Pri</th>
+                        <th style="width:15%">Range / Type</th>
+                        <th style="width:15%">Stage / Deadline</th>
+                        <th>Notes</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody">
+                <tbody id="table-body">
                     </tbody>
             </table>
         </div>
-    </div>
 
-    <div id="toast">Action Saved</div>
+        <div id="toast">Saved</div>
+    </main>
 
-    <script>
-        // --- DATA MODEL ---
-        const STATUS_OPTIONS = ['Apply Now', 'Applied', 'Monitor', 'Contract', 'Partner', 'Archive'];
-        const TYPE_OPTIONS = ['Foundation', 'Regrantor', 'Lab', 'University', 'DAO', 'Think Tank', 'Private'];
-
-        // Initial Seed Data (21 Entries)
-        const seedData = [
-            { id: 1, name: "NLnet Foundation", sub: "NGI Zero Commons", type: "Foundation", range: "€5K–€50K", status: "Apply Now", link: "https://nlnet.nl/commonsfund", pitch: "Open source infrastructure for AI accountability.", notes: "Top Priority. Focus on public utility tools." },
-            { id: 2, name: "Emergent Ventures", sub: "Mercatus Center", type: "Foundation", range: "$10K–$50K+", status: "Apply Now", link: "https://www.mercatus.org/emergent-ventures", pitch: "High-upside, non-consensus bet on safety instrumentation.", notes: "Write 1-pager. Focus on 'outlier' ideas." },
-            { id: 3, name: "Aligned Studies Foundation (ASF)", sub: "", type: "Regrantor", range: "$5K–$50K", status: "Apply Now", link: "https://alignedstudies.com/apply", pitch: "Infrastructure and specs for independent researchers.", notes: "Check eligibility requirements." },
-            { id: 4, name: "AI Safety Campus (AISC)", sub: "", type: "Regrantor", range: "$1K–$30K", status: "Apply Now", link: "https://www.aisafety.campus/grants", pitch: "Fast agile grant for immediate tooling.", notes: "Good for server costs." },
-            { id: 5, name: "AE Studio", sub: "Alignment Research Grants", type: "Private", range: "$10K–$25K", status: "Apply Now", link: "https://research.ae.studio/", pitch: "Neglected approaches in alignment diagnostics.", notes: "Emphasize 'neglected approach'." },
-            { id: 6, name: "BlueDot Impact", sub: "AGI Strategy Fund", type: "Regrantor", range: "$5K–$50K", status: "Apply Now", link: "https://www.aisafety.com/funding", pitch: "Governance and strategy tooling for policymakers.", notes: "Check alumni requirements." },
-            { id: 7, name: "Huberman Family Charitable Fund", sub: "AI Safety Stream", type: "Foundation", range: "$25K–$75K", status: "Monitor", link: "mailto:grants@huberman.org", pitch: "Evaluation and monitoring of AI systems.", notes: "Need intro or direct email pitch." },
-            { id: 8, name: "Mozilla Technology Fund", sub: "", type: "Foundation", range: "$50K", status: "Monitor", link: "https://foundation.mozilla.org/en/what-we-fund/technologies/", pitch: "Open source audit tools and algorithmic accountability.", notes: "Watch for open calls." },
-            { id: 9, name: "Cooperative AI Foundation (CAIF)", sub: "", type: "Foundation", range: "£20K–£50K", status: "Monitor", link: "https://www.cooperativeai.com/grants", pitch: "Benchmarks for multi-agent cooperation.", notes: "Fit for R4 (Reciprocity) work." },
-            { id: 10, name: "SingularityNET", sub: "Deep Funding", type: "DAO", range: "~$40K", status: "Monitor", link: "https://deepfunding.ai/all-rfps/", pitch: "Decentralized reasoning and neural-symbolic tools.", notes: "Web3/Crypto focus." },
-            { id: 11, name: "AI Objectives Institute", sub: "", type: "Think Tank", range: "$15K–$40K", status: "Monitor", link: "https://www.aioi.org/contact", pitch: "Human values metrics and moral coherence.", notes: "Good fit for Moral Index (MCI)." },
-            { id: 12, name: "Patrick J. McGovern Foundation", sub: "", type: "Foundation", range: "Unknown", status: "Monitor", link: "https://www.mcgovern.org/", pitch: "AI for public good and data sovereignty.", notes: "Large grants, harder to access." },
-            { id: 13, name: "Coefficient Giving", sub: "Entrepreneurial Grants", type: "Regrantor", range: "Variable", status: "Apply Now", link: "https://coefficientgiving.org/", pitch: "Entrepreneurial approaches to safety.", notes: "Fast turnaround." },
-            { id: 14, name: "FAR AI", sub: "Alignment Grants", type: "Lab", range: "Variable", status: "Monitor", link: "https://far.ai/", pitch: "Interpretability and robustness research.", notes: "Usually for academic/PhD level." },
-            { id: 15, name: "Future Fund", sub: "Infrastructure Stream", type: "Foundation", range: "$10K–$100K", status: "Archive", link: "https://ftx.com/foundation", pitch: "Paused.", notes: "Currently inactive." },
-            { id: 16, name: "Lightcone Infrastructure", sub: "LessWrong Projects", type: "Regrantor", range: "$5K–$20K", status: "Monitor", link: "https://www.lesswrong.com/", pitch: "Rationality and alignment community tooling.", notes: "Community-based funding." },
-            { id: 17, name: "Rethink Priorities", sub: "Worldview Investigation", type: "Think Tank", range: "Variable", status: "Monitor", link: "https://rethinkpriorities.org/", pitch: "Research into moral weights and AI welfare.", notes: "Research heavy." },
-            { id: 18, name: "QURI", sub: "Quantified Uncertainty", type: "Lab", range: "Variable", status: "Monitor", link: "https://quantifieduncertainty.org/", pitch: "Forecasting and epistemics tools.", notes: "Good for 'Oracle' validation." },
-            { id: 19, name: "METR", sub: "Contract Work", type: "Lab", range: "Contract", status: "Contract", link: "https://metr.org/contact/", pitch: "Third-party evaluation environment.", notes: "Sales pitch, not grant." },
-            { id: 20, name: "MIRI", sub: "", type: "Lab", range: "Variable", status: "Monitor", link: "https://intelligence.org/", pitch: "Mathematical alignment theory.", notes: "Very theoretical." },
-            { id: 21, name: "SERI Microgrants", sub: "Stanford", type: "University", range: "$5K", status: "Monitor", link: "https://seri.stanford.edu/", pitch: "Existential risk reduction projects.", notes: "Often student focused." }
-        ];
-
-        // --- STATE MANAGEMENT ---
-        let db = [];
-        let activeFilters = {
-            status: [],
-            type: []
-        };
-        let sortConfig = { key: 'id', dir: 'asc' };
-
-        // --- INITIALIZATION ---
-        function init() {
-            // Load from LocalStorage or Seed
-            const saved = localStorage.getItem('fundingDB_v1');
-            if (saved) {
-                db = JSON.parse(saved);
-            } else {
-                db = JSON.parse(JSON.stringify(seedData)); // Deep copy
-                save();
-            }
-
-            renderFilters();
-            renderTable();
-            updateStats();
-        }
-
-        function save() {
-            localStorage.setItem('fundingDB_v1', JSON.stringify(db));
-            updateStats();
-        }
-
-        // --- RENDERING ---
-        function renderFilters() {
-            // Status Filters
-            const statusContainer = document.getElementById('statusFilters');
-            statusContainer.innerHTML = STATUS_OPTIONS.map(s => 
-                `<span class="chip ${activeFilters.status.includes(s) ? 'active' : ''}" 
-                       onclick="toggleFilter('status', '${s}')">${s}</span>`
-            ).join('');
-
-            // Type Filters
-            const typeContainer = document.getElementById('typeFilters');
-            typeContainer.innerHTML = TYPE_OPTIONS.map(t => 
-                `<span class="chip ${activeFilters.type.includes(t) ? 'active' : ''}" 
-                       onclick="toggleFilter('type', '${t}')">${t}</span>`
-            ).join('');
-        }
-
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            const search = document.getElementById('searchInput').value.toLowerCase();
-
-            // Filter
-            let filtered = db.filter(item => {
-                const matchesSearch = 
-                    item.name.toLowerCase().includes(search) || 
-                    item.notes.toLowerCase().includes(search) ||
-                    item.type.toLowerCase().includes(search);
-                
-                const matchesStatus = activeFilters.status.length === 0 || activeFilters.status.includes(item.status);
-                const matchesType = activeFilters.type.length === 0 || activeFilters.type.includes(item.type);
-
-                return matchesSearch && matchesStatus && matchesType;
-            });
-
-            // Sort
-            filtered.sort((a, b) => {
-                let valA = a[sortConfig.key] || '';
-                let valB = b[sortConfig.key] || '';
-                if (typeof valA === 'string') valA = valA.toLowerCase();
-                if (typeof valB === 'string') valB = valB.toLowerCase();
-
-                if (valA < valB) return sortConfig.dir === 'asc' ? -1 : 1;
-                if (valA > valB) return sortConfig.dir === 'asc' ? 1 : -1;
-                return 0;
-            });
-
-            // Render Rows
-            tbody.innerHTML = filtered.map(item => `
-                <tr>
-                    <td>
-                        <div class="cell-org">${item.name}</div>
-                        <span class="cell-sub">${item.sub}</span>
-                    </td>
-                    <td>${item.type}</td>
-                    <td style="font-family:var(--font-mono); font-size:0.75rem;">${item.range}</td>
-                    <td>
-                        <select class="status-select ${getStatusClass(item.status)}" onchange="updateStatus(${item.id}, this.value)">
-                            ${STATUS_OPTIONS.map(opt => `<option value="${opt}" ${item.status === opt ? 'selected' : ''}>${opt}</option>`).join('')}
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text" class="notes-input" value="${item.notes}" 
-                               onchange="updateNotes(${item.id}, this.value)" placeholder="Add notes...">
-                    </td>
-                    <td>
-                        <div class="actions-cell">
-                            <button class="icon-btn" onclick="copyPitch('${item.pitch.replace(/'/g, "\\'")}')" title="Copy Pitch">
-                                📋
-                            </button>
-                            <a href="${item.link}" target="_blank" class="icon-btn" title="Open Link">
-                                ↗
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function updateStats() {
-            const total = db.length;
-            const apply = db.filter(i => i.status === 'Apply Now').length;
-            const applied = db.filter(i => i.status === 'Applied').length;
-            const monitor = db.filter(i => i.status === 'Monitor').length;
-
-            document.getElementById('statsBar').innerHTML = `
-                <div class="stat-item"><span class="stat-label">Total:</span><span>${total}</span></div>
-                <div class="stat-item"><span class="stat-label">Apply Now:</span><span style="color:var(--accent-primary)">${apply}</span></div>
-                <div class="stat-item"><span class="stat-label">Applied:</span><span style="color:var(--status-verified)">${applied}</span></div>
-                <div class="stat-item"><span class="stat-label">Monitor:</span><span>${monitor}</span></div>
-            `;
-        }
-
-        // --- ACTIONS ---
-        function toggleFilter(category, value) {
-            const idx = activeFilters[category].indexOf(value);
-            if (idx > -1) {
-                activeFilters[category].splice(idx, 1);
-            } else {
-                activeFilters[category].push(value);
-            }
-            renderFilters();
-            renderTable();
-        }
-
-        function sortTable(key) {
-            if (sortConfig.key === key) {
-                sortConfig.dir = sortConfig.dir === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortConfig.key = key;
-                sortConfig.dir = 'asc';
-            }
-            
-            // Update UI indicators
-            document.querySelectorAll('th').forEach(th => th.className = '');
-            const activeTh = document.querySelector(`th[onclick="sortTable('${key}')"]`);
-            if (activeTh) activeTh.classList.add(`sort-${sortConfig.dir}`);
-            
-            renderTable();
-        }
-
-        function updateStatus(id, newVal) {
-            const item = db.find(i => i.id === id);
-            if (item) {
-                item.status = newVal;
-                save();
-                renderTable(); // Re-render to update color
-                showToast(`Status updated to: ${newVal}`);
-            }
-        }
-
-        function updateNotes(id, newVal) {
-            const item = db.find(i => i.id === id);
-            if (item) {
-                item.notes = newVal;
-                save();
-                // No re-render needed for notes to prevent focus loss
-            }
-        }
-
-        function copyPitch(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast("Pitch copied to clipboard!");
-            });
-        }
-
-        function getStatusClass(status) {
-            switch(status) {
-                case 'Apply Now': return 'st-apply';
-                case 'Monitor': return 'st-monitor';
-                case 'Contract': return 'st-contract';
-                case 'Partner': return 'st-partner';
-                case 'Archive': return 'st-archive';
-                case 'Applied': return 'st-applied';
-                default: return '';
-            }
-        }
-
-        // --- IMPORT / EXPORT ---
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "funding_data_" + new Date().toISOString().slice(0,10) + ".json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-        }
-
-        function importData(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const json = JSON.parse(e.target.result);
-                    if (Array.isArray(json)) {
-                        db = json;
-                        save();
-                        renderTable();
-                        showToast("Data imported successfully!");
-                    } else {
-                        alert("Invalid JSON format.");
-                    }
-                } catch (err) {
-                    alert("Error parsing file.");
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
-        }
-
-        // Event Listeners
-        document.getElementById('searchInput').addEventListener('input', renderTable);
-
-        // --- BOOT ---
-        init();
-
-        // Theme Toggle
-        function toggleTheme() {
-            const isDark = document.body.getAttribute('data-theme') === 'dark';
-            document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-        }
-
-    </script>
+    <script src="assets/funding.js"></script>
 </body>
 </html>
