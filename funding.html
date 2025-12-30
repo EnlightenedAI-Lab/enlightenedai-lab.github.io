@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>EAIRL | FUNDING CMD v13.0</title>
+    <title>EAIRL | FUNDING CMD v14.0</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +38,13 @@
             --badge-accel: #fae8ff; --text-accel: #86198f;
             --badge-uni: #dbeafe; --text-uni: #1e40af;
             --badge-partner: #ffedd5; --text-partner: #c2410c;
+
+            /* LOGISTICS PILLS */
+            --pill-cash: #ecfccb; --text-cash: #365314;
+            --pill-credits: #e0e7ff; --text-credits: #3730a3;
+            --pill-access: #f3e8ff; --text-access: #581c87;
+            --pill-fast: #dcfce7; --text-fast: #14532d;
+            --pill-slow: #fee2e2; --text-slow: #7f1d1d;
         }
 
         body[data-theme="dark"] {
@@ -52,6 +59,12 @@
             --badge-accel: #4a044e; --text-accel: #f0abfc;
             --badge-uni: #172554; --text-uni: #bfdbfe;
             --badge-partner: #431407; --text-partner: #fdba74;
+            
+            --pill-cash: #1a2e05; --text-cash: #bef264;
+            --pill-credits: #1e1b4b; --text-credits: #c7d2fe;
+            --pill-access: #3b0764; --text-access: #e9d5ff;
+            --pill-fast: #052e16; --text-fast: #86efac;
+            --pill-slow: #450a0a; --text-slow: #fca5a5;
         }
 
         * { box-sizing: border-box; }
@@ -76,7 +89,11 @@
         
         .status-badge {
             font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 2px;
-            font-family: "JetBrains Mono", monospace; border: 1px solid transparent;
+            font-family: "JetBrains Mono", monospace; border: 1px solid transparent; display:inline-block; margin-bottom:2px;
+        }
+        
+        .pill {
+            font-size: 9px; padding: 1px 4px; border-radius: 3px; font-family: "JetBrains Mono", monospace; margin-right: 2px; display: inline-block;
         }
 
         /* --- SEARCH & FILTERS --- */
@@ -155,6 +172,9 @@
         .file-list { margin-top: 20px; border: 1px solid var(--border); }
         .file-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--border); align-items: center; }
         .log-item { padding: 8px; border-bottom: 1px solid var(--border); font-size: 11px; }
+
+        /* Version Tag */
+        .ver-tag { position:fixed; bottom:20px; right:20px; font-family:'JetBrains Mono'; font-size:10px; color:red; border:1px solid red; padding:4px 8px; background:var(--bg); border-radius:4px; z-index:1000; }
     </style>
 </head>
 <body data-theme="light">
@@ -191,7 +211,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
                 <div>
                     <h1>Funding Command</h1>
-                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v13.0</div>
+                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v14.0</div>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn" onclick="exportData()">↓ BACKUP DATABASE</button>
@@ -200,7 +220,7 @@
 
             <div class="search-container">
                 <div class="filters-row">
-                    <input id="global-search" class="search-input" placeholder="> SEARCH TARGETS, NOTES, STATUS..." oninput="renderApp()">
+                    <input id="global-search" class="search-input" placeholder="> GLOBAL SEARCH (Name, Notes, Status, Type)..." oninput="renderApp()">
                     <select id="filter-status" class="filter-select" onchange="renderApp()">
                         <option value="">ALL STATUS</option>
                         <option value="identify">Identify</option>
@@ -272,7 +292,7 @@
                     <button class="btn" style="height:100%; border-style:dashed;" onclick="addDoc()">📝 CREATE NOTE / PASTE SCREENSHOTS</button>
                 </div>
 
-                <div class="mono subtitle" style="margin-bottom:8px;">ATTACHMENTS</div>
+                <div class="mono subtitle" style="margin-bottom:8px;">EVIDENCE / TEXTS</div>
                 <div id="file-list"></div>
 
                 <div class="mono subtitle" style="margin-bottom:8px; margin-top:20px;">ACTIVITY LOG</div>
@@ -285,60 +305,63 @@
         </div>
     </div>
 
+    <div class="ver-tag">[ v14.0 ]</div>
+
     <script>
         // --- CONFIG ---
-        const DB_KEY = 'eairl_funding_v13'; 
+        const DB_KEY = 'eairl_funding_v14'; 
         
-        // --- SEED DATA (FULL + NEW SECTIONS) ---
+        // --- SEED DATA (v14 Schema) ---
         const seedData = [
             // A: ACTIVE OPS
-            { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", status: "Identify", deadline: "2026-02-01", owner: "Nicolas", mode: "Portal", next: "Draft Abstract", link_apply: "https://nlnet.nl/commonsfund", updated: "2025-12-29", files: [], logs: [] },
-            { id: 2, sec: 'A', name: "Emergent Ventures", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", next: "Write 1-pager", link_apply: "https://www.mercatus.org/emergent-ventures", updated: "2025-12-29", files: [], logs: [] },
-            { id: 3, sec: 'A', name: "NRC IRAP", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Phone", next: "Call Montreal Office", link_apply: "https://nrc.canada.ca/en/support-technology-innovation", updated: "2025-12-29", files: [], logs: [] },
-            { id: 4, sec: 'A', name: "Aligned Studies (ASF)", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", next: "Review RFP", link_apply: "https://alignedstudies.com/apply", updated: "2025-12-29", files: [], logs: [] },
+            { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", status: "Identify", deadline: "2026-02-01", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "High", next: "Draft Abstract", link_apply: "https://nlnet.nl/commonsfund", updated: "2025-12-30", files: [], logs: [] },
+            { id: 2, sec: 'A', name: "Emergent Ventures", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "<30d", effort: "Low", next: "Write 1-pager", link_apply: "https://www.mercatus.org/emergent-ventures", updated: "2025-12-30", files: [], logs: [] },
+            { id: 3, sec: 'A', name: "NRC IRAP", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Phone", reality: "CASH", latency: "1-3mo", effort: "Med", next: "Call Montreal Office", link_apply: "https://nrc.canada.ca/en/support-technology-innovation", updated: "2025-12-30", files: [], logs: [] },
+            { id: 4, sec: 'A', name: "Aligned Studies (ASF)", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "1-3mo", effort: "Med", next: "Review RFP", link_apply: "https://alignedstudies.com/apply", updated: "2025-12-30", files: [], logs: [] },
             
             // B: COMPETITIONS
-            { id: 5, sec: 'B', name: "Martian Prize", type: "Prize", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Code", next: "Check bounties", link_apply: "https://www.martian.org/", updated: "2025-12-29", files: [], logs: [] },
-            { id: 6, sec: 'B', name: "Google AI VRP", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Report", next: "Review scope", link_apply: "https://bughunters.google.com/", updated: "2025-12-29", files: [], logs: [] },
-            { id: 7, sec: 'B', name: "Microsoft AI Bounty", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Report", next: "Review scope", link_apply: "https://www.microsoft.com/en-us/msrc/bounty", updated: "2025-12-29", files: [], logs: [] },
+            { id: 5, sec: 'B', name: "Martian Prize", type: "Prize", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Code", reality: "CASH", latency: "Unk", effort: "High", next: "Check bounties", link_apply: "https://www.martian.org/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 6, sec: 'B', name: "Google AI VRP", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Report", reality: "CASH", latency: "1-3mo", effort: "High", next: "Review scope", link_apply: "https://bughunters.google.com/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 7, sec: 'B', name: "Microsoft AI Bounty", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Report", reality: "CASH", latency: "1-3mo", effort: "High", next: "Review scope", link_apply: "https://www.microsoft.com/en-us/msrc/bounty", updated: "2025-12-30", files: [], logs: [] },
 
             // C: REGRANTORS
-            { id: 20, sec: 'C', name: "Evan Hubinger", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-29", files: [], logs: [] },
-            { id: 21, sec: 'C', name: "Tristan Hume", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-29", files: [], logs: [] },
-            { id: 22, sec: 'C', name: "Neel Nanda", affiliation: "DeepMind", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-29", files: [], logs: [] },
-            { id: 23, sec: 'C', name: "Marius Hobbhahn", affiliation: "Apollo", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-29", files: [], logs: [] },
-            { id: 24, sec: 'C', name: "Adam Gleave", affiliation: "FAR AI", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-29", files: [], logs: [] },
-            { id: 25, sec: 'C', name: "Oliver Habryka", affiliation: "Lightcone", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", next: "Draft Pitch", link_apply: "mailto:oliver.habryka@lightconeinfra.com", updated: "2025-12-29", files: [], logs: [] },
-            { id: 26, sec: 'C', name: "Ryan Kidd", affiliation: "MATS", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-29", files: [], logs: [] },
-            { id: 27, sec: 'C', name: "Marcus Abramovitch", affiliation: "Indep", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-29", files: [], logs: [] },
-            { id: 28, sec: 'C', name: "Nuño Sempere", affiliation: "Manifund", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", next: "Draft Pitch", link_apply: "mailto:nuno.semperel@gmail.com", updated: "2025-12-29", files: [], logs: [] },
-            { id: 29, sec: 'C', name: "Zvi Mowshowitz", affiliation: "Indep", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", next: "Draft Pitch", link_apply: "mailto:zvi@thezvi.com", updated: "2025-12-29", files: [], logs: [] },
+            { id: 20, sec: 'C', name: "Evan Hubinger", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 21, sec: 'C', name: "Tristan Hume", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 22, sec: 'C', name: "Neel Nanda", affiliation: "DeepMind", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 23, sec: 'C', name: "Marius Hobbhahn", affiliation: "Apollo", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 24, sec: 'C', name: "Adam Gleave", affiliation: "FAR AI", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 25, sec: 'C', name: "Oliver Habryka", affiliation: "Lightcone", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "mailto:oliver.habryka@lightconeinfra.com", updated: "2025-12-30", files: [], logs: [] },
+            { id: 26, sec: 'C', name: "Ryan Kidd", affiliation: "MATS", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 27, sec: 'C', name: "Marcus Abramovitch", affiliation: "Indep", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 28, sec: 'C', name: "Nuño Sempere", affiliation: "Manifund", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "mailto:nuno.semperel@gmail.com", updated: "2025-12-30", files: [], logs: [] },
+            { id: 29, sec: 'C', name: "Zvi Mowshowitz", affiliation: "Indep", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "mailto:zvi@thezvi.com", updated: "2025-12-30", files: [], logs: [] },
 
             // D: SUBMITTED / ARCHIVE
-            { id: 99, sec: 'D', name: "Foresight Institute", type: "Grant", status: "Submitted", deadline: "Rolling", owner: "Nicolas", mode: "Portal", next: "Wait", link_apply: "", notes: "Applied Dec 29.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 98, sec: 'D', name: "NextAI (Next Canada)", type: "Accel", status: "Submitted", deadline: "Submitted", owner: "Nicolas", mode: "Portal", next: "Wait", link_apply: "https://www.nextcanada.com/next-ai", notes: "Applied Dec 29.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 99, sec: 'D', name: "Foresight Institute", type: "Grant", status: "Submitted", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "ACCESS", latency: "Unk", effort: "High", next: "Wait", link_apply: "", notes: "Applied Dec 29.", updated: "2025-12-30", files: [], logs: [] },
+            { id: 98, sec: 'D', name: "NextAI (Next Canada)", type: "Accel", status: "Submitted", deadline: "Submitted", owner: "Nicolas", mode: "Portal", reality: "CREDITS", latency: "1-3mo", effort: "High", next: "Wait", link_apply: "https://www.nextcanada.com/next-ai", notes: "Applied Dec 29.", updated: "2025-12-30", files: [], logs: [] },
 
             // E: MONITOR
-            { id: 10, sec: 'E', name: "BlueDot Impact", type: "Grant", status: "Identify", deadline: "Check", owner: "Nicolas", mode: "Portal", next: "Check site", link_apply: "https://www.aisafety.com/funding", updated: "2025-12-29", files: [], logs: [] },
-            { id: 11, sec: 'E', name: "Mozilla Tech Fund", type: "Grant", status: "Identify", deadline: "Closed", owner: "Nicolas", mode: "Portal", next: "Monitor", link_apply: "https://foundation.mozilla.org/en/", updated: "2025-12-29", files: [], logs: [] },
-            { id: 12, sec: 'E', name: "METR (ARC Evals)", type: "Contract", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Sales", next: "Sales pitch", link_apply: "https://metr.org/contact/", updated: "2025-12-29", files: [], logs: [] },
+            { id: 10, sec: 'E', name: "BlueDot Impact", type: "Grant", status: "Identify", deadline: "Check", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "Med", next: "Check site", link_apply: "https://www.aisafety.com/funding", updated: "2025-12-30", files: [], logs: [] },
+            { id: 11, sec: 'E', name: "Mozilla Tech Fund", type: "Grant", status: "Identify", deadline: "Closed", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "Med", next: "Monitor", link_apply: "https://foundation.mozilla.org/en/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 12, sec: 'E', name: "METR (ARC Evals)", type: "Contract", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Sales", reality: "CASH", latency: "Unk", effort: "High", next: "Sales pitch", link_apply: "https://metr.org/contact/", updated: "2025-12-30", files: [], logs: [] },
 
-            // F: UNIVERSITIES (NEW)
-            { id: 30, sec: 'F', name: "Stanford HAI", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", next: "Find contact", link_apply: "https://hai.stanford.edu/", updated: "2025-12-29", files: [], logs: [] },
-            { id: 31, sec: 'F', name: "SERI (Stanford)", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", next: "Check grants", link_apply: "https://cs.stanford.edu/seri/", updated: "2025-12-29", files: [], logs: [] },
-            { id: 32, sec: 'F', name: "Mila (Montreal)", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Warm Intro", next: "Network", link_apply: "https://mila.quebec/", updated: "2025-12-29", files: [], logs: [] },
-            { id: 33, sec: 'F', name: "MIT CSAIL", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", next: "Research labs", link_apply: "https://www.csail.mit.edu/", updated: "2025-12-29", files: [], logs: [] },
+            // F: UNIVERSITIES
+            { id: 30, sec: 'F', name: "Stanford HAI", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", reality: "ACCESS", latency: "Unk", effort: "Med", next: "Find contact", link_apply: "https://hai.stanford.edu/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 31, sec: 'F', name: "SERI (Stanford)", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "1-3mo", effort: "Low", next: "Check grants", link_apply: "https://cs.stanford.edu/seri/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 32, sec: 'F', name: "Mila (Montreal)", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Warm Intro", reality: "ACCESS", latency: "Unk", effort: "High", next: "Network", link_apply: "https://mila.quebec/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 33, sec: 'F', name: "MIT CSAIL", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", reality: "ACCESS", latency: "Unk", effort: "Med", next: "Research labs", link_apply: "https://www.csail.mit.edu/", updated: "2025-12-30", files: [], logs: [] },
             
-            // G: ACCELERATORS / CREDITS (NEW)
-            { id: 40, sec: 'G', name: "Google for Startups", type: "Partner", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Portal", next: "Apply Credits", link_apply: "https://cloud.google.com/startup", updated: "2025-12-29", files: [], logs: [] },
-            { id: 41, sec: 'G', name: "NVIDIA Inception", type: "Partner", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Portal", next: "Apply Program", link_apply: "https://www.nvidia.com/en-us/startups/", updated: "2025-12-29", files: [], logs: [] },
-            { id: 42, sec: 'G', name: "AWS Activate", type: "Partner", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Portal", next: "Apply Credits", link_apply: "https://aws.amazon.com/activate/", updated: "2025-12-29", files: [], logs: [] }
+            // G: ACCELERATORS / PARTNERS
+            { id: 40, sec: 'G', name: "Google for Startups", type: "Partner", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Portal", reality: "CREDITS", latency: "<30d", effort: "Low", next: "Apply Credits", link_apply: "https://cloud.google.com/startup", updated: "2025-12-30", files: [], logs: [] },
+            { id: 41, sec: 'G', name: "NVIDIA Inception", type: "Partner", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Portal", reality: "ACCESS", latency: "<30d", effort: "Low", next: "Apply Program", link_apply: "https://www.nvidia.com/en-us/startups/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 42, sec: 'G', name: "AWS Activate", type: "Partner", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Portal", reality: "CREDITS", latency: "<30d", effort: "Low", next: "Apply Credits", link_apply: "https://aws.amazon.com/activate/", updated: "2025-12-30", files: [], logs: [] }
         ];
 
         let db = [];
         let activeId = null;
         let activeFileIndex = null;
-        let openSections = JSON.parse(localStorage.getItem('eairl_sections_v13') || '{"A":true, "B":false, "C":false, "D":true, "E":false, "F":false, "G":false}');
+        // Default section states
+        let openSections = JSON.parse(localStorage.getItem('eairl_sections_v14') || '{"A":true, "B":true, "C":true, "D":true, "E":false, "F":false, "G":false}');
 
         // --- CORE LOGIC ---
         function initApp() {
@@ -346,8 +369,11 @@
                 const saved = localStorage.getItem(DB_KEY);
                 if (saved) {
                     db = JSON.parse(saved);
-                    // Safe Migration
+                    // Safe Migration for v14 fields
                     db.forEach(i => {
+                        if(!i.reality) i.reality = "UNKNOWN";
+                        if(!i.latency) i.latency = "Unknown";
+                        if(!i.effort) i.effort = "Medium";
                         if(!i.files) i.files = [];
                         if(!i.logs) i.logs = [];
                     });
@@ -366,14 +392,14 @@
         function hardReset() {
             if(confirm("DANGER: This will wipe all local data and restore the default list. Are you sure?")) {
                 localStorage.removeItem(DB_KEY);
-                localStorage.removeItem('eairl_sections_v13');
+                localStorage.removeItem('eairl_sections_v14');
                 location.reload();
             }
         }
 
         function toggleSection(secKey) {
             openSections[secKey] = !openSections[secKey];
-            localStorage.setItem('eairl_sections_v13', JSON.stringify(openSections));
+            localStorage.setItem('eairl_sections_v14', JSON.stringify(openSections));
         }
 
         function renderApp() {
@@ -422,7 +448,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th style="width:20%">Target / Fit</th>
+                                    <th style="width:20%">Target / Logistics</th>
                                     <th style="width:10%">Type / Owner</th>
                                     <th style="width:8%">Deadline</th>
                                     <th style="width:12%">Status</th>
@@ -449,11 +475,20 @@
                     const hasFiles = (i.files && i.files.length > 0) ? 'color:var(--highlight); opacity:1;' : '';
                     const dateStr = (i.updated && typeof i.updated === 'string' && i.updated.length >= 5) ? i.updated.slice(5) : '-';
 
+                    // PILLS LOGIC
+                    const realityClass = i.reality === 'CASH' ? 'cash' : i.reality === 'CREDITS' ? 'credits' : 'access';
+                    const latencyClass = (i.latency||'').includes('<') ? 'fast' : 'slow';
+                    const effortClass = (i.effort||'').includes('Low') ? 'fast' : 'slow';
+
                     html += `
                         <tr>
                             <td>
                                 <div style="font-weight:700;">${i.name}</div>
-                                <div style="font-size:10px; color:var(--text-muted);">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">APPLY ↗</a>` : ''} ${i.link_fit ? `• <a href="${i.link_fit}" target="_blank" style="color:var(--text-muted); text-decoration:none;">FIT</a>` : ''}</div>
+                                <div style="margin-top:4px;">
+                                    <span class="pill" style="background:var(--pill-${realityClass}); color:var(--text-${realityClass});">${i.reality}</span>
+                                    <span class="pill" style="background:var(--pill-${latencyClass}); color:var(--text-${latencyClass});">${i.latency}</span>
+                                    <span class="pill" style="background:var(--pill-${effortClass}); color:var(--text-${effortClass});">${i.effort}</span>
+                                </div>
                             </td>
                             <td>
                                 <span class="status-badge" style="${badgeStyle}">${i.type}</span>
@@ -538,10 +573,13 @@
             const name = document.getElementById('link-name').value;
             const url = document.getElementById('link-url').value;
             if (!name) return alert("Name required");
+            
             const item = db.find(i => i.id === activeId);
             item.files.push({ name: name, link: url, content: null });
             item.updated = new Date().toISOString().split('T')[0];
-            document.getElementById('link-name').value = ''; document.getElementById('link-url').value = '';
+            
+            document.getElementById('link-name').value = '';
+            document.getElementById('link-url').value = '';
             save(); renderFiles(); renderApp();
         }
 
