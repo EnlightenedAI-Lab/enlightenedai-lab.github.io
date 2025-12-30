@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>EAIRL | FUNDING CMD v14.2</title>
+    <title>EAIRL | FUNDING CMD v14.3</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +27,7 @@
             --st-submitted: #059669;
             --st-won: #16a34a;
             --st-rejected: #dc2626;
+            --st-archived: #a1a1aa;
             
             /* TYPE BADGES */
             --badge-grant: #e0f2fe; --text-grant: #075985;
@@ -39,7 +40,8 @@
             --badge-partner: #ffedd5; --text-partner: #c2410c;
 
             /* LOGISTICS PILLS */
-            --pill-bg: #f4f4f5; --pill-text: #52525b;
+            --pill-bg: #ffffff; --pill-border: #e4e4e7; --pill-text: #52525b;
+            --pill-cash: #059669; --pill-credits: #7c3aed;
         }
 
         body[data-theme="dark"] {
@@ -54,7 +56,8 @@
             --badge-accel: #4a044e; --text-accel: #f0abfc;
             --badge-uni: #172554; --text-uni: #bfdbfe;
             --badge-partner: #431407; --text-partner: #fdba74;
-            --pill-bg: #27272a; --pill-text: #d4d4d8;
+            --pill-bg: #18181b; --pill-border: #3f3f46; --pill-text: #d4d4d8;
+            --pill-cash: #34d399; --pill-credits: #a78bfa;
         }
 
         * { box-sizing: border-box; }
@@ -83,9 +86,11 @@
         }
         
         .pill {
-            font-size: 9px; padding: 1px 4px; border-radius: 3px; font-family: "JetBrains Mono", monospace; 
-            margin-right: 2px; display: inline-block; background: var(--pill-bg); color: var(--pill-text);
+            font-size: 9px; padding: 1px 4px; border: 1px solid var(--pill-border); border-radius: 3px; font-family: "JetBrains Mono", monospace; 
+            margin-right: 3px; display: inline-block; background: var(--pill-bg); color: var(--pill-text);
         }
+        .pill-val.cash { color: var(--pill-cash); font-weight: 700; border-color: var(--pill-cash); }
+        .pill-val.credits { color: var(--pill-credits); font-weight: 700; border-color: var(--pill-credits); }
 
         /* --- SEARCH & FILTERS --- */
         .search-container { margin-bottom: 20px; position: sticky; top: 0; background: var(--bg); z-index: 20; padding-top: 5px; }
@@ -164,11 +169,9 @@
         .file-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--border); align-items: center; }
         .log-item { padding: 8px; border-bottom: 1px solid var(--border); font-size: 11px; }
 
-        /* Version Tag */
         .ver-tag { position:fixed; bottom:20px; right:20px; font-family:'JetBrains Mono'; font-size:10px; color:red; border:1px solid red; padding:4px 8px; background:var(--bg); border-radius:4px; z-index:1000; }
-        
         .priority-star { cursor: pointer; color: var(--border); transition: color 0.2s; font-size: 14px; margin-right: 5px; }
-        .priority-star.active { color: #eab308; } /* Yellow */
+        .priority-star.active { color: #eab308; } 
     </style>
 </head>
 <body data-theme="light">
@@ -205,7 +208,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
                 <div>
                     <h1>Funding Command</h1>
-                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v14.2</div>
+                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v14.3</div>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn" style="border-color:var(--highlight); color:var(--highlight);" onclick="openAddTargetModal()">+ ADD TARGET</button>
@@ -304,14 +307,24 @@
                     <input id="new-name" placeholder="e.g. Open Philanthropy" style="border:1px solid var(--border); padding:8px;">
                 </div>
                 <div style="margin-bottom:15px;">
-                    <label class="subtitle">MODE</label>
-                    <select id="new-mode">
-                        <option value="Portal">Portal</option>
-                        <option value="Email">Email</option>
-                        <option value="Warm Intro">Warm Intro</option>
-                        <option value="Regrantor">Regrantor</option>
-                        <option value="Monitor">Monitor</option>
-                    </select>
+                    <label class="subtitle">LOGISTICS (REALITY / LATENCY / EFFORT)</label>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;">
+                        <select id="new-reality">
+                            <option value="CASH">CASH</option>
+                            <option value="CREDITS">CREDITS</option>
+                            <option value="ACCESS">ACCESS</option>
+                        </select>
+                        <select id="new-latency">
+                            <option value="1-3mo">1-3mo</option>
+                            <option value="<30d">&lt;30d</option>
+                            <option value="3-6mo">3-6mo</option>
+                        </select>
+                        <select id="new-effort">
+                            <option value="Med">Med</option>
+                            <option value="Low">Low</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
                 </div>
                 <button class="btn" style="width:100%; border-color:var(--highlight); color:var(--highlight);" onclick="saveNewTarget()">ADD TO DATABASE</button>
             </div>
@@ -351,15 +364,13 @@
         </div>
     </div>
 
-    <div class="ver-tag">[ v14.2 ]</div>
+    <div class="ver-tag">[ v14.3 ]</div>
 
     <script>
-        // --- CONFIG ---
-        const DB_KEY = 'eairl_funding_v14_2'; // NEW KEY for correct seed data
+        const DB_KEY = 'eairl_funding_v14_3'; // FRESH KEY FOR LOGISTICS FIX
         
-        // --- SEED DATA (UPDATED TARGETS) ---
         const seedData = [
-            // A: ACTIVE OPS (THE 7 TARGETS)
+            // A: ACTIVE OPS
             { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", status: "Identify", deadline: "2026-02-01", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "High", next: "Draft Abstract", link_apply: "https://nlnet.nl/apply/", updated: "2025-12-30", priority: true, files: [], logs: [] },
             { id: 2, sec: 'A', name: "Emergent Ventures", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "<30d", effort: "Low", next: "Write 1-pager", link_apply: "https://mercatuscenter.formstack.com/forms/emergent_ventures", updated: "2025-12-30", priority: true, files: [], logs: [] },
             { id: 3, sec: 'A', name: "NRC IRAP", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Phone", reality: "CASH", latency: "1-3mo", effort: "Med", next: "Call Montreal Office", link_apply: "https://nrc.canada.ca/en/support-technology-innovation", updated: "2025-12-30", files: [], logs: [] },
@@ -417,24 +428,12 @@
                 let currentDB = [];
                 if (saved) {
                     currentDB = JSON.parse(saved);
-                    // Migration / Consistency check
-                    currentDB.forEach(i => {
-                        if(!i.files) i.files = [];
-                        if(!i.logs) i.logs = [];
-                    });
-                    
-                    // SAFE MERGE: Add missing seed items without overwriting existing
-                    let added = false;
+                    // MERGE LOGIC FOR SAFETY
                     seedData.forEach(seedItem => {
                         const exists = currentDB.some(d => String(d.id) === String(seedItem.id) && d.sec === seedItem.sec);
-                        if (!exists) {
-                            currentDB.push(seedItem);
-                            added = true;
-                        }
+                        if (!exists) currentDB.push(seedItem);
                     });
-                    
                     db = currentDB;
-                    if(added) save(); // Persist the merged data
                 } else {
                     db = seedData;
                     save();
@@ -443,7 +442,6 @@
                 updateMemory();
             } catch(e) {
                 console.error("Init Error:", e);
-                // Fallback
                 db = seedData;
                 renderApp();
             }
@@ -491,16 +489,9 @@
             for (const [key, title] of Object.entries(sections)) {
                 let items = db.filter(i => i.sec === key);
                 
-                // FILTERING
                 if (searchVal || filterStat || filterType) {
                     items = items.filter(i => {
-                        const matchesSearch = !searchVal || (
-                            i.name.toLowerCase().includes(searchVal) || 
-                            (i.notes && i.notes.toLowerCase().includes(searchVal)) || 
-                            (i.mode && i.mode.toLowerCase().includes(searchVal)) ||
-                            String(i.id).includes(searchVal) ||
-                            (i.type && i.type.toLowerCase().includes(searchVal))
-                        );
+                        const matchesSearch = !searchVal || (i.name.toLowerCase().includes(searchVal) || (i.notes && i.notes.toLowerCase().includes(searchVal)));
                         const matchesStat = !filterStat || i.status.toLowerCase() === filterStat;
                         const matchesType = !filterType || i.type.toLowerCase().includes(filterType);
                         return matchesSearch && matchesStat && matchesType;
@@ -523,7 +514,7 @@
                                     <th style="width:5%">ID</th>
                                     <th style="width:20%">Target</th>
                                     <th style="width:10%">Type / Mode</th>
-                                    <th style="width:10%">Logistics</th>
+                                    <th style="width:15%">Logistics</th>
                                     <th style="width:8%">Deadline</th>
                                     <th style="width:12%">Status</th>
                                     <th style="width:15%">Next Action</th>
@@ -549,13 +540,8 @@
                     const hasFiles = (i.files && i.files.length > 0) ? 'color:var(--highlight); opacity:1;' : '';
                     const dateStr = (i.updated && typeof i.updated === 'string' && i.updated.length >= 5) ? i.updated.slice(5) : '-';
                     const starClass = i.priority ? 'active' : '';
-
-                    // Apply Link Label Logic
-                    let linkLabel = "APPLY ↗";
-                    if (i.link_apply && i.link_apply.toLowerCase().startsWith("mailto:")) linkLabel = "EMAIL ↗";
-
-                    // Owner/Mode Logic
-                    const ownerDisplay = (i.owner && i.owner !== 'Nicolas') ? `/ ${i.owner}` : '';
+                    
+                    const realityClass = (i.reality === 'CASH') ? 'cash' : (i.reality === 'CREDITS') ? 'credits' : '';
 
                     html += `
                         <tr>
@@ -565,14 +551,16 @@
                                     <span class="priority-star ${starClass}" onclick="togglePriority(${i.id})">★</span>
                                     <span style="font-weight:700;">${i.name}</span>
                                 </div>
-                                <div style="font-size:10px; margin-top:2px;">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">${linkLabel}</a>` : ''}</div>
+                                <div style="font-size:10px; margin-top:2px;">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">APPLY ↗</a>` : ''}</div>
                             </td>
                             <td>
                                 <span class="status-badge" style="${badgeStyle}">${i.type}</span>
-                                <div style="font-size:9px; margin-top:2px; color:var(--text-muted);">${i.mode} ${ownerDisplay}</div>
+                                <div style="font-size:9px; margin-top:2px; color:var(--text-muted);">${i.mode || '-'}</div>
                             </td>
                             <td>
-                                <span class="pill">${i.magnitude}</span> <span class="pill">${i.speed}</span>
+                                <span class="pill pill-val ${realityClass}">${i.reality || '-'}</span>
+                                <span class="pill">${i.latency || '-'}</span>
+                                <span class="pill">${i.effort || '-'}</span>
                             </td>
                             <td><input class="mono" value="${i.deadline||''}" onchange="update(${i.id}, 'deadline', this.value)"></td>
                             <td>
@@ -601,181 +589,44 @@
             }
         }
 
+        // ... [Rest of functions are same as before: renderStats, update, openFileModal, etc.] ...
         function renderStats() {
             const total = db.length;
             const submitted = db.filter(i => i.status === 'Submitted').length;
             const goal = 5; 
             const pct = Math.min((submitted / goal) * 100, 100);
-
             document.getElementById('goal-bar').style.width = pct + "%";
             document.getElementById('goal-text').innerText = `${submitted} / ${goal}`;
-            
-            document.getElementById('stats-mount').innerHTML = `
-                <div class="stat-item"><span class="stat-lbl">ACTIVE TARGETS</span><span class="stat-val">${total}</span></div>
-                <div class="stat-item"><span class="stat-lbl" style="color:#d97706">DRAFTING</span><span class="stat-val" style="color:#d97706">${db.filter(i=>i.status==='Drafting').length}</span></div>
-                <div class="stat-item"><span class="stat-lbl" style="color:#059669">SUBMITTED</span><span class="stat-val" style="color:#059669">${submitted}</span></div>
-                <div class="stat-item"><span class="stat-lbl" style="color:#16a34a">WON</span><span class="stat-val" style="color:#16a34a">${db.filter(i=>i.status==='Won').length}</span></div>
-            `;
+            document.getElementById('stats-mount').innerHTML = `<div class="stat-item"><span class="stat-lbl">ACTIVE TARGETS</span><span class="stat-val">${total}</span></div><div class="stat-item"><span class="stat-lbl" style="color:#d97706">DRAFTING</span><span class="stat-val" style="color:#d97706">${db.filter(i=>i.status==='Drafting').length}</span></div><div class="stat-item"><span class="stat-lbl" style="color:#059669">SUBMITTED</span><span class="stat-val" style="color:#059669">${submitted}</span></div><div class="stat-item"><span class="stat-lbl" style="color:#16a34a">WON</span><span class="stat-val" style="color:#16a34a">${db.filter(i=>i.status==='Won').length}</span></div>`;
         }
-
-        function update(id, field, val) {
-            const item = db.find(i => i.id === id);
-            item[field] = val;
-            item.updated = new Date().toISOString().split('T')[0];
-            save(); renderApp();
-        }
-
-        function openFileModal(id) {
-            activeId = id;
-            document.getElementById('file-modal').style.display = 'flex';
-            renderFiles(); renderLogs();
-        }
-
-        function openAddTargetModal() {
-            document.getElementById('add-modal').style.display = 'flex';
-        }
-
+        function update(id, field, val) { const item = db.find(i => i.id === id); item[field] = val; item.updated = new Date().toISOString().split('T')[0]; save(); renderApp(); }
+        function openFileModal(id) { activeId = id; document.getElementById('file-modal').style.display = 'flex'; renderFiles(); renderLogs(); }
+        function openAddTargetModal() { document.getElementById('add-modal').style.display = 'flex'; }
         function saveNewTarget() {
             const name = document.getElementById('new-name').value;
             if(!name) return alert("Name required");
-            
             const newItem = {
-                id: Date.now().toString().slice(-4), // Simple 4-digit ID
-                sec: document.getElementById('new-sec').value,
-                name: name,
-                type: document.getElementById('new-type').value,
-                mode: document.getElementById('new-mode').value,
-                status: "Identify",
-                deadline: "Rolling",
-                magnitude: "Med",
-                speed: "Med",
-                priority: false,
-                updated: new Date().toISOString().split('T')[0],
-                files: [],
-                logs: []
+                id: Date.now().toString().slice(-4), sec: document.getElementById('new-sec').value,
+                name: name, type: document.getElementById('new-type').value, mode: document.getElementById('new-mode').value,
+                reality: document.getElementById('new-reality').value, latency: document.getElementById('new-latency').value, effort: document.getElementById('new-effort').value,
+                status: "Identify", deadline: "Rolling", priority: false, updated: new Date().toISOString().split('T')[0], files: [], logs: []
             };
-            
-            db.push(newItem);
-            save();
-            closeModal('add-modal');
-            document.getElementById('new-name').value = '';
-            renderApp();
+            db.push(newItem); save(); closeModal('add-modal'); document.getElementById('new-name').value = ''; renderApp();
         }
-
-        function renderFiles() {
-            const item = db.find(i => i.id === activeId);
-            const list = document.getElementById('file-list');
-            list.innerHTML = item.files.map((f, idx) => `
-                <div class="file-item">
-                    <div>
-                        <span style="font-weight:700;">${f.name}</span>
-                        ${f.link ? `<a href="${f.link}" target="_blank" style="margin-left:5px; color:var(--highlight);">OPEN ↗</a>` : ''}
-                        ${f.content ? `<span style="font-size:9px; background:var(--border); padding:1px 4px; border-radius:2px; margin-left:5px;">DOC</span>` : ''}
-                    </div>
-                    <div>
-                        <button class="btn" style="font-size:9px;" onclick="openEditor(${idx})">${f.content ? 'EDIT' : 'VIEW'}</button>
-                        <button class="icon-btn" style="color:red;" onclick="delFile(${idx})">×</button>
-                    </div>
-                </div>
-            `).join('') || '<div style="padding:10px; color:var(--text-muted); font-style:italic;">No attachments.</div>';
-        }
-
-        function addLink() {
-            const name = document.getElementById('link-name').value;
-            const url = document.getElementById('link-url').value;
-            if (!name) return alert("Name required");
-            const item = db.find(i => i.id === activeId);
-            item.files.push({ name: name, link: url, content: null });
-            item.updated = new Date().toISOString().split('T')[0];
-            document.getElementById('link-name').value = ''; document.getElementById('link-url').value = '';
-            save(); renderFiles(); renderApp();
-        }
-
-        function addDoc() {
-            const item = db.find(i => i.id === activeId);
-            item.files.push({ name: "Note / Draft", link: null, content: "" });
-            item.updated = new Date().toISOString().split('T')[0];
-            save(); openEditor(item.files.length - 1);
-        }
-
-        function delFile(idx) {
-            const item = db.find(i => i.id === activeId);
-            item.files.splice(idx, 1);
-            item.updated = new Date().toISOString().split('T')[0];
-            save(); renderFiles(); renderApp();
-        }
-
-        function openEditor(idx) {
-            activeFileIndex = idx;
-            const item = db.find(i => i.id === activeId);
-            document.getElementById('rich-editor').innerHTML = item.files[idx].content || "";
-            document.getElementById('file-modal').style.display = 'none';
-            document.getElementById('editor-modal').style.display = 'flex';
-        }
-
-        function saveEditorContent() {
-            const content = document.getElementById('rich-editor').innerHTML;
-            const item = db.find(i => i.id === activeId);
-            item.files[activeFileIndex].content = content;
-            item.updated = new Date().toISOString().split('T')[0];
-            save();
-            document.getElementById('editor-modal').style.display = 'none';
-            document.getElementById('file-modal').style.display = 'flex';
-            renderFiles();
-        }
-
+        function renderFiles() { const item = db.find(i => i.id === activeId); const list = document.getElementById('file-list'); list.innerHTML = item.files.map((f, idx) => `<div class="file-item"><div><span style="font-weight:700;">${f.name}</span>${f.link ? `<a href="${f.link}" target="_blank" style="margin-left:5px; color:var(--highlight);">OPEN ↗</a>` : ''}${f.content ? `<span style="font-size:9px; background:var(--border); padding:1px 4px; border-radius:2px; margin-left:5px;">DOC</span>` : ''}</div><div><button class="btn" style="font-size:9px;" onclick="openEditor(${idx})">${f.content ? 'EDIT' : 'VIEW'}</button><button class="icon-btn" style="color:red;" onclick="delFile(${idx})">×</button></div></div>`).join('') || '<div style="padding:10px; color:var(--text-muted); font-style:italic;">No attachments.</div>'; }
+        function addLink() { const name = document.getElementById('link-name').value; const url = document.getElementById('link-url').value; if (!name) return alert("Name required"); const item = db.find(i => i.id === activeId); item.files.push({ name: name, link: url, content: null }); item.updated = new Date().toISOString().split('T')[0]; document.getElementById('link-name').value = ''; document.getElementById('link-url').value = ''; save(); renderFiles(); renderApp(); }
+        function addDoc() { const item = db.find(i => i.id === activeId); item.files.push({ name: "Note / Draft", link: null, content: "" }); item.updated = new Date().toISOString().split('T')[0]; save(); openEditor(item.files.length - 1); }
+        function delFile(idx) { const item = db.find(i => i.id === activeId); item.files.splice(idx, 1); item.updated = new Date().toISOString().split('T')[0]; save(); renderFiles(); renderApp(); }
+        function openEditor(idx) { activeFileIndex = idx; const item = db.find(i => i.id === activeId); document.getElementById('rich-editor').innerHTML = item.files[idx].content || ""; document.getElementById('file-modal').style.display = 'none'; document.getElementById('editor-modal').style.display = 'flex'; }
+        function saveEditorContent() { const content = document.getElementById('rich-editor').innerHTML; const item = db.find(i => i.id === activeId); item.files[activeFileIndex].content = content; item.updated = new Date().toISOString().split('T')[0]; save(); document.getElementById('editor-modal').style.display = 'none'; document.getElementById('file-modal').style.display = 'flex'; renderFiles(); }
         function format(cmd, val) { document.execCommand(cmd, false, val); }
-
-        function addLog() {
-            const txt = document.getElementById('log-input').value;
-            if(!txt) return;
-            const item = db.find(i => i.id === activeId);
-            item.logs.unshift({ date: new Date().toISOString().split('T')[0], text: txt });
-            item.updated = new Date().toISOString().split('T')[0];
-            document.getElementById('log-input').value = '';
-            save(); renderLogs(); renderApp();
-        }
-
-        function renderLogs() {
-            const item = db.find(i => i.id === activeId);
-            document.getElementById('log-list').innerHTML = item.logs.map(l => `
-                <div class="log-item">
-                    <span class="mono" style="color:var(--text-muted); margin-right:5px;">${l.date}</span>
-                    ${l.text}
-                </div>
-            `).join('');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-            if (id === 'editor-modal') document.getElementById('file-modal').style.display = 'flex';
-        }
-
-        function save() { 
-            try {
-                localStorage.setItem(DB_KEY, JSON.stringify(db));
-                updateMemory();
-            } catch(e) { alert("STORAGE FULL."); }
-        }
-
-        function updateMemory() {
-            const used = JSON.stringify(localStorage).length;
-            const pct = Math.round((used / 5000000) * 100);
-            document.getElementById('mem-val').innerText = pct + "%";
-            document.getElementById('mem-fill').style.width = pct + "%";
-        }
-
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
-            const a = document.createElement('a'); a.href = dataStr; a.download = "eairl_funding_db.json"; a.click(); a.remove();
-        }
-
-        function toggleTheme() {
-            const b = document.body;
-            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-        }
-
-        // Boot
+        function addLog() { const txt = document.getElementById('log-input').value; if(!txt) return; const item = db.find(i => i.id === activeId); item.logs.unshift({ date: new Date().toISOString().split('T')[0], text: txt }); item.updated = new Date().toISOString().split('T')[0]; document.getElementById('log-input').value = ''; save(); renderLogs(); renderApp(); }
+        function renderLogs() { const item = db.find(i => i.id === activeId); document.getElementById('log-list').innerHTML = item.logs.map(l => `<div class="log-item"><span class="mono" style="color:var(--text-muted); margin-right:5px;">${l.date}</span>${l.text}</div>`).join(''); }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; if (id === 'editor-modal') document.getElementById('file-modal').style.display = 'flex'; }
+        function save() { try { localStorage.setItem(DB_KEY, JSON.stringify(db)); updateMemory(); } catch(e) { alert("STORAGE FULL."); } }
+        function updateMemory() { const used = JSON.stringify(localStorage).length; const pct = Math.round((used / 5000000) * 100); document.getElementById('mem-val').innerText = pct + "%"; document.getElementById('mem-fill').style.width = pct + "%"; }
+        function exportData() { const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2)); const a = document.createElement('a'); a.href = dataStr; a.download = "eairl_funding_db.json"; a.click(); a.remove(); }
+        function toggleTheme() { const b = document.body; b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
         initApp();
     </script>
 </body>
