@@ -151,6 +151,7 @@
         .st-drafting { color: #b45309; border-color: #b45309; background: rgba(180,83,9,0.05); }
         .st-submitted { color: #008800; border-color: #008800; background: rgba(0,136,0,0.05); }
         .st-won { background: #00cc00; color: #fff; border-color: #00cc00; }
+        .st-monitor { color: var(--text-muted); border-color: var(--border-color); opacity: 0.8; }
 
         .notes-input {
             background: transparent; border: 1px solid transparent; color: var(--text-main);
@@ -328,18 +329,32 @@
       const DB_KEY = 'eairl_funding_v1';
       
       const seedData = [
-        { id: 1, name: "NLnet Foundation", type: "Foundation", range: "€5K–€50K", status: "Identify", link: "https://nlnet.nl/commonsfund", notes: "Top Priority. Focus on public utility tools." },
-        { id: 2, name: "Emergent Ventures", type: "Foundation", range: "$10K–$50K+", status: "Identify", link: "https://www.mercatus.org/emergent-ventures", notes: "Write 1-pager. Focus on 'outlier' ideas." },
-        { id: 3, name: "NRC IRAP (AI Assist)", type: "Gov / R&D", range: "$20K–$49K", status: "Identify", link: "https://nrc.canada.ca/en/support-technology-innovation", notes: "Call Montreal Office (514-496-6100). Ask for AI Assist ARP." },
-        { id: 4, name: "Aligned Studies (ASF)", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://alignedstudies.com/apply", notes: "Wants infrastructure & specs." },
-        { id: 5, name: "AI Safety Campus", type: "Regrantor", range: "$1K–$30K", status: "Identify", link: "https://www.aisafety.campus/grants", notes: "Fast agile grant for compute/hosting." },
-        { id: 6, name: "AE Studio", type: "Private", range: "$10K–$25K", status: "Identify", link: "https://research.ae.studio/", notes: "Pitch 'neglected approaches' in diagnostics." },
+        // TOP PRIORITY
+        { id: 1, name: "NLnet Foundation (NGI Zero)", type: "Foundation", range: "€5K–€50K", status: "Identify", link: "https://nlnet.nl/commonsfund", notes: "Top Priority. Focus on public utility." },
+        { id: 2, name: "Emergent Ventures", type: "Foundation", range: "$10K–$50K+", status: "Identify", link: "https://www.mercatus.org/emergent-ventures", notes: "Write 1-pager. 'Outlier' ideas." },
+        { id: 3, name: "NRC IRAP (AI Assist)", type: "Gov / R&D", range: "$20K–$49K", status: "Identify", link: "https://nrc.canada.ca/en/support-technology-innovation", notes: "Call Montreal Office (514-496-6100)." },
+        { id: 4, name: "Aligned Studies (ASF)", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://alignedstudies.com/apply", notes: "Infrastructure & specs focus." },
+        { id: 5, name: "AI Safety Campus", type: "Regrantor", range: "$1K–$30K", status: "Identify", link: "https://www.aisafety.campus/grants", notes: "Fast agile grant for compute." },
+        { id: 6, name: "AE Studio", type: "Private", range: "$10K–$25K", status: "Identify", link: "https://research.ae.studio/", notes: "Pitch 'neglected approaches'." },
         { id: 7, name: "BlueDot Impact", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://www.aisafety.com/funding", notes: "Governance/Strategy tools." },
-        { id: 8, name: "Huberman Family Fund", type: "Foundation", range: "$25K–$75K", status: "Monitor", link: "mailto:grants@huberman.org", notes: "Evaluation focus. Needs direct pitch." },
-        { id: 9, name: "Mozilla Tech Fund", type: "Foundation", range: "$50K", status: "Monitor", link: "https://foundation.mozilla.org/en/what-we-fund/technologies/", notes: "Audit Tools. Watch for calls." },
-        { id: 10, name: "Cooperative AI", type: "Foundation", range: "£20K–£50K", status: "Monitor", link: "https://www.cooperativeai.com/grants", notes: "Multi-agent cooperation benchmarks." },
-        { id: 11, name: "SingularityNET", type: "DAO", range: "~$40K", status: "Monitor", link: "https://deepfunding.ai/all-rfps/", notes: "Deep Funding. Neural-symbolic focus." },
-        { id: 12, name: "METR (ARC Evals)", type: "Contract", range: "Revenue", status: "Monitor", link: "https://metr.org/contact/", notes: "Sell as Eval Environment." }
+        
+        // MEDIUM / NICHE
+        { id: 8, name: "Huberman Family Fund", type: "Foundation", range: "$25K–$75K", status: "Monitor", link: "mailto:grants@huberman.org", notes: "Needs direct email pitch." },
+        { id: 9, name: "Mozilla Tech Fund", type: "Foundation", range: "$50K", status: "Monitor", link: "https://foundation.mozilla.org/en/what-we-fund/technologies/", notes: "Watch for audit tool calls." },
+        { id: 10, name: "Cooperative AI", type: "Foundation", range: "£20K–£50K", status: "Monitor", link: "https://www.cooperativeai.com/grants", notes: "Multi-agent cooperation." },
+        { id: 11, name: "SingularityNET (Deep)", type: "DAO", range: "~$40K", status: "Monitor", link: "https://deepfunding.ai/all-rfps/", notes: "Neural-symbolic focus." },
+        { id: 12, name: "METR (ARC Evals)", type: "Contract", range: "Revenue", status: "Monitor", link: "https://metr.org/contact/", notes: "Sales pitch for eval environment." },
+        
+        // ADDITIONAL (13-21)
+        { id: 13, name: "Coefficient Giving", type: "Regrantor", range: "Variable", status: "Monitor", link: "https://coefficientgiving.org/", notes: "Entrepreneurial safety focus." },
+        { id: 14, name: "FAR AI", type: "Lab", range: "Variable", status: "Monitor", link: "https://far.ai/", notes: "Research heavy (robustness)." },
+        { id: 15, name: "Future Fund (Archive)", type: "Foundation", range: "Paused", status: "Monitor", link: "https://ftx.com/foundation", notes: "Currently inactive." },
+        { id: 16, name: "Lightcone Infrastructure", type: "Regrantor", range: "$5K–$20K", status: "Monitor", link: "https://www.lesswrong.com/", notes: "Rationality community tools." },
+        { id: 17, name: "Rethink Priorities", type: "Think Tank", range: "Variable", status: "Monitor", link: "https://rethinkpriorities.org/", notes: "Moral weights/welfare." },
+        { id: 18, name: "QURI", type: "Lab", range: "Variable", status: "Monitor", link: "https://quantifieduncertainty.org/", notes: "Forecasting/Epistemics." },
+        { id: 19, name: "MIRI", type: "Lab", range: "Variable", status: "Monitor", link: "https://intelligence.org/", notes: "Mathematical theory." },
+        { id: 20, name: "SERI Microgrants", type: "University", range: "$5K", status: "Monitor", link: "https://seri.stanford.edu/", notes: "Existential risk projects." },
+        { id: 21, name: "Patrick J. McGovern", type: "Foundation", range: "Large", status: "Monitor", link: "https://www.mcgovern.org/", notes: "Data sovereignty focus." }
       ];
 
       let db = [];
@@ -427,7 +442,7 @@
           if (status === 'Drafting') return 'st-drafting';
           if (status === 'Submitted') return 'st-submitted';
           if (status === 'Won') return 'st-won';
-          return '';
+          return 'st-monitor';
       }
 
       function exportData() {
