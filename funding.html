@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funding Workbench | Enlightened AI</title>
+    <title>Funding Command v4.0 | Enlightened AI</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/footer.css">
 
     <style>
         /* --- THEME: INSTITUTE STANDARD V54 --- */
@@ -31,6 +30,12 @@
             --input-bg: #fff;
             --select-bg: #f8f9fa;
             --modal-overlay: rgba(0,0,0,0.4);
+            
+            /* TYPES */
+            --type-grant: #e0f2fe; --text-grant: #0369a1;
+            --type-prize: #dcfce7; --text-prize: #15803d;
+            --type-bounty: #fee2e2; --text-bounty: #b91c1c;
+            --type-contract: #fef3c7; --text-contract: #b45309;
         }
 
         /* --- DARK MODE OVERRIDES --- */
@@ -44,6 +49,11 @@
             --input-bg: #111;
             --select-bg: #151515;
             --modal-overlay: rgba(0,0,0,0.8);
+            
+            --type-grant: #0c4a6e; --text-grant: #7dd3fc;
+            --type-prize: #052e16; --text-prize: #86efac;
+            --type-bounty: #450a0a; --text-bounty: #fca5a5;
+            --type-contract: #451a03; --text-contract: #fcd34d;
         }
         body[data-theme="dark"] aside { background-color: #0a0a0a; border-right-color: #333; }
         body[data-theme="dark"] .mobile-bar { background: rgba(10,10,10,0.95); border-bottom-color: #333; }
@@ -57,6 +67,7 @@
         body[data-theme="dark"] th { background: #111; color: #fff; border-bottom-color: #333; }
         body[data-theme="dark"] td { border-bottom-color: #333; }
         body[data-theme="dark"] .modal-content { background: #111; border-color: #333; }
+        body[data-theme="dark"] .scratchpad { background: #111; border-color: #333; color: #eee; }
 
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -85,7 +96,6 @@
 
         .mode-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; }
         .toggle-btn { font-family: var(--font-mono); font-size: 0.7rem; color: #999; cursor: pointer; display: flex; justify-content: space-between; transition: color 0.1s; }
-        .toggle-btn.active { color: var(--text-main); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
         
         nav ul { list-style: none; padding: 0; margin: 0; }
         nav li { margin-bottom: 4px; }
@@ -94,7 +104,6 @@
         nav a.active { color: var(--text-main); font-weight: 700; border-left: 3px solid var(--text-main); background: linear-gradient(90deg, transparent, var(--bg-color)); }
 
         .theme-switch { margin-top: auto; margin-bottom: 1rem; cursor: pointer; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid var(--border-color); transition: color 0.2s; }
-        .theme-switch:hover { color: var(--text-main); }
 
         /* --- MOBILE BAR --- */
         .mobile-bar {
@@ -107,55 +116,74 @@
         .mobile-index-btn { font-family: var(--font-mono); font-size: 0.75rem; padding: 4px 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); cursor: pointer; }
 
         /* --- MAIN CONTENT --- */
-        main { flex-grow: 1; padding: 3rem 4rem; max-width: 1400px; width: 100%; }
+        main { flex-grow: 1; padding: 3rem 4rem; max-width: 1400px; width: 100%; position: relative; }
         
+        /* HEADER */
+        .reader-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 2.5rem; }
+        .header-top-row { display: flex; align-items: center; gap: 3rem; margin-bottom: 1rem; font-family: var(--font-mono); }
+        .meta-item { display: flex; flex-direction: column; gap: 4px; }
+        .label { font-size: 0.6rem; letter-spacing: 0.05em; color: #999; text-transform: uppercase; }
+        .val { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+        .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.05); cursor: default; }
+        .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
+        .orienting-sentence { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9; }
+
         /* TYPOGRAPHY */
         h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1.5rem; line-height: 1.1; text-transform: uppercase; }
         h2 { font-size: 1.1rem; font-weight: 700; margin-top: 4rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
         p { margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.95rem; }
 
-        /* --- INTERACTIVE DATA TABLE --- */
+        /* SCRATCHPAD */
+        .scratchpad-container { margin-bottom: 3rem; }
+        .scratchpad {
+            width: 100%; min-height: 120px; padding: 1.5rem;
+            font-family: var(--font-mono); font-size: 0.8rem;
+            background: #fff; border: 1px solid var(--border-color); border-left: 3px solid var(--accent-primary);
+            color: #333; resize: vertical; outline: none; line-height: 1.6;
+        }
+        .scratchpad:focus { border-color: var(--accent-primary); }
+        .scratchpad::placeholder { color: var(--text-muted); opacity: 0.6; }
+
+        /* TABLE */
         .table-wrapper { overflow-x: auto; margin-bottom: 4rem; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
         th { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); padding: 12px 8px; border-bottom: 2px solid var(--border-color); font-weight: 700; background: var(--sidebar-bg); }
-        td { padding: 16px 8px; border-bottom: 1px solid var(--border-color); vertical-align: top; color: var(--text-main); }
+        td { padding: 14px 8px; border-bottom: 1px solid var(--border-color); vertical-align: top; color: var(--text-main); }
         
-        /* Number Column */
         .col-id { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); width: 40px; text-align: center; }
+        .org-name { font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 2px; }
+        .org-detail { font-size: 0.75rem; color: var(--text-muted); }
+        .deadline-tag { font-family: var(--font-mono); font-size: 0.65rem; color: #b45309; display: inline-block; background: rgba(180, 83, 9, 0.1); padding: 1px 4px; border-radius: 3px; margin-top: 4px; }
 
-        /* Interactive Inputs */
+        /* BADGES */
+        .badge { font-family: var(--font-mono); font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-weight: 700; display: inline-block; }
+        .badge-grant { background: var(--type-grant); color: var(--text-grant); }
+        .badge-prize { background: var(--type-prize); color: var(--text-prize); }
+        .badge-bounty { background: var(--type-bounty); color: var(--text-bounty); }
+        .badge-contract { background: var(--type-contract); color: var(--text-contract); }
+
+        /* INPUTS */
         .status-select {
             background: var(--select-bg); border: 1px solid var(--border-color); color: var(--text-main);
             font-family: var(--font-mono); font-size: 0.7rem; padding: 4px 8px; border-radius: 4px;
             cursor: pointer; width: 100%; text-transform: uppercase; font-weight: 700;
         }
-        .status-select:focus { border-color: var(--accent-primary); outline: none; }
-        
-        /* Status Colors */
-        .st-apply { color: var(--accent-primary); border-color: var(--accent-primary); background: rgba(0,68,204,0.05); }
-        .st-drafting { color: #b45309; border-color: #b45309; background: rgba(180,83,9,0.05); }
+        .st-identify { opacity: 0.6; }
+        .st-pitching { color: #b45309; border-color: #b45309; background: rgba(180,83,9,0.05); }
         .st-submitted { color: #008800; border-color: #008800; background: rgba(0,136,0,0.05); }
         .st-won { background: #00cc00; color: #fff; border-color: #00cc00; }
-        .st-monitor { color: var(--text-muted); border-color: var(--border-color); opacity: 0.8; }
 
-        .notes-input {
+        .action-input {
             background: transparent; border: 1px solid transparent; color: var(--text-main);
             font-family: var(--font-stack); font-size: 0.8rem; width: 100%; padding: 4px;
-            border-bottom: 1px dashed var(--border-color); transition: all 0.2s;
+            border-bottom: 1px dashed var(--border-color); transition: all 0.2s; margin-bottom: 4px;
         }
-        .notes-input:focus { border-color: var(--accent-primary); border-bottom-style: solid; outline: none; background: var(--select-bg); }
-        .notes-input::placeholder { font-style: italic; color: var(--text-muted); opacity: 0.5; }
+        .action-input:focus { border-color: var(--accent-primary); border-bottom-style: solid; outline: none; background: var(--select-bg); }
 
         .icon-btn { font-size: 1rem; cursor: pointer; background: none; border: none; opacity: 0.6; transition: opacity 0.2s; }
         .icon-btn:hover { opacity: 1; }
         .has-files { color: var(--accent-primary); opacity: 1; }
-
-        .stats-bar {
-            display: flex; gap: 2rem; font-family: var(--font-mono); font-size: 0.75rem; 
-            margin-bottom: 2rem; padding: 1rem; border: 1px solid var(--border-color); background: var(--sidebar-bg);
-        }
-        .stat-val { font-weight: 700; color: var(--text-main); }
 
         /* MODAL */
         #modal-overlay {
@@ -167,11 +195,8 @@
             border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         .modal-header { font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-        .modal-body { margin-bottom: 1.5rem; }
-        .modal-footer { text-align: right; }
         .file-list { margin-top: 1rem; border: 1px solid var(--border-color); padding: 0.5rem; min-height: 50px; border-radius: 4px; }
         .file-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 4px; border-bottom: 1px solid var(--border-color); }
-        .file-item:last-child { border-bottom: none; }
 
         /* UTILS */
         .btn-action {
@@ -182,7 +207,18 @@
         }
         .btn-action:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
 
-        #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
+        .stats-bar {
+            display: flex; gap: 2rem; font-family: var(--font-mono); font-size: 0.75rem; 
+            margin-bottom: 2rem; padding: 1rem; border: 1px solid var(--border-color); background: var(--sidebar-bg);
+        }
+        .stat-val { font-weight: 700; color: var(--text-main); }
+
+        /* VERSION TAG */
+        .version-tag {
+            position: fixed; bottom: 20px; left: 20px; font-family: var(--font-mono);
+            font-size: 0.65rem; color: #cc0000; font-weight: 700; z-index: 2000;
+            background: var(--bg-color); padding: 4px 8px; border: 1px solid #cc0000; border-radius: 4px;
+        }
 
         @media (max-width: 900px) {
             .layout-wrapper { display: block; }
@@ -196,28 +232,29 @@
             td { display: block; padding: 8px 0; border: none; }
             tr { display: block; border: 1px solid var(--border-color); margin-bottom: 1rem; padding: 1rem; }
             .col-id { text-align: left; font-weight: 700; margin-bottom: 4px; }
+            .version-tag { left: auto; right: 20px; }
         }
     </style>
 </head>
 <body data-mode="reader" data-theme="light">
 
+    <div class="version-tag">[ v4.0 ]</div>
+
     <div id="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header">ATTACHMENTS FOR: <span id="modal-org-name"></span></div>
-            <div class="modal-body">
+            <div class="modal-header">EVIDENCE / FILES FOR: <span id="modal-org-name"></span></div>
+            <div style="margin-bottom: 1.5rem;">
                 <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">
-                    Since this is an offline tool, files are not hosted on a server. 
-                    <strong>Enter the filename or paste your Drive/Dropbox link here to track it.</strong>
+                    Store links to your evidence (Google Drive, Dropbox, Notion) or local filenames.
                 </p>
                 <div style="display:flex; gap:10px; margin-bottom:10px;">
-                    <input type="text" id="file-name-input" class="notes-input" placeholder="Filename (e.g. Application_v1.pdf)" style="border:1px solid var(--border-color);">
-                    <input type="text" id="file-link-input" class="notes-input" placeholder="Link URL (Optional)" style="border:1px solid var(--border-color);">
+                    <input type="text" id="file-name-input" class="action-input" placeholder="Description (e.g. Draft v2)" style="border:1px solid var(--border-color);">
+                    <input type="text" id="file-link-input" class="action-input" placeholder="URL (Optional)" style="border:1px solid var(--border-color);">
                     <button class="btn-action" onclick="addFile()">ADD</button>
                 </div>
-                <div class="file-list" id="modal-file-list">
-                    </div>
+                <div class="file-list" id="modal-file-list"></div>
             </div>
-            <div class="modal-footer">
+            <div style="text-align: right;">
                 <button class="btn-action" onclick="closeModal()">CLOSE</button>
             </div>
         </div>
@@ -240,9 +277,7 @@
             </div>
 
             <div class="mode-group">
-                <span class="toggle-btn active" style="cursor:default;">[ READER ] <span>•</span></span>
-                <span class="toggle-btn disabled" style="opacity:0.3; cursor:not-allowed;">[ AUDIT ] <span>·</span></span>
-                <span class="toggle-btn disabled" style="opacity:0.3; cursor:not-allowed;">[ LOGIC ] <span>λ</span></span>
+                <span class="toggle-btn active" style="cursor:default;">[ WORKBENCH ] <span>•</span></span>
             </div>
             
             <nav>
@@ -263,9 +298,27 @@
         </aside>
 
         <main>
-            <div style="max-width: 800px; margin-bottom: 2rem;">
-                <h1>Funding Workbench</h1>
-                <p>Internal tool for tracking R&D grant pipelines. Data persists locally.</p>
+            <div class="reader-header">
+                <div class="header-top-row">
+                    <div class="meta-item">
+                        <span class="label">DOC_ID</span>
+                        <span class="val">EAIRL-FUNDING-004</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">CLASSIFICATION</span>
+                        <span class="val">INTERNAL / STRATEGIC</span>
+                    </div>
+                    <div class="integrity-seal">
+                        <span class="status-dot"></span>
+                        <span style="font-family:var(--font-mono); font-size:0.7rem; color:#005500;">INTEGRITY: VERIFIED</span>
+                    </div>
+                </div>
+                <div class="orienting-sentence">THIS DOCUMENT IS AN ACTIVE COMMAND CENTER FOR FUNDING OPERATIONS.</div>
+            </div>
+
+            <div class="scratchpad-container">
+                <h2 style="margin-top:0; border:none; margin-bottom:0.5rem; font-size:0.85rem;">GLOBAL NOTES / STRATEGY</h2>
+                <textarea id="global-scratchpad" class="scratchpad" placeholder="Type general strategy notes here... (Auto-saves locally)"></textarea>
             </div>
 
             <div class="stats-bar" id="stats-mount">
@@ -274,7 +327,7 @@
 
             <section>
                 <h2>
-                    <span><span class="scramble">01 //</span> Master Index</span>
+                    <span><span class="scramble">01 //</span> Master Pipeline</span>
                     <button class="btn-action" onclick="exportData()">↓ Backup Data</button>
                 </h2>
                 
@@ -283,12 +336,13 @@
                         <thead>
                             <tr>
                                 <th class="col-id">#</th>
-                                <th style="width:25%;">Organization</th>
-                                <th style="width:15%;">Range / Type</th>
-                                <th style="width:18%;">Status</th>
-                                <th>Notes</th>
-                                <th style="width:5%; text-align:center;">Files</th>
-                                <th style="width:8%; text-align:right;">Link</th>
+                                <th style="width:22%;">Organization / Deadline</th>
+                                <th style="width:12%;">Angle / Type</th>
+                                <th style="width:15%;">Status</th>
+                                <th style="width:25%;">Next Action</th>
+                                <th>Quick Notes</th>
+                                <th style="width:5%; text-align:center;">Evid.</th>
+                                <th style="width:5%; text-align:right;">Link</th>
                             </tr>
                         </thead>
                         <tbody id="table-body">
@@ -300,60 +354,71 @@
         </main>
     </div>
 
-    <div id="footer-mount"></div>
-    
     <script>
-      fetch('/partials/footer.html')
-        .then(r => r.text())
-        .then(html => {
-          document.getElementById('footer-mount').innerHTML = html;
-        });
-
       // --- APP LOGIC ---
-      const DB_KEY = 'eairl_funding_master_v21';
+      const DB_KEY = 'eairl_funding_v4';
+      const NOTES_KEY = 'eairl_funding_notes_v4';
       
       const seedData = [
-        // PRIORITY (1-6)
-        { id: 1, name: "NLnet Foundation", type: "Foundation", range: "€5K–€50K", status: "Identify", link: "https://nlnet.nl/commonsfund", notes: "Top Priority. Focus on public utility tools.", files: [] },
-        { id: 2, name: "Emergent Ventures", type: "Foundation", range: "$10K–$50K+", status: "Identify", link: "https://www.mercatus.org/emergent-ventures", notes: "Write 1-pager. 'Outlier' ideas.", files: [] },
-        { id: 3, name: "NRC IRAP (AI Assist)", type: "Gov / R&D", range: "$20K–$49K", status: "Identify", link: "https://nrc.canada.ca/en/support-technology-innovation", notes: "Call Montreal Office (514-496-6100).", files: [] },
-        { id: 4, name: "Aligned Studies (ASF)", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://alignedstudies.com/apply", notes: "Wants infrastructure & specs.", files: [] },
-        { id: 5, name: "AI Safety Campus", type: "Regrantor", range: "$1K–$30K", status: "Identify", link: "https://www.aisafety.campus/grants", notes: "Fast agile grant for compute.", files: [] },
-        { id: 6, name: "AE Studio", type: "Private", range: "$10K–$25K", status: "Identify", link: "https://research.ae.studio/", notes: "Pitch 'neglected approaches'.", files: [] },
+        // PRIORITY / HIGH EV
+        { id: 1, name: "NLnet Foundation", type: "Grant", angle: "Infra", range: "€50K", deadline: "Feb 1st", status: "Identify", link: "https://nlnet.nl/commonsfund", action: "Draft Abstract", notes: "Top Priority.", files: [] },
+        { id: 2, name: "Emergent Ventures", type: "Grant", angle: "Safety", range: "$50K+", deadline: "Rolling", status: "Identify", link: "https://www.mercatus.org/emergent-ventures", action: "Write 1-pager", notes: "High upside.", files: [] },
+        { id: 3, name: "NRC IRAP (AI Assist)", type: "Grant", angle: "R&D", range: "$49K", deadline: "Rolling", status: "Identify", link: "https://nrc.canada.ca/en/support-technology-innovation", action: "Call Montreal Office", notes: "Use ARP strategy.", files: [] },
+        { id: 4, name: "Martian Interpretability Prize", type: "Prize", angle: "Prize", range: "High", deadline: "See Site", status: "Identify", link: "https://www.martian.org/", action: "Check specific bounties", notes: "New addition.", files: [] },
+        { id: 5, name: "Scale AI (Canada)", type: "Partner", angle: "Supply", range: "Variable", deadline: "Rolling", status: "Identify", link: "https://www.scaleai.ca/", action: "Check eligibility", notes: "Montreal based.", files: [] },
         
-        // MEDIUM (7-12)
-        { id: 7, name: "BlueDot Impact", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://www.aisafety.com/funding", notes: "Governance/Strategy tools.", files: [] },
-        { id: 8, name: "Huberman Family Fund", type: "Foundation", range: "$25K–$75K", status: "Monitor", link: "mailto:grants@huberman.org", notes: "Needs direct email pitch.", files: [] },
-        { id: 9, name: "Mozilla Tech Fund", type: "Foundation", range: "$50K", status: "Monitor", link: "https://foundation.mozilla.org/en/what-we-fund/technologies/", notes: "Watch for audit tool calls.", files: [] },
-        { id: 10, name: "Cooperative AI", type: "Foundation", range: "£20K–£50K", status: "Monitor", link: "https://www.cooperativeai.com/grants", notes: "Multi-agent cooperation.", files: [] },
-        { id: 11, name: "SingularityNET", type: "DAO", range: "~$40K", status: "Monitor", link: "https://deepfunding.ai/all-rfps/", notes: "Neural-symbolic focus.", files: [] },
-        { id: 12, name: "METR (ARC Evals)", type: "Contract", range: "Revenue", status: "Monitor", link: "https://metr.org/contact/", notes: "Sales pitch for eval environment.", files: [] },
+        // BOUNTIES
+        { id: 23, name: "Google AI VRP", type: "Bounty", angle: "Security", range: "Variable", deadline: "Always Open", status: "Identify", link: "https://bughunters.google.com/about/rules/6625378258649088", action: "Review scope", notes: "Vuln reward program.", files: [] },
+        { id: 24, name: "Microsoft AI Bounty", type: "Bounty", angle: "Security", range: "Variable", deadline: "Always Open", status: "Identify", link: "https://www.microsoft.com/en-us/msrc/bounty", action: "Review scope", notes: "Zero Day Quest.", files: [] },
+
+        // CORE GRANTS
+        { id: 6, name: "Aligned Studies (ASF)", type: "Grant", angle: "Infra", range: "$50K", deadline: "Rolling", status: "Identify", link: "https://alignedstudies.com/apply", action: "", notes: "Independent researchers.", files: [] },
+        { id: 7, name: "AI Safety Campus", type: "Grant", angle: "Compute", range: "$30K", deadline: "Rolling", status: "Identify", link: "https://www.aisafety.campus/grants", action: "", notes: "Fast agile grant.", files: [] },
+        { id: 8, name: "AE Studio", type: "Contract", angle: "Safety", range: "$25K", deadline: "Rolling", status: "Identify", link: "https://research.ae.studio/", action: "", notes: "Neglected approaches.", files: [] },
+        { id: 9, name: "BlueDot Impact", type: "Grant", angle: "Gov", range: "$50K", deadline: "Check", status: "Identify", link: "https://www.aisafety.com/funding", action: "", notes: "Governance tools.", files: [] },
         
-        // NICHE (13-21)
-        { id: 13, name: "Coefficient Giving", type: "Regrantor", range: "Variable", status: "Monitor", link: "https://coefficientgiving.org/", notes: "Entrepreneurial safety focus.", files: [] },
-        { id: 14, name: "FAR AI", type: "Lab", range: "Variable", status: "Monitor", link: "https://far.ai/", notes: "Research heavy (robustness).", files: [] },
-        { id: 15, name: "Future Fund (Archive)", type: "Foundation", range: "Paused", status: "Monitor", link: "https://ftx.com/foundation", notes: "Currently inactive.", files: [] },
-        { id: 16, name: "Lightcone Infrastructure", type: "Regrantor", range: "$5K–$20K", status: "Monitor", link: "https://www.lesswrong.com/", notes: "Rationality community tools.", files: [] },
-        { id: 17, name: "Rethink Priorities", type: "Think Tank", range: "Variable", status: "Monitor", link: "https://rethinkpriorities.org/", notes: "Moral weights/welfare.", files: [] },
-        { id: 18, name: "QURI", type: "Lab", range: "Variable", status: "Monitor", link: "https://quantifieduncertainty.org/", notes: "Forecasting/Epistemics.", files: [] },
-        { id: 19, name: "MIRI", type: "Lab", range: "Variable", status: "Monitor", link: "https://intelligence.org/", notes: "Mathematical theory.", files: [] },
-        { id: 20, name: "SERI Microgrants", type: "University", range: "$5K", status: "Monitor", link: "https://seri.stanford.edu/", notes: "Existential risk projects.", files: [] },
-        { id: 21, name: "Patrick J. McGovern", type: "Foundation", range: "Large", status: "Monitor", link: "https://www.mcgovern.org/", notes: "Data sovereignty focus.", files: [] }
+        // MONITOR / MEDIUM
+        { id: 10, name: "Huberman Family Fund", type: "Grant", angle: "Eval", range: "$75K", deadline: "Rolling", status: "Identify", link: "mailto:grants@huberman.org", action: "", notes: "Direct pitch needed.", files: [] },
+        { id: 11, name: "Mozilla Tech Fund", type: "Grant", angle: "Infra", range: "$50K", deadline: "Closed", status: "Identify", link: "https://foundation.mozilla.org/en/what-we-fund/technologies/", action: "", notes: "Watch for calls.", files: [] },
+        { id: 12, name: "Cooperative AI", type: "Grant", angle: "Safety", range: "£50K", deadline: "Rolling", status: "Identify", link: "https://www.cooperativeai.com/grants", action: "", notes: "Multi-agent coop.", files: [] },
+        { id: 13, name: "SingularityNET", type: "Grant", angle: "Infra", range: "$40K", deadline: "Rounds", status: "Identify", link: "https://deepfunding.ai/all-rfps/", action: "", notes: "Deep funding DAO.", files: [] },
+        { id: 14, name: "METR (ARC Evals)", type: "Contract", angle: "Eval", range: "Revenue", deadline: "N/A", status: "Identify", link: "https://metr.org/contact/", action: "", notes: "Sales pitch.", files: [] },
+        
+        // NICHE / LONG TAIL
+        { id: 15, name: "Coefficient Giving", type: "Grant", angle: "Safety", range: "Var", deadline: "Rolling", status: "Identify", link: "https://coefficientgiving.org/", action: "", notes: "Entrepreneurial.", files: [] },
+        { id: 16, name: "FAR AI", type: "Grant", angle: "Research", range: "Var", deadline: "Rolling", status: "Identify", link: "https://far.ai/", action: "", notes: "Robustness research.", files: [] },
+        { id: 17, name: "Future Fund", type: "Grant", angle: "Archive", range: "Paused", deadline: "N/A", status: "Identify", link: "https://ftx.com/foundation", action: "", notes: "Inactive.", files: [] },
+        { id: 18, name: "Lightcone Infra", type: "Grant", angle: "Infra", range: "$20K", deadline: "Rolling", status: "Identify", link: "https://www.lesswrong.com/", action: "", notes: "Rationality tools.", files: [] },
+        { id: 19, name: "Rethink Priorities", type: "Grant", angle: "Research", range: "Var", deadline: "Rolling", status: "Identify", link: "https://rethinkpriorities.org/", action: "", notes: "Moral weights.", files: [] },
+        { id: 20, name: "QURI", type: "Grant", angle: "Research", range: "Var", deadline: "Rolling", status: "Identify", link: "https://quantifieduncertainty.org/", action: "", notes: "Forecasting.", files: [] },
+        { id: 21, name: "MIRI", type: "Grant", angle: "Math", range: "Var", deadline: "Rolling", status: "Identify", link: "https://intelligence.org/", action: "", notes: "Pure theory.", files: [] },
+        { id: 22, name: "SERI Microgrants", type: "Grant", angle: "Safety", range: "$5K", deadline: "Rolling", status: "Identify", link: "https://seri.stanford.edu/", action: "", notes: "Student/Early.", files: [] },
+        { id: 25, name: "Patrick J. McGovern", type: "Grant", angle: "Gov", range: "Large", deadline: "Rolling", status: "Identify", link: "https://www.mcgovern.org/", action: "", notes: "Data sovereignty.", files: [] }
       ];
 
       let db = [];
       let currentModalId = null;
 
       function initApp() {
+          // Load DB
           const saved = localStorage.getItem(DB_KEY);
           if (saved) {
               db = JSON.parse(saved);
-              // Migration check: ensure all items have 'files' array
-              db.forEach(item => { if(!item.files) item.files = []; });
+              // Simple migration to ensure new fields exist if loading old data
+              db.forEach(item => { 
+                  if(!item.action) item.action = "";
+                  if(!item.deadline) item.deadline = "Rolling";
+                  if(!item.angle) item.angle = "Grant";
+              });
           } else {
               db = seedData;
               save();
           }
+
+          // Load Notes
+          const savedNotes = localStorage.getItem(NOTES_KEY);
+          if (savedNotes) document.getElementById('global-scratchpad').value = savedNotes;
+
           renderTable();
           renderStats();
       }
@@ -364,29 +429,34 @@
               <tr>
                   <td class="col-id">${item.id}</td>
                   <td>
-                      <div style="font-weight:700; font-size:0.85rem; color:var(--text-main);">${item.name}</div>
+                      <a href="${item.link}" target="_blank" class="org-name">${item.name}</a>
+                      <span class="deadline-tag">Due: ${item.deadline}</span>
                   </td>
                   <td>
-                      <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">${item.range}</div>
-                      <div style="font-size:0.7rem; opacity:0.8;">${item.type}</div>
+                      <div style="margin-bottom:4px;"><span class="badge ${getAngleClass(item.angle)}">${item.angle}</span></div>
+                      <span class="badge ${getTypeClass(item.type)}">${item.type}</span>
                   </td>
                   <td>
-                      <select class="status-select ${getStatusClass(item.status)}" onchange="updateStatus(${item.id}, this.value)">
+                      <select class="status-select ${getStatusClass(item.status)}" onchange="updateRow(${item.id}, 'status', this.value)">
                           <option value="Identify" ${item.status === 'Identify' ? 'selected' : ''}>Identify</option>
-                          <option value="Drafting" ${item.status === 'Drafting' ? 'selected' : ''}>Drafting</option>
+                          <option value="Pitching" ${item.status === 'Pitching' ? 'selected' : ''}>Pitching</option>
+                          <option value="Contacted" ${item.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
                           <option value="Submitted" ${item.status === 'Submitted' ? 'selected' : ''}>Submitted</option>
                           <option value="Won" ${item.status === 'Won' ? 'selected' : ''}>Won</option>
-                          <option value="Monitor" ${item.status === 'Monitor' ? 'selected' : ''}>Monitor</option>
+                          <option value="Rejected" ${item.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
                       </select>
                   </td>
                   <td>
-                      <input type="text" class="notes-input" value="${item.notes}" onchange="updateNotes(${item.id}, this.value)" placeholder="Add notes...">
+                      <input type="text" class="action-input" value="${item.action || ''}" onchange="updateRow(${item.id}, 'action', this.value)" placeholder="Next Step...">
+                  </td>
+                  <td>
+                      <input type="text" class="action-input" value="${item.notes || ''}" onchange="updateRow(${item.id}, 'notes', this.value)" placeholder="Notes...">
                   </td>
                   <td style="text-align:center;">
                       <button class="icon-btn ${item.files.length > 0 ? 'has-files' : ''}" onclick="openModal(${item.id})">📎 <span style="font-size:0.7rem; font-weight:700;">${item.files.length || ''}</span></button>
                   </td>
                   <td style="text-align:right;">
-                      <a href="${item.link}" target="_blank" class="apply-link">OPEN ↗</a>
+                      <a href="${item.link}" target="_blank" style="font-size:1.2rem; text-decoration:none;">↗</a>
                   </td>
               </tr>
           `).join('');
@@ -394,19 +464,49 @@
 
       function renderStats() {
           const total = db.length;
-          const drafting = db.filter(i => i.status === 'Drafting').length;
+          const pitching = db.filter(i => i.status === 'Pitching').length;
           const submitted = db.filter(i => i.status === 'Submitted').length;
           const won = db.filter(i => i.status === 'Won').length;
 
           document.getElementById('stats-mount').innerHTML = `
-              <div><span style="color:var(--text-muted);">TOTAL:</span> <span class="stat-val">${total}</span></div>
-              <div><span style="color:var(--text-muted);">DRAFTING:</span> <span class="stat-val" style="color:#b45309">${drafting}</span></div>
+              <div><span style="color:var(--text-muted);">TARGETS:</span> <span class="stat-val">${total}</span></div>
+              <div><span style="color:var(--text-muted);">DRAFTING:</span> <span class="stat-val" style="color:#b45309">${pitching}</span></div>
               <div><span style="color:var(--text-muted);">SUBMITTED:</span> <span class="stat-val" style="color:#008800">${submitted}</span></div>
               <div><span style="color:var(--text-muted);">WON:</span> <span class="stat-val" style="color:#00cc00">${won}</span></div>
           `;
       }
 
-      // --- MODAL LOGIC ---
+      // --- HELPERS ---
+      function updateRow(id, field, value) {
+          const item = db.find(i => i.id === id);
+          if (item) { item[field] = value; save(); renderTable(); renderStats(); }
+      }
+
+      function getStatusClass(s) {
+          if(s === 'Identify') return 'st-identify';
+          if(s === 'Pitching') return 'st-pitching';
+          if(s === 'Submitted') return 'st-submitted';
+          if(s === 'Won') return 'st-won';
+          return '';
+      }
+
+      function getTypeClass(t) {
+          if(t === 'Grant') return 'badge-grant';
+          if(t === 'Prize') return 'badge-prize';
+          if(t === 'Bounty') return 'badge-bounty';
+          return 'badge-contract';
+      }
+
+      function getAngleClass(a) {
+          return 'badge-contract'; // Simple default style for angles
+      }
+
+      // --- SCRATCHPAD ---
+      document.getElementById('global-scratchpad').addEventListener('input', function(e) {
+          localStorage.setItem(NOTES_KEY, e.target.value);
+      });
+
+      // --- MODAL ---
       function openModal(id) {
           currentModalId = id;
           const item = db.find(i => i.id === id);
@@ -414,97 +514,58 @@
           document.getElementById('modal-overlay').style.display = 'flex';
           renderFileList(item);
       }
-
-      function closeModal() {
-          document.getElementById('modal-overlay').style.display = 'none';
-          currentModalId = null;
-      }
-
+      function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+      
       function renderFileList(item) {
           const list = document.getElementById('modal-file-list');
           list.innerHTML = item.files.map((f, index) => `
               <div class="file-item">
-                  <span>
-                      ${f.link ? `<a href="${f.link}" target="_blank" style="color:var(--accent-primary); text-decoration:none;">${f.name} ↗</a>` : f.name}
-                  </span>
+                  <span>${f.link ? `<a href="${f.link}" target="_blank" style="color:var(--accent-primary);">${f.name} ↗</a>` : f.name}</span>
                   <span style="color:red; cursor:pointer;" onclick="deleteFile(${item.id}, ${index})">×</span>
               </div>
-          `).join('') || '<div style="color:var(--text-muted); font-style:italic; padding:10px;">No attachments yet.</div>';
+          `).join('') || '<div style="color:var(--text-muted); font-style:italic;">No evidence linked yet.</div>';
       }
 
       function addFile() {
-          const nameInput = document.getElementById('file-name-input');
-          const linkInput = document.getElementById('file-link-input');
-          const name = nameInput.value;
-          const link = linkInput.value;
-
-          if (!name) return;
-
+          const name = document.getElementById('file-name-input').value;
+          const link = document.getElementById('file-link-input').value;
+          if(!name) return;
           const item = db.find(i => i.id === currentModalId);
           item.files.push({ name, link });
           save();
-          
-          nameInput.value = '';
-          linkInput.value = '';
+          document.getElementById('file-name-input').value = '';
+          document.getElementById('file-link-input').value = '';
           renderFileList(item);
-          renderTable(); // Update count on main table
+          renderTable();
       }
 
-      function deleteFile(itemId, fileIndex) {
-          const item = db.find(i => i.id === itemId);
-          item.files.splice(fileIndex, 1);
+      function deleteFile(id, idx) {
+          const item = db.find(i => i.id === id);
+          item.files.splice(idx, 1);
           save();
           renderFileList(item);
           renderTable();
       }
 
       // --- CORE ---
-      function updateStatus(id, newVal) {
-          const item = db.find(i => i.id === id);
-          if (item) { item.status = newVal; save(); renderTable(); renderStats(); }
-      }
-
-      function updateNotes(id, newVal) {
-          const item = db.find(i => i.id === id);
-          if (item) { item.notes = newVal; save(); }
-      }
-
-      function save() {
-          localStorage.setItem(DB_KEY, JSON.stringify(db));
-      }
-
-      function getStatusClass(status) {
-          if (status === 'Identify') return 'st-apply';
-          if (status === 'Drafting') return 'st-drafting';
-          if (status === 'Submitted') return 'st-submitted';
-          if (status === 'Won') return 'st-won';
-          return 'st-monitor';
-      }
-
+      function save() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+      
       function exportData() {
           const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
           const a = document.createElement('a');
-          a.setAttribute("href", dataStr);
-          a.setAttribute("download", "eairl_funding_data.json");
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
+          a.href = dataStr; a.download = "funding_v4_backup.json";
+          a.click(); a.remove();
       }
 
-      // Theme
-      function setTheme(theme) {
-          document.body.setAttribute('data-theme', theme);
-          localStorage.setItem('theme', theme);
-          const icon = document.getElementById('theme-icon');
-          if (icon) icon.textContent = (theme === 'dark') ? '◑' : '◐';
-      }
+      // --- THEME & INIT ---
       function toggleTheme() {
           const current = document.body.getAttribute('data-theme') || 'light';
           const next = (current === 'dark') ? 'light' : 'dark';
-          setTheme(next);
+          document.body.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
       }
       const savedTheme = localStorage.getItem('theme') || 'light';
-      setTheme(savedTheme);
+      document.body.setAttribute('data-theme', savedTheme);
 
       // Scramble
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
@@ -534,7 +595,6 @@
           if (!clickedInside) sidebar.classList.remove("open");
       });
 
-      // Boot
       initApp();
     </script>
 </body>
