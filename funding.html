@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Funding Command | Secure v7.5</title>
+    <title>Funding Command | Secure v7.6</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -120,7 +120,7 @@
         </div>
     </div>
 
-    <div class="version-tag">[ v7.5 ]</div>
+    <div class="version-tag">[ v7.6 ]</div>
 
     <div class="layout-wrapper" id="app-wrapper">
         <aside>
@@ -192,7 +192,7 @@
                 <div style="background:var(--sidebar-bg); padding:1rem; border-radius:4px; margin-bottom:1rem; border:1px solid var(--border-color);">
                     <div style="font-weight:700; font-size:0.75rem; margin-bottom:0.5rem; color:var(--text-muted);">OPTION A: LINK TO CLOUD</div>
                     <div style="display:flex; gap:10px;">
-                        <input type="text" id="file-name-input" class="action-input" placeholder="Name" style="border:1px solid var(--border-color);">
+                        <input type="text" id="file-name-input" class="action-input" placeholder="Name (Required)" style="border:1px solid var(--border-color);">
                         <input type="text" id="file-link-input" class="action-input" placeholder="URL" style="border:1px solid var(--border-color);">
                         <button class="btn-action" onclick="addFile()">ADD LINK</button>
                     </div>
@@ -423,9 +423,13 @@
         }
 
         function addFile() {
-            const name = document.getElementById('file-name-input').value;
+            let name = document.getElementById('file-name-input').value;
             const link = document.getElementById('file-link-input').value;
-            if(!name) return;
+            
+            // Fix: If no name but link exists, use "Link" as name
+            if(!name && link) name = "Link";
+            if(!name) return; // Only fail if BOTH empty
+
             const item = db.find(i => i.id === activeId);
             item.files.push({ name, link, content: "" });
             save();
