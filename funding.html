@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funding | Enlightened AI</title>
+    <title>Funding Pipeline | Enlightened AI</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,10 +26,11 @@
             /* SIGNALS */
             --status-verified: #00cc00;
             --signal-blue: #0066ff;
-            
-            /* THEORY SPECIFIC */
             --accent-primary: #0044cc;
-            --mode-logic: #0044cc; 
+            
+            /* INTERACTIVE ELEMENTS */
+            --input-bg: #fff;
+            --select-bg: #f8f9fa;
         }
 
         /* --- DARK MODE OVERRIDES --- */
@@ -40,7 +41,8 @@
             --text-muted: #888888;
             --border-color: #333333;
             --accent-primary: #66aaff;
-            --mode-logic: #66aaff;
+            --input-bg: #111;
+            --select-bg: #151515;
         }
         body[data-theme="dark"] aside { background-color: #0a0a0a; border-right-color: #333; }
         body[data-theme="dark"] .mobile-bar { background: rgba(10,10,10,0.95); border-bottom-color: #333; }
@@ -50,7 +52,6 @@
         body[data-theme="dark"] nav a:hover { color: #fff; }
         body[data-theme="dark"] .toggle-btn:hover, body[data-theme="dark"] .toggle-btn.active { color: #fff; }
         body[data-theme="dark"] .force-card { background: #111; border-color: #333; }
-        body[data-theme="dark"] .logic-block { background: #111; border-color: #333; color: #ccc; }
         body[data-theme="dark"] p { color: #ccc; }
         body[data-theme="dark"] h1, body[data-theme="dark"] h2 { color: #fff; }
         body[data-theme="dark"] .val { color: #fff; }
@@ -66,9 +67,7 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.6;
-            display: flex;
-            flex-direction: column; 
-            min-height: 100vh;
+            display: flex; flex-direction: column; min-height: 100vh;
             transition: background-color 0.2s, color 0.2s;
         }
 
@@ -108,76 +107,79 @@
         .mobile-index-btn { font-family: var(--font-mono); font-size: 0.75rem; padding: 4px 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); cursor: pointer; }
 
         /* --- MAIN CONTENT --- */
-        main { flex-grow: 1; padding: 3rem 4rem; max-width: 1200px; width: 100%; }
+        main { flex-grow: 1; padding: 3rem 4rem; max-width: 1400px; width: 100%; }
         
         /* HEADER */
-        .reader-header { 
-            border-bottom: 1px solid var(--border-color); 
-            padding-bottom: 1.5rem; 
-            margin-bottom: 2.5rem;
-        }
-        .header-top-row {
-            display: flex; align-items: center; gap: 3rem; margin-bottom: 1rem; font-family: var(--font-mono); 
-        }
+        .reader-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 2.5rem; }
+        .header-top-row { display: flex; align-items: center; gap: 3rem; margin-bottom: 1rem; font-family: var(--font-mono); }
         .meta-item { display: flex; flex-direction: column; gap: 4px; }
         .label { font-size: 0.6rem; letter-spacing: 0.05em; color: #999; text-transform: uppercase; }
         .val { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
-        
-        .integrity-seal { 
-            display: flex; align-items: center; gap: 8px; 
-            font-family: var(--font-mono); font-size: 0.7rem; color: #005500; 
-            border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px;
-            background: rgba(0,204,0,0.05); cursor: default;
-        }
+        .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.05); cursor: default; }
         .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
-
-        .orienting-sentence {
-            font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); 
-            text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9;
-        }
+        .orienting-sentence { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9; }
 
         /* TYPOGRAPHY */
         h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1.5rem; line-height: 1.1; text-transform: uppercase; }
-        h2 { font-size: 1.1rem; font-weight: 700; margin-top: 4rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; display: flex; align-items: center; }
+        h2 { font-size: 1.1rem; font-weight: 700; margin-top: 4rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
         p { margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.95rem; }
-        
-        /* CARD GRID (From Theory Page) */
+
+        /* STRATEGY CARDS */
         .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 2rem; }
         .force-card { border: 1px solid var(--border-color); padding: 1.25rem; background: #fff; height: 100%; display: flex; flex-direction: column; }
         .force-id { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-primary); font-weight: 700; display:block; margin-bottom: 0.5rem; }
         .force-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; }
         .force-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; flex-grow: 1; }
 
-        /* DATA TABLE (New for Funding) */
+        /* --- INTERACTIVE DATA TABLE --- */
         .table-wrapper { overflow-x: auto; margin-bottom: 4rem; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
         th { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); padding: 12px 8px; border-bottom: 2px solid var(--border-color); font-weight: 700; background: var(--sidebar-bg); }
         td { padding: 16px 8px; border-bottom: 1px solid var(--border-color); vertical-align: top; color: var(--text-main); }
         
-        .apply-btn { 
-            display: inline-block; padding: 4px 10px; border: 1px solid var(--border-color); 
-            font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; color: var(--text-main); 
-            text-decoration: none; border-radius: 2px; transition: all 0.2s; text-transform: uppercase;
+        /* Interactive Inputs */
+        .status-select {
+            background: var(--select-bg); border: 1px solid var(--border-color); color: var(--text-main);
+            font-family: var(--font-mono); font-size: 0.7rem; padding: 4px 8px; border-radius: 4px;
+            cursor: pointer; width: 100%; text-transform: uppercase; font-weight: 700;
         }
-        .apply-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+        .status-select:focus { border-color: var(--accent-primary); outline: none; }
+        
+        /* Status Colors */
+        .st-apply { color: var(--accent-primary); border-color: var(--accent-primary); background: rgba(0,68,204,0.05); }
+        .st-drafting { color: #b45309; border-color: #b45309; background: rgba(180,83,9,0.05); }
+        .st-submitted { color: #008800; border-color: #008800; background: rgba(0,136,0,0.05); }
+        .st-won { background: #00cc00; color: #fff; border-color: #00cc00; }
 
-        /* LOGIC BLOCK */
-        .logic-block { 
-            display: block; font-family: var(--font-mono); font-size: 0.8rem; 
-            color: #333; background-color: #fcfcfc; 
-            border: 1px solid var(--border-color); border-left: 3px solid var(--accent-primary); 
-            padding: 1.5rem; margin: 2rem 0; line-height: 1.7; 
-            white-space: pre-wrap; overflow-x: auto; position: relative; 
+        .notes-input {
+            background: transparent; border: 1px solid transparent; color: var(--text-main);
+            font-family: var(--font-stack); font-size: 0.8rem; width: 100%; padding: 4px;
+            border-bottom: 1px dashed var(--border-color); transition: all 0.2s;
         }
-        .logic-block::before {
-            content: "PYTHON UTILITY — GENERATE .DOCX";
-            position: absolute; top: 0; right: 0;
-            background: var(--bg-color); color: var(--accent-primary);
-            font-size: 0.55rem; border-bottom: 1px solid var(--border-color);
-            border-left: 1px solid var(--border-color); padding: 4px 8px;
-            font-weight: 700; letter-spacing: 0.05em;
+        .notes-input:focus { border-color: var(--accent-primary); border-bottom-style: solid; outline: none; background: var(--select-bg); }
+        .notes-input::placeholder { font-style: italic; color: var(--text-muted); opacity: 0.5; }
+
+        .apply-link { 
+            font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-primary); 
+            text-decoration: none; border-bottom: 1px solid transparent; 
         }
+        .apply-link:hover { border-bottom-color: var(--accent-primary); }
+
+        .stats-bar {
+            display: flex; gap: 2rem; font-family: var(--font-mono); font-size: 0.75rem; 
+            margin-bottom: 2rem; padding: 1rem; border: 1px solid var(--border-color); background: var(--sidebar-bg);
+        }
+        .stat-val { font-weight: 700; color: var(--text-main); }
+
+        /* UTILS */
+        .btn-action {
+            font-family: var(--font-mono); font-size: 0.65rem; padding: 6px 12px;
+            background: var(--bg-color); border: 1px solid var(--border-color);
+            color: var(--text-main); cursor: pointer; text-transform: uppercase;
+            letter-spacing: 0.05em; transition: all 0.2s;
+        }
+        .btn-action:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
 
         #footer-mount { width: 100%; z-index: 100; border-top: 1px solid var(--border-color); background: var(--bg-color); }
 
@@ -192,9 +194,8 @@
             .header-top-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
             .integrity-seal { margin-left: 0; }
             th { display: none; }
-            td { display: block; padding: 4px 0; border: none; }
+            td { display: block; padding: 8px 0; border: none; }
             tr { display: block; border: 1px solid var(--border-color); margin-bottom: 1rem; padding: 1rem; }
-            tr td:first-child { font-weight: 700; margin-bottom: 4px; font-size: 0.95rem; }
         }
     </style>
 </head>
@@ -255,21 +256,48 @@
                         <span style="font-family:var(--font-mono); font-size:0.7rem; color:#005500;">INTEGRITY: VERIFIED</span>
                     </div>
                 </div>
-                <div class="orienting-sentence">THIS DOCUMENT IS AN INSPECTABLE RECORD OF FUNDING SOURCES FOR ALIGNMENT TOOLING.</div>
+                <div class="orienting-sentence">THIS DOCUMENT IS AN ACTIVE WORKBENCH FOR TRACKING FUNDING PIPELINES.</div>
             </div>
 
             <div style="max-width: 800px; margin-bottom: 2rem;">
-                <h1>AI Alignment Funding Master Index</h1>
-                <p>This document consolidates all credible funding avenues for an independent AI alignment researcher focused on tooling, diagnostics, and alignment infrastructure. It filters out large-scale academic grants and focuses on "agile" funders who support artifacts (code, dashboards, lexicons) over pure theory.</p>
+                <h1>Funding Pipeline</h1>
+                <p>This is the master control plane for funding operations. Data entered here is stored locally in your browser.</p>
+            </div>
+
+            <div class="stats-bar" id="stats-mount">
+                <div>LOADING...</div>
             </div>
 
             <section>
-                <h2><span class="scramble">01 //</span> Top 6 Strategy (Green Light)</h2>
+                <h2>
+                    <span><span class="scramble">01 //</span> Active Pipeline</span>
+                    <button class="btn-action" onclick="exportData()">↓ Download Data</button>
+                </h2>
+                
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:25%;">Organization</th>
+                                <th style="width:15%;">Range / Type</th>
+                                <th style="width:18%;">Status (Pipeline)</th>
+                                <th>Notes / Next Step</th>
+                                <th style="width:8%;">Link</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2><span class="scramble">02 //</span> Priority Strategy</h2>
                 <div class="theory-grid">
                     <div class="force-card">
                         <span class="force-id">PRIORITY: HIGH</span>
                         <div class="force-title">NLnet Foundation</div>
-                        <div class="force-desc">Best for "Open Source Infrastructure." Frame the dashboard as public utility for AI accountability.</div>
+                        <div class="force-desc">Best for "Open Source Infrastructure." Frame the dashboard as public utility.</div>
                     </div>
                     <div class="force-card">
                         <span class="force-id">PRIORITY: HIGH</span>
@@ -278,110 +306,9 @@
                     </div>
                     <div class="force-card">
                         <span class="force-id">PRIORITY: HIGH</span>
-                        <div class="force-title">Aligned Studies (ASF)</div>
-                        <div class="force-desc">Specifically designed for independent researchers. They want "infrastructure and specs."</div>
-                    </div>
-                    <div class="force-card">
-                        <span class="force-id">PRIORITY: HIGH</span>
                         <div class="force-title">NRC IRAP (AI Assist)</div>
-                        <div class="force-desc"><strong>Quebec Region.</strong> Validation of R&D (<$50k ARP). Best for finishing the dashboard prototype.</div>
+                        <div class="force-desc"><strong>Quebec Region.</strong> R&D Validation (<$50k ARP). Best for finishing the prototype.</div>
                     </div>
-                    <div class="force-card">
-                        <span class="force-id">PRIORITY: HIGH</span>
-                        <div class="force-title">AI Safety Campus</div>
-                        <div class="force-desc">Fast, agile grants for "immediate applicability." Good for covering compute/hosting.</div>
-                    </div>
-                    <div class="force-card">
-                        <span class="force-id">PRIORITY: HIGH</span>
-                        <div class="force-title">AE Studio</div>
-                        <div class="force-desc">They seek "neglected approaches." Pitch your dashboard as a practical diagnostic tool.</div>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h2><span class="scramble">02 //</span> Master Funding Table</h2>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width:25%;">Organization</th>
-                                <th style="width:15%;">Range</th>
-                                <th>Strategy / Fit</th>
-                                <th style="width:12%;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>NLnet Foundation</strong><br><span style="color:#999; font-size:0.7rem;">NGI Zero Commons</span></td>
-                                <td style="font-family:var(--font-mono); font-size:0.7rem;">€5K–€50K</td>
-                                <td>Top Priority. Funds "open trustworthiness" tools.</td>
-                                <td><a href="https://nlnet.nl/commonsfund" target="_blank" class="apply-btn">APPLY →</a></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Emergent Ventures</strong><br><span style="color:#999; font-size:0.7rem;">Mercatus Center</span></td>
-                                <td style="font-family:var(--font-mono); font-size:0.7rem;">$10K–$50K+</td>
-                                <td>Funds "outliers." Frame RAA as high-upside bet.</td>
-                                <td><a href="https://www.mercatus.org/emergent-ventures" target="_blank" class="apply-btn">APPLY →</a></td>
-                            </tr>
-                            <tr>
-                                <td><strong>NRC IRAP</strong><br><span style="color:#999; font-size:0.7rem;">AI Assist (ARP)</span></td>
-                                <td style="font-family:var(--font-mono); font-size:0.7rem;">$20K–$49K</td>
-                                <td>Call Montreal Office (514-496-6100). Ask for "AI Assist ARP".</td>
-                                <td><a href="https://nrc.canada.ca/en/support-technology-innovation/nrc-irap-support-smes-innovating-artificial-intelligence" target="_blank" class="apply-btn">INFO →</a></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Aligned Studies</strong><br><span style="color:#999; font-size:0.7rem;">ASF Grant</span></td>
-                                <td style="font-family:var(--font-mono); font-size:0.7rem;">$5K–$50K</td>
-                                <td>Wants "infrastructure & specs" for alignment.</td>
-                                <td><a href="https://alignedstudies.com/apply" target="_blank" class="apply-btn">APPLY →</a></td>
-                            </tr>
-                            <tr>
-                                <td><strong>AI Safety Campus</strong><br><span style="color:#999; font-size:0.7rem;">AISC</span></td>
-                                <td style="font-family:var(--font-mono); font-size:0.7rem;">$1K–$30K</td>
-                                <td>Fast grants for projects with "immediate applicability."</td>
-                                <td><a href="https://www.aisafety.campus/grants" target="_blank" class="apply-btn">APPLY →</a></td>
-                            </tr>
-                            <tr>
-                                <td><strong>AE Studio</strong><br><span style="color:#999; font-size:0.7rem;">Research Grants</span></td>
-                                <td style="font-family:var(--font-mono); font-size:0.7rem;">$10K–$25K</td>
-                                <td>"Neglected approaches." Pitch dashboard as diagnostics.</td>
-                                <td><a href="https://research.ae.studio/" target="_blank" class="apply-btn">APPLY →</a></td>
-                            </tr>
-                            <tr>
-                                <td><strong>BlueDot Impact</strong><br><span style="color:#999; font-size:0.7rem;">AGI Strategy Fund</span></td>
-                                <td style="font-family:var(--font-mono); font-size:0.7rem;">$5K–$50K</td>
-                                <td>Governance/Strategy tools for policymakers.</td>
-                                <td><a href="https://www.aisafety.com/funding" target="_blank" class="apply-btn">APPLY →</a></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Huberman Family Fund</strong><br><span style="color:#999; font-size:0.7rem;">AI Safety Stream</span></td>
-                                <td style="font-family:var(--font-mono); font-size:0.7rem;">$25K–$75K</td>
-                                <td>Focuses on "evaluation and monitoring."</td>
-                                <td><a href="mailto:grants@huberman.org" class="apply-btn">EMAIL →</a></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Mozilla Tech Fund</strong><br><span style="color:#999; font-size:0.7rem;">Audit Tools</span></td>
-                                <td style="font-family:var(--font-mono); font-size:0.7rem;">$50K</td>
-                                <td>Open Source Audit Tools and Algorithmic Accountability.</td>
-                                <td><a href="https://foundation.mozilla.org/en/what-we-fund/technologies/" target="_blank" class="apply-btn">INFO →</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section>
-                <h2><span class="scramble">03 //</span> Tools</h2>
-                <div class="logic-block">
-# UTILITY: Generate .docx version of this index
-from docx import Document
-
-def create_funding_doc():
-    doc = Document()
-    doc.add_heading('AI Alignment Funding Master Index', 0)
-    # [Rest of generation script...]
-    doc.save('Funding_Index.docx')
                 </div>
             </section>
 
@@ -389,57 +316,175 @@ def create_funding_doc():
     </div>
 
     <div id="footer-mount"></div>
+    
     <script>
       fetch('/partials/footer.html')
         .then(r => r.text())
         .then(html => {
           document.getElementById('footer-mount').innerHTML = html;
         });
-    </script>
 
-    <script>
-        // Scramble Effect
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-        function scrambleText(element) {
-            let iterations = 0; const originalText = element.innerText; 
-            if(element.interval) clearInterval(element.interval);
-            element.interval = setInterval(() => {
-                element.innerText = originalText.split("").map((letter, index) => {
-                    if(index < iterations) return originalText[index];
-                    return letters[Math.floor(Math.random() * 26)];
-                }).join("");
-                if(iterations >= originalText.length) clearInterval(element.interval);
-                iterations += 1 / 3;
-            }, 30);
-        }
-        document.querySelectorAll(".scramble").forEach(h => {
-            h.addEventListener("mouseover", event => scrambleText(event.target));
-        });
+      // --- APP LOGIC ---
+      const DB_KEY = 'eairl_funding_v1';
+      
+      const seedData = [
+        { id: 1, name: "NLnet Foundation", type: "Foundation", range: "€5K–€50K", status: "Identify", link: "https://nlnet.nl/commonsfund", notes: "Top Priority. Focus on public utility tools." },
+        { id: 2, name: "Emergent Ventures", type: "Foundation", range: "$10K–$50K+", status: "Identify", link: "https://www.mercatus.org/emergent-ventures", notes: "Write 1-pager. Focus on 'outlier' ideas." },
+        { id: 3, name: "NRC IRAP (AI Assist)", type: "Gov / R&D", range: "$20K–$49K", status: "Identify", link: "https://nrc.canada.ca/en/support-technology-innovation", notes: "Call Montreal Office (514-496-6100). Ask for AI Assist ARP." },
+        { id: 4, name: "Aligned Studies (ASF)", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://alignedstudies.com/apply", notes: "Wants infrastructure & specs." },
+        { id: 5, name: "AI Safety Campus", type: "Regrantor", range: "$1K–$30K", status: "Identify", link: "https://www.aisafety.campus/grants", notes: "Fast agile grant for compute/hosting." },
+        { id: 6, name: "AE Studio", type: "Private", range: "$10K–$25K", status: "Identify", link: "https://research.ae.studio/", notes: "Pitch 'neglected approaches' in diagnostics." },
+        { id: 7, name: "BlueDot Impact", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://www.aisafety.com/funding", notes: "Governance/Strategy tools." },
+        { id: 8, name: "Huberman Family Fund", type: "Foundation", range: "$25K–$75K", status: "Monitor", link: "mailto:grants@huberman.org", notes: "Evaluation focus. Needs direct pitch." },
+        { id: 9, name: "Mozilla Tech Fund", type: "Foundation", range: "$50K", status: "Monitor", link: "https://foundation.mozilla.org/en/what-we-fund/technologies/", notes: "Audit Tools. Watch for calls." },
+        { id: 10, name: "Cooperative AI", type: "Foundation", range: "£20K–£50K", status: "Monitor", link: "https://www.cooperativeai.com/grants", notes: "Multi-agent cooperation benchmarks." },
+        { id: 11, name: "SingularityNET", type: "DAO", range: "~$40K", status: "Monitor", link: "https://deepfunding.ai/all-rfps/", notes: "Deep Funding. Neural-symbolic focus." },
+        { id: 12, name: "METR (ARC Evals)", type: "Contract", range: "Revenue", status: "Monitor", link: "https://metr.org/contact/", notes: "Sell as Eval Environment." }
+      ];
 
-        // Theme Logic
-        function setTheme(theme) {
-            document.body.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            const icon = document.getElementById('theme-icon');
-            if (icon) icon.textContent = (theme === 'dark') ? '◑' : '◐';
-        }
-        function toggleTheme() {
-            const current = document.body.getAttribute('data-theme') || 'light';
-            const next = (current === 'dark') ? 'light' : 'dark';
-            setTheme(next);
-        }
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        setTheme(savedTheme);
+      let db = [];
 
-        // Sidebar Mobile Logic
-        document.addEventListener("click", (e) => {
-            if (window.innerWidth > 900) return;
-            const sidebar = document.getElementById("sidebar");
-            const isOpen = sidebar.classList.contains("open");
-            if (!isOpen) return;
-            const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
-            if (!clickedInside) sidebar.classList.remove("open");
-        });
+      function initApp() {
+          const saved = localStorage.getItem(DB_KEY);
+          if (saved) {
+              db = JSON.parse(saved);
+          } else {
+              db = seedData;
+              localStorage.setItem(DB_KEY, JSON.stringify(db));
+          }
+          renderTable();
+          renderStats();
+      }
+
+      function renderTable() {
+          const tbody = document.getElementById('table-body');
+          tbody.innerHTML = db.map(item => `
+              <tr>
+                  <td>
+                      <div style="font-weight:700; font-size:0.85rem; color:var(--text-main);">${item.name}</div>
+                  </td>
+                  <td>
+                      <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">${item.range}</div>
+                      <div style="font-size:0.7rem; opacity:0.8;">${item.type}</div>
+                  </td>
+                  <td>
+                      <select class="status-select ${getStatusClass(item.status)}" onchange="updateStatus(${item.id}, this.value)">
+                          <option value="Identify" ${item.status === 'Identify' ? 'selected' : ''}>Identify</option>
+                          <option value="Drafting" ${item.status === 'Drafting' ? 'selected' : ''}>Drafting</option>
+                          <option value="Submitted" ${item.status === 'Submitted' ? 'selected' : ''}>Submitted</option>
+                          <option value="Won" ${item.status === 'Won' ? 'selected' : ''}>Won</option>
+                          <option value="Monitor" ${item.status === 'Monitor' ? 'selected' : ''}>Monitor</option>
+                      </select>
+                  </td>
+                  <td>
+                      <input type="text" class="notes-input" value="${item.notes}" onchange="updateNotes(${item.id}, this.value)" placeholder="Add notes...">
+                  </td>
+                  <td>
+                      <a href="${item.link}" target="_blank" class="apply-link">OPEN ↗</a>
+                  </td>
+              </tr>
+          `).join('');
+      }
+
+      function renderStats() {
+          const total = db.length;
+          const drafting = db.filter(i => i.status === 'Drafting').length;
+          const submitted = db.filter(i => i.status === 'Submitted').length;
+          const won = db.filter(i => i.status === 'Won').length;
+
+          document.getElementById('stats-mount').innerHTML = `
+              <div><span style="color:var(--text-muted);">TOTAL TARGETS:</span> <span class="stat-val">${total}</span></div>
+              <div><span style="color:var(--text-muted);">DRAFTING:</span> <span class="stat-val" style="color:#b45309">${drafting}</span></div>
+              <div><span style="color:var(--text-muted);">SUBMITTED:</span> <span class="stat-val" style="color:#008800">${submitted}</span></div>
+              <div><span style="color:var(--text-muted);">WON:</span> <span class="stat-val" style="color:#00cc00">${won}</span></div>
+          `;
+      }
+
+      function updateStatus(id, newVal) {
+          const item = db.find(i => i.id === id);
+          if (item) {
+              item.status = newVal;
+              save();
+              renderTable(); // Re-render to update color
+              renderStats();
+          }
+      }
+
+      function updateNotes(id, newVal) {
+          const item = db.find(i => i.id === id);
+          if (item) {
+              item.notes = newVal;
+              save();
+          }
+      }
+
+      function save() {
+          localStorage.setItem(DB_KEY, JSON.stringify(db));
+      }
+
+      function getStatusClass(status) {
+          if (status === 'Identify') return 'st-apply';
+          if (status === 'Drafting') return 'st-drafting';
+          if (status === 'Submitted') return 'st-submitted';
+          if (status === 'Won') return 'st-won';
+          return '';
+      }
+
+      function exportData() {
+          const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+          const a = document.createElement('a');
+          a.setAttribute("href", dataStr);
+          a.setAttribute("download", "eairl_funding_data.json");
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+      }
+
+      // Scramble Effect
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+      function scrambleText(element) {
+          let iterations = 0; const originalText = element.innerText; 
+          if(element.interval) clearInterval(element.interval);
+          element.interval = setInterval(() => {
+              element.innerText = originalText.split("").map((letter, index) => {
+                  if(index < iterations) return originalText[index];
+                  return letters[Math.floor(Math.random() * 26)];
+              }).join("");
+              if(iterations >= originalText.length) clearInterval(element.interval);
+              iterations += 1 / 3;
+          }, 30);
+      }
+      document.querySelectorAll(".scramble").forEach(h => {
+          h.addEventListener("mouseover", event => scrambleText(event.target));
+      });
+
+      // Theme
+      function setTheme(theme) {
+          document.body.setAttribute('data-theme', theme);
+          localStorage.setItem('theme', theme);
+          const icon = document.getElementById('theme-icon');
+          if (icon) icon.textContent = (theme === 'dark') ? '◑' : '◐';
+      }
+      function toggleTheme() {
+          const current = document.body.getAttribute('data-theme') || 'light';
+          const next = (current === 'dark') ? 'light' : 'dark';
+          setTheme(next);
+      }
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      setTheme(savedTheme);
+
+      // Mobile Menu
+      document.addEventListener("click", (e) => {
+          if (window.innerWidth > 900) return;
+          const sidebar = document.getElementById("sidebar");
+          const isOpen = sidebar.classList.contains("open");
+          if (!isOpen) return;
+          const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
+          if (!clickedInside) sidebar.classList.remove("open");
+      });
+
+      // Boot
+      initApp();
     </script>
 </body>
 </html>
