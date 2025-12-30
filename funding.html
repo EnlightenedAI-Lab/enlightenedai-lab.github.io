@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>EAIRL | FUNDING CMD v15.3</title>
+    <title>EAIRL | FUNDING CMD v15.3.1</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -187,7 +187,7 @@
 <body data-theme="light">
 
     <div id="lock-screen">
-        <div style="font-weight:700; margin-bottom:10px; letter-spacing:2px;">EAIRL_SECURE_TERMINAL // v15.3</div>
+        <div style="font-weight:700; margin-bottom:10px; letter-spacing:2px;">EAIRL_SECURE_TERMINAL // v15.3.1</div>
         <input type="password" id="password-input" class="lock-input" placeholder="ACCESS KEY" autofocus>
         <div id="lock-msg" style="color:#ef4444; display:none; margin-top:10px; font-size:10px;">ACCESS DENIED</div>
         
@@ -223,7 +223,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
                 <div>
                     <h1>Funding Command</h1>
-                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v15.3</div>
+                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE</div>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn" style="border-color:var(--highlight); color:var(--highlight);" onclick="openAddTargetModal()">+ ADD TARGET</button>
@@ -401,11 +401,12 @@
         </div>
     </div>
 
-    <div class="ver-tag">[ v15.3 ]</div>
+    <div class="ver-tag">[ v15.3.1 ]</div>
 
     <script>
         const APP_PASSWORD = "3000"; 
         const DB_KEY = 'eairl_funding_v15_3'; 
+        const SECTIONS_KEY = 'eairl_sections_v15_3';
         
         const seedData = [
             // A: ACTIVE OPS
@@ -457,7 +458,7 @@
         let db = [];
         let activeId = null;
         let activeFileIndex = null;
-        let openSections = JSON.parse(localStorage.getItem('eairl_sections_v14') || '{"A":true, "B":true, "C":true, "D":true, "E":false, "F":false, "G":false}');
+        let openSections = JSON.parse(localStorage.getItem(SECTIONS_KEY) || '{"A":true, "B":true, "C":true, "D":true, "E":false, "F":false, "G":false}');
 
         // --- PASSWORD CHECK ---
         const passwordInput = document.getElementById('password-input');
@@ -512,14 +513,14 @@
         function hardReset() {
             if(confirm("DANGER: This will wipe all local data and restore the default list. Are you sure?")) {
                 localStorage.removeItem(DB_KEY);
-                localStorage.removeItem('eairl_sections_v14');
+                localStorage.removeItem(SECTIONS_KEY);
                 location.reload();
             }
         }
 
         function toggleSection(secKey) {
             openSections[secKey] = !openSections[secKey];
-            localStorage.setItem('eairl_sections_v14', JSON.stringify(openSections));
+            localStorage.setItem(SECTIONS_KEY, JSON.stringify(openSections));
         }
 
         function togglePriority(sec, id) {
@@ -614,7 +615,7 @@
                             <td class="mono" style="font-size:10px; opacity:0.6;">${i.sec}-${i.id}</td>
                             <td>
                                 <div>
-                                    <span class="priority-star ${starClass}" onclick="togglePriority('${i.sec}', ${i.id})">★</span>
+                                    <span class="priority-star ${starClass}" onclick="togglePriority('${i.sec}', '${i.id}')">★</span>
                                     <span style="font-weight:700;">${i.name}</span>
                                 </div>
                                 <div style="font-size:10px; margin-top:2px;">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">APPLY ↗</a>` : ''}</div>
@@ -628,9 +629,9 @@
                                 <span class="pill">${i.latency || '-'}</span>
                                 <span class="pill">${i.effort || '-'}</span>
                             </td>
-                            <td><input class="mono" value="${i.deadline||''}" onchange="update('${i.sec}', ${i.id}, 'deadline', this.value)"></td>
+                            <td><input class="mono" value="${i.deadline||''}" onchange="update('${i.sec}', '${i.id}', 'deadline', this.value)"></td>
                             <td>
-                                <select class="status-select" style="color:${statusColor}; font-weight:700;" onchange="update('${i.sec}', ${i.id}, 'status', this.value)">
+                                <select class="status-select" style="color:${statusColor}; font-weight:700;" onchange="update('${i.sec}', '${i.id}', 'status', this.value)">
                                     <option ${i.status==='Identify'?'selected':''}>Identify</option>
                                     <option ${i.status==='Drafting'?'selected':''}>Drafting</option>
                                     <option ${i.status==='Submitted'?'selected':''}>Submitted</option>
@@ -640,11 +641,11 @@
                                     <option ${i.status==='Archived'?'selected':''}>Archived</option>
                                 </select>
                             </td>
-                            <td><input value="${i.next||''}" onchange="update('${i.sec}', ${i.id}, 'next', this.value)"></td>
+                            <td><input value="${i.next||''}" onchange="update('${i.sec}', '${i.id}', 'next', this.value)"></td>
                             <td class="mono" style="font-size:9px; color:var(--text-muted);">${dateStr}</td>
-                            <td><input value="${i.notes||''}" onchange="update('${i.sec}', ${i.id}, 'notes', this.value)"></td>
+                            <td><input value="${i.notes||''}" onchange="update('${i.sec}', '${i.id}', 'notes', this.value)"></td>
                             <td>
-                                <button class="icon-btn" style="${hasFiles}" onclick="openFileModal('${i.sec}', ${i.id})"><svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/></svg></button>
+                                <button class="icon-btn" style="${hasFiles}" onclick="openFileModal('${i.sec}', '${i.id}')"><svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/></svg></button>
                             </td>
                         </tr>
                     `;
@@ -693,7 +694,7 @@
         function renderFiles() { 
             const item = findItem(activeId.sec, activeId.id); 
             const list = document.getElementById('file-list'); 
-            list.innerHTML = item.files.map((f, idx) => `<div class="file-item"><div><span style="font-weight:700;">${f.name}</span>${f.link ? `<a href="${f.link}" target="_blank" style="margin-left:5px; color:var(--highlight);">OPEN ↗</a>` : ''}${f.content ? `<span style="font-size:9px; background:var(--border); padding:1px 4px; border-radius:2px; margin-left:5px;">DOC</span>` : ''}</div><div><button class="btn" style="font-size:9px;" onclick="openEditor(${idx})">${f.content ? 'EDIT' : 'VIEW'}</button><button class="icon-btn" style="color:red;" onclick="delFile(${idx})">×</button></div></div>`).join('') || '<div style="padding:10px; color:var(--text-muted); font-style:italic;">No attachments.</div>'; 
+            list.innerHTML = item.files.map((f, idx) => `<div class="file-item"><div><span style="font-weight:700;">${f.name}</span>${f.link ? `<a href="${f.link}" target="_blank" style="margin-left:5px; color:var(--highlight);">OPEN ↗</a>` : ''}${f.content !== null ? `<span style="font-size:9px; background:var(--border); padding:1px 4px; border-radius:2px; margin-left:5px;">DOC</span>` : ''}</div><div><button class="btn" style="font-size:9px;" onclick="openEditor(${idx})">${f.content !== null ? 'EDIT' : 'VIEW'}</button><button class="icon-btn" style="color:red;" onclick="delFile(${idx})">×</button></div></div>`).join('') || '<div style="padding:10px; color:var(--text-muted); font-style:italic;">No attachments.</div>'; 
         }
         function addLink() { 
             const name = document.getElementById('link-name').value; 
