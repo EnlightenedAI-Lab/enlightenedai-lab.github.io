@@ -1,419 +1,781 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EAIRL | FUNDING CMD v14.x</title>
-<style>
-    :root {
-        --bg: #f8fafc;
-        --surface: #ffffff;
-        --text: #0f172a;
-        --text-sub: #64748b;
-        --border: #e2e8f0;
-        --primary: #2563eb;
-        --accent: #10b981;
-        --danger: #ef4444;
-        --warning: #f59e0b;
-        --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    }
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        margin: 0;
-        padding: 20px;
-        font-size: 14px;
-    }
-    /* LAYOUT */
-    .app-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        display: flex;
-        flex-direction: column;
-        height: 95vh;
-    }
-    header {
-        padding: 15px 20px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #f1f5f9;
-    }
-    h1 { margin: 0; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-    .badge { background: var(--primary); color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; }
-
-    /* CONTROLS */
-    .controls {
-        padding: 15px 20px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
-        align-items: flex-end;
-    }
-    .control-group { display: flex; flex-direction: column; gap: 5px; }
-    label { font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; }
-    input, select {
-        padding: 8px 12px;
-        border: 1px solid var(--border);
-        border-radius: 4px;
-        font-size: 13px;
-        min-width: 150px;
-    }
-    input:focus, select:focus { outline: 2px solid var(--primary); border-color: transparent; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>EAIRL | FUNDING CMD v14.1</title>
     
-    /* NEW QUICK SEARCH STYLE */
-    #quick-search {
-        min-width: 300px;
-        border-left: 3px solid var(--accent);
-        background: #f0fdf4;
-    }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-    /* DATA GRID */
-    .grid-container {
-        flex: 1;
-        overflow: auto;
-        position: relative;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 1200px;
-    }
-    thead {
-        position: sticky;
-        top: 0;
-        background: #f8fafc;
-        z-index: 10;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-    th {
-        text-align: left;
-        padding: 10px 15px;
-        font-size: 11px;
-        text-transform: uppercase;
-        color: var(--text-sub);
-        border-bottom: 1px solid var(--border);
-        white-space: nowrap;
-    }
-    td {
-        padding: 12px 15px;
-        border-bottom: 1px solid var(--border);
-        vertical-align: top;
-    }
-    tr:hover { background: #f8fafc; }
-    
-    /* CELLS */
-    .cell-id { font-family: var(--font-mono); color: var(--text-sub); font-size: 11px; }
-    .cell-name { font-weight: 600; color: var(--primary); cursor: pointer; }
-    .cell-sec { font-weight: 700; width: 40px; text-align: center; }
-    .sec-A { color: var(--accent); background: #ecfdf5; border-radius: 4px; }
-    .sec-B { color: var(--primary); background: #eff6ff; border-radius: 4px; }
-    .sec-E { color: var(--text-sub); background: #f1f5f9; border-radius: 4px; }
-    
-    .status-badge {
-        display: inline-block;
-        padding: 2px 8px;
-        border-radius: 4px;
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-    .st-todo { background: #e2e8f0; color: var(--text-sub); }
-    .st-prog { background: #fef3c7; color: #b45309; }
-    .st-done { background: #dcfce7; color: #15803d; }
-    .st-stop { background: #fee2e2; color: #b91c1c; }
+    <style>
+        :root {
+            /* COLOR PALETTE - LAB STANDARD */
+            --bg: #ffffff; 
+            --surface: #f4f4f5; 
+            --border: #e4e4e7;
+            --text-main: #09090b; 
+            --text-muted: #71717a;
+            --accent: #18181b; 
+            --highlight: #2563eb; 
+            
+            /* STATUS COLORS */
+            --st-identify: #71717a;
+            --st-drafting: #d97706;
+            --st-submitted: #059669;
+            --st-won: #16a34a;
+            --st-rejected: #dc2626;
+            
+            /* TYPE BADGES */
+            --badge-grant: #e0f2fe; --text-grant: #075985;
+            --badge-bounty: #fee2e2; --text-bounty: #991b1b;
+            --badge-regrant: #f3e8ff; --text-regrant: #6b21a8;
+            --badge-contract: #fef3c7; --text-contract: #92400e;
+            --badge-prize: #dcfce7; --text-prize: #166534;
+            --badge-accel: #fae8ff; --text-accel: #86198f;
+            --badge-uni: #dbeafe; --text-uni: #1e40af;
+            --badge-partner: #ffedd5; --text-partner: #c2410c;
 
-    .logistics-tag {
-        font-size: 10px;
-        padding: 2px 4px;
-        border: 1px solid var(--border);
-        border-radius: 3px;
-        margin-right: 4px;
-        background: white;
-        color: var(--text-sub);
-    }
+            /* LOGISTICS PILLS */
+            --pill-bg: #f4f4f5; --pill-text: #52525b;
+        }
 
-    .btn-apply {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        text-decoration: none;
-        color: white;
-        background: var(--primary);
-        padding: 4px 10px;
-        border-radius: 4px;
-        font-size: 11px;
-        font-weight: 600;
-        transition: opacity 0.2s;
-    }
-    .btn-apply:hover { opacity: 0.9; }
+        body[data-theme="dark"] {
+            --bg: #09090b; --surface: #18181b; --border: #27272a;
+            --text-main: #fafafa; --text-muted: #a1a1aa;
+            --accent: #fafafa; --highlight: #3b82f6;
+            --badge-grant: #0c4a6e; --text-grant: #bae6fd;
+            --badge-bounty: #450a0a; --text-bounty: #fecaca;
+            --badge-regrant: #3b0764; --text-regrant: #e9d5ff;
+            --badge-contract: #451a03; --text-contract: #fde68a;
+            --badge-prize: #052e16; --text-prize: #86efac;
+            --badge-accel: #4a044e; --text-accel: #f0abfc;
+            --badge-uni: #172554; --text-uni: #bfdbfe;
+            --badge-partner: #431407; --text-partner: #fdba74;
+            --pill-bg: #27272a; --pill-text: #d4d4d8;
+        }
 
-    /* FOOTER */
-    footer {
-        padding: 10px 20px;
-        border-top: 1px solid var(--border);
-        font-size: 11px;
-        color: var(--text-sub);
-        display: flex;
-        justify-content: space-between;
-        background: #f8fafc;
-    }
-</style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: "Inter", sans-serif; background: var(--bg); color: var(--text-main); font-size: 13px; height: 100vh; overflow: hidden; display: flex; }
+
+        /* --- LAYOUT --- */
+        aside { width: 260px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; z-index: 10; }
+        main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; position: relative; }
+        
+        /* --- TYPOGRAPHY --- */
+        .mono { font-family: "JetBrains Mono", monospace; }
+        h1 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 4px 0; }
+        .subtitle { font-size: 11px; color: var(--text-muted); }
+        
+        /* --- COMPONENTS --- */
+        .btn {
+            background: var(--bg); border: 1px solid var(--border); color: var(--text-main);
+            padding: 6px 12px; font-family: "JetBrains Mono", monospace; font-size: 11px;
+            cursor: pointer; text-transform: uppercase; transition: all 0.1s;
+        }
+        .btn:hover { border-color: var(--highlight); color: var(--highlight); }
+        
+        .status-badge {
+            font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 2px;
+            font-family: "JetBrains Mono", monospace; border: 1px solid transparent; display:inline-block; margin-bottom:2px;
+        }
+        
+        .pill {
+            font-size: 9px; padding: 1px 4px; border-radius: 3px; font-family: "JetBrains Mono", monospace; 
+            margin-right: 2px; display: inline-block; background: var(--pill-bg); color: var(--pill-text);
+        }
+
+        /* --- SEARCH & FILTERS --- */
+        .search-container { margin-bottom: 20px; position: sticky; top: 0; background: var(--bg); z-index: 20; padding-top: 5px; }
+        .filters-row { display: flex; gap: 8px; margin-bottom: 5px; }
+        .search-input {
+            flex: 1; padding: 8px 12px; background: var(--surface); border: 1px solid var(--border);
+            color: var(--text-main); font-family: "JetBrains Mono", monospace; font-size: 12px;
+        }
+        .search-input:focus { border-color: var(--highlight); outline: none; }
+        
+        .filter-select {
+            padding: 8px; background: var(--surface); border: 1px solid var(--border);
+            color: var(--text-main); font-family: "JetBrains Mono", monospace; font-size: 11px; min-width: 100px;
+        }
+
+        .goal-bar-container { width: 100%; height: 4px; background: var(--border); margin-top: 5px; border-radius: 2px; overflow: hidden; }
+        .goal-bar-fill { height: 100%; background: var(--highlight); width: 0%; transition: width 0.5s ease; }
+        .goal-label { font-size: 10px; font-family: "JetBrains Mono", monospace; color: var(--text-muted); display: flex; justify-content: space-between; margin-top: 2px; }
+
+        /* --- DATA TABLES --- */
+        .section-header {
+            padding: 12px 24px; background: var(--surface); border-bottom: 1px solid var(--border);
+            border-top: 1px solid var(--border); font-family: "JetBrains Mono", monospace; font-weight: 700;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+        }
+        .section-header:hover { background: var(--border); }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th { 
+            text-align: left; padding: 8px 12px; font-family: "JetBrains Mono", monospace; 
+            font-size: 10px; text-transform: uppercase; color: var(--text-muted); 
+            border-bottom: 1px solid var(--border); background: var(--bg);
+            position: sticky; top: 0; z-index: 5;
+        }
+        td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        tr:hover td { background: var(--surface); }
+
+        /* --- INPUTS --- */
+        input, select {
+            background: transparent; border: 1px solid transparent; color: var(--text-main);
+            font-family: inherit; font-size: 12px; width: 100%; padding: 2px 4px;
+        }
+        input:focus, select:focus { border-color: var(--highlight); outline: none; background: var(--bg); }
+        
+        /* --- MODALS --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(2px); z-index: 100;
+            align-items: center; justify-content: center;
+        }
+        .modal-box {
+            background: var(--bg); border: 1px solid var(--border); width: 900px; max-width: 95%;
+            height: 85vh; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .modal-header {
+            padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; 
+            justify-content: space-between; font-weight: 700; font-family: "JetBrains Mono", monospace;
+        }
+        .editor-area {
+            flex: 1; padding: 20px; overflow-y: auto; outline: none; font-family: "Inter", sans-serif;
+            line-height: 1.6;
+        }
+        .editor-area img { max-width: 100%; border: 1px solid var(--border); margin: 10px 0; }
+        .toolbar { padding: 8px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; background: var(--surface); }
+
+        /* --- UTILS --- */
+        .icon-btn { cursor: pointer; opacity: 0.5; transition: opacity 0.2s; font-size: 14px; background: none; border: none; padding: 0 4px; }
+        .icon-btn:hover { opacity: 1; color: var(--highlight); }
+        
+        .stat-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); margin-bottom: 20px; border: 1px solid var(--border); }
+        .stat-item { background: var(--bg); padding: 10px; text-align: center; }
+        .stat-val { display: block; font-weight: 700; font-size: 16px; }
+        .stat-lbl { font-size: 9px; text-transform: uppercase; color: var(--text-muted); font-family: "JetBrains Mono", monospace; }
+        
+        .file-list { margin-top: 20px; border: 1px solid var(--border); }
+        .file-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--border); align-items: center; }
+        .log-item { padding: 8px; border-bottom: 1px solid var(--border); font-size: 11px; }
+
+        /* Version Tag */
+        .ver-tag { position:fixed; bottom:20px; right:20px; font-family:'JetBrains Mono'; font-size:10px; color:red; border:1px solid red; padding:4px 8px; background:var(--bg); border-radius:4px; z-index:1000; }
+        
+        .priority-star { cursor: pointer; color: var(--border); transition: color 0.2s; font-size: 14px; margin-right: 5px; }
+        .priority-star.active { color: #eab308; } /* Yellow */
+    </style>
 </head>
-<body>
+<body data-theme="light">
 
-<div class="app-container">
-    <header>
-        <h1>EAIRL | FUNDING CMD <span class="badge">v14.x</span></h1>
-        <div style="font-size: 11px; color: var(--text-sub);">Local-First • Persistent</div>
-    </header>
+    <aside>
+        <div style="margin-bottom: 30px;">
+            <div class="mono" style="font-weight:700;">ENLIGHTENED AI</div>
+            <div class="subtitle mono">RESEARCH LAB</div>
+        </div>
+        
+        <nav style="display:flex; flex-direction:column; gap:8px;">
+            <div class="subtitle mono" style="margin-bottom:4px;">MODULES</div>
+            <a href="#" class="btn" style="text-align:left; border-color:var(--text-main);">[•] FUNDING CMD</a>
+            <a href="diagnostics.html" class="btn" style="text-align:left; color:var(--text-muted);">[ ] DIAGNOSTICS</a>
+            <a href="lexicon.html" class="btn" style="text-align:left; color:var(--text-muted);">[ ] LEXICON</a>
+        </nav>
 
-    <div class="controls">
-        <div class="control-group" style="flex: 2;">
-            <label for="quick-search">> QUICK FIND (Exact / Contains / Link)</label>
-            <input type="text" id="quick-search" placeholder="Type name, logic, or paste link..." onkeyup="app.handleSearch()">
+        <div style="margin-top:auto;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:10px;" class="mono">
+                <span>BROWSER STORAGE</span>
+                <span id="mem-val">0%</span>
+            </div>
+            <div style="height:2px; background:var(--border); width:100%;"><div id="mem-fill" style="height:100%; background:var(--text-muted); width:0%;"></div></div>
+            <button class="btn" style="width:100%; margin-top:15px;" onclick="toggleTheme()">THEME: SWITCH</button>
+            <div style="margin-top:10px; text-align:center;">
+                <span style="font-size:9px; text-decoration:underline; cursor:pointer; color:red;" onclick="hardReset()">⚠ FACTORY RESET</span>
+            </div>
         </div>
+    </aside>
 
-        <div class="control-group">
-            <label>Global Filter</label>
-            <input type="text" id="search-input" placeholder="Search all fields..." onkeyup="app.handleSearch()">
+    <main id="app-content">
+        <div style="padding: 24px 32px;">
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                <div>
+                    <h1>Funding Command</h1>
+                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v14.1</div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn" style="border-color:var(--highlight); color:var(--highlight);" onclick="openAddTargetModal()">+ ADD TARGET</button>
+                    <button class="btn" onclick="exportData()">↓ BACKUP</button>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <div class="filters-row">
+                    <input id="global-search" class="search-input" placeholder="> GLOBAL SEARCH (ID, Name, Mode, Notes)..." oninput="renderApp()">
+                    <select id="filter-status" class="filter-select" onchange="renderApp()">
+                        <option value="">ALL STATUS</option>
+                        <option value="identify">Identify</option>
+                        <option value="drafting">Drafting</option>
+                        <option value="submitted">Submitted</option>
+                        <option value="won">Won</option>
+                    </select>
+                    <select id="filter-type" class="filter-select" onchange="renderApp()">
+                        <option value="">ALL TYPES</option>
+                        <option value="grant">Grant</option>
+                        <option value="prize">Prize/Bounty</option>
+                        <option value="regrant">Regrantor</option>
+                        <option value="accel">Accelerator</option>
+                        <option value="uni">University</option>
+                        <option value="partner">Partner</option>
+                    </select>
+                </div>
+                <div class="goal-label">
+                    <span>JANUARY GOAL: SUBMISSIONS</span>
+                    <span id="goal-text">0 / 5</span>
+                </div>
+                <div class="goal-bar-container">
+                    <div class="goal-bar-fill" id="goal-bar"></div>
+                </div>
+            </div>
+
+            <div class="stat-bar" id="stats-mount"></div>
+
+            <div id="pipeline-container"></div>
         </div>
-        <div class="control-group">
-            <label>Status</label>
-            <select id="filter-status" onchange="app.handleSearch()">
-                <option value="ALL">All Statuses</option>
-                <option value="TODO">To Do</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="SUBMITTED">Submitted</option>
-                <option value="WON">Won</option>
-                <option value="LOST">Lost</option>
-                <option value="BLOCKED">Blocked</option>
-            </select>
-        </div>
-        <div class="control-group">
-            <label>Type</label>
-            <select id="filter-type" onchange="app.handleSearch()">
-                <option value="ALL">All Types</option>
-                <option value="GRANT">Grant</option>
-                <option value="BOUNTY">Bounty</option>
-                <option value="CONTRACT">Contract</option>
-                <option value="INFRA">Infrastructure</option>
-            </select>
+    </main>
+
+    <div id="editor-modal" class="modal-overlay" style="z-index:200;">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span>DOCUMENT EDITOR</span>
+                <button class="icon-btn" onclick="closeModal('editor-modal')">✕</button>
+            </div>
+            <div class="toolbar">
+                <button class="btn" onclick="format('bold')">B</button>
+                <button class="btn" onclick="format('italic')">I</button>
+                <button class="btn" onclick="format('insertUnorderedList')">List</button>
+                <button class="btn" onclick="format('formatBlock','H3')">Header</button>
+            </div>
+            <div id="rich-editor" class="editor-area" contenteditable="true" placeholder="Paste screenshots or text here..."></div>
+            <div style="padding:15px; border-top:1px solid var(--border); text-align:right;">
+                <button class="btn" onclick="saveEditorContent()">SAVE & CLOSE</button>
+            </div>
         </div>
     </div>
 
-    <div class="grid-container">
-        <table id="data-table">
-            <thead>
-                <tr>
-                    <th width="40">SEC</th>
-                    <th width="40">ID</th>
-                    <th>TARGET NAME</th>
-                    <th>TYPE</th>
-                    <th>STATUS</th>
-                    <th>LOGISTICS (Reality/Lat/Eff)</th>
-                    <th>DEADLINE</th>
-                    <th>ACTION</th>
-                </tr>
-            </thead>
-            <tbody id="table-body">
-                </tbody>
-        </table>
+    <div id="add-modal" class="modal-overlay" style="z-index:250;">
+        <div class="modal-box" style="height:auto;">
+            <div class="modal-header">
+                <span>ADD NEW TARGET</span>
+                <button class="icon-btn" onclick="closeModal('add-modal')">✕</button>
+            </div>
+            <div style="padding:20px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
+                    <div>
+                        <label class="subtitle">SECTION</label>
+                        <select id="new-sec">
+                            <option value="A">A: Active Ops</option>
+                            <option value="B">B: Competitions</option>
+                            <option value="C">C: Regrantors</option>
+                            <option value="D">D: Archive</option>
+                            <option value="E">E: Monitor</option>
+                            <option value="F">F: University</option>
+                            <option value="G">G: Accelerator</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="subtitle">TYPE</label>
+                        <select id="new-type">
+                            <option value="Grant">Grant</option>
+                            <option value="Regrant">Regrantor</option>
+                            <option value="Bounty">Bounty</option>
+                            <option value="Prize">Prize</option>
+                            <option value="University">University</option>
+                            <option value="Partner">Partner</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label class="subtitle">TARGET NAME</label>
+                    <input id="new-name" placeholder="e.g. Open Philanthropy" style="border:1px solid var(--border); padding:8px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label class="subtitle">MODE</label>
+                    <select id="new-mode">
+                        <option value="Portal">Portal</option>
+                        <option value="Email">Email</option>
+                        <option value="Warm Intro">Warm Intro</option>
+                        <option value="Regrantor">Regrantor</option>
+                        <option value="Monitor">Monitor</option>
+                    </select>
+                </div>
+                <button class="btn" style="width:100%; border-color:var(--highlight); color:var(--highlight);" onclick="saveNewTarget()">ADD TO DATABASE</button>
+            </div>
+        </div>
     </div>
 
-    <footer>
-        <span id="record-count">Loading...</span>
-        <button onclick="app.resetData()" style="background:none; border:none; color:#cbd5e1; cursor:pointer;">Reset DB</button>
-    </footer>
-</div>
+    <div id="file-modal" class="modal-overlay">
+        <div class="modal-box" style="height:auto; max-height:80vh;">
+            <div class="modal-header">
+                <span>EVIDENCE & LOGS</span>
+                <button class="icon-btn" onclick="closeModal('file-modal')">✕</button>
+            </div>
+            <div style="padding:20px; overflow-y:auto;">
+                
+                <div class="mono subtitle" style="margin-bottom:8px;">QUICK ACTIONS</div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+                    <div style="border:1px solid var(--border); padding:10px;">
+                        <input id="link-name" placeholder="Link Name (e.g. Drive)" style="margin-bottom:5px;">
+                        <div style="display:flex; gap:5px;">
+                            <input id="link-url" placeholder="https://..." style="flex:1;">
+                            <button class="btn" onclick="addLink()">ADD LINK</button>
+                        </div>
+                    </div>
+                    <button class="btn" style="height:100%; border-style:dashed;" onclick="addDoc()">📝 CREATE NOTE / PASTE SCREENSHOTS</button>
+                </div>
 
-<script>
-/**
- * EAIRL FUNDING CMD v14.x
- * Core Logic & Data
- */
+                <div class="mono subtitle" style="margin-bottom:8px;">ATTACHMENTS</div>
+                <div id="file-list"></div>
 
-const DB_KEY = 'eairl_funding_v14_db';
+                <div class="mono subtitle" style="margin-bottom:8px; margin-top:20px;">ACTIVITY LOG</div>
+                <div style="display:flex; gap:5px; margin-bottom:10px;">
+                    <input id="log-input" placeholder="Log interaction..." style="border-bottom:1px solid var(--border);">
+                    <button class="btn" onclick="addLog()">POST</button>
+                </div>
+                <div id="log-list" style="max-height:150px; overflow-y:auto; border:1px solid var(--border);"></div>
+            </div>
+        </div>
+    </div>
 
-// V14 SEED DATA (Instruction A & B implemented)
-// Sec A: 7 Survivors. Sec B: Martian Fix.
-const seedData = [
-    // SECTION A: SURVIVORS (7 Items)
-    { id: 1, sec: 'A', name: 'NLnet Foundation (NGI Zero)', type: 'GRANT', status: 'TODO', deadline: 'Rolling', 
-      link_apply: 'https://nlnet.nl/commonsfund', 
-      reality: 'CASH', latency: '1-3mo', effort: 'Med', notes: 'Focus: Open Infrastructure / Standards.' },
-      
-    { id: 2, sec: 'A', name: 'Emergent Ventures (Mercatus)', type: 'GRANT', status: 'TODO', deadline: 'Rolling', 
-      link_apply: 'https://www.mercatus.org/emergent-ventures', 
-      reality: 'CASH', latency: '<30d', effort: 'Low', notes: 'Focus: High-agency / Outliers.' },
-      
-    { id: 101, sec: 'A', name: 'NRC IRAP', type: 'GRANT', status: 'TODO', deadline: 'Rolling', 
-      link_apply: 'https://nrc.canada.ca/en/support-technology-innovation', 
-      reality: 'CASH', latency: '3-6mo', effort: 'High', notes: 'Gov funding. Requires "tech innovation".' },
-      
-    { id: 3, sec: 'A', name: 'Aligned Studies Foundation (ASF)', type: 'GRANT', status: 'TODO', deadline: 'Rolling', 
-      link_apply: 'https://alignedstudies.com/apply', 
-      reality: 'CASH', latency: '1-3mo', effort: 'Med', notes: 'Independent researcher focus.' },
-      
-    { id: 4, sec: 'A', name: 'AI Safety Camp (AISC)', type: 'GRANT', status: 'TODO', deadline: 'Rolling', 
-      link_apply: 'https://www.aisafety.camp/about-faq', 
-      reality: 'CASH', latency: '<30d', effort: 'Low', notes: 'Microgrants for immediate costs.' },
-      
-    { id: 5, sec: 'A', name: 'AE Studio (Alignment)', type: 'GRANT', status: 'TODO', deadline: 'Rolling', 
-      link_apply: 'https://research.ae.studio/grants', 
-      reality: 'CASH', latency: '1-3mo', effort: 'Med', notes: 'Neglected approaches / Tooling.' },
-      
-    { id: 6, sec: 'A', name: 'BlueDot Impact (AGI Strategy)', type: 'GRANT', status: 'TODO', deadline: 'Rolling', 
-      link_apply: 'https://apply.bluedot.org/', 
-      reality: 'CASH', latency: '1-3mo', effort: 'Med', notes: 'Governance & Strategy tooling.' },
+    <div class="ver-tag">[ v14.1 ]</div>
 
-    // SECTION B: COMPETITIONS / BOUNTIES
-    { id: 201, sec: 'B', name: 'Martian Interpretability Prize', type: 'GRANT', status: 'TODO', deadline: 'Rolling', 
-      link_apply: 'https://withmartian.com/prize', 
-      reality: 'CASH', latency: 'Rolling', effort: 'High', notes: 'Research proposals for mechanistic interp.' },
-      
-    { id: 202, sec: 'B', name: 'Google AI VRP', type: 'BOUNTY', status: 'TODO', deadline: 'N/A', 
-      link_apply: 'https://bughunters.google.com/report', 
-      reality: 'CASH', latency: '<30d', effort: 'Med', notes: 'Find safety bypasses in Gemini.' },
+    <script>
+        // --- CONFIG ---
+        const DB_KEY = 'eairl_funding_v14'; 
+        
+        // --- SEED DATA (Updated Links & AI Safety Camp) ---
+        const seedData = [
+            // A: ACTIVE OPS
+            { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", status: "Identify", deadline: "2026-02-01", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "High", next: "Draft Abstract", link_apply: "https://nlnet.nl/commonsfund", updated: "2025-12-30", priority: true, files: [], logs: [] },
+            { id: 2, sec: 'A', name: "Emergent Ventures", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "<30d", effort: "Low", next: "Write 1-pager", link_apply: "https://www.mercatus.org/emergent-ventures", updated: "2025-12-30", priority: true, files: [], logs: [] },
+            { id: 3, sec: 'A', name: "NRC IRAP", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Phone", reality: "CASH", latency: "1-3mo", effort: "Med", next: "Call Montreal Office", link_apply: "https://nrc.canada.ca/en/support-technology-innovation", updated: "2025-12-30", files: [], logs: [] },
+            { id: 4, sec: 'A', name: "Aligned Studies (ASF)", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "1-3mo", effort: "Med", next: "Review RFP", link_apply: "https://alignedstudies.com/apply", updated: "2025-12-30", files: [], logs: [] },
+            
+            // B: COMPETITIONS
+            { id: 5, sec: 'B', name: "Martian Prize", type: "Prize", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Code", reality: "CASH", latency: "Unk", effort: "High", next: "Check bounties", link_apply: "https://withmartian.com/prize", updated: "2025-12-30", files: [], logs: [] },
+            { id: 6, sec: 'B', name: "Google AI VRP", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Report", reality: "CASH", latency: "1-3mo", effort: "High", next: "Review scope", link_apply: "https://bughunters.google.com/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 7, sec: 'B', name: "Microsoft AI Bounty", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Report", reality: "CASH", latency: "1-3mo", effort: "High", next: "Review scope", link_apply: "https://www.microsoft.com/en-us/msrc/bounty", updated: "2025-12-30", files: [], logs: [] },
 
-    // SECTION E: REFERENCE / OTHER
-    { id: 901, sec: 'E', name: 'Huberman Family Fund', type: 'GRANT', status: 'BLOCKED', deadline: 'Unknown', 
-      link_apply: 'mailto:grants@huberman.org', 
-      reality: 'CASH', latency: 'Unk', effort: 'High', notes: 'Evaluation & Monitoring focus.' },
-      
-    { id: 902, sec: 'E', name: 'Mozilla Tech Fund', type: 'GRANT', status: 'BLOCKED', deadline: 'Closed', 
-      link_apply: 'https://foundation.mozilla.org/en/what-we-fund/', 
-      reality: 'CASH', latency: '6mo', effort: 'High', notes: 'Audit tools.' }
-];
+            // C: REGRANTORS
+            { id: 20, sec: 'C', name: "Evan Hubinger", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 21, sec: 'C', name: "Tristan Hume", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 22, sec: 'C', name: "Neel Nanda", affiliation: "DeepMind", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 23, sec: 'C', name: "Marius Hobbhahn", affiliation: "Apollo", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 24, sec: 'C', name: "Adam Gleave", affiliation: "FAR AI", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 25, sec: 'C', name: "Oliver Habryka", affiliation: "Lightcone", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "mailto:oliver.habryka@lightconeinfra.com", updated: "2025-12-30", files: [], logs: [] },
+            { id: 26, sec: 'C', name: "Ryan Kidd", affiliation: "MATS", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 27, sec: 'C', name: "Marcus Abramovitch", affiliation: "Indep", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "https://manifund.org/submit", updated: "2025-12-30", files: [], logs: [] },
+            { id: 28, sec: 'C', name: "Nuño Sempere", affiliation: "Manifund", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "mailto:nuno.semperel@gmail.com", updated: "2025-12-30", files: [], logs: [] },
+            { id: 29, sec: 'C', name: "Zvi Mowshowitz", affiliation: "Indep", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", reality: "CASH", latency: "<30d", effort: "Med", next: "Draft Pitch", link_apply: "mailto:zvi@thezvi.com", updated: "2025-12-30", files: [], logs: [] },
 
-const app = {
-    data: [],
+            // D: SUBMITTED / ARCHIVE
+            { id: 99, sec: 'D', name: "Foresight Institute", type: "Grant", status: "Submitted", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "ACCESS", latency: "Unk", effort: "High", next: "Wait", link_apply: "", notes: "Applied Dec 29.", updated: "2025-12-30", files: [], logs: [] },
+            { id: 98, sec: 'D', name: "NextAI (Next Canada)", type: "Accel", status: "Submitted", deadline: "Submitted", owner: "Nicolas", mode: "Portal", reality: "CREDITS", latency: "1-3mo", effort: "High", next: "Wait", link_apply: "https://www.nextcanada.com/next-ai", notes: "Applied Dec 29.", updated: "2025-12-30", files: [], logs: [] },
 
-    init() {
-        this.loadData();
-        this.renderTable();
-    },
+            // E: MONITOR (with AI Safety Camp)
+            { id: 50, sec: 'E', name: "AI Safety Camp", type: "Grant", status: "Identify", deadline: "Check", owner: "Nicolas", mode: "Portal", reality: "ACCESS", latency: "3-6mo", effort: "High", next: "Check dates", link_apply: "https://www.aisafety.camp/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 10, sec: 'E', name: "BlueDot Impact", type: "Grant", status: "Identify", deadline: "Check", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "Med", next: "Check site", link_apply: "https://www.aisafety.com/funding", updated: "2025-12-30", files: [], logs: [] },
+            { id: 11, sec: 'E', name: "Mozilla Tech Fund", type: "Grant", status: "Identify", deadline: "Closed", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "Med", next: "Monitor", link_apply: "https://foundation.mozilla.org/en/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 12, sec: 'E', name: "METR (ARC Evals)", type: "Contract", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Sales", reality: "CASH", latency: "Unk", effort: "High", next: "Sales pitch", link_apply: "https://metr.org/contact/", updated: "2025-12-30", files: [], logs: [] },
 
-    loadData() {
-        const stored = localStorage.getItem(DB_KEY);
-        if (stored) {
-            this.data = JSON.parse(stored);
-            this.safeMigrate(); // Instruction C
-        } else {
-            this.data = seedData;
-            this.saveData();
-        }
-    },
+            // F: UNIVERSITIES
+            { id: 30, sec: 'F', name: "Stanford HAI", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", reality: "ACCESS", latency: "Unk", effort: "Med", next: "Find contact", link_apply: "https://hai.stanford.edu/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 31, sec: 'F', name: "SERI (Stanford)", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "1-3mo", effort: "Low", next: "Check grants", link_apply: "https://cs.stanford.edu/seri/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 32, sec: 'F', name: "Mila (Montreal)", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Warm Intro", reality: "ACCESS", latency: "Unk", effort: "High", next: "Network", link_apply: "https://mila.quebec/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 33, sec: 'F', name: "MIT CSAIL", type: "University", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", reality: "ACCESS", latency: "Unk", effort: "Med", next: "Research labs", link_apply: "https://www.csail.mit.edu/", updated: "2025-12-30", files: [], logs: [] },
+            
+            // G: ACCELERATORS
+            { id: 40, sec: 'G', name: "Google for Startups", type: "Partner", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Portal", reality: "CREDITS", latency: "<30d", effort: "Low", next: "Apply Credits", link_apply: "https://cloud.google.com/startup", updated: "2025-12-30", files: [], logs: [] },
+            { id: 41, sec: 'G', name: "NVIDIA Inception", type: "Partner", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Portal", reality: "ACCESS", latency: "<30d", effort: "Low", next: "Apply Program", link_apply: "https://www.nvidia.com/en-us/startups/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 42, sec: 'G', name: "AWS Activate", type: "Partner", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Portal", reality: "CREDITS", latency: "<30d", effort: "Low", next: "Apply Credits", link_apply: "https://aws.amazon.com/activate/", updated: "2025-12-30", files: [], logs: [] }
+        ];
 
-    // INSTRUCTION C: SAFE MIGRATE (Fix Undefined)
-    safeMigrate() {
-        let changed = false;
-        this.data.forEach(item => {
-            // If missing logistics, set defaults so no "undefined"
-            if (!item.reality) { item.reality = 'UNKNOWN'; changed = true; }
-            if (!item.latency) { item.latency = 'Unk'; changed = true; }
-            if (!item.effort) { item.effort = 'Med'; changed = true; }
-            // Ensure Sec A structure is correct (Instruction A)
-            if (['NLnet Foundation (NGI Zero)', 'AI Safety Camp (AISC)', 'BlueDot Impact (AGI Strategy)'].some(n => item.name.includes(n))) {
-                if(item.sec !== 'A') { item.sec = 'A'; changed = true; }
+        let db = [];
+        let activeId = null;
+        let activeFileIndex = null;
+        let openSections = JSON.parse(localStorage.getItem('eairl_sections_v14') || '{"A":true, "B":true, "C":true, "D":true, "E":false, "F":false, "G":false}');
+
+        // --- CORE LOGIC ---
+        function initApp() {
+            try {
+                const saved = localStorage.getItem(DB_KEY);
+                let currentDB = [];
+                if (saved) {
+                    currentDB = JSON.parse(saved);
+                    // Migration / Consistency check
+                    currentDB.forEach(i => {
+                        if(!i.files) i.files = [];
+                        if(!i.logs) i.logs = [];
+                    });
+                    
+                    // SAFE MERGE: Add missing seed items without overwriting existing
+                    let added = false;
+                    seedData.forEach(seedItem => {
+                        const exists = currentDB.some(d => String(d.id) === String(seedItem.id) && d.sec === seedItem.sec);
+                        if (!exists) {
+                            currentDB.push(seedItem);
+                            added = true;
+                        }
+                    });
+                    
+                    db = currentDB;
+                    if(added) save(); // Persist the merged data
+                } else {
+                    db = seedData;
+                    save();
+                }
+                renderApp();
+                updateMemory();
+            } catch(e) {
+                console.error("Init Error:", e);
+                // Fallback
+                db = seedData;
+                renderApp();
             }
-        });
-        if (changed) this.saveData();
-    },
-
-    saveData() {
-        localStorage.setItem(DB_KEY, JSON.stringify(this.data));
-    },
-
-    resetData() {
-        if(confirm('Reset all local data to v14 seed?')) {
-            this.data = seedData;
-            this.saveData();
-            this.renderTable();
         }
-    },
 
-    // INSTRUCTION D: DUAL SEARCH LOGIC
-    handleSearch() {
-        const globalVal = document.getElementById('search-input').value.toLowerCase();
-        const quickVal = document.getElementById('quick-search').value.toLowerCase(); // New input
-        const statusVal = document.getElementById('filter-status').value;
-        const typeVal = document.getElementById('filter-type').value;
+        function hardReset() {
+            if(confirm("DANGER: This will wipe all local data and restore the default list. Are you sure?")) {
+                localStorage.removeItem(DB_KEY);
+                localStorage.removeItem('eairl_sections_v14');
+                location.reload();
+            }
+        }
 
-        const filtered = this.data.filter(item => {
-            // 1. Status Filter
-            if (statusVal !== 'ALL' && item.status !== statusVal) return false;
-            // 2. Type Filter
-            if (typeVal !== 'ALL' && item.type !== typeVal) return false;
+        function toggleSection(secKey) {
+            openSections[secKey] = !openSections[secKey];
+            localStorage.setItem('eairl_sections_v14', JSON.stringify(openSections));
+        }
+
+        function togglePriority(id) {
+            const item = db.find(i => i.id === id);
+            item.priority = !item.priority;
+            save(); renderApp();
+        }
+
+        function renderApp() {
+            const searchVal = document.getElementById('global-search').value.toLowerCase();
+            const filterStat = document.getElementById('filter-status').value.toLowerCase();
+            const filterType = document.getElementById('filter-type').value.toLowerCase();
             
-            // 3. Global Search (Generic)
-            const globalMatch = !globalVal || Object.values(item).some(val => 
-                String(val).toLowerCase().includes(globalVal)
-            );
-
-            // 4. Quick Search (Specific Fields + Apply Link)
-            const quickMatch = !quickVal || (
-                (item.name && item.name.toLowerCase().includes(quickVal)) ||
-                (item.notes && item.notes.toLowerCase().includes(quickVal)) ||
-                (item.link_apply && item.link_apply.toLowerCase().includes(quickVal)) ||
-                (item.status && item.status.toLowerCase().includes(quickVal)) ||
-                (item.type && item.type.toLowerCase().includes(quickVal))
-            );
-
-            return globalMatch && quickMatch;
-        });
-
-        this.renderTable(filtered);
-    },
-
-    renderTable(dataSet = this.data) {
-        const tbody = document.getElementById('table-body');
-        tbody.innerHTML = '';
-
-        // Sort: Section A first, then ID
-        const sorted = [...dataSet].sort((a, b) => {
-            if (a.sec === b.sec) return a.id - b.id;
-            return a.sec.localeCompare(b.sec);
-        });
-
-        document.getElementById('record-count').innerText = `${sorted.length} Records`;
-
-        sorted.forEach(item => {
-            const tr = document.createElement('tr');
+            renderStats();
             
-            // Logistics rendering (Instruction C: prevent undefined)
-            const logisticsHtml = `
-                <span class="logistics-tag">${item.reality || 'UNKNOWN'}</span>
-                <span class="logistics-tag">${item.latency || 'Unk'}</span>
-                <span class="logistics-tag">Effort: ${item.effort || 'Med'}</span>
-            `;
+            const container = document.getElementById('pipeline-container');
+            container.innerHTML = '';
 
-            tr.innerHTML = `
-                <td><span class="cell-sec sec-${item.sec}">${item.sec}</span></td>
-                <td><span class="cell-id">#${item.id}</span></td>
-                <td class="cell-name" title="${item.notes || ''}">${item.name}</td>
-                <td><span class="logistics-tag">${item.type}</span></td>
-                <td><span class="status-badge st-${item.status.toLowerCase().substring(0,4)}">${item.status}</span></td>
-                <td>${logisticsHtml}</td>
-                <td>${item.deadline}</td>
-                <td>
-                    ${item.link_apply ? `<a href="${item.link_apply}" target="_blank" rel="noopener noreferrer" class="btn-apply">APPLY ↗</a>` : '<span style="color:#cbd5e1">-</span>'}
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-};
+            const sections = {
+                'A': 'SECTION A: ACTIVE OPS (HIGH PRIORITY)',
+                'B': 'SECTION B: COMPETITIONS & BOUNTIES',
+                'C': 'SECTION C: VERIFIED REGRANTORS',
+                'D': 'SECTION D: SUBMITTED / ARCHIVE',
+                'E': 'SECTION E: STRATEGIC MONITOR',
+                'F': 'SECTION F: UNIVERSITY / RESEARCH LABS',
+                'G': 'SECTION G: ACCELERATORS / PARTNERS'
+            };
 
-// Boot
-app.init();
-</script>
+            for (const [key, title] of Object.entries(sections)) {
+                let items = db.filter(i => i.sec === key);
+                
+                // FILTERING
+                if (searchVal || filterStat || filterType) {
+                    items = items.filter(i => {
+                        const matchesSearch = !searchVal || (
+                            i.name.toLowerCase().includes(searchVal) || 
+                            (i.notes && i.notes.toLowerCase().includes(searchVal)) || 
+                            (i.mode && i.mode.toLowerCase().includes(searchVal)) ||
+                            String(i.id).includes(searchVal) ||
+                            (i.type && i.type.toLowerCase().includes(searchVal))
+                        );
+                        const matchesStat = !filterStat || i.status.toLowerCase() === filterStat;
+                        const matchesType = !filterType || i.type.toLowerCase().includes(filterType);
+                        return matchesSearch && matchesStat && matchesType;
+                    });
+                }
+
+                if (items.length === 0) continue;
+
+                const isOpen = openSections[key] || (searchVal || filterStat || filterType) ? 'open' : '';
+                
+                let html = `
+                    <details ${isOpen} style="margin-bottom:20px; border:1px solid var(--border);" ontoggle="toggleSection('${key}')">
+                        <summary class="section-header">
+                            <span>${title}</span>
+                            <span class="mono" style="font-size:10px; opacity:0.5;">${items.length}</span>
+                        </summary>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:5%">ID</th>
+                                    <th style="width:20%">Target</th>
+                                    <th style="width:10%">Type / Mode</th>
+                                    <th style="width:10%">Logistics</th>
+                                    <th style="width:8%">Deadline</th>
+                                    <th style="width:12%">Status</th>
+                                    <th style="width:15%">Next Action</th>
+                                    <th style="width:7%">Last</th>
+                                    <th style="width:10%">Notes</th>
+                                    <th style="width:5%">Tools</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                items.forEach(i => {
+                    const statusColor = `var(--st-${(i.status||'identify').toLowerCase()})`;
+                    const typeClass = (i.type||'grant').toLowerCase().includes('grant') ? 'grant' : 
+                                      (i.type||'').toLowerCase().includes('bounty') ? 'bounty' : 
+                                      (i.type||'').toLowerCase().includes('regrant') ? 'regrant' : 
+                                      (i.type||'').toLowerCase().includes('accel') ? 'accel' :
+                                      (i.type||'').toLowerCase().includes('uni') ? 'uni' :
+                                      (i.type||'').toLowerCase().includes('partner') ? 'partner' :
+                                      (i.type||'').toLowerCase().includes('prize') ? 'prize' : 'contract';
+                    
+                    const badgeStyle = `background:var(--badge-${typeClass}); color:var(--text-${typeClass});`;
+                    const hasFiles = (i.files && i.files.length > 0) ? 'color:var(--highlight); opacity:1;' : '';
+                    const dateStr = (i.updated && typeof i.updated === 'string' && i.updated.length >= 5) ? i.updated.slice(5) : '-';
+                    const starClass = i.priority ? 'active' : '';
+
+                    // Apply Link Label Logic
+                    let linkLabel = "APPLY ↗";
+                    if (i.link_apply && i.link_apply.toLowerCase().startsWith("mailto:")) linkLabel = "EMAIL ↗";
+
+                    // Owner/Mode Logic
+                    const ownerDisplay = (i.owner && i.owner !== 'Nicolas') ? `/ ${i.owner}` : '';
+
+                    html += `
+                        <tr>
+                            <td class="mono" style="font-size:10px; opacity:0.6;">${i.sec}-${i.id}</td>
+                            <td>
+                                <div>
+                                    <span class="priority-star ${starClass}" onclick="togglePriority(${i.id})">★</span>
+                                    <span style="font-weight:700;">${i.name}</span>
+                                </div>
+                                <div style="font-size:10px; margin-top:2px;">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">${linkLabel}</a>` : ''}</div>
+                            </td>
+                            <td>
+                                <span class="status-badge" style="${badgeStyle}">${i.type}</span>
+                                <div style="font-size:9px; margin-top:2px; color:var(--text-muted);">${i.mode} ${ownerDisplay}</div>
+                            </td>
+                            <td>
+                                <span class="pill">${i.magnitude}</span> <span class="pill">${i.speed}</span>
+                            </td>
+                            <td><input class="mono" value="${i.deadline||''}" onchange="update(${i.id}, 'deadline', this.value)"></td>
+                            <td>
+                                <select class="status-select" style="color:${statusColor}; font-weight:700;" onchange="update(${i.id}, 'status', this.value)">
+                                    <option ${i.status==='Identify'?'selected':''}>Identify</option>
+                                    <option ${i.status==='Drafting'?'selected':''}>Drafting</option>
+                                    <option ${i.status==='Submitted'?'selected':''}>Submitted</option>
+                                    <option ${i.status==='Follow-up'?'selected':''}>Follow-up</option>
+                                    <option ${i.status==='Won'?'selected':''}>Won</option>
+                                    <option ${i.status==='Rejected'?'selected':''}>Rejected</option>
+                                    <option ${i.status==='Archived'?'selected':''}>Archived</option>
+                                </select>
+                            </td>
+                            <td><input value="${i.next||''}" onchange="update(${i.id}, 'next', this.value)"></td>
+                            <td class="mono" style="font-size:9px; color:var(--text-muted);">${dateStr}</td>
+                            <td><input value="${i.notes||''}" onchange="update(${i.id}, 'notes', this.value)"></td>
+                            <td>
+                                <button class="icon-btn" style="${hasFiles}" onclick="openFileModal(${i.id})"><svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/></svg></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table></details>`;
+                container.innerHTML += html;
+            }
+        }
+
+        function renderStats() {
+            const total = db.length;
+            const submitted = db.filter(i => i.status === 'Submitted').length;
+            const goal = 5; 
+            const pct = Math.min((submitted / goal) * 100, 100);
+
+            document.getElementById('goal-bar').style.width = pct + "%";
+            document.getElementById('goal-text').innerText = `${submitted} / ${goal}`;
+            
+            document.getElementById('stats-mount').innerHTML = `
+                <div class="stat-item"><span class="stat-lbl">ACTIVE TARGETS</span><span class="stat-val">${total}</span></div>
+                <div class="stat-item"><span class="stat-lbl" style="color:#d97706">DRAFTING</span><span class="stat-val" style="color:#d97706">${db.filter(i=>i.status==='Drafting').length}</span></div>
+                <div class="stat-item"><span class="stat-lbl" style="color:#059669">SUBMITTED</span><span class="stat-val" style="color:#059669">${submitted}</span></div>
+                <div class="stat-item"><span class="stat-lbl" style="color:#16a34a">WON</span><span class="stat-val" style="color:#16a34a">${db.filter(i=>i.status==='Won').length}</span></div>
+            `;
+        }
+
+        function update(id, field, val) {
+            const item = db.find(i => i.id === id);
+            item[field] = val;
+            item.updated = new Date().toISOString().split('T')[0];
+            save(); renderApp();
+        }
+
+        function openFileModal(id) {
+            activeId = id;
+            document.getElementById('file-modal').style.display = 'flex';
+            renderFiles(); renderLogs();
+        }
+
+        function openAddTargetModal() {
+            document.getElementById('add-modal').style.display = 'flex';
+        }
+
+        function saveNewTarget() {
+            const name = document.getElementById('new-name').value;
+            if(!name) return alert("Name required");
+            
+            const newItem = {
+                id: Date.now().toString().slice(-4), // Simple 4-digit ID
+                sec: document.getElementById('new-sec').value,
+                name: name,
+                type: document.getElementById('new-type').value,
+                mode: document.getElementById('new-mode').value,
+                status: "Identify",
+                deadline: "Rolling",
+                magnitude: "Med",
+                speed: "Med",
+                priority: false,
+                updated: new Date().toISOString().split('T')[0],
+                files: [],
+                logs: []
+            };
+            
+            db.push(newItem);
+            save();
+            closeModal('add-modal');
+            document.getElementById('new-name').value = '';
+            renderApp();
+        }
+
+        function renderFiles() {
+            const item = db.find(i => i.id === activeId);
+            const list = document.getElementById('file-list');
+            list.innerHTML = item.files.map((f, idx) => `
+                <div class="file-item">
+                    <div>
+                        <span style="font-weight:700;">${f.name}</span>
+                        ${f.link ? `<a href="${f.link}" target="_blank" style="margin-left:5px; color:var(--highlight);">OPEN ↗</a>` : ''}
+                        ${f.content ? `<span style="font-size:9px; background:var(--border); padding:1px 4px; border-radius:2px; margin-left:5px;">DOC</span>` : ''}
+                    </div>
+                    <div>
+                        <button class="btn" style="font-size:9px;" onclick="openEditor(${idx})">${f.content ? 'EDIT' : 'VIEW'}</button>
+                        <button class="icon-btn" style="color:red;" onclick="delFile(${idx})">×</button>
+                    </div>
+                </div>
+            `).join('') || '<div style="padding:10px; color:var(--text-muted); font-style:italic;">No attachments.</div>';
+        }
+
+        function addLink() {
+            const name = document.getElementById('link-name').value;
+            const url = document.getElementById('link-url').value;
+            if (!name) return alert("Name required");
+            const item = db.find(i => i.id === activeId);
+            item.files.push({ name: name, link: url, content: null });
+            item.updated = new Date().toISOString().split('T')[0];
+            document.getElementById('link-name').value = ''; document.getElementById('link-url').value = '';
+            save(); renderFiles(); renderApp();
+        }
+
+        function addDoc() {
+            const item = db.find(i => i.id === activeId);
+            item.files.push({ name: "Note / Draft", link: null, content: "" });
+            item.updated = new Date().toISOString().split('T')[0];
+            save(); openEditor(item.files.length - 1);
+        }
+
+        function delFile(idx) {
+            const item = db.find(i => i.id === activeId);
+            item.files.splice(idx, 1);
+            item.updated = new Date().toISOString().split('T')[0];
+            save(); renderFiles(); renderApp();
+        }
+
+        function openEditor(idx) {
+            activeFileIndex = idx;
+            const item = db.find(i => i.id === activeId);
+            document.getElementById('rich-editor').innerHTML = item.files[idx].content || "";
+            document.getElementById('file-modal').style.display = 'none';
+            document.getElementById('editor-modal').style.display = 'flex';
+        }
+
+        function saveEditorContent() {
+            const content = document.getElementById('rich-editor').innerHTML;
+            const item = db.find(i => i.id === activeId);
+            item.files[activeFileIndex].content = content;
+            item.updated = new Date().toISOString().split('T')[0];
+            save();
+            document.getElementById('editor-modal').style.display = 'none';
+            document.getElementById('file-modal').style.display = 'flex';
+            renderFiles();
+        }
+
+        function format(cmd, val) { document.execCommand(cmd, false, val); }
+
+        function addLog() {
+            const txt = document.getElementById('log-input').value;
+            if(!txt) return;
+            const item = db.find(i => i.id === activeId);
+            item.logs.unshift({ date: new Date().toISOString().split('T')[0], text: txt });
+            item.updated = new Date().toISOString().split('T')[0];
+            document.getElementById('log-input').value = '';
+            save(); renderLogs(); renderApp();
+        }
+
+        function renderLogs() {
+            const item = db.find(i => i.id === activeId);
+            document.getElementById('log-list').innerHTML = item.logs.map(l => `
+                <div class="log-item">
+                    <span class="mono" style="color:var(--text-muted); margin-right:5px;">${l.date}</span>
+                    ${l.text}
+                </div>
+            `).join('');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+            if (id === 'editor-modal') document.getElementById('file-modal').style.display = 'flex';
+        }
+
+        function save() { 
+            try {
+                localStorage.setItem(DB_KEY, JSON.stringify(db));
+                updateMemory();
+            } catch(e) { alert("STORAGE FULL."); }
+        }
+
+        function updateMemory() {
+            const used = JSON.stringify(localStorage).length;
+            const pct = Math.round((used / 5000000) * 100);
+            document.getElementById('mem-val').innerText = pct + "%";
+            document.getElementById('mem-fill').style.width = pct + "%";
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+            const a = document.createElement('a'); a.href = dataStr; a.download = "eairl_funding_db.json"; a.click(); a.remove();
+        }
+
+        function toggleTheme() {
+            const b = document.body;
+            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        }
+
+        // Boot
+        initApp();
+    </script>
 </body>
 </html>
