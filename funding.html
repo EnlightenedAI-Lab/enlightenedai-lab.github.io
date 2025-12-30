@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Funding Command | Secure</title>
+    <title>Funding Command | Secure v7.1</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,17 +31,9 @@
         body { margin: 0; font-family: "Inter", sans-serif; background: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
         
         /* LOCK SCREEN */
-        #lock-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-color); z-index: 9999; display: flex;
-            align-items: center; justify-content: center; flex-direction: column;
-        }
+        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
         .lock-box { text-align: center; width: 300px; }
-        .lock-input { 
-            width: 100%; padding: 10px; margin-top: 1rem; font-family: "JetBrains Mono", monospace; 
-            border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main);
-            text-align: center; letter-spacing: 0.2em; font-size: 1.2rem;
-        }
+        .lock-input { width: 100%; padding: 10px; margin-top: 1rem; font-family: "JetBrains Mono", monospace; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); text-align: center; letter-spacing: 0.2em; font-size: 1.2rem; }
         .lock-msg { color: #cc0000; font-size: 0.75rem; margin-top: 1rem; display: none; font-family: "JetBrains Mono", monospace; }
         .privacy-note { margin-top: 2rem; font-size: 0.65rem; color: var(--text-muted); font-family: "JetBrains Mono", monospace; opacity: 0.7; }
 
@@ -88,7 +80,7 @@
         .icon-btn:hover { opacity: 1; transform: scale(1.1); }
         .has-data { color: var(--accent-primary); opacity: 1; }
 
-        /* MODAL */
+        /* MODALS */
         #modal-overlay, #log-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
         .modal-content { background: var(--bg-color); padding: 2rem; width: 500px; border: 1px solid var(--border-color); display: flex; flex-direction: column; max-height: 85vh; }
         .modal-header { font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
@@ -97,12 +89,8 @@
         .log-date { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
         .file-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 6px; border-bottom: 1px solid var(--border-color); background: var(--bg-color); margin-bottom: 4px; }
 
-        /* VERSION TAG */
-        .version-tag {
-            position: fixed; bottom: 20px; left: 20px; font-family: var(--font-mono);
-            font-size: 0.65rem; color: #cc0000; font-weight: 700; z-index: 2000;
-            background: var(--bg-color); padding: 4px 8px; border: 1px solid #cc0000; border-radius: 4px;
-        }
+        .version-tag { position: fixed; bottom: 20px; left: 20px; font-family: var(--font-mono); font-size: 0.65rem; color: #cc0000; font-weight: 700; z-index: 2000; background: var(--bg-color); padding: 4px 8px; border: 1px solid #cc0000; border-radius: 4px; }
+        
         @media (max-width: 900px) {
             .layout-wrapper { display: block; }
             aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); transition: transform 0.25s ease; border-right: none; padding: 2rem; background: var(--bg-color); overflow-y: auto; z-index: 10000; }
@@ -127,7 +115,7 @@
         </div>
     </div>
 
-    <div class="version-tag">[ v7.0 ]</div>
+    <div class="version-tag">[ v7.1 ]</div>
 
     <div class="layout-wrapper" id="app-wrapper">
         <aside>
@@ -180,13 +168,18 @@
 
     <div id="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><span>FILES</span> <span style="cursor:pointer" onclick="closeModal()">✕</span></div>
+            <div class="modal-header"><span>EVIDENCE / FILES</span> <span style="cursor:pointer" onclick="closeModal()">✕</span></div>
             <div style="flex:1;">
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Link to Drive/Dropbox or list filenames.</p>
-                <div style="display:flex; gap:10px; margin-bottom:10px;">
-                    <input type="text" id="file-name-input" class="action-input" placeholder="Name" style="border:1px solid var(--border-color);">
-                    <input type="text" id="file-link-input" class="action-input" placeholder="URL" style="border:1px solid var(--border-color);">
-                    <button class="btn-action" onclick="addFile()">ADD</button>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">
+                    <strong>Note:</strong> Files are not uploaded. Use this to log filenames or Drive links.
+                </p>
+                <div style="display:flex; gap:10px; margin-bottom:10px; align-items:center;">
+                    <input type="file" id="real-file-picker" style="display:none" onchange="handleFilePick(this)">
+                    <button class="btn-action" onclick="document.getElementById('real-file-picker').click()">BROWSE...</button>
+                    
+                    <input type="text" id="file-name-input" class="action-input" placeholder="File Name" style="border:1px solid var(--border-color);">
+                    <input type="text" id="file-link-input" class="action-input" placeholder="Link (Optional)" style="border:1px solid var(--border-color);">
+                    <button class="btn-action" onclick="addFile()">SAVE</button>
                 </div>
                 <div class="file-list" id="modal-file-list"></div>
             </div>
@@ -194,10 +187,8 @@
     </div>
 
     <script>
-        // --- 1. SECURITY CONFIG ---
-        const APP_PASSWORD = "3000"; // <--- PASSWORD SET HERE
+        const APP_PASSWORD = "3000"; // <--- PASSWORD
         
-        // --- 2. DATA SEED ---
         const seedData = [
             // A: ACTIVE
             { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", deadline: "Feb 1", status: "Identify", notes: "Top Priority" },
@@ -212,15 +203,10 @@
             { id: 8, sec: 'B', name: "Microsoft AI Bounty", type: "Bounty", deadline: "Open", status: "Identify", notes: "Zero Day Quest" },
             { id: 9, sec: 'B', name: "AE Studio", type: "Contract", deadline: "Rolling", status: "Identify", notes: "Neglected approaches" },
 
-            // C: SUBMITTED / ARCHIVE (NEW SECTION)
-            { 
-                id: 99, sec: 'C', 
-                name: "Foresight Institute", type: "Grant", 
-                deadline: "Rolling", status: "Submitted", 
-                notes: "Applied with existing alignment instrumentation. Archived unless follow-up." 
-            },
+            // C: SUBMITTED (FORESIGHT ADDED)
+            { id: 99, sec: 'C', name: "Foresight Institute", type: "Grant", deadline: "Rolling", status: "Submitted", notes: "Applied with alignment instrumentation. Archived unless follow-up." },
 
-            // D: STRATEGIC MONITOR
+            // D: MONITOR
             { id: 10, sec: 'D', name: "BlueDot Impact", type: "Grant", deadline: "Check", status: "Identify", notes: "Governance" },
             { id: 11, sec: 'D', name: "Mozilla Tech Fund", type: "Grant", deadline: "Closed", status: "Identify", notes: "Audit Tools" },
             { id: 12, sec: 'D', name: "Huberman Family", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Direct pitch" },
@@ -243,7 +229,6 @@
         let db = [];
         let activeId = null;
 
-        // --- 3. LOCK SCREEN LOGIC ---
         const lockInput = document.getElementById('password-input');
         lockInput.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') {
@@ -258,15 +243,9 @@
             }
         });
 
-        // --- 4. APP LOGIC ---
         function initApp() {
             const saved = localStorage.getItem('eairl_db_v7_1');
-            if (saved) {
-                db = JSON.parse(saved);
-            } else {
-                db = seedData;
-                save();
-            }
+            db = saved ? JSON.parse(saved) : seedData;
             db.forEach(i => { if(!i.logs) i.logs = []; if(!i.files) i.files = []; });
             render();
         }
@@ -279,7 +258,7 @@
             const sections = {
                 'A': '🚀 ACTIVE OPS (HIGH PRIORITY)',
                 'B': '🏴‍☠️ COMPETITIONS & BOUNTIES',
-                'C': '📂 SUBMITTED / ARCHIVE (APPLIED ONCE)',
+                'C': '📂 SUBMITTED / ARCHIVE',
                 'D': '📡 STRATEGIC MONITOR',
                 'E': '🗄️ LONG TAIL'
             };
@@ -321,6 +300,13 @@
             }
         }
 
+        function handleFilePick(input) {
+            if (input.files.length > 0) {
+                document.getElementById('file-name-input').value = input.files[0].name;
+                document.getElementById('file-link-input').value = "Local File (Not Uploaded)";
+            }
+        }
+
         function renderStats() {
             const total = db.length;
             const pitching = db.filter(i => i.status === 'Pitching').length;
@@ -338,8 +324,7 @@
         function update(id, field, val) {
             const item = db.find(i => i.id === id);
             item[field] = val;
-            save();
-            render();
+            save(); render();
         }
 
         function openLog(id) {
@@ -357,9 +342,7 @@
             if (!txt) return;
             const item = db.find(i => i.id === activeId);
             item.logs.unshift({ date: new Date().toLocaleDateString(), text: txt });
-            save();
-            openLog(activeId); 
-            render();
+            save(); openLog(activeId); render();
         }
         function closeLog() { document.getElementById('log-overlay').style.display = 'none'; }
 
@@ -390,23 +373,19 @@
             save();
             document.getElementById('file-name-input').value = '';
             document.getElementById('file-link-input').value = '';
-            renderFileList(item);
-            render();
+            renderFileList(item); render();
         }
 
         function deleteFile(id, idx) {
             const item = db.find(i => i.id === id);
             item.files.splice(idx, 1);
-            save();
-            renderFileList(item);
-            render();
+            save(); renderFileList(item); render();
         }
 
         function save() { localStorage.setItem('eairl_db_v7_1', JSON.stringify(db)); }
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
-            const a = document.createElement('a');
-            a.href = dataStr; a.download = "funding_backup.json"; a.click(); a.remove();
+            const a = document.createElement('a'); a.href = dataStr; a.download = "funding_backup.json"; a.click(); a.remove();
         }
         function toggleTheme() {
             const b = document.body;
