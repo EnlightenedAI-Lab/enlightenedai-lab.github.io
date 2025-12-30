@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>EAIRL | FUNDING CMD v14.1</title>
+    <title>EAIRL | FUNDING CMD v14.2</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -205,7 +205,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
                 <div>
                     <h1>Funding Command</h1>
-                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v14.1</div>
+                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v14.2</div>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn" style="border-color:var(--highlight); color:var(--highlight);" onclick="openAddTargetModal()">+ ADD TARGET</button>
@@ -351,20 +351,23 @@
         </div>
     </div>
 
-    <div class="ver-tag">[ v14.1 ]</div>
+    <div class="ver-tag">[ v14.2 ]</div>
 
     <script>
         // --- CONFIG ---
-        const DB_KEY = 'eairl_funding_v14'; 
+        const DB_KEY = 'eairl_funding_v14_2'; // NEW KEY for correct seed data
         
-        // --- SEED DATA (Updated Links & AI Safety Camp) ---
+        // --- SEED DATA (UPDATED TARGETS) ---
         const seedData = [
-            // A: ACTIVE OPS
-            { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", status: "Identify", deadline: "2026-02-01", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "High", next: "Draft Abstract", link_apply: "https://nlnet.nl/commonsfund", updated: "2025-12-30", priority: true, files: [], logs: [] },
-            { id: 2, sec: 'A', name: "Emergent Ventures", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "<30d", effort: "Low", next: "Write 1-pager", link_apply: "https://www.mercatus.org/emergent-ventures", updated: "2025-12-30", priority: true, files: [], logs: [] },
+            // A: ACTIVE OPS (THE 7 TARGETS)
+            { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", status: "Identify", deadline: "2026-02-01", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "High", next: "Draft Abstract", link_apply: "https://nlnet.nl/apply/", updated: "2025-12-30", priority: true, files: [], logs: [] },
+            { id: 2, sec: 'A', name: "Emergent Ventures", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "<30d", effort: "Low", next: "Write 1-pager", link_apply: "https://mercatuscenter.formstack.com/forms/emergent_ventures", updated: "2025-12-30", priority: true, files: [], logs: [] },
             { id: 3, sec: 'A', name: "NRC IRAP", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Phone", reality: "CASH", latency: "1-3mo", effort: "Med", next: "Call Montreal Office", link_apply: "https://nrc.canada.ca/en/support-technology-innovation", updated: "2025-12-30", files: [], logs: [] },
-            { id: 4, sec: 'A', name: "Aligned Studies (ASF)", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "1-3mo", effort: "Med", next: "Review RFP", link_apply: "https://alignedstudies.com/apply", updated: "2025-12-30", files: [], logs: [] },
-            
+            { id: 4, sec: 'A', name: "Aligned Studies (ASF)", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "1-3mo", effort: "Med", next: "Review RFP", link_apply: "https://alignedstudies.org/apply", updated: "2025-12-30", files: [], logs: [] },
+            { id: 50, sec: 'A', name: "AE Studio", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "Unk", effort: "High", next: "Submit Idea", link_apply: "https://research.ae.studio/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 51, sec: 'A', name: "AI Safety Campus", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "High", next: "Check dates", link_apply: "https://aisafety.camp/", updated: "2025-12-30", files: [], logs: [] },
+            { id: 52, sec: 'A', name: "BlueDot Impact", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "Med", next: "Check site", link_apply: "https://aisafety.com/funding", updated: "2025-12-30", files: [], logs: [] },
+
             // B: COMPETITIONS
             { id: 5, sec: 'B', name: "Martian Prize", type: "Prize", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Code", reality: "CASH", latency: "Unk", effort: "High", next: "Check bounties", link_apply: "https://withmartian.com/prize", updated: "2025-12-30", files: [], logs: [] },
             { id: 6, sec: 'B', name: "Google AI VRP", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Report", reality: "CASH", latency: "1-3mo", effort: "High", next: "Review scope", link_apply: "https://bughunters.google.com/", updated: "2025-12-30", files: [], logs: [] },
@@ -386,9 +389,7 @@
             { id: 99, sec: 'D', name: "Foresight Institute", type: "Grant", status: "Submitted", deadline: "Rolling", owner: "Nicolas", mode: "Portal", reality: "ACCESS", latency: "Unk", effort: "High", next: "Wait", link_apply: "", notes: "Applied Dec 29.", updated: "2025-12-30", files: [], logs: [] },
             { id: 98, sec: 'D', name: "NextAI (Next Canada)", type: "Accel", status: "Submitted", deadline: "Submitted", owner: "Nicolas", mode: "Portal", reality: "CREDITS", latency: "1-3mo", effort: "High", next: "Wait", link_apply: "https://www.nextcanada.com/next-ai", notes: "Applied Dec 29.", updated: "2025-12-30", files: [], logs: [] },
 
-            // E: MONITOR (with AI Safety Camp)
-            { id: 50, sec: 'E', name: "AI Safety Camp", type: "Grant", status: "Identify", deadline: "Check", owner: "Nicolas", mode: "Portal", reality: "ACCESS", latency: "3-6mo", effort: "High", next: "Check dates", link_apply: "https://www.aisafety.camp/", updated: "2025-12-30", files: [], logs: [] },
-            { id: 10, sec: 'E', name: "BlueDot Impact", type: "Grant", status: "Identify", deadline: "Check", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "Med", next: "Check site", link_apply: "https://www.aisafety.com/funding", updated: "2025-12-30", files: [], logs: [] },
+            // E: MONITOR
             { id: 11, sec: 'E', name: "Mozilla Tech Fund", type: "Grant", status: "Identify", deadline: "Closed", owner: "Nicolas", mode: "Portal", reality: "CASH", latency: "3-6mo", effort: "Med", next: "Monitor", link_apply: "https://foundation.mozilla.org/en/", updated: "2025-12-30", files: [], logs: [] },
             { id: 12, sec: 'E', name: "METR (ARC Evals)", type: "Contract", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Sales", reality: "CASH", latency: "Unk", effort: "High", next: "Sales pitch", link_apply: "https://metr.org/contact/", updated: "2025-12-30", files: [], logs: [] },
 
