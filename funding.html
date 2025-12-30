@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funding Command v5.0 | Enlightened AI</title>
+    <title>Funding Command v6.0 | Enlightened AI</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -125,12 +125,10 @@
         .header-title h1 { font-size: 1.8rem; font-weight: 800; margin: 0; line-height: 1; letter-spacing: -0.02em; }
         .header-title span { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); display: block; margin-top: 6px; }
 
-        /* MISSION CONTROL (Collapsible) */
+        /* MISSION CONTROL */
         details.mission-control { margin-bottom: 3rem; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; background: var(--sidebar-bg); }
         details.mission-control summary { padding: 12px 16px; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
         details.mission-control summary::-webkit-details-marker { display: none; }
-        details.mission-control summary::after { content: "+"; }
-        details.mission-control[open] summary::after { content: "-"; }
         
         .control-panel { padding: 1.5rem; border-top: 1px solid var(--border-color); background: var(--bg-color); }
         .scratchpad {
@@ -183,6 +181,7 @@
         }
         .st-identify { opacity: 0.6; }
         .st-pitching { color: #b45309; border-color: #b45309; background: rgba(180,83,9,0.05); }
+        .st-outreach { color: var(--accent-primary); border-color: var(--accent-primary); background: rgba(0,68,204,0.05); }
         .st-submitted { color: #008800; border-color: #008800; background: rgba(0,136,0,0.05); }
         .st-won { background: #00cc00; color: #fff; border-color: #00cc00; }
         .st-rejected { text-decoration: line-through; opacity: 0.5; }
@@ -194,22 +193,26 @@
         }
         .action-input:focus { border-color: var(--accent-primary); border-bottom-style: solid; outline: none; background: var(--select-bg); }
 
-        .icon-btn { font-size: 1rem; cursor: pointer; background: none; border: none; opacity: 0.4; transition: opacity 0.2s; }
-        .icon-btn:hover { opacity: 1; }
-        .has-files { color: var(--accent-primary); opacity: 1; }
+        .icon-btn { font-size: 1rem; cursor: pointer; background: none; border: none; opacity: 0.4; transition: opacity 0.2s; margin-left: 6px; }
+        .icon-btn:hover { opacity: 1; transform: scale(1.1); }
+        .has-data { color: var(--accent-primary); opacity: 1; }
 
-        /* MODAL */
-        #modal-overlay {
+        /* MODALS */
+        #modal-overlay, #log-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--modal-overlay); z-index: 2000; align-items: center; justify-content: center;
         }
         .modal-content {
             background: var(--bg-color); padding: 2rem; border-radius: 4px; width: 500px; max-width: 90%;
-            border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; max-height: 85vh;
         }
-        .modal-header { font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-        .file-list { margin-top: 1rem; border: 1px solid var(--border-color); padding: 0.5rem; min-height: 50px; border-radius: 4px; }
-        .file-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 4px; border-bottom: 1px solid var(--border-color); }
+        .modal-header { font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+        
+        .file-list, .log-list { margin-top: 1rem; border: 1px solid var(--border-color); padding: 0.5rem; min-height: 100px; max-height: 300px; overflow-y: auto; border-radius: 4px; background: var(--sidebar-bg); }
+        .file-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 6px; border-bottom: 1px solid var(--border-color); background: var(--bg-color); margin-bottom: 4px; }
+        
+        .log-entry { font-size: 0.8rem; padding: 8px; border-bottom: 1px solid var(--border-color); background: var(--bg-color); margin-bottom: 4px; }
+        .log-date { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
 
         /* UTILS */
         .btn-action {
@@ -219,6 +222,15 @@
             letter-spacing: 0.05em; transition: all 0.2s;
         }
         .btn-action:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+        .btn-small { padding: 4px 8px; font-size: 0.6rem; }
+
+        .link-btn {
+            font-family: var(--font-mono); font-size: 0.65rem; padding: 4px 8px;
+            background: var(--bg-color); border: 1px solid var(--border-color);
+            color: var(--text-main); text-decoration: none; display: inline-block;
+            border-radius: 2px;
+        }
+        .link-btn:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
 
         /* VERSION TAG */
         .version-tag {
@@ -243,24 +255,32 @@
 </head>
 <body data-mode="reader" data-theme="light">
 
-    <div class="version-tag">[ v5.0 ]</div>
+    <div class="version-tag">[ v6.0 ]</div>
 
     <div id="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header">EVIDENCE / FILES FOR: <span id="modal-org-name"></span></div>
-            <div style="margin-bottom: 1.5rem;">
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">
-                    Store links to your evidence (Drive/Dropbox) or local filenames.
-                </p>
+            <div class="modal-header"><span>EVIDENCE / FILES</span> <span style="cursor:pointer" onclick="closeModal()">✕</span></div>
+            <div style="flex:1;">
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Link to Drive/Dropbox or list local filenames.</p>
                 <div style="display:flex; gap:10px; margin-bottom:10px;">
-                    <input type="text" id="file-name-input" class="action-input" placeholder="Description (e.g. Draft v2)" style="border:1px solid var(--border-color);">
+                    <input type="text" id="file-name-input" class="action-input" placeholder="Name (e.g. Draft v2)" style="border:1px solid var(--border-color);">
                     <input type="text" id="file-link-input" class="action-input" placeholder="URL (Optional)" style="border:1px solid var(--border-color);">
                     <button class="btn-action" onclick="addFile()">ADD</button>
                 </div>
                 <div class="file-list" id="modal-file-list"></div>
             </div>
-            <div style="text-align: right;">
-                <button class="btn-action" onclick="closeModal()">CLOSE</button>
+        </div>
+    </div>
+
+    <div id="log-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><span>INTERACTION LOG</span> <span style="cursor:pointer" onclick="closeLog()">✕</span></div>
+            <div style="flex:1; display:flex; flex-direction:column;">
+                <div class="log-list" id="log-list-container"></div>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <input type="text" id="log-input" class="action-input" placeholder="Type update (e.g. 'Sent cold email')..." style="border:1px solid var(--border-color);">
+                    <button class="btn-action" onclick="addLog()">POST</button>
+                </div>
             </div>
         </div>
     </div>
@@ -280,11 +300,9 @@
                 <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
                 <span>EST. 2026 // MONTREAL</span>
             </div>
-
             <div class="mode-group">
                 <span class="toggle-btn active" style="cursor:default;">[ WORKBENCH ] <span>•</span></span>
             </div>
-            
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
@@ -296,17 +314,14 @@
                     <li><a href="videos.html">Videos</a></li>
                 </ul>
             </nav>
-            
-            <div class="theme-switch" onclick="toggleTheme()">
-                [ LIGHT / DARK ] <span id="theme-icon">◐</span>
-            </div>
+            <div class="theme-switch" onclick="toggleTheme()">[ LIGHT / DARK ] <span id="theme-icon">◐</span></div>
         </aside>
 
         <main>
             <div class="reader-header">
                 <div class="header-title">
                     <h1>Funding Command</h1>
-                    <span>INTERNAL OPS / v5.0</span>
+                    <span>INTERNAL OPS / v6.0</span>
                 </div>
                 <div class="header-meta">
                     <button class="btn-action" onclick="exportData()">↓ BACKUP DATA</button>
@@ -318,20 +333,16 @@
                 <div class="control-panel">
                     <div style="display:grid; grid-template-columns: 2fr 1fr; gap:2rem;">
                         <div>
-                            <textarea id="global-scratchpad" class="scratchpad" placeholder="Global Strategy Notes: e.g., 'Focus on NLnet for Jan, then Pivot to Bounties in Feb...'"></textarea>
+                            <textarea id="global-scratchpad" class="scratchpad" placeholder="Global Strategy Notes..."></textarea>
                         </div>
-                        <div class="stats-grid" id="stats-mount">
-                            </div>
+                        <div class="stats-grid" id="stats-mount"></div>
                     </div>
                 </div>
             </details>
 
             <details class="section-group" open>
                 <summary class="section-header">
-                    <div class="section-title">
-                        <span>🚀 SECTION A: ACTIVE OPS (HIGH PRIORITY)</span>
-                        <span class="section-count" id="count-a">0</span>
-                    </div>
+                    <div class="section-title"><span>🚀 SECTION A: ACTIVE OPS (HIGH PRIORITY)</span><span class="section-count" id="count-a">0</span></div>
                 </summary>
                 <div class="table-wrapper">
                     <table id="table-a">
@@ -340,9 +351,9 @@
                                 <th style="width:25%;">Target / Deadline</th>
                                 <th style="width:10%;">Type</th>
                                 <th style="width:15%;">Status</th>
-                                <th style="width:25%;">Next Action</th>
-                                <th>Notes</th>
-                                <th style="width:5%; text-align:center;">Files</th>
+                                <th style="width:20%;">Next Action</th>
+                                <th style="width:15%; text-align:center;">Tools</th>
+                                <th style="width:10%; text-align:right;">Link</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -352,10 +363,7 @@
 
             <details class="section-group" open>
                 <summary class="section-header">
-                    <div class="section-title">
-                        <span>🏴‍☠️ SECTION B: COMPETITIONS & BOUNTIES</span>
-                        <span class="section-count" id="count-b">0</span>
-                    </div>
+                    <div class="section-title"><span>🏴‍☠️ SECTION B: COMPETITIONS & BOUNTIES</span><span class="section-count" id="count-b">0</span></div>
                 </summary>
                 <div class="table-wrapper">
                     <table id="table-b">
@@ -364,9 +372,9 @@
                                 <th style="width:25%;">Target / Deadline</th>
                                 <th style="width:10%;">Type</th>
                                 <th style="width:15%;">Status</th>
-                                <th style="width:25%;">Next Action</th>
-                                <th>Notes</th>
-                                <th style="width:5%; text-align:center;">Files</th>
+                                <th style="width:20%;">Next Action</th>
+                                <th style="width:15%; text-align:center;">Tools</th>
+                                <th style="width:10%; text-align:right;">Link</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -376,10 +384,7 @@
 
             <details class="section-group">
                 <summary class="section-header">
-                    <div class="section-title">
-                        <span>📡 SECTION C: STRATEGIC MONITOR (ROLLING)</span>
-                        <span class="section-count" id="count-c">0</span>
-                    </div>
+                    <div class="section-title"><span>📡 SECTION C: STRATEGIC MONITOR</span><span class="section-count" id="count-c">0</span></div>
                 </summary>
                 <div class="table-wrapper">
                     <table id="table-c">
@@ -388,9 +393,9 @@
                                 <th style="width:25%;">Target / Deadline</th>
                                 <th style="width:10%;">Type</th>
                                 <th style="width:15%;">Status</th>
-                                <th style="width:25%;">Next Action</th>
-                                <th>Notes</th>
-                                <th style="width:5%; text-align:center;">Files</th>
+                                <th style="width:20%;">Next Action</th>
+                                <th style="width:15%; text-align:center;">Tools</th>
+                                <th style="width:10%; text-align:right;">Link</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -400,10 +405,7 @@
 
             <details class="section-group">
                 <summary class="section-header">
-                    <div class="section-title">
-                        <span>🗄️ SECTION D: LONG TAIL / ARCHIVE</span>
-                        <span class="section-count" id="count-d">0</span>
-                    </div>
+                    <div class="section-title"><span>🗄️ SECTION D: ARCHIVE</span><span class="section-count" id="count-d">0</span></div>
                 </summary>
                 <div class="table-wrapper">
                     <table id="table-d">
@@ -412,9 +414,9 @@
                                 <th style="width:25%;">Target / Deadline</th>
                                 <th style="width:10%;">Type</th>
                                 <th style="width:15%;">Status</th>
-                                <th style="width:25%;">Next Action</th>
-                                <th>Notes</th>
-                                <th style="width:5%; text-align:center;">Files</th>
+                                <th style="width:20%;">Next Action</th>
+                                <th style="width:15%; text-align:center;">Tools</th>
+                                <th style="width:10%; text-align:right;">Link</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -426,87 +428,74 @@
     </div>
 
     <script>
-      // --- APP LOGIC v5.0 ---
-      const DB_KEY = 'eairl_funding_v5';
-      const NOTES_KEY = 'eairl_funding_notes_v5';
+      const DB_KEY = 'eairl_funding_v6';
+      const NOTES_KEY = 'eairl_funding_notes_v6';
       
-      // FULL 25-ITEM DATASET
       const seedData = [
-        // SECTION A: ACTIVE (High Priority Grants)
-        { id: 1, section: 'A', name: "NLnet Foundation", type: "Grant", angle: "Infra", range: "€50K", deadline: "Feb 1st", status: "Identify", link: "https://nlnet.nl/commonsfund", action: "Draft Abstract", notes: "Top Priority.", files: [] },
-        { id: 2, section: 'A', name: "Emergent Ventures", type: "Grant", angle: "Safety", range: "$50K+", deadline: "Rolling", status: "Identify", link: "https://www.mercatus.org/emergent-ventures", action: "Write 1-pager", notes: "High upside.", files: [] },
-        { id: 3, section: 'A', name: "NRC IRAP (AI Assist)", type: "Grant", angle: "R&D", range: "$49K", deadline: "Rolling", status: "Identify", link: "https://nrc.canada.ca/en/support-technology-innovation", action: "Call Montreal Office", notes: "Use ARP strategy.", files: [] },
-        { id: 4, section: 'A', name: "Aligned Studies (ASF)", type: "Grant", angle: "Infra", range: "$50K", deadline: "Rolling", status: "Identify", link: "https://alignedstudies.com/apply", action: "", notes: "Independent researchers.", files: [] },
-        { id: 5, section: 'A', name: "Scale AI (Canada)", type: "Partner", angle: "Supply", range: "Var", deadline: "Rolling", status: "Identify", link: "https://www.scaleai.ca/", action: "Check eligibility", notes: "Montreal based.", files: [] },
-        
-        // SECTION B: COMPETITIONS (Prizes/Bounties)
-        { id: 6, section: 'B', name: "Martian Prize", type: "Prize", angle: "Prize", range: "High", deadline: "See Site", status: "Identify", link: "https://www.martian.org/", action: "Check specific bounties", notes: "Interpretability.", files: [] },
-        { id: 7, section: 'B', name: "Google AI VRP", type: "Bounty", angle: "Security", range: "Var", deadline: "Open", status: "Identify", link: "https://bughunters.google.com/", action: "Review scope", notes: "Attack mode.", files: [] },
-        { id: 8, section: 'B', name: "Microsoft AI Bounty", type: "Bounty", angle: "Security", range: "Var", deadline: "Open", status: "Identify", link: "https://www.microsoft.com/en-us/msrc/bounty", action: "Review scope", notes: "Zero Day Quest.", files: [] },
-        { id: 9, section: 'B', name: "AE Studio", type: "Contract", angle: "Safety", range: "$25K", deadline: "Rolling", status: "Identify", link: "https://research.ae.studio/", action: "", notes: "Neglected approaches.", files: [] },
-
-        // SECTION C: MONITOR (Strategic)
-        { id: 10, section: 'C', name: "AI Safety Campus", type: "Grant", angle: "Compute", range: "$30K", deadline: "Rolling", status: "Identify", link: "https://www.aisafety.campus/grants", action: "", notes: "Good for server costs.", files: [] },
-        { id: 11, section: 'C', name: "BlueDot Impact", type: "Grant", angle: "Gov", range: "$50K", deadline: "Check", status: "Identify", link: "https://www.aisafety.com/funding", action: "", notes: "Governance tools.", files: [] },
-        { id: 12, section: 'C', name: "Mozilla Tech Fund", type: "Grant", angle: "Infra", range: "$50K", deadline: "Closed", status: "Identify", link: "https://foundation.mozilla.org/en/", action: "", notes: "Watch for calls.", files: [] },
-        { id: 13, section: 'C', name: "Huberman Family", type: "Grant", angle: "Eval", range: "$75K", deadline: "Rolling", status: "Identify", link: "mailto:grants@huberman.org", action: "", notes: "Direct pitch.", files: [] },
-        { id: 14, section: 'C', name: "Cooperative AI", type: "Grant", angle: "Safety", range: "£50K", deadline: "Rolling", status: "Identify", link: "https://www.cooperativeai.com/grants", action: "", notes: "Multi-agent.", files: [] },
-        { id: 15, section: 'C', name: "SingularityNET", type: "Grant", angle: "Infra", range: "$40K", deadline: "Rounds", status: "Identify", link: "https://deepfunding.ai/", action: "", notes: "Deep funding.", files: [] },
-        { id: 16, section: 'C', name: "METR (ARC Evals)", type: "Contract", angle: "Eval", range: "Revenue", deadline: "N/A", status: "Identify", link: "https://metr.org/contact/", action: "", notes: "Sales pitch.", files: [] },
-
-        // SECTION D: LONG TAIL / ARCHIVE
-        { id: 17, section: 'D', name: "Coefficient Giving", type: "Grant", angle: "Safety", range: "Var", deadline: "Rolling", status: "Identify", link: "https://coefficientgiving.org/", action: "", notes: "", files: [] },
-        { id: 18, section: 'D', name: "FAR AI", type: "Grant", angle: "Research", range: "Var", deadline: "Rolling", status: "Identify", link: "https://far.ai/", action: "", notes: "Robustness.", files: [] },
-        { id: 19, section: 'D', name: "Future Fund", type: "Grant", angle: "Archive", range: "Paused", deadline: "N/A", status: "Identify", link: "https://ftx.com/foundation", action: "", notes: "Inactive.", files: [] },
-        { id: 20, section: 'D', name: "Lightcone Infra", type: "Grant", angle: "Infra", range: "$20K", deadline: "Rolling", status: "Identify", link: "https://www.lesswrong.com/", action: "", notes: "Community tools.", files: [] },
-        { id: 21, section: 'D', name: "Rethink Priorities", type: "Grant", angle: "Research", range: "Var", deadline: "Rolling", status: "Identify", link: "https://rethinkpriorities.org/", action: "", notes: "Welfare.", files: [] },
-        { id: 22, section: 'D', name: "QURI", type: "Grant", angle: "Research", range: "Var", deadline: "Rolling", status: "Identify", link: "https://quantifieduncertainty.org/", action: "", notes: "Forecasting.", files: [] },
-        { id: 23, section: 'D', name: "MIRI", type: "Grant", angle: "Math", range: "Var", deadline: "Rolling", status: "Identify", link: "https://intelligence.org/", action: "", notes: "Theory.", files: [] },
-        { id: 24, section: 'D', name: "SERI Microgrants", type: "Grant", angle: "Safety", range: "$5K", deadline: "Rolling", status: "Identify", link: "https://seri.stanford.edu/", action: "", notes: "Student.", files: [] },
-        { id: 25, section: 'D', name: "Patrick J. McGovern", type: "Grant", angle: "Gov", range: "Large", deadline: "Rolling", status: "Identify", link: "https://www.mcgovern.org/", action: "", notes: "Data sov.", files: [] }
+        // A
+        { id: 1, section: 'A', name: "NLnet Foundation", type: "Grant", angle: "Infra", range: "€50K", deadline: "Feb 1st", status: "Identify", link: "https://nlnet.nl/commonsfund", action: "Draft Abstract", history: [], files: [] },
+        { id: 2, section: 'A', name: "Emergent Ventures", type: "Grant", angle: "Safety", range: "$50K+", deadline: "Rolling", status: "Identify", link: "https://www.mercatus.org/emergent-ventures", action: "Write 1-pager", history: [], files: [] },
+        { id: 3, section: 'A', name: "NRC IRAP (AI Assist)", type: "Grant", angle: "R&D", range: "$49K", deadline: "Rolling", status: "Identify", link: "https://nrc.canada.ca/en/support-technology-innovation", action: "Call Montreal Office", history: [], files: [] },
+        { id: 4, section: 'A', name: "Aligned Studies (ASF)", type: "Grant", angle: "Infra", range: "$50K", deadline: "Rolling", status: "Identify", link: "https://alignedstudies.com/apply", action: "", history: [], files: [] },
+        { id: 5, section: 'A', name: "Scale AI (Canada)", type: "Partner", angle: "Supply", range: "Var", deadline: "Rolling", status: "Identify", link: "https://www.scaleai.ca/", action: "Check eligibility", history: [], files: [] },
+        // B
+        { id: 6, section: 'B', name: "Martian Prize", type: "Prize", angle: "Prize", range: "High", deadline: "See Site", status: "Identify", link: "https://www.martian.org/", action: "Check specific bounties", history: [], files: [] },
+        { id: 7, section: 'B', name: "Google AI VRP", type: "Bounty", angle: "Security", range: "Var", deadline: "Open", status: "Identify", link: "https://bughunters.google.com/", action: "Review scope", history: [], files: [] },
+        { id: 8, section: 'B', name: "Microsoft AI Bounty", type: "Bounty", angle: "Security", range: "Var", deadline: "Open", status: "Identify", link: "https://www.microsoft.com/en-us/msrc/bounty", action: "Review scope", history: [], files: [] },
+        { id: 9, section: 'B', name: "AE Studio", type: "Contract", angle: "Safety", range: "$25K", deadline: "Rolling", status: "Identify", link: "https://research.ae.studio/", action: "", history: [], files: [] },
+        // C
+        { id: 10, section: 'C', name: "AI Safety Campus", type: "Grant", angle: "Compute", range: "$30K", deadline: "Rolling", status: "Identify", link: "https://www.aisafety.campus/grants", action: "", history: [], files: [] },
+        { id: 11, section: 'C', name: "BlueDot Impact", type: "Grant", angle: "Gov", range: "$50K", deadline: "Check", status: "Identify", link: "https://www.aisafety.com/funding", action: "", history: [], files: [] },
+        { id: 12, section: 'C', name: "Mozilla Tech Fund", type: "Grant", angle: "Infra", range: "$50K", deadline: "Closed", status: "Identify", link: "https://foundation.mozilla.org/en/", action: "", history: [], files: [] },
+        { id: 13, section: 'C', name: "Huberman Family", type: "Grant", angle: "Eval", range: "$75K", deadline: "Rolling", status: "Identify", link: "mailto:grants@huberman.org", action: "", history: [], files: [] },
+        { id: 14, section: 'C', name: "Cooperative AI", type: "Grant", angle: "Safety", range: "£50K", deadline: "Rolling", status: "Identify", link: "https://www.cooperativeai.com/grants", action: "", history: [], files: [] },
+        { id: 15, section: 'C', name: "SingularityNET", type: "Grant", angle: "Infra", range: "$40K", deadline: "Rounds", status: "Identify", link: "https://deepfunding.ai/", action: "", history: [], files: [] },
+        { id: 16, section: 'C', name: "METR (ARC Evals)", type: "Contract", angle: "Eval", range: "Revenue", deadline: "N/A", status: "Identify", link: "https://metr.org/contact/", action: "", history: [], files: [] },
+        // D
+        { id: 17, section: 'D', name: "Coefficient Giving", type: "Grant", angle: "Safety", range: "Var", deadline: "Rolling", status: "Identify", link: "https://coefficientgiving.org/", action: "", history: [], files: [] },
+        { id: 18, section: 'D', name: "FAR AI", type: "Grant", angle: "Research", range: "Var", deadline: "Rolling", status: "Identify", link: "https://far.ai/", action: "", history: [], files: [] },
+        { id: 19, section: 'D', name: "Future Fund", type: "Grant", angle: "Archive", range: "Paused", deadline: "N/A", status: "Identify", link: "https://ftx.com/foundation", action: "", history: [], files: [] },
+        { id: 20, section: 'D', name: "Lightcone Infra", type: "Grant", angle: "Infra", range: "$20K", deadline: "Rolling", status: "Identify", link: "https://www.lesswrong.com/", action: "", history: [], files: [] },
+        { id: 21, section: 'D', name: "Rethink Priorities", type: "Grant", angle: "Research", range: "Var", deadline: "Rolling", status: "Identify", link: "https://rethinkpriorities.org/", action: "", history: [], files: [] },
+        { id: 22, section: 'D', name: "QURI", type: "Grant", angle: "Research", range: "Var", deadline: "Rolling", status: "Identify", link: "https://quantifieduncertainty.org/", action: "", history: [], files: [] },
+        { id: 23, section: 'D', name: "MIRI", type: "Grant", angle: "Math", range: "Var", deadline: "Rolling", status: "Identify", link: "https://intelligence.org/", action: "", history: [], files: [] },
+        { id: 24, section: 'D', name: "SERI Microgrants", type: "Grant", angle: "Safety", range: "$5K", deadline: "Rolling", status: "Identify", link: "https://seri.stanford.edu/", action: "", history: [], files: [] },
+        { id: 25, section: 'D', name: "Patrick J. McGovern", type: "Grant", angle: "Gov", range: "Large", deadline: "Rolling", status: "Identify", link: "https://www.mcgovern.org/", action: "", history: [], files: [] }
       ];
 
       let db = [];
       let currentModalId = null;
 
       function initApp() {
-          // Load DB
           const saved = localStorage.getItem(DB_KEY);
           if (saved) {
               db = JSON.parse(saved);
-              // Ensure all items have section tags
-              if(!db[0].section) {
-                  console.log("Migrating data...");
-                  db = seedData; // Reset if schema mismatch on first v5 load
-                  save();
-              }
+              db.forEach(item => { 
+                  if(!item.history) item.history = []; 
+                  if(!item.files) item.files = [];
+              });
           } else {
               db = seedData;
               save();
           }
-
-          // Load Global Notes
           const savedNotes = localStorage.getItem(NOTES_KEY);
           if (savedNotes) document.getElementById('global-scratchpad').value = savedNotes;
-
           renderTables();
           renderStats();
       }
 
       function renderTables() {
-          // Clear all tables
           ['a', 'b', 'c', 'd'].forEach(sec => {
               document.getElementById(`table-${sec}`).querySelector('tbody').innerHTML = '';
               document.getElementById(`count-${sec}`).innerText = db.filter(i => i.section === sec.toUpperCase()).length;
           });
 
-          // Render Rows
           db.forEach(item => {
               const tbody = document.getElementById(`table-${item.section.toLowerCase()}`).querySelector('tbody');
               const tr = document.createElement('tr');
               tr.innerHTML = `
                   <td>
-                      <a href="${item.link}" target="_blank" class="org-name">${item.name}</a>
+                      <span class="org-name">${item.name}</span>
                       <span class="deadline-tag">Due: ${item.deadline}</span>
                   </td>
                   <td><span class="badge ${getTypeClass(item.type)}">${item.type}</span></td>
@@ -514,15 +503,19 @@
                       <select class="status-select ${getStatusClass(item.status)}" onchange="updateRow(${item.id}, 'status', this.value)">
                           <option value="Identify" ${item.status === 'Identify' ? 'selected' : ''}>Identify</option>
                           <option value="Drafting" ${item.status === 'Drafting' ? 'selected' : ''}>Drafting</option>
+                          <option value="Outreach" ${item.status === 'Outreach' ? 'selected' : ''}>Outreach</option>
                           <option value="Submitted" ${item.status === 'Submitted' ? 'selected' : ''}>Submitted</option>
                           <option value="Won" ${item.status === 'Won' ? 'selected' : ''}>Won</option>
                           <option value="Rejected" ${item.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
                       </select>
                   </td>
                   <td><input type="text" class="action-input" value="${item.action || ''}" onchange="updateRow(${item.id}, 'action', this.value)" placeholder="Next Step..."></td>
-                  <td><input type="text" class="action-input" value="${item.notes || ''}" onchange="updateRow(${item.id}, 'notes', this.value)" placeholder="Notes..."></td>
                   <td style="text-align:center;">
-                      <button class="icon-btn ${item.files.length > 0 ? 'has-files' : ''}" onclick="openModal(${item.id})">📎 ${item.files.length || ''}</button>
+                      <button class="icon-btn ${item.history.length > 0 ? 'has-data' : ''}" onclick="openLog(${item.id})" title="History Log">📝</button>
+                      <button class="icon-btn ${item.files.length > 0 ? 'has-data' : ''}" onclick="openModal(${item.id})" title="Files">📎</button>
+                  </td>
+                  <td style="text-align:right;">
+                      <a href="${item.link}" target="_blank" class="link-btn">↗ OPEN</a>
                   </td>
               `;
               tbody.appendChild(tr);
@@ -532,14 +525,14 @@
       function renderStats() {
           const total = db.length;
           const drafting = db.filter(i => i.status === 'Drafting').length;
+          const outreach = db.filter(i => i.status === 'Outreach').length;
           const submitted = db.filter(i => i.status === 'Submitted').length;
-          const won = db.filter(i => i.status === 'Won').length;
 
           document.getElementById('stats-mount').innerHTML = `
               <div class="stat-box"><span class="stat-label">Total Targets</span><span class="stat-num">${total}</span></div>
               <div class="stat-box" style="border-color:#b45309; background:rgba(180,83,9,0.05);"><span class="stat-label" style="color:#b45309">Drafting</span><span class="stat-num" style="color:#b45309">${drafting}</span></div>
+              <div class="stat-box" style="border-color:#0044cc; background:rgba(0,68,204,0.05);"><span class="stat-label" style="color:#0044cc">Outreach</span><span class="stat-num" style="color:#0044cc">${outreach}</span></div>
               <div class="stat-box"><span class="stat-label">Submitted</span><span class="stat-num">${submitted}</span></div>
-              <div class="stat-box"><span class="stat-label" style="color:#00cc00">Won</span><span class="stat-num" style="color:#00cc00">${won}</span></div>
           `;
       }
 
@@ -551,6 +544,7 @@
 
       function getStatusClass(s) {
           if(s === 'Drafting') return 'st-pitching';
+          if(s === 'Outreach') return 'st-outreach';
           if(s === 'Submitted') return 'st-submitted';
           if(s === 'Won') return 'st-won';
           if(s === 'Rejected') return 'st-rejected';
@@ -564,12 +558,40 @@
           return 'badge-contract';
       }
 
-      // --- SCRATCHPAD ---
       document.getElementById('global-scratchpad').addEventListener('input', function(e) {
           localStorage.setItem(NOTES_KEY, e.target.value);
       });
 
-      // --- MODAL ---
+      // --- LOG MODAL ---
+      function openLog(id) {
+          currentModalId = id;
+          document.getElementById('log-overlay').style.display = 'flex';
+          renderLog();
+      }
+      function closeLog() { document.getElementById('log-overlay').style.display = 'none'; }
+      function renderLog() {
+          const item = db.find(i => i.id === currentModalId);
+          const list = document.getElementById('log-list-container');
+          list.innerHTML = item.history.map(h => `
+              <div class="log-entry">
+                  <span class="log-date">${h.date}</span>
+                  ${h.text}
+              </div>
+          `).join('') || '<div style="color:var(--text-muted); font-style:italic; padding:10px;">No logs yet.</div>';
+      }
+      function addLog() {
+          const input = document.getElementById('log-input');
+          if(!input.value) return;
+          const item = db.find(i => i.id === currentModalId);
+          const date = new Date().toLocaleString();
+          item.history.unshift({ date: date, text: input.value });
+          save();
+          input.value = '';
+          renderLog();
+          renderTables();
+      }
+
+      // --- FILE MODAL ---
       function openModal(id) {
           currentModalId = id;
           const item = db.find(i => i.id === id);
@@ -578,17 +600,15 @@
           renderFileList(item);
       }
       function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
-      
       function renderFileList(item) {
           const list = document.getElementById('modal-file-list');
           list.innerHTML = item.files.map((f, index) => `
               <div class="file-item">
-                  <span>${f.link ? `<a href="${f.link}" target="_blank" style="color:var(--accent-primary);">${f.name} ↗</a>` : f.name}</span>
+                  <span>${f.link ? `<a href="${f.link}" target="_blank" style="color:var(--accent-primary); text-decoration:none;">${f.name} ↗</a>` : f.name}</span>
                   <span style="color:red; cursor:pointer;" onclick="deleteFile(${item.id}, ${index})">×</span>
               </div>
-          `).join('') || '<div style="color:var(--text-muted); font-style:italic;">No evidence linked yet.</div>';
+          `).join('') || '<div style="color:var(--text-muted); font-style:italic;">No files linked yet.</div>';
       }
-
       function addFile() {
           const name = document.getElementById('file-name-input').value;
           const link = document.getElementById('file-link-input').value;
@@ -601,7 +621,6 @@
           renderFileList(item);
           renderTables();
       }
-
       function deleteFile(id, idx) {
           const item = db.find(i => i.id === id);
           item.files.splice(idx, 1);
@@ -610,17 +629,15 @@
           renderTables();
       }
 
-      // --- CORE ---
       function save() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
       
       function exportData() {
           const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
           const a = document.createElement('a');
-          a.href = dataStr; a.download = "funding_v5_backup.json";
+          a.href = dataStr; a.download = "funding_v6_backup.json";
           a.click(); a.remove();
       }
 
-      // --- THEME & INIT ---
       function toggleTheme() {
           const current = document.body.getAttribute('data-theme') || 'light';
           const next = (current === 'dark') ? 'light' : 'dark';
@@ -630,25 +647,6 @@
       const savedTheme = localStorage.getItem('theme') || 'light';
       document.body.setAttribute('data-theme', savedTheme);
 
-      // Scramble
-      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-      function scrambleText(element) {
-          let iterations = 0; const originalText = element.innerText; 
-          if(element.interval) clearInterval(element.interval);
-          element.interval = setInterval(() => {
-              element.innerText = originalText.split("").map((letter, index) => {
-                  if(index < iterations) return originalText[index];
-                  return letters[Math.floor(Math.random() * 26)];
-              }).join("");
-              if(iterations >= originalText.length) clearInterval(element.interval);
-              iterations += 1 / 3;
-          }, 30);
-      }
-      document.querySelectorAll(".scramble").forEach(h => {
-          h.addEventListener("mouseover", event => scrambleText(event.target));
-      });
-
-      // Mobile Menu
       document.addEventListener("click", (e) => {
           if (window.innerWidth > 900) return;
           const sidebar = document.getElementById("sidebar");
