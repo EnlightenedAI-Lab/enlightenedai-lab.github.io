@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Funding Command | Secure v7.2</title>
+    <title>Funding Command | Secure v7.3</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,12 +19,14 @@
             --type-prize: #dcfce7; --text-prize: #15803d;
             --type-bounty: #fee2e2; --text-bounty: #b91c1c;
             --type-contract: #fef3c7; --text-contract: #b45309;
+            --type-accel: #f3e8ff; --text-accel: #6b21a8;
         }
         body[data-theme="dark"] {
             --bg-color: #0a0a0a; --sidebar-bg: #0a0a0a; --text-main: #f0f0f0; --text-muted: #888888;
             --border-color: #333333; --accent-primary: #66aaff;
             --type-grant: #0c4a6e; --text-grant: #7dd3fc; --type-prize: #052e16; --text-prize: #86efac;
             --type-bounty: #450a0a; --text-bounty: #fca5a5; --type-contract: #451a03; --text-contract: #fcd34d;
+            --type-accel: #3b0764; --text-accel: #d8b4fe;
         }
         
         * { box-sizing: border-box; }
@@ -67,6 +69,7 @@
         .badge-prize { background: var(--type-prize); color: var(--text-prize); }
         .badge-bounty { background: var(--type-bounty); color: var(--text-bounty); }
         .badge-contract { background: var(--type-contract); color: var(--text-contract); }
+        .badge-accel { background: var(--type-accel); color: var(--text-accel); }
         
         .status-select, .action-input { background: transparent; border: 1px solid transparent; color: var(--text-main); font-family: inherit; font-size: 0.8rem; padding: 4px; width: 100%; }
         .status-select:hover, .action-input:hover { border-color: var(--border-color); background: var(--bg-color); }
@@ -116,7 +119,7 @@
         </div>
     </div>
 
-    <div class="version-tag">[ v7.2 ]</div>
+    <div class="version-tag">[ v7.3 ]</div>
 
     <div class="layout-wrapper" id="app-wrapper">
         <aside>
@@ -156,7 +159,7 @@
 
     <div id="log-overlay">
         <div class="modal-content">
-            <div class="modal-header"><span>LOG</span> <span style="cursor:pointer" onclick="closeModal()">✕</span></div>
+            <div class="modal-header"><span>LOG</span> <span style="cursor:pointer" onclick="closeLog()">✕</span></div>
             <div style="flex:1; display:flex; flex-direction:column;">
                 <div class="log-list" id="log-list-container"></div>
                 <div style="display:flex; gap:10px; margin-top:10px;">
@@ -183,8 +186,8 @@
             <div class="modal-header"><span>EVIDENCE / FILES</span> <span style="cursor:pointer" onclick="closeModal()">✕</span></div>
             <div style="flex:1;">
                 <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">
-                    <strong>Option A:</strong> Paste a Google Drive / Dropbox link (Recommended).<br>
-                    <strong>Option B:</strong> Click "Paste App Text" to store the text here.
+                    <strong>Option A:</strong> Paste a Drive/Dropbox link.<br>
+                    <strong>Option B:</strong> Click "Paste / View" to store text directly here.
                 </p>
                 <div style="display:flex; gap:10px; margin-bottom:10px;">
                     <input type="text" id="file-name-input" class="action-input" placeholder="Name" style="border:1px solid var(--border-color);">
@@ -213,8 +216,9 @@
             { id: 8, sec: 'B', name: "Microsoft AI Bounty", type: "Bounty", deadline: "Open", status: "Identify", notes: "Zero Day Quest" },
             { id: 9, sec: 'B', name: "AE Studio", type: "Contract", deadline: "Rolling", status: "Identify", notes: "Neglected approaches" },
 
-            // C: SUBMITTED (FORESIGHT ADDED)
-            { id: 99, sec: 'C', name: "Foresight Institute", type: "Grant", deadline: "Rolling", status: "Submitted", notes: "Applied with alignment instrumentation. Archived." },
+            // C: SUBMITTED (Added NextAI here)
+            { id: 99, sec: 'C', name: "Foresight Institute", type: "Grant", deadline: "Submitted", status: "Submitted", notes: "Applied Dec 29. Archived." },
+            { id: 98, sec: 'C', name: "NextAI (Next Canada)", type: "Accel", deadline: "Submitted", status: "Submitted", notes: "Application submitted.", link: "https://www.nextcanada.com/next-ai" },
 
             // D: MONITOR
             { id: 10, sec: 'D', name: "BlueDot Impact", type: "Grant", deadline: "Check", status: "Identify", notes: "Governance" },
@@ -255,7 +259,7 @@
         });
 
         function initApp() {
-            const saved = localStorage.getItem('eairl_db_v7_2');
+            const saved = localStorage.getItem('eairl_db_v7_3');
             db = saved ? JSON.parse(saved) : seedData;
             db.forEach(i => { if(!i.logs) i.logs = []; if(!i.files) i.files = []; });
             render();
@@ -296,7 +300,7 @@
                                                 <option ${i.status === 'Won' ? 'selected' : ''}>Won</option>
                                             </select>
                                         </td>
-                                        <td><input class="action-input" value="${i.notes}" onchange="update(${i.id}, 'notes', this.value)"></td>
+                                        <td><input class="action-input" value="${i.notes || ''}" onchange="update(${i.id}, 'notes', this.value)"></td>
                                         <td style="text-align:center;">
                                             <button class="icon-btn ${i.logs.length > 0 ? 'has-data' : ''}" onclick="openLog(${i.id})">📝</button>
                                             <button class="icon-btn ${i.files.length > 0 ? 'has-data' : ''}" onclick="openModal(${i.id})">📎</button>
@@ -411,7 +415,7 @@
         }
         function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; document.getElementById('content-overlay').style.display = 'none'; }
 
-        function save() { localStorage.setItem('eairl_db_v7_2', JSON.stringify(db)); }
+        function save() { localStorage.setItem('eairl_db_v7_3', JSON.stringify(db)); }
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
             const a = document.createElement('a'); a.href = dataStr; a.download = "funding_backup.json"; a.click(); a.remove();
