@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funding Pipeline | Enlightened AI</title>
+    <title>Funding Workbench | Enlightened AI</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,12 +25,12 @@
             
             /* SIGNALS */
             --status-verified: #00cc00;
-            --signal-blue: #0066ff;
             --accent-primary: #0044cc;
             
             /* INTERACTIVE ELEMENTS */
             --input-bg: #fff;
             --select-bg: #f8f9fa;
+            --modal-overlay: rgba(0,0,0,0.4);
         }
 
         /* --- DARK MODE OVERRIDES --- */
@@ -43,6 +43,7 @@
             --accent-primary: #66aaff;
             --input-bg: #111;
             --select-bg: #151515;
+            --modal-overlay: rgba(0,0,0,0.8);
         }
         body[data-theme="dark"] aside { background-color: #0a0a0a; border-right-color: #333; }
         body[data-theme="dark"] .mobile-bar { background: rgba(10,10,10,0.95); border-bottom-color: #333; }
@@ -51,12 +52,11 @@
         body[data-theme="dark"] nav a.active { color: #fff; border-left-color: #fff; background: linear-gradient(90deg, #151515, #0a0a0a); }
         body[data-theme="dark"] nav a:hover { color: #fff; }
         body[data-theme="dark"] .toggle-btn:hover, body[data-theme="dark"] .toggle-btn.active { color: #fff; }
-        body[data-theme="dark"] .force-card { background: #111; border-color: #333; }
         body[data-theme="dark"] p { color: #ccc; }
         body[data-theme="dark"] h1, body[data-theme="dark"] h2 { color: #fff; }
-        body[data-theme="dark"] .val { color: #fff; }
         body[data-theme="dark"] th { background: #111; color: #fff; border-bottom-color: #333; }
         body[data-theme="dark"] td { border-bottom-color: #333; }
+        body[data-theme="dark"] .modal-content { background: #111; border-color: #333; }
 
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -109,28 +109,11 @@
         /* --- MAIN CONTENT --- */
         main { flex-grow: 1; padding: 3rem 4rem; max-width: 1400px; width: 100%; }
         
-        /* HEADER */
-        .reader-header { border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 2.5rem; }
-        .header-top-row { display: flex; align-items: center; gap: 3rem; margin-bottom: 1rem; font-family: var(--font-mono); }
-        .meta-item { display: flex; flex-direction: column; gap: 4px; }
-        .label { font-size: 0.6rem; letter-spacing: 0.05em; color: #999; text-transform: uppercase; }
-        .val { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
-        .integrity-seal { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.7rem; color: #005500; border: 1px solid var(--status-verified); padding: 4px 8px; border-radius: 4px; background: rgba(0,204,0,0.05); cursor: default; }
-        .status-dot { width: 8px; height: 8px; background: var(--status-verified); border-radius: 50%; display: block; }
-        .orienting-sentence { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9; }
-
         /* TYPOGRAPHY */
         h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1.5rem; line-height: 1.1; text-transform: uppercase; }
         h2 { font-size: 1.1rem; font-weight: 700; margin-top: 4rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
         .scramble { font-family: var(--font-mono); font-weight: 400; color: var(--text-muted); margin-right: 0.75rem; cursor: crosshair; }
         p { margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.95rem; }
-
-        /* STRATEGY CARDS */
-        .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 2rem; }
-        .force-card { border: 1px solid var(--border-color); padding: 1.25rem; background: #fff; height: 100%; display: flex; flex-direction: column; }
-        .force-id { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-primary); font-weight: 700; display:block; margin-bottom: 0.5rem; }
-        .force-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; }
-        .force-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; flex-grow: 1; }
 
         /* --- INTERACTIVE DATA TABLE --- */
         .table-wrapper { overflow-x: auto; margin-bottom: 4rem; }
@@ -138,6 +121,9 @@
         th { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); padding: 12px 8px; border-bottom: 2px solid var(--border-color); font-weight: 700; background: var(--sidebar-bg); }
         td { padding: 16px 8px; border-bottom: 1px solid var(--border-color); vertical-align: top; color: var(--text-main); }
         
+        /* Number Column */
+        .col-id { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); width: 40px; text-align: center; }
+
         /* Interactive Inputs */
         .status-select {
             background: var(--select-bg); border: 1px solid var(--border-color); color: var(--text-main);
@@ -161,17 +147,31 @@
         .notes-input:focus { border-color: var(--accent-primary); border-bottom-style: solid; outline: none; background: var(--select-bg); }
         .notes-input::placeholder { font-style: italic; color: var(--text-muted); opacity: 0.5; }
 
-        .apply-link { 
-            font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-primary); 
-            text-decoration: none; border-bottom: 1px solid transparent; 
-        }
-        .apply-link:hover { border-bottom-color: var(--accent-primary); }
+        .icon-btn { font-size: 1rem; cursor: pointer; background: none; border: none; opacity: 0.6; transition: opacity 0.2s; }
+        .icon-btn:hover { opacity: 1; }
+        .has-files { color: var(--accent-primary); opacity: 1; }
 
         .stats-bar {
             display: flex; gap: 2rem; font-family: var(--font-mono); font-size: 0.75rem; 
             margin-bottom: 2rem; padding: 1rem; border: 1px solid var(--border-color); background: var(--sidebar-bg);
         }
         .stat-val { font-weight: 700; color: var(--text-main); }
+
+        /* MODAL */
+        #modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--modal-overlay); z-index: 2000; align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: var(--bg-color); padding: 2rem; border-radius: 4px; width: 500px; max-width: 90%;
+            border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .modal-header { font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        .modal-body { margin-bottom: 1.5rem; }
+        .modal-footer { text-align: right; }
+        .file-list { margin-top: 1rem; border: 1px solid var(--border-color); padding: 0.5rem; min-height: 50px; border-radius: 4px; }
+        .file-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 4px; border-bottom: 1px solid var(--border-color); }
+        .file-item:last-child { border-bottom: none; }
 
         /* UTILS */
         .btn-action {
@@ -192,15 +192,36 @@
             aside.open { transform: translateX(0); }
             main { padding: 1.5rem; margin-top: 50px; width: 100%; max-width: 100vw; }
             section { margin-bottom: 4rem; grid-template-columns: 1fr !important; }
-            .header-top-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .integrity-seal { margin-left: 0; }
             th { display: none; }
             td { display: block; padding: 8px 0; border: none; }
             tr { display: block; border: 1px solid var(--border-color); margin-bottom: 1rem; padding: 1rem; }
+            .col-id { text-align: left; font-weight: 700; margin-bottom: 4px; }
         }
     </style>
 </head>
 <body data-mode="reader" data-theme="light">
+
+    <div id="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">ATTACHMENTS FOR: <span id="modal-org-name"></span></div>
+            <div class="modal-body">
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">
+                    Since this is an offline tool, files are not hosted on a server. 
+                    <strong>Enter the filename or paste your Drive/Dropbox link here to track it.</strong>
+                </p>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <input type="text" id="file-name-input" class="notes-input" placeholder="Filename (e.g. Application_v1.pdf)" style="border:1px solid var(--border-color);">
+                    <input type="text" id="file-link-input" class="notes-input" placeholder="Link URL (Optional)" style="border:1px solid var(--border-color);">
+                    <button class="btn-action" onclick="addFile()">ADD</button>
+                </div>
+                <div class="file-list" id="modal-file-list">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-action" onclick="closeModal()">CLOSE</button>
+            </div>
+        </div>
+    </div>
 
     <header class="mobile-bar">
         <div class="mobile-brand">ENLIGHTENED AI</div>
@@ -242,27 +263,9 @@
         </aside>
 
         <main>
-            <div class="reader-header">
-                <div class="header-top-row">
-                    <div class="meta-item">
-                        <span class="label">DOC_ID</span>
-                        <span class="val">EAIRL-FUNDING-001</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="label">CLASSIFICATION</span>
-                        <span class="val">INTERNAL / STRATEGIC</span>
-                    </div>
-                    <div class="integrity-seal">
-                        <span class="status-dot"></span>
-                        <span style="font-family:var(--font-mono); font-size:0.7rem; color:#005500;">INTEGRITY: VERIFIED</span>
-                    </div>
-                </div>
-                <div class="orienting-sentence">THIS DOCUMENT IS AN ACTIVE WORKBENCH FOR TRACKING FUNDING PIPELINES.</div>
-            </div>
-
             <div style="max-width: 800px; margin-bottom: 2rem;">
-                <h1>Funding Pipeline</h1>
-                <p>This is the master control plane for funding operations. Data entered here is stored locally in your browser.</p>
+                <h1>Funding Workbench</h1>
+                <p>Internal tool for tracking R&D grant pipelines. Data persists locally.</p>
             </div>
 
             <div class="stats-bar" id="stats-mount">
@@ -271,45 +274,26 @@
 
             <section>
                 <h2>
-                    <span><span class="scramble">01 //</span> Active Pipeline</span>
-                    <button class="btn-action" onclick="exportData()">↓ Download Data</button>
+                    <span><span class="scramble">01 //</span> Master Index</span>
+                    <button class="btn-action" onclick="exportData()">↓ Backup Data</button>
                 </h2>
                 
                 <div class="table-wrapper">
                     <table>
                         <thead>
                             <tr>
+                                <th class="col-id">#</th>
                                 <th style="width:25%;">Organization</th>
                                 <th style="width:15%;">Range / Type</th>
-                                <th style="width:18%;">Status (Pipeline)</th>
-                                <th>Notes / Next Step</th>
-                                <th style="width:8%;">Link</th>
+                                <th style="width:18%;">Status</th>
+                                <th>Notes</th>
+                                <th style="width:5%; text-align:center;">Files</th>
+                                <th style="width:8%; text-align:right;">Link</th>
                             </tr>
                         </thead>
                         <tbody id="table-body">
                             </tbody>
                     </table>
-                </div>
-            </section>
-
-            <section>
-                <h2><span class="scramble">02 //</span> Priority Strategy</h2>
-                <div class="theory-grid">
-                    <div class="force-card">
-                        <span class="force-id">PRIORITY: HIGH</span>
-                        <div class="force-title">NLnet Foundation</div>
-                        <div class="force-desc">Best for "Open Source Infrastructure." Frame the dashboard as public utility.</div>
-                    </div>
-                    <div class="force-card">
-                        <span class="force-id">PRIORITY: HIGH</span>
-                        <div class="force-title">Emergent Ventures</div>
-                        <div class="force-desc">Best for "High-Agency/Unconventional Ideas." Frame RAA/RDL as a high-upside bet.</div>
-                    </div>
-                    <div class="force-card">
-                        <span class="force-id">PRIORITY: HIGH</span>
-                        <div class="force-title">NRC IRAP (AI Assist)</div>
-                        <div class="force-desc"><strong>Quebec Region.</strong> R&D Validation (<$50k ARP). Best for finishing the prototype.</div>
-                    </div>
                 </div>
             </section>
 
@@ -326,46 +310,49 @@
         });
 
       // --- APP LOGIC ---
-      const DB_KEY = 'eairl_funding_v1';
+      const DB_KEY = 'eairl_funding_master_v21';
       
       const seedData = [
-        // TOP PRIORITY
-        { id: 1, name: "NLnet Foundation (NGI Zero)", type: "Foundation", range: "€5K–€50K", status: "Identify", link: "https://nlnet.nl/commonsfund", notes: "Top Priority. Focus on public utility." },
-        { id: 2, name: "Emergent Ventures", type: "Foundation", range: "$10K–$50K+", status: "Identify", link: "https://www.mercatus.org/emergent-ventures", notes: "Write 1-pager. 'Outlier' ideas." },
-        { id: 3, name: "NRC IRAP (AI Assist)", type: "Gov / R&D", range: "$20K–$49K", status: "Identify", link: "https://nrc.canada.ca/en/support-technology-innovation", notes: "Call Montreal Office (514-496-6100)." },
-        { id: 4, name: "Aligned Studies (ASF)", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://alignedstudies.com/apply", notes: "Infrastructure & specs focus." },
-        { id: 5, name: "AI Safety Campus", type: "Regrantor", range: "$1K–$30K", status: "Identify", link: "https://www.aisafety.campus/grants", notes: "Fast agile grant for compute." },
-        { id: 6, name: "AE Studio", type: "Private", range: "$10K–$25K", status: "Identify", link: "https://research.ae.studio/", notes: "Pitch 'neglected approaches'." },
-        { id: 7, name: "BlueDot Impact", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://www.aisafety.com/funding", notes: "Governance/Strategy tools." },
+        // PRIORITY (1-6)
+        { id: 1, name: "NLnet Foundation", type: "Foundation", range: "€5K–€50K", status: "Identify", link: "https://nlnet.nl/commonsfund", notes: "Top Priority. Focus on public utility tools.", files: [] },
+        { id: 2, name: "Emergent Ventures", type: "Foundation", range: "$10K–$50K+", status: "Identify", link: "https://www.mercatus.org/emergent-ventures", notes: "Write 1-pager. 'Outlier' ideas.", files: [] },
+        { id: 3, name: "NRC IRAP (AI Assist)", type: "Gov / R&D", range: "$20K–$49K", status: "Identify", link: "https://nrc.canada.ca/en/support-technology-innovation", notes: "Call Montreal Office (514-496-6100).", files: [] },
+        { id: 4, name: "Aligned Studies (ASF)", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://alignedstudies.com/apply", notes: "Wants infrastructure & specs.", files: [] },
+        { id: 5, name: "AI Safety Campus", type: "Regrantor", range: "$1K–$30K", status: "Identify", link: "https://www.aisafety.campus/grants", notes: "Fast agile grant for compute.", files: [] },
+        { id: 6, name: "AE Studio", type: "Private", range: "$10K–$25K", status: "Identify", link: "https://research.ae.studio/", notes: "Pitch 'neglected approaches'.", files: [] },
         
-        // MEDIUM / NICHE
-        { id: 8, name: "Huberman Family Fund", type: "Foundation", range: "$25K–$75K", status: "Monitor", link: "mailto:grants@huberman.org", notes: "Needs direct email pitch." },
-        { id: 9, name: "Mozilla Tech Fund", type: "Foundation", range: "$50K", status: "Monitor", link: "https://foundation.mozilla.org/en/what-we-fund/technologies/", notes: "Watch for audit tool calls." },
-        { id: 10, name: "Cooperative AI", type: "Foundation", range: "£20K–£50K", status: "Monitor", link: "https://www.cooperativeai.com/grants", notes: "Multi-agent cooperation." },
-        { id: 11, name: "SingularityNET (Deep)", type: "DAO", range: "~$40K", status: "Monitor", link: "https://deepfunding.ai/all-rfps/", notes: "Neural-symbolic focus." },
-        { id: 12, name: "METR (ARC Evals)", type: "Contract", range: "Revenue", status: "Monitor", link: "https://metr.org/contact/", notes: "Sales pitch for eval environment." },
+        // MEDIUM (7-12)
+        { id: 7, name: "BlueDot Impact", type: "Regrantor", range: "$5K–$50K", status: "Identify", link: "https://www.aisafety.com/funding", notes: "Governance/Strategy tools.", files: [] },
+        { id: 8, name: "Huberman Family Fund", type: "Foundation", range: "$25K–$75K", status: "Monitor", link: "mailto:grants@huberman.org", notes: "Needs direct email pitch.", files: [] },
+        { id: 9, name: "Mozilla Tech Fund", type: "Foundation", range: "$50K", status: "Monitor", link: "https://foundation.mozilla.org/en/what-we-fund/technologies/", notes: "Watch for audit tool calls.", files: [] },
+        { id: 10, name: "Cooperative AI", type: "Foundation", range: "£20K–£50K", status: "Monitor", link: "https://www.cooperativeai.com/grants", notes: "Multi-agent cooperation.", files: [] },
+        { id: 11, name: "SingularityNET", type: "DAO", range: "~$40K", status: "Monitor", link: "https://deepfunding.ai/all-rfps/", notes: "Neural-symbolic focus.", files: [] },
+        { id: 12, name: "METR (ARC Evals)", type: "Contract", range: "Revenue", status: "Monitor", link: "https://metr.org/contact/", notes: "Sales pitch for eval environment.", files: [] },
         
-        // ADDITIONAL (13-21)
-        { id: 13, name: "Coefficient Giving", type: "Regrantor", range: "Variable", status: "Monitor", link: "https://coefficientgiving.org/", notes: "Entrepreneurial safety focus." },
-        { id: 14, name: "FAR AI", type: "Lab", range: "Variable", status: "Monitor", link: "https://far.ai/", notes: "Research heavy (robustness)." },
-        { id: 15, name: "Future Fund (Archive)", type: "Foundation", range: "Paused", status: "Monitor", link: "https://ftx.com/foundation", notes: "Currently inactive." },
-        { id: 16, name: "Lightcone Infrastructure", type: "Regrantor", range: "$5K–$20K", status: "Monitor", link: "https://www.lesswrong.com/", notes: "Rationality community tools." },
-        { id: 17, name: "Rethink Priorities", type: "Think Tank", range: "Variable", status: "Monitor", link: "https://rethinkpriorities.org/", notes: "Moral weights/welfare." },
-        { id: 18, name: "QURI", type: "Lab", range: "Variable", status: "Monitor", link: "https://quantifieduncertainty.org/", notes: "Forecasting/Epistemics." },
-        { id: 19, name: "MIRI", type: "Lab", range: "Variable", status: "Monitor", link: "https://intelligence.org/", notes: "Mathematical theory." },
-        { id: 20, name: "SERI Microgrants", type: "University", range: "$5K", status: "Monitor", link: "https://seri.stanford.edu/", notes: "Existential risk projects." },
-        { id: 21, name: "Patrick J. McGovern", type: "Foundation", range: "Large", status: "Monitor", link: "https://www.mcgovern.org/", notes: "Data sovereignty focus." }
+        // NICHE (13-21)
+        { id: 13, name: "Coefficient Giving", type: "Regrantor", range: "Variable", status: "Monitor", link: "https://coefficientgiving.org/", notes: "Entrepreneurial safety focus.", files: [] },
+        { id: 14, name: "FAR AI", type: "Lab", range: "Variable", status: "Monitor", link: "https://far.ai/", notes: "Research heavy (robustness).", files: [] },
+        { id: 15, name: "Future Fund (Archive)", type: "Foundation", range: "Paused", status: "Monitor", link: "https://ftx.com/foundation", notes: "Currently inactive.", files: [] },
+        { id: 16, name: "Lightcone Infrastructure", type: "Regrantor", range: "$5K–$20K", status: "Monitor", link: "https://www.lesswrong.com/", notes: "Rationality community tools.", files: [] },
+        { id: 17, name: "Rethink Priorities", type: "Think Tank", range: "Variable", status: "Monitor", link: "https://rethinkpriorities.org/", notes: "Moral weights/welfare.", files: [] },
+        { id: 18, name: "QURI", type: "Lab", range: "Variable", status: "Monitor", link: "https://quantifieduncertainty.org/", notes: "Forecasting/Epistemics.", files: [] },
+        { id: 19, name: "MIRI", type: "Lab", range: "Variable", status: "Monitor", link: "https://intelligence.org/", notes: "Mathematical theory.", files: [] },
+        { id: 20, name: "SERI Microgrants", type: "University", range: "$5K", status: "Monitor", link: "https://seri.stanford.edu/", notes: "Existential risk projects.", files: [] },
+        { id: 21, name: "Patrick J. McGovern", type: "Foundation", range: "Large", status: "Monitor", link: "https://www.mcgovern.org/", notes: "Data sovereignty focus.", files: [] }
       ];
 
       let db = [];
+      let currentModalId = null;
 
       function initApp() {
           const saved = localStorage.getItem(DB_KEY);
           if (saved) {
               db = JSON.parse(saved);
+              // Migration check: ensure all items have 'files' array
+              db.forEach(item => { if(!item.files) item.files = []; });
           } else {
               db = seedData;
-              localStorage.setItem(DB_KEY, JSON.stringify(db));
+              save();
           }
           renderTable();
           renderStats();
@@ -375,6 +362,7 @@
           const tbody = document.getElementById('table-body');
           tbody.innerHTML = db.map(item => `
               <tr>
+                  <td class="col-id">${item.id}</td>
                   <td>
                       <div style="font-weight:700; font-size:0.85rem; color:var(--text-main);">${item.name}</div>
                   </td>
@@ -394,7 +382,10 @@
                   <td>
                       <input type="text" class="notes-input" value="${item.notes}" onchange="updateNotes(${item.id}, this.value)" placeholder="Add notes...">
                   </td>
-                  <td>
+                  <td style="text-align:center;">
+                      <button class="icon-btn ${item.files.length > 0 ? 'has-files' : ''}" onclick="openModal(${item.id})">📎 <span style="font-size:0.7rem; font-weight:700;">${item.files.length || ''}</span></button>
+                  </td>
+                  <td style="text-align:right;">
                       <a href="${item.link}" target="_blank" class="apply-link">OPEN ↗</a>
                   </td>
               </tr>
@@ -408,29 +399,74 @@
           const won = db.filter(i => i.status === 'Won').length;
 
           document.getElementById('stats-mount').innerHTML = `
-              <div><span style="color:var(--text-muted);">TOTAL TARGETS:</span> <span class="stat-val">${total}</span></div>
+              <div><span style="color:var(--text-muted);">TOTAL:</span> <span class="stat-val">${total}</span></div>
               <div><span style="color:var(--text-muted);">DRAFTING:</span> <span class="stat-val" style="color:#b45309">${drafting}</span></div>
               <div><span style="color:var(--text-muted);">SUBMITTED:</span> <span class="stat-val" style="color:#008800">${submitted}</span></div>
               <div><span style="color:var(--text-muted);">WON:</span> <span class="stat-val" style="color:#00cc00">${won}</span></div>
           `;
       }
 
+      // --- MODAL LOGIC ---
+      function openModal(id) {
+          currentModalId = id;
+          const item = db.find(i => i.id === id);
+          document.getElementById('modal-org-name').innerText = item.name;
+          document.getElementById('modal-overlay').style.display = 'flex';
+          renderFileList(item);
+      }
+
+      function closeModal() {
+          document.getElementById('modal-overlay').style.display = 'none';
+          currentModalId = null;
+      }
+
+      function renderFileList(item) {
+          const list = document.getElementById('modal-file-list');
+          list.innerHTML = item.files.map((f, index) => `
+              <div class="file-item">
+                  <span>
+                      ${f.link ? `<a href="${f.link}" target="_blank" style="color:var(--accent-primary); text-decoration:none;">${f.name} ↗</a>` : f.name}
+                  </span>
+                  <span style="color:red; cursor:pointer;" onclick="deleteFile(${item.id}, ${index})">×</span>
+              </div>
+          `).join('') || '<div style="color:var(--text-muted); font-style:italic; padding:10px;">No attachments yet.</div>';
+      }
+
+      function addFile() {
+          const nameInput = document.getElementById('file-name-input');
+          const linkInput = document.getElementById('file-link-input');
+          const name = nameInput.value;
+          const link = linkInput.value;
+
+          if (!name) return;
+
+          const item = db.find(i => i.id === currentModalId);
+          item.files.push({ name, link });
+          save();
+          
+          nameInput.value = '';
+          linkInput.value = '';
+          renderFileList(item);
+          renderTable(); // Update count on main table
+      }
+
+      function deleteFile(itemId, fileIndex) {
+          const item = db.find(i => i.id === itemId);
+          item.files.splice(fileIndex, 1);
+          save();
+          renderFileList(item);
+          renderTable();
+      }
+
+      // --- CORE ---
       function updateStatus(id, newVal) {
           const item = db.find(i => i.id === id);
-          if (item) {
-              item.status = newVal;
-              save();
-              renderTable(); // Re-render to update color
-              renderStats();
-          }
+          if (item) { item.status = newVal; save(); renderTable(); renderStats(); }
       }
 
       function updateNotes(id, newVal) {
           const item = db.find(i => i.id === id);
-          if (item) {
-              item.notes = newVal;
-              save();
-          }
+          if (item) { item.notes = newVal; save(); }
       }
 
       function save() {
@@ -455,7 +491,22 @@
           a.remove();
       }
 
-      // Scramble Effect
+      // Theme
+      function setTheme(theme) {
+          document.body.setAttribute('data-theme', theme);
+          localStorage.setItem('theme', theme);
+          const icon = document.getElementById('theme-icon');
+          if (icon) icon.textContent = (theme === 'dark') ? '◑' : '◐';
+      }
+      function toggleTheme() {
+          const current = document.body.getAttribute('data-theme') || 'light';
+          const next = (current === 'dark') ? 'light' : 'dark';
+          setTheme(next);
+      }
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      setTheme(savedTheme);
+
+      // Scramble
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
       function scrambleText(element) {
           let iterations = 0; const originalText = element.innerText; 
@@ -472,21 +523,6 @@
       document.querySelectorAll(".scramble").forEach(h => {
           h.addEventListener("mouseover", event => scrambleText(event.target));
       });
-
-      // Theme
-      function setTheme(theme) {
-          document.body.setAttribute('data-theme', theme);
-          localStorage.setItem('theme', theme);
-          const icon = document.getElementById('theme-icon');
-          if (icon) icon.textContent = (theme === 'dark') ? '◑' : '◐';
-      }
-      function toggleTheme() {
-          const current = document.body.getAttribute('data-theme') || 'light';
-          const next = (current === 'dark') ? 'light' : 'dark';
-          setTheme(next);
-      }
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      setTheme(savedTheme);
 
       // Mobile Menu
       document.addEventListener("click", (e) => {
