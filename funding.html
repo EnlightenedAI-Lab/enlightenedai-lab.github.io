@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>EAIRL | FUNDING CMD v15.2</title>
+    <title>EAIRL | FUNDING CMD v15.3</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -187,7 +187,7 @@
 <body data-theme="light">
 
     <div id="lock-screen">
-        <div style="font-weight:700; margin-bottom:10px; letter-spacing:2px;">EAIRL_SECURE_TERMINAL // v15.2</div>
+        <div style="font-weight:700; margin-bottom:10px; letter-spacing:2px;">EAIRL_SECURE_TERMINAL // v15.3</div>
         <input type="password" id="password-input" class="lock-input" placeholder="ACCESS KEY" autofocus>
         <div id="lock-msg" style="color:#ef4444; display:none; margin-top:10px; font-size:10px;">ACCESS DENIED</div>
         
@@ -223,7 +223,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
                 <div>
                     <h1>Funding Command</h1>
-                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v15.2</div>
+                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE // v15.3</div>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn" style="border-color:var(--highlight); color:var(--highlight);" onclick="openAddTargetModal()">+ ADD TARGET</button>
@@ -401,11 +401,11 @@
         </div>
     </div>
 
-    <div class="ver-tag">[ v15.2 ]</div>
+    <div class="ver-tag">[ v15.3 ]</div>
 
     <script>
         const APP_PASSWORD = "3000"; 
-        const DB_KEY = 'eairl_funding_v14_3'; 
+        const DB_KEY = 'eairl_funding_v15_3'; 
         
         const seedData = [
             // A: ACTIVE OPS
@@ -486,7 +486,7 @@
                 let currentDB = [];
                 if (saved) {
                     currentDB = JSON.parse(saved);
-                    // Safe MERGE LOGIC
+                    // MERGE LOGIC
                     seedData.forEach(seedItem => {
                         const exists = currentDB.some(d => String(d.id) === String(seedItem.id) && d.sec === seedItem.sec);
                         if (!exists) currentDB.push(seedItem);
@@ -505,6 +505,10 @@
             }
         }
 
+        function findItem(sec, id) {
+            return db.find(i => i.sec === sec && String(i.id) === String(id));
+        }
+
         function hardReset() {
             if(confirm("DANGER: This will wipe all local data and restore the default list. Are you sure?")) {
                 localStorage.removeItem(DB_KEY);
@@ -518,8 +522,9 @@
             localStorage.setItem('eairl_sections_v14', JSON.stringify(openSections));
         }
 
-        function togglePriority(id) {
-            const item = db.find(i => i.id === id);
+        function togglePriority(sec, id) {
+            const item = findItem(sec, id);
+            if (!item) return;
             item.priority = !item.priority;
             save(); renderApp();
         }
@@ -550,8 +555,9 @@
                 
                 if (searchVal || secSearchVal || filterStat || filterType) {
                     items = items.filter(i => {
-                        const matchesSearch = !searchVal || (i.name.toLowerCase().includes(searchVal) || (i.notes && i.notes.toLowerCase().includes(searchVal)));
-                        const matchesSec = !secSearchVal || (i.name + (i.notes||'') + (i.mode||'')).toLowerCase().includes(secSearchVal);
+                        const hayGlobal = (`${i.sec}-${i.id} ${i.name||''} ${i.mode||''} ${i.type||''} ${i.next||''} ${i.deadline||''} ${i.notes||''}`).toLowerCase();
+                        const matchesSearch = !searchVal || hayGlobal.includes(searchVal);
+                        const matchesSec = !secSearchVal || hayGlobal.includes(secSearchVal);
                         const matchesStat = !filterStat || i.status.toLowerCase() === filterStat;
                         const matchesType = !filterType || i.type.toLowerCase().includes(filterType);
                         return matchesSearch && matchesSec && matchesStat && matchesType;
@@ -608,7 +614,7 @@
                             <td class="mono" style="font-size:10px; opacity:0.6;">${i.sec}-${i.id}</td>
                             <td>
                                 <div>
-                                    <span class="priority-star ${starClass}" onclick="togglePriority(${i.id})">★</span>
+                                    <span class="priority-star ${starClass}" onclick="togglePriority('${i.sec}', ${i.id})">★</span>
                                     <span style="font-weight:700;">${i.name}</span>
                                 </div>
                                 <div style="font-size:10px; margin-top:2px;">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">APPLY ↗</a>` : ''}</div>
@@ -622,9 +628,9 @@
                                 <span class="pill">${i.latency || '-'}</span>
                                 <span class="pill">${i.effort || '-'}</span>
                             </td>
-                            <td><input class="mono" value="${i.deadline||''}" onchange="update(${i.id}, 'deadline', this.value)"></td>
+                            <td><input class="mono" value="${i.deadline||''}" onchange="update('${i.sec}', ${i.id}, 'deadline', this.value)"></td>
                             <td>
-                                <select class="status-select" style="color:${statusColor}; font-weight:700;" onchange="update(${i.id}, 'status', this.value)">
+                                <select class="status-select" style="color:${statusColor}; font-weight:700;" onchange="update('${i.sec}', ${i.id}, 'status', this.value)">
                                     <option ${i.status==='Identify'?'selected':''}>Identify</option>
                                     <option ${i.status==='Drafting'?'selected':''}>Drafting</option>
                                     <option ${i.status==='Submitted'?'selected':''}>Submitted</option>
@@ -634,11 +640,11 @@
                                     <option ${i.status==='Archived'?'selected':''}>Archived</option>
                                 </select>
                             </td>
-                            <td><input value="${i.next||''}" onchange="update(${i.id}, 'next', this.value)"></td>
+                            <td><input value="${i.next||''}" onchange="update('${i.sec}', ${i.id}, 'next', this.value)"></td>
                             <td class="mono" style="font-size:9px; color:var(--text-muted);">${dateStr}</td>
-                            <td><input value="${i.notes||''}" onchange="update(${i.id}, 'notes', this.value)"></td>
+                            <td><input value="${i.notes||''}" onchange="update('${i.sec}', ${i.id}, 'notes', this.value)"></td>
                             <td>
-                                <button class="icon-btn" style="${hasFiles}" onclick="openFileModal(${i.id})"><svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/></svg></button>
+                                <button class="icon-btn" style="${hasFiles}" onclick="openFileModal('${i.sec}', ${i.id})"><svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/></svg></button>
                             </td>
                         </tr>
                     `;
@@ -659,30 +665,93 @@
             document.getElementById('goal-text').innerText = `${submitted} / ${goal}`;
             document.getElementById('stats-mount').innerHTML = `<div class="stat-item"><span class="stat-lbl">ACTIVE TARGETS</span><span class="stat-val">${total}</span></div><div class="stat-item"><span class="stat-lbl" style="color:#d97706">DRAFTING</span><span class="stat-val" style="color:#d97706">${db.filter(i=>i.status==='Drafting').length}</span></div><div class="stat-item"><span class="stat-lbl" style="color:#059669">SUBMITTED</span><span class="stat-val" style="color:#059669">${submitted}</span></div><div class="stat-item"><span class="stat-lbl" style="color:#16a34a">WON</span><span class="stat-val" style="color:#16a34a">${db.filter(i=>i.status==='Won').length}</span></div>`;
         }
-        function update(id, field, val) { const item = db.find(i => i.id === id); item[field] = val; item.updated = new Date().toISOString().split('T')[0]; save(); renderApp(); }
-        function openFileModal(id) { activeId = id; document.getElementById('file-modal').style.display = 'flex'; renderFiles(); renderLogs(); }
+        function update(sec, id, field, val) { 
+            const item = findItem(sec, id);
+            if (!item) return;
+            item[field] = val; 
+            item.updated = new Date().toISOString().split('T')[0]; 
+            save(); renderApp(); 
+        }
+        function openFileModal(sec, id) { 
+            activeId = { sec, id }; 
+            document.getElementById('file-modal').style.display = 'flex'; 
+            renderFiles(); renderLogs(); 
+        }
         function openAddTargetModal() { document.getElementById('add-modal').style.display = 'flex'; }
         function saveNewTarget() {
             const name = document.getElementById('new-name').value;
             if(!name) return alert("Name required");
             const newItem = {
-                id: Date.now().toString().slice(-4), sec: document.getElementById('new-sec').value,
+                id: Date.now(), 
+                sec: document.getElementById('new-sec').value,
                 name: name, type: document.getElementById('new-type').value, mode: document.getElementById('new-mode').value,
                 reality: document.getElementById('new-reality').value, latency: document.getElementById('new-latency').value, effort: document.getElementById('new-effort').value,
                 status: "Identify", deadline: "Rolling", priority: false, updated: new Date().toISOString().split('T')[0], files: [], logs: []
             };
             db.push(newItem); save(); closeModal('add-modal'); document.getElementById('new-name').value = ''; renderApp();
         }
-        function renderFiles() { const item = db.find(i => i.id === activeId); const list = document.getElementById('file-list'); list.innerHTML = item.files.map((f, idx) => `<div class="file-item"><div><span style="font-weight:700;">${f.name}</span>${f.link ? `<a href="${f.link}" target="_blank" style="margin-left:5px; color:var(--highlight);">OPEN ↗</a>` : ''}${f.content ? `<span style="font-size:9px; background:var(--border); padding:1px 4px; border-radius:2px; margin-left:5px;">DOC</span>` : ''}</div><div><button class="btn" style="font-size:9px;" onclick="openEditor(${idx})">${f.content ? 'EDIT' : 'VIEW'}</button><button class="icon-btn" style="color:red;" onclick="delFile(${idx})">×</button></div></div>`).join('') || '<div style="padding:10px; color:var(--text-muted); font-style:italic;">No attachments.</div>'; }
-        function addLink() { const name = document.getElementById('link-name').value; const url = document.getElementById('link-url').value; if (!name) return alert("Name required"); const item = db.find(i => i.id === activeId); item.files.push({ name: name, link: url, content: null }); item.updated = new Date().toISOString().split('T')[0]; document.getElementById('link-name').value = ''; document.getElementById('link-url').value = ''; save(); renderFiles(); renderApp(); }
-        function addDoc() { const item = db.find(i => i.id === activeId); item.files.push({ name: "Note / Draft", link: null, content: "" }); item.updated = new Date().toISOString().split('T')[0]; save(); openEditor(item.files.length - 1); }
-        function delFile(idx) { const item = db.find(i => i.id === activeId); item.files.splice(idx, 1); item.updated = new Date().toISOString().split('T')[0]; save(); renderFiles(); renderApp(); }
-        function openEditor(idx) { activeFileIndex = idx; const item = db.find(i => i.id === activeId); document.getElementById('rich-editor').innerHTML = item.files[idx].content || ""; document.getElementById('file-modal').style.display = 'none'; document.getElementById('editor-modal').style.display = 'flex'; }
-        function saveEditorContent() { const content = document.getElementById('rich-editor').innerHTML; const item = db.find(i => i.id === activeId); item.files[activeFileIndex].content = content; item.updated = new Date().toISOString().split('T')[0]; save(); document.getElementById('editor-modal').style.display = 'none'; document.getElementById('file-modal').style.display = 'flex'; renderFiles(); }
+        function renderFiles() { 
+            const item = findItem(activeId.sec, activeId.id); 
+            const list = document.getElementById('file-list'); 
+            list.innerHTML = item.files.map((f, idx) => `<div class="file-item"><div><span style="font-weight:700;">${f.name}</span>${f.link ? `<a href="${f.link}" target="_blank" style="margin-left:5px; color:var(--highlight);">OPEN ↗</a>` : ''}${f.content ? `<span style="font-size:9px; background:var(--border); padding:1px 4px; border-radius:2px; margin-left:5px;">DOC</span>` : ''}</div><div><button class="btn" style="font-size:9px;" onclick="openEditor(${idx})">${f.content ? 'EDIT' : 'VIEW'}</button><button class="icon-btn" style="color:red;" onclick="delFile(${idx})">×</button></div></div>`).join('') || '<div style="padding:10px; color:var(--text-muted); font-style:italic;">No attachments.</div>'; 
+        }
+        function addLink() { 
+            const name = document.getElementById('link-name').value; 
+            const url = document.getElementById('link-url').value; 
+            if (!name) return alert("Name required"); 
+            const item = findItem(activeId.sec, activeId.id); 
+            item.files.push({ name: name, link: url, content: null }); 
+            item.updated = new Date().toISOString().split('T')[0]; 
+            document.getElementById('link-name').value = ''; document.getElementById('link-url').value = ''; 
+            save(); renderFiles(); renderApp(); 
+        }
+        function addDoc() { 
+            const item = findItem(activeId.sec, activeId.id); 
+            item.files.push({ name: "Note / Draft", link: null, content: "" }); 
+            item.updated = new Date().toISOString().split('T')[0]; 
+            save(); openEditor(item.files.length - 1); 
+        }
+        function delFile(idx) { 
+            const item = findItem(activeId.sec, activeId.id); 
+            item.files.splice(idx, 1); 
+            item.updated = new Date().toISOString().split('T')[0]; 
+            save(); renderFiles(); renderApp(); 
+        }
+        function openEditor(idx) { 
+            activeFileIndex = idx; 
+            const item = findItem(activeId.sec, activeId.id); 
+            document.getElementById('rich-editor').innerHTML = item.files[idx].content || ""; 
+            document.getElementById('file-modal').style.display = 'none'; 
+            document.getElementById('editor-modal').style.display = 'flex'; 
+        }
+        function saveEditorContent() { 
+            const content = document.getElementById('rich-editor').innerHTML; 
+            const item = findItem(activeId.sec, activeId.id); 
+            item.files[activeFileIndex].content = content; 
+            item.updated = new Date().toISOString().split('T')[0]; 
+            save(); 
+            document.getElementById('editor-modal').style.display = 'none'; 
+            document.getElementById('file-modal').style.display = 'flex'; 
+            renderFiles(); 
+        }
         function format(cmd, val) { document.execCommand(cmd, false, val); }
-        function addLog() { const txt = document.getElementById('log-input').value; if(!txt) return; const item = db.find(i => i.id === activeId); item.logs.unshift({ date: new Date().toISOString().split('T')[0], text: txt }); item.updated = new Date().toISOString().split('T')[0]; document.getElementById('log-input').value = ''; save(); renderLogs(); renderApp(); }
-        function renderLogs() { const item = db.find(i => i.id === activeId); document.getElementById('log-list').innerHTML = item.logs.map(l => `<div class="log-item"><span class="mono" style="color:var(--text-muted); margin-right:5px;">${l.date}</span>${l.text}</div>`).join(''); }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; if (id === 'editor-modal') document.getElementById('file-modal').style.display = 'flex'; }
+        function addLog() { 
+            const txt = document.getElementById('log-input').value; 
+            if(!txt) return; 
+            const item = findItem(activeId.sec, activeId.id); 
+            item.logs.unshift({ date: new Date().toISOString().split('T')[0], text: txt }); 
+            item.updated = new Date().toISOString().split('T')[0]; 
+            document.getElementById('log-input').value = ''; 
+            save(); renderLogs(); renderApp(); 
+        }
+        function renderLogs() { 
+            const item = findItem(activeId.sec, activeId.id); 
+            document.getElementById('log-list').innerHTML = item.logs.map(l => `<div class="log-item"><span class="mono" style="color:var(--text-muted); margin-right:5px;">${l.date}</span>${l.text}</div>`).join(''); 
+        }
+        function closeModal(id) { 
+            document.getElementById(id).style.display = 'none'; 
+            if (id === 'editor-modal') document.getElementById('file-modal').style.display = 'flex'; 
+        }
         function save() { try { localStorage.setItem(DB_KEY, JSON.stringify(db)); updateMemory(); } catch(e) { alert("STORAGE FULL."); } }
         function updateMemory() { const used = JSON.stringify(localStorage).length; const pct = Math.round((used / 5000000) * 100); document.getElementById('mem-val').innerText = pct + "%"; document.getElementById('mem-fill').style.width = pct + "%"; }
         function exportData() { const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2)); const a = document.createElement('a'); a.href = dataStr; a.download = "eairl_funding_db.json"; a.click(); a.remove(); }
