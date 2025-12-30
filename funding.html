@@ -4,457 +4,566 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Funding Command | Secure v8.0</title>
+    <title>EAIRL | FUNDING CMD v9.0</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- THEME: INSTITUTE STANDARD V54 --- */
         :root {
-            --bg-color: #ffffff; --sidebar-bg: #f8f9fa; --text-main: #050505; --text-muted: #5e5e5e;
-            --border-color: #e5e5e5; --accent-primary: #0044cc;
-            --type-grant: #e0f2fe; --text-grant: #0369a1;
-            --type-prize: #dcfce7; --text-prize: #15803d;
-            --type-bounty: #fee2e2; --text-bounty: #b91c1c;
-            --type-contract: #fef3c7; --text-contract: #b45309;
+            /* COLOR PALETTE - LAB STANDARD */
+            --bg: #ffffff; 
+            --surface: #f4f4f5; 
+            --border: #e4e4e7;
+            --text-main: #09090b; 
+            --text-muted: #71717a;
+            --accent: #18181b; /* Almost Black */
+            --highlight: #2563eb; /* Lab Blue */
+            
+            /* STATUS COLORS */
+            --st-identify: #71717a;
+            --st-drafting: #d97706;
+            --st-submitted: #059669;
+            --st-won: #16a34a;
+            --st-rejected: #dc2626;
+            
+            /* TYPE BADGES */
+            --badge-grant: #e0f2fe; --text-grant: #075985;
+            --badge-bounty: #fee2e2; --text-bounty: #991b1b;
+            --badge-regrant: #f3e8ff; --text-regrant: #6b21a8;
+            --badge-contract: #fef3c7; --text-contract: #92400e;
         }
+
         body[data-theme="dark"] {
-            --bg-color: #0a0a0a; --sidebar-bg: #0a0a0a; --text-main: #f0f0f0; --text-muted: #888888;
-            --border-color: #333333; --accent-primary: #66aaff;
-            --type-grant: #0c4a6e; --text-grant: #7dd3fc; --type-prize: #052e16; --text-prize: #86efac;
-            --type-bounty: #450a0a; --text-bounty: #fca5a5; --type-contract: #451a03; --text-contract: #fcd34d;
+            --bg: #09090b; --surface: #18181b; --border: #27272a;
+            --text-main: #fafafa; --text-muted: #a1a1aa;
+            --accent: #fafafa; --highlight: #3b82f6;
+            --badge-grant: #0c4a6e; --text-grant: #bae6fd;
+            --badge-bounty: #450a0a; --text-bounty: #fecaca;
+            --badge-regrant: #3b0764; --text-regrant: #e9d5ff;
+            --badge-contract: #451a03; --text-contract: #fde68a;
         }
-        
+
         * { box-sizing: border-box; }
-        body { margin: 0; font-family: "Inter", sans-serif; background: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
-        
-        /* LOCK SCREEN */
-        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-        .lock-box { text-align: center; width: 300px; }
-        .lock-input { width: 100%; padding: 10px; margin-top: 1rem; font-family: "JetBrains Mono", monospace; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); text-align: center; letter-spacing: 0.2em; font-size: 1.2rem; }
-        .lock-msg { color: #cc0000; font-size: 0.75rem; margin-top: 1rem; display: none; font-family: "JetBrains Mono", monospace; }
-        .privacy-note { margin-top: 2rem; font-size: 0.65rem; color: var(--text-muted); font-family: "JetBrains Mono", monospace; opacity: 0.7; }
+        body { margin: 0; font-family: "Inter", sans-serif; background: var(--bg); color: var(--text-main); font-size: 13px; height: 100vh; overflow: hidden; display: flex; }
 
-        /* LAYOUT & COMPONENTS */
-        .layout-wrapper { display: flex; flex: 1; width: 100%; filter: blur(10px); transition: filter 0.5s; pointer-events: none; opacity: 0.5; }
-        .layout-wrapper.unlocked { filter: none; pointer-events: all; opacity: 1; }
+        /* --- LAYOUT --- */
+        aside { width: 260px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; z-index: 10; }
+        main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; position: relative; }
         
-        aside { width: 280px; border-right: 1px solid var(--border-color); padding: 3rem 2rem; background: var(--sidebar-bg); overflow-y: auto; }
-        main { flex: 1; padding: 3rem 4rem; overflow-y: auto; position: relative; }
+        /* --- TYPOGRAPHY --- */
+        .mono { font-family: "JetBrains Mono", monospace; }
+        h1 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 4px 0; }
+        .subtitle { font-size: 11px; color: var(--text-muted); }
         
-        .brand { margin-bottom: 4rem; font-weight: 800; font-size: 0.95rem; }
-        nav a { display: block; padding: 2px 0; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; }
-        nav a.active { color: var(--text-main); font-weight: 700; border-left: 3px solid var(--text-main); padding-left: 10px; }
-        
-        h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 1.5rem 0; }
-        
-        /* DASHBOARD ELEMENTS */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem; }
-        .stat-box { border: 1px solid var(--border-color); padding: 10px; text-align: center; border-radius: 4px; }
-        .stat-num { font-weight: 800; font-size: 1.2rem; display: block; }
-        .stat-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-family: "JetBrains Mono", monospace; }
-        
-        /* MEMORY METER */
-        .memory-bar-container { width: 100%; height: 6px; background: var(--sidebar-bg); border-radius: 3px; margin-top: 1rem; overflow: hidden; }
-        .memory-bar-fill { height: 100%; background: var(--accent-primary); width: 0%; transition: width 0.5s; }
-        .memory-label { font-size: 0.65rem; font-family: "JetBrains Mono", monospace; color: var(--text-muted); margin-top: 4px; display: flex; justify-content: space-between; }
-
-        details { margin-bottom: 2rem; }
-        summary { cursor: pointer; padding: 10px 0; border-bottom: 2px solid var(--border-color); font-weight: 700; font-family: "Inter", sans-serif; list-style: none; display: flex; justify-content: space-between; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th { text-align: left; padding: 10px; border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-family: "JetBrains Mono", monospace; font-size: 0.65rem; text-transform: uppercase; }
-        td { padding: 10px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
-        
-        .badge { padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; font-family: "JetBrains Mono", monospace; }
-        .badge-grant { background: var(--type-grant); color: var(--text-grant); }
-        .badge-prize { background: var(--type-prize); color: var(--text-prize); }
-        .badge-bounty { background: var(--type-bounty); color: var(--text-bounty); }
-        .badge-contract { background: var(--type-contract); color: var(--text-contract); }
-        
-        .status-select, .action-input { background: transparent; border: 1px solid transparent; color: var(--text-main); font-family: inherit; font-size: 0.8rem; padding: 4px; width: 100%; }
-        .status-select:hover, .action-input:hover { border-color: var(--border-color); background: var(--bg-color); }
-        .st-pitching { color: #b45309; font-weight: 700; } 
-        .st-submitted { color: #008800; font-weight: 700; }
-        
-        .btn-action { cursor: pointer; padding: 6px 12px; background: var(--bg-color); border: 1px solid var(--border-color); font-family: "JetBrains Mono", monospace; font-size: 0.65rem; text-transform: uppercase; }
-        .btn-action:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
-
-        .icon-btn { font-size: 1rem; cursor: pointer; background: none; border: none; opacity: 0.4; transition: opacity 0.2s; margin-left: 6px; }
-        .icon-btn:hover { opacity: 1; transform: scale(1.1); }
-        .has-data { color: var(--accent-primary); opacity: 1; }
-
-        /* MODALS */
-        #modal-overlay, #log-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
-        
-        /* CONTENT OVERLAY - RICH TEXT */
-        #content-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 5000; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
-
-        .modal-content { background: var(--bg-color); padding: 2rem; width: 600px; max-width: 90%; border: 1px solid var(--border-color); display: flex; flex-direction: column; max-height: 85vh; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
-        .modal-header { font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
-        
-        .file-list, .log-list { margin-top: 1rem; border: 1px solid var(--border-color); padding: 0.5rem; min-height: 100px; max-height: 300px; overflow-y: auto; background: var(--sidebar-bg); }
-        .file-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 6px; border-bottom: 1px solid var(--border-color); background: var(--bg-color); margin-bottom: 4px; align-items: center; }
-
-        /* RICH EDITOR STYLES */
-        .rich-editor-toolbar { display: flex; gap: 5px; margin-bottom: 5px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
-        .toolbar-btn { cursor: pointer; padding: 4px 8px; border: 1px solid var(--border-color); background: var(--sidebar-bg); font-weight: 700; font-size: 0.7rem; }
-        .toolbar-btn:hover { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
-        
-        .rich-editor-area {
-            flex: 1; border: 1px solid var(--border-color); background: #fff; color: #000;
-            padding: 20px; font-family: "Inter", sans-serif; font-size: 0.9rem;
-            overflow-y: auto; min-height: 300px; outline: none;
+        /* --- COMPONENTS --- */
+        .btn {
+            background: var(--bg); border: 1px solid var(--border); color: var(--text-main);
+            padding: 6px 12px; font-family: "JetBrains Mono", monospace; font-size: 11px;
+            cursor: pointer; text-transform: uppercase; transition: all 0.1s;
         }
-        .rich-editor-area img { max-width: 100%; border: 1px solid #ccc; margin: 10px 0; }
-        .rich-editor-area b { font-weight: 800; }
-        .rich-editor-area h3 { margin-top: 0; text-transform: uppercase; font-size: 1rem; }
-
-        .version-tag { position: fixed; bottom: 20px; left: 20px; font-family: var(--font-mono); font-size: 0.65rem; color: #cc0000; font-weight: 700; z-index: 2000; background: var(--bg-color); padding: 4px 8px; border: 1px solid #cc0000; border-radius: 4px; }
+        .btn:hover { border-color: var(--highlight); color: var(--highlight); }
         
-        @media (max-width: 900px) {
-            .layout-wrapper { display: block; }
-            aside { position: fixed; top: 50px; left: 0; width: 100%; height: calc(100vh - 50px); transform: translateX(-100%); transition: transform 0.25s ease; border-right: none; padding: 2rem; background: var(--bg-color); overflow-y: auto; z-index: 10000; }
-            aside.open { transform: translateX(0); }
-            main { padding: 1.5rem; margin-top: 50px; width: 100%; }
-            th { display: none; }
-            td { display: block; padding: 8px 0; border: none; }
-            tr { display: block; border: 1px solid var(--border-color); margin-bottom: 1rem; padding: 1rem; }
-            .version-tag { left: auto; right: 20px; }
+        .status-badge {
+            font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 2px;
+            font-family: "JetBrains Mono", monospace; border: 1px solid transparent;
         }
+
+        /* --- DATA TABLES --- */
+        .section-header {
+            padding: 12px 24px; background: var(--surface); border-bottom: 1px solid var(--border);
+            border-top: 1px solid var(--border); font-family: "JetBrains Mono", monospace; font-weight: 700;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+        }
+        .section-header:hover { background: var(--border); }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th { 
+            text-align: left; padding: 8px 12px; font-family: "JetBrains Mono", monospace; 
+            font-size: 10px; text-transform: uppercase; color: var(--text-muted); 
+            border-bottom: 1px solid var(--border); background: var(--bg);
+            position: sticky; top: 0; z-index: 5;
+        }
+        td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        tr:hover td { background: var(--surface); }
+
+        /* --- INPUTS --- */
+        input, select {
+            background: transparent; border: 1px solid transparent; color: var(--text-main);
+            font-family: inherit; font-size: 12px; width: 100%; padding: 2px 4px;
+        }
+        input:focus, select:focus { border-color: var(--highlight); outline: none; background: var(--bg); }
+        input::placeholder { color: var(--text-muted); opacity: 0.5; }
+
+        /* --- LOCK SCREEN --- */
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #09090b; color: #00ff00; z-index: 9999;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            font-family: "JetBrains Mono", monospace;
+        }
+        .lock-input { 
+            background: transparent; border: 1px solid #333; color: #00ff00; 
+            padding: 10px; width: 200px; text-align: center; margin-top: 20px; outline: none;
+        }
+        .lock-input:focus { border-color: #00ff00; }
+
+        /* --- MODALS --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(2px); z-index: 100;
+            align-items: center; justify-content: center;
+        }
+        .modal-box {
+            background: var(--bg); border: 1px solid var(--border); width: 800px; max-width: 95%;
+            height: 80vh; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .modal-header {
+            padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; 
+            justify-content: space-between; font-weight: 700; font-family: "JetBrains Mono", monospace;
+        }
+        .editor-area {
+            flex: 1; padding: 20px; overflow-y: auto; outline: none; font-family: "Inter", sans-serif;
+            line-height: 1.6;
+        }
+        .toolbar { padding: 8px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; background: var(--surface); }
+
+        /* UTILS */
+        .stat-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); margin-bottom: 20px; border: 1px solid var(--border); }
+        .stat-item { background: var(--bg); padding: 10px; text-align: center; }
+        .stat-val { display: block; font-weight: 700; font-size: 16px; }
+        .stat-lbl { font-size: 9px; text-transform: uppercase; color: var(--text-muted); font-family: "JetBrains Mono", monospace; }
+        
+        .mem-meter { height: 2px; background: var(--border); width: 100%; margin-top: auto; }
+        .mem-fill { height: 100%; background: var(--text-muted); width: 0%; }
+
+        .hidden { display: none; }
+        .icon-btn { cursor: pointer; opacity: 0.5; transition: opacity 0.2s; font-size: 14px; background: none; border: none; padding: 0 4px; }
+        .icon-btn:hover { opacity: 1; color: var(--highlight); }
+        .has-content { opacity: 1; color: var(--text-main); }
     </style>
 </head>
 <body data-theme="light">
 
     <div id="lock-screen">
-        <div class="lock-box">
-            <div style="font-weight:800; font-size:1.2rem; margin-bottom:1rem;">ENLIGHTENED AI</div>
-            <div style="font-family:'JetBrains Mono', monospace; font-size:0.7rem; color:#666; margin-bottom:1rem;">SECURE TERMINAL ACCESS</div>
-            <input type="password" id="password-input" class="lock-input" placeholder="ENTER KEY" autofocus>
-            <div id="lock-msg" class="lock-msg">ACCESS DENIED</div>
-            <div class="privacy-note">Client-side privacy shield (not cryptographic security).</div>
-        </div>
+        <div>EAIRL_SECURE_TERMINAL // v9.0</div>
+        <input type="password" id="password-input" class="lock-input" placeholder="ACCESS KEY" autofocus>
+        <div id="lock-msg" style="margin-top:10px; font-size:10px; color:red; display:none;">ACCESS DENIED</div>
     </div>
 
-    <div class="version-tag">[ v8.0 ]</div>
+    <aside>
+        <div style="margin-bottom: 30px;">
+            <div class="mono" style="font-weight:700;">ENLIGHTENED AI</div>
+            <div class="subtitle mono">RESEARCH LAB</div>
+        </div>
+        
+        <nav style="display:flex; flex-direction:column; gap:8px;">
+            <div class="subtitle mono" style="margin-bottom:4px;">MODULES</div>
+            <a href="#" class="btn" style="text-align:left; border-color:var(--text-main);">[•] FUNDING CMD</a>
+            <a href="diagnostics.html" class="btn" style="text-align:left; color:var(--text-muted);">[ ] DIAGNOSTICS</a>
+            <a href="lexicon.html" class="btn" style="text-align:left; color:var(--text-muted);">[ ] LEXICON</a>
+        </nav>
 
-    <div class="layout-wrapper" id="app-wrapper">
-        <aside>
-            <div class="brand">
-                <div>ENLIGHTENED AI</div>
-                <div style="font-size:0.7rem; color:#666; margin-top:4px;">RESEARCH LAB</div>
+        <div style="margin-top:auto;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:10px;" class="mono">
+                <span>STORAGE</span>
+                <span id="mem-val">0%</span>
             </div>
-            <nav>
-                <a href="#">Funding Command [ACTIVE]</a>
-                <a href="#" style="opacity:0.5">Diagnostics</a>
-                <a href="#" style="opacity:0.5">Lexicon</a>
-            </nav>
-            <div style="margin-top:auto; font-size:0.7rem; cursor:pointer; opacity:0.5;" onclick="toggleTheme()">Theme: Light/Dark</div>
-        </aside>
+            <div class="mem-meter"><div class="mem-fill" id="mem-fill"></div></div>
+            <button class="btn" style="width:100%; margin-top:15px;" onclick="toggleTheme()">THEME: SWITCH</button>
+        </div>
+    </aside>
 
-        <main>
-            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:3rem;">
-                <h1>Funding Command</h1>
-                <button class="btn-action" onclick="exportData()">↓ BACKUP DATA</button>
+    <main id="app-content" style="opacity:0; transition:opacity 0.5s;">
+        <div style="padding: 24px 32px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                <div>
+                    <h1>Funding Command</h1>
+                    <div class="subtitle mono">PIPELINE INTEGRITY: ACTIVE</div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn" onclick="exportData()">↓ BACKUP DATABASE</button>
+                </div>
             </div>
 
-            <details class="mission-control">
-                <summary>MISSION CONTROL / STRATEGY</summary>
-                <div class="control-panel">
-                    <div style="display:grid; grid-template-columns: 2fr 1fr; gap:2rem;">
-                        <div>
-                            <textarea id="global-scratchpad" class="scratchpad" placeholder="Global Strategy Notes..."></textarea>
-                        </div>
-                        <div>
-                            <div class="stats-grid" id="stats-mount"></div>
-                            
-                            <div style="margin-top:20px;">
-                                <div class="memory-label">
-                                    <span>BROWSER STORAGE</span>
-                                    <span id="mem-val">0%</span>
-                                </div>
-                                <div class="memory-bar-container">
-                                    <div class="memory-bar-fill" id="mem-bar"></div>
-                                </div>
-                                <div style="font-size:0.6rem; color:#999; margin-top:4px;">
-                                    Warning: Pasting many images will fill this up.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="stat-bar" id="stats-mount"></div>
+
+            <details style="margin-bottom:20px; border:1px solid var(--border);">
+                <summary class="section-header"><span>> MISSION CONTROL / STRATEGY</span></summary>
+                <div style="padding:0;">
+                    <textarea id="global-scratchpad" style="width:100%; height:120px; padding:15px; border:none; resize:vertical; outline:none; background:var(--bg); color:var(--text-main); font-family:'JetBrains Mono', monospace; font-size:12px;" placeholder="Global strategic notes..."></textarea>
                 </div>
             </details>
 
-            <div id="tables-container"></div>
-        </main>
-    </div>
+            <div id="pipeline-container"></div>
+        </div>
+    </main>
 
-    <div id="log-overlay">
-        <div class="modal-content">
-            <div class="modal-header"><span>LOG</span> <span style="cursor:pointer" onclick="closeLog()">✕</span></div>
-            <div style="flex:1; display:flex; flex-direction:column;">
-                <div class="log-list" id="log-list-container"></div>
-                <div style="display:flex; gap:10px; margin-top:10px;">
-                    <input type="text" id="log-input" class="action-input" placeholder="Type update..." style="border:1px solid var(--border-color);">
-                    <button class="btn-action" onclick="addLog()">POST</button>
-                </div>
+    <div id="editor-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span>DOCUMENT EDITOR</span>
+                <button class="icon-btn" onclick="closeModal()">✕</button>
+            </div>
+            <div class="toolbar">
+                <button class="btn" onclick="format('bold')">B</button>
+                <button class="btn" onclick="format('italic')">I</button>
+                <button class="btn" onclick="format('insertUnorderedList')">List</button>
+                <button class="btn" onclick="format('formatBlock','H3')">Header</button>
+            </div>
+            <div id="rich-editor" class="editor-area" contenteditable="true"></div>
+            <div style="padding:15px; border-top:1px solid var(--border); text-align:right;">
+                <button class="btn" onclick="saveEditorContent()">SAVE & CLOSE</button>
             </div>
         </div>
     </div>
 
-    <div id="content-overlay">
-        <div class="modal-content" style="height: 90vh; width: 900px;">
-            <div class="modal-header"><span>DOCUMENT EDITOR</span> <span style="cursor:pointer" onclick="closeModal()">✕</span></div>
-            <div style="flex:1; display:flex; flex-direction:column;">
-                <div class="rich-editor-toolbar">
-                    <button class="toolbar-btn" onclick="formatDoc('bold')">B</button>
-                    <button class="toolbar-btn" onclick="formatDoc('italic')">I</button>
-                    <button class="toolbar-btn" onclick="formatDoc('underline')">U</button>
-                    <button class="toolbar-btn" onclick="formatDoc('insertUnorderedList')">• List</button>
-                    <button class="toolbar-btn" onclick="formatDoc('formatBlock', 'H3')">Header</button>
-                </div>
-                <div id="rich-editor" class="rich-editor-area" contenteditable="true" placeholder="Paste your text and images here..."></div>
-                <div style="text-align:right; margin-top:10px;">
-                    <button class="btn-action" onclick="saveContent()">SAVE DOCUMENT</button>
-                </div>
+    <div id="file-modal" class="modal-overlay">
+        <div class="modal-box" style="height:auto; max-height:80vh;">
+            <div class="modal-header">
+                <span>EVIDENCE & LOGS</span>
+                <button class="icon-btn" onclick="closeModal()">✕</button>
             </div>
-        </div>
-    </div>
-
-    <div id="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header"><span>EVIDENCE / FILES</span> <span style="cursor:pointer" onclick="closeModal()">✕</span></div>
-            <div style="flex:1;">
+            <div style="padding:20px; overflow-y:auto;">
                 
-                <div style="background:var(--sidebar-bg); padding:1rem; border-radius:4px; margin-bottom:1rem; border:1px solid var(--border-color);">
-                    <div style="font-weight:700; font-size:0.75rem; margin-bottom:0.5rem; color:var(--text-muted);">OPTION A: LINK TO CLOUD</div>
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" id="file-name-input" class="action-input" placeholder="Name (Required)" style="border:1px solid var(--border-color);">
-                        <input type="text" id="file-link-input" class="action-input" placeholder="URL" style="border:1px solid var(--border-color);">
-                        <button class="btn-action" onclick="addFile()">ADD LINK</button>
+                <div class="mono subtitle" style="margin-bottom:8px;">QUICK ACTIONS</div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+                    <div style="border:1px solid var(--border); padding:10px;">
+                        <input id="link-name" placeholder="Link Name (e.g. Drive)" style="margin-bottom:5px;">
+                        <div style="display:flex; gap:5px;">
+                            <input id="link-url" placeholder="https://..." style="flex:1;">
+                            <button class="btn" onclick="addLink()">ADD</button>
+                        </div>
                     </div>
+                    <button class="btn" style="height:100%; border-style:dashed;" onclick="addDoc()">+ CREATE NOTE / PASTE TEXT</button>
                 </div>
 
-                <div style="background:var(--sidebar-bg); padding:1rem; border-radius:4px; margin-bottom:1rem; border:1px solid var(--border-color);">
-                    <div style="font-weight:700; font-size:0.75rem; margin-bottom:0.5rem; color:var(--text-muted);">OPTION B: CREATE DOC</div>
-                    <button class="btn-action" style="width:100%; border:1px dashed var(--accent-primary); color:var(--accent-primary);" onclick="addTextEntry()">📝 CREATE NOTE / PASTE SCREENSHOTS</button>
-                </div>
+                <div class="mono subtitle" style="margin-bottom:8px;">ATTACHMENTS</div>
+                <div id="file-list" style="margin-bottom:20px; border:1px solid var(--border);"></div>
 
-                <div style="font-weight:700; font-size:0.75rem; margin-bottom:0.5rem; color:var(--text-muted);">ATTACHMENTS</div>
-                <div class="file-list" id="modal-file-list"></div>
+                <div class="mono subtitle" style="margin-bottom:8px;">ACTIVITY LOG</div>
+                <div style="display:flex; gap:5px; margin-bottom:10px;">
+                    <input id="log-input" placeholder="Log interaction..." style="border-bottom:1px solid var(--border);">
+                    <button class="btn" onclick="addLog()">POST</button>
+                </div>
+                <div id="log-list" style="max-height:150px; overflow-y:auto; border:1px solid var(--border);"></div>
             </div>
         </div>
     </div>
 
     <script>
+        // --- CONFIG ---
         const APP_PASSWORD = "3000"; 
+        const DB_KEY = 'eairl_funding_v9';
         
+        // --- SEED DATA (v9 Schema) ---
         const seedData = [
-            // A: ACTIVE
-            { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", deadline: "Feb 1", status: "Identify", notes: "Top Priority" },
-            { id: 2, sec: 'A', name: "Emergent Ventures", type: "Grant", deadline: "Rolling", status: "Identify", notes: "High upside" },
-            { id: 3, sec: 'A', name: "NRC IRAP (AI Assist)", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Call Montreal Office" },
-            { id: 4, sec: 'A', name: "Aligned Studies (ASF)", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Independent researchers" },
-            { id: 5, sec: 'A', name: "Scale AI", type: "Partner", deadline: "Rolling", status: "Identify", notes: "Montreal Industry" },
+            // A: ACTIVE OPS
+            { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", status: "Identify", deadline: "2026-02-01", owner: "Nicolas", amount: "€50k", next: "Draft Abstract", link_apply: "https://nlnet.nl/commonsfund", link_fit: "", notes: "Top priority infra.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 2, sec: 'A', name: "Emergent Ventures", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "$50k+", next: "Write 1-pager", link_apply: "https://www.mercatus.org/emergent-ventures", link_fit: "", notes: "High agency/upside.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 3, sec: 'A', name: "NRC IRAP", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "$49k", next: "Call Montreal Office", link_apply: "https://nrc.canada.ca/en/support-technology-innovation", link_fit: "", notes: "AI Assist program.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 4, sec: 'A', name: "Aligned Studies (ASF)", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "$50k", next: "Review RFP", link_apply: "https://alignedstudies.com/apply", link_fit: "", notes: "Independent researchers.", updated: "2025-12-29", files: [], logs: [] },
+            
             // B: COMPETITIONS
-            { id: 6, sec: 'B', name: "Martian Prize", type: "Prize", deadline: "See Site", status: "Identify", notes: "Interpretability" },
-            { id: 7, sec: 'B', name: "Google AI VRP", type: "Bounty", deadline: "Open", status: "Identify", notes: "Attack mode" },
-            { id: 8, sec: 'B', name: "Microsoft AI Bounty", type: "Bounty", deadline: "Open", status: "Identify", notes: "Zero Day Quest" },
-            { id: 9, sec: 'B', name: "AE Studio", type: "Contract", deadline: "Rolling", status: "Identify", notes: "Neglected approaches" },
-            // C: SUBMITTED
-            { id: 99, sec: 'C', name: "Foresight Institute", type: "Grant", deadline: "Rolling", status: "Submitted", notes: "Applied with alignment instrumentation. Archived." },
-            { id: 98, sec: 'C', name: "NextAI (Next Canada)", type: "Accel", deadline: "Submitted", status: "Submitted", notes: "Application submitted.", link: "https://www.nextcanada.com/next-ai" },
-            // D: MONITOR
-            { id: 10, sec: 'D', name: "BlueDot Impact", type: "Grant", deadline: "Check", status: "Identify", notes: "Governance" },
-            { id: 11, sec: 'D', name: "Mozilla Tech Fund", type: "Grant", deadline: "Closed", status: "Identify", notes: "Audit Tools" },
-            { id: 12, sec: 'D', name: "Huberman Family", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Direct pitch" },
-            { id: 13, sec: 'D', name: "SingularityNET", type: "Grant", deadline: "Rounds", status: "Identify", notes: "Deep Funding" },
-            { id: 14, sec: 'D', name: "Cooperative AI", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Multi-agent" },
-            { id: 15, sec: 'D', name: "METR (ARC Evals)", type: "Contract", deadline: "N/A", status: "Identify", notes: "Sales pitch" },
-            // E: ARCHIVE
-            { id: 16, sec: 'E', name: "Future Fund", type: "Grant", deadline: "Paused", status: "Identify", notes: "Inactive" },
-            { id: 17, sec: 'E', name: "Coefficient Giving", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Entrepreneurial" },
-            { id: 18, sec: 'E', name: "FAR AI", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Robustness" },
-            { id: 19, sec: 'E', name: "Lightcone Infra", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Rationality" },
-            { id: 20, sec: 'E', name: "Rethink Priorities", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Welfare" },
-            { id: 21, sec: 'E', name: "QURI", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Forecasting" },
-            { id: 22, sec: 'E', name: "MIRI", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Theory" },
-            { id: 23, sec: 'E', name: "SERI Microgrants", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Student" },
-            { id: 24, sec: 'E', name: "Patrick J. McGovern", type: "Grant", deadline: "Rolling", status: "Identify", notes: "Data sov" }
+            { id: 5, sec: 'B', name: "Martian Prize", type: "Prize", status: "Identify", deadline: "Open", owner: "Nicolas", amount: "High", next: "Check bounties", link_apply: "https://www.martian.org/", link_fit: "", notes: "Interpretability.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 6, sec: 'B', name: "Google AI VRP", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", amount: "Var", next: "Review scope", link_apply: "https://bughunters.google.com/", link_fit: "", notes: "Vuln reward.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 7, sec: 'B', name: "Microsoft AI Bounty", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", amount: "Var", next: "Review scope", link_apply: "https://www.microsoft.com/en-us/msrc/bounty", link_fit: "", notes: "Zero Day Quest.", updated: "2025-12-29", files: [], logs: [] },
+
+            // C: REGRANTORS (NEW)
+            { id: 20, sec: 'C', name: "Evan Hubinger", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/evhub", notes: "Focus: Interpretability, evals.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 21, sec: 'C', name: "Tristan Hume", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/trishume", notes: "Focus: Tooling, behavioral evals.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 22, sec: 'C', name: "Neel Nanda", affiliation: "DeepMind", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/NeelNanda", notes: "Focus: Mech Interp.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 23, sec: 'C', name: "Marius Hobbhahn", affiliation: "Apollo", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "", notes: "Focus: Deception/Evals.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 24, sec: 'C', name: "Adam Gleave", affiliation: "FAR AI", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/AdamGleave", notes: "Focus: Robustness.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 25, sec: 'C', name: "Oliver Habryka", affiliation: "Lightcone", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "mailto:oliver.habryka@lightconeinfra.com", link_fit: "", notes: "Focus: Infrastructure.", updated: "2025-12-29", files: [], logs: [] },
+
+            // D: SUBMITTED / ARCHIVE
+            { id: 99, sec: 'D', name: "Foresight Institute", type: "Grant", status: "Submitted", deadline: "Rolling", owner: "Nicolas", amount: "Fellowship", next: "Wait", link_apply: "", link_fit: "", notes: "Applied Dec 29.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 98, sec: 'D', name: "NextAI (Next Canada)", type: "Accel", status: "Submitted", deadline: "Submitted", owner: "Nicolas", amount: "Accel", next: "Wait", link_apply: "https://www.nextcanada.com/next-ai", link_fit: "", notes: "Applied Dec 29.", updated: "2025-12-29", files: [], logs: [] },
+
+            // E: MONITOR
+            { id: 10, sec: 'E', name: "BlueDot Impact", type: "Grant", status: "Identify", deadline: "Check", owner: "Nicolas", amount: "$50k", next: "Check site", link_apply: "https://www.aisafety.com/funding", link_fit: "", notes: "Governance.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 11, sec: 'E', name: "Mozilla Tech Fund", type: "Grant", status: "Identify", deadline: "Closed", owner: "Nicolas", amount: "$50k", next: "Monitor", link_apply: "https://foundation.mozilla.org/en/", link_fit: "", notes: "Open source audit.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 12, sec: 'E', name: "METR (ARC Evals)", type: "Contract", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Rev", next: "Sales pitch", link_apply: "https://metr.org/contact/", link_fit: "", notes: "Eval services.", updated: "2025-12-29", files: [], logs: [] }
         ];
 
         let db = [];
         let activeId = null;
         let activeFileIndex = null;
 
-        const lockInput = document.getElementById('password-input');
-        lockInput.addEventListener('keyup', (e) => {
+        // --- AUTHENTICATION ---
+        document.getElementById('password-input').addEventListener('keyup', (e) => {
             if (e.key === 'Enter') {
-                if (lockInput.value === APP_PASSWORD) {
+                if (e.target.value === APP_PASSWORD) {
                     document.getElementById('lock-screen').style.display = 'none';
-                    document.getElementById('app-wrapper').classList.add('unlocked');
+                    document.getElementById('app-content').style.opacity = '1';
                     initApp();
                 } else {
                     document.getElementById('lock-msg').style.display = 'block';
-                    lockInput.value = '';
+                    e.target.value = '';
                 }
             }
         });
 
+        // --- CORE LOGIC ---
         function initApp() {
-            const saved = localStorage.getItem('eairl_db_v8_0');
-            db = saved ? JSON.parse(saved) : seedData;
-            db.forEach(i => { if(!i.logs) i.logs = []; if(!i.files) i.files = []; });
-            render();
-            checkMemory();
+            const saved = localStorage.getItem(DB_KEY);
+            if (saved) {
+                db = JSON.parse(saved);
+                // Schema Migration Check
+                db.forEach(i => {
+                    if(!i.owner) i.owner = "Nicolas";
+                    if(!i.updated) i.updated = new Date().toISOString().split('T')[0];
+                    if(!i.files) i.files = [];
+                    if(!i.logs) i.logs = [];
+                });
+            } else {
+                db = seedData;
+                save();
+            }
+            renderApp();
+            updateMemory();
         }
 
-        function render() {
+        function renderApp() {
             renderStats();
-            const container = document.getElementById('tables-container');
+            const container = document.getElementById('pipeline-container');
             container.innerHTML = '';
-            
+
             const sections = {
-                'A': '🚀 ACTIVE OPS (HIGH PRIORITY)',
-                'B': '🏴‍☠️ COMPETITIONS & BOUNTIES',
-                'C': '📂 SUBMITTED / ARCHIVE',
-                'D': '📡 STRATEGIC MONITOR',
-                'E': '🗄️ LONG TAIL'
+                'A': 'SECTION A: ACTIVE OPS (HIGH PRIORITY)',
+                'B': 'SECTION B: COMPETITIONS & BOUNTIES',
+                'C': 'SECTION C: VERIFIED REGRANTORS',
+                'D': 'SECTION D: SUBMITTED / ARCHIVE',
+                'E': 'SECTION E: STRATEGIC MONITOR'
             };
 
             for (const [key, title] of Object.entries(sections)) {
                 const items = db.filter(i => i.sec === key);
                 if (items.length === 0) continue;
+
+                const isOpen = (key === 'A' || key === 'C' || key === 'D') ? 'open' : '';
                 
-                const html = `
-                    <details ${key === 'A' || key === 'C' ? 'open' : ''}>
-                        <summary>${title} <span style="opacity:0.5">${items.length}</span></summary>
+                let html = `
+                    <details ${isOpen} style="margin-bottom:20px; border:1px solid var(--border);">
+                        <summary class="section-header">
+                            <span>${title}</span>
+                            <span class="mono" style="font-size:10px; opacity:0.5;">${items.length} TARGETS</span>
+                        </summary>
                         <table>
-                            <thead><tr><th width="25%">Target</th><th width="10%">Type</th><th width="15%">Status</th><th>Notes</th><th width="5%">Tools</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th style="width:20%">Target</th>
+                                    <th style="width:10%">Type / Affil.</th>
+                                    <th style="width:10%">Deadline</th>
+                                    <th style="width:12%">Status</th>
+                                    <th style="width:20%">Next Action</th>
+                                    <th style="width:8%">Last</th>
+                                    <th style="width:15%">Notes</th>
+                                    <th style="width:5%">Tools</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                ${items.map(i => `
-                                    <tr>
-                                        <td><strong>${i.name}</strong><br><span style="font-size:0.7rem; color:#888">Due: ${i.deadline}</span></td>
-                                        <td><span class="badge badge-${i.type.toLowerCase()}">${i.type}</span></td>
-                                        <td>
-                                            <select class="status-select st-${i.status.toLowerCase()}" onchange="update(${i.id}, 'status', this.value)">
-                                                <option ${i.status === 'Identify' ? 'selected' : ''}>Identify</option>
-                                                <option ${i.status === 'Pitching' ? 'selected' : ''}>Pitching</option>
-                                                <option ${i.status === 'Submitted' ? 'selected' : ''}>Submitted</option>
-                                                <option ${i.status === 'Won' ? 'selected' : ''}>Won</option>
-                                            </select>
-                                        </td>
-                                        <td><input class="action-input" value="${i.notes || ''}" onchange="update(${i.id}, 'notes', this.value)"></td>
-                                        <td style="text-align:center;">
-                                            <button class="icon-btn ${i.logs.length > 0 ? 'has-data' : ''}" onclick="openLog(${i.id})">📝</button>
-                                            <button class="icon-btn ${i.files.length > 0 ? 'has-data' : ''}" onclick="openModal(${i.id})">📎</button>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </details>
                 `;
+
+                items.forEach(i => {
+                    // Styles
+                    const statusColor = `var(--st-${i.status.toLowerCase()})`;
+                    const typeClass = i.type.toLowerCase().includes('grant') ? 'grant' : 
+                                      i.type.toLowerCase().includes('bounty') ? 'bounty' : 
+                                      i.type.toLowerCase().includes('regrant') ? 'regrant' : 'contract';
+                    
+                    const badgeStyle = `background:var(--badge-${typeClass}); color:var(--text-${typeClass});`;
+                    const hasFiles = i.files.length > 0 ? 'color:var(--highlight); opacity:1;' : '';
+
+                    html += `
+                        <tr>
+                            <td>
+                                <div style="font-weight:700;">${i.name}</div>
+                                <div style="font-size:10px; color:var(--text-muted);">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">APPLY ↗</a>` : ''} ${i.link_fit ? `• <a href="${i.link_fit}" target="_blank" style="color:var(--text-muted); text-decoration:none;">EVIDENCE</a>` : ''}</div>
+                            </td>
+                            <td>
+                                <span class="status-badge" style="${badgeStyle}">${i.type}</span>
+                                ${i.affiliation ? `<div style="font-size:9px; margin-top:2px;">${i.affiliation}</div>` : ''}
+                            </td>
+                            <td><input class="mono" value="${i.deadline}" onchange="update(${i.id}, 'deadline', this.value)"></td>
+                            <td>
+                                <select class="status-select" style="color:${statusColor}; font-weight:700;" onchange="update(${i.id}, 'status', this.value)">
+                                    <option ${i.status==='Identify'?'selected':''}>Identify</option>
+                                    <option ${i.status==='Drafting'?'selected':''}>Drafting</option>
+                                    <option ${i.status==='Submitted'?'selected':''}>Submitted</option>
+                                    <option ${i.status==='Follow-up'?'selected':''}>Follow-up</option>
+                                    <option ${i.status==='Won'?'selected':''}>Won</option>
+                                    <option ${i.status==='Rejected'?'selected':''}>Rejected</option>
+                                    <option ${i.status==='Archived'?'selected':''}>Archived</option>
+                                </select>
+                            </td>
+                            <td><input value="${i.next}" onchange="update(${i.id}, 'next', this.value)"></td>
+                            <td class="mono" style="font-size:10px; color:var(--text-muted);">${i.updated}</td>
+                            <td><input value="${i.notes}" onchange="update(${i.id}, 'notes', this.value)"></td>
+                            <td>
+                                <button class="icon-btn" style="${hasFiles}" onclick="openFileModal(${i.id})"><svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/></svg></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table></details>`;
                 container.innerHTML += html;
             }
         }
 
-        function checkMemory() {
-            const used = JSON.stringify(localStorage).length;
-            const limit = 5000000; // ~5MB
-            const pct = Math.round((used / limit) * 100);
-            
-            document.getElementById('mem-bar').style.width = pct + '%';
-            document.getElementById('mem-val').innerText = pct + '%';
-            
-            if(pct > 90) document.getElementById('mem-bar').style.background = 'red';
-        }
-
-        // --- CORE FUNCTIONS (Same as before) ---
         function renderStats() {
             const total = db.length;
-            const pitching = db.filter(i => i.status === 'Pitching').length;
+            const drafting = db.filter(i => i.status === 'Drafting').length;
             const submitted = db.filter(i => i.status === 'Submitted').length;
             const won = db.filter(i => i.status === 'Won').length;
-            document.getElementById('stats-mount').innerHTML = `<div class="stat-box"><span class="stat-label">Total</span><span class="stat-num">${total}</span></div><div class="stat-box"><span class="stat-label" style="color:#b45309">Pitching</span><span class="stat-num" style="color:#b45309">${pitching}</span></div><div class="stat-box"><span class="stat-label" style="color:#008800">Submitted</span><span class="stat-num" style="color:#008800">${submitted}</span></div><div class="stat-box"><span class="stat-label" style="color:#0044cc">Won</span><span class="stat-num" style="color:#0044cc">${won}</span></div>`;
-        }
-        function update(id, field, val) { const item = db.find(i => i.id === id); item[field] = val; save(); render(); }
-        function openLog(id) { activeId = id; const item = db.find(i => i.id === id); document.getElementById('log-overlay').style.display = 'flex'; document.getElementById('log-input').value = ''; document.getElementById('log-list-container').innerHTML = item.logs.map(l => `<div class="log-entry"><span class="log-date">${l.date}</span>${l.text}</div>`).join(''); }
-        function saveLog() { const txt = document.getElementById('log-input').value; if (!txt) return; const item = db.find(i => i.id === activeId); item.logs.unshift({ date: new Date().toLocaleDateString(), text: txt }); save(); openLog(activeId); render(); }
-        function closeLog() { document.getElementById('log-overlay').style.display = 'none'; }
-
-        // --- NEW RICH EDITOR LOGIC ---
-        function openModal(id) { activeId = id; const item = db.find(i => i.id === id); document.getElementById('modal-overlay').style.display = 'flex'; renderFileList(item); }
-        
-        function renderFileList(item) {
-            const list = document.getElementById('modal-file-list');
-            list.innerHTML = item.files.map((f, index) => `
-                <div class="file-item">
-                    <span>${f.link ? `<a href="${f.link}" target="_blank" style="color:var(--accent-primary); text-decoration:none;">${f.name} ↗</a>` : f.name} ${f.content ? `<span style="font-size:0.6rem; background:#eee; padding:2px 4px; border-radius:3px; margin-left:5px;">DOC</span>` : ''}</span>
-                    <div><button class="btn-action" style="font-size:0.5rem; padding:2px 6px; margin-right:5px;" onclick="editContent(${item.id}, ${index})">OPEN / EDIT</button><span style="color:red; cursor:pointer;" onclick="deleteFile(${item.id}, ${index})">×</span></div>
-                </div>
-            `).join('') || '<div style="color:var(--text-muted); font-style:italic; padding:10px;">No files linked yet.</div>';
+            
+            document.getElementById('stats-mount').innerHTML = `
+                <div class="stat-item"><span class="stat-lbl">TOTAL TARGETS</span><span class="stat-val">${total}</span></div>
+                <div class="stat-item"><span class="stat-lbl" style="color:#d97706">DRAFTING</span><span class="stat-val" style="color:#d97706">${drafting}</span></div>
+                <div class="stat-item"><span class="stat-lbl" style="color:#059669">SUBMITTED</span><span class="stat-val" style="color:#059669">${submitted}</span></div>
+                <div class="stat-item"><span class="stat-lbl" style="color:#16a34a">WON</span><span class="stat-val" style="color:#16a34a">${won}</span></div>
+            `;
         }
 
-        function formatDoc(cmd, value=null) { document.execCommand(cmd, false, value); }
-
-        function editContent(id, idx) {
-            activeId = id;
-            activeFileIndex = idx;
+        // --- ACTIONS ---
+        function update(id, field, val) {
             const item = db.find(i => i.id === id);
-            const file = item.files[idx];
-            document.getElementById('modal-overlay').style.display = 'none';
-            document.getElementById('content-overlay').style.display = 'flex';
-            document.getElementById('rich-editor').innerHTML = file.content || "";
+            item[field] = val;
+            item.updated = new Date().toISOString().split('T')[0]; // Auto-timestamp
+            save(); renderApp();
         }
 
-        function saveContent() {
-            const txt = document.getElementById('rich-editor').innerHTML;
+        // --- FILE MODAL ---
+        function openFileModal(id) {
+            activeId = id;
+            document.getElementById('file-modal').style.display = 'flex';
+            renderFiles();
+            renderLogs();
+        }
+
+        function renderFiles() {
             const item = db.find(i => i.id === activeId);
-            item.files[activeFileIndex].content = txt;
-            save();
-            document.getElementById('content-overlay').style.display = 'none';
-            document.getElementById('modal-overlay').style.display = 'flex';
-            renderFileList(item);
+            const list = document.getElementById('file-list');
+            list.innerHTML = item.files.map((f, idx) => `
+                <div style="display:flex; justify-content:space-between; padding:8px; background:var(--bg); border-bottom:1px solid var(--border); align-items:center;">
+                    <div>
+                        <span style="font-weight:700;">${f.name}</span>
+                        ${f.link ? `<a href="${f.link}" target="_blank" style="margin-left:5px; color:var(--highlight);">OPEN ↗</a>` : ''}
+                        ${f.content ? `<span style="font-size:9px; background:var(--border); padding:1px 4px; border-radius:2px; margin-left:5px;">DOC</span>` : ''}
+                    </div>
+                    <div>
+                        <button class="btn" style="font-size:9px;" onclick="openEditor(${idx})">${f.content ? 'EDIT' : 'VIEW'}</button>
+                        <button class="icon-btn" style="color:red;" onclick="delFile(${idx})">×</button>
+                    </div>
+                </div>
+            `).join('') || '<div style="padding:10px; color:var(--text-muted); font-style:italic;">No attachments.</div>';
         }
 
-        function addTextEntry() {
+        function addLink() {
+            const name = document.getElementById('link-name').value;
+            const url = document.getElementById('link-url').value;
+            if (!name) return alert("Name required");
+            
             const item = db.find(i => i.id === activeId);
-            item.files.push({ name: "Application Document", link: "", content: "" });
-            save();
-            const newIndex = item.files.length - 1;
-            renderFileList(item);
-            render();
-            editContent(activeId, newIndex);
+            item.files.push({ name: name, link: url, content: null });
+            item.updated = new Date().toISOString().split('T')[0];
+            
+            document.getElementById('link-name').value = '';
+            document.getElementById('link-url').value = '';
+            save(); renderFiles(); renderApp();
         }
 
-        function addFile() {
-            let name = document.getElementById('file-name-input').value;
-            const link = document.getElementById('file-link-input').value;
-            if(!name && link) name = "Link";
-            if(!name) return;
+        function addDoc() {
             const item = db.find(i => i.id === activeId);
-            item.files.push({ name, link, content: "" });
-            save();
-            document.getElementById('file-name-input').value = '';
-            document.getElementById('file-link-input').value = '';
-            renderFileList(item); render();
+            item.files.push({ name: "Note / Draft", link: null, content: "" });
+            item.updated = new Date().toISOString().split('T')[0];
+            save(); 
+            openEditor(item.files.length - 1);
         }
 
-        function deleteFile(id, idx) { const item = db.find(i => i.id === id); item.files.splice(idx, 1); save(); renderFileList(item); render(); }
-        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; document.getElementById('content-overlay').style.display = 'none'; }
+        function delFile(idx) {
+            const item = db.find(i => i.id === activeId);
+            item.files.splice(idx, 1);
+            item.updated = new Date().toISOString().split('T')[0];
+            save(); renderFiles(); renderApp();
+        }
+
+        // --- EDITOR ---
+        function openEditor(idx) {
+            activeFileIndex = idx;
+            const item = db.find(i => i.id === activeId);
+            document.getElementById('rich-editor').innerHTML = item.files[idx].content || "";
+            document.getElementById('file-modal').style.display = 'none';
+            document.getElementById('editor-modal').style.display = 'flex';
+        }
+
+        function saveEditorContent() {
+            const content = document.getElementById('rich-editor').innerHTML;
+            const item = db.find(i => i.id === activeId);
+            item.files[activeFileIndex].content = content;
+            item.updated = new Date().toISOString().split('T')[0];
+            
+            save();
+            document.getElementById('editor-modal').style.display = 'none';
+            document.getElementById('file-modal').style.display = 'flex';
+            renderFiles();
+        }
+
+        function format(cmd, val) { document.execCommand(cmd, false, val); }
+
+        // --- LOGS ---
+        function addLog() {
+            const txt = document.getElementById('log-input').value;
+            if(!txt) return;
+            const item = db.find(i => i.id === activeId);
+            item.logs.unshift({ date: new Date().toISOString().split('T')[0], text: txt });
+            item.updated = new Date().toISOString().split('T')[0];
+            document.getElementById('log-input').value = '';
+            save(); renderLogs(); renderApp();
+        }
+
+        function renderLogs() {
+            const item = db.find(i => i.id === activeId);
+            document.getElementById('log-list').innerHTML = item.logs.map(l => `
+                <div style="padding:6px; border-bottom:1px solid var(--border); font-size:11px;">
+                    <span class="mono" style="color:var(--text-muted); margin-right:5px;">${l.date}</span>
+                    ${l.text}
+                </div>
+            `).join('');
+        }
+
+        // --- SYSTEM ---
+        function closeModal() {
+            document.getElementById('file-modal').style.display = 'none';
+            document.getElementById('editor-modal').style.display = 'none';
+        }
 
         function save() { 
             try {
-                localStorage.setItem('eairl_db_v8_0', JSON.stringify(db));
-                checkMemory();
-            } catch(e) {
-                alert("STORAGE FULL! Delete some images or text.");
-            }
+                localStorage.setItem(DB_KEY, JSON.stringify(db));
+                updateMemory();
+            } catch(e) { alert("STORAGE FULL."); }
         }
-        function exportData() { const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2)); const a = document.createElement('a'); a.href = dataStr; a.download = "funding_backup.json"; a.click(); a.remove(); }
-        function toggleTheme() { const b = document.body; b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
+
+        function updateMemory() {
+            const used = JSON.stringify(localStorage).length;
+            const pct = Math.round((used / 5000000) * 100);
+            document.getElementById('mem-val').innerText = pct + "%";
+            document.getElementById('mem-fill').style.width = pct + "%";
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+            const a = document.createElement('a'); a.href = dataStr; a.download = "eairl_funding_db.json"; a.click(); a.remove();
+        }
+
+        function toggleTheme() {
+            const b = document.body;
+            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        }
     </script>
 </body>
 </html>
