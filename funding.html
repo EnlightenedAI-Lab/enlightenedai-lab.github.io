@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Funding Command | Secure v7.3</title>
+    <title>Funding Command | Secure v7.4</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,14 +19,12 @@
             --type-prize: #dcfce7; --text-prize: #15803d;
             --type-bounty: #fee2e2; --text-bounty: #b91c1c;
             --type-contract: #fef3c7; --text-contract: #b45309;
-            --type-accel: #f3e8ff; --text-accel: #6b21a8;
         }
         body[data-theme="dark"] {
             --bg-color: #0a0a0a; --sidebar-bg: #0a0a0a; --text-main: #f0f0f0; --text-muted: #888888;
             --border-color: #333333; --accent-primary: #66aaff;
             --type-grant: #0c4a6e; --text-grant: #7dd3fc; --type-prize: #052e16; --text-prize: #86efac;
             --type-bounty: #450a0a; --text-bounty: #fca5a5; --type-contract: #451a03; --text-contract: #fcd34d;
-            --type-accel: #3b0764; --text-accel: #d8b4fe;
         }
         
         * { box-sizing: border-box; }
@@ -69,7 +67,6 @@
         .badge-prize { background: var(--type-prize); color: var(--text-prize); }
         .badge-bounty { background: var(--type-bounty); color: var(--text-bounty); }
         .badge-contract { background: var(--type-contract); color: var(--text-contract); }
-        .badge-accel { background: var(--type-accel); color: var(--text-accel); }
         
         .status-select, .action-input { background: transparent; border: 1px solid transparent; color: var(--text-main); font-family: inherit; font-size: 0.8rem; padding: 4px; width: 100%; }
         .status-select:hover, .action-input:hover { border-color: var(--border-color); background: var(--bg-color); }
@@ -91,7 +88,7 @@
         .file-list, .log-list { margin-top: 1rem; border: 1px solid var(--border-color); padding: 0.5rem; min-height: 100px; max-height: 300px; overflow-y: auto; background: var(--sidebar-bg); }
         .log-entry { font-size: 0.8rem; padding: 8px; border-bottom: 1px solid var(--border-color); background: var(--bg-color); margin-bottom: 4px; }
         .log-date { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
-        .file-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 6px; border-bottom: 1px solid var(--border-color); background: var(--bg-color); margin-bottom: 4px; }
+        .file-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 6px; border-bottom: 1px solid var(--border-color); background: var(--bg-color); margin-bottom: 4px; align-items: center; }
 
         .version-tag { position: fixed; bottom: 20px; left: 20px; font-family: var(--font-mono); font-size: 0.65rem; color: #cc0000; font-weight: 700; z-index: 2000; background: var(--bg-color); padding: 4px 8px; border: 1px solid #cc0000; border-radius: 4px; }
         
@@ -119,7 +116,7 @@
         </div>
     </div>
 
-    <div class="version-tag">[ v7.3 ]</div>
+    <div class="version-tag">[ v7.4 ]</div>
 
     <div class="layout-wrapper" id="app-wrapper">
         <aside>
@@ -174,9 +171,11 @@
         <div class="modal-content" style="height: 80vh; width: 800px;">
             <div class="modal-header"><span>EDIT CONTENT</span> <span style="cursor:pointer" onclick="closeModal()">✕</span></div>
             <div style="flex:1; display:flex; flex-direction:column;">
-                <p style="font-size:0.8rem; color:var(--text-muted);">Paste your application text here to save it securely in the browser.</p>
-                <textarea id="content-editor" class="scratchpad" style="flex:1; margin-bottom:1rem; border:1px solid var(--border-color);"></textarea>
-                <button class="btn-action" onclick="saveContent()">SAVE CHANGES</button>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">Paste application text below. It saves to local browser storage.</p>
+                <textarea id="content-editor" class="scratchpad" style="flex:1; margin-bottom:1rem; border:1px solid var(--border-color); font-family:monospace; font-size:0.85rem;"></textarea>
+                <div style="text-align:right;">
+                    <button class="btn-action" onclick="saveContent()">SAVE CHANGES</button>
+                </div>
             </div>
         </div>
     </div>
@@ -185,15 +184,22 @@
         <div class="modal-content">
             <div class="modal-header"><span>EVIDENCE / FILES</span> <span style="cursor:pointer" onclick="closeModal()">✕</span></div>
             <div style="flex:1;">
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">
-                    <strong>Option A:</strong> Paste a Drive/Dropbox link.<br>
-                    <strong>Option B:</strong> Click "Paste / View" to store text directly here.
-                </p>
-                <div style="display:flex; gap:10px; margin-bottom:10px;">
-                    <input type="text" id="file-name-input" class="action-input" placeholder="Name" style="border:1px solid var(--border-color);">
-                    <input type="text" id="file-link-input" class="action-input" placeholder="URL (Optional)" style="border:1px solid var(--border-color);">
-                    <button class="btn-action" onclick="addFile()">ADD LINK</button>
+                
+                <div style="background:var(--sidebar-bg); padding:1rem; border-radius:4px; margin-bottom:1rem; border:1px solid var(--border-color);">
+                    <div style="font-weight:700; font-size:0.75rem; margin-bottom:0.5rem; color:var(--text-muted);">OPTION A: LINK TO CLOUD</div>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="file-name-input" class="action-input" placeholder="Name" style="border:1px solid var(--border-color);">
+                        <input type="text" id="file-link-input" class="action-input" placeholder="URL" style="border:1px solid var(--border-color);">
+                        <button class="btn-action" onclick="addFile()">ADD LINK</button>
+                    </div>
                 </div>
+
+                <div style="background:var(--sidebar-bg); padding:1rem; border-radius:4px; margin-bottom:1rem; border:1px solid var(--border-color);">
+                    <div style="font-weight:700; font-size:0.75rem; margin-bottom:0.5rem; color:var(--text-muted);">OPTION B: PASTE TEXT</div>
+                    <button class="btn-action" style="width:100%; border:1px dashed var(--accent-primary); color:var(--accent-primary);" onclick="addTextEntry()">📝 CREATE TEXT NOTE & PASTE CONTENT</button>
+                </div>
+
+                <div style="font-weight:700; font-size:0.75rem; margin-bottom:0.5rem; color:var(--text-muted);">ATTACHMENTS</div>
                 <div class="file-list" id="modal-file-list"></div>
             </div>
         </div>
@@ -216,8 +222,8 @@
             { id: 8, sec: 'B', name: "Microsoft AI Bounty", type: "Bounty", deadline: "Open", status: "Identify", notes: "Zero Day Quest" },
             { id: 9, sec: 'B', name: "AE Studio", type: "Contract", deadline: "Rolling", status: "Identify", notes: "Neglected approaches" },
 
-            // C: SUBMITTED (Added NextAI here)
-            { id: 99, sec: 'C', name: "Foresight Institute", type: "Grant", deadline: "Submitted", status: "Submitted", notes: "Applied Dec 29. Archived." },
+            // C: SUBMITTED
+            { id: 99, sec: 'C', name: "Foresight Institute", type: "Grant", deadline: "Rolling", status: "Submitted", notes: "Applied with alignment instrumentation. Archived." },
             { id: 98, sec: 'C', name: "NextAI (Next Canada)", type: "Accel", deadline: "Submitted", status: "Submitted", notes: "Application submitted.", link: "https://www.nextcanada.com/next-ai" },
 
             // D: MONITOR
@@ -371,8 +377,8 @@
                         ${f.content ? `<span style="font-size:0.6rem; background:#eee; padding:2px 4px; border-radius:3px; margin-left:5px;">TEXT SAVED</span>` : ''}
                     </span>
                     <div>
-                        <button class="btn-action" style="font-size:0.5rem; padding:2px 4px; margin-right:5px;" onclick="editContent(${item.id}, ${index})">PASTE / VIEW</button>
-                        <span style="color:red; cursor:pointer;" onclick="deleteFile(${item.id}, ${index})">×</span>
+                        <button class="btn-action" style="font-size:0.6rem; padding:2px 6px;" onclick="editContent(${item.id}, ${index})">PASTE / VIEW</button>
+                        <span style="color:red; cursor:pointer; margin-left:8px;" onclick="deleteFile(${item.id}, ${index})">×</span>
                     </div>
                 </div>
             `).join('') || '<div style="color:var(--text-muted); font-style:italic; padding:10px;">No files linked yet.</div>';
@@ -394,6 +400,18 @@
             save();
             document.getElementById('content-overlay').style.display = 'none';
             renderFileList(item);
+        }
+
+        // NEW: Create a dedicated text entry directly
+        function addTextEntry() {
+            const item = db.find(i => i.id === activeId);
+            item.files.push({ name: "Application Text", link: "", content: "" });
+            save();
+            const newIndex = item.files.length - 1;
+            renderFileList(item);
+            render();
+            // Open the editor immediately
+            editContent(activeId, newIndex);
         }
 
         function addFile() {
