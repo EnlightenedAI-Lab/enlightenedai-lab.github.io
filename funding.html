@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>EAIRL | FUNDING CMD v9.0</title>
+    <title>EAIRL | FUNDING CMD v9.1</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,17 +18,17 @@
             --border: #e4e4e7;
             --text-main: #09090b; 
             --text-muted: #71717a;
-            --accent: #18181b; /* Almost Black */
-            --highlight: #2563eb; /* Lab Blue */
+            --accent: #18181b; 
+            --highlight: #2563eb; 
             
-            /* STATUS COLORS */
+            /* STATUS COLORS (Semantic) */
             --st-identify: #71717a;
             --st-drafting: #d97706;
             --st-submitted: #059669;
             --st-won: #16a34a;
             --st-rejected: #dc2626;
             
-            /* TYPE BADGES */
+            /* TYPE BADGES (Scientific) */
             --badge-grant: #e0f2fe; --text-grant: #075985;
             --badge-bounty: #fee2e2; --text-bounty: #991b1b;
             --badge-regrant: #f3e8ff; --text-regrant: #6b21a8;
@@ -70,6 +70,18 @@
             font-family: "JetBrains Mono", monospace; border: 1px solid transparent;
         }
 
+        /* --- SEARCH & GOAL BAR --- */
+        .search-container { margin-bottom: 20px; position: sticky; top: 0; background: var(--bg); z-index: 20; padding-top: 5px; }
+        .search-input {
+            width: 100%; padding: 10px 12px; background: var(--surface); border: 1px solid var(--border);
+            color: var(--text-main); font-family: "JetBrains Mono", monospace; font-size: 12px;
+        }
+        .search-input:focus { border-color: var(--highlight); outline: none; }
+
+        .goal-bar-container { width: 100%; height: 4px; background: var(--border); margin-top: 5px; border-radius: 2px; overflow: hidden; }
+        .goal-bar-fill { height: 100%; background: var(--highlight); width: 0%; transition: width 0.5s ease; }
+        .goal-label { font-size: 10px; font-family: "JetBrains Mono", monospace; color: var(--text-muted); display: flex; justify-content: space-between; margin-top: 2px; }
+
         /* --- DATA TABLES --- */
         .section-header {
             padding: 12px 24px; background: var(--surface); border-bottom: 1px solid var(--border);
@@ -94,7 +106,27 @@
             font-family: inherit; font-size: 12px; width: 100%; padding: 2px 4px;
         }
         input:focus, select:focus { border-color: var(--highlight); outline: none; background: var(--bg); }
-        input::placeholder { color: var(--text-muted); opacity: 0.5; }
+        
+        /* --- MODALS --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(2px); z-index: 100;
+            align-items: center; justify-content: center;
+        }
+        .modal-box {
+            background: var(--bg); border: 1px solid var(--border); width: 900px; max-width: 95%;
+            height: 85vh; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .modal-header {
+            padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; 
+            justify-content: space-between; font-weight: 700; font-family: "JetBrains Mono", monospace;
+        }
+        .editor-area {
+            flex: 1; padding: 20px; overflow-y: auto; outline: none; font-family: "Inter", sans-serif;
+            line-height: 1.6;
+        }
+        .editor-area img { max-width: 100%; border: 1px solid var(--border); }
+        .toolbar { padding: 8px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; background: var(--surface); }
 
         /* --- LOCK SCREEN --- */
         #lock-screen {
@@ -107,47 +139,15 @@
             background: transparent; border: 1px solid #333; color: #00ff00; 
             padding: 10px; width: 200px; text-align: center; margin-top: 20px; outline: none;
         }
-        .lock-input:focus { border-color: #00ff00; }
 
-        /* --- MODALS --- */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(2px); z-index: 100;
-            align-items: center; justify-content: center;
-        }
-        .modal-box {
-            background: var(--bg); border: 1px solid var(--border); width: 800px; max-width: 95%;
-            height: 80vh; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        .modal-header {
-            padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; 
-            justify-content: space-between; font-weight: 700; font-family: "JetBrains Mono", monospace;
-        }
-        .editor-area {
-            flex: 1; padding: 20px; overflow-y: auto; outline: none; font-family: "Inter", sans-serif;
-            line-height: 1.6;
-        }
-        .toolbar { padding: 8px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; background: var(--surface); }
-
-        /* UTILS */
-        .stat-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); margin-bottom: 20px; border: 1px solid var(--border); }
-        .stat-item { background: var(--bg); padding: 10px; text-align: center; }
-        .stat-val { display: block; font-weight: 700; font-size: 16px; }
-        .stat-lbl { font-size: 9px; text-transform: uppercase; color: var(--text-muted); font-family: "JetBrains Mono", monospace; }
-        
-        .mem-meter { height: 2px; background: var(--border); width: 100%; margin-top: auto; }
-        .mem-fill { height: 100%; background: var(--text-muted); width: 0%; }
-
-        .hidden { display: none; }
         .icon-btn { cursor: pointer; opacity: 0.5; transition: opacity 0.2s; font-size: 14px; background: none; border: none; padding: 0 4px; }
         .icon-btn:hover { opacity: 1; color: var(--highlight); }
-        .has-content { opacity: 1; color: var(--text-main); }
     </style>
 </head>
 <body data-theme="light">
 
     <div id="lock-screen">
-        <div>EAIRL_SECURE_TERMINAL // v9.0</div>
+        <div>EAIRL_SECURE_TERMINAL // v9.1</div>
         <input type="password" id="password-input" class="lock-input" placeholder="ACCESS KEY" autofocus>
         <div id="lock-msg" style="margin-top:10px; font-size:10px; color:red; display:none;">ACCESS DENIED</div>
     </div>
@@ -170,13 +170,14 @@
                 <span>STORAGE</span>
                 <span id="mem-val">0%</span>
             </div>
-            <div class="mem-meter"><div class="mem-fill" id="mem-fill"></div></div>
+            <div style="height:2px; background:var(--border); width:100%;"><div id="mem-fill" style="height:100%; background:var(--text-muted); width:0%;"></div></div>
             <button class="btn" style="width:100%; margin-top:15px;" onclick="toggleTheme()">THEME: SWITCH</button>
         </div>
     </aside>
 
     <main id="app-content" style="opacity:0; transition:opacity 0.5s;">
         <div style="padding: 24px 32px;">
+            
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
                 <div>
                     <h1>Funding Command</h1>
@@ -187,12 +188,21 @@
                 </div>
             </div>
 
-            <div class="stat-bar" id="stats-mount"></div>
+            <div class="search-container">
+                <input id="global-search" class="search-input" placeholder="> SEARCH TARGETS, NOTES, STATUS..." oninput="renderApp()">
+                <div class="goal-label">
+                    <span>JANUARY GOAL: SUBMISSIONS</span>
+                    <span id="goal-text">0 / 5</span>
+                </div>
+                <div class="goal-bar-container">
+                    <div class="goal-bar-fill" id="goal-bar"></div>
+                </div>
+            </div>
 
             <details style="margin-bottom:20px; border:1px solid var(--border);">
-                <summary class="section-header"><span>> MISSION CONTROL / STRATEGY</span></summary>
+                <summary class="section-header"><span>// MISSION CONTROL</span></summary>
                 <div style="padding:0;">
-                    <textarea id="global-scratchpad" style="width:100%; height:120px; padding:15px; border:none; resize:vertical; outline:none; background:var(--bg); color:var(--text-main); font-family:'JetBrains Mono', monospace; font-size:12px;" placeholder="Global strategic notes..."></textarea>
+                    <textarea id="global-scratchpad" style="width:100%; height:100px; padding:15px; border:none; resize:vertical; outline:none; background:var(--bg); color:var(--text-main); font-family:'JetBrains Mono', monospace; font-size:12px;" placeholder="Global strategic notes..."></textarea>
                 </div>
             </details>
 
@@ -212,7 +222,7 @@
                 <button class="btn" onclick="format('insertUnorderedList')">List</button>
                 <button class="btn" onclick="format('formatBlock','H3')">Header</button>
             </div>
-            <div id="rich-editor" class="editor-area" contenteditable="true"></div>
+            <div id="rich-editor" class="editor-area" contenteditable="true" placeholder="Paste screenshots or text here..."></div>
             <div style="padding:15px; border-top:1px solid var(--border); text-align:right;">
                 <button class="btn" onclick="saveEditorContent()">SAVE & CLOSE</button>
             </div>
@@ -233,7 +243,7 @@
                         <input id="link-name" placeholder="Link Name (e.g. Drive)" style="margin-bottom:5px;">
                         <div style="display:flex; gap:5px;">
                             <input id="link-url" placeholder="https://..." style="flex:1;">
-                            <button class="btn" onclick="addLink()">ADD</button>
+                            <button class="btn" onclick="addLink()">ADD LINK</button>
                         </div>
                     </div>
                     <button class="btn" style="height:100%; border-style:dashed;" onclick="addDoc()">+ CREATE NOTE / PASTE TEXT</button>
@@ -255,44 +265,47 @@
     <script>
         // --- CONFIG ---
         const APP_PASSWORD = "3000"; 
-        const DB_KEY = 'eairl_funding_v9';
+        const DB_KEY = 'eairl_funding_v9_1';
         
-        // --- SEED DATA (v9 Schema) ---
+        // --- SEED DATA (Updated w/ Regrantors) ---
         const seedData = [
             // A: ACTIVE OPS
-            { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", status: "Identify", deadline: "2026-02-01", owner: "Nicolas", amount: "€50k", next: "Draft Abstract", link_apply: "https://nlnet.nl/commonsfund", link_fit: "", notes: "Top priority infra.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 2, sec: 'A', name: "Emergent Ventures", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "$50k+", next: "Write 1-pager", link_apply: "https://www.mercatus.org/emergent-ventures", link_fit: "", notes: "High agency/upside.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 3, sec: 'A', name: "NRC IRAP", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "$49k", next: "Call Montreal Office", link_apply: "https://nrc.canada.ca/en/support-technology-innovation", link_fit: "", notes: "AI Assist program.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 4, sec: 'A', name: "Aligned Studies (ASF)", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "$50k", next: "Review RFP", link_apply: "https://alignedstudies.com/apply", link_fit: "", notes: "Independent researchers.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", status: "Identify", deadline: "2026-02-01", owner: "Nicolas", mode: "Portal", amount: "€50k", next: "Draft Abstract", link_apply: "https://nlnet.nl/commonsfund", link_fit: "", notes: "Top priority infra.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 2, sec: 'A', name: "Emergent Ventures", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", amount: "$50k+", next: "Write 1-pager", link_apply: "https://www.mercatus.org/emergent-ventures", link_fit: "", notes: "High agency/upside.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 3, sec: 'A', name: "NRC IRAP", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Phone", amount: "$49k", next: "Call Montreal Office", link_apply: "https://nrc.canada.ca/en/support-technology-innovation", link_fit: "", notes: "AI Assist program.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 4, sec: 'A', name: "Aligned Studies (ASF)", type: "Grant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Portal", amount: "$50k", next: "Review RFP", link_apply: "https://alignedstudies.com/apply", link_fit: "", notes: "Independent researchers.", updated: "2025-12-29", files: [], logs: [] },
             
             // B: COMPETITIONS
-            { id: 5, sec: 'B', name: "Martian Prize", type: "Prize", status: "Identify", deadline: "Open", owner: "Nicolas", amount: "High", next: "Check bounties", link_apply: "https://www.martian.org/", link_fit: "", notes: "Interpretability.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 6, sec: 'B', name: "Google AI VRP", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", amount: "Var", next: "Review scope", link_apply: "https://bughunters.google.com/", link_fit: "", notes: "Vuln reward.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 7, sec: 'B', name: "Microsoft AI Bounty", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", amount: "Var", next: "Review scope", link_apply: "https://www.microsoft.com/en-us/msrc/bounty", link_fit: "", notes: "Zero Day Quest.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 5, sec: 'B', name: "Martian Prize", type: "Prize", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Code", amount: "High", next: "Check bounties", link_apply: "https://www.martian.org/", link_fit: "", notes: "Interpretability.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 6, sec: 'B', name: "Google AI VRP", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Report", amount: "Var", next: "Review scope", link_apply: "https://bughunters.google.com/", link_fit: "", notes: "Vuln reward.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 7, sec: 'B', name: "Microsoft AI Bounty", type: "Bounty", status: "Identify", deadline: "Open", owner: "Nicolas", mode: "Report", amount: "Var", next: "Review scope", link_apply: "https://www.microsoft.com/en-us/msrc/bounty", link_fit: "", notes: "Zero Day Quest.", updated: "2025-12-29", files: [], logs: [] },
 
-            // C: REGRANTORS (NEW)
-            { id: 20, sec: 'C', name: "Evan Hubinger", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/evhub", notes: "Focus: Interpretability, evals.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 21, sec: 'C', name: "Tristan Hume", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/trishume", notes: "Focus: Tooling, behavioral evals.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 22, sec: 'C', name: "Neel Nanda", affiliation: "DeepMind", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/NeelNanda", notes: "Focus: Mech Interp.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 23, sec: 'C', name: "Marius Hobbhahn", affiliation: "Apollo", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "", notes: "Focus: Deception/Evals.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 24, sec: 'C', name: "Adam Gleave", affiliation: "FAR AI", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/AdamGleave", notes: "Focus: Robustness.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 25, sec: 'C', name: "Oliver Habryka", affiliation: "Lightcone", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Var", next: "Draft Pitch", link_apply: "mailto:oliver.habryka@lightconeinfra.com", link_fit: "", notes: "Focus: Infrastructure.", updated: "2025-12-29", files: [], logs: [] },
+            // C: REGRANTORS (Full List)
+            { id: 20, sec: 'C', name: "Evan Hubinger", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/evhub", notes: "Interp, evals.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 21, sec: 'C', name: "Tristan Hume", affiliation: "Anthropic", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/trishume", notes: "Tooling, behavioral evals.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 22, sec: 'C', name: "Neel Nanda", affiliation: "DeepMind", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/NeelNanda", notes: "Mech Interp.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 23, sec: 'C', name: "Marius Hobbhahn", affiliation: "Apollo", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "", notes: "Deception/Evals.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 24, sec: 'C', name: "Adam Gleave", affiliation: "FAR AI", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/AdamGleave", notes: "Robustness.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 25, sec: 'C', name: "Oliver Habryka", affiliation: "Lightcone", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", amount: "Var", next: "Draft Pitch", link_apply: "mailto:oliver.habryka@lightconeinfra.com", link_fit: "", notes: "Infrastructure.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 26, sec: 'C', name: "Ryan Kidd", affiliation: "MATS", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/RyanKidd", notes: "Early-stage evals.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 27, sec: 'C', name: "Marcus Abramovitch", affiliation: "Indep", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Manifund", amount: "Var", next: "Draft Pitch", link_apply: "https://manifund.org/submit", link_fit: "https://manifund.org/MarcusAbramovitch", notes: "Evals & infra.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 28, sec: 'C', name: "Nuño Sempere", affiliation: "Manifund", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", amount: "Var", next: "Draft Pitch", link_apply: "mailto:nuno.semperel@gmail.com", link_fit: "", notes: "Measurement tools.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 29, sec: 'C', name: "Zvi Mowshowitz", affiliation: "Indep", type: "Regrant", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Email", amount: "Var", next: "Draft Pitch", link_apply: "mailto:zvi@thezvi.com", link_fit: "", notes: "Execution-focused tools.", updated: "2025-12-29", files: [], logs: [] },
 
             // D: SUBMITTED / ARCHIVE
-            { id: 99, sec: 'D', name: "Foresight Institute", type: "Grant", status: "Submitted", deadline: "Rolling", owner: "Nicolas", amount: "Fellowship", next: "Wait", link_apply: "", link_fit: "", notes: "Applied Dec 29.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 98, sec: 'D', name: "NextAI (Next Canada)", type: "Accel", status: "Submitted", deadline: "Submitted", owner: "Nicolas", amount: "Accel", next: "Wait", link_apply: "https://www.nextcanada.com/next-ai", link_fit: "", notes: "Applied Dec 29.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 99, sec: 'D', name: "Foresight Institute", type: "Grant", status: "Submitted", deadline: "Rolling", owner: "Nicolas", mode: "Portal", amount: "Fellowship", next: "Wait", link_apply: "", link_fit: "", notes: "Applied Dec 29.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 98, sec: 'D', name: "NextAI (Next Canada)", type: "Accel", status: "Submitted", deadline: "Submitted", owner: "Nicolas", mode: "Portal", amount: "Accel", next: "Wait", link_apply: "https://www.nextcanada.com/next-ai", link_fit: "", notes: "Applied Dec 29.", updated: "2025-12-29", files: [], logs: [] },
 
             // E: MONITOR
-            { id: 10, sec: 'E', name: "BlueDot Impact", type: "Grant", status: "Identify", deadline: "Check", owner: "Nicolas", amount: "$50k", next: "Check site", link_apply: "https://www.aisafety.com/funding", link_fit: "", notes: "Governance.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 11, sec: 'E', name: "Mozilla Tech Fund", type: "Grant", status: "Identify", deadline: "Closed", owner: "Nicolas", amount: "$50k", next: "Monitor", link_apply: "https://foundation.mozilla.org/en/", link_fit: "", notes: "Open source audit.", updated: "2025-12-29", files: [], logs: [] },
-            { id: 12, sec: 'E', name: "METR (ARC Evals)", type: "Contract", status: "Identify", deadline: "Rolling", owner: "Nicolas", amount: "Rev", next: "Sales pitch", link_apply: "https://metr.org/contact/", link_fit: "", notes: "Eval services.", updated: "2025-12-29", files: [], logs: [] }
+            { id: 10, sec: 'E', name: "BlueDot Impact", type: "Grant", status: "Identify", deadline: "Check", owner: "Nicolas", mode: "Portal", amount: "$50k", next: "Check site", link_apply: "https://www.aisafety.com/funding", link_fit: "", notes: "Governance.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 11, sec: 'E', name: "Mozilla Tech Fund", type: "Grant", status: "Identify", deadline: "Closed", owner: "Nicolas", mode: "Portal", amount: "$50k", next: "Monitor", link_apply: "https://foundation.mozilla.org/en/", link_fit: "", notes: "Open source audit.", updated: "2025-12-29", files: [], logs: [] },
+            { id: 12, sec: 'E', name: "METR (ARC Evals)", type: "Contract", status: "Identify", deadline: "Rolling", owner: "Nicolas", mode: "Sales", amount: "Rev", next: "Sales pitch", link_apply: "https://metr.org/contact/", link_fit: "", notes: "Eval services.", updated: "2025-12-29", files: [], logs: [] }
         ];
 
         let db = [];
         let activeId = null;
         let activeFileIndex = null;
 
-        // --- AUTHENTICATION ---
         document.getElementById('password-input').addEventListener('keyup', (e) => {
             if (e.key === 'Enter') {
                 if (e.target.value === APP_PASSWORD) {
@@ -306,14 +319,13 @@
             }
         });
 
-        // --- CORE LOGIC ---
         function initApp() {
             const saved = localStorage.getItem(DB_KEY);
             if (saved) {
                 db = JSON.parse(saved);
-                // Schema Migration Check
                 db.forEach(i => {
                     if(!i.owner) i.owner = "Nicolas";
+                    if(!i.mode) i.mode = "-";
                     if(!i.updated) i.updated = new Date().toISOString().split('T')[0];
                     if(!i.files) i.files = [];
                     if(!i.logs) i.logs = [];
@@ -327,7 +339,9 @@
         }
 
         function renderApp() {
+            const filter = document.getElementById('global-search').value.toLowerCase();
             renderStats();
+            
             const container = document.getElementById('pipeline-container');
             container.innerHTML = '';
 
@@ -340,26 +354,37 @@
             };
 
             for (const [key, title] of Object.entries(sections)) {
-                const items = db.filter(i => i.sec === key);
+                let items = db.filter(i => i.sec === key);
+                
+                // FILTERING LOGIC
+                if (filter) {
+                    items = items.filter(i => 
+                        i.name.toLowerCase().includes(filter) || 
+                        i.notes.toLowerCase().includes(filter) || 
+                        i.status.toLowerCase().includes(filter) ||
+                        i.type.toLowerCase().includes(filter)
+                    );
+                }
+
                 if (items.length === 0) continue;
 
-                const isOpen = (key === 'A' || key === 'C' || key === 'D') ? 'open' : '';
+                const isOpen = (key === 'A' || key === 'C' || key === 'D' || filter) ? 'open' : '';
                 
                 let html = `
                     <details ${isOpen} style="margin-bottom:20px; border:1px solid var(--border);">
                         <summary class="section-header">
                             <span>${title}</span>
-                            <span class="mono" style="font-size:10px; opacity:0.5;">${items.length} TARGETS</span>
+                            <span class="mono" style="font-size:10px; opacity:0.5;">${items.length}</span>
                         </summary>
                         <table>
                             <thead>
                                 <tr>
-                                    <th style="width:20%">Target</th>
-                                    <th style="width:10%">Type / Affil.</th>
-                                    <th style="width:10%">Deadline</th>
+                                    <th style="width:20%">Target / Fit</th>
+                                    <th style="width:10%">Type / Owner</th>
+                                    <th style="width:8%">Deadline</th>
                                     <th style="width:12%">Status</th>
-                                    <th style="width:20%">Next Action</th>
-                                    <th style="width:8%">Last</th>
+                                    <th style="width:18%">Next Action</th>
+                                    <th style="width:7%">Last</th>
                                     <th style="width:15%">Notes</th>
                                     <th style="width:5%">Tools</th>
                                 </tr>
@@ -368,7 +393,6 @@
                 `;
 
                 items.forEach(i => {
-                    // Styles
                     const statusColor = `var(--st-${i.status.toLowerCase()})`;
                     const typeClass = i.type.toLowerCase().includes('grant') ? 'grant' : 
                                       i.type.toLowerCase().includes('bounty') ? 'bounty' : 
@@ -381,11 +405,11 @@
                         <tr>
                             <td>
                                 <div style="font-weight:700;">${i.name}</div>
-                                <div style="font-size:10px; color:var(--text-muted);">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">APPLY ↗</a>` : ''} ${i.link_fit ? `• <a href="${i.link_fit}" target="_blank" style="color:var(--text-muted); text-decoration:none;">EVIDENCE</a>` : ''}</div>
+                                <div style="font-size:10px; color:var(--text-muted);">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">APPLY ↗</a>` : ''} ${i.link_fit ? `• <a href="${i.link_fit}" target="_blank" style="color:var(--text-muted); text-decoration:none;">FIT</a>` : ''}</div>
                             </td>
                             <td>
                                 <span class="status-badge" style="${badgeStyle}">${i.type}</span>
-                                ${i.affiliation ? `<div style="font-size:9px; margin-top:2px;">${i.affiliation}</div>` : ''}
+                                <div style="font-size:9px; margin-top:2px; color:var(--text-muted);">${i.owner} / ${i.mode}</div>
                             </td>
                             <td><input class="mono" value="${i.deadline}" onchange="update(${i.id}, 'deadline', this.value)"></td>
                             <td>
@@ -400,7 +424,7 @@
                                 </select>
                             </td>
                             <td><input value="${i.next}" onchange="update(${i.id}, 'next', this.value)"></td>
-                            <td class="mono" style="font-size:10px; color:var(--text-muted);">${i.updated}</td>
+                            <td class="mono" style="font-size:9px; color:var(--text-muted);">${i.updated.slice(5)}</td>
                             <td><input value="${i.notes}" onchange="update(${i.id}, 'notes', this.value)"></td>
                             <td>
                                 <button class="icon-btn" style="${hasFiles}" onclick="openFileModal(${i.id})"><svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/></svg></button>
@@ -416,32 +440,32 @@
 
         function renderStats() {
             const total = db.length;
-            const drafting = db.filter(i => i.status === 'Drafting').length;
             const submitted = db.filter(i => i.status === 'Submitted').length;
-            const won = db.filter(i => i.status === 'Won').length;
+            const goal = 5; // January Goal
+            const pct = Math.min((submitted / goal) * 100, 100);
+
+            document.getElementById('goal-bar').style.width = pct + "%";
+            document.getElementById('goal-text').innerText = `${submitted} / ${goal}`;
             
             document.getElementById('stats-mount').innerHTML = `
-                <div class="stat-item"><span class="stat-lbl">TOTAL TARGETS</span><span class="stat-val">${total}</span></div>
-                <div class="stat-item"><span class="stat-lbl" style="color:#d97706">DRAFTING</span><span class="stat-val" style="color:#d97706">${drafting}</span></div>
+                <div class="stat-item"><span class="stat-lbl">ACTIVE TARGETS</span><span class="stat-val">${total}</span></div>
+                <div class="stat-item"><span class="stat-lbl" style="color:#d97706">DRAFTING</span><span class="stat-val" style="color:#d97706">${db.filter(i=>i.status==='Drafting').length}</span></div>
                 <div class="stat-item"><span class="stat-lbl" style="color:#059669">SUBMITTED</span><span class="stat-val" style="color:#059669">${submitted}</span></div>
-                <div class="stat-item"><span class="stat-lbl" style="color:#16a34a">WON</span><span class="stat-val" style="color:#16a34a">${won}</span></div>
+                <div class="stat-item"><span class="stat-lbl" style="color:#16a34a">WON</span><span class="stat-val" style="color:#16a34a">${db.filter(i=>i.status==='Won').length}</span></div>
             `;
         }
 
-        // --- ACTIONS ---
         function update(id, field, val) {
             const item = db.find(i => i.id === id);
             item[field] = val;
-            item.updated = new Date().toISOString().split('T')[0]; // Auto-timestamp
+            item.updated = new Date().toISOString().split('T')[0];
             save(); renderApp();
         }
 
-        // --- FILE MODAL ---
         function openFileModal(id) {
             activeId = id;
             document.getElementById('file-modal').style.display = 'flex';
-            renderFiles();
-            renderLogs();
+            renderFiles(); renderLogs();
         }
 
         function renderFiles() {
@@ -466,13 +490,10 @@
             const name = document.getElementById('link-name').value;
             const url = document.getElementById('link-url').value;
             if (!name) return alert("Name required");
-            
             const item = db.find(i => i.id === activeId);
             item.files.push({ name: name, link: url, content: null });
             item.updated = new Date().toISOString().split('T')[0];
-            
-            document.getElementById('link-name').value = '';
-            document.getElementById('link-url').value = '';
+            document.getElementById('link-name').value = ''; document.getElementById('link-url').value = '';
             save(); renderFiles(); renderApp();
         }
 
@@ -480,8 +501,7 @@
             const item = db.find(i => i.id === activeId);
             item.files.push({ name: "Note / Draft", link: null, content: "" });
             item.updated = new Date().toISOString().split('T')[0];
-            save(); 
-            openEditor(item.files.length - 1);
+            save(); openEditor(item.files.length - 1);
         }
 
         function delFile(idx) {
@@ -491,7 +511,6 @@
             save(); renderFiles(); renderApp();
         }
 
-        // --- EDITOR ---
         function openEditor(idx) {
             activeFileIndex = idx;
             const item = db.find(i => i.id === activeId);
@@ -505,7 +524,6 @@
             const item = db.find(i => i.id === activeId);
             item.files[activeFileIndex].content = content;
             item.updated = new Date().toISOString().split('T')[0];
-            
             save();
             document.getElementById('editor-modal').style.display = 'none';
             document.getElementById('file-modal').style.display = 'flex';
@@ -514,7 +532,6 @@
 
         function format(cmd, val) { document.execCommand(cmd, false, val); }
 
-        // --- LOGS ---
         function addLog() {
             const txt = document.getElementById('log-input').value;
             if(!txt) return;
@@ -535,17 +552,13 @@
             `).join('');
         }
 
-        // --- SYSTEM ---
         function closeModal() {
             document.getElementById('file-modal').style.display = 'none';
             document.getElementById('editor-modal').style.display = 'none';
         }
 
         function save() { 
-            try {
-                localStorage.setItem(DB_KEY, JSON.stringify(db));
-                updateMemory();
-            } catch(e) { alert("STORAGE FULL."); }
+            try { localStorage.setItem(DB_KEY, JSON.stringify(db)); updateMemory(); } catch(e) { alert("STORAGE FULL."); }
         }
 
         function updateMemory() {
