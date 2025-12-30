@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>EAIRL | FUNDING CMD v9.1</title>
+    <title>EAIRL | FUNDING CMD v9.2</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,18 +21,20 @@
             --accent: #18181b; 
             --highlight: #2563eb; 
             
-            /* STATUS COLORS (Semantic) */
+            /* STATUS COLORS */
             --st-identify: #71717a;
             --st-drafting: #d97706;
             --st-submitted: #059669;
             --st-won: #16a34a;
             --st-rejected: #dc2626;
+            --st-archived: #a1a1aa;
             
-            /* TYPE BADGES (Scientific) */
+            /* TYPE BADGES */
             --badge-grant: #e0f2fe; --text-grant: #075985;
             --badge-bounty: #fee2e2; --text-bounty: #991b1b;
             --badge-regrant: #f3e8ff; --text-regrant: #6b21a8;
             --badge-contract: #fef3c7; --text-contract: #92400e;
+            --badge-prize: #dcfce7; --text-prize: #166534;
         }
 
         body[data-theme="dark"] {
@@ -43,6 +45,7 @@
             --badge-bounty: #450a0a; --text-bounty: #fecaca;
             --badge-regrant: #3b0764; --text-regrant: #e9d5ff;
             --badge-contract: #451a03; --text-contract: #fde68a;
+            --badge-prize: #052e16; --text-prize: #86efac;
         }
 
         * { box-sizing: border-box; }
@@ -70,7 +73,7 @@
             font-family: "JetBrains Mono", monospace; border: 1px solid transparent;
         }
 
-        /* --- SEARCH & GOAL BAR --- */
+        /* --- SEARCH & GOAL --- */
         .search-container { margin-bottom: 20px; position: sticky; top: 0; background: var(--bg); z-index: 20; padding-top: 5px; }
         .search-input {
             width: 100%; padding: 10px 12px; background: var(--surface); border: 1px solid var(--border);
@@ -147,7 +150,7 @@
 <body data-theme="light">
 
     <div id="lock-screen">
-        <div>EAIRL_SECURE_TERMINAL // v9.1</div>
+        <div>EAIRL_SECURE_TERMINAL // v9.2</div>
         <input type="password" id="password-input" class="lock-input" placeholder="ACCESS KEY" autofocus>
         <div id="lock-msg" style="margin-top:10px; font-size:10px; color:red; display:none;">ACCESS DENIED</div>
     </div>
@@ -172,6 +175,9 @@
             </div>
             <div style="height:2px; background:var(--border); width:100%;"><div id="mem-fill" style="height:100%; background:var(--text-muted); width:0%;"></div></div>
             <button class="btn" style="width:100%; margin-top:15px;" onclick="toggleTheme()">THEME: SWITCH</button>
+            <div style="margin-top:10px; text-align:center;">
+                <span style="font-size:9px; text-decoration:underline; cursor:pointer; color:red;" onclick="hardReset()">Factory Reset Data</span>
+            </div>
         </div>
     </aside>
 
@@ -265,9 +271,9 @@
     <script>
         // --- CONFIG ---
         const APP_PASSWORD = "3000"; 
-        const DB_KEY = 'eairl_funding_v9_1';
+        const DB_KEY = 'eairl_funding_v9_2';
         
-        // --- SEED DATA (Updated w/ Regrantors) ---
+        // --- SEED DATA (SAFE VERSION) ---
         const seedData = [
             // A: ACTIVE OPS
             { id: 1, sec: 'A', name: "NLnet Foundation", type: "Grant", status: "Identify", deadline: "2026-02-01", owner: "Nicolas", mode: "Portal", amount: "€50k", next: "Draft Abstract", link_apply: "https://nlnet.nl/commonsfund", link_fit: "", notes: "Top priority infra.", updated: "2025-12-29", files: [], logs: [] },
@@ -320,128 +326,149 @@
         });
 
         function initApp() {
-            const saved = localStorage.getItem(DB_KEY);
-            if (saved) {
-                db = JSON.parse(saved);
-                db.forEach(i => {
-                    if(!i.owner) i.owner = "Nicolas";
-                    if(!i.mode) i.mode = "-";
-                    if(!i.updated) i.updated = new Date().toISOString().split('T')[0];
-                    if(!i.files) i.files = [];
-                    if(!i.logs) i.logs = [];
-                });
-            } else {
-                db = seedData;
-                save();
+            try {
+                const saved = localStorage.getItem(DB_KEY);
+                if (saved) {
+                    db = JSON.parse(saved);
+                    // Robust Migration
+                    db.forEach(i => {
+                        if(!i.owner) i.owner = "Nicolas";
+                        if(!i.mode) i.mode = "-";
+                        if(!i.updated || typeof i.updated !== 'string') i.updated = new Date().toISOString().split('T')[0];
+                        if(!i.files) i.files = [];
+                        if(!i.logs) i.logs = [];
+                        if(!i.name) i.name = "Unknown";
+                        if(!i.status) i.status = "Identify";
+                        if(!i.type) i.type = "Grant";
+                    });
+                } else {
+                    db = seedData;
+                    save();
+                }
+                renderApp();
+                updateMemory();
+            } catch(e) {
+                console.error("Init Error:", e);
+                alert("Data error. Click 'Factory Reset Data' in sidebar if stuck.");
             }
-            renderApp();
-            updateMemory();
+        }
+
+        function hardReset() {
+            if(confirm("DANGER: This will wipe all local data and restore the default list. Are you sure?")) {
+                localStorage.removeItem(DB_KEY);
+                location.reload();
+            }
         }
 
         function renderApp() {
-            const filter = document.getElementById('global-search').value.toLowerCase();
-            renderStats();
-            
-            const container = document.getElementById('pipeline-container');
-            container.innerHTML = '';
-
-            const sections = {
-                'A': 'SECTION A: ACTIVE OPS (HIGH PRIORITY)',
-                'B': 'SECTION B: COMPETITIONS & BOUNTIES',
-                'C': 'SECTION C: VERIFIED REGRANTORS',
-                'D': 'SECTION D: SUBMITTED / ARCHIVE',
-                'E': 'SECTION E: STRATEGIC MONITOR'
-            };
-
-            for (const [key, title] of Object.entries(sections)) {
-                let items = db.filter(i => i.sec === key);
+            try {
+                const filter = document.getElementById('global-search').value.toLowerCase();
+                renderStats();
                 
-                // FILTERING LOGIC
-                if (filter) {
-                    items = items.filter(i => 
-                        i.name.toLowerCase().includes(filter) || 
-                        i.notes.toLowerCase().includes(filter) || 
-                        i.status.toLowerCase().includes(filter) ||
-                        i.type.toLowerCase().includes(filter)
-                    );
-                }
+                const container = document.getElementById('pipeline-container');
+                container.innerHTML = '';
 
-                if (items.length === 0) continue;
+                const sections = {
+                    'A': 'SECTION A: ACTIVE OPS (HIGH PRIORITY)',
+                    'B': 'SECTION B: COMPETITIONS & BOUNTIES',
+                    'C': 'SECTION C: VERIFIED REGRANTORS',
+                    'D': 'SECTION D: SUBMITTED / ARCHIVE',
+                    'E': 'SECTION E: STRATEGIC MONITOR'
+                };
 
-                const isOpen = (key === 'A' || key === 'C' || key === 'D' || filter) ? 'open' : '';
-                
-                let html = `
-                    <details ${isOpen} style="margin-bottom:20px; border:1px solid var(--border);">
-                        <summary class="section-header">
-                            <span>${title}</span>
-                            <span class="mono" style="font-size:10px; opacity:0.5;">${items.length}</span>
-                        </summary>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="width:20%">Target / Fit</th>
-                                    <th style="width:10%">Type / Owner</th>
-                                    <th style="width:8%">Deadline</th>
-                                    <th style="width:12%">Status</th>
-                                    <th style="width:18%">Next Action</th>
-                                    <th style="width:7%">Last</th>
-                                    <th style="width:15%">Notes</th>
-                                    <th style="width:5%">Tools</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
-
-                items.forEach(i => {
-                    const statusColor = `var(--st-${i.status.toLowerCase()})`;
-                    const typeClass = i.type.toLowerCase().includes('grant') ? 'grant' : 
-                                      i.type.toLowerCase().includes('bounty') ? 'bounty' : 
-                                      i.type.toLowerCase().includes('regrant') ? 'regrant' : 'contract';
+                for (const [key, title] of Object.entries(sections)) {
+                    let items = db.filter(i => i.sec === key);
                     
-                    const badgeStyle = `background:var(--badge-${typeClass}); color:var(--text-${typeClass});`;
-                    const hasFiles = i.files.length > 0 ? 'color:var(--highlight); opacity:1;' : '';
+                    if (filter) {
+                        items = items.filter(i => 
+                            (i.name && i.name.toLowerCase().includes(filter)) || 
+                            (i.notes && i.notes.toLowerCase().includes(filter)) || 
+                            (i.status && i.status.toLowerCase().includes(filter))
+                        );
+                    }
 
-                    html += `
-                        <tr>
-                            <td>
-                                <div style="font-weight:700;">${i.name}</div>
-                                <div style="font-size:10px; color:var(--text-muted);">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">APPLY ↗</a>` : ''} ${i.link_fit ? `• <a href="${i.link_fit}" target="_blank" style="color:var(--text-muted); text-decoration:none;">FIT</a>` : ''}</div>
-                            </td>
-                            <td>
-                                <span class="status-badge" style="${badgeStyle}">${i.type}</span>
-                                <div style="font-size:9px; margin-top:2px; color:var(--text-muted);">${i.owner} / ${i.mode}</div>
-                            </td>
-                            <td><input class="mono" value="${i.deadline}" onchange="update(${i.id}, 'deadline', this.value)"></td>
-                            <td>
-                                <select class="status-select" style="color:${statusColor}; font-weight:700;" onchange="update(${i.id}, 'status', this.value)">
-                                    <option ${i.status==='Identify'?'selected':''}>Identify</option>
-                                    <option ${i.status==='Drafting'?'selected':''}>Drafting</option>
-                                    <option ${i.status==='Submitted'?'selected':''}>Submitted</option>
-                                    <option ${i.status==='Follow-up'?'selected':''}>Follow-up</option>
-                                    <option ${i.status==='Won'?'selected':''}>Won</option>
-                                    <option ${i.status==='Rejected'?'selected':''}>Rejected</option>
-                                    <option ${i.status==='Archived'?'selected':''}>Archived</option>
-                                </select>
-                            </td>
-                            <td><input value="${i.next}" onchange="update(${i.id}, 'next', this.value)"></td>
-                            <td class="mono" style="font-size:9px; color:var(--text-muted);">${i.updated.slice(5)}</td>
-                            <td><input value="${i.notes}" onchange="update(${i.id}, 'notes', this.value)"></td>
-                            <td>
-                                <button class="icon-btn" style="${hasFiles}" onclick="openFileModal(${i.id})"><svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/></svg></button>
-                            </td>
-                        </tr>
+                    if (items.length === 0) continue;
+
+                    const isOpen = (key === 'A' || key === 'C' || key === 'D' || filter) ? 'open' : '';
+                    
+                    let html = `
+                        <details ${isOpen} style="margin-bottom:20px; border:1px solid var(--border);">
+                            <summary class="section-header">
+                                <span>${title}</span>
+                                <span class="mono" style="font-size:10px; opacity:0.5;">${items.length}</span>
+                            </summary>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width:20%">Target / Fit</th>
+                                        <th style="width:10%">Type / Owner</th>
+                                        <th style="width:8%">Deadline</th>
+                                        <th style="width:12%">Status</th>
+                                        <th style="width:18%">Next Action</th>
+                                        <th style="width:7%">Last</th>
+                                        <th style="width:15%">Notes</th>
+                                        <th style="width:5%">Tools</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                     `;
-                });
 
-                html += `</tbody></table></details>`;
-                container.innerHTML += html;
+                    items.forEach(i => {
+                        const statusColor = `var(--st-${(i.status||'identify').toLowerCase()})`;
+                        const typeClass = (i.type||'grant').toLowerCase().includes('grant') ? 'grant' : 
+                                          (i.type||'').toLowerCase().includes('bounty') ? 'bounty' : 
+                                          (i.type||'').toLowerCase().includes('regrant') ? 'regrant' : 
+                                          (i.type||'').toLowerCase().includes('prize') ? 'prize' : 'contract';
+                        
+                        const badgeStyle = `background:var(--badge-${typeClass}); color:var(--text-${typeClass});`;
+                        const hasFiles = (i.files && i.files.length > 0) ? 'color:var(--highlight); opacity:1;' : '';
+                        const dateStr = (i.updated && typeof i.updated === 'string' && i.updated.length >= 5) ? i.updated.slice(5) : '-';
+
+                        html += `
+                            <tr>
+                                <td>
+                                    <div style="font-weight:700;">${i.name}</div>
+                                    <div style="font-size:10px; color:var(--text-muted);">${i.link_apply ? `<a href="${i.link_apply}" target="_blank" style="color:var(--highlight); text-decoration:none;">APPLY ↗</a>` : ''} ${i.link_fit ? `• <a href="${i.link_fit}" target="_blank" style="color:var(--text-muted); text-decoration:none;">FIT</a>` : ''}</div>
+                                </td>
+                                <td>
+                                    <span class="status-badge" style="${badgeStyle}">${i.type}</span>
+                                    <div style="font-size:9px; margin-top:2px; color:var(--text-muted);">${i.owner} / ${i.mode}</div>
+                                </td>
+                                <td><input class="mono" value="${i.deadline||''}" onchange="update(${i.id}, 'deadline', this.value)"></td>
+                                <td>
+                                    <select class="status-select" style="color:${statusColor}; font-weight:700;" onchange="update(${i.id}, 'status', this.value)">
+                                        <option ${i.status==='Identify'?'selected':''}>Identify</option>
+                                        <option ${i.status==='Drafting'?'selected':''}>Drafting</option>
+                                        <option ${i.status==='Submitted'?'selected':''}>Submitted</option>
+                                        <option ${i.status==='Follow-up'?'selected':''}>Follow-up</option>
+                                        <option ${i.status==='Won'?'selected':''}>Won</option>
+                                        <option ${i.status==='Rejected'?'selected':''}>Rejected</option>
+                                        <option ${i.status==='Archived'?'selected':''}>Archived</option>
+                                    </select>
+                                </td>
+                                <td><input value="${i.next||''}" onchange="update(${i.id}, 'next', this.value)"></td>
+                                <td class="mono" style="font-size:9px; color:var(--text-muted);">${dateStr}</td>
+                                <td><input value="${i.notes||''}" onchange="update(${i.id}, 'notes', this.value)"></td>
+                                <td>
+                                    <button class="icon-btn" style="${hasFiles}" onclick="openFileModal(${i.id})"><svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/></svg></button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `</tbody></table></details>`;
+                    container.innerHTML += html;
+                }
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<div style="padding:20px; color:red;">ERROR RENDERING TABLE. TRY RESETTING DATA.</div>`;
             }
         }
 
         function renderStats() {
             const total = db.length;
             const submitted = db.filter(i => i.status === 'Submitted').length;
-            const goal = 5; // January Goal
+            const goal = 5; 
             const pct = Math.min((submitted / goal) * 100, 100);
 
             document.getElementById('goal-bar').style.width = pct + "%";
