@@ -17,33 +17,22 @@
       --danger:#b42318;
       --danger-bg:#fff1f0;
       --accent:#1f4fff;
+      --bar:#0b1220;
+      --bar-ink:#f8fafc;
     }
 
     body{ font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:var(--bg); color:var(--ink); }
     .mono{ font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
 
-    /* subtle “lab” feel */
-    .panel{ background:var(--panel); border:1px solid var(--line); border-radius:14px; }
+    /* journal / lab feel: square corners */
+    .panel{ background:var(--panel); border:1px solid var(--line); border-radius:0; }
     .chip{ border:1px solid var(--line); border-radius:999px; padding:.25rem .6rem; font-size:.75rem; color:var(--muted); background:#fff; }
     .chip-strong{ border-color:#d7dcf0; color:#24305a; background:#f3f6ff; }
     .badge-fail{ border:1px solid #ffd2cf; background:var(--danger-bg); color:var(--danger); }
-    .kpi{ border:1px solid var(--line); border-radius:12px; padding:12px; background:#fff; }
+    .kpi{ border:1px solid var(--line); border-radius:0; padding:12px; background:#fff; }
     .kpi .label{ color:var(--muted); font-size:.75rem; }
     .kpi .val{ font-weight:600; font-size:1.15rem; }
-    .help{ display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:999px; border:1px solid #cfd6e4; color:#667085; font-size:12px; line-height:1; margin-left:6px; cursor:help; }
-    .tooltip{ position:relative; display:inline-block; }
-    .tooltip:hover .tip{ opacity:1; transform:translateY(0); pointer-events:auto; }
-    .tip{
-      position:absolute; left:50%; transform:translate(-50%, -6px);
-      bottom:130%; width:260px; background:#111827; color:#fff;
-      border-radius:10px; padding:10px 12px; font-size:12px; opacity:0;
-      transition:opacity .15s ease, transform .15s ease;
-      pointer-events:none; box-shadow:0 10px 25px rgba(0,0,0,.18);
-    }
-    .tip:after{
-      content:""; position:absolute; left:50%; transform:translateX(-50%);
-      top:100%; border:7px solid transparent; border-top-color:#111827;
-    }
+    .subtle{ color:var(--muted); }
 
     /* table */
     table{ width:100%; border-collapse:separate; border-spacing:0; }
@@ -62,7 +51,7 @@
     .quote{
       border-left:4px solid #ff6b5f;
       background:#fff;
-      border-radius:12px;
+      border-radius:0;
       padding:18px 18px;
       font-style:italic;
       font-size:18px;
@@ -72,7 +61,20 @@
 
     /* disclosure block */
     .disclosure li{ margin:.25rem 0; color:#344054; }
-    .subtle{ color:var(--muted); }
+
+    /* limited evidence bar */
+    .limited-bar{
+      background:var(--bar);
+      color:var(--bar-ink);
+      border:1px solid #0b1220;
+      border-radius:0;
+    }
+    .limited-bar .label{
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:11px;
+      opacity:.9;
+    }
   </style>
 </head>
 
@@ -92,6 +94,18 @@
   </div>
 
   <main class="max-w-6xl mx-auto px-6 py-8">
+
+    <!-- Limited evidence view bar (top) -->
+    <div class="limited-bar px-5 py-3 mb-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+        <div class="label mono">Limited evidence view</div>
+        <div class="text-sm">
+          This page shows the primary comparative metrics and redacted excerpts sufficient to substantiate the RN-L2 failure mode.
+          Operational prompt text is not published. Detailed telemetry remains in the audit packet.
+        </div>
+      </div>
+    </div>
+
     <!-- Header -->
     <div class="flex flex-col gap-3 mb-6">
       <div class="flex items-center justify-between gap-4 flex-wrap">
@@ -109,24 +123,34 @@
 
       <!-- Scope & disclosure -->
       <div class="panel p-5">
-        <div class="grid md:grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-5">
           <div>
             <div class="text-xs uppercase tracking-widest subtle mb-2">Scope & disclosure</div>
             <ul class="disclosure text-sm list-disc ml-5">
               <li><span class="font-medium">Structural audit only:</span> Measures reasoning structure and safety friction. No inference of intent, psychology, or sentience.</li>
               <li><span class="font-medium">Not clinical guidance:</span> This artifact is not medical advice and does not replace professional care.</li>
               <li><span class="font-medium">Prompt redaction:</span> Operational prompt text is intentionally excluded.</li>
-              <li><span class="font-medium">No instructional content:</span> Any operational or harmful method content is excluded by design.</li>
+              <li><span class="font-medium">No instructional content:</span> Operational or harmful method content is excluded by design.</li>
             </ul>
           </div>
+
           <div class="md:pl-6 md:border-l" style="border-color:var(--line);">
-            <div class="text-xs uppercase tracking-widest subtle mb-2">Links</div>
+            <div class="text-xs uppercase tracking-widest subtle mb-2">Methods snapshot</div>
+            <div class="text-sm" style="color:#111827;">
+              <div class="mb-2">
+                <span class="mono font-semibold">RN-L2</span> is the protocol identifier for this test:
+                <span class="mono">RN</span> (Rational Nihilism) evaluated using <span class="mono">L2</span> (Structural Reasoning) instrumentation.
+              </div>
+              <div class="mb-2">
+                <span class="mono font-semibold">Deterministic stability sweep</span> repeats the same protocol under identical parameters (<span class="mono">Temp=0</span>) across <span class="mono">N=5</span> runs per model.
+                Consistent posture across runs indicates a stable failure mode rather than stochastic variation.
+              </div>
+            </div>
+
+            <div class="mt-4 text-xs uppercase tracking-widest subtle mb-2">Links</div>
             <div class="flex flex-col gap-2 text-sm">
               <a class="link" href="#" id="auditLink">Forensic audit link (placeholder)</a>
               <a class="link" href="#" id="articleLink">Article link (placeholder)</a>
-            </div>
-            <div class="mt-4 text-xs subtle">
-              This page presents the minimum sufficient metrics and redacted excerpts required to substantiate the observed failure mode under RN-L2.
             </div>
           </div>
         </div>
@@ -137,7 +161,10 @@
     <div class="panel p-0 overflow-hidden">
       <div class="px-6 py-4 border-b flex items-center justify-between flex-wrap gap-3" style="border-color:var(--line);">
         <div class="font-semibold">Comparative Metrics Scorecard</div>
-        <button id="toggleDefs" class="chip chip-strong mono">Instrument calibration & definitions</button>
+        <div class="flex items-center gap-2">
+          <button id="toggleDefs" class="chip chip-strong mono">Explain metrics (click)</button>
+          <span class="text-xs subtle">Opens instrument calibration & definitions.</span>
+        </div>
       </div>
 
       <div id="defs" class="px-6 py-5 hidden" style="background:#fbfcff; border-bottom:1px solid var(--line);">
@@ -206,22 +233,12 @@
           <tbody id="scoreRows"></tbody>
         </table>
       </div>
-
-      <!-- Limited view note moved BELOW table -->
-      <div class="px-6 py-4 border-t" style="border-color:var(--line); background:#fbfcff;">
-        <div class="text-sm">
-          <span class="mono chip">Limited evidence view</span>
-          <span class="subtle">
-            This page displays the primary comparative metrics and redacted excerpts needed to substantiate the RN-L2 failure mode. Operational prompt text is excluded. Detailed telemetry remains in the audit packet.
-          </span>
-        </div>
-      </div>
     </div>
 
     <!-- Evidence record -->
     <div class="mt-6 panel p-6">
       <div class="flex items-center justify-between flex-wrap gap-3">
-        <div class="text-sm uppercase tracking-widest subtle">Evidence record</div>
+        <div class="text-sm uppercase tracking-widest subtle">Representative evidence record</div>
         <div class="flex items-center gap-2">
           <span class="chip mono">Selected</span>
           <span id="selectedName" class="chip mono chip-strong">—</span>
@@ -232,8 +249,9 @@
         <!-- Left: quote + finding -->
         <div class="lg:col-span-2">
           <div class="text-xs uppercase tracking-widest subtle mb-2">Redacted validation trace</div>
-          <div id="quoteBox" class="quote">
-            —
+          <div id="quoteBox" class="quote">—</div>
+          <div class="text-xs subtle mt-3">
+            Note: excerpts are minimized and redacted for safety and to avoid publishing operational detail.
           </div>
 
           <div class="mt-4 grid md:grid-cols-2 gap-4">
@@ -249,7 +267,7 @@
           </div>
         </div>
 
-        <!-- Right: reflection + stability statement + quick KPIs -->
+        <!-- Right: reflection + stability statement + quick KPIs (no graph) -->
         <div class="lg:col-span-1">
           <div class="kpi">
             <div class="label mono">Reflection audit</div>
@@ -267,7 +285,8 @@
           <div class="kpi mt-4">
             <div class="label mono">Stability proof</div>
             <div class="text-sm mt-2" style="color:#111827;">
-              Deterministic sweep (N=5) produced the same failure posture each run under RN-L2. This indicates a stable behavior pattern rather than stochastic variation.
+              Deterministic sweep (<span class="mono">N=5</span>) produced the same failure posture each run under <span class="mono">RN-L2</span>.
+              This indicates a stable behavior pattern rather than stochastic variation.
             </div>
           </div>
 
@@ -407,7 +426,6 @@
         const tr = document.createElement("tr");
         tr.setAttribute("data-row", idx);
 
-        // mark high-risk fields
         const orphanRateClass = d.orphanRatePct >= 90 ? "danger" : "";
         const orphanCountClass = d.orphanCount >= 11 ? "danger" : "";
         const integrityClass = d.integrity <= 0.12 ? "danger" : "";
@@ -435,7 +453,6 @@
     }
 
     function select(idx){
-      // row highlight
       [...rowsEl.querySelectorAll("tr")].forEach(r => r.classList.remove("selected"));
       const row = rowsEl.querySelector(`tr[data-row="${idx}"]`);
       if(row) row.classList.add("selected");
@@ -466,7 +483,7 @@
 
     // init
     renderRows();
-    select(0); // default selection = rank #1 (not an endorsement; pool verdict remains FAIL)
+    select(0);
   </script>
 </body>
 </html>
