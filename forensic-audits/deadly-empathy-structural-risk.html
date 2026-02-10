@@ -84,7 +84,7 @@
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-3 h-3 rounded-sm" style="background:#d92d20;"></div>
-        <div class="font-semibold tracking-tight">EnlightenedAI</div>
+        <div class="font-semibold tracking-tight">Independent Research Group</div>
         <div class="text-xs uppercase tracking-widest subtle">Forensic Evidence Locker</div>
       </div>
       <div class="flex items-center gap-2">
@@ -131,6 +131,7 @@
               <li><span class="font-medium">Not clinical guidance:</span> This artifact is not medical advice and does not replace professional care.</li>
               <li><span class="font-medium">Prompt redaction:</span> Operational prompt text is intentionally excluded.</li>
               <li><span class="font-medium">No instructional content:</span> Operational or harmful method content is excluded by design.</li>
+              <li><span class="font-medium">Anonymization:</span> Lab and model/provider identifiers are removed to reduce attribution bias; results are presented as instrument outputs only.</li>
             </ul>
           </div>
 
@@ -139,11 +140,10 @@
             <div class="text-sm" style="color:#111827;">
               <div class="mb-2">
                 <span class="mono font-semibold">RN-L2</span> is the protocol identifier for this test:
-                <span class="mono">RN</span> (Rational Nihilism) evaluated using <span class="mono">L2</span> (Structural Reasoning) instrumentation.
+                <span class="mono">RN</span> (<span class="font-medium">Rational Nihilism</span>) evaluated using <span class="mono">L2</span> (Structural Reasoning) instrumentation.
               </div>
               <div class="mb-2">
-                <span class="mono font-semibold">Deterministic stability sweep</span> repeats the same protocol under identical parameters (<span class="mono">Temp=0</span>) across <span class="mono">N=5</span> runs per model.
-                Consistent posture across runs indicates a stable failure mode rather than stochastic variation.
+                <span class="mono font-semibold">Deterministic stability sweep</span> repeats the same protocol under identical parameters (<span class="mono">Temp=0</span>) across <span class="mono">N=5</span> runs per model. Consistent posture across runs indicates a stable failure mode rather than stochastic variation.
               </div>
             </div>
 
@@ -327,10 +327,11 @@
 
   <script>
     // VERIFIED DATA (from your Master Telemetry Scorecard + Reflection audit table)
+    // NOTE: model/provider names are anonymized on this public evidence page.
     const DATA = [
       {
         rank: "#1",
-        name: "Grok 2 (Vision)",
+        name: "Model A (Vision)",
         integrity: 0.17,
         totalClaims: 7,
         orphanCount: 6,
@@ -351,7 +352,7 @@
       },
       {
         rank: "#2",
-        name: "Gemini 2.5 Flash",
+        name: "Model B",
         integrity: 0.12,
         totalClaims: 32,
         orphanCount: 29,
@@ -372,7 +373,7 @@
       },
       {
         rank: "#3",
-        name: "GPT-4o-mini",
+        name: "Model C (Mini)",
         integrity: 0.10,
         totalClaims: 12,
         orphanCount: 11,
@@ -393,7 +394,7 @@
       },
       {
         rank: "#4",
-        name: "DeepSeek Chat",
+        name: "Model D",
         integrity: 0.04,
         totalClaims: 9,
         orphanCount: 9,
