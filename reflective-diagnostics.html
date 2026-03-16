@@ -13,7 +13,7 @@
   <script type="application/json" id="audit-manifest">
   {
     "doc_id": "RD-DIAG-0001",
-    "version": "15.0.0",
+    "version": "16.0.0",
     "status": "PUBLIC_OVERVIEW"
   }
   </script>
@@ -37,7 +37,7 @@
       --mode-diff: #000000;
 
       --sidebar-width: 280px;
-      --rail-width: 420px;
+      --content-max: 820px;
     }
 
     [data-theme="dark"] {
@@ -54,11 +54,6 @@
 
       --mode-audit: #ffaa00;
       --mode-logic: #66aaff;
-    }
-
-    body[data-theme="dark"] .rail-thumbimg {
-      filter: invert(0.93) hue-rotate(180deg);
-      opacity: 0.9;
     }
 
     * { box-sizing: border-box; }
@@ -151,28 +146,10 @@
       opacity: 0.9;
     }
 
-    .split-view {
-      display: flex;
-      flex: 1;
-      align-items: flex-start;
-    }
-
     .content-col {
-      flex: 1;
+      width: 100%;
+      max-width: var(--content-max);
       padding: 3rem 4rem 6rem 4rem;
-      min-width: 0;
-    }
-
-    .diagram-rail {
-      width: var(--rail-width);
-      flex-shrink: 0;
-      border-left: 1px solid var(--border-color);
-      background: var(--bg-color);
-      padding: 3rem 2rem;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
     }
 
     #footer-mount {
@@ -227,13 +204,6 @@
     li {
       margin-bottom: 0.5rem;
       font-size: 0.95rem;
-    }
-
-    .note {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      max-width: 72ch;
     }
 
     .scramble-brand,
@@ -495,70 +465,6 @@
       border-color: var(--text-main);
     }
 
-    .rail-item {
-      margin-bottom: 2rem;
-      cursor: default;
-    }
-
-    .rail-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 0.5rem;
-    }
-
-    .rail-title {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: var(--text-main);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .rail-id {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.62rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .rail-desc {
-      margin-top: 0.75rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.35;
-      max-width: 48ch;
-    }
-
-    .rail-thumbframe {
-      width: 100%;
-      height: 240px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--border-color);
-      background: #ffffff;
-      border-radius: 4px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-
-    .rail-thumbimg {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    body[data-theme="dark"] .rail-thumbframe {
-      border-color: #333;
-      background: #0b0b0b;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    }
-
     #mode-banner {
       position: fixed;
       top: 120px;
@@ -595,16 +501,6 @@
     @media (max-width: 1100px) {
       body { display: block; overflow-x: hidden; }
       .layout-wrapper { display: block; }
-      .split-view { display: block; }
-
-      .diagram-rail {
-        width: 100%;
-        position: static;
-        border-left: none;
-        border-top: 1px solid var(--border-color);
-        padding: 2rem;
-        height: auto;
-      }
 
       .content-col {
         padding: 1.5rem;
@@ -693,7 +589,6 @@
           <li><a href="theory.html">Theory</a></li>
           <li><a href="lexicon.html">Lexicon</a></li>
           <li><a href="reflective-diagnostics.html" class="active">Reflective Diagnostics</a></li>
-          <li><a href="data.html">Data</a></li>
           <li><a href="curriculum.html">Curriculum</a></li>
           <li><a href="videos.html">Videos</a></li>
           <li><a href="publications.html">Publications</a></li>
@@ -739,69 +634,41 @@
         <div class="orienting-frame">PUBLIC OVERVIEW OF REFLECTIVE DIAGNOSTICS.</div>
       </div>
 
-      <div class="split-view">
-        <div class="content-col">
-          <div style="margin-bottom: 2rem;">
-            <h1>Reflective Diagnostics</h1>
-            <div class="doc-subtitle">Evidence-first evaluation for LLM reliability.</div>
-          </div>
-
-          <section id="overview">
-            <h2><span class="scramble-hover" data-value="01 //">01 //</span> Overview</h2>
-            <p>
-              Reflective Diagnostics is a rule-based instrument for evaluating large language model outputs and turning them into structured evidence.
-            </p>
-            <p>
-              Built for reliability testing, comparison, and audit.
-            </p>
-
-            <div class="callout">
-              <div class="callout-title">Core outputs</div>
-              <p>
-                Evidence artifacts. Structural signals. Reproducible records.
-              </p>
-            </div>
-
-            <div class="cta-row">
-              <a class="cta-link" href="https://reflectivediagnostics.ai/" target="_blank" rel="noopener noreferrer">Visit ReflectiveDiagnostics.ai</a>
-            </div>
-          </section>
-
-          <section id="what-it-does">
-            <h2><span class="scramble-hover" data-value="02 //">02 //</span> What it does</h2>
-            <ul>
-              <li>Evaluates structural supportability</li>
-              <li>Generates evidence-bound outputs</li>
-              <li>Supports model comparison</li>
-            </ul>
-          </section>
+      <div class="content-col">
+        <div style="margin-bottom: 2rem;">
+          <h1>Reflective Diagnostics</h1>
+          <div class="doc-subtitle">Evidence-first evaluation for LLM reliability.</div>
         </div>
 
-        <div class="diagram-rail">
-          <div class="rail-item">
-            <div class="rail-head">
-              <div class="rail-title">Site Preview</div>
-              <div class="rail-id">RD-BRIDGE-01</div>
-            </div>
-            <div class="rail-thumbframe">
-              <img class="rail-thumbimg" src="assets/diag-samples/coverage-map.png" alt="Reflective Diagnostics preview" loading="lazy" />
-            </div>
-            <div class="rail-desc">
-              Public overview of Reflective Diagnostics.
-            </div>
-          </div>
+        <section id="overview">
+          <h2><span class="scramble-hover" data-value="01 //">01 //</span> Overview</h2>
+          <p>
+            Reflective Diagnostics is a rule-based instrument for evaluating large language model outputs and turning them into structured evidence.
+          </p>
+          <p>
+            Built for reliability testing, comparison, and audit.
+          </p>
 
-          <div class="callout" style="margin-top: 2rem;">
-            <div class="callout-title">Public site</div>
-            <p class="note" style="margin:0;">
-              Full overview available at ReflectiveDiagnostics.ai
+          <div class="callout">
+            <div class="callout-title">Core outputs</div>
+            <p>
+              Evidence artifacts. Structural signals. Reproducible records.
             </p>
           </div>
 
           <div class="cta-row">
-            <a class="cta-link" href="https://reflectivediagnostics.ai/" target="_blank" rel="noopener noreferrer">Visit Site</a>
+            <a class="cta-link" href="https://reflectivediagnostics.ai/" target="_blank" rel="noopener noreferrer">Visit ReflectiveDiagnostics.ai</a>
           </div>
-        </div>
+        </section>
+
+        <section id="what-it-does">
+          <h2><span class="scramble-hover" data-value="02 //">02 //</span> What it does</h2>
+          <ul>
+            <li>Evaluates structural supportability</li>
+            <li>Generates evidence-bound outputs</li>
+            <li>Supports model comparison</li>
+          </ul>
+        </section>
       </div>
 
       <div id="footer-mount"></div>
