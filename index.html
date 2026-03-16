@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enlightened AI Research Lab</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/footer.css">
+
+    <script type="application/json" id="audit-manifest">
+    {
+        "doc_id": "EAI-2026-001",
+        "version": "55.0.0",
+        "status": "SEMANTIC_INTEGRITY_VERIFIED"
+    }
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-main: #050505;
+            --text-muted: #5e5e5e;
+            --border-color: #e5e5e5;
+            --sidebar-width: 280px;
+            --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+            --status-verified: #00cc00;
+            --signal-blue: #0066ff;
+
+            --mode-audit: #b45309;
+            --mode-logic: #0044cc;
+            --mode-diff: #000000;
+        }
+
+        body[data-theme="dark"] {
+            --bg-color: #0a0a0a;
+            --text-main: #f0f0f0;
+            --text-muted: #888888;
+            --border-color: #333333;
+            --mode-audit: #ffaa00;
+            --mode-logic: #66aaff;
+        }
+
+        body[data-theme="dark"] aside { background-color: #0a0a0a; border-right-color: #333; }
+        body[data-theme="dark"] .mobile-bar { background: rgba(10,10,10,0.95); border-bottom-color: #333; }
+        body[data-theme="dark"] .mobile-index-btn { background: var(--bg-color); color: var(--text-main); border-color: var(--border-color); }
+        body[data-theme="dark"] .brand div { color: #fff; }
+        body[data-theme="dark"] nav a.active { color: #fff; border-left-color: #fff; background: linear-gradient(90deg, #151515, #0a0a0a); }
+        body[data-theme="dark"] nav a:hover { color: #fff; }
+        body[data-theme="dark"] .toggle-btn:hover,
+        body[data-theme="dark"] .toggle-btn.active { color: #fff; }
+        body[data-theme="dark"] .export-btn { background: #111; color: #ccc; border-color: #444; }
+        body[data-theme="dark"] .export-btn:hover { background: #fff; color: #000; }
+        body[data-theme="dark"] .claim-box { background: #111; border-color: #333; }
+        body[data-theme="dark"] .claim-id { color: #fff; }
+        body[data-theme="dark"] .claim-text { color: #ccc; }
+        body[data-theme="dark"] .logic-block { background: #111; border-color: #333; color: #ccc; }
+        body[data-theme="dark"] .logic-block::before { background: #222; border-color: #333; }
+        body[data-theme="dark"] p { color: #ccc; }
+        body[data-theme="dark"] h1,
+        body[data-theme="dark"] h2 { color: #fff; }
+        body[data-theme="dark"] .doc-val { color: #fff; }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-stack);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .layout-wrapper {
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+
+        @keyframes beacon-pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7); opacity: 1; }
+            50% { opacity: 1; }
+            100% { box-shadow: 0 0 0 10px rgba(0, 204, 0, 0); opacity: 1; }
+        }
+
+        @keyframes border-pulse {
+            0% { border-color: rgba(0,204,0,0.4); }
+            50% { border-color: rgba(0,204,0,1); }
+            100% { border-color: rgba(0,204,0,0.4); }
+        }
+
+        .integrity-seal {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: #005500;
+            border: 1px solid var(--status-verified);
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(0,204,0,0.05);
+            cursor: default;
+            animation: border-pulse 3s infinite;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--status-verified);
+            border-radius: 50%;
+            display: block;
+            animation: beacon-pulse-green 2s infinite;
+        }
+
+        .mobile-bar {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10001;
+            background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 1.25rem;
+            height: 50px;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+        }
+
+        .mobile-brand {
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: -0.02em;
+        }
+
+        .mobile-index-btn {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        aside {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            align-self: flex-start;
+            border-right: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            background: var(--bg-color);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .brand { margin-bottom: 4rem; }
+
+        .brand div {
+            font-family: var(--font-stack);
+            font-weight: 800;
+            font-size: 0.95rem;
+            line-height: 1.0;
+            color: #000;
+        }
+
+        .brand span {
+            display: block;
+            margin-top: 6px;
+            font-weight: 500;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .mode-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+
+        .toggle-btn {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: #999;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            transition: color 0.1s;
+        }
+
+        .toggle-btn.active {
+            color: #000;
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li { margin-bottom: 4px; }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 2px 0 2px 10px;
+            border-left: 2px solid transparent;
+            display: block;
+        }
+
+        nav a:hover { color: #000; }
+
+        nav a.active {
+            color: #000;
+            font-weight: 700;
+            border-left: 3px solid #000;
+            background: linear-gradient(90deg, #f9f9f9, #fff);
+        }
+
+        .theme-switch {
+            margin-top: auto;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-top: 1px solid var(--border-color);
+            transition: color 0.2s;
+        }
+
+        .theme-switch:hover { color: var(--text-main); }
+
+        .export-btn {
+            width: 100%;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .export-btn:hover {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        main {
+            flex-grow: 1;
+            padding: 3rem 3rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .doc-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: flex-start;
+            gap: 3rem;
+            align-items: center;
+            color: var(--text-muted);
+        }
+
+        .doc-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .doc-label {
+            font-size: 0.6rem;
+            color: #999;
+            margin-bottom: 2px;
+        }
+
+        .doc-val {
+            font-weight: 500;
+            color: #000;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 1.5rem;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            max-width: 65ch;
+            color: inherit;
+            position: relative;
+        }
+
+        .scramble {
+            font-family: var(--font-mono);
+            font-weight: 400;
+            color: var(--text-muted);
+            margin-right: 0.75rem;
+        }
+
+        .orienting-frame {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 2rem;
+            border-left: 1px solid var(--border-color);
+            padding-left: 12px;
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 0.5rem;
+        }
+
+        .cta-link {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            transition: all 0.2s ease;
+        }
+
+        .cta-link:hover {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        body[data-theme="dark"] .cta-link:hover {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        #footer-mount {
+            width: 100%;
+            z-index: 100;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-color);
+        }
+
+        del, ins, .diff-tag { display: none; }
+
+        body[data-mode="reader"] .audit-marker,
+        body[data-mode="reader"] .logic-block,
+        body[data-mode="reader"] .diff-del,
+        body[data-mode="reader"] .diff-tag,
+        body[data-mode="reader"] .audit-rail,
+        body[data-mode="reader"] .diff-header {
+            display: none !important;
+        }
+
+        body[data-mode="reader"] ins {
+            display: inline;
+            text-decoration: none;
+            border-bottom: none;
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        body[data-mode="reader"] del { display: none; }
+
+        body[data-mode="diff"] del {
+            display: inline;
+            background: #ffebeb;
+            color: #cc0000;
+            text-decoration: line-through;
+            padding: 0 4px;
+            opacity: 0.7;
+        }
+
+        body[data-mode="diff"] ins {
+            display: inline;
+            background: #e6ffec;
+            color: #006600;
+            border-bottom: 2px solid #00cc00;
+            text-decoration: none;
+            padding: 0 2px;
+        }
+
+        body[data-mode="diff"] .diff-tag {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: #006600;
+            margin-left: 4px;
+            vertical-align: 1px;
+        }
+
+        .diff-header {
+            display: none;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: #000;
+            border-bottom: 1px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        body[data-mode="diff"] .diff-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        body[data-mode="diff"] section {
+            grid-template-columns: 1fr 280px;
+            gap: 3rem;
+        }
+
+        body[data-mode="diff"] .audit-rail {
+            display: block;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .audit-marker {
+            display: none;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--mode-audit);
+            border: 1px solid var(--mode-audit);
+            padding: 1px 4px;
+            border-radius: 3px;
+            margin-right: 6px;
+            vertical-align: 1px;
+            background: #fff;
+        }
+
+        body[data-mode="audit"] .audit-marker { display: inline-block; }
+
+        body[data-mode="audit"] ins {
+            display: inline;
+            text-decoration: none;
+            border-bottom: none;
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        body[data-mode="audit"] del { display: none; }
+
+        body[data-mode="audit"] section {
+            grid-template-columns: 1fr 280px;
+            gap: 3rem;
+        }
+
+        body[data-mode="audit"] .audit-rail { display: block; }
+
+        .audit-rail {
+            display: none;
+            padding-left: 1.5rem;
+            border-left: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .claim-box {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #fafafa;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .claim-id {
+            font-weight: 700;
+            color: #000;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .claim-meta {
+            display: flex;
+            justify-content: space-between;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+            font-size: 0.6rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 4px;
+        }
+
+        .metric-tag {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .claim-text {
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .logic-block {
+            display: none;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #333;
+            background-color: #fcfcfc;
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--mode-logic);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .logic-block::before {
+            content: "FORMAL BACKING — NON-EXECUTABLE";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--bg-color);
+            color: var(--mode-logic);
+            font-size: 0.55rem;
+            border-bottom: 1px solid var(--border-color);
+            border-left: 1px solid var(--border-color);
+            padding: 4px 8px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        body[data-mode="logic"] .logic-block {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        body[data-mode="logic"] ins {
+            display: inline;
+            text-decoration: none;
+            border-bottom: none;
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        body[data-mode="logic"] del { display: none; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #mode-banner {
+            position: fixed;
+            top: 120px;
+            right: 5rem;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            pointer-events: none;
+            z-index: 100;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        body:not([data-mode="reader"]) #mode-banner {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        body[data-mode="audit"] #mode-banner {
+            border: 1px solid var(--mode-audit);
+            color: var(--mode-audit);
+            border-left-width: 4px;
+        }
+
+        body[data-mode="logic"] #mode-banner {
+            border: 1px solid var(--mode-logic);
+            color: var(--mode-logic);
+            border-left-width: 4px;
+        }
+
+        body[data-mode="diff"] #mode-banner {
+            border: 1px solid var(--mode-diff);
+            color: var(--mode-diff);
+            border-left-width: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .layout-wrapper { display: block; }
+            body { overflow-x: hidden; }
+            .mobile-bar { display: flex; }
+
+            aside {
+                position: fixed;
+                top: 50px;
+                left: 0;
+                width: 100%;
+                height: calc(100vh - 50px);
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+                border-right: none;
+                padding: 2rem;
+                background: var(--bg-color);
+                overflow-y: auto;
+                z-index: 10000;
+            }
+
+            aside.open { transform: translateX(0); }
+
+            main {
+                padding: 1.5rem;
+                margin-top: 50px;
+                width: 100%;
+                max-width: 100vw;
+            }
+
+            section {
+                margin-bottom: 4rem;
+                grid-template-columns: 1fr !important;
+            }
+
+            .audit-rail { display: none !important; }
+
+            .doc-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .integrity-seal { margin-left: 0; }
+            #mode-banner { top: 60px; right: 20px; z-index: 900; }
+
+            .logic-block {
+                max-width: 100%;
+                overflow-x: auto;
+                word-break: break-word;
+                font-size: 0.7rem;
+                margin: 2rem 0;
+            }
+        }
+    </style>
+</head>
+<body data-mode="reader" data-theme="light">
+
+    <div id="mode-banner">READER MODE</div>
+
+    <header class="mobile-bar">
+        <div class="mobile-brand">ENLIGHTENED AI</div>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <span id="theme-icon-mobile" onclick="toggleTheme()" style="cursor:pointer; font-size:1.1rem; user-select:none;">◐</span>
+            <button class="mobile-index-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">INDEX</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside id="sidebar">
+            <div class="brand">
+                <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">ENLIGHTENED AI</div>
+                <div class="scramble" style="font-weight: 800; font-size: 0.95rem;">RESEARCH LAB</div>
+                <span>EST. 2026 // MONTREAL</span>
+            </div>
+
+            <div class="mode-group">
+                <span class="toggle-btn active" id="btn-reader" onclick="setMode('reader', 'READER MODE')">[ READER ] <span>•</span></span>
+                <span class="toggle-btn" id="btn-audit" onclick="setMode('audit', 'AUDIT MODE ACTIVE')">[ AUDIT ] <span>•</span></span>
+                <span class="toggle-btn" id="btn-diff" onclick="setMode('diff', 'CHANGE TRACE ACTIVE')">[ DIFF LOG ] <span>Δ</span></span>
+                <span class="toggle-btn" id="btn-logic" onclick="setMode('logic', 'LOGIC LAYER EXPOSED')">[ LOGIC ] <span>λ</span></span>
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#featured-project" class="nav-link">Reflective Diagnostics</a></li>
+                    <li><a href="#about-lab" class="nav-link">About the Lab</a></li>
+                    <li><a href="#research-areas" class="nav-link">Research Areas</a></li>
+
+                    <li class="nav-divider" style="margin: 15px 0 10px 0; border-top: 1px solid var(--border-color); opacity: 0.5;"></li>
+
+                    <li><a href="reflective-diagnostics.html" class="nav-link">Diagnostics</a></li>
+                    <li><a href="publications.html" class="nav-link">Publications</a></li>
+                    <li><a href="theory.html" class="nav-link">Theory</a></li>
+                    <li><a href="lexicon.html" class="nav-link">Lexicon</a></li>
+                    <li><a href="data.html" class="nav-link">Data</a></li>
+                    <li><a href="videos.html" class="nav-link">Videos</a></li>
+                    <li><a href="curriculum.html" class="nav-link">Curriculum</a></li>
+                </ul>
+            </nav>
+
+            <div class="theme-switch" onclick="toggleTheme()">
+                [ LIGHT / DARK ] <span id="theme-icon">◐</span>
+            </div>
+
+            <div class="export-container">
+                <button class="export-btn" onclick="window.print()"><span>🖨</span> Export Record</button>
+            </div>
+        </aside>
+
+        <main>
+            <div class="doc-header mono">
+                <div class="doc-meta"><span class="doc-label">DOC_ID</span><span class="doc-val">EAI-2026-001</span></div>
+                <div class="doc-meta"><span class="doc-label">CLASSIFICATION</span><span class="doc-val">PUBLIC</span></div>
+                <div class="integrity-seal verified"><span class="status-dot"></span><span>INTEGRITY: VERIFIED</span></div>
+            </div>
+
+            <section id="home">
+                <div class="content-col">
+                    <div class="orienting-frame">Independent research lab building evaluation instruments for AI systems.</div>
+                    <h1><span class="scramble">01 //</span>Enlightened AI Research Lab</h1>
+                    <div class="prose-content">
+                        <p>
+                            We build evaluation instruments for reasoning reliability, structured AI auditing, and model benchmarking.
+                        </p>
+                        <p>
+                            Our work focuses on reliability, confidence behavior, ambiguity handling, and structured evidence generation for comparing and evaluating AI systems.
+                        </p>
+
+                        <div class="logic-block">
+# Public Home View — Institutional Summary
+lab = {
+    "name": "Enlightened AI Research Lab",
+    "focus": [
+        "reasoning reliability",
+        "structured AI auditing",
+        "model benchmarking"
+    ],
+    "featured_project": "Reflective Diagnostics"
+}
+                        </div>
+
+                        <div class="cta-row">
+                            <a href="reflective-diagnostics.html" class="cta-link">Explore Reflective Diagnostics</a>
+                            <a href="publications.html" class="cta-link">View Publications</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="audit-rail">
+                    <div class="claim-box">
+                        <span class="claim-id">LAB STATUS</span>
+                        <div class="claim-meta"><span>LOCATION: MONTREAL</span><span class="metric-tag">PUBLIC</span></div>
+                        <div class="claim-text">Research lab focused on AI evaluation, diagnostics, and structured evidence.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="featured-project">
+                <div class="content-col">
+                    <div class="diff-header">FEATURED INSTRUMENT</div>
+                    <h2><span class="scramble">02 //</span>Reflective Diagnostics</h2>
+                    <div class="prose-content">
+                        <p>
+                            Reflective Diagnostics is a rule-based evaluation framework for analyzing LLM outputs and turning them into structured evidence, including JSON records, scorecards, reports, and short briefs.
+                        </p>
+                        <p>
+                            It is designed to support reliability testing, vendor comparison, and evaluation under ambiguity without relying on AI-generated judgment.
+                        </p>
+
+                        <div class="logic-block">
+# Instrument Summary — Reflective Diagnostics
+def reflective_diagnostics(output):
+    return {
+        "artifact_types": ["json", "scorecard", "report", "brief"],
+        "supports": ["reliability testing", "vendor comparison", "ambiguity evaluation"],
+        "judgment_mode": "rule_based"
+    }
+                        </div>
+
+                        <div class="cta-row">
+                            <a href="reflective-diagnostics.html" class="cta-link">Open Diagnostics Page</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="audit-rail">
+                    <div class="claim-box">
+                        <span class="claim-id">FEATURED PROJECT</span>
+                        <div class="claim-meta"><span>TYPE: INSTRUMENT</span><span class="metric-tag">ACTIVE</span></div>
+                        <div class="claim-text">Rule-based evaluation framework for LLM reliability and structured benchmarking.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about-lab">
+                <div class="content-col">
+                    <div class="diff-header">LAB OVERVIEW</div>
+                    <h2><span class="scramble">03 //</span>About the Lab</h2>
+                    <div class="prose-content">
+                        <p>
+                            Enlightened AI Research Lab develops research-grade tools for evaluating how AI systems behave under real usage conditions.
+                        </p>
+                        <p>
+                            The lab’s work combines structured diagnostics, interpretable outputs, and reproducible records to support research, auditing, and comparison across systems.
+                        </p>
+                        <p>
+                            In addition to Reflective Diagnostics, the site includes theory, lexicon, publications, videos, and supporting materials related to the broader research program.
+                        </p>
+
+                        <div class="logic-block">
+# Lab Scope
+scope = [
+    "evaluation instruments",
+    "interpretable outputs",
+    "reproducible records",
+    "research and auditing support"
+]
+                        </div>
+                    </div>
+                </div>
+
+                <div class="audit-rail">
+                    <div class="claim-box">
+                        <span class="claim-id">LAB PROFILE</span>
+                        <div class="claim-meta"><span>SCOPE: RESEARCH</span><span class="metric-tag">INDEPENDENT</span></div>
+                        <div class="claim-text">Evaluation instruments, theory, publications, and structured audit artifacts.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="research-areas">
+                <div class="content-col">
+                    <div class="diff-header">RESEARCH AREAS</div>
+                    <h2><span class="scramble">04 //</span>Research Areas</h2>
+                    <div class="prose-content">
+                        <p>Current work includes:</p>
+                        <p>
+                            — reasoning reliability and structural failure patterns<br>
+                            — confidence behavior and ambiguity handling<br>
+                            — rule-based benchmarking and vendor comparison<br>
+                            — structured evidence generation for research and evaluation
+                        </p>
+                        <p>
+                            For deeper technical framing, visitors can explore the Theory and Lexicon sections. For outputs and examples, see Publications, Videos, and the Reflective Diagnostics page.
+                        </p>
+
+                        <div class="logic-block">
+# Current Areas
+areas = {
+    "reliability": True,
+    "confidence_behavior": True,
+    "ambiguity_handling": True,
+    "benchmarking": True,
+    "structured_evidence": True
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="audit-rail">
+                    <div class="claim-box">
+                        <span class="claim-id">CURRENT FOCUS</span>
+                        <div class="claim-meta"><span>AREAS: 4</span><span class="metric-tag">EXPANDING</span></div>
+                        <div class="claim-text">Reliability, confidence, ambiguity, benchmarking, and structured audit outputs.</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="footer-mount"></div>
+    <script>
+      fetch('/partials/footer.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('footer-mount').innerHTML = html;
+        });
+    </script>
+
+    <script>
+        function setMode(mode, label) {
+            document.body.setAttribute('data-mode', mode);
+            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${mode}`).classList.add('active');
+            const banner = document.getElementById('mode-banner');
+            banner.innerText = label;
+
+            if (window.innerWidth <= 900) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        }
+
+        function highlightText(id) {}
+        function unhighlightText(id) {}
+        function highlightClaim(id) {}
+        function unhighlightClaim(id) {}
+
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+        function scrambleText(element) {
+            let iterations = 0;
+            const originalText = element.dataset.value;
+            if (element.interval) clearInterval(element.interval);
+            element.interval = setInterval(() => {
+                element.innerText = originalText.split("").map((letter, index) => {
+                    if (index < iterations) return originalText[index];
+                    return letters[Math.floor(Math.random() * 26)];
+                }).join("");
+                if (iterations >= originalText.length) clearInterval(element.interval);
+                iterations += 1 / 3;
+            }, 30);
+        }
+
+        document.querySelectorAll(".scramble").forEach(h => {
+            h.dataset.value = h.innerText;
+            h.addEventListener("mouseover", event => scrambleText(event.target));
+        });
+
+        function copyCite(text) { navigator.clipboard.writeText(text); }
+        function copyLink(id) { navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`); }
+
+        function setTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+
+            const icon = document.getElementById('theme-icon');
+            if (icon) icon.textContent = (theme === 'dark') ? '◑' : '◐';
+
+            const iconMobile = document.getElementById('theme-icon-mobile');
+            if (iconMobile) iconMobile.textContent = (theme === 'dark') ? '◑' : '◐';
+        }
+
+        function toggleTheme() {
+            const current = document.body.getAttribute('data-theme') || 'light';
+            const next = (current === 'dark') ? 'light' : 'dark';
+            setTheme(next);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        document.addEventListener("click", (e) => {
+            if (window.innerWidth > 900) return;
+            const sidebar = document.getElementById("sidebar");
+            const isOpen = sidebar.classList.contains("open");
+            if (!isOpen) return;
+            const clickedInside = sidebar.contains(e.target) || e.target.closest(".mobile-bar") || e.target.closest(".mobile-index-btn");
+            if (!clickedInside) sidebar.classList.remove("open");
+        });
+
+        const sectionIds = ["home", "featured-project", "about-lab", "research-areas"];
+        const navLinks = document.querySelectorAll('a.nav-link[href^="#"]');
+
+        function updateActiveNav() {
+            let current = "home";
+            for (const id of sectionIds) {
+                const el = document.getElementById(id);
+                if (!el) continue;
+                const rect = el.getBoundingClientRect();
+                if (rect.top <= 140) current = id;
+            }
+
+            navLinks.forEach(link => {
+                link.classList.toggle("active", link.getAttribute("href") === `#${current}`);
+            });
+        }
+
+        window.addEventListener("scroll", updateActiveNav);
+        window.addEventListener("load", updateActiveNav);
+    </script>
+</body>
+</html>
