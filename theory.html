@@ -19,7 +19,9 @@
       --line: #d9d7d1;
       --line-dark: #bdb9ae;
       --accent: #1f5eff;
+      --accent-dark: #0e3f99;
       --paper: rgba(255, 255, 255, 0.58);
+      --paper-strong: rgba(255, 255, 255, 0.82);
       --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
       --serif: Georgia, "Times New Roman", serif;
       --sans: Arial, Helvetica, sans-serif;
@@ -100,13 +102,13 @@
       border-bottom: 1px solid var(--line);
     }
 
-    .kicker {
+    .kicker,
+    .section-label {
       font-family: var(--mono);
       font-size: 12px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 24px;
       font-weight: 700;
     }
 
@@ -182,15 +184,6 @@
       align-items: start;
     }
 
-    .section-label {
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 700;
-    }
-
     .insight-text {
       margin: 0;
       max-width: 980px;
@@ -201,8 +194,8 @@
       font-weight: 500;
     }
 
-    .architecture {
-      padding: 78px 0 88px;
+    .section {
+      padding: 86px 0;
       border-bottom: 1px solid var(--line);
     }
 
@@ -215,7 +208,7 @@
     }
 
     .section-head h2 {
-      margin: 0;
+      margin: 18px 0 0;
       font-family: var(--serif);
       font-size: clamp(44px, 6vw, 86px);
       line-height: 0.96;
@@ -225,13 +218,103 @@
 
     .section-head p {
       margin: 0;
-      max-width: 720px;
+      max-width: 760px;
       font-size: 19px;
       line-height: 1.65;
       color: var(--muted);
     }
 
+    .diagram-card {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      padding: 22px;
+    }
+
+    .diagram-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 24px;
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .diagram-title strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .diagram-card svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .svg-text {
+      font-family: Georgia, "Times New Roman", serif;
+      fill: var(--text);
+    }
+
+    .svg-mono {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      fill: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    .svg-blue {
+      fill: var(--accent-dark);
+    }
+
+    .svg-line {
+      stroke: #4d5157;
+      stroke-width: 1.35;
+      fill: none;
+    }
+
+    .svg-line-light {
+      stroke: #a9a59b;
+      stroke-width: 1.1;
+      fill: none;
+    }
+
+    .svg-line-blue {
+      stroke: var(--accent-dark);
+      stroke-width: 1.6;
+      fill: none;
+    }
+
+    .svg-box {
+      fill: rgba(255, 255, 255, 0.62);
+      stroke: #87837a;
+      stroke-width: 1.15;
+    }
+
+    .svg-circle {
+      fill: rgba(255, 255, 255, 0.62);
+      stroke: #55585e;
+      stroke-width: 1.2;
+    }
+
+    .caption {
+      margin-top: 22px;
+      max-width: 900px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .caption strong {
+      color: var(--text);
+    }
+
     .force-grid {
+      margin-top: 28px;
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       border-top: 1px solid var(--line);
@@ -239,7 +322,7 @@
     }
 
     .force-card {
-      min-height: 240px;
+      min-height: 230px;
       padding: 26px 24px;
       border-right: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
@@ -270,96 +353,11 @@
       color: var(--muted);
     }
 
-    .flow-section {
-      padding: 82px 0;
-      border-bottom: 1px solid var(--line);
-      display: grid;
-      grid-template-columns: 0.75fr 1.25fr;
-      gap: 72px;
-      align-items: start;
-    }
-
-    .flow-copy h2 {
-      margin: 0 0 26px;
-      font-family: var(--serif);
-      font-size: clamp(44px, 5.5vw, 80px);
-      line-height: 0.98;
-      letter-spacing: -0.055em;
-      font-weight: 500;
-    }
-
-    .flow-copy p {
-      margin: 0;
-      max-width: 620px;
-      font-size: 19px;
-      line-height: 1.65;
-      color: var(--muted);
-    }
-
-    .flow-diagram {
-      border: 1px solid var(--line);
-      background: var(--paper);
-      padding: 32px;
-    }
-
-    .flow-row {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr auto 1fr;
-      gap: 16px;
-      align-items: center;
-      margin-bottom: 22px;
-    }
-
-    .flow-box {
-      min-height: 112px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.62);
-      padding: 20px;
-    }
-
-    .flow-title {
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .flow-text {
-      font-family: var(--serif);
-      font-size: 25px;
-      line-height: 1.05;
-      letter-spacing: -0.035em;
-    }
-
-    .flow-arrow {
-      font-family: var(--serif);
-      font-size: 34px;
-      color: var(--soft);
-    }
-
-    .flow-output {
-      margin-top: 18px;
-      border-top: 1px solid var(--line);
-      padding-top: 22px;
-      font-family: var(--mono);
-      font-size: 13px;
-      line-height: 1.8;
-      color: #222;
-    }
-
-    .metrics {
-      padding: 82px 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .metric-grid {
+    .metrics-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 18px;
-      margin-top: 52px;
+      margin-top: 28px;
     }
 
     .metric-card {
@@ -376,6 +374,7 @@
       line-height: 0.9;
       letter-spacing: -0.06em;
       margin-bottom: 30px;
+      color: var(--accent-dark);
     }
 
     .metric-name {
@@ -395,103 +394,38 @@
       color: var(--muted);
     }
 
-    .failure-section {
-      padding: 82px 0;
-      border-bottom: 1px solid var(--line);
-      display: grid;
-      grid-template-columns: 0.75fr 1.25fr;
-      gap: 72px;
-    }
-
-    .failure-list {
+    .failure-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      border-top: 1px solid var(--line);
-      border-left: 1px solid var(--line);
+      gap: 18px;
+      margin-top: 28px;
     }
 
-    .failure-item {
-      min-height: 150px;
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
+    .failure-card {
+      min-height: 155px;
+      border: 1px solid var(--line);
       background: var(--paper);
       padding: 24px;
     }
 
-    .failure-item h3 {
+    .failure-card h3 {
       margin: 0 0 14px;
       font-family: var(--serif);
-      font-size: 28px;
+      font-size: 31px;
       line-height: 1;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.045em;
       font-weight: 500;
     }
 
-    .failure-item p {
+    .failure-card p {
       margin: 0;
       font-size: 15px;
       line-height: 1.55;
       color: var(--muted);
     }
 
-    .atlas {
-      padding: 82px 0 92px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .atlas-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-top: 52px;
-    }
-
-    .figure-card {
-      border: 1px solid var(--line);
-      background: var(--paper);
-      padding: 12px;
-      cursor: zoom-in;
-      transition: border-color 160ms ease, transform 160ms ease;
-    }
-
-    .figure-card:hover {
-      border-color: var(--line-dark);
-      transform: translateY(-2px);
-    }
-
-    .figure-card img {
-      width: 100%;
-      aspect-ratio: 1.28 / 1;
-      object-fit: cover;
-      display: block;
-      border: 1px solid var(--line);
-      background: #fff;
-    }
-
-    .figure-caption {
-      padding: 14px 4px 2px;
-    }
-
-    .figure-caption span {
-      display: block;
-      margin-bottom: 8px;
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .figure-caption p {
-      margin: 0;
-      font-size: 15px;
-      line-height: 1.45;
-      color: var(--muted);
-    }
-
     .paper-block {
-      padding: 82px 0 92px;
+      padding: 86px 0 92px;
       display: grid;
       grid-template-columns: minmax(0, 1fr) 340px;
       gap: 72px;
@@ -499,7 +433,7 @@
     }
 
     .paper-block h2 {
-      margin: 0 0 24px;
+      margin: 18px 0 24px;
       font-family: var(--serif);
       font-size: clamp(44px, 5.8vw, 84px);
       line-height: 0.96;
@@ -533,27 +467,6 @@
       height: auto;
     }
 
-    #lightbox-modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      inset: 0;
-      background: rgba(251, 250, 247, 0.96);
-      backdrop-filter: blur(12px);
-      align-items: center;
-      justify-content: center;
-      padding: 38px;
-      cursor: zoom-out;
-    }
-
-    #lightbox-img {
-      max-width: 92vw;
-      max-height: 90vh;
-      background: #fff;
-      border: 1px solid var(--line);
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
-    }
-
     .footer {
       padding-top: 26px;
       border-top: 1px solid var(--line);
@@ -585,8 +498,6 @@
 
       .core-insight,
       .section-head,
-      .flow-section,
-      .failure-section,
       .paper-block {
         grid-template-columns: 1fr;
         gap: 42px;
@@ -596,8 +507,8 @@
         grid-template-columns: repeat(2, 1fr);
       }
 
-      .atlas-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .metrics-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -626,29 +537,23 @@
       }
 
       .core-insight,
-      .architecture,
-      .flow-section,
-      .metrics,
-      .failure-section,
-      .atlas,
+      .section,
       .paper-block {
         padding: 58px 0;
       }
 
       .force-grid,
-      .metric-grid,
-      .failure-list,
-      .atlas-grid {
+      .failure-grid {
         grid-template-columns: 1fr;
       }
 
-      .flow-row {
-        grid-template-columns: 1fr;
+      .diagram-card {
+        padding: 14px;
       }
 
-      .flow-arrow {
-        transform: rotate(90deg);
-        justify-self: start;
+      .diagram-title {
+        display: block;
+        line-height: 1.8;
       }
 
       .footer {
@@ -666,10 +571,6 @@
 </head>
 
 <body>
-  <div id="lightbox-modal" onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Expanded theory figure" />
-  </div>
-
   <div class="page">
     <header class="site-header">
       <a href="index.html" aria-label="Enlightened AI Research Lab home">
@@ -706,8 +607,8 @@
             <span>Full Paper</span>
             <span>→</span>
           </a>
-          <a class="button secondary" href="#atlas">
-            <span>Visual Atlas</span>
+          <a class="button secondary" href="#diagrams">
+            <span>Theory Diagrams</span>
             <span>→</span>
           </a>
         </div>
@@ -721,7 +622,7 @@
         </p>
       </section>
 
-      <section class="architecture" aria-label="Reflective Alignment Architecture">
+      <section class="section" id="diagrams" aria-label="RAA diagram">
         <div class="section-head">
           <div>
             <div class="section-label">RAA</div>
@@ -734,87 +635,200 @@
           </p>
         </div>
 
+        <div class="diagram-card">
+          <div class="diagram-title">
+            <strong>Figure 01</strong>
+            <span>Reflective Alignment Architecture</span>
+          </div>
+
+          <svg viewBox="0 0 1200 720" role="img" aria-label="Five forces of moral coherence diagram">
+            <defs>
+              <marker id="arrow-blue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M 0 0 L 12 6 L 0 12 z" fill="#0e3f99"></path>
+              </marker>
+              <marker id="arrow-gray" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M 0 0 L 12 6 L 0 12 z" fill="#55585e"></path>
+              </marker>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.08"/>
+              </filter>
+            </defs>
+
+            <rect x="18" y="18" width="1164" height="684" rx="2" fill="none" stroke="#c7c3ba" stroke-width="1"/>
+
+            <text x="76" y="86" class="svg-mono" font-size="18" fill="#0e3f99">FIGURE 01</text>
+            <line x1="76" y1="108" x2="174" y2="108" class="svg-line-blue"/>
+            <text x="76" y="178" class="svg-text" font-size="62">Five Forces of</text>
+            <text x="76" y="247" class="svg-text" font-size="62">Moral Coherence</text>
+            <text x="76" y="325" class="svg-mono" font-size="15">THE DYNAMICS OF ALIGNMENT</text>
+            <text x="76" y="350" class="svg-mono" font-size="15">THROUGH REFLECTION</text>
+
+            <circle cx="735" cy="372" r="126" class="svg-circle" filter="url(#softShadow)"/>
+            <circle cx="735" cy="372" r="104" fill="none" stroke="#9d998f" stroke-width="1.1"/>
+            <text x="735" y="352" text-anchor="middle" class="svg-text svg-blue" font-size="38">Moral</text>
+            <text x="735" y="398" text-anchor="middle" class="svg-text svg-blue" font-size="38">Coherence</text>
+            <text x="735" y="446" text-anchor="middle" class="svg-blue" font-size="34">✶</text>
+
+            <circle cx="735" cy="142" r="76" class="svg-circle"/>
+            <text x="735" y="126" text-anchor="middle" class="svg-text" font-size="30">R1</text>
+            <text x="735" y="164" text-anchor="middle" class="svg-mono" font-size="16">REGULATION</text>
+            <text x="735" y="198" text-anchor="middle" class="svg-blue" font-size="32">⚖</text>
+
+            <circle cx="991" cy="274" r="76" class="svg-circle"/>
+            <text x="991" y="258" text-anchor="middle" class="svg-text" font-size="30">R2</text>
+            <text x="991" y="296" text-anchor="middle" class="svg-mono" font-size="16">REFLECTION</text>
+            <text x="991" y="330" text-anchor="middle" class="svg-blue" font-size="32">◉</text>
+
+            <circle cx="945" cy="555" r="76" class="svg-circle"/>
+            <text x="945" y="539" text-anchor="middle" class="svg-text" font-size="30">R3</text>
+            <text x="945" y="577" text-anchor="middle" class="svg-mono" font-size="16">REASONING</text>
+            <text x="945" y="611" text-anchor="middle" class="svg-blue" font-size="32">λ</text>
+
+            <circle cx="525" cy="555" r="76" class="svg-circle"/>
+            <text x="525" y="539" text-anchor="middle" class="svg-text" font-size="30">R4</text>
+            <text x="525" y="577" text-anchor="middle" class="svg-mono" font-size="16">RECIPROCITY</text>
+            <text x="525" y="611" text-anchor="middle" class="svg-blue" font-size="32">◇</text>
+
+            <circle cx="479" cy="274" r="76" class="svg-circle"/>
+            <text x="479" y="258" text-anchor="middle" class="svg-text" font-size="30">R5</text>
+            <text x="479" y="296" text-anchor="middle" class="svg-mono" font-size="16">RESONANCE</text>
+            <text x="479" y="330" text-anchor="middle" class="svg-blue" font-size="32">◎</text>
+
+            <path d="M735 218 L735 246" class="svg-line" marker-end="url(#arrow-gray)"/>
+            <path d="M918 306 L840 345" class="svg-line" marker-end="url(#arrow-gray)"/>
+            <path d="M887 516 L825 461" class="svg-line" marker-end="url(#arrow-gray)"/>
+            <path d="M583 516 L645 461" class="svg-line" marker-end="url(#arrow-gray)"/>
+            <path d="M552 306 L630 345" class="svg-line" marker-end="url(#arrow-gray)"/>
+
+            <circle cx="735" cy="372" r="256" fill="none" stroke="#9d998f" stroke-width="1.2" stroke-dasharray="3 9"/>
+            <circle cx="735" cy="372" r="310" fill="none" stroke="#777a7f" stroke-width="1.2"/>
+
+            <path d="M735 218 C850 210 950 245 991 274" class="svg-line-light"/>
+            <path d="M991 350 C1010 430 990 506 945 555" class="svg-line-light"/>
+            <path d="M869 590 C760 648 640 640 525 555" class="svg-line-light"/>
+            <path d="M479 350 C450 430 470 506 525 555" class="svg-line-light"/>
+            <path d="M479 198 C540 135 630 112 735 142" class="svg-line-light"/>
+
+            <line x1="420" y1="660" x2="1050" y2="660" class="svg-line-light"/>
+            <text x="735" y="672" text-anchor="middle" class="svg-mono" font-size="16" fill="#0e3f99">REFLECTIVE ALIGNMENT ARCHITECTURE</text>
+          </svg>
+
+          <p class="caption">
+            <strong>Figure 01.</strong> RAA treats alignment as a coupled field of five forces. Stability emerges when regulation, reflection, reasoning, reciprocity, and resonance remain in coherent interaction.
+          </p>
+        </div>
+
         <div class="force-grid">
           <div class="force-card">
             <span class="force-id">R1</span>
             <div class="force-title">Regulation</div>
-            <div class="force-desc">
-              The boundary layer: legal, ethical, safety, and harm-prevention constraints.
-            </div>
+            <div class="force-desc">Legal, ethical, safety, and harm-prevention boundaries.</div>
           </div>
 
           <div class="force-card">
             <span class="force-id">R2</span>
             <div class="force-title">Reflection</div>
-            <div class="force-desc">
-              Self-critique, uncertainty detection, error recognition, and value-conflict identification.
-            </div>
+            <div class="force-desc">Self-critique, uncertainty detection, and value-conflict recognition.</div>
           </div>
 
           <div class="force-card">
             <span class="force-id">R3</span>
             <div class="force-title">Reasoning</div>
-            <div class="force-desc">
-              Logical, causal, and evidential coherence inside the reasoning process.
-            </div>
+            <div class="force-desc">Logical, causal, and evidential coherence inside the reasoning process.</div>
           </div>
 
           <div class="force-card">
             <span class="force-id">R4</span>
             <div class="force-title">Reciprocity</div>
-            <div class="force-desc">
-              Perspective-taking, autonomy respect, stakeholder awareness, and vulnerability modeling.
-            </div>
+            <div class="force-desc">Perspective-taking, stakeholder awareness, and vulnerability modeling.</div>
           </div>
 
           <div class="force-card">
             <span class="force-id">R5</span>
             <div class="force-title">Resonance</div>
-            <div class="force-desc">
-              Long-horizon moral stability across context, pressure, time, and version change.
-            </div>
+            <div class="force-desc">Long-horizon stability across time, pressure, context, and version change.</div>
           </div>
         </div>
       </section>
 
-      <section class="flow-section" aria-label="Reflective Duality Layer">
-        <div class="flow-copy">
-          <div class="section-label">RDL</div>
-          <h2>The measurement layer.</h2>
+      <section class="section" aria-label="RDL diagram">
+        <div class="section-head">
+          <div>
+            <div class="section-label">RDL</div>
+            <h2>The measurement layer.</h2>
+          </div>
+
           <p>
-            The Reflective Duality Layer converts the theory into measurement by comparing the forward reasoning path with the reflective critique path.
+            The Reflective Duality Layer converts theory into measurement by comparing a forward reasoning trajectory with a reflective critique trajectory, producing a reviewable event record.
           </p>
         </div>
 
-        <div class="flow-diagram">
-          <div class="flow-row">
-            <div class="flow-box">
-              <div class="flow-title">F</div>
-              <div class="flow-text">Forward reasoning</div>
-            </div>
-
-            <div class="flow-arrow">→</div>
-
-            <div class="flow-box">
-              <div class="flow-title">Q</div>
-              <div class="flow-text">Reflective critique</div>
-            </div>
-
-            <div class="flow-arrow">→</div>
-
-            <div class="flow-box">
-              <div class="flow-title">RER</div>
-              <div class="flow-text">Reflective Event Record</div>
-            </div>
+        <div class="diagram-card">
+          <div class="diagram-title">
+            <strong>Figure 02</strong>
+            <span>Reflective Duality Layer</span>
           </div>
 
-          <div class="flow-output">
-            Output signals: Ψ reflective stability / R∇ reflective gradient / MCI⋆ moral coherence index
-          </div>
+          <svg viewBox="0 0 1200 620" role="img" aria-label="Reflective Duality Layer flow diagram">
+            <defs>
+              <marker id="arrow2" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M 0 0 L 12 6 L 0 12 z" fill="#55585e"></path>
+              </marker>
+              <marker id="arrow2blue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M 0 0 L 12 6 L 0 12 z" fill="#0e3f99"></path>
+              </marker>
+            </defs>
+
+            <rect x="18" y="18" width="1164" height="584" rx="2" fill="none" stroke="#c7c3ba" stroke-width="1"/>
+
+            <text x="76" y="86" class="svg-mono" font-size="18" fill="#0e3f99">FIGURE 02</text>
+            <line x1="76" y1="108" x2="174" y2="108" class="svg-line-blue"/>
+            <text x="76" y="178" class="svg-text" font-size="62">Reflective Duality Layer</text>
+            <text x="76" y="255" class="svg-mono" font-size="15">FROM INPUT TO REVIEWABLE STABILITY</text>
+
+            <circle cx="190" cy="390" r="76" class="svg-circle"/>
+            <text x="190" y="378" text-anchor="middle" class="svg-mono" font-size="15">PROMPT</text>
+            <text x="190" y="405" text-anchor="middle" class="svg-text" font-size="26">Context</text>
+
+            <circle cx="440" cy="390" r="76" class="svg-circle"/>
+            <text x="440" y="374" text-anchor="middle" class="svg-mono" font-size="15">F</text>
+            <text x="440" y="405" text-anchor="middle" class="svg-text" font-size="27">Forward</text>
+            <text x="440" y="432" text-anchor="middle" class="svg-text" font-size="27">Reasoning</text>
+
+            <rect x="610" y="260" width="160" height="260" rx="78" class="svg-box"/>
+            <text x="690" y="318" text-anchor="middle" class="svg-mono" font-size="15">Q</text>
+            <text x="690" y="354" text-anchor="middle" class="svg-text svg-blue" font-size="31">Reflective</text>
+            <text x="690" y="391" text-anchor="middle" class="svg-text svg-blue" font-size="31">Critique</text>
+            <line x1="650" y1="420" x2="730" y2="420" class="svg-line-light"/>
+            <text x="690" y="458" text-anchor="middle" class="svg-mono" font-size="14">STABILITY CHECK</text>
+
+            <circle cx="970" cy="318" r="76" class="svg-circle"/>
+            <text x="970" y="305" text-anchor="middle" class="svg-mono" font-size="15">OUTPUT</text>
+            <text x="970" y="336" text-anchor="middle" class="svg-text" font-size="28">Aligned</text>
+            <text x="970" y="366" text-anchor="middle" class="svg-text" font-size="28">Response</text>
+
+            <circle cx="970" cy="504" r="76" class="svg-circle"/>
+            <text x="970" y="492" text-anchor="middle" class="svg-mono" font-size="15">RER</text>
+            <text x="970" y="523" text-anchor="middle" class="svg-text" font-size="27">Event</text>
+            <text x="970" y="552" text-anchor="middle" class="svg-text" font-size="27">Record</text>
+
+            <line x1="266" y1="390" x2="364" y2="390" class="svg-line" marker-end="url(#arrow2)"/>
+            <line x1="516" y1="390" x2="610" y2="390" class="svg-line" marker-end="url(#arrow2)"/>
+            <line x1="770" y1="390" x2="894" y2="326" class="svg-line" marker-end="url(#arrow2blue)"/>
+
+            <path d="M770 448 C835 448 835 504 894 504" class="svg-line-light" stroke-dasharray="7 7" marker-end="url(#arrow2)"/>
+            <path d="M894 504 C760 575 640 560 690 520" class="svg-line-light" stroke-dasharray="7 7" marker-end="url(#arrow2)"/>
+
+            <text x="690" y="584" text-anchor="middle" class="svg-mono" font-size="16" fill="#0e3f99">F → Q → RER → Ψ / R∇ / MCI⋆</text>
+          </svg>
+
+          <p class="caption">
+            <strong>Figure 02.</strong> RDL compares a first-pass reasoning path with reflective critique, then records the interaction as a Reflective Event Record with measurable stability signals.
+          </p>
         </div>
       </section>
 
-      <section class="metrics" aria-label="Core metrics">
+      <section class="section" aria-label="Metrics">
         <div class="section-head">
           <div>
             <div class="section-label">Metrics</div>
@@ -822,142 +836,149 @@
           </div>
 
           <p>
-            The theory measures alignment through stability signals rather than single-answer correctness.
-            These metrics reveal whether reflection improves reasoning, whether care remains stable, and whether coherence persists over time.
+            The theory measures alignment through stability signals rather than single-answer correctness. These metrics reveal whether reflection improves reasoning, whether care remains stable, and whether coherence persists over time.
           </p>
         </div>
 
-        <div class="metric-grid">
+        <div class="diagram-card">
+          <div class="diagram-title">
+            <strong>Figure 03</strong>
+            <span>Core Measures of Reflective Alignment</span>
+          </div>
+
+          <svg viewBox="0 0 1200 540" role="img" aria-label="Metrics of reflective integrity diagram">
+            <rect x="18" y="18" width="1164" height="504" rx="2" fill="none" stroke="#c7c3ba" stroke-width="1"/>
+
+            <text x="76" y="86" class="svg-mono" font-size="18" fill="#0e3f99">FIGURE 03</text>
+            <line x1="76" y1="108" x2="174" y2="108" class="svg-line-blue"/>
+            <text x="76" y="176" class="svg-text" font-size="60">Metrics of</text>
+            <text x="76" y="242" class="svg-text" font-size="60">Reflective Integrity</text>
+
+            <circle cx="350" cy="360" r="106" class="svg-circle"/>
+            <circle cx="350" cy="360" r="86" fill="none" stroke="#aaa69b" stroke-width="1.1" stroke-dasharray="2 8"/>
+            <text x="350" y="324" text-anchor="middle" class="svg-text svg-blue" font-size="62">Ψ</text>
+            <text x="350" y="380" text-anchor="middle" class="svg-text" font-size="30">Reflective</text>
+            <text x="350" y="414" text-anchor="middle" class="svg-text" font-size="30">Stability</text>
+
+            <circle cx="630" cy="360" r="106" class="svg-circle"/>
+            <circle cx="630" cy="360" r="86" fill="none" stroke="#aaa69b" stroke-width="1.1" stroke-dasharray="2 8"/>
+            <text x="630" y="324" text-anchor="middle" class="svg-text svg-blue" font-size="62">R∇</text>
+            <text x="630" y="380" text-anchor="middle" class="svg-text" font-size="30">Reflective</text>
+            <text x="630" y="414" text-anchor="middle" class="svg-text" font-size="30">Gradient</text>
+
+            <circle cx="910" cy="360" r="106" class="svg-circle"/>
+            <circle cx="910" cy="360" r="86" fill="none" stroke="#aaa69b" stroke-width="1.1" stroke-dasharray="2 8"/>
+            <text x="910" y="324" text-anchor="middle" class="svg-text svg-blue" font-size="56">MCI⋆</text>
+            <text x="910" y="380" text-anchor="middle" class="svg-text" font-size="30">Moral</text>
+            <text x="910" y="414" text-anchor="middle" class="svg-text" font-size="30">Coherence</text>
+
+            <line x1="456" y1="360" x2="524" y2="360" class="svg-line-light"/>
+            <line x1="736" y1="360" x2="804" y2="360" class="svg-line-light"/>
+
+            <text x="630" y="488" text-anchor="middle" class="svg-mono" font-size="16" fill="#0e3f99">THREE SIGNALS FOR REVIEWABLE INTELLIGENCE</text>
+          </svg>
+        </div>
+
+        <div class="metrics-grid">
           <div class="metric-card">
             <span class="metric-symbol">Ψ</span>
             <span class="metric-name">Reflective Stability</span>
-            <p>
-              Measures whether the system preserves care, autonomy-respect, uncertainty awareness, and harm sensitivity during reasoning.
-            </p>
+            <p>Measures whether the system preserves care, autonomy-respect, uncertainty awareness, and harm sensitivity during reasoning.</p>
           </div>
 
           <div class="metric-card">
             <span class="metric-symbol">R∇</span>
             <span class="metric-name">Reflective Gradient</span>
-            <p>
-              Measures whether reflection improves the output, destabilizes it, or merely performs cosmetic self-correction.
-            </p>
+            <p>Measures whether reflection improves the output, destabilizes it, or merely performs cosmetic self-correction.</p>
           </div>
 
           <div class="metric-card">
             <span class="metric-symbol">MCI⋆</span>
             <span class="metric-name">Moral Coherence Index</span>
-            <p>
-              Tracks long-horizon coherence across the five forces, dual trajectories, stress, drift, and version change.
-            </p>
+            <p>Tracks long-horizon coherence across the five forces, dual trajectories, stress, drift, and version change.</p>
           </div>
         </div>
       </section>
 
-      <section class="failure-section" aria-label="Failure signatures">
-        <div>
-          <div class="section-label">Failure Signatures</div>
-          <div class="section-head" style="display:block; margin-bottom:0;">
+      <section class="section" aria-label="Failure signatures">
+        <div class="section-head">
+          <div>
+            <div class="section-label">Failure Signatures</div>
             <h2>What instability looks like.</h2>
-            <p style="margin-top:24px;">
-              RDL reveals failure patterns before they appear as obvious unsafe outputs.
-            </p>
           </div>
+
+          <p>
+            RDL reveals failure patterns before they appear as obvious unsafe outputs. These signatures show where alignment begins to fracture under pressure.
+          </p>
         </div>
 
-        <div class="failure-list">
-          <div class="failure-item">
+        <div class="diagram-card">
+          <div class="diagram-title">
+            <strong>Figure 04</strong>
+            <span>Failure Modes in Reflective Systems</span>
+          </div>
+
+          <svg viewBox="0 0 1200 650" role="img" aria-label="Failure signatures quadrant">
+            <rect x="18" y="18" width="1164" height="614" rx="2" fill="none" stroke="#c7c3ba" stroke-width="1"/>
+
+            <text x="76" y="86" class="svg-mono" font-size="18" fill="#0e3f99">FIGURE 04</text>
+            <line x1="76" y1="108" x2="174" y2="108" class="svg-line-blue"/>
+            <text x="76" y="178" class="svg-text" font-size="62">Failure Signatures</text>
+            <text x="76" y="244" class="svg-mono" font-size="15">HOW ALIGNMENT BREAKS UNDER PRESSURE</text>
+
+            <rect x="310" y="170" width="710" height="370" fill="rgba(255,255,255,0.42)" stroke="#8d8a82" stroke-width="1.1"/>
+            <line x1="665" y1="170" x2="665" y2="540" class="svg-line-light"/>
+            <line x1="310" y1="355" x2="1020" y2="355" class="svg-line-light"/>
+
+            <text x="290" y="185" text-anchor="end" class="svg-mono" font-size="13">HIGH</text>
+            <text x="290" y="540" text-anchor="end" class="svg-mono" font-size="13">LOW</text>
+            <text x="310" y="572" text-anchor="middle" class="svg-mono" font-size="13">LOW</text>
+            <text x="1020" y="572" text-anchor="middle" class="svg-mono" font-size="13">HIGH</text>
+            <text x="665" y="603" text-anchor="middle" class="svg-mono" font-size="15">REASONING STABILITY</text>
+            <text x="250" y="355" transform="rotate(-90 250 355)" text-anchor="middle" class="svg-mono" font-size="15">MORAL REGULATION</text>
+
+            <text x="487" y="267" text-anchor="middle" class="svg-blue" font-size="34">✶</text>
+            <text x="487" y="318" text-anchor="middle" class="svg-text" font-size="46">Drift</text>
+            <text x="487" y="370" text-anchor="middle" class="svg-mono" font-size="14">VALUES WANDER</text>
+            <text x="487" y="394" text-anchor="middle" class="svg-mono" font-size="14">DIRECTION FADES</text>
+
+            <text x="842" y="267" text-anchor="middle" class="svg-blue" font-size="34">▣</text>
+            <text x="842" y="318" text-anchor="middle" class="svg-text" font-size="46">Rigidity</text>
+            <text x="842" y="370" text-anchor="middle" class="svg-mono" font-size="14">ADAPTATION CEASES</text>
+            <text x="842" y="394" text-anchor="middle" class="svg-mono" font-size="14">RULES OVERRIDE REASON</text>
+
+            <text x="487" y="452" text-anchor="middle" class="svg-blue" font-size="34">✣</text>
+            <text x="487" y="503" text-anchor="middle" class="svg-text" font-size="46">Collapse</text>
+
+            <text x="842" y="452" text-anchor="middle" class="svg-blue" font-size="34">♡</text>
+            <text x="842" y="503" text-anchor="middle" class="svg-text" font-size="46">Care Erosion</text>
+
+            <path d="M585 286 C690 295 742 392 812 471" class="svg-line-blue" stroke-dasharray="7 8"/>
+            <circle cx="585" cy="286" r="6" fill="var(--bg)" stroke="#0e3f99" stroke-width="1.5"/>
+            <circle cx="812" cy="471" r="6" fill="var(--bg)" stroke="#0e3f99" stroke-width="1.5"/>
+          </svg>
+        </div>
+
+        <div class="failure-grid">
+          <div class="failure-card">
             <h3>Sub-goal pitfall</h3>
             <p>Reasoning outpaces regulation and reflection, producing unsafe optimization under pressure.</p>
           </div>
 
-          <div class="failure-item">
+          <div class="failure-card">
             <h3>Ethical drift</h3>
             <p>Long-horizon degradation of reciprocity, reflection quality, and moral stability.</p>
           </div>
 
-          <div class="failure-item">
+          <div class="failure-card">
             <h3>Mode switching</h3>
             <p>The system oscillates between incompatible behavioral regimes under slight framing changes.</p>
           </div>
 
-          <div class="failure-item">
+          <div class="failure-card">
             <h3>Care erosion</h3>
             <p>Decline in Ψ across turns, tasks, or versions, often before visible failure.</p>
           </div>
-
-          <div class="failure-item">
-            <h3>Performance alignment</h3>
-            <p>Surface-level safety without stable internal coherence.</p>
-          </div>
-
-          <div class="failure-item">
-            <h3>Long-horizon collapse</h3>
-            <p>Reasoning remains plausible while stability degrades over time or pressure.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="atlas" id="atlas" aria-label="Visual atlas">
-        <div class="section-head">
-          <div>
-            <div class="section-label">Visual Atlas</div>
-            <h2>Selected figures.</h2>
-          </div>
-
-          <p>
-            A curated set of visual studies from the theory. Each figure opens in an expanded view.
-          </p>
-        </div>
-
-        <div class="atlas-grid">
-          <figure class="figure-card" onclick="openLightbox('assets/img/theory/fig1.png')">
-            <img src="assets/img/theory/fig1.png" alt="Alignment Drift Curve" onerror="this.style.display='none'" />
-            <figcaption class="figure-caption">
-              <span>Figure 01</span>
-              <p>Alignment drift curve showing stability decline over multi-turn reasoning.</p>
-            </figcaption>
-          </figure>
-
-          <figure class="figure-card" onclick="openLightbox('assets/img/theory/fig2.png')">
-            <img src="assets/img/theory/fig2.png" alt="R1 to R5 Structural Interaction Map" onerror="this.style.display='none'" />
-            <figcaption class="figure-caption">
-              <span>Figure 02</span>
-              <p>R1–R5 interaction map showing the forces that stabilize or destabilize coherence.</p>
-            </figcaption>
-          </figure>
-
-          <figure class="figure-card" onclick="openLightbox('assets/img/theory/fig3.png')">
-            <img src="assets/img/theory/fig3.png" alt="RDL Workflow Overview" onerror="this.style.display='none'" />
-            <figcaption class="figure-caption">
-              <span>Figure 03</span>
-              <p>Reflective Duality Layer workflow from input to stability-checked output.</p>
-            </figcaption>
-          </figure>
-
-          <figure class="figure-card" onclick="openLightbox('assets/img/theory/fig4.png')">
-            <img src="assets/img/theory/fig4.png" alt="Core Metrics Overview" onerror="this.style.display='none'" />
-            <figcaption class="figure-caption">
-              <span>Figure 04</span>
-              <p>Metric triad connecting Ψ, R∇, and MCI⋆ inside the reflective core.</p>
-            </figcaption>
-          </figure>
-
-          <figure class="figure-card" onclick="openLightbox('assets/img/theory/fig5.png')">
-            <img src="assets/img/theory/fig5.png" alt="Failure Signatures Map" onerror="this.style.display='none'" />
-            <figcaption class="figure-caption">
-              <span>Figure 05</span>
-              <p>Failure signatures showing drift, rigidity, hallucination patterns, and instability zones.</p>
-            </figcaption>
-          </figure>
-
-          <figure class="figure-card" onclick="openLightbox('assets/img/theory/fig6.png')">
-            <img src="assets/img/theory/fig6.png" alt="Reflective Stability Field" onerror="this.style.display='none'" />
-            <figcaption class="figure-caption">
-              <span>Figure 06</span>
-              <p>Reflective stability field showing coherence dynamics under pressure.</p>
-            </figcaption>
-          </figure>
         </div>
       </section>
 
@@ -1019,21 +1040,5 @@
       </div>
     </footer>
   </div>
-
-  <script>
-    function openLightbox(src) {
-      if (!src) return;
-
-      const modal = document.getElementById("lightbox-modal");
-      const img = document.getElementById("lightbox-img");
-
-      img.src = src;
-      modal.style.display = "flex";
-    }
-
-    function closeLightbox() {
-      document.getElementById("lightbox-modal").style.display = "none";
-    }
-  </script>
 </body>
 </html>
