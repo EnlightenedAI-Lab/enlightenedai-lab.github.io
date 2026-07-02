@@ -20,8 +20,8 @@
       --line-dark: #bdb9ae;
       --accent: #1f5eff;
       --accent-dark: #0e3f99;
-      --paper: rgba(255, 255, 255, 0.58);
-      --paper-strong: rgba(255, 255, 255, 0.82);
+      --paper: rgba(255, 255, 255, 0.62);
+      --paper-strong: rgba(255, 255, 255, 0.88);
       --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
       --serif: Georgia, "Times New Roman", serif;
       --sans: Arial, Helvetica, sans-serif;
@@ -47,6 +47,10 @@
     a {
       color: inherit;
       text-decoration: none;
+    }
+
+    button {
+      font: inherit;
     }
 
     .page {
@@ -224,13 +228,25 @@
       color: var(--muted);
     }
 
-    .diagram-card {
-      border: 1px solid var(--line);
-      background: var(--paper);
-      padding: 22px;
+    .interactive-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(310px, 0.75fr);
+      gap: 24px;
+      align-items: stretch;
     }
 
-    .diagram-title {
+    .visual-panel,
+    .info-panel {
+      border: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .visual-panel {
+      padding: 24px;
+      min-height: 560px;
+    }
+
+    .panel-header {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
@@ -245,15 +261,89 @@
       color: var(--muted);
     }
 
-    .diagram-title strong {
+    .panel-header strong {
       color: var(--accent);
       font-weight: 700;
     }
 
-    .diagram-card svg {
+    .visual-panel svg {
       display: block;
       width: 100%;
       height: auto;
+    }
+
+    .info-panel {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 560px;
+    }
+
+    .info-kicker {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .info-title {
+      margin: 0 0 18px;
+      font-family: var(--serif);
+      font-size: 48px;
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      font-weight: 500;
+    }
+
+    .info-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .selector-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .selector {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.38);
+      padding: 14px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 160ms ease;
+      text-align: left;
+    }
+
+    .selector span:first-child {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .selector span:last-child {
+      font-size: 14px;
+    }
+
+    .selector:hover,
+    .selector.active {
+      border-color: var(--text);
+      color: var(--text);
+      background: var(--paper-strong);
     }
 
     .svg-text {
@@ -272,85 +362,121 @@
     }
 
     .svg-line {
-      stroke: #4d5157;
-      stroke-width: 1.35;
+      stroke: #55585e;
+      stroke-width: 1.25;
       fill: none;
+      vector-effect: non-scaling-stroke;
     }
 
     .svg-line-light {
       stroke: #a9a59b;
-      stroke-width: 1.1;
+      stroke-width: 1;
       fill: none;
+      vector-effect: non-scaling-stroke;
     }
 
     .svg-line-blue {
       stroke: var(--accent-dark);
-      stroke-width: 1.6;
+      stroke-width: 1.7;
       fill: none;
-    }
-
-    .svg-box {
-      fill: rgba(255, 255, 255, 0.62);
-      stroke: #87837a;
-      stroke-width: 1.15;
+      vector-effect: non-scaling-stroke;
     }
 
     .svg-circle {
-      fill: rgba(255, 255, 255, 0.62);
-      stroke: #55585e;
+      fill: rgba(255,255,255,0.58);
+      stroke: #666a70;
+      stroke-width: 1.25;
+      vector-effect: non-scaling-stroke;
+      transition: fill 180ms ease, stroke 180ms ease, transform 180ms ease;
+    }
+
+    .svg-node {
+      cursor: pointer;
+      outline: none;
+    }
+
+    .svg-node text {
+      pointer-events: none;
+    }
+
+    .svg-node circle {
+      transition: all 180ms ease;
+    }
+
+    .svg-node.active circle,
+    .svg-node:hover circle {
+      stroke: var(--accent-dark);
+      stroke-width: 2.2;
+      fill: rgba(31, 94, 255, 0.06);
+    }
+
+    .svg-node.active .node-label,
+    .svg-node:hover .node-label {
+      fill: var(--accent-dark);
+    }
+
+    .force-link {
+      stroke: #a9a59b;
+      stroke-width: 1.1;
+      fill: none;
+      stroke-dasharray: 420;
+      stroke-dashoffset: 0;
+      vector-effect: non-scaling-stroke;
+      transition: stroke 180ms ease, stroke-width 180ms ease;
+    }
+
+    .force-link.active {
+      stroke: var(--accent-dark);
+      stroke-width: 2;
+      animation: dashFlow 1.2s linear infinite;
+    }
+
+    @keyframes dashFlow {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -80; }
+    }
+
+    .pulse-ring {
+      fill: none;
+      stroke: var(--accent-dark);
       stroke-width: 1.2;
+      opacity: 0.14;
+      transform-origin: center;
+      animation: pulseRing 3.8s ease-in-out infinite;
     }
 
-    .caption {
-      margin-top: 22px;
-      max-width: 900px;
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--muted);
+    @keyframes pulseRing {
+      0%, 100% { transform: scale(0.92); opacity: 0.08; }
+      50% { transform: scale(1.04); opacity: 0.22; }
     }
 
-    .caption strong {
-      color: var(--text);
+    .flow-stage rect,
+    .flow-stage circle {
+      transition: all 180ms ease;
+      cursor: pointer;
     }
 
-    .force-grid {
-      margin-top: 28px;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      border-top: 1px solid var(--line);
-      border-left: 1px solid var(--line);
+    .flow-stage.active rect,
+    .flow-stage.active circle,
+    .flow-stage:hover rect,
+    .flow-stage:hover circle {
+      stroke: var(--accent-dark);
+      stroke-width: 2.2;
+      fill: rgba(31, 94, 255, 0.06);
     }
 
-    .force-card {
-      min-height: 230px;
-      padding: 26px 24px;
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      background: var(--paper);
+    .flow-path {
+      stroke: #9d998f;
+      stroke-width: 1.3;
+      fill: none;
+      vector-effect: non-scaling-stroke;
     }
 
-    .force-id {
-      display: block;
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing: 0.14em;
-      color: var(--accent);
-      font-weight: 700;
-      margin-bottom: 22px;
-    }
-
-    .force-title {
-      margin-bottom: 16px;
-      font-family: var(--serif);
-      font-size: 28px;
-      line-height: 1;
-      letter-spacing: -0.035em;
-    }
-
-    .force-desc {
-      font-size: 15px;
-      line-height: 1.55;
-      color: var(--muted);
+    .flow-path.active {
+      stroke: var(--accent-dark);
+      stroke-width: 2;
+      stroke-dasharray: 8 9;
+      animation: dashFlow 1.1s linear infinite;
     }
 
     .metrics-grid {
@@ -361,10 +487,16 @@
     }
 
     .metric-card {
-      min-height: 300px;
+      min-height: 330px;
       border: 1px solid var(--line);
       background: var(--paper);
-      padding: 32px 28px;
+      padding: 30px 28px;
+      transition: transform 160ms ease, border-color 160ms ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--line-dark);
     }
 
     .metric-symbol {
@@ -373,7 +505,7 @@
       font-size: 86px;
       line-height: 0.9;
       letter-spacing: -0.06em;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
       color: var(--accent-dark);
     }
 
@@ -394,22 +526,51 @@
       color: var(--muted);
     }
 
+    .metric-line {
+      width: 100%;
+      height: 80px;
+      margin: 8px 0 24px;
+    }
+
+    .metric-line path {
+      fill: none;
+      stroke: var(--accent-dark);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-dasharray: 240;
+      stroke-dashoffset: 240;
+      animation: drawLine 2.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+
     .failure-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-      margin-top: 28px;
+      gap: 10px;
+      margin-top: 30px;
     }
 
-    .failure-card {
-      min-height: 155px;
+    .failure-button {
+      min-height: 118px;
       border: 1px solid var(--line);
-      background: var(--paper);
-      padding: 24px;
+      background: rgba(255,255,255,0.38);
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 160ms ease;
     }
 
-    .failure-card h3 {
-      margin: 0 0 14px;
+    .failure-button:hover,
+    .failure-button.active {
+      border-color: var(--text);
+      background: var(--paper-strong);
+    }
+
+    .failure-button h3 {
+      margin: 0 0 10px;
       font-family: var(--serif);
       font-size: 31px;
       line-height: 1;
@@ -417,11 +578,19 @@
       font-weight: 500;
     }
 
-    .failure-card p {
+    .failure-button p {
       margin: 0;
-      font-size: 15px;
-      line-height: 1.55;
       color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    #failure-point {
+      transition: cx 450ms cubic-bezier(.2,.8,.2,1), cy 450ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    #failure-trace {
+      transition: d 450ms cubic-bezier(.2,.8,.2,1);
     }
 
     .paper-block {
@@ -498,13 +667,15 @@
 
       .core-insight,
       .section-head,
+      .interactive-shell,
       .paper-block {
         grid-template-columns: 1fr;
         gap: 42px;
       }
 
-      .force-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .visual-panel,
+      .info-panel {
+        min-height: auto;
       }
 
       .metrics-grid {
@@ -542,18 +713,18 @@
         padding: 58px 0;
       }
 
-      .force-grid,
-      .failure-grid {
-        grid-template-columns: 1fr;
+      .visual-panel,
+      .info-panel {
+        padding: 18px;
       }
 
-      .diagram-card {
-        padding: 14px;
-      }
-
-      .diagram-title {
+      .panel-header {
         display: block;
         line-height: 1.8;
+      }
+
+      .failure-grid {
+        grid-template-columns: 1fr;
       }
 
       .footer {
@@ -607,8 +778,8 @@
             <span>Full Paper</span>
             <span>→</span>
           </a>
-          <a class="button secondary" href="#diagrams">
-            <span>Theory Diagrams</span>
+          <a class="button secondary" href="#raa">
+            <span>Interactive Theory</span>
             <span>→</span>
           </a>
         </div>
@@ -622,7 +793,7 @@
         </p>
       </section>
 
-      <section class="section" id="diagrams" aria-label="RAA diagram">
+      <section class="section" id="raa" aria-label="Reflective Alignment Architecture">
         <div class="section-head">
           <div>
             <div class="section-label">RAA</div>
@@ -630,128 +801,90 @@
           </div>
 
           <p>
-            Reflective Alignment Architecture describes alignment as the interaction of five internal forces:
-            regulation, reflection, reasoning, reciprocity, and resonance.
+            Reflective Alignment Architecture describes alignment as a coupled field. Hover or tap each force to see how it contributes to stable intelligence.
           </p>
         </div>
 
-        <div class="diagram-card">
-          <div class="diagram-title">
-            <strong>Figure 01</strong>
-            <span>Reflective Alignment Architecture</span>
+        <div class="interactive-shell">
+          <div class="visual-panel">
+            <div class="panel-header">
+              <strong>Interactive System 01</strong>
+              <span>Reflective Alignment Architecture</span>
+            </div>
+
+            <svg viewBox="0 0 820 640" role="img" aria-label="Interactive five-force alignment system">
+              <circle cx="410" cy="322" r="260" fill="none" stroke="#c9c5bc" stroke-width="1" stroke-dasharray="3 10"/>
+              <circle cx="410" cy="322" r="200" class="pulse-ring"/>
+
+              <path id="line-r1" class="force-link active" d="M410 162 L410 245"></path>
+              <path id="line-r2" class="force-link" d="M585 244 L495 292"></path>
+              <path id="line-r3" class="force-link" d="M522 492 L470 405"></path>
+              <path id="line-r4" class="force-link" d="M298 492 L350 405"></path>
+              <path id="line-r5" class="force-link" d="M235 244 L325 292"></path>
+
+              <circle cx="410" cy="322" r="92" class="svg-circle"></circle>
+              <text x="410" y="306" text-anchor="middle" class="svg-text svg-blue" font-size="34">Moral</text>
+              <text x="410" y="346" text-anchor="middle" class="svg-text svg-blue" font-size="34">Coherence</text>
+
+              <g id="node-r1" class="svg-node active" tabindex="0" data-force="r1">
+                <circle cx="410" cy="92" r="74" class="svg-circle"></circle>
+                <text x="410" y="78" text-anchor="middle" class="svg-text node-label" font-size="28">R1</text>
+                <text x="410" y="116" text-anchor="middle" class="svg-mono" font-size="14">REGULATION</text>
+              </g>
+
+              <g id="node-r2" class="svg-node" tabindex="0" data-force="r2">
+                <circle cx="638" cy="222" r="74" class="svg-circle"></circle>
+                <text x="638" y="208" text-anchor="middle" class="svg-text node-label" font-size="28">R2</text>
+                <text x="638" y="246" text-anchor="middle" class="svg-mono" font-size="14">REFLECTION</text>
+              </g>
+
+              <g id="node-r3" class="svg-node" tabindex="0" data-force="r3">
+                <circle cx="552" cy="534" r="74" class="svg-circle"></circle>
+                <text x="552" y="520" text-anchor="middle" class="svg-text node-label" font-size="28">R3</text>
+                <text x="552" y="558" text-anchor="middle" class="svg-mono" font-size="14">REASONING</text>
+              </g>
+
+              <g id="node-r4" class="svg-node" tabindex="0" data-force="r4">
+                <circle cx="268" cy="534" r="74" class="svg-circle"></circle>
+                <text x="268" y="520" text-anchor="middle" class="svg-text node-label" font-size="28">R4</text>
+                <text x="268" y="558" text-anchor="middle" class="svg-mono" font-size="14">RECIPROCITY</text>
+              </g>
+
+              <g id="node-r5" class="svg-node" tabindex="0" data-force="r5">
+                <circle cx="182" cy="222" r="74" class="svg-circle"></circle>
+                <text x="182" y="208" text-anchor="middle" class="svg-text node-label" font-size="28">R5</text>
+                <text x="182" y="246" text-anchor="middle" class="svg-mono" font-size="14">RESONANCE</text>
+              </g>
+
+              <path d="M410 166 C505 158 588 190 638 222" class="svg-line-light"/>
+              <path d="M638 296 C650 390 610 480 552 534" class="svg-line-light"/>
+              <path d="M478 570 C390 610 340 590 268 534" class="svg-line-light"/>
+              <path d="M182 296 C170 390 210 480 268 534" class="svg-line-light"/>
+              <path d="M182 148 C240 82 325 60 410 92" class="svg-line-light"/>
+            </svg>
           </div>
 
-          <svg viewBox="0 0 1200 720" role="img" aria-label="Five forces of moral coherence diagram">
-            <defs>
-              <marker id="arrow-blue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-                <path d="M 0 0 L 12 6 L 0 12 z" fill="#0e3f99"></path>
-              </marker>
-              <marker id="arrow-gray" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-                <path d="M 0 0 L 12 6 L 0 12 z" fill="#55585e"></path>
-              </marker>
-              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.08"/>
-              </filter>
-            </defs>
+          <aside class="info-panel">
+            <div>
+              <div class="info-kicker" id="force-kicker">R1</div>
+              <h3 class="info-title" id="force-title">Regulation</h3>
+              <p class="info-copy" id="force-copy">
+                The boundary layer: legal, ethical, safety, and harm-prevention constraints. Regulation defines what the system must not violate.
+              </p>
+            </div>
 
-            <rect x="18" y="18" width="1164" height="684" rx="2" fill="none" stroke="#c7c3ba" stroke-width="1"/>
-
-            <text x="76" y="86" class="svg-mono" font-size="18" fill="#0e3f99">FIGURE 01</text>
-            <line x1="76" y1="108" x2="174" y2="108" class="svg-line-blue"/>
-            <text x="76" y="178" class="svg-text" font-size="62">Five Forces of</text>
-            <text x="76" y="247" class="svg-text" font-size="62">Moral Coherence</text>
-            <text x="76" y="325" class="svg-mono" font-size="15">THE DYNAMICS OF ALIGNMENT</text>
-            <text x="76" y="350" class="svg-mono" font-size="15">THROUGH REFLECTION</text>
-
-            <circle cx="735" cy="372" r="126" class="svg-circle" filter="url(#softShadow)"/>
-            <circle cx="735" cy="372" r="104" fill="none" stroke="#9d998f" stroke-width="1.1"/>
-            <text x="735" y="352" text-anchor="middle" class="svg-text svg-blue" font-size="38">Moral</text>
-            <text x="735" y="398" text-anchor="middle" class="svg-text svg-blue" font-size="38">Coherence</text>
-            <text x="735" y="446" text-anchor="middle" class="svg-blue" font-size="34">✶</text>
-
-            <circle cx="735" cy="142" r="76" class="svg-circle"/>
-            <text x="735" y="126" text-anchor="middle" class="svg-text" font-size="30">R1</text>
-            <text x="735" y="164" text-anchor="middle" class="svg-mono" font-size="16">REGULATION</text>
-            <text x="735" y="198" text-anchor="middle" class="svg-blue" font-size="32">⚖</text>
-
-            <circle cx="991" cy="274" r="76" class="svg-circle"/>
-            <text x="991" y="258" text-anchor="middle" class="svg-text" font-size="30">R2</text>
-            <text x="991" y="296" text-anchor="middle" class="svg-mono" font-size="16">REFLECTION</text>
-            <text x="991" y="330" text-anchor="middle" class="svg-blue" font-size="32">◉</text>
-
-            <circle cx="945" cy="555" r="76" class="svg-circle"/>
-            <text x="945" y="539" text-anchor="middle" class="svg-text" font-size="30">R3</text>
-            <text x="945" y="577" text-anchor="middle" class="svg-mono" font-size="16">REASONING</text>
-            <text x="945" y="611" text-anchor="middle" class="svg-blue" font-size="32">λ</text>
-
-            <circle cx="525" cy="555" r="76" class="svg-circle"/>
-            <text x="525" y="539" text-anchor="middle" class="svg-text" font-size="30">R4</text>
-            <text x="525" y="577" text-anchor="middle" class="svg-mono" font-size="16">RECIPROCITY</text>
-            <text x="525" y="611" text-anchor="middle" class="svg-blue" font-size="32">◇</text>
-
-            <circle cx="479" cy="274" r="76" class="svg-circle"/>
-            <text x="479" y="258" text-anchor="middle" class="svg-text" font-size="30">R5</text>
-            <text x="479" y="296" text-anchor="middle" class="svg-mono" font-size="16">RESONANCE</text>
-            <text x="479" y="330" text-anchor="middle" class="svg-blue" font-size="32">◎</text>
-
-            <path d="M735 218 L735 246" class="svg-line" marker-end="url(#arrow-gray)"/>
-            <path d="M918 306 L840 345" class="svg-line" marker-end="url(#arrow-gray)"/>
-            <path d="M887 516 L825 461" class="svg-line" marker-end="url(#arrow-gray)"/>
-            <path d="M583 516 L645 461" class="svg-line" marker-end="url(#arrow-gray)"/>
-            <path d="M552 306 L630 345" class="svg-line" marker-end="url(#arrow-gray)"/>
-
-            <circle cx="735" cy="372" r="256" fill="none" stroke="#9d998f" stroke-width="1.2" stroke-dasharray="3 9"/>
-            <circle cx="735" cy="372" r="310" fill="none" stroke="#777a7f" stroke-width="1.2"/>
-
-            <path d="M735 218 C850 210 950 245 991 274" class="svg-line-light"/>
-            <path d="M991 350 C1010 430 990 506 945 555" class="svg-line-light"/>
-            <path d="M869 590 C760 648 640 640 525 555" class="svg-line-light"/>
-            <path d="M479 350 C450 430 470 506 525 555" class="svg-line-light"/>
-            <path d="M479 198 C540 135 630 112 735 142" class="svg-line-light"/>
-
-            <line x1="420" y1="660" x2="1050" y2="660" class="svg-line-light"/>
-            <text x="735" y="672" text-anchor="middle" class="svg-mono" font-size="16" fill="#0e3f99">REFLECTIVE ALIGNMENT ARCHITECTURE</text>
-          </svg>
-
-          <p class="caption">
-            <strong>Figure 01.</strong> RAA treats alignment as a coupled field of five forces. Stability emerges when regulation, reflection, reasoning, reciprocity, and resonance remain in coherent interaction.
-          </p>
-        </div>
-
-        <div class="force-grid">
-          <div class="force-card">
-            <span class="force-id">R1</span>
-            <div class="force-title">Regulation</div>
-            <div class="force-desc">Legal, ethical, safety, and harm-prevention boundaries.</div>
-          </div>
-
-          <div class="force-card">
-            <span class="force-id">R2</span>
-            <div class="force-title">Reflection</div>
-            <div class="force-desc">Self-critique, uncertainty detection, and value-conflict recognition.</div>
-          </div>
-
-          <div class="force-card">
-            <span class="force-id">R3</span>
-            <div class="force-title">Reasoning</div>
-            <div class="force-desc">Logical, causal, and evidential coherence inside the reasoning process.</div>
-          </div>
-
-          <div class="force-card">
-            <span class="force-id">R4</span>
-            <div class="force-title">Reciprocity</div>
-            <div class="force-desc">Perspective-taking, stakeholder awareness, and vulnerability modeling.</div>
-          </div>
-
-          <div class="force-card">
-            <span class="force-id">R5</span>
-            <div class="force-title">Resonance</div>
-            <div class="force-desc">Long-horizon stability across time, pressure, context, and version change.</div>
-          </div>
+            <div class="selector-grid" aria-label="Select RAA force">
+              <button class="selector active" data-force="r1"><span>R1</span><span>Regulation</span></button>
+              <button class="selector" data-force="r2"><span>R2</span><span>Reflection</span></button>
+              <button class="selector" data-force="r3"><span>R3</span><span>Reasoning</span></button>
+              <button class="selector" data-force="r4"><span>R4</span><span>Reciprocity</span></button>
+              <button class="selector" data-force="r5"><span>R5</span><span>Resonance</span></button>
+            </div>
+          </aside>
         </div>
       </section>
 
-      <section class="section" aria-label="RDL diagram">
+      <section class="section" aria-label="Reflective Duality Layer">
         <div class="section-head">
           <div>
             <div class="section-label">RDL</div>
@@ -759,76 +892,83 @@
           </div>
 
           <p>
-            The Reflective Duality Layer converts theory into measurement by comparing a forward reasoning trajectory with a reflective critique trajectory, producing a reviewable event record.
+            The Reflective Duality Layer converts theory into measurement by comparing forward reasoning with reflective critique and preserving the interaction as an event record.
           </p>
         </div>
 
-        <div class="diagram-card">
-          <div class="diagram-title">
-            <strong>Figure 02</strong>
-            <span>Reflective Duality Layer</span>
+        <div class="interactive-shell">
+          <div class="visual-panel">
+            <div class="panel-header">
+              <strong>Interactive System 02</strong>
+              <span>Forward → Reflection → Record</span>
+            </div>
+
+            <svg viewBox="0 0 860 500" role="img" aria-label="Reflective Duality Layer animated flow">
+              <defs>
+                <marker id="arrow-flow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M 0 0 L 12 6 L 0 12 z" fill="#55585e"></path>
+                </marker>
+              </defs>
+
+              <g id="flow-input" class="flow-stage active" data-flow="input">
+                <circle cx="100" cy="250" r="66" class="svg-circle"></circle>
+                <text x="100" y="238" text-anchor="middle" class="svg-mono" font-size="13">INPUT</text>
+                <text x="100" y="270" text-anchor="middle" class="svg-text" font-size="27">Prompt</text>
+              </g>
+
+              <path id="flow-path-1" class="flow-path active" d="M166 250 L264 250" marker-end="url(#arrow-flow)"></path>
+
+              <g id="flow-forward" class="flow-stage" data-flow="forward">
+                <rect x="278" y="180" width="154" height="140" rx="70" class="svg-circle"></rect>
+                <text x="355" y="238" text-anchor="middle" class="svg-mono" font-size="13">F</text>
+                <text x="355" y="270" text-anchor="middle" class="svg-text" font-size="27">Forward</text>
+              </g>
+
+              <path id="flow-path-2" class="flow-path" d="M432 250 L530 250" marker-end="url(#arrow-flow)"></path>
+
+              <g id="flow-reflective" class="flow-stage" data-flow="reflective">
+                <rect x="544" y="145" width="150" height="210" rx="75" class="svg-circle"></rect>
+                <text x="619" y="220" text-anchor="middle" class="svg-mono" font-size="13">Q</text>
+                <text x="619" y="254" text-anchor="middle" class="svg-text svg-blue" font-size="28">Reflective</text>
+                <text x="619" y="286" text-anchor="middle" class="svg-text svg-blue" font-size="28">Critique</text>
+              </g>
+
+              <path id="flow-path-3" class="flow-path" d="M694 250 L764 250" marker-end="url(#arrow-flow)"></path>
+
+              <g id="flow-output" class="flow-stage" data-flow="output">
+                <circle cx="804" cy="250" r="66" class="svg-circle"></circle>
+                <text x="804" y="238" text-anchor="middle" class="svg-mono" font-size="13">RER</text>
+                <text x="804" y="270" text-anchor="middle" class="svg-text" font-size="27">Record</text>
+              </g>
+
+              <path id="flow-path-4" class="flow-path" d="M804 316 C700 430 520 430 619 356" stroke-dasharray="8 9"></path>
+
+              <text x="430" y="448" text-anchor="middle" class="svg-mono" font-size="15" fill="#0e3f99">
+                Ψ / R∇ / MCI⋆ are computed from the F ↔ Q interaction.
+              </text>
+            </svg>
           </div>
 
-          <svg viewBox="0 0 1200 620" role="img" aria-label="Reflective Duality Layer flow diagram">
-            <defs>
-              <marker id="arrow2" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-                <path d="M 0 0 L 12 6 L 0 12 z" fill="#55585e"></path>
-              </marker>
-              <marker id="arrow2blue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-                <path d="M 0 0 L 12 6 L 0 12 z" fill="#0e3f99"></path>
-              </marker>
-            </defs>
+          <aside class="info-panel">
+            <div>
+              <div class="info-kicker" id="flow-kicker">Input</div>
+              <h3 class="info-title" id="flow-title">Prompt + context</h3>
+              <p class="info-copy" id="flow-copy">
+                The system begins with a user request, domain context, constraints, and uncertainty. RDL treats this as the start of a reviewable event.
+              </p>
+            </div>
 
-            <rect x="18" y="18" width="1164" height="584" rx="2" fill="none" stroke="#c7c3ba" stroke-width="1"/>
-
-            <text x="76" y="86" class="svg-mono" font-size="18" fill="#0e3f99">FIGURE 02</text>
-            <line x1="76" y1="108" x2="174" y2="108" class="svg-line-blue"/>
-            <text x="76" y="178" class="svg-text" font-size="62">Reflective Duality Layer</text>
-            <text x="76" y="255" class="svg-mono" font-size="15">FROM INPUT TO REVIEWABLE STABILITY</text>
-
-            <circle cx="190" cy="390" r="76" class="svg-circle"/>
-            <text x="190" y="378" text-anchor="middle" class="svg-mono" font-size="15">PROMPT</text>
-            <text x="190" y="405" text-anchor="middle" class="svg-text" font-size="26">Context</text>
-
-            <circle cx="440" cy="390" r="76" class="svg-circle"/>
-            <text x="440" y="374" text-anchor="middle" class="svg-mono" font-size="15">F</text>
-            <text x="440" y="405" text-anchor="middle" class="svg-text" font-size="27">Forward</text>
-            <text x="440" y="432" text-anchor="middle" class="svg-text" font-size="27">Reasoning</text>
-
-            <rect x="610" y="260" width="160" height="260" rx="78" class="svg-box"/>
-            <text x="690" y="318" text-anchor="middle" class="svg-mono" font-size="15">Q</text>
-            <text x="690" y="354" text-anchor="middle" class="svg-text svg-blue" font-size="31">Reflective</text>
-            <text x="690" y="391" text-anchor="middle" class="svg-text svg-blue" font-size="31">Critique</text>
-            <line x1="650" y1="420" x2="730" y2="420" class="svg-line-light"/>
-            <text x="690" y="458" text-anchor="middle" class="svg-mono" font-size="14">STABILITY CHECK</text>
-
-            <circle cx="970" cy="318" r="76" class="svg-circle"/>
-            <text x="970" y="305" text-anchor="middle" class="svg-mono" font-size="15">OUTPUT</text>
-            <text x="970" y="336" text-anchor="middle" class="svg-text" font-size="28">Aligned</text>
-            <text x="970" y="366" text-anchor="middle" class="svg-text" font-size="28">Response</text>
-
-            <circle cx="970" cy="504" r="76" class="svg-circle"/>
-            <text x="970" y="492" text-anchor="middle" class="svg-mono" font-size="15">RER</text>
-            <text x="970" y="523" text-anchor="middle" class="svg-text" font-size="27">Event</text>
-            <text x="970" y="552" text-anchor="middle" class="svg-text" font-size="27">Record</text>
-
-            <line x1="266" y1="390" x2="364" y2="390" class="svg-line" marker-end="url(#arrow2)"/>
-            <line x1="516" y1="390" x2="610" y2="390" class="svg-line" marker-end="url(#arrow2)"/>
-            <line x1="770" y1="390" x2="894" y2="326" class="svg-line" marker-end="url(#arrow2blue)"/>
-
-            <path d="M770 448 C835 448 835 504 894 504" class="svg-line-light" stroke-dasharray="7 7" marker-end="url(#arrow2)"/>
-            <path d="M894 504 C760 575 640 560 690 520" class="svg-line-light" stroke-dasharray="7 7" marker-end="url(#arrow2)"/>
-
-            <text x="690" y="584" text-anchor="middle" class="svg-mono" font-size="16" fill="#0e3f99">F → Q → RER → Ψ / R∇ / MCI⋆</text>
-          </svg>
-
-          <p class="caption">
-            <strong>Figure 02.</strong> RDL compares a first-pass reasoning path with reflective critique, then records the interaction as a Reflective Event Record with measurable stability signals.
-          </p>
+            <div class="selector-grid" aria-label="Select RDL stage">
+              <button class="selector active" data-flow="input"><span>01</span><span>Input</span></button>
+              <button class="selector" data-flow="forward"><span>02</span><span>Forward reasoning</span></button>
+              <button class="selector" data-flow="reflective"><span>03</span><span>Reflective critique</span></button>
+              <button class="selector" data-flow="output"><span>04</span><span>Event record</span></button>
+            </div>
+          </aside>
         </div>
       </section>
 
-      <section class="section" aria-label="Metrics">
+      <section class="section" aria-label="Core metrics">
         <div class="section-head">
           <div>
             <div class="section-label">Metrics</div>
@@ -836,64 +976,34 @@
           </div>
 
           <p>
-            The theory measures alignment through stability signals rather than single-answer correctness. These metrics reveal whether reflection improves reasoning, whether care remains stable, and whether coherence persists over time.
+            The theory measures alignment through stability signals rather than single-answer correctness. These are designed as scientific instruments, not decorative scores.
           </p>
-        </div>
-
-        <div class="diagram-card">
-          <div class="diagram-title">
-            <strong>Figure 03</strong>
-            <span>Core Measures of Reflective Alignment</span>
-          </div>
-
-          <svg viewBox="0 0 1200 540" role="img" aria-label="Metrics of reflective integrity diagram">
-            <rect x="18" y="18" width="1164" height="504" rx="2" fill="none" stroke="#c7c3ba" stroke-width="1"/>
-
-            <text x="76" y="86" class="svg-mono" font-size="18" fill="#0e3f99">FIGURE 03</text>
-            <line x1="76" y1="108" x2="174" y2="108" class="svg-line-blue"/>
-            <text x="76" y="176" class="svg-text" font-size="60">Metrics of</text>
-            <text x="76" y="242" class="svg-text" font-size="60">Reflective Integrity</text>
-
-            <circle cx="350" cy="360" r="106" class="svg-circle"/>
-            <circle cx="350" cy="360" r="86" fill="none" stroke="#aaa69b" stroke-width="1.1" stroke-dasharray="2 8"/>
-            <text x="350" y="324" text-anchor="middle" class="svg-text svg-blue" font-size="62">Ψ</text>
-            <text x="350" y="380" text-anchor="middle" class="svg-text" font-size="30">Reflective</text>
-            <text x="350" y="414" text-anchor="middle" class="svg-text" font-size="30">Stability</text>
-
-            <circle cx="630" cy="360" r="106" class="svg-circle"/>
-            <circle cx="630" cy="360" r="86" fill="none" stroke="#aaa69b" stroke-width="1.1" stroke-dasharray="2 8"/>
-            <text x="630" y="324" text-anchor="middle" class="svg-text svg-blue" font-size="62">R∇</text>
-            <text x="630" y="380" text-anchor="middle" class="svg-text" font-size="30">Reflective</text>
-            <text x="630" y="414" text-anchor="middle" class="svg-text" font-size="30">Gradient</text>
-
-            <circle cx="910" cy="360" r="106" class="svg-circle"/>
-            <circle cx="910" cy="360" r="86" fill="none" stroke="#aaa69b" stroke-width="1.1" stroke-dasharray="2 8"/>
-            <text x="910" y="324" text-anchor="middle" class="svg-text svg-blue" font-size="56">MCI⋆</text>
-            <text x="910" y="380" text-anchor="middle" class="svg-text" font-size="30">Moral</text>
-            <text x="910" y="414" text-anchor="middle" class="svg-text" font-size="30">Coherence</text>
-
-            <line x1="456" y1="360" x2="524" y2="360" class="svg-line-light"/>
-            <line x1="736" y1="360" x2="804" y2="360" class="svg-line-light"/>
-
-            <text x="630" y="488" text-anchor="middle" class="svg-mono" font-size="16" fill="#0e3f99">THREE SIGNALS FOR REVIEWABLE INTELLIGENCE</text>
-          </svg>
         </div>
 
         <div class="metrics-grid">
           <div class="metric-card">
             <span class="metric-symbol">Ψ</span>
+            <svg class="metric-line" viewBox="0 0 260 80" aria-hidden="true">
+              <path d="M10 54 C55 18 90 72 130 38 C168 6 202 20 250 12"></path>
+            </svg>
             <span class="metric-name">Reflective Stability</span>
             <p>Measures whether the system preserves care, autonomy-respect, uncertainty awareness, and harm sensitivity during reasoning.</p>
           </div>
 
           <div class="metric-card">
             <span class="metric-symbol">R∇</span>
+            <svg class="metric-line" viewBox="0 0 260 80" aria-hidden="true">
+              <path d="M10 62 C55 64 90 54 122 42 C158 28 190 30 250 16"></path>
+            </svg>
             <span class="metric-name">Reflective Gradient</span>
             <p>Measures whether reflection improves the output, destabilizes it, or merely performs cosmetic self-correction.</p>
           </div>
 
           <div class="metric-card">
             <span class="metric-symbol">MCI⋆</span>
+            <svg class="metric-line" viewBox="0 0 260 80" aria-hidden="true">
+              <path d="M10 48 C58 42 88 42 128 38 C174 34 206 28 250 22"></path>
+            </svg>
             <span class="metric-name">Moral Coherence Index</span>
             <p>Tracks long-horizon coherence across the five forces, dual trajectories, stress, drift, and version change.</p>
           </div>
@@ -908,77 +1018,84 @@
           </div>
 
           <p>
-            RDL reveals failure patterns before they appear as obvious unsafe outputs. These signatures show where alignment begins to fracture under pressure.
+            The quadrant is interactive. Select a failure mode and the stability point moves to its region. The visual stays mathematical and restrained.
           </p>
         </div>
 
-        <div class="diagram-card">
-          <div class="diagram-title">
-            <strong>Figure 04</strong>
-            <span>Failure Modes in Reflective Systems</span>
+        <div class="interactive-shell">
+          <div class="visual-panel">
+            <div class="panel-header">
+              <strong>Interactive System 03</strong>
+              <span>Failure Space</span>
+            </div>
+
+            <svg viewBox="0 0 820 620" role="img" aria-label="Interactive failure signature quadrant">
+              <defs>
+                <marker id="arrow-axis" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M 0 0 L 12 6 L 0 12 z" fill="#55585e"></path>
+                </marker>
+              </defs>
+
+              <rect x="150" y="80" width="560" height="400" fill="rgba(255,255,255,0.42)" stroke="#8d8a82" stroke-width="1.1"/>
+              <line x1="430" y1="80" x2="430" y2="480" class="svg-line-light"/>
+              <line x1="150" y1="280" x2="710" y2="280" class="svg-line-light"/>
+
+              <line x1="150" y1="510" x2="710" y2="510" class="svg-line" marker-end="url(#arrow-axis)"/>
+              <line x1="120" y1="480" x2="120" y2="80" class="svg-line" marker-end="url(#arrow-axis)"/>
+
+              <text x="430" y="558" text-anchor="middle" class="svg-mono" font-size="15">REASONING STABILITY</text>
+              <text x="72" y="280" transform="rotate(-90 72 280)" text-anchor="middle" class="svg-mono" font-size="15">MORAL REGULATION</text>
+
+              <text x="170" y="306" class="svg-text" font-size="42">Collapse</text>
+              <text x="190" y="238" class="svg-text" font-size="42">Drift</text>
+              <text x="520" y="238" class="svg-text" font-size="42">Rigidity</text>
+              <text x="500" y="378" class="svg-text" font-size="42">Care Erosion</text>
+
+              <path id="failure-trace" d="M430 280 C380 230 325 210 270 210" class="svg-line-blue" stroke-dasharray="8 9"/>
+              <circle id="failure-point" cx="270" cy="210" r="10" fill="#fbfaf7" stroke="#0e3f99" stroke-width="2.2"/>
+              <circle id="failure-halo" cx="270" cy="210" r="28" fill="none" stroke="#0e3f99" stroke-width="1.2" opacity="0.14">
+                <animate attributeName="r" values="18;34;18" dur="2.8s" repeatCount="indefinite"></animate>
+                <animate attributeName="opacity" values="0.08;0.22;0.08" dur="2.8s" repeatCount="indefinite"></animate>
+              </circle>
+
+              <text x="150" y="532" text-anchor="middle" class="svg-mono" font-size="12">LOW</text>
+              <text x="710" y="532" text-anchor="middle" class="svg-mono" font-size="12">HIGH</text>
+              <text x="102" y="484" text-anchor="end" class="svg-mono" font-size="12">LOW</text>
+              <text x="102" y="86" text-anchor="end" class="svg-mono" font-size="12">HIGH</text>
+            </svg>
           </div>
 
-          <svg viewBox="0 0 1200 650" role="img" aria-label="Failure signatures quadrant">
-            <rect x="18" y="18" width="1164" height="614" rx="2" fill="none" stroke="#c7c3ba" stroke-width="1"/>
+          <aside class="info-panel">
+            <div>
+              <div class="info-kicker" id="failure-kicker">Failure Signature</div>
+              <h3 class="info-title" id="failure-title">Drift</h3>
+              <p class="info-copy" id="failure-copy">
+                Values begin to wander across turns. The system still sounds coherent, but its moral direction weakens under time, ambiguity, or pressure.
+              </p>
+            </div>
 
-            <text x="76" y="86" class="svg-mono" font-size="18" fill="#0e3f99">FIGURE 04</text>
-            <line x1="76" y1="108" x2="174" y2="108" class="svg-line-blue"/>
-            <text x="76" y="178" class="svg-text" font-size="62">Failure Signatures</text>
-            <text x="76" y="244" class="svg-mono" font-size="15">HOW ALIGNMENT BREAKS UNDER PRESSURE</text>
+            <div class="failure-grid" aria-label="Select failure signature">
+              <button class="failure-button active" data-failure="drift">
+                <h3>Drift</h3>
+                <p>Direction weakens while the output still appears plausible.</p>
+              </button>
 
-            <rect x="310" y="170" width="710" height="370" fill="rgba(255,255,255,0.42)" stroke="#8d8a82" stroke-width="1.1"/>
-            <line x1="665" y1="170" x2="665" y2="540" class="svg-line-light"/>
-            <line x1="310" y1="355" x2="1020" y2="355" class="svg-line-light"/>
+              <button class="failure-button" data-failure="rigidity">
+                <h3>Rigidity</h3>
+                <p>Rules dominate adaptation; context sensitivity collapses.</p>
+              </button>
 
-            <text x="290" y="185" text-anchor="end" class="svg-mono" font-size="13">HIGH</text>
-            <text x="290" y="540" text-anchor="end" class="svg-mono" font-size="13">LOW</text>
-            <text x="310" y="572" text-anchor="middle" class="svg-mono" font-size="13">LOW</text>
-            <text x="1020" y="572" text-anchor="middle" class="svg-mono" font-size="13">HIGH</text>
-            <text x="665" y="603" text-anchor="middle" class="svg-mono" font-size="15">REASONING STABILITY</text>
-            <text x="250" y="355" transform="rotate(-90 250 355)" text-anchor="middle" class="svg-mono" font-size="15">MORAL REGULATION</text>
+              <button class="failure-button" data-failure="collapse">
+                <h3>Collapse</h3>
+                <p>Reasoning and reflection fracture under pressure.</p>
+              </button>
 
-            <text x="487" y="267" text-anchor="middle" class="svg-blue" font-size="34">✶</text>
-            <text x="487" y="318" text-anchor="middle" class="svg-text" font-size="46">Drift</text>
-            <text x="487" y="370" text-anchor="middle" class="svg-mono" font-size="14">VALUES WANDER</text>
-            <text x="487" y="394" text-anchor="middle" class="svg-mono" font-size="14">DIRECTION FADES</text>
-
-            <text x="842" y="267" text-anchor="middle" class="svg-blue" font-size="34">▣</text>
-            <text x="842" y="318" text-anchor="middle" class="svg-text" font-size="46">Rigidity</text>
-            <text x="842" y="370" text-anchor="middle" class="svg-mono" font-size="14">ADAPTATION CEASES</text>
-            <text x="842" y="394" text-anchor="middle" class="svg-mono" font-size="14">RULES OVERRIDE REASON</text>
-
-            <text x="487" y="452" text-anchor="middle" class="svg-blue" font-size="34">✣</text>
-            <text x="487" y="503" text-anchor="middle" class="svg-text" font-size="46">Collapse</text>
-
-            <text x="842" y="452" text-anchor="middle" class="svg-blue" font-size="34">♡</text>
-            <text x="842" y="503" text-anchor="middle" class="svg-text" font-size="46">Care Erosion</text>
-
-            <path d="M585 286 C690 295 742 392 812 471" class="svg-line-blue" stroke-dasharray="7 8"/>
-            <circle cx="585" cy="286" r="6" fill="var(--bg)" stroke="#0e3f99" stroke-width="1.5"/>
-            <circle cx="812" cy="471" r="6" fill="var(--bg)" stroke="#0e3f99" stroke-width="1.5"/>
-          </svg>
-        </div>
-
-        <div class="failure-grid">
-          <div class="failure-card">
-            <h3>Sub-goal pitfall</h3>
-            <p>Reasoning outpaces regulation and reflection, producing unsafe optimization under pressure.</p>
-          </div>
-
-          <div class="failure-card">
-            <h3>Ethical drift</h3>
-            <p>Long-horizon degradation of reciprocity, reflection quality, and moral stability.</p>
-          </div>
-
-          <div class="failure-card">
-            <h3>Mode switching</h3>
-            <p>The system oscillates between incompatible behavioral regimes under slight framing changes.</p>
-          </div>
-
-          <div class="failure-card">
-            <h3>Care erosion</h3>
-            <p>Decline in Ψ across turns, tasks, or versions, often before visible failure.</p>
-          </div>
+              <button class="failure-button" data-failure="care">
+                <h3>Care Erosion</h3>
+                <p>Harm sensitivity and reciprocity fade across turns.</p>
+              </button>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -1040,5 +1157,175 @@
       </div>
     </footer>
   </div>
+
+  <script>
+    const forceData = {
+      r1: {
+        kicker: "R1",
+        title: "Regulation",
+        copy: "The boundary layer: legal, ethical, safety, and harm-prevention constraints. Regulation defines what the system must not violate."
+      },
+      r2: {
+        kicker: "R2",
+        title: "Reflection",
+        copy: "The metacognitive layer: self-critique, uncertainty detection, error recognition, and value-conflict identification."
+      },
+      r3: {
+        kicker: "R3",
+        title: "Reasoning",
+        copy: "The coherence engine: logical, causal, and evidential structure inside the reasoning process."
+      },
+      r4: {
+        kicker: "R4",
+        title: "Reciprocity",
+        copy: "The human-facing layer: perspective-taking, autonomy respect, stakeholder awareness, and vulnerability modeling."
+      },
+      r5: {
+        kicker: "R5",
+        title: "Resonance",
+        copy: "The long-horizon stability field: the ability to preserve a coherent moral identity across time, pressure, and context."
+      }
+    };
+
+    function setForce(force) {
+      const data = forceData[force];
+      if (!data) return;
+
+      document.getElementById("force-kicker").textContent = data.kicker;
+      document.getElementById("force-title").textContent = data.title;
+      document.getElementById("force-copy").textContent = data.copy;
+
+      document.querySelectorAll("[data-force]").forEach((item) => {
+        item.classList.toggle("active", item.dataset.force === force);
+      });
+
+      document.querySelectorAll(".force-link").forEach((line) => {
+        line.classList.remove("active");
+      });
+
+      const line = document.getElementById("line-" + force);
+      if (line) line.classList.add("active");
+    }
+
+    document.querySelectorAll("[data-force]").forEach((item) => {
+      item.addEventListener("mouseenter", () => setForce(item.dataset.force));
+      item.addEventListener("focus", () => setForce(item.dataset.force));
+      item.addEventListener("click", () => setForce(item.dataset.force));
+      item.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          setForce(item.dataset.force);
+        }
+      });
+    });
+
+    const flowData = {
+      input: {
+        kicker: "Input",
+        title: "Prompt + context",
+        copy: "The system begins with a user request, domain context, constraints, and uncertainty. RDL treats this as the start of a reviewable event."
+      },
+      forward: {
+        kicker: "F",
+        title: "Forward reasoning",
+        copy: "The model produces its first-pass reasoning and candidate answer. This exposes assumptions, evidence use, and early instability signals."
+      },
+      reflective: {
+        kicker: "Q",
+        title: "Reflective critique",
+        copy: "A second trajectory critiques the first, identifying uncertainty, contradiction, value conflict, or correction requirements."
+      },
+      output: {
+        kicker: "RER",
+        title: "Reflective Event Record",
+        copy: "The forward and reflective trajectories are preserved as a structured record, producing Ψ, R∇, and MCI⋆ stability signals."
+      }
+    };
+
+    const flowOrder = ["input", "forward", "reflective", "output"];
+
+    function setFlow(stage) {
+      const data = flowData[stage];
+      if (!data) return;
+
+      document.getElementById("flow-kicker").textContent = data.kicker;
+      document.getElementById("flow-title").textContent = data.title;
+      document.getElementById("flow-copy").textContent = data.copy;
+
+      document.querySelectorAll("[data-flow]").forEach((item) => {
+        item.classList.toggle("active", item.dataset.flow === stage);
+      });
+
+      document.querySelectorAll(".flow-path").forEach((path) => path.classList.remove("active"));
+
+      const index = flowOrder.indexOf(stage);
+      for (let i = 1; i <= index + 1; i++) {
+        const path = document.getElementById("flow-path-" + i);
+        if (path) path.classList.add("active");
+      }
+    }
+
+    document.querySelectorAll("[data-flow]").forEach((item) => {
+      item.addEventListener("mouseenter", () => setFlow(item.dataset.flow));
+      item.addEventListener("focus", () => setFlow(item.dataset.flow));
+      item.addEventListener("click", () => setFlow(item.dataset.flow));
+    });
+
+    const failureData = {
+      drift: {
+        title: "Drift",
+        copy: "Values begin to wander across turns. The system still sounds coherent, but its moral direction weakens under time, ambiguity, or pressure.",
+        x: 270,
+        y: 210
+      },
+      rigidity: {
+        title: "Rigidity",
+        copy: "Rules dominate adaptation. The system remains controlled, but loses situational judgment and becomes brittle under new conditions.",
+        x: 585,
+        y: 205
+      },
+      collapse: {
+        title: "Collapse",
+        copy: "Reasoning and reflection fracture together. The system can no longer maintain coherence under stress.",
+        x: 275,
+        y: 398
+      },
+      care: {
+        title: "Care Erosion",
+        copy: "Harm sensitivity and reciprocity fade across turns. The system remains capable, but less protective of human consequence.",
+        x: 588,
+        y: 398
+      }
+    };
+
+    function setFailure(mode) {
+      const data = failureData[mode];
+      if (!data) return;
+
+      document.getElementById("failure-title").textContent = data.title;
+      document.getElementById("failure-copy").textContent = data.copy;
+
+      document.querySelectorAll("[data-failure]").forEach((item) => {
+        item.classList.toggle("active", item.dataset.failure === mode);
+      });
+
+      const point = document.getElementById("failure-point");
+      const halo = document.getElementById("failure-halo");
+      const trace = document.getElementById("failure-trace");
+
+      point.setAttribute("cx", data.x);
+      point.setAttribute("cy", data.y);
+      halo.setAttribute("cx", data.x);
+      halo.setAttribute("cy", data.y);
+
+      trace.setAttribute("d", `M430 280 C${(430 + data.x) / 2} 260 ${(430 + data.x) / 2} ${data.y} ${data.x} ${data.y}`);
+    }
+
+    document.querySelectorAll("[data-failure]").forEach((item) => {
+      item.addEventListener("mouseenter", () => setFailure(item.dataset.failure));
+      item.addEventListener("focus", () => setFailure(item.dataset.failure));
+      item.addEventListener("click", () => setFailure(item.dataset.failure));
+    });
+  </script>
 </body>
 </html>
