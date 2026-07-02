@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Lexicon | Enlightened AI Research Lab</title>
+  <meta
+    name="description"
+    content="Reflective Alignment Lexicon — a structured vocabulary for AI reasoning stability, drift, reflection, and failure modes."
+  />
+
+  <style>
+    :root {
+      --bg: #fbfaf7;
+      --text: #0b0f14;
+      --muted: #60646c;
+      --soft: #8b8f96;
+      --line: #d9d7d1;
+      --line-dark: #bdb9ae;
+      --accent: #1f5eff;
+      --accent-dark: #0e3f99;
+      --paper: rgba(255, 255, 255, 0.62);
+      --paper-strong: rgba(255, 255, 255, 0.92);
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 54px 64px 34px;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      padding-bottom: 34px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      font-size: 15px;
+      line-height: 1;
+      color: #111;
+      white-space: nowrap;
+    }
+
+    .site-nav a {
+      opacity: 0.72;
+      transition: opacity 160ms ease;
+    }
+
+    .site-nav a:hover,
+    .site-nav a.active {
+      opacity: 1;
+    }
+
+    main {
+      max-width: 1380px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 96px 0 86px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .kicker,
+    .section-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 1120px;
+      font-family: var(--serif);
+      font-size: clamp(70px, 12vw, 168px);
+      line-height: 0.9;
+      letter-spacing: -0.066em;
+      font-weight: 500;
+    }
+
+    .hero-copy {
+      margin-top: 44px;
+      max-width: 900px;
+      font-family: var(--serif);
+      font-size: clamp(26px, 3.2vw, 48px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      font-weight: 500;
+    }
+
+    .hero-description {
+      margin-top: 30px;
+      max-width: 780px;
+      font-size: 19px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .actions {
+      margin-top: 34px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .button {
+      display: inline-flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 22px;
+      border: 1px solid var(--text);
+      padding: 15px 18px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      background: var(--text);
+      color: var(--bg);
+      transition: all 160ms ease;
+      min-width: 190px;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--line-dark);
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .core-insight {
+      padding: 92px 0;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 0.55fr 1.45fr;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .insight-text {
+      margin: 0;
+      max-width: 1000px;
+      font-family: var(--serif);
+      font-size: clamp(44px, 6vw, 92px);
+      line-height: 0.96;
+      letter-spacing: -0.058em;
+      font-weight: 500;
+    }
+
+    .section {
+      padding: 86px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 0.75fr 1.25fr;
+      gap: 72px;
+      align-items: start;
+      margin-bottom: 52px;
+    }
+
+    .section-head h2 {
+      margin: 18px 0 0;
+      font-family: var(--serif);
+      font-size: clamp(44px, 6vw, 86px);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+      font-weight: 500;
+    }
+
+    .section-head p {
+      margin: 0;
+      max-width: 780px;
+      font-size: 19px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .problem-card {
+      min-height: 230px;
+      padding: 26px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .problem-card span {
+      display: block;
+      margin-bottom: 34px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .problem-card h3 {
+      margin: 0 0 16px;
+      font-family: var(--serif);
+      font-size: 36px;
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+      font-weight: 500;
+    }
+
+    .problem-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .panel-inner {
+      padding: 28px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 24px;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .panel-header strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .branch-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .branch-button {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.38);
+      padding: 22px 20px;
+      cursor: pointer;
+      color: var(--text);
+      text-align: left;
+      transition: all 160ms ease;
+      display: grid;
+      grid-template-columns: 70px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .branch-button:hover,
+    .branch-button.active {
+      border-color: var(--text);
+      background: var(--paper-strong);
+    }
+
+    .branch-id {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .branch-title {
+      margin: 0 0 8px;
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -0.045em;
+      font-weight: 500;
+    }
+
+    .branch-line {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .detail-title {
+      margin: 0 0 22px;
+      font-family: var(--serif);
+      font-size: clamp(42px, 4.8vw, 72px);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+      font-weight: 500;
+    }
+
+    .detail-kicker {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .detail-copy {
+      margin: 0 0 30px;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.65;
+    }
+
+    .detail-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .detail-row {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+
+    .detail-label {
+      display: block;
+      margin-bottom: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .detail-row p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .workflow-step {
+      min-height: 270px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+      padding: 24px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 160ms ease;
+      color: var(--text);
+    }
+
+    .workflow-step:hover,
+    .workflow-step.active {
+      background: var(--paper-strong);
+      border-color: var(--line-dark);
+    }
+
+    .workflow-step.active {
+      box-shadow: inset 0 3px 0 var(--accent);
+    }
+
+    .step-number {
+      display: block;
+      margin-bottom: 28px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .step-title {
+      margin: 0 0 14px;
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -0.045em;
+      font-weight: 500;
+    }
+
+    .step-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .workflow-detail {
+      margin-top: 24px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: 0.75fr 1.25fr;
+    }
+
+    .workflow-signal {
+      padding: 28px;
+      border-right: 1px solid var(--line);
+    }
+
+    .workflow-signal span {
+      display: block;
+      font-family: var(--serif);
+      font-size: clamp(58px, 8vw, 120px);
+      line-height: 0.85;
+      letter-spacing: -0.065em;
+      color: var(--accent-dark);
+    }
+
+    .workflow-explain {
+      padding: 28px;
+    }
+
+    .workflow-explain h3 {
+      margin: 0 0 16px;
+      font-family: var(--serif);
+      font-size: 46px;
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      font-weight: 500;
+    }
+
+    .workflow-explain p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .boundary {
+      border: 1px solid var(--text);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 46px;
+      display: grid;
+      grid-template-columns: 0.7fr 1.3fr;
+      gap: 54px;
+      align-items: start;
+    }
+
+    .boundary h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(46px, 6vw, 86px);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+      font-weight: 500;
+    }
+
+    .boundary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 22px;
+      line-height: 1.55;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .status-card {
+      min-height: 260px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      padding: 28px;
+    }
+
+    .status-card span {
+      display: block;
+      margin-bottom: 28px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .status-card h3 {
+      margin: 0 0 16px;
+      font-family: var(--serif);
+      font-size: 38px;
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      font-weight: 500;
+    }
+
+    .status-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .faq-item {
+      min-height: 190px;
+      padding: 28px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .faq-item h3 {
+      margin: 0 0 18px;
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -0.045em;
+      font-weight: 500;
+    }
+
+    .faq-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .paper-block {
+      padding: 86px 0 92px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .paper-block h2 {
+      margin: 18px 0 24px;
+      font-family: var(--serif);
+      font-size: clamp(44px, 5.8vw, 84px);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+      font-weight: 500;
+    }
+
+    .paper-block p {
+      margin: 0;
+      max-width: 780px;
+      font-size: 19px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .paper-title {
+      margin-top: 28px;
+      max-width: 760px;
+      font-family: var(--serif);
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .footer {
+      padding-top: 26px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+    }
+
+    @media (max-width: 1160px) {
+      .site-header {
+        display: block;
+      }
+
+      .site-nav {
+        margin-top: 28px;
+        flex-wrap: wrap;
+        white-space: normal;
+      }
+
+      .core-insight,
+      .section-head,
+      .two-col,
+      .workflow-detail,
+      .boundary,
+      .paper-block {
+        grid-template-columns: 1fr;
+        gap: 42px;
+      }
+
+      .problem-grid,
+      .workflow,
+      .status-grid,
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-signal {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        padding: 34px 28px 28px;
+      }
+
+      .brand {
+        font-size: 15px;
+        letter-spacing: 0.24em;
+        white-space: normal;
+      }
+
+      .site-nav {
+        gap: 18px 22px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 68px 0 60px;
+      }
+
+      h1 {
+        font-size: clamp(64px, 22vw, 118px);
+      }
+
+      .core-insight,
+      .section,
+      .paper-block {
+        padding: 58px 0;
+      }
+
+      .branch-button {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .boundary {
+        padding: 28px;
+      }
+
+      .footer {
+        display: block;
+        line-height: 1.8;
+      }
+
+      .footer-links {
+        margin-top: 18px;
+        flex-wrap: wrap;
+        gap: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header class="site-header">
+      <a href="index.html" aria-label="Enlightened AI Research Lab home">
+        <div class="brand">Enlightened AI Research Lab</div>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="theory.html">Theory</a>
+        <a href="lexicon.html" class="active">Lexicon</a>
+        <a href="publications.html">Publications</a>
+        <a href="visualizations.html">Visualizations</a>
+        <a href="raise.html">RAISE</a>
+        <a href="https://iqaitrust.com" target="_blank" rel="noopener">IQAI</a>
+        <a href="mailto:research@enlightenedai.ai">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-label="Lexicon introduction">
+        <div class="kicker">Lexicon</div>
+
+        <h1>A language for reasoning stability.</h1>
+
+        <div class="hero-copy">
+          The Reflective Alignment Lexicon gives AI reasoning failures stable names, identifiers, and boundaries.
+        </div>
+
+        <div class="hero-description">
+          It is a governed ontology for describing observable patterns of coherence, reflection, drift, and failure in AI reasoning — without claiming to read model internals or certify safety.
+        </div>
+
+        <div class="actions">
+          <a class="button" href="#overview">
+            <span>Explore Structure</span>
+            <span>→</span>
+          </a>
+          <a class="button secondary" href="#status">
+            <span>Registry Status</span>
+            <span>→</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="core-insight" aria-label="Core insight">
+        <div class="section-label">Core Insight</div>
+
+        <p class="insight-text">
+          Before AI reasoning can be governed, its failures need stable names.
+        </p>
+      </section>
+
+      <section class="section" aria-label="Problem">
+        <div class="section-head">
+          <div>
+            <div class="section-label">Problem</div>
+            <h2>AI vocabulary is unstable.</h2>
+          </div>
+
+          <p>
+            Words like alignment, hallucination, drift, trust, and failure are used across papers, policies, products, and audits — but they often mean different things in each context.
+          </p>
+        </div>
+
+        <div class="problem-grid">
+          <div class="problem-card">
+            <span>01</span>
+            <h3>Different words</h3>
+            <p>The same reasoning pattern may be described with different labels across studies or tools.</p>
+          </div>
+
+          <div class="problem-card">
+            <span>02</span>
+            <h3>Same word</h3>
+            <p>The same label may be used for structurally different behaviors.</p>
+          </div>
+
+          <div class="problem-card">
+            <span>03</span>
+            <h3>No stable ID</h3>
+            <p>Without canonical identifiers, concepts are hard to compare, cite, or reconstruct over time.</p>
+          </div>
+
+          <div class="problem-card">
+            <span>04</span>
+            <h3>No boundary</h3>
+            <p>Without diagnostic boundaries, reviewers can disagree about what a failure actually is.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="overview" aria-label="Ontology overview">
+        <div class="section-head">
+          <div>
+            <div class="section-label">Ontology</div>
+            <h2>Four public branches.</h2>
+          </div>
+
+          <p>
+            The public page shows the architecture of the Lexicon, not the full registry. The canonical term list, bridge patterns, production definitions, and machine-readable registry remain controlled until public release.
+          </p>
+        </div>
+
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-header">
+              <strong>RAL</strong>
+              <span>Public architecture overview</span>
+            </div>
+
+            <div class="panel-inner">
+              <div class="branch-list">
+                <button class="branch-button active" data-branch="a">
+                  <div class="branch-id">A</div>
+                  <div>
+                    <h3 class="branch-title">Reflective Cognition</h3>
+                    <p class="branch-line">Observable reasoning states, regulation modes, drift, and failure.</p>
+                  </div>
+                </button>
+
+                <button class="branch-button" data-branch="b">
+                  <div class="branch-id">B</div>
+                  <div>
+                    <h3 class="branch-title">Reflective Geometry</h3>
+                    <p class="branch-line">Structural ways of describing collapse, stability, and reflective space.</p>
+                  </div>
+                </button>
+
+                <button class="branch-button" data-branch="c">
+                  <div class="branch-id">C</div>
+                  <div>
+                    <h3 class="branch-title">Reflective Infrastructure</h3>
+                    <p class="branch-line">Anchors, proxies, stabilization supports, and information flow.</p>
+                  </div>
+                </button>
+
+                <button class="branch-button" data-branch="d">
+                  <div class="branch-id">D</div>
+                  <div>
+                    <h3 class="branch-title">Ontological Index</h3>
+                    <p class="branch-line">Canonical identifiers, versioning, registry governance, and controlled release.</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <aside class="panel">
+            <div class="panel-header">
+              <strong id="branch-panel-id">A</strong>
+              <span id="branch-panel-name">Reflective Cognition</span>
+            </div>
+
+            <div class="panel-inner">
+              <div class="detail-kicker">Public Branch</div>
+              <h3 class="detail-title" id="branch-title">Observable reasoning states.</h3>
+
+              <p class="detail-copy" id="branch-copy">
+                This branch describes visible patterns in reasoning artifacts: stability, regulation, drift, and failure as they appear in outputs or traces.
+              </p>
+
+              <div class="detail-grid">
+                <div class="detail-row">
+                  <span class="detail-label">Publicly shown</span>
+                  <p id="branch-public">High-level category only.</p>
+                </div>
+
+                <div class="detail-row">
+                  <span class="detail-label">Controlled</span>
+                  <p id="branch-controlled">Specific term entries, diagnostic boundaries, and registry details.</p>
+                </div>
+
+                <div class="detail-row">
+                  <span class="detail-label">Purpose</span>
+                  <p id="branch-purpose">Create a stable vocabulary for discussing observable reasoning behavior.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" aria-label="Lexicon Mapper workflow">
+        <div class="section-head">
+          <div>
+            <div class="section-label">Instrument</div>
+            <h2>From document to reviewable concept.</h2>
+          </div>
+
+          <p>
+            The Lexicon Mapper is a local research instrument. Publicly, we describe the workflow only at a high level: document, evidence, candidate concept, human review, and exportable record.
+          </p>
+        </div>
+
+        <div class="workflow" aria-label="Public-safe Lexicon Mapper workflow">
+          <button class="workflow-step active" data-flow="document">
+            <span class="step-number">01</span>
+            <h3 class="step-title">Document</h3>
+            <p class="step-copy">A paper, policy, transcript, or pasted text enters the review workspace.</p>
+          </button>
+
+          <button class="workflow-step" data-flow="evidence">
+            <span class="step-number">02</span>
+            <h3 class="step-title">Evidence span</h3>
+            <p class="step-copy">The instrument identifies reviewable passages or phrases for human attention.</p>
+          </button>
+
+          <button class="workflow-step" data-flow="candidate">
+            <span class="step-number">03</span>
+            <h3 class="step-title">Candidate concept</h3>
+            <p class="step-copy">A candidate lexicon concept is suggested as an ontological match.</p>
+          </button>
+
+          <button class="workflow-step" data-flow="review">
+            <span class="step-number">04</span>
+            <h3 class="step-title">Human review</h3>
+            <p class="step-copy">A human reviewer accepts, rejects, or calibrates the candidate mapping.</p>
+          </button>
+
+          <button class="workflow-step" data-flow="record">
+            <span class="step-number">05</span>
+            <h3 class="step-title">Exportable record</h3>
+            <p class="step-copy">The result becomes a review package for teaching, research, or calibration.</p>
+          </button>
+        </div>
+
+        <div class="workflow-detail">
+          <div class="workflow-signal">
+            <span id="flow-symbol">01</span>
+          </div>
+
+          <div class="workflow-explain">
+            <h3 id="flow-title">Document</h3>
+            <p id="flow-copy">
+              A source document enters the mapping workspace. The public website does not expose real review packages, real registry terms, bridge triggers, or production mapping logic.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-label="Boundary statement">
+        <div class="boundary">
+          <h2>What it does not claim.</h2>
+
+          <p>
+            Lexicon mapping produces ontological candidates for human review. It does not prove model state, certify safety, measure truth, access hidden model internals, or replace expert judgment.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="status" aria-label="Registry status">
+        <div class="section-head">
+          <div>
+            <div class="section-label">Status</div>
+            <h2>Controlled research record.</h2>
+          </div>
+
+          <p>
+            The canonical registry is maintained as a controlled research record. Public release is forthcoming after the registry record and citation path are confirmed.
+          </p>
+        </div>
+
+        <div class="status-grid">
+          <div class="status-card">
+            <span>Public now</span>
+            <h3>Architecture</h3>
+            <p>Purpose, boundaries, workflow, and top-level ontology structure.</p>
+          </div>
+
+          <div class="status-card">
+            <span>Controlled</span>
+            <h3>Registry</h3>
+            <p>Canonical terms, definitions, real RA-IDs, bridge patterns, and production metadata.</p>
+          </div>
+
+          <div class="status-card">
+            <span>Forthcoming</span>
+            <h3>Citation record</h3>
+            <p>A public registry record will be linked only after the official release is confirmed.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-label="FAQ">
+        <div class="section-head">
+          <div>
+            <div class="section-label">FAQ</div>
+            <h2>Boundaries by design.</h2>
+          </div>
+
+          <p>
+            The Lexicon is intentionally narrow. Its value is structural clarity, not overclaiming.
+          </p>
+        </div>
+
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h3>Does it read model weights?</h3>
+            <p>No. The Lexicon is designed around observable artifacts, not hidden model internals.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Does it certify safety?</h3>
+            <p>No. It provides diagnostic vocabulary and candidate mappings for review, not safety certification.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Is it a term browser?</h3>
+            <p>Not publicly yet. The full canonical registry remains controlled until public release.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Is the Mapper the Lexicon?</h3>
+            <p>No. The Lexicon is the ontology. The Mapper is a local research instrument that applies it to documents.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="paper-block" aria-label="Research note">
+        <div>
+          <div class="section-label">Research Direction</div>
+          <h2>Semantic infrastructure for AI reasoning risk.</h2>
+
+          <p>
+            The Lexicon is part of Enlightened AI Research Lab’s broader work on making AI reasoning, alignment, drift, and institutional reliance more observable, nameable, and reviewable.
+          </p>
+
+          <div class="paper-title">
+            Full registry access is not provided from the public website.
+          </div>
+        </div>
+
+        <div>
+          <div class="actions" style="margin-top:0;">
+            <a class="button" href="theory.html">
+              <span>Theory</span>
+              <span>→</span>
+            </a>
+
+            <a class="button secondary" href="mailto:research@enlightenedai.ai">
+              <span>Research Contact</span>
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>© 2026 Enlightened AI Research Lab</div>
+
+      <div class="footer-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const branchData = {
+      a: {
+        id: "A",
+        name: "Reflective Cognition",
+        title: "Observable reasoning states.",
+        copy: "This branch describes visible patterns in reasoning artifacts: stability, regulation, drift, and failure as they appear in outputs or traces.",
+        public: "High-level category only.",
+        controlled: "Specific term entries, diagnostic boundaries, and registry details.",
+        purpose: "Create a stable vocabulary for discussing observable reasoning behavior."
+      },
+      b: {
+        id: "B",
+        name: "Reflective Geometry",
+        title: "Structure without exposing the registry.",
+        copy: "This branch gives conceptual language for how stability, collapse, and reflective space may be described structurally.",
+        public: "Conceptual territory only.",
+        controlled: "Detailed geometries, term relationships, and production graph neighborhoods.",
+        purpose: "Support more precise discussion of structural instability without implying access to model internals."
+      },
+      c: {
+        id: "C",
+        name: "Reflective Infrastructure",
+        title: "Supports for stable reasoning.",
+        copy: "This branch organizes concepts around anchors, proxies, stabilization supports, and information flow.",
+        public: "General infrastructure category only.",
+        controlled: "Operational details, term records, anchors, mapping fields, and machine-readable metadata.",
+        purpose: "Describe the supports that help make reasoning reviewable and reconstructable."
+      },
+      d: {
+        id: "D",
+        name: "Ontological Index",
+        title: "Governance for the language system.",
+        copy: "This branch concerns identifiers, versioning, registry governance, and controlled release.",
+        public: "Governance concept and release boundary.",
+        controlled: "Canonical registry contents, versioned JSON, crosswalks, and full term records.",
+        purpose: "Preserve stable reference, citation, and longitudinal reconstruction."
+      }
+    };
+
+    function setBranch(branch) {
+      const data = branchData[branch];
+      if (!data) return;
+
+      document.getElementById("branch-panel-id").textContent = data.id;
+      document.getElementById("branch-panel-name").textContent = data.name;
+      document.getElementById("branch-title").textContent = data.title;
+      document.getElementById("branch-copy").textContent = data.copy;
+      document.getElementById("branch-public").textContent = data.public;
+      document.getElementById("branch-controlled").textContent = data.controlled;
+      document.getElementById("branch-purpose").textContent = data.purpose;
+
+      document.querySelectorAll("[data-branch]").forEach((item) => {
+        item.classList.toggle("active", item.dataset.branch === branch);
+      });
+    }
+
+    document.querySelectorAll("[data-branch]").forEach((item) => {
+      item.addEventListener("mouseenter", () => setBranch(item.dataset.branch));
+      item.addEventListener("focus", () => setBranch(item.dataset.branch));
+      item.addEventListener("click", () => setBranch(item.dataset.branch));
+    });
+
+    const flowData = {
+      document: {
+        symbol: "01",
+        title: "Document",
+        copy: "A source document enters the mapping workspace. The public website does not expose real review packages, real registry terms, bridge triggers, or production mapping logic."
+      },
+      evidence: {
+        symbol: "02",
+        title: "Evidence span",
+        copy: "The instrument highlights reviewable spans. Public examples should use placeholders or redacted samples, not real production mappings."
+      },
+      candidate: {
+        symbol: "03",
+        title: "Candidate concept",
+        copy: "A candidate concept is suggested for human review. The public page does not expose the full term registry, term definitions, or bridge-pattern library."
+      },
+      review: {
+        symbol: "04",
+        title: "Human review",
+        copy: "A reviewer labels the match, calibrates the mapping, and keeps judgment in the loop. The Lexicon does not replace expert interpretation."
+      },
+      record: {
+        symbol: "05",
+        title: "Exportable record",
+        copy: "The review can produce an exportable package for research, teaching, and calibration. Real exports remain controlled because they may contain passages, candidate identifiers, and review metadata."
+      }
+    };
+
+    function setFlow(stage) {
+      const data = flowData[stage];
+      if (!data) return;
+
+      document.getElementById("flow-symbol").textContent = data.symbol;
+      document.getElementById("flow-title").textContent = data.title;
+      document.getElementById("flow-copy").textContent = data.copy;
+
+      document.querySelectorAll("[data-flow]").forEach((item) => {
+        item.classList.toggle("active", item.dataset.flow === stage);
+      });
+    }
+
+    document.querySelectorAll("[data-flow]").forEach((item) => {
+      item.addEventListener("mouseenter", () => setFlow(item.dataset.flow));
+      item.addEventListener("focus", () => setFlow(item.dataset.flow));
+      item.addEventListener("click", () => setFlow(item.dataset.flow));
+    });
+  </script>
+</body>
+</html>
