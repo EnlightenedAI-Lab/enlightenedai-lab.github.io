@@ -21,7 +21,7 @@
       --accent: #1f5eff;
       --accent-dark: #0e3f99;
       --paper: rgba(255, 255, 255, 0.62);
-      --paper-strong: rgba(255, 255, 255, 0.88);
+      --paper-strong: rgba(255, 255, 255, 0.9);
       --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
       --serif: Georgia, "Times New Roman", serif;
       --sans: Arial, Helvetica, sans-serif;
@@ -230,7 +230,7 @@
 
     .interactive-shell {
       display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(310px, 0.75fr);
+      grid-template-columns: minmax(0, 1.32fr) minmax(340px, 0.68fr);
       gap: 24px;
       align-items: stretch;
     }
@@ -244,6 +244,7 @@
     .visual-panel {
       padding: 24px;
       min-height: 560px;
+      overflow: hidden;
     }
 
     .panel-header {
@@ -270,6 +271,7 @@
       display: block;
       width: 100%;
       height: auto;
+      overflow: visible;
     }
 
     .info-panel {
@@ -487,11 +489,12 @@
     }
 
     .metric-card {
-      min-height: 330px;
+      min-height: 350px;
       border: 1px solid var(--line);
       background: var(--paper);
       padding: 30px 28px;
       transition: transform 160ms ease, border-color 160ms ease;
+      overflow: hidden;
     }
 
     .metric-card:hover {
@@ -502,10 +505,10 @@
     .metric-symbol {
       display: block;
       font-family: var(--serif);
-      font-size: 86px;
+      font-size: 84px;
       line-height: 0.9;
       letter-spacing: -0.06em;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       color: var(--accent-dark);
     }
 
@@ -526,24 +529,63 @@
       color: var(--muted);
     }
 
-    .metric-line {
-      width: 100%;
-      height: 80px;
+    .instrument {
       margin: 8px 0 24px;
+      width: 100%;
+      height: 82px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      position: relative;
     }
 
-    .metric-line path {
-      fill: none;
-      stroke: var(--accent-dark);
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-dasharray: 240;
-      stroke-dashoffset: 240;
-      animation: drawLine 2.8s ease-in-out infinite alternate;
+    .instrument::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(96,100,108,0.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(96,100,108,0.12) 1px, transparent 1px);
+      background-size: 28px 100%, 100% 20px;
+      opacity: 0.34;
     }
 
-    @keyframes drawLine {
-      to { stroke-dashoffset: 0; }
+    .instrument-fill {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      height: 2px;
+      background: var(--accent-dark);
+      transform: translateY(-50%);
+      animation: instrumentMeasure 3.6s ease-in-out infinite alternate;
+    }
+
+    .instrument-dot {
+      position: absolute;
+      top: 50%;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--accent-dark);
+      transform: translate(-50%, -50%);
+      animation: instrumentDot 3.6s ease-in-out infinite alternate;
+    }
+
+    .metric-card:nth-child(1) .instrument-fill { width: 68%; }
+    .metric-card:nth-child(1) .instrument-dot { left: 68%; }
+    .metric-card:nth-child(2) .instrument-fill { width: 76%; }
+    .metric-card:nth-child(2) .instrument-dot { left: 76%; }
+    .metric-card:nth-child(3) .instrument-fill { width: 82%; }
+    .metric-card:nth-child(3) .instrument-dot { left: 82%; }
+
+    @keyframes instrumentMeasure {
+      from { opacity: 0.45; }
+      to { opacity: 1; }
+    }
+
+    @keyframes instrumentDot {
+      from { transform: translate(-50%, -50%) scale(0.88); }
+      to { transform: translate(-50%, -50%) scale(1.08); }
     }
 
     .failure-grid {
@@ -586,6 +628,10 @@
     }
 
     #failure-point {
+      transition: cx 450ms cubic-bezier(.2,.8,.2,1), cy 450ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    #failure-halo {
       transition: cx 450ms cubic-bezier(.2,.8,.2,1), cy 450ms cubic-bezier(.2,.8,.2,1);
     }
 
@@ -903,7 +949,7 @@
               <span>Forward → Reflection → Record</span>
             </div>
 
-            <svg viewBox="0 0 860 500" role="img" aria-label="Reflective Duality Layer animated flow">
+            <svg viewBox="0 0 980 500" role="img" aria-label="Reflective Duality Layer animated flow">
               <defs>
                 <marker id="arrow-flow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
                   <path d="M 0 0 L 12 6 L 0 12 z" fill="#55585e"></path>
@@ -911,40 +957,39 @@
               </defs>
 
               <g id="flow-input" class="flow-stage active" data-flow="input">
-                <circle cx="100" cy="250" r="66" class="svg-circle"></circle>
-                <text x="100" y="238" text-anchor="middle" class="svg-mono" font-size="13">INPUT</text>
-                <text x="100" y="270" text-anchor="middle" class="svg-text" font-size="27">Prompt</text>
+                <circle cx="115" cy="250" r="62" class="svg-circle"></circle>
+                <text x="115" y="238" text-anchor="middle" class="svg-mono" font-size="13">INPUT</text>
+                <text x="115" y="270" text-anchor="middle" class="svg-text" font-size="27">Prompt</text>
               </g>
 
-              <path id="flow-path-1" class="flow-path active" d="M166 250 L264 250" marker-end="url(#arrow-flow)"></path>
+              <path id="flow-path-1" class="flow-path active" d="M177 250 L284 250" marker-end="url(#arrow-flow)"></path>
 
               <g id="flow-forward" class="flow-stage" data-flow="forward">
-                <rect x="278" y="180" width="154" height="140" rx="70" class="svg-circle"></rect>
-                <text x="355" y="238" text-anchor="middle" class="svg-mono" font-size="13">F</text>
-                <text x="355" y="270" text-anchor="middle" class="svg-text" font-size="27">Forward</text>
+                <circle cx="350" cy="250" r="62" class="svg-circle"></circle>
+                <text x="350" y="238" text-anchor="middle" class="svg-mono" font-size="13">F</text>
+                <text x="350" y="270" text-anchor="middle" class="svg-text" font-size="27">Forward</text>
               </g>
 
-              <path id="flow-path-2" class="flow-path" d="M432 250 L530 250" marker-end="url(#arrow-flow)"></path>
+              <path id="flow-path-2" class="flow-path" d="M412 250 L523 250" marker-end="url(#arrow-flow)"></path>
 
               <g id="flow-reflective" class="flow-stage" data-flow="reflective">
-                <rect x="544" y="145" width="150" height="210" rx="75" class="svg-circle"></rect>
-                <text x="619" y="220" text-anchor="middle" class="svg-mono" font-size="13">Q</text>
-                <text x="619" y="254" text-anchor="middle" class="svg-text svg-blue" font-size="28">Reflective</text>
-                <text x="619" y="286" text-anchor="middle" class="svg-text svg-blue" font-size="28">Critique</text>
+                <rect x="540" y="145" width="172" height="210" rx="86" class="svg-circle"></rect>
+                <text x="626" y="218" text-anchor="middle" class="svg-mono" font-size="13">Q</text>
+                <text x="626" y="254" text-anchor="middle" class="svg-text svg-blue" font-size="28">Reflective</text>
+                <text x="626" y="286" text-anchor="middle" class="svg-text svg-blue" font-size="28">Critique</text>
               </g>
 
-              <path id="flow-path-3" class="flow-path" d="M694 250 L764 250" marker-end="url(#arrow-flow)"></path>
+              <path id="flow-path-3" class="flow-path" d="M712 250 L817 250" marker-end="url(#arrow-flow)"></path>
 
               <g id="flow-output" class="flow-stage" data-flow="output">
-                <circle cx="804" cy="250" r="66" class="svg-circle"></circle>
-                <text x="804" y="238" text-anchor="middle" class="svg-mono" font-size="13">RER</text>
-                <text x="804" y="270" text-anchor="middle" class="svg-text" font-size="27">Record</text>
+                <circle cx="883" cy="250" r="62" class="svg-circle"></circle>
+                <text x="883" y="238" text-anchor="middle" class="svg-mono" font-size="13">RER</text>
+                <text x="883" y="270" text-anchor="middle" class="svg-text" font-size="27">Record</text>
               </g>
 
-              <path id="flow-path-4" class="flow-path" d="M804 316 C700 430 520 430 619 356" stroke-dasharray="8 9"></path>
-
-              <text x="430" y="448" text-anchor="middle" class="svg-mono" font-size="15" fill="#0e3f99">
-                Ψ / R∇ / MCI⋆ are computed from the F ↔ Q interaction.
+              <line x1="115" y1="378" x2="883" y2="378" class="svg-line-light"/>
+              <text x="499" y="418" text-anchor="middle" class="svg-mono" font-size="15" fill="#0e3f99">
+                Ψ / R∇ / MCI⋆ computed from the F ↔ Q interaction
               </text>
             </svg>
           </div>
@@ -983,27 +1028,30 @@
         <div class="metrics-grid">
           <div class="metric-card">
             <span class="metric-symbol">Ψ</span>
-            <svg class="metric-line" viewBox="0 0 260 80" aria-hidden="true">
-              <path d="M10 54 C55 18 90 72 130 38 C168 6 202 20 250 12"></path>
-            </svg>
+            <div class="instrument">
+              <div class="instrument-fill"></div>
+              <div class="instrument-dot"></div>
+            </div>
             <span class="metric-name">Reflective Stability</span>
             <p>Measures whether the system preserves care, autonomy-respect, uncertainty awareness, and harm sensitivity during reasoning.</p>
           </div>
 
           <div class="metric-card">
             <span class="metric-symbol">R∇</span>
-            <svg class="metric-line" viewBox="0 0 260 80" aria-hidden="true">
-              <path d="M10 62 C55 64 90 54 122 42 C158 28 190 30 250 16"></path>
-            </svg>
+            <div class="instrument">
+              <div class="instrument-fill"></div>
+              <div class="instrument-dot"></div>
+            </div>
             <span class="metric-name">Reflective Gradient</span>
             <p>Measures whether reflection improves the output, destabilizes it, or merely performs cosmetic self-correction.</p>
           </div>
 
           <div class="metric-card">
             <span class="metric-symbol">MCI⋆</span>
-            <svg class="metric-line" viewBox="0 0 260 80" aria-hidden="true">
-              <path d="M10 48 C58 42 88 42 128 38 C174 34 206 28 250 22"></path>
-            </svg>
+            <div class="instrument">
+              <div class="instrument-fill"></div>
+              <div class="instrument-dot"></div>
+            </div>
             <span class="metric-name">Moral Coherence Index</span>
             <p>Tracks long-horizon coherence across the five forces, dual trajectories, stress, drift, and version change.</p>
           </div>
@@ -1018,7 +1066,7 @@
           </div>
 
           <p>
-            The quadrant is interactive. Select a failure mode and the stability point moves to its region. The visual stays mathematical and restrained.
+            Select a failure mode and the stability point moves to its region. The visual stays restrained, mathematical, and legible.
           </p>
         </div>
 
@@ -1046,10 +1094,10 @@
               <text x="430" y="558" text-anchor="middle" class="svg-mono" font-size="15">REASONING STABILITY</text>
               <text x="72" y="280" transform="rotate(-90 72 280)" text-anchor="middle" class="svg-mono" font-size="15">MORAL REGULATION</text>
 
-              <text x="170" y="306" class="svg-text" font-size="42">Collapse</text>
-              <text x="190" y="238" class="svg-text" font-size="42">Drift</text>
-              <text x="520" y="238" class="svg-text" font-size="42">Rigidity</text>
-              <text x="500" y="378" class="svg-text" font-size="42">Care Erosion</text>
+              <text x="185" y="230" class="svg-text" font-size="40">Drift</text>
+              <text x="510" y="230" class="svg-text" font-size="40">Rigidity</text>
+              <text x="180" y="385" class="svg-text" font-size="40">Collapse</text>
+              <text x="500" y="385" class="svg-text" font-size="40">Care Erosion</text>
 
               <path id="failure-trace" d="M430 280 C380 230 325 210 270 210" class="svg-line-blue" stroke-dasharray="8 9"/>
               <circle id="failure-point" cx="270" cy="210" r="10" fill="#fbfaf7" stroke="#0e3f99" stroke-width="2.2"/>
