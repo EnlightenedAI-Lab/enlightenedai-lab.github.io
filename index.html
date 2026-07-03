@@ -20,9 +20,13 @@
       --content: 1620px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
@@ -42,9 +46,9 @@
       display: flex;
       flex-direction: column;
       background:
-        radial-gradient(circle at 79% 33%, rgba(213, 152, 69, 0.07), transparent 34%),
-        radial-gradient(circle at 86% 73%, rgba(184, 112, 37, 0.05), transparent 28%),
-        linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0));
+        radial-gradient(circle at 78% 33%, rgba(214, 154, 72, 0.07), transparent 32%),
+        radial-gradient(circle at 87% 72%, rgba(178, 111, 42, 0.05), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
     }
 
     header {
@@ -89,9 +93,13 @@
       transition: opacity 160ms ease;
     }
 
-    nav a:hover { opacity: 1; }
+    nav a:hover {
+      opacity: 1;
+    }
 
-    main { flex: 1; }
+    main {
+      flex: 1;
+    }
 
     .hero {
       position: relative;
@@ -160,272 +168,28 @@
       border-color: var(--dark);
     }
 
-    .button:hover { transform: translateY(-1px); }
+    .button:hover {
+      transform: translateY(-1px);
+    }
 
-    /* Bee composition */
-
-    .bee-stage {
+    .bee-art {
       position: absolute;
       z-index: 1;
-      top: 34px;
-      right: -28px;
-      width: min(61vw, 980px);
-      height: 735px;
+      top: 38px;
+      right: -36px;
+      width: min(61vw, 970px);
+      height: 720px;
       pointer-events: none;
       overflow: visible;
     }
 
-    .bee {
-      position: absolute;
-      transform-origin: center;
-      will-change: transform, filter;
-      filter: drop-shadow(0 18px 18px rgba(7, 16, 25, 0.12));
-    }
-
-    .bee img {
-      display: block;
-      width: 100%;
-      height: auto;
-      user-select: none;
-      -webkit-user-drag: none;
-      pointer-events: none;
-    }
-
-    .bee.large::before,
-    .bee.large::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      pointer-events: none;
-      mix-blend-mode: multiply;
-      opacity: 0.28;
-      will-change: transform, opacity;
-    }
-
-    .bee.large::before {
-      left: var(--wing-1-left);
-      top: var(--wing-1-top);
-      width: var(--wing-1-width);
-      height: var(--wing-1-height);
-      transform: rotate(var(--wing-1-rot));
-      border: 1px solid rgba(171, 110, 42, 0.28);
-      background:
-        radial-gradient(ellipse at 50% 50%,
-          rgba(255, 249, 227, 0.50) 0%,
-          rgba(255, 239, 206, 0.24) 40%,
-          rgba(255, 239, 206, 0.04) 70%,
-          rgba(255, 239, 206, 0) 100%);
-      animation: wingPulseA 0.16s ease-in-out infinite alternate;
-    }
-
-    .bee.large::after {
-      left: var(--wing-2-left);
-      top: var(--wing-2-top);
-      width: var(--wing-2-width);
-      height: var(--wing-2-height);
-      transform: rotate(var(--wing-2-rot));
-      border: 1px solid rgba(171, 110, 42, 0.24);
-      background:
-        radial-gradient(ellipse at 50% 50%,
-          rgba(255, 249, 227, 0.38) 0%,
-          rgba(255, 239, 206, 0.16) 42%,
-          rgba(255, 239, 206, 0.04) 70%,
-          rgba(255, 239, 206, 0) 100%);
-      animation: wingPulseB 0.18s ease-in-out infinite alternate;
-    }
-
-    .bee-left {
-      width: 338px;
-      top: 140px;
-      left: 10px;
-      animation: beeFloatLeft 4.8s ease-in-out infinite;
-      --wing-1-left: 16px;
-      --wing-1-top: -8px;
-      --wing-1-width: 164px;
-      --wing-1-height: 78px;
-      --wing-1-rot: 33deg;
-      --wing-2-left: 88px;
-      --wing-2-top: 18px;
-      --wing-2-width: 108px;
-      --wing-2-height: 58px;
-      --wing-2-rot: 14deg;
-    }
-
-    .bee-top-right {
-      width: 332px;
-      top: 48px;
-      right: 18px;
-      animation: beeFloatTopRight 5.5s ease-in-out infinite;
-      --wing-1-left: 10px;
-      --wing-1-top: -10px;
-      --wing-1-width: 170px;
-      --wing-1-height: 78px;
-      --wing-1-rot: 28deg;
-      --wing-2-left: 136px;
-      --wing-2-top: 0px;
-      --wing-2-width: 110px;
-      --wing-2-height: 58px;
-      --wing-2-rot: -8deg;
-    }
-
-    .bee-bottom-right {
-      width: 334px;
-      top: 378px;
-      right: 20px;
-      animation: beeFloatBottomRight 5.1s ease-in-out infinite;
-      --wing-1-left: 22px;
-      --wing-1-top: -4px;
-      --wing-1-width: 160px;
-      --wing-1-height: 74px;
-      --wing-1-rot: 26deg;
-      --wing-2-left: 122px;
-      --wing-2-top: 18px;
-      --wing-2-width: 104px;
-      --wing-2-height: 54px;
-      --wing-2-rot: 4deg;
-    }
-
-    .bee-front {
-      width: 278px;
-      top: 480px;
-      left: 44px;
-      animation: beeFloatFront 4.6s ease-in-out infinite;
-      --wing-1-left: -6px;
-      --wing-1-top: 46px;
-      --wing-1-width: 124px;
-      --wing-1-height: 58px;
-      --wing-1-rot: 8deg;
-      --wing-2-left: 150px;
-      --wing-2-top: 54px;
-      --wing-2-width: 118px;
-      --wing-2-height: 56px;
-      --wing-2-rot: -8deg;
-    }
-
-    .bee-small-top {
-      width: 78px;
-      top: 118px;
-      left: 314px;
-      animation: beeBuzzTop 1.9s linear infinite;
-      opacity: 0.92;
-      filter: blur(0.1px) drop-shadow(0 10px 12px rgba(7, 16, 25, 0.08));
-    }
-
-    .bee-small-mid {
-      width: 84px;
-      top: 338px;
-      left: 352px;
-      animation: beeBuzzMid 2.2s linear infinite;
-      opacity: 0.9;
-      filter: blur(0.15px) drop-shadow(0 10px 12px rgba(7, 16, 25, 0.08));
-    }
-
-    .pollen {
+    .bee-art img {
       position: absolute;
       inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.85;
-    }
-
-    .pollen span {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      border-radius: 999px;
-      background: rgba(204, 132, 33, 0.44);
-      box-shadow:
-        28px 18px 0 rgba(229, 158, 56, 0.24),
-        54px -12px 0 rgba(204, 132, 33, 0.22),
-        96px 24px 0 rgba(229, 158, 56, 0.16),
-        140px -20px 0 rgba(204, 132, 33, 0.18);
-      animation: pollenTwinkle 3.6s ease-in-out infinite;
-    }
-
-    .pollen .trail-1 { top: 202px; left: 450px; }
-    .pollen .trail-2 { top: 420px; left: 540px; animation-delay: -1.4s; }
-    .pollen .trail-3 { top: 260px; right: 118px; animation-delay: -2.2s; }
-    .pollen .trail-4 { top: 560px; right: 140px; animation-delay: -0.9s; }
-
-    @keyframes beeFloatLeft {
-      0%, 100% { transform: translate3d(0, 0, 0) rotate(-1.2deg) scale(1); }
-      20% { transform: translate3d(8px, -14px, 0) rotate(0deg) scale(1.01); }
-      50% { transform: translate3d(15px, -10px, 0) rotate(0.9deg) scale(1.012); }
-      80% { transform: translate3d(3px, 6px, 0) rotate(-0.4deg) scale(0.998); }
-    }
-
-    @keyframes beeFloatTopRight {
-      0%, 100% { transform: translate3d(0, 0, 0) rotate(1deg) scale(1); }
-      25% { transform: translate3d(-10px, -16px, 0) rotate(0deg) scale(1.012); }
-      55% { transform: translate3d(-16px, -8px, 0) rotate(-0.8deg) scale(1.008); }
-      82% { transform: translate3d(-6px, 7px, 0) rotate(0.25deg) scale(0.998); }
-    }
-
-    @keyframes beeFloatBottomRight {
-      0%, 100% { transform: translate3d(0, 0, 0) rotate(-0.6deg) scale(1); }
-      28% { transform: translate3d(-8px, -10px, 0) rotate(0.6deg) scale(1.01); }
-      58% { transform: translate3d(-14px, 0, 0) rotate(0deg) scale(1.008); }
-      84% { transform: translate3d(-4px, 8px, 0) rotate(-0.8deg) scale(0.998); }
-    }
-
-    @keyframes beeFloatFront {
-      0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
-      25% { transform: translate3d(7px, -9px, 0) rotate(1deg) scale(1.012); }
-      55% { transform: translate3d(12px, -4px, 0) rotate(-0.6deg) scale(1.006); }
-      78% { transform: translate3d(2px, 8px, 0) rotate(0.6deg) scale(0.996); }
-    }
-
-    @keyframes beeBuzzTop {
-      0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
-      10%  { transform: translate3d(8px, -5px, 0) rotate(5deg) scale(1.02); }
-      24%  { transform: translate3d(18px, -16px, 0) rotate(-3deg) scale(0.99); }
-      37%  { transform: translate3d(12px, -8px, 0) rotate(4deg) scale(1.03); }
-      53%  { transform: translate3d(-2px, 4px, 0) rotate(-2deg) scale(1); }
-      70%  { transform: translate3d(-10px, 12px, 0) rotate(3deg) scale(0.98); }
-      85%  { transform: translate3d(2px, 6px, 0) rotate(-3deg) scale(1.02); }
-      100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
-    }
-
-    @keyframes beeBuzzMid {
-      0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
-      14%  { transform: translate3d(-6px, -5px, 0) rotate(-3deg) scale(1.01); }
-      30%  { transform: translate3d(-16px, -14px, 0) rotate(4deg) scale(1.02); }
-      46%  { transform: translate3d(-12px, 4px, 0) rotate(-5deg) scale(0.99); }
-      62%  { transform: translate3d(2px, 12px, 0) rotate(2deg) scale(1.02); }
-      78%  { transform: translate3d(10px, 6px, 0) rotate(-3deg) scale(0.99); }
-      92%  { transform: translate3d(4px, -3px, 0) rotate(2deg) scale(1.01); }
-      100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
-    }
-
-    @keyframes wingPulseA {
-      0% {
-        opacity: 0.12;
-        transform: rotate(var(--wing-1-rot)) scaleX(0.94) scaleY(0.84);
-        filter: blur(0.4px);
-      }
-      100% {
-        opacity: 0.52;
-        transform: rotate(var(--wing-1-rot)) scaleX(1.1) scaleY(1.02);
-        filter: blur(1px);
-      }
-    }
-
-    @keyframes wingPulseB {
-      0% {
-        opacity: 0.1;
-        transform: rotate(var(--wing-2-rot)) scaleX(0.92) scaleY(0.84);
-        filter: blur(0.4px);
-      }
-      100% {
-        opacity: 0.46;
-        transform: rotate(var(--wing-2-rot)) scaleX(1.06) scaleY(1.02);
-        filter: blur(0.9px);
-      }
-    }
-
-    @keyframes pollenTwinkle {
-      0%, 100% { opacity: 0.25; transform: scale(0.92); }
-      50% { opacity: 0.75; transform: scale(1.08); }
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 22px 24px rgba(7, 16, 25, 0.13));
     }
 
     footer {
@@ -457,14 +221,22 @@
       color: #303844;
     }
 
-    .footer-right a { opacity: 0.9; }
-    .footer-right a:hover { opacity: 1; }
+    .footer-right a {
+      opacity: 0.9;
+    }
+
+    .footer-right a:hover {
+      opacity: 1;
+    }
 
     @media (max-width: 1280px) {
-      .hero-copy { width: 54vw; }
-      .bee-stage {
-        right: -150px;
-        opacity: 0.8;
+      .hero-copy {
+        width: 54vw;
+      }
+
+      .bee-art {
+        right: -170px;
+        opacity: 0.76;
       }
     }
 
@@ -489,9 +261,9 @@
         width: min(760px, 68vw);
       }
 
-      .bee-stage {
-        right: -270px;
-        opacity: 0.46;
+      .bee-art {
+        right: -300px;
+        opacity: 0.48;
       }
     }
 
@@ -544,33 +316,7 @@
         min-width: 0;
       }
 
-      .bee-stage {
-        display: block;
-        position: relative;
-        top: auto;
-        right: auto;
-        width: 100%;
-        height: 170px;
-        margin-top: 28px;
-        opacity: 1;
-      }
-
-      .bee-left,
-      .bee-top-right,
-      .bee-bottom-right,
-      .bee-small-top,
-      .bee-small-mid {
-        display: none;
-      }
-
-      .bee-front {
-        width: 160px;
-        top: 0;
-        left: auto;
-        right: 4px;
-      }
-
-      .pollen {
+      .bee-art {
         display: none;
       }
 
@@ -578,15 +324,6 @@
         flex-direction: column;
         align-items: flex-start;
         padding: 28px 24px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .bee,
-      .bee.large::before,
-      .bee.large::after,
-      .pollen span {
-        animation: none !important;
       }
     }
   </style>
@@ -625,37 +362,8 @@
           </div>
         </div>
 
-        <div class="bee-stage" aria-hidden="true">
-          <div class="pollen">
-            <span class="trail-1"></span>
-            <span class="trail-2"></span>
-            <span class="trail-3"></span>
-            <span class="trail-4"></span>
-          </div>
-
-          <div class="bee large bee-left">
-            <img src="/assets/bee-left.png" alt="" />
-          </div>
-
-          <div class="bee bee-small-top">
-            <img src="/assets/bee-small-top.png" alt="" />
-          </div>
-
-          <div class="bee large bee-top-right">
-            <img src="/assets/bee-top-right.png" alt="" />
-          </div>
-
-          <div class="bee bee-small-mid">
-            <img src="/assets/bee-small-mid.png" alt="" />
-          </div>
-
-          <div class="bee large bee-front">
-            <img src="/assets/bee-front.png" alt="" />
-          </div>
-
-          <div class="bee large bee-bottom-right">
-            <img src="/assets/bee-bottom-right.png" alt="" />
-          </div>
+        <div class="bee-art" aria-hidden="true">
+          <img src="/assets/bees-realistic.png" alt="" />
         </div>
       </section>
     </main>
