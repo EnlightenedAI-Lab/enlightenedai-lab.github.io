@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>RAISE at AI for Good | Enlightened AI Research Lab</title>
+  <title>RAISE Film Screening | Enlightened AI Research Lab</title>
   <meta
     name="description"
-    content="A public record of Enlightened AI Research Lab’s contribution to the RAISE documentary conversation on AI, humanity, ethics, and responsible intelligence."
+    content="Nicolas Holm, founder of Enlightened AI Research Lab, was interviewed for RAISE, screening at AI for Good Global Summit 2026 in Geneva."
   />
 
   <style>
@@ -204,7 +204,8 @@
     }
 
     .artwork-card,
-    .summit-card {
+    .summit-card,
+    .screening-card {
       border: 1px solid var(--line);
       background: #111;
       box-shadow: 0 34px 90px rgba(0,0,0,0.20);
@@ -217,6 +218,63 @@
       width: 100%;
       height: auto;
       background: #111;
+    }
+
+    .screening-card {
+      background: var(--dark);
+      color: white;
+      padding: 30px;
+      box-shadow: none;
+    }
+
+    .screening-card .screening-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 42px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.58);
+      line-height: 1.7;
+    }
+
+    .screening-card h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(38px, 4.5vw, 76px);
+      line-height: 0.94;
+      letter-spacing: -0.055em;
+      font-weight: 500;
+      color: white;
+    }
+
+    .screening-card .screening-meta {
+      margin-top: 36px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      border-top: 1px solid rgba(255,255,255,0.16);
+      padding-top: 22px;
+    }
+
+    .screening-card .screening-meta span {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.48);
+      margin-bottom: 8px;
+    }
+
+    .screening-card .screening-meta strong {
+      display: block;
+      font-size: 15px;
+      color: rgba(255,255,255,0.88);
+      font-weight: 500;
+      line-height: 1.4;
     }
 
     .artwork-card.missing-art,
@@ -638,6 +696,14 @@
         text-align: left;
       }
 
+      .screening-card .screening-top {
+        display: block;
+      }
+
+      .screening-card .screening-meta {
+        grid-template-columns: 1fr;
+      }
+
       .section,
       .quote-band,
       .closing {
@@ -701,20 +767,20 @@
     <main>
       <section class="hero" aria-label="RAISE introduction">
         <div>
-          <div class="kicker">AI for Good Global Summit 2026</div>
+          <div class="kicker">AI Film Festival · Centre Stage</div>
 
-          <h1>RAISE at AI for Good</h1>
+          <h1>RAISE Film Screening</h1>
 
           <div class="hero-line">
             Wisdom before intelligence.
           </div>
 
           <div class="hero-copy">
-            A public record of Enlightened AI Research Lab’s contribution to the RAISE documentary conversation on AI, humanity, ethics, and responsible intelligence.
+            Nicolas Holm, founder of Enlightened AI Research Lab, was interviewed for RAISE, a Michael P. Nash documentary series exploring artificial intelligence, humanity, and the future worth building.
           </div>
 
           <div class="event-stamp" aria-label="Event details">
-            <span>Geneva</span>
+            <span>Centre Stage</span>
             <span>9 July 2026</span>
             <span>18:30–20:00 CEST</span>
           </div>
@@ -740,24 +806,50 @@
         <aside class="visual-stack" aria-label="RAISE and AI for Good visuals">
           <div class="artwork-card">
             <img
-              src="/assets/img/raise-artwork.jpg?v=2"
+              src="/assets/img/raise-artwork.jpg?v=10"
               alt="RAISE documentary artwork"
               onerror="this.style.display='none'; this.parentElement.classList.add('missing-art');"
             />
 
             <div class="caption">
               <div>
-                <strong>RAISE Film Screening</strong>
-                <span>AI for Good Global Summit 2026 · Geneva</span>
+                <strong>RAISE Documentary</strong>
+                <span>A Michael P. Nash film · Executive produced by Leonardo DiCaprio</span>
               </div>
 
-              <div class="date">9 July 2026</div>
+              <div class="date">RAISE</div>
+            </div>
+          </div>
+
+          <div class="screening-card">
+            <div class="screening-top">
+              <span>Home &gt; Programme</span>
+              <span>AI Film Festival</span>
+            </div>
+
+            <h2>“Raise” film screening</h2>
+
+            <div class="screening-meta">
+              <div>
+                <span>Date</span>
+                <strong>9 July 2026</strong>
+              </div>
+
+              <div>
+                <span>Timeframe</span>
+                <strong>18:30–20:00 CEST</strong>
+              </div>
+
+              <div>
+                <span>Location</span>
+                <strong>Centre Stage</strong>
+              </div>
             </div>
           </div>
 
           <div class="summit-card">
             <img
-              src="/assets/img/ai-for-good-summit.jpg?v=1"
+              src="/assets/img/ai-for-good-summit.jpg?v=5"
               alt="AI for Good Global Summit visual"
               onerror="this.style.display='none'; this.parentElement.classList.add('missing-art');"
             />
@@ -765,10 +857,10 @@
             <div class="caption">
               <div>
                 <strong>AI for Good Context</strong>
-                <span>Global Summit 2026 · AI Film Festival</span>
+                <span>Global Summit 2026 · Geneva</span>
               </div>
 
-              <div class="date">Geneva</div>
+              <div class="date">7–10 July</div>
             </div>
           </div>
         </aside>
@@ -777,12 +869,12 @@
       <section class="section" aria-label="About RAISE at AI for Good">
         <div class="section-head">
           <div>
-            <div class="section-label">RAISE at AI for Good</div>
-            <h2>A global story about AI in the real world.</h2>
+            <div class="section-label">Screening Context</div>
+            <h2>RAISE comes to Centre Stage.</h2>
           </div>
 
           <p>
-            RAISE is a six-part global documentary series exploring how artificial intelligence is already being used to address humanity’s most urgent challenges and help build a future worth believing in.
+            The “Raise” film screening is listed in the AI Film Festival programme at AI for Good Global Summit 2026. The screening is scheduled for 9 July 2026, from 18:30 to 20:00 CEST, on Centre Stage in Geneva.
           </p>
         </div>
 
@@ -791,15 +883,15 @@
             <h3>The human question beneath the film.</h3>
 
             <p>
-              RAISE places artificial intelligence inside the human question: not simply what AI can do, but what wisdom should guide it. For Enlightened AI Research Lab, this is the central issue. Intelligence without reflection can drift. Capability without judgment can amplify risk. The future of AI depends on the wisdom of humanity teaching, guiding, and governing the intelligence it creates.
+              RAISE places artificial intelligence inside the human question: not simply what AI can do, but what wisdom should guide it. Intelligence without reflection can drift. Capability without judgment can amplify risk. The future of AI depends on the wisdom of humanity teaching, guiding, and governing the intelligence it creates.
             </p>
           </article>
 
           <article class="card">
-            <h3>Geneva screening.</h3>
+            <h3>Screening details.</h3>
 
             <p>
-              The RAISE screening is listed as part of the AI for Good Global Summit 2026 in Geneva. The documentary is directed by Michael P. Nash and executive produced by Leonardo DiCaprio.
+              RAISE is described by AI for Good as a six-part global documentary series exploring how artificial intelligence is being used to address humanity’s most urgent challenges and help build a future worth believing in.
             </p>
 
             <div class="event-list">
@@ -814,12 +906,12 @@
               </div>
 
               <div class="event-row">
-                <span>Location</span>
-                <span>Geneva · AI for Good Global Summit 2026</span>
+                <span>Venue</span>
+                <span>Centre Stage · AI for Good Global Summit 2026</span>
               </div>
 
               <div class="event-row">
-                <span>Programme</span>
+                <span>Track</span>
                 <span>AI Film Festival</span>
               </div>
             </div>
@@ -843,23 +935,23 @@
       <section class="section" aria-label="Enlightened AI Research Lab contribution">
         <div class="section-head">
           <div>
-            <div class="section-label">Lab Contribution</div>
-            <h2>A conversation on responsible intelligence.</h2>
+            <div class="section-label">Interview Contribution</div>
+            <h2>Enlightened AI Research Lab in the RAISE conversation.</h2>
           </div>
 
           <p>
-            Nicolas Holm, founder of Enlightened AI Research Lab, was interviewed for the RAISE project on AI, humanity, ethics, and the future of responsible intelligence.
+            Nicolas Holm was interviewed for RAISE on AI, humanity, ethics, and responsible intelligence. His contribution reflects the lab’s central position: AI should not only become more capable; it should remain connected to evidence, reflection, human judgment, and responsibility.
           </p>
         </div>
 
         <article class="recognition-card">
           <div class="label">
-            Public record<br />
-            Interview contribution
+            Interviewed for RAISE<br />
+            Screening at AI for Good
           </div>
 
           <p>
-            His contribution reflects the lab’s central position: AI should not only become more capable; it should remain connected to evidence, reflection, human judgment, and responsibility.
+            The deeper question is not whether artificial intelligence can exceed human capability. It is whether human wisdom can teach, guide, and govern the intelligence it creates.
           </p>
         </article>
       </section>
@@ -954,10 +1046,10 @@
 
       <section class="closing" aria-label="Closing statement">
         <div class="closing-inner">
-          <h2>Responsible intelligence begins with the human question.</h2>
+          <h2>Responsible intelligence begins with wisdom.</h2>
 
           <p>
-            RAISE places artificial intelligence in the context where it matters most: people, institutions, society, and the future we choose to build.
+            RAISE places artificial intelligence in the context where it matters most: people, institutions, society, and the future humanity chooses to build.
           </p>
         </div>
       </section>
