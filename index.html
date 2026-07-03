@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Enlightened AI Research Lab</title>
-  <meta
-    name="description"
-    content="Research and products for safer applied AI."
-  />
+  <meta name="description" content="Research and products for safer applied AI." />
 
   <style>
     :root {
@@ -17,9 +14,6 @@
       --muted: #5f6670;
       --line: #ddd7ce;
       --dark: #071019;
-      --gold: #c8842d;
-      --honey: #e6a548;
-      --amber: #b86f25;
       --max: 1900px;
       --content: 1620px;
     }
@@ -50,9 +44,9 @@
       display: flex;
       flex-direction: column;
       background:
-        radial-gradient(circle at 80% 35%, rgba(213, 151, 65, 0.09), transparent 32%),
-        radial-gradient(circle at 86% 72%, rgba(176, 111, 37, 0.06), transparent 26%),
-        linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0));
+        radial-gradient(circle at 78% 36%, rgba(201, 139, 54, 0.08), transparent 31%),
+        radial-gradient(circle at 86% 72%, rgba(180, 112, 32, 0.045), transparent 25%),
+        linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0));
     }
 
     header {
@@ -176,263 +170,125 @@
       transform: translateY(-1px);
     }
 
-    .bee-field {
+    .bee-art-wrap {
       position: absolute;
       z-index: 1;
-      top: 62px;
-      right: -10px;
+      top: 54px;
+      right: -8px;
       width: min(58vw, 920px);
-      height: 700px;
+      height: 730px;
       pointer-events: none;
       overflow: visible;
+      opacity: 0.98;
+      transform: translateZ(0);
     }
 
-    .bee {
+    .bee-art {
       position: absolute;
-      width: var(--w);
-      opacity: var(--opacity, 1);
-      filter: drop-shadow(0 20px 22px rgba(7, 16, 25, 0.13));
-      animation: bee-hover var(--hover-speed, 6s) ease-in-out infinite;
-      animation-delay: var(--delay, 0s);
+      inset: 0;
+      background-image: url("assets/bees-realistic.png");
+      background-repeat: no-repeat;
+      background-position: center right;
+      background-size: contain;
+      animation: bee-field-hover 8.5s ease-in-out infinite;
+      filter: drop-shadow(0 18px 22px rgba(7, 16, 25, 0.08));
       will-change: transform;
     }
 
-    .bee-inner {
-      transform: rotate(var(--r, 0deg));
-      transform-origin: center;
-    }
-
-    .bee-svg {
-      display: block;
-      width: 100%;
-      height: auto;
-      overflow: visible;
-    }
-
-    .wing {
-      transform-box: fill-box;
-      opacity: 0.72;
-      will-change: transform, opacity;
-      animation-duration: var(--wing-speed, 0.19s);
-      animation-timing-function: ease-in-out;
-      animation-iteration-count: infinite;
-      animation-direction: alternate;
-    }
-
-    .wing-left {
-      transform-origin: 88% 72%;
-      animation-name: wing-left-flutter;
-    }
-
-    .wing-right {
-      transform-origin: 12% 72%;
-      animation-name: wing-right-flutter;
-    }
-
-    .wing-fill {
-      fill: rgba(255, 244, 218, 0.72);
-      stroke: rgba(129, 82, 26, 0.64);
-      stroke-width: 1.2;
-    }
-
-    .wing-vein {
-      fill: none;
-      stroke: rgba(118, 75, 24, 0.52);
-      stroke-width: 0.9;
-      stroke-linecap: round;
-    }
-
-    .hair {
-      fill: none;
-      stroke: rgba(57, 37, 19, 0.58);
-      stroke-width: 1.4;
-      stroke-linecap: round;
-    }
-
-    .leg {
-      fill: none;
-      stroke: #20150c;
-      stroke-width: 3.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .leg-fur {
-      fill: none;
-      stroke: #d28a2a;
-      stroke-width: 2;
-      stroke-linecap: round;
-    }
-
-    .antenna {
-      fill: none;
-      stroke: #111;
-      stroke-width: 2.8;
-      stroke-linecap: round;
-    }
-
-    .eye-glint {
-      animation: eye-glint 4.8s ease-in-out infinite;
-      transform-origin: center;
-    }
-
-    .pollen {
+    .bee-art::after {
+      content: "";
       position: absolute;
       inset: 0;
-      z-index: 0;
-      opacity: 0.72;
-      animation: pollen-shimmer 7s ease-in-out infinite;
+      background-image: inherit;
+      background-repeat: no-repeat;
+      background-position: center right;
+      background-size: contain;
+      opacity: 0.06;
+      filter: blur(0.9px) brightness(1.16) saturate(1.06);
+      mix-blend-mode: multiply;
+      animation: wing-shimmer 0.24s ease-in-out infinite alternate;
+      transform-origin: 62% 32%;
+      will-change: transform, opacity;
     }
 
-    .pollen svg {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
+    .wing-glint {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(ellipse at center, rgba(255, 245, 215, 0.56), rgba(255, 245, 215, 0.18) 42%, rgba(255, 245, 215, 0) 72%);
+      filter: blur(4px);
+      mix-blend-mode: screen;
+      animation: wing-glint 1.9s ease-in-out infinite;
     }
 
-    .pollen path {
-      fill: none;
-      stroke: rgba(213, 146, 44, 0.46);
-      stroke-width: 1.2;
-      stroke-dasharray: 3 9;
-      stroke-linecap: round;
-    }
-
-    .pollen circle {
-      fill: rgba(210, 137, 34, 0.52);
-    }
-
-    .bee-one {
-      --w: 280px;
-      --r: -8deg;
-      --opacity: 1;
-      --wing-speed: 0.17s;
-      --hover-speed: 5.8s;
-      --delay: -1.2s;
+    .glint-one {
+      width: 190px;
+      height: 78px;
       top: 118px;
-      left: 38px;
+      left: 95px;
+      transform: rotate(-16deg);
+      animation-delay: -0.3s;
     }
 
-    .bee-two {
-      --w: 282px;
-      --r: 10deg;
-      --opacity: 1;
-      --wing-speed: 0.18s;
-      --hover-speed: 6.4s;
-      --delay: -3.4s;
-      top: 44px;
-      right: 54px;
+    .glint-two {
+      width: 205px;
+      height: 82px;
+      top: 50px;
+      right: 130px;
+      transform: rotate(18deg);
+      animation-delay: -1.0s;
     }
 
-    .bee-three {
-      --w: 248px;
-      --r: 7deg;
-      --opacity: 0.98;
-      --wing-speed: 0.16s;
-      --hover-speed: 5.3s;
-      --delay: -2.1s;
-      top: 384px;
-      right: 72px;
+    .glint-three {
+      width: 185px;
+      height: 72px;
+      top: 360px;
+      right: 126px;
+      transform: rotate(-12deg);
+      animation-delay: -1.5s;
     }
 
-    .bee-four {
-      --w: 238px;
-      --r: -3deg;
-      --opacity: 0.98;
-      --wing-speed: 0.2s;
-      --hover-speed: 6.1s;
-      --delay: -4.4s;
-      top: 430px;
-      left: 88px;
+    .glint-four {
+      width: 165px;
+      height: 68px;
+      top: 530px;
+      left: 130px;
+      transform: rotate(11deg);
+      animation-delay: -0.7s;
     }
 
-    .bee-five {
-      --w: 108px;
-      --r: 14deg;
-      --opacity: 0.38;
-      --wing-speed: 0.13s;
-      --hover-speed: 4.7s;
-      --delay: -0.8s;
-      top: 114px;
-      left: 372px;
-      filter: blur(1.4px) drop-shadow(0 14px 16px rgba(7, 16, 25, 0.08));
-    }
-
-    .bee-six {
-      --w: 92px;
-      --r: -12deg;
-      --opacity: 0.34;
-      --wing-speed: 0.13s;
-      --hover-speed: 4.4s;
-      --delay: -2.8s;
-      top: 355px;
-      left: 435px;
-      filter: blur(1.7px) drop-shadow(0 14px 16px rgba(7, 16, 25, 0.08));
-    }
-
-    @keyframes bee-hover {
-      0% {
-        transform: translate3d(0, 0, 0);
-      }
-
-      33% {
-        transform: translate3d(7px, -9px, 0);
-      }
-
-      66% {
-        transform: translate3d(-5px, 5px, 0);
-      }
-
-      100% {
-        transform: translate3d(0, 0, 0);
-      }
-    }
-
-    @keyframes wing-left-flutter {
-      0% {
-        transform: rotate(-5deg) scaleY(1);
-        opacity: 0.83;
-      }
-
-      100% {
-        transform: rotate(13deg) scaleY(0.86);
-        opacity: 0.52;
-      }
-    }
-
-    @keyframes wing-right-flutter {
-      0% {
-        transform: rotate(5deg) scaleY(1);
-        opacity: 0.83;
-      }
-
-      100% {
-        transform: rotate(-13deg) scaleY(0.86);
-        opacity: 0.52;
-      }
-    }
-
-    @keyframes eye-glint {
-      0%, 74%, 100% {
-        opacity: 0.58;
-        transform: scale(1);
-      }
-
-      82% {
-        opacity: 1;
-        transform: scale(1.15);
-      }
-    }
-
-    @keyframes pollen-shimmer {
+    @keyframes bee-field-hover {
       0%, 100% {
-        opacity: 0.48;
-        transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0) scale(1);
       }
 
       50% {
-        opacity: 0.82;
-        transform: translate3d(6px, -4px, 0);
+        transform: translate3d(4px, -5px, 0) scale(1.004);
+      }
+    }
+
+    @keyframes wing-shimmer {
+      0% {
+        opacity: 0.035;
+        transform: translate3d(-1px, 0, 0) scaleY(1);
+      }
+
+      100% {
+        opacity: 0.11;
+        transform: translate3d(1px, -1px, 0) scaleY(0.992);
+      }
+    }
+
+    @keyframes wing-glint {
+      0%, 100% {
+        opacity: 0.02;
+        transform: translate3d(0, 0, 0) scale(0.98) rotate(var(--r, 0deg));
+      }
+
+      50% {
+        opacity: 0.18;
+        transform: translate3d(1px, -1px, 0) scale(1.04) rotate(var(--r, 0deg));
       }
     }
 
@@ -478,9 +334,9 @@
         width: 54vw;
       }
 
-      .bee-field {
-        right: -160px;
-        opacity: 0.72;
+      .bee-art-wrap {
+        right: -175px;
+        opacity: 0.78;
       }
     }
 
@@ -505,9 +361,9 @@
         width: min(760px, 68vw);
       }
 
-      .bee-field {
-        right: -260px;
-        opacity: 0.5;
+      .bee-art-wrap {
+        right: -285px;
+        opacity: 0.48;
       }
     }
 
@@ -560,7 +416,7 @@
         min-width: 0;
       }
 
-      .bee-field {
+      .bee-art-wrap {
         display: none;
       }
 
@@ -572,10 +428,9 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .bee,
-      .wing,
-      .eye-glint,
-      .pollen {
+      .bee-art,
+      .bee-art::after,
+      .wing-glint {
         animation: none;
       }
     }
@@ -615,307 +470,12 @@
           </div>
         </div>
 
-        <div class="bee-field" aria-hidden="true">
-          <div class="pollen">
-            <svg viewBox="0 0 920 700">
-              <path d="M80 250 C190 120 330 130 455 230 C580 330 720 300 835 170" />
-              <path d="M120 555 C260 410 430 455 545 535 C665 620 800 560 890 450" />
-              <path d="M405 90 C520 40 635 85 700 170 C770 260 850 255 905 205" />
-              <circle cx="218" cy="218" r="2.2" />
-              <circle cx="262" cy="180" r="1.8" />
-              <circle cx="492" cy="296" r="2.4" />
-              <circle cx="615" cy="242" r="1.9" />
-              <circle cx="742" cy="174" r="2.2" />
-              <circle cx="320" cy="500" r="2.1" />
-              <circle cx="456" cy="516" r="1.7" />
-              <circle cx="690" cy="560" r="2.5" />
-              <circle cx="830" cy="438" r="1.9" />
-            </svg>
-          </div>
-
-          <div class="bee bee-one">
-            <div class="bee-inner">
-              <svg class="bee-svg" viewBox="0 0 320 220">
-                <defs>
-                  <radialGradient id="fur1" cx="48%" cy="42%" r="62%">
-                    <stop offset="0%" stop-color="#f6c36b"/>
-                    <stop offset="46%" stop-color="#a86321"/>
-                    <stop offset="100%" stop-color="#23160d"/>
-                  </radialGradient>
-                  <linearGradient id="abdomen1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#f2b452"/>
-                    <stop offset="45%" stop-color="#9b541d"/>
-                    <stop offset="100%" stop-color="#120c08"/>
-                  </linearGradient>
-                </defs>
-
-                <g class="wing wing-left">
-                  <path class="wing-fill" d="M129 76 C92 4 28 0 12 51 C51 61 87 84 137 112 Z" />
-                  <path class="wing-vein" d="M129 78 C86 44 51 28 16 52" />
-                  <path class="wing-vein" d="M101 66 C76 49 53 45 31 48" />
-                  <path class="wing-vein" d="M87 84 C61 72 39 67 18 65" />
-                  <path class="wing-vein" d="M114 93 C92 86 72 84 51 90" />
-                </g>
-
-                <g class="wing wing-right">
-                  <path class="wing-fill" d="M166 76 C226 5 294 16 306 76 C259 80 218 95 159 116 Z" />
-                  <path class="wing-vein" d="M166 78 C220 46 260 38 304 75" />
-                  <path class="wing-vein" d="M195 66 C224 52 251 51 281 63" />
-                  <path class="wing-vein" d="M206 88 C238 77 266 78 296 92" />
-                  <path class="wing-vein" d="M181 99 C211 93 236 98 264 110" />
-                </g>
-
-                <ellipse cx="126" cy="113" rx="50" ry="43" fill="url(#fur1)" />
-                <ellipse cx="178" cy="115" rx="73" ry="47" fill="url(#abdomen1)" />
-
-                <path d="M116 77 C130 95 130 132 116 151" stroke="#2b190d" stroke-width="8" opacity="0.76" />
-                <path d="M154 69 C171 94 171 137 154 162" stroke="#15100d" stroke-width="11" opacity="0.86" />
-                <path d="M196 73 C214 101 214 132 198 159" stroke="#15100d" stroke-width="12" opacity="0.9" />
-                <path d="M234 96 C243 113 241 128 231 144" stroke="#17110c" stroke-width="10" opacity="0.9" />
-
-                <circle cx="78" cy="107" r="35" fill="#24160e" />
-                <ellipse cx="70" cy="101" rx="16" ry="22" fill="#070707" />
-                <ellipse class="eye-glint" cx="64" cy="92" rx="5" ry="7" fill="#fff6dc" opacity="0.78" />
-
-                <path class="antenna" d="M55 84 C31 60 18 50 5 44" />
-                <path class="antenna" d="M62 82 C45 52 42 37 35 20" />
-
-                <path class="leg" d="M105 145 C86 164 73 181 57 199" />
-                <path class="leg" d="M138 153 C128 177 122 193 111 214" />
-                <path class="leg" d="M179 153 C184 178 190 195 196 216" />
-                <path class="leg" d="M216 142 C237 158 250 176 267 197" />
-
-                <path class="leg-fur" d="M96 152 C91 164 85 176 75 187" />
-                <path class="leg-fur" d="M133 158 C130 173 127 184 122 197" />
-                <path class="leg-fur" d="M183 158 C187 174 190 186 193 199" />
-                <path class="leg-fur" d="M222 149 C235 162 244 173 253 185" />
-
-                <path class="hair" d="M108 78 L99 61 M118 73 L113 55 M132 72 L135 55 M147 75 L154 59 M93 88 L76 75 M94 132 L74 141 M116 154 L104 174 M139 158 L142 178 M166 160 L171 179 M204 155 L219 174" />
-              </svg>
-            </div>
-          </div>
-
-          <div class="bee bee-two">
-            <div class="bee-inner">
-              <svg class="bee-svg" viewBox="0 0 320 220">
-                <defs>
-                  <radialGradient id="fur2" cx="48%" cy="42%" r="62%">
-                    <stop offset="0%" stop-color="#f8cb76"/>
-                    <stop offset="46%" stop-color="#a86321"/>
-                    <stop offset="100%" stop-color="#25160c"/>
-                  </radialGradient>
-                  <linearGradient id="abdomen2" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#f2b452"/>
-                    <stop offset="45%" stop-color="#a45b1f"/>
-                    <stop offset="100%" stop-color="#120c08"/>
-                  </linearGradient>
-                </defs>
-
-                <g class="wing wing-left">
-                  <path class="wing-fill" d="M129 76 C92 4 28 0 12 51 C51 61 87 84 137 112 Z" />
-                  <path class="wing-vein" d="M129 78 C86 44 51 28 16 52" />
-                  <path class="wing-vein" d="M101 66 C76 49 53 45 31 48" />
-                  <path class="wing-vein" d="M87 84 C61 72 39 67 18 65" />
-                  <path class="wing-vein" d="M114 93 C92 86 72 84 51 90" />
-                </g>
-
-                <g class="wing wing-right">
-                  <path class="wing-fill" d="M166 76 C226 5 294 16 306 76 C259 80 218 95 159 116 Z" />
-                  <path class="wing-vein" d="M166 78 C220 46 260 38 304 75" />
-                  <path class="wing-vein" d="M195 66 C224 52 251 51 281 63" />
-                  <path class="wing-vein" d="M206 88 C238 77 266 78 296 92" />
-                  <path class="wing-vein" d="M181 99 C211 93 236 98 264 110" />
-                </g>
-
-                <ellipse cx="126" cy="113" rx="50" ry="43" fill="url(#fur2)" />
-                <ellipse cx="178" cy="115" rx="73" ry="47" fill="url(#abdomen2)" />
-
-                <path d="M116 77 C130 95 130 132 116 151" stroke="#2b190d" stroke-width="8" opacity="0.76" />
-                <path d="M154 69 C171 94 171 137 154 162" stroke="#15100d" stroke-width="11" opacity="0.86" />
-                <path d="M196 73 C214 101 214 132 198 159" stroke="#15100d" stroke-width="12" opacity="0.9" />
-                <path d="M234 96 C243 113 241 128 231 144" stroke="#17110c" stroke-width="10" opacity="0.9" />
-
-                <circle cx="78" cy="107" r="35" fill="#24160e" />
-                <ellipse cx="70" cy="101" rx="16" ry="22" fill="#070707" />
-                <ellipse class="eye-glint" cx="64" cy="92" rx="5" ry="7" fill="#fff6dc" opacity="0.78" />
-
-                <path class="antenna" d="M55 84 C31 60 18 50 5 44" />
-                <path class="antenna" d="M62 82 C45 52 42 37 35 20" />
-
-                <path class="leg" d="M105 145 C86 164 73 181 57 199" />
-                <path class="leg" d="M138 153 C128 177 122 193 111 214" />
-                <path class="leg" d="M179 153 C184 178 190 195 196 216" />
-                <path class="leg" d="M216 142 C237 158 250 176 267 197" />
-
-                <path class="leg-fur" d="M96 152 C91 164 85 176 75 187" />
-                <path class="leg-fur" d="M133 158 C130 173 127 184 122 197" />
-                <path class="leg-fur" d="M183 158 C187 174 190 186 193 199" />
-                <path class="leg-fur" d="M222 149 C235 162 244 173 253 185" />
-
-                <path class="hair" d="M108 78 L99 61 M118 73 L113 55 M132 72 L135 55 M147 75 L154 59 M93 88 L76 75 M94 132 L74 141 M116 154 L104 174 M139 158 L142 178 M166 160 L171 179 M204 155 L219 174" />
-              </svg>
-            </div>
-          </div>
-
-          <div class="bee bee-three">
-            <div class="bee-inner">
-              <svg class="bee-svg" viewBox="0 0 320 220">
-                <defs>
-                  <radialGradient id="fur3" cx="48%" cy="42%" r="62%">
-                    <stop offset="0%" stop-color="#f7c46f"/>
-                    <stop offset="46%" stop-color="#9f5c22"/>
-                    <stop offset="100%" stop-color="#24150b"/>
-                  </radialGradient>
-                  <linearGradient id="abdomen3" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#eaa141"/>
-                    <stop offset="45%" stop-color="#9d561e"/>
-                    <stop offset="100%" stop-color="#120c08"/>
-                  </linearGradient>
-                </defs>
-
-                <g class="wing wing-left">
-                  <path class="wing-fill" d="M129 76 C92 4 28 0 12 51 C51 61 87 84 137 112 Z" />
-                  <path class="wing-vein" d="M129 78 C86 44 51 28 16 52" />
-                  <path class="wing-vein" d="M101 66 C76 49 53 45 31 48" />
-                  <path class="wing-vein" d="M87 84 C61 72 39 67 18 65" />
-                  <path class="wing-vein" d="M114 93 C92 86 72 84 51 90" />
-                </g>
-
-                <g class="wing wing-right">
-                  <path class="wing-fill" d="M166 76 C226 5 294 16 306 76 C259 80 218 95 159 116 Z" />
-                  <path class="wing-vein" d="M166 78 C220 46 260 38 304 75" />
-                  <path class="wing-vein" d="M195 66 C224 52 251 51 281 63" />
-                  <path class="wing-vein" d="M206 88 C238 77 266 78 296 92" />
-                  <path class="wing-vein" d="M181 99 C211 93 236 98 264 110" />
-                </g>
-
-                <ellipse cx="126" cy="113" rx="50" ry="43" fill="url(#fur3)" />
-                <ellipse cx="178" cy="115" rx="73" ry="47" fill="url(#abdomen3)" />
-
-                <path d="M116 77 C130 95 130 132 116 151" stroke="#2b190d" stroke-width="8" opacity="0.76" />
-                <path d="M154 69 C171 94 171 137 154 162" stroke="#15100d" stroke-width="11" opacity="0.86" />
-                <path d="M196 73 C214 101 214 132 198 159" stroke="#15100d" stroke-width="12" opacity="0.9" />
-                <path d="M234 96 C243 113 241 128 231 144" stroke="#17110c" stroke-width="10" opacity="0.9" />
-
-                <circle cx="78" cy="107" r="35" fill="#24160e" />
-                <ellipse cx="70" cy="101" rx="16" ry="22" fill="#070707" />
-                <ellipse class="eye-glint" cx="64" cy="92" rx="5" ry="7" fill="#fff6dc" opacity="0.78" />
-
-                <path class="antenna" d="M55 84 C31 60 18 50 5 44" />
-                <path class="antenna" d="M62 82 C45 52 42 37 35 20" />
-
-                <path class="leg" d="M105 145 C86 164 73 181 57 199" />
-                <path class="leg" d="M138 153 C128 177 122 193 111 214" />
-                <path class="leg" d="M179 153 C184 178 190 195 196 216" />
-                <path class="leg" d="M216 142 C237 158 250 176 267 197" />
-
-                <path class="leg-fur" d="M96 152 C91 164 85 176 75 187" />
-                <path class="leg-fur" d="M133 158 C130 173 127 184 122 197" />
-                <path class="leg-fur" d="M183 158 C187 174 190 186 193 199" />
-                <path class="leg-fur" d="M222 149 C235 162 244 173 253 185" />
-
-                <path class="hair" d="M108 78 L99 61 M118 73 L113 55 M132 72 L135 55 M147 75 L154 59 M93 88 L76 75 M94 132 L74 141 M116 154 L104 174 M139 158 L142 178 M166 160 L171 179 M204 155 L219 174" />
-              </svg>
-            </div>
-          </div>
-
-          <div class="bee bee-four">
-            <div class="bee-inner">
-              <svg class="bee-svg" viewBox="0 0 320 220">
-                <defs>
-                  <radialGradient id="fur4" cx="48%" cy="42%" r="62%">
-                    <stop offset="0%" stop-color="#f6c36b"/>
-                    <stop offset="46%" stop-color="#a86321"/>
-                    <stop offset="100%" stop-color="#23160d"/>
-                  </radialGradient>
-                  <linearGradient id="abdomen4" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#f2b452"/>
-                    <stop offset="45%" stop-color="#9b541d"/>
-                    <stop offset="100%" stop-color="#120c08"/>
-                  </linearGradient>
-                </defs>
-
-                <g class="wing wing-left">
-                  <path class="wing-fill" d="M129 76 C92 4 28 0 12 51 C51 61 87 84 137 112 Z" />
-                  <path class="wing-vein" d="M129 78 C86 44 51 28 16 52" />
-                  <path class="wing-vein" d="M101 66 C76 49 53 45 31 48" />
-                  <path class="wing-vein" d="M87 84 C61 72 39 67 18 65" />
-                  <path class="wing-vein" d="M114 93 C92 86 72 84 51 90" />
-                </g>
-
-                <g class="wing wing-right">
-                  <path class="wing-fill" d="M166 76 C226 5 294 16 306 76 C259 80 218 95 159 116 Z" />
-                  <path class="wing-vein" d="M166 78 C220 46 260 38 304 75" />
-                  <path class="wing-vein" d="M195 66 C224 52 251 51 281 63" />
-                  <path class="wing-vein" d="M206 88 C238 77 266 78 296 92" />
-                  <path class="wing-vein" d="M181 99 C211 93 236 98 264 110" />
-                </g>
-
-                <ellipse cx="126" cy="113" rx="50" ry="43" fill="url(#fur4)" />
-                <ellipse cx="178" cy="115" rx="73" ry="47" fill="url(#abdomen4)" />
-
-                <path d="M116 77 C130 95 130 132 116 151" stroke="#2b190d" stroke-width="8" opacity="0.76" />
-                <path d="M154 69 C171 94 171 137 154 162" stroke="#15100d" stroke-width="11" opacity="0.86" />
-                <path d="M196 73 C214 101 214 132 198 159" stroke="#15100d" stroke-width="12" opacity="0.9" />
-                <path d="M234 96 C243 113 241 128 231 144" stroke="#17110c" stroke-width="10" opacity="0.9" />
-
-                <circle cx="78" cy="107" r="35" fill="#24160e" />
-                <ellipse cx="70" cy="101" rx="16" ry="22" fill="#070707" />
-                <ellipse class="eye-glint" cx="64" cy="92" rx="5" ry="7" fill="#fff6dc" opacity="0.78" />
-
-                <path class="antenna" d="M55 84 C31 60 18 50 5 44" />
-                <path class="antenna" d="M62 82 C45 52 42 37 35 20" />
-
-                <path class="leg" d="M105 145 C86 164 73 181 57 199" />
-                <path class="leg" d="M138 153 C128 177 122 193 111 214" />
-                <path class="leg" d="M179 153 C184 178 190 195 196 216" />
-                <path class="leg" d="M216 142 C237 158 250 176 267 197" />
-
-                <path class="leg-fur" d="M96 152 C91 164 85 176 75 187" />
-                <path class="leg-fur" d="M133 158 C130 173 127 184 122 197" />
-                <path class="leg-fur" d="M183 158 C187 174 190 186 193 199" />
-                <path class="leg-fur" d="M222 149 C235 162 244 173 253 185" />
-
-                <path class="hair" d="M108 78 L99 61 M118 73 L113 55 M132 72 L135 55 M147 75 L154 59 M93 88 L76 75 M94 132 L74 141 M116 154 L104 174 M139 158 L142 178 M166 160 L171 179 M204 155 L219 174" />
-              </svg>
-            </div>
-          </div>
-
-          <div class="bee bee-five">
-            <div class="bee-inner">
-              <svg class="bee-svg" viewBox="0 0 320 220">
-                <ellipse cx="126" cy="113" rx="50" ry="43" fill="#8e5a24" />
-                <ellipse cx="178" cy="115" rx="73" ry="47" fill="#a86122" />
-                <path d="M154 69 C171 94 171 137 154 162" stroke="#15100d" stroke-width="11" opacity="0.86" />
-                <path d="M196 73 C214 101 214 132 198 159" stroke="#15100d" stroke-width="12" opacity="0.9" />
-                <circle cx="78" cy="107" r="35" fill="#24160e" />
-                <g class="wing wing-left">
-                  <path class="wing-fill" d="M129 76 C92 4 28 0 12 51 C51 61 87 84 137 112 Z" />
-                </g>
-                <g class="wing wing-right">
-                  <path class="wing-fill" d="M166 76 C226 5 294 16 306 76 C259 80 218 95 159 116 Z" />
-                </g>
-              </svg>
-            </div>
-          </div>
-
-          <div class="bee bee-six">
-            <div class="bee-inner">
-              <svg class="bee-svg" viewBox="0 0 320 220">
-                <ellipse cx="126" cy="113" rx="50" ry="43" fill="#8e5a24" />
-                <ellipse cx="178" cy="115" rx="73" ry="47" fill="#a86122" />
-                <path d="M154 69 C171 94 171 137 154 162" stroke="#15100d" stroke-width="11" opacity="0.86" />
-                <path d="M196 73 C214 101 214 132 198 159" stroke="#15100d" stroke-width="12" opacity="0.9" />
-                <circle cx="78" cy="107" r="35" fill="#24160e" />
-                <g class="wing wing-left">
-                  <path class="wing-fill" d="M129 76 C92 4 28 0 12 51 C51 61 87 84 137 112 Z" />
-                </g>
-                <g class="wing wing-right">
-                  <path class="wing-fill" d="M166 76 C226 5 294 16 306 76 C259 80 218 95 159 116 Z" />
-                </g>
-              </svg>
-            </div>
-          </div>
+        <div class="bee-art-wrap" aria-hidden="true">
+          <div class="bee-art"></div>
+          <div class="wing-glint glint-one" style="--r: -16deg;"></div>
+          <div class="wing-glint glint-two" style="--r: 18deg;"></div>
+          <div class="wing-glint glint-three" style="--r: -12deg;"></div>
+          <div class="wing-glint glint-four" style="--r: 11deg;"></div>
         </div>
       </section>
     </main>
