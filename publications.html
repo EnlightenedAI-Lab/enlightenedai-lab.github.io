@@ -345,7 +345,7 @@
       width: 100%;
       height: 100%;
       display: block;
-      object-fit: cover;
+      object-fit: contain;
     }
 
     .date-art.missing-art::after {
@@ -787,15 +787,17 @@
 
           <article class="featured-card">
             <div class="item-meta">
-              <span>Primer</span>
-              <span>2026</span>
+              <span>Book</span>
+              <span>2025</span>
             </div>
-            <h3>The Little Book of AI Alignment</h3>
+            <h3>The Little Book of Alignment</h3>
             <p>
-              Compact public-facing primer on AI alignment, reflective stability, and the language of responsible intelligence.
+              A plain-language book on how AI intelligence stays stable while it grows. A dedicated online reader will make this work available as a special book experience.
             </p>
             <div class="link-row">
-              <a class="small-link primary" href="https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171" target="_blank" rel="noopener">Download PDF →</a>
+              <a class="small-link primary" href="little-book.html">Read Online →</a>
+              <a class="small-link" href="https://www.amazon.ca/LITTLE-BOOK-ALIGNMENT-Intelligence-Stable/dp/B0G3TLK6PY" target="_blank" rel="noopener">Amazon →</a>
+              <a class="small-link" href="https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171" target="_blank" rel="noopener">PDF →</a>
             </div>
           </article>
 
@@ -844,7 +846,7 @@
         <div class="date-feature">
           <div class="date-art">
             <img
-              src="assets/img/date-series-hero.png"
+              src="/assets/img/date-series-hero.png?v=2"
               alt="Data at the Edge five-book series by Nicolas Holm"
               onerror="this.style.display='none'; this.parentElement.classList.add('missing-art');"
             />
@@ -960,13 +962,15 @@
 
           <article class="record-card">
             <div class="item-meta">
-              <span>Primer</span>
-              <span>2026-01</span>
+              <span>Book</span>
+              <span>2025</span>
             </div>
-            <h3>The Little Book of AI Alignment</h3>
-            <p>Compact primer and public-facing entry point for the alignment work.</p>
+            <h3>The Little Book of Alignment</h3>
+            <p>A public-facing book on alignment, drift, internal dynamics, the 5R framework, RDL, and measurable stability.</p>
             <div class="link-row">
-              <a class="small-link primary" href="https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171" target="_blank" rel="noopener">Download PDF →</a>
+              <a class="small-link primary" href="little-book.html">Read Online →</a>
+              <a class="small-link" href="https://www.amazon.ca/LITTLE-BOOK-ALIGNMENT-Intelligence-Stable/dp/B0G3TLK6PY" target="_blank" rel="noopener">Amazon →</a>
+              <a class="small-link" href="https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171" target="_blank" rel="noopener">PDF →</a>
             </div>
           </article>
 
@@ -1329,13 +1333,15 @@
       },
       {
         category: "research",
-        type: "Primer",
-        venue: "PDF",
-        date: "2026-01",
-        title: "The Little Book of AI Alignment",
-        desc: "Compact primer and public-facing entry point.",
-        tags: "overview alignment primer",
+        type: "Book",
+        venue: "Book / PDF / Amazon",
+        date: "2025",
+        title: "The Little Book of Alignment",
+        desc: "A plain-language alignment book on internal stability, drift, the 5R framework, RDL, and measurable coherence.",
+        tags: "alignment primer little book RAA RDL stability",
         links: [
+          ["Read Online", "little-book.html"],
+          ["Amazon", "https://www.amazon.ca/LITTLE-BOOK-ALIGNMENT-Intelligence-Stable/dp/B0G3TLK6PY"],
           ["Download PDF", "https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171"]
         ]
       },
@@ -1504,7 +1510,7 @@
     function archiveCard(item) {
       const links = item.links.map(([label, url], index) => {
         const cls = index === 0 ? "small-link primary" : "small-link";
-        return `<a class="${cls}" href="${url}" target="_blank" rel="noopener">${label} →</a>`;
+        return `<a class="${cls}" href="${url}" target="${url.startsWith('http') ? '_blank' : '_self'}" rel="${url.startsWith('http') ? 'noopener' : ''}">${label} →</a>`;
       }).join("");
 
       return `
