@@ -29,8 +29,13 @@
       --sans: Arial, Helvetica, sans-serif;
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
@@ -41,8 +46,16 @@
       text-rendering: optimizeLegibility;
     }
 
-    a { color: inherit; text-decoration: none; }
-    button, input, select { font: inherit; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
 
     .page {
       min-height: 100vh;
@@ -77,8 +90,15 @@
       white-space: nowrap;
     }
 
-    .site-nav a { opacity: 0.72; transition: opacity 160ms ease; }
-    .site-nav a:hover, .site-nav a.active { opacity: 1; }
+    .site-nav a {
+      opacity: 0.72;
+      transition: opacity 160ms ease;
+    }
+
+    .site-nav a:hover,
+    .site-nav a.active {
+      opacity: 1;
+    }
 
     main {
       max-width: 1380px;
@@ -90,7 +110,8 @@
       border-bottom: 1px solid var(--line);
     }
 
-    .kicker, .section-label {
+    .kicker,
+    .section-label {
       font-family: var(--mono);
       font-size: 12px;
       letter-spacing: 0.2em;
@@ -101,10 +122,10 @@
 
     h1 {
       margin: 0;
-      max-width: 1180px;
+      max-width: 1120px;
       font-family: var(--serif);
-      font-size: clamp(62px, 10vw, 136px);
-      line-height: 0.92;
+      font-size: clamp(70px, 12vw, 168px);
+      line-height: 0.9;
       letter-spacing: -0.066em;
       font-weight: 500;
     }
@@ -158,7 +179,9 @@
       border-color: var(--line-dark);
     }
 
-    .button:hover { transform: translateY(-1px); }
+    .button:hover {
+      transform: translateY(-1px);
+    }
 
     .core-insight {
       padding: 92px 0;
@@ -171,9 +194,9 @@
 
     .insight-text {
       margin: 0;
-      max-width: 1050px;
+      max-width: 1000px;
       font-family: var(--serif);
-      font-size: clamp(42px, 5.8vw, 88px);
+      font-size: clamp(44px, 6vw, 92px);
       line-height: 0.96;
       letter-spacing: -0.058em;
       font-weight: 500;
@@ -246,31 +269,22 @@
       font-weight: 700;
     }
 
-    .featured-card h3,
-    .record-card h3,
-    .archive-item h3 {
-      margin: 0 0 16px;
+    .featured-card h3 {
+      margin: 0 0 18px;
       font-family: var(--serif);
-      line-height: 0.98;
-      letter-spacing: -0.05em;
+      font-size: clamp(34px, 3vw, 48px);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
       font-weight: 500;
     }
 
-    .featured-card h3 { font-size: clamp(34px, 3vw, 48px); }
-    .record-card h3 { font-size: 34px; }
-    .archive-item h3 { font-size: 28px; }
-
-    .featured-card p,
-    .record-card p,
-    .archive-item p {
+    .featured-card p {
+      margin: 0 0 28px;
       color: var(--muted);
+      font-size: 16px;
       line-height: 1.6;
       flex: 1;
     }
-
-    .featured-card p { margin: 0 0 28px; font-size: 16px; }
-    .record-card p { margin: 0 0 24px; font-size: 15px; }
-    .archive-item p { margin: 0 0 20px; font-size: 14px; }
 
     .link-row {
       display: flex;
@@ -308,47 +322,63 @@
 
     .date-feature {
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(380px, 1.05fr);
-      gap: 28px;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+      gap: 24px;
       align-items: stretch;
-      margin-bottom: 26px;
+      margin-bottom: 24px;
     }
 
     .date-art {
       border: 1px solid var(--line);
       background:
-        radial-gradient(circle at 72% 34%, rgba(0, 191, 240, 0.28), transparent 22%),
-        linear-gradient(135deg, #061528 0%, #0c324f 46%, #0b0f14 100%);
-      min-height: 540px;
+        radial-gradient(circle at 70% 34%, rgba(0, 191, 240, 0.28), transparent 16%),
+        linear-gradient(135deg, #061528 0%, #0c324f 48%, #0b0f14 100%);
       overflow: hidden;
+      min-height: 520px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      position: relative;
     }
 
     .date-art img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
       display: block;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.28);
+      object-fit: cover;
+    }
+
+    .date-art.missing-art::after {
+      content: "Upload image to assets/img/date-series-hero.png";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      color: rgba(255,255,255,0.72);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.8;
     }
 
     .date-copy {
       border: 1px solid var(--line);
       background: var(--paper);
-      padding: 36px;
+      padding: 34px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
     }
 
     .date-copy h3 {
-      margin: 20px 0 26px;
+      margin: 20px 0 24px;
       font-family: var(--serif);
-      font-size: clamp(48px, 5vw, 82px);
-      line-height: 0.92;
+      font-size: clamp(44px, 5vw, 78px);
+      line-height: 0.94;
       letter-spacing: -0.06em;
       font-weight: 500;
     }
@@ -356,89 +386,40 @@
     .date-copy p {
       margin: 0;
       color: var(--muted);
-      font-size: 19px;
+      font-size: 18px;
       line-height: 1.65;
     }
 
     .date-note {
-      margin-top: 38px;
-      padding-top: 20px;
+      margin-top: 24px !important;
+      padding-top: 24px;
       border-top: 1px solid var(--line);
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--soft);
-      line-height: 1.7;
     }
 
-    .book-wall {
+    .book-list {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 14px;
     }
 
-    .book-card {
+    .book-list-card {
       border: 1px solid var(--line);
       background: var(--paper);
-      min-height: 360px;
+      padding: 22px;
+      min-height: 310px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
       transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
     }
 
-    .book-card:hover {
+    .book-list-card:hover {
       transform: translateY(-2px);
       border-color: var(--text);
       background: var(--paper-strong);
     }
 
-    .book-cover {
-      min-height: 210px;
-      background:
-        radial-gradient(circle at 74% 38%, rgba(255,255,255,0.95), rgba(0,191,240,0.86) 12%, rgba(31,94,255,0.36) 25%, transparent 42%),
-        linear-gradient(145deg, #020305 0%, #07111b 58%, #030405 100%);
-      color: white;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .book-cover .cover-mini {
-      font-family: var(--sans);
-      font-weight: 700;
-      font-size: 31px;
-      letter-spacing: 0.12em;
-      line-height: 0.95;
-    }
-
-    .book-cover .cover-mini span {
-      display: block;
-      color: rgba(255,255,255,0.72);
-      font-weight: 400;
-      margin-top: 10px;
-    }
-
-    .book-cover .cover-by {
-      font-family: var(--mono);
-      color: var(--cyan);
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .book-body {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .book-body h3 {
-      margin: 0 0 12px;
+    .book-list-card h3 {
+      margin: 0 0 14px;
       font-family: var(--serif);
       font-size: 30px;
       line-height: 1;
@@ -446,7 +427,7 @@
       font-weight: 500;
     }
 
-    .book-body p {
+    .book-list-card p {
       margin: 0 0 24px;
       color: var(--muted);
       font-size: 15px;
@@ -474,6 +455,23 @@
       transform: translateY(-2px);
       border-color: var(--text);
       background: var(--paper-strong);
+    }
+
+    .record-card h3 {
+      margin: 0 0 14px;
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      font-weight: 500;
+    }
+
+    .record-card p {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+      flex: 1;
     }
 
     .press-card {
@@ -524,9 +522,20 @@
       outline: none;
     }
 
-    .archive-toolbar input { flex: 1; min-width: 260px; }
-    .archive-toolbar select { min-width: 220px; cursor: pointer; }
-    .archive-toolbar input:focus, .archive-toolbar select:focus { border-color: var(--text); }
+    .archive-toolbar input {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .archive-toolbar select {
+      min-width: 220px;
+      cursor: pointer;
+    }
+
+    .archive-toolbar input:focus,
+    .archive-toolbar select:focus {
+      border-color: var(--text);
+    }
 
     .archive-grid {
       display: grid;
@@ -541,6 +550,23 @@
       display: flex;
       flex-direction: column;
       min-height: 210px;
+    }
+
+    .archive-item h3 {
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -0.045em;
+      font-weight: 500;
+    }
+
+    .archive-item p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      flex: 1;
     }
 
     .citation-note {
@@ -582,28 +608,99 @@
       text-transform: uppercase;
     }
 
-    .footer-links { display: flex; gap: 28px; }
+    .footer-links {
+      display: flex;
+      gap: 28px;
+    }
 
     @media (max-width: 1220px) {
-      .site-header { display: block; }
-      .site-nav { margin-top: 28px; flex-wrap: wrap; white-space: normal; }
-      .core-insight, .section-head, .date-feature, .press-card, .citation-note { grid-template-columns: 1fr; gap: 42px; }
-      .featured-grid, .book-wall, .card-grid, .archive-grid { grid-template-columns: 1fr; }
-      .date-art { min-height: 440px; }
+      .site-header {
+        display: block;
+      }
+
+      .site-nav {
+        margin-top: 28px;
+        flex-wrap: wrap;
+        white-space: normal;
+      }
+
+      .core-insight,
+      .section-head,
+      .date-feature,
+      .press-card,
+      .citation-note {
+        grid-template-columns: 1fr;
+        gap: 42px;
+      }
+
+      .featured-grid,
+      .book-list,
+      .card-grid,
+      .archive-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .date-art {
+        min-height: auto;
+      }
+
+      .date-art img {
+        height: auto;
+      }
     }
 
     @media (max-width: 760px) {
-      .page { padding: 34px 28px 28px; }
-      .brand { font-size: 15px; letter-spacing: 0.24em; white-space: normal; }
-      .site-nav { gap: 18px 22px; font-size: 14px; }
-      .hero { padding: 68px 0 60px; }
-      h1 { font-size: clamp(54px, 18vw, 92px); }
-      .core-insight, .section { padding: 58px 0; }
-      .featured-card, .record-card, .press-card, .citation-note, .date-copy { padding: 26px; }
-      .date-art { min-height: auto; padding: 12px; }
-      .archive-toolbar input, .archive-toolbar select { width: 100%; }
-      .footer { display: block; line-height: 1.8; }
-      .footer-links { margin-top: 18px; flex-wrap: wrap; gap: 18px; }
+      .page {
+        padding: 34px 28px 28px;
+      }
+
+      .brand {
+        font-size: 15px;
+        letter-spacing: 0.24em;
+        white-space: normal;
+      }
+
+      .site-nav {
+        gap: 18px 22px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 68px 0 60px;
+      }
+
+      h1 {
+        font-size: clamp(64px, 22vw, 118px);
+      }
+
+      .core-insight,
+      .section {
+        padding: 58px 0;
+      }
+
+      .featured-card,
+      .record-card,
+      .press-card,
+      .citation-note,
+      .date-copy {
+        padding: 26px;
+      }
+
+      .archive-toolbar input,
+      .archive-toolbar select {
+        width: 100%;
+      }
+
+      .footer {
+        display: block;
+        line-height: 1.8;
+      }
+
+      .footer-links {
+        margin-top: 18px;
+        flex-wrap: wrap;
+        gap: 18px;
+      }
     }
   </style>
 </head>
@@ -641,13 +738,20 @@
         </div>
 
         <div class="actions">
-          <a class="button" href="#featured"><span>Featured Works</span><span>→</span></a>
-          <a class="button secondary" href="#archive"><span>Full Archive</span><span>→</span></a>
+          <a class="button" href="#featured">
+            <span>Featured Works</span>
+            <span>→</span>
+          </a>
+          <a class="button secondary" href="#archive">
+            <span>Full Archive</span>
+            <span>→</span>
+          </a>
         </div>
       </section>
 
       <section class="core-insight" aria-label="Core framing">
         <div class="section-label">Publication Spine</div>
+
         <p class="insight-text">
           The books establish the field experience. The papers define the theory. The public records preserve the research trail. The essays carry the human argument.
         </p>
@@ -659,16 +763,22 @@
             <div class="section-label">Featured Works</div>
             <h2>Entry points into the work.</h2>
           </div>
+
           <p>
-            Four public-facing starting points: the core theory, a compact alignment book, the Data at the Edge series, and the ethical foundation behind the work.
+            Four public-facing starting points: the core theory, a compact alignment primer, the Data at the Edge book series, and the ethical foundation behind the work.
           </p>
         </div>
 
         <div class="featured-grid">
           <article class="featured-card">
-            <div class="item-meta"><span>Core Paper</span><span>2025</span></div>
+            <div class="item-meta">
+              <span>Core Paper</span>
+              <span>2025</span>
+            </div>
             <h3>Reflective Alignment Architecture & Reflective Duality Layer</h3>
-            <p>Core framework paper describing reflective stability and the RDL measurement layer.</p>
+            <p>
+              Core framework paper describing reflective stability and the RDL measurement layer.
+            </p>
             <div class="link-row">
               <a class="small-link primary" href="https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing" target="_blank" rel="noopener">Read PDF →</a>
               <a class="small-link" href="https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/" target="_blank" rel="noopener">GitHub →</a>
@@ -676,27 +786,42 @@
           </article>
 
           <article class="featured-card">
-            <div class="item-meta"><span>Public Book</span><span>2025</span></div>
-            <h3>The Little Book of Alignment</h3>
-            <p>A plain-language book on how AI intelligence stays stable while it grows. A dedicated online reader will be added as a separate page.</p>
+            <div class="item-meta">
+              <span>Primer</span>
+              <span>2026</span>
+            </div>
+            <h3>The Little Book of AI Alignment</h3>
+            <p>
+              Compact public-facing primer on AI alignment, reflective stability, and the language of responsible intelligence.
+            </p>
             <div class="link-row">
               <a class="small-link primary" href="https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171" target="_blank" rel="noopener">Download PDF →</a>
             </div>
           </article>
 
           <article class="featured-card">
-            <div class="item-meta"><span>Book Series</span><span>2025</span></div>
+            <div class="item-meta">
+              <span>Book Series</span>
+              <span>2025</span>
+            </div>
             <h3>Data at the Edge</h3>
-            <p>Five-book series on geospatial AI, trusted data, edge intelligence, and real-world data systems.</p>
+            <p>
+              Five-book series on geospatial AI, trusted data, edge intelligence, and real-world data systems.
+            </p>
             <div class="link-row">
               <a class="small-link primary" href="https://www.amazon.com/Data-Edge-Master-Geospatial-AI/dp/1069204706/ref=sr_1_1" target="_blank" rel="noopener">View Book →</a>
             </div>
           </article>
 
           <article class="featured-card">
-            <div class="item-meta"><span>Essay</span><span>2026</span></div>
+            <div class="item-meta">
+              <span>Essay</span>
+              <span>2026</span>
+            </div>
             <h3>Shaping AI with Care</h3>
-            <p>Public essay on care, ethical coevolution, and the human responsibility behind alignment work.</p>
+            <p>
+              Public essay on care, ethical coevolution, and the human responsibility behind alignment work.
+            </p>
             <div class="link-row">
               <a class="small-link primary" href="https://medium.com/@nicolas_91820/shaping-ai-with-care-a-covenant-for-ethical-coevolution-c7f7d9d73543" target="_blank" rel="noopener">Read Essay →</a>
             </div>
@@ -710,7 +835,10 @@
             <div class="section-label">Books & Monographs</div>
             <h2>Data at the Edge.</h2>
           </div>
-          <p>A five-book series on geospatial AI, trusted data, and edge intelligence.</p>
+
+          <p>
+            A five-book series on geospatial AI, trusted data, and edge intelligence.
+          </p>
         </div>
 
         <div class="date-feature">
@@ -718,72 +846,87 @@
             <img
               src="assets/img/date-series-hero.png"
               alt="Data at the Edge five-book series by Nicolas Holm"
-              onerror="this.style.display='none';"
+              onerror="this.style.display='none'; this.parentElement.classList.add('missing-art');"
             />
           </div>
 
           <div class="date-copy">
-            <div>
-              <div class="section-label">Series</div>
-              <h3>Field experience, organized as a body of work.</h3>
-              <p>
-                The Data at the Edge series anchors the lab’s practical foundation: GIS, trusted data, AI workflows, edge systems, and public-facing knowledge infrastructure.
-              </p>
-            </div>
-            <div class="date-note">
-              If the artwork file is not yet uploaded, the section remains readable. Add the image at assets/img/date-series-hero.png.
-            </div>
+            <div class="section-label">Series</div>
+
+            <h3>Field experience, organized as a body of work.</h3>
+
+            <p>
+              The Data at the Edge series anchors the lab’s practical foundation: GIS,
+              trusted data, AI workflows, edge systems, and public-facing knowledge
+              infrastructure.
+            </p>
+
+            <p class="date-note">
+              The series connects practical geospatial data work with the broader
+              Enlightened AI focus on reliable systems, trusted information, and
+              responsible intelligence.
+            </p>
           </div>
         </div>
 
-        <div class="book-wall">
-          <article class="book-card">
-            <div class="book-cover"><div class="cover-mini">DATA<span>AT THE EDGE</span></div><div class="cover-by">Nicolas Holm</div></div>
-            <div class="book-body">
-              <div class="item-meta"><span>Book</span><span>2025</span></div>
-              <h3>Data at the Edge: Master Geospatial AI</h3>
-              <p>Comprehensive guide to mastering geospatial artificial intelligence and edge computing.</p>
-              <div class="link-row"><a class="small-link primary" href="https://www.amazon.com/Data-Edge-Master-Geospatial-AI/dp/1069204706/ref=sr_1_1" target="_blank" rel="noopener">Amazon →</a></div>
+        <div class="book-list">
+          <article class="book-list-card">
+            <div class="item-meta">
+              <span>Book</span>
+              <span>2025</span>
+            </div>
+            <h3>Data at the Edge: Master Geospatial AI</h3>
+            <p>Comprehensive guide to mastering geospatial artificial intelligence and edge computing.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://www.amazon.com/Data-Edge-Master-Geospatial-AI/dp/1069204706/ref=sr_1_1" target="_blank" rel="noopener">Amazon →</a>
             </div>
           </article>
 
-          <article class="book-card">
-            <div class="book-cover"><div class="cover-mini">DATA<span>WORKBOOK</span></div><div class="cover-by">Nicolas Holm</div></div>
-            <div class="book-body">
-              <div class="item-meta"><span>Book</span><span>2025</span></div>
-              <h3>Data at the Edge: Master Workbook Companion</h3>
-              <p>Practical workbook and companion exercises for the Data at the Edge curriculum.</p>
-              <div class="link-row"><a class="small-link primary" href="https://www.amazon.com/Data-Edge-Master-Workbook-Companion-ebook/dp/B0DX3CFMPC?ref_=ast_author_dp" target="_blank" rel="noopener">Amazon →</a></div>
+          <article class="book-list-card">
+            <div class="item-meta">
+              <span>Book</span>
+              <span>2025</span>
+            </div>
+            <h3>Data at the Edge: Master Workbook Companion</h3>
+            <p>Practical workbook and companion exercises for the Data at the Edge curriculum.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://www.amazon.com/Data-Edge-Master-Workbook-Companion-ebook/dp/B0DX3CFMPC?ref_=ast_author_dp" target="_blank" rel="noopener">Amazon →</a>
             </div>
           </article>
 
-          <article class="book-card">
-            <div class="book-cover"><div class="cover-mini">DATA<span>AT THE EDGE</span></div><div class="cover-by">Nicolas Holm</div></div>
-            <div class="book-body">
-              <div class="item-meta"><span>Book</span><span>2025</span></div>
-              <h3>Data at the Edge</h3>
-              <p>The core text defining the principles of edge-based data systems.</p>
-              <div class="link-row"><a class="small-link primary" href="https://www.amazon.com/dp/B0DX7BYL3G?ref_=ast_author_dp" target="_blank" rel="noopener">Amazon →</a></div>
+          <article class="book-list-card">
+            <div class="item-meta">
+              <span>Book</span>
+              <span>2025</span>
+            </div>
+            <h3>Data at the Edge</h3>
+            <p>The core text defining the principles of edge-based data systems.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://www.amazon.com/dp/B0DX7BYL3G?ref_=ast_author_dp" target="_blank" rel="noopener">Amazon →</a>
             </div>
           </article>
 
-          <article class="book-card">
-            <div class="book-cover"><div class="cover-mini">DATA<span>ArcGIS</span></div><div class="cover-by">Nicolas Holm</div></div>
-            <div class="book-body">
-              <div class="item-meta"><span>Book</span><span>2025</span></div>
-              <h3>Data at the Edge: Practical ArcGIS</h3>
-              <p>A practical guide to implementing edge data strategies using ArcGIS.</p>
-              <div class="link-row"><a class="small-link primary" href="https://www.amazon.com/DATA-AT-EDGE-PRACTICAL-ArcGIS-ebook/dp/B0DX3DB57T?ref_=ast_author_dp" target="_blank" rel="noopener">Amazon →</a></div>
+          <article class="book-list-card">
+            <div class="item-meta">
+              <span>Book</span>
+              <span>2025</span>
+            </div>
+            <h3>Data at the Edge: Practical ArcGIS</h3>
+            <p>A practical guide to implementing edge data strategies using ArcGIS.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://www.amazon.com/DATA-AT-EDGE-PRACTICAL-ArcGIS-ebook/dp/B0DX3DB57T?ref_=ast_author_dp" target="_blank" rel="noopener">Amazon →</a>
             </div>
           </article>
 
-          <article class="book-card">
-            <div class="book-cover"><div class="cover-mini">DATA<span>SOURCES</span></div><div class="cover-by">Nicolas Holm</div></div>
-            <div class="book-body">
-              <div class="item-meta"><span>Book</span><span>2025</span></div>
-              <h3>Data at the Edge: Premier Sources</h3>
-              <p>A curated collection of premier sources and reference materials.</p>
-              <div class="link-row"><a class="small-link primary" href="https://www.amazon.com/DATA-AT-EDGE-PREMIER-SOURCES-ebook/dp/B0DX3G8XH1?ref_=ast_author_dp" target="_blank" rel="noopener">Amazon →</a></div>
+          <article class="book-list-card">
+            <div class="item-meta">
+              <span>Book</span>
+              <span>2025</span>
+            </div>
+            <h3>Data at the Edge: Premier Sources</h3>
+            <p>A curated collection of premier sources and reference materials.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://www.amazon.com/DATA-AT-EDGE-PREMIER-SOURCES-ebook/dp/B0DX3G8XH1?ref_=ast_author_dp" target="_blank" rel="noopener">Amazon →</a>
             </div>
           </article>
         </div>
@@ -795,14 +938,61 @@
             <div class="section-label">Core Research</div>
             <h2>Theory, frameworks, and preprints.</h2>
           </div>
-          <p>The main research outputs defining reflective alignment, reflective duality, moral coherence, education applications, and care as a stabilizing concept.</p>
+
+          <p>
+            The main research outputs defining reflective alignment, reflective duality, moral coherence, education applications, and care as a stabilizing concept.
+          </p>
         </div>
 
         <div class="card-grid">
-          <article class="record-card"><div class="item-meta"><span>Core Paper</span><span>2025-11</span></div><h3>Reflective Alignment Architecture & Reflective Duality Layer</h3><p>Core framework paper describing reflective stability and the RDL measurement layer.</p><div class="link-row"><a class="small-link primary" href="https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing" target="_blank" rel="noopener">Read PDF →</a><a class="small-link" href="https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/" target="_blank" rel="noopener">GitHub →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>Public Book</span><span>2025</span></div><h3>The Little Book of Alignment</h3><p>Plain-language book on how AI intelligence stays stable while it grows.</p><div class="link-row"><a class="small-link primary" href="https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171" target="_blank" rel="noopener">Download PDF →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>Preprint</span><span>2026-01</span></div><h3>5R Framework on Education</h3><p>SSRN preprint applying the 5R framework to education contexts.</p><div class="link-row"><a class="small-link primary" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708262" target="_blank" rel="noopener">SSRN →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>Preprint</span><span>2026-01</span></div><h3>Teaching the Machine to Care</h3><p>SSRN preprint on care as a stabilizing parameter for moral coherence.</p><div class="link-row"><a class="small-link primary" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708265" target="_blank" rel="noopener">SSRN →</a></div></article>
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Core Paper</span>
+              <span>2025-11</span>
+            </div>
+            <h3>Reflective Alignment Architecture & Reflective Duality Layer</h3>
+            <p>Core framework paper describing reflective stability and the RDL measurement layer.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing" target="_blank" rel="noopener">Read PDF →</a>
+              <a class="small-link" href="https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/" target="_blank" rel="noopener">GitHub →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Primer</span>
+              <span>2026-01</span>
+            </div>
+            <h3>The Little Book of AI Alignment</h3>
+            <p>Compact primer and public-facing entry point for the alignment work.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171" target="_blank" rel="noopener">Download PDF →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Preprint</span>
+              <span>2026-01</span>
+            </div>
+            <h3>5R Framework on Education</h3>
+            <p>SSRN preprint applying the 5R framework to education contexts.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708262" target="_blank" rel="noopener">SSRN →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Preprint</span>
+              <span>2026-01</span>
+            </div>
+            <h3>Teaching the Machine to Care</h3>
+            <p>SSRN preprint on care as a stabilizing parameter for moral coherence.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708265" target="_blank" rel="noopener">SSRN →</a>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -812,18 +1002,108 @@
             <div class="section-label">Public Records & Artifacts</div>
             <h2>The research trail.</h2>
           </div>
-          <p>Timestamped records, repositories, preprints, model cards, and supporting materials connected to the lab’s research outputs.</p>
+
+          <p>
+            Timestamped records, repositories, preprints, model cards, and supporting materials connected to the lab’s research outputs.
+          </p>
         </div>
 
         <div class="card-grid">
-          <article class="record-card"><div class="item-meta"><span>Zenodo</span><span>2026-01</span></div><h3>Zenodo Record — RAA Core Framework</h3><p>Immutable timestamp for public verification. DOI: 10.5281/zenodo.17665613.</p><div class="link-row"><a class="small-link primary" href="https://zenodo.org/records/17665613" target="_blank" rel="noopener">Zenodo →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>Zenodo</span><span>2026-01</span></div><h3>Zenodo Record — RDL Extension</h3><p>Measurement layer extension timestamp. DOI: 10.5281/zenodo.17664094.</p><div class="link-row"><a class="small-link primary" href="https://zenodo.org/records/17664094" target="_blank" rel="noopener">Zenodo →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>Zenodo</span><span>2026-01</span></div><h3>Zenodo Record — Failure Signatures</h3><p>Alignment failure modes dataset timestamp. DOI: 10.5281/zenodo.17575613.</p><div class="link-row"><a class="small-link primary" href="https://zenodo.org/records/17575613" target="_blank" rel="noopener">Zenodo →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>OSF</span><span>2025-11</span></div><h3>RAA & RDL: Scientific Framework</h3><p>Public project hosting the core archival version of the RAA/RDL framework.</p><div class="link-row"><a class="small-link primary" href="https://osf.io/8e2wx/" target="_blank" rel="noopener">OSF →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>OSF</span><span>2025-11</span></div><h3>RAA v1.1 — Figures & Supplements</h3><p>Repository for diagrams, figures, and supplementary materials associated with RAA v1.1.</p><div class="link-row"><a class="small-link primary" href="https://osf.io/5bzmu/" target="_blank" rel="noopener">OSF →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>Academia.edu</span><span>2025-11</span></div><h3>RAA & RDL Framework</h3><p>Scientific framework for measuring moral coherence in AI systems.</p><div class="link-row"><a class="small-link primary" href="https://www.academia.edu/145222632" target="_blank" rel="noopener">Academia →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>GitHub</span><span>2026-01</span></div><h3>RAA Repository</h3><p>Canonical public repository for code, artifacts, and record integrity.</p><div class="link-row"><a class="small-link primary" href="https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/" target="_blank" rel="noopener">GitHub →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>Hugging Face</span><span>2026-01</span></div><h3>Hugging Face Model Card</h3><p>Model card and dataset entry point.</p><div class="link-row"><a class="small-link primary" href="https://huggingface.co/EnlightenedAI-Lab/RAA-Reflective-Alignment-Architecture" target="_blank" rel="noopener">Hugging Face →</a></div></article>
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Zenodo</span>
+              <span>2026-01</span>
+            </div>
+            <h3>Zenodo Record — RAA Core Framework</h3>
+            <p>Immutable timestamp for public verification. DOI: 10.5281/zenodo.17665613.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://zenodo.org/records/17665613" target="_blank" rel="noopener">Zenodo →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Zenodo</span>
+              <span>2026-01</span>
+            </div>
+            <h3>Zenodo Record — RDL Extension</h3>
+            <p>Measurement layer extension timestamp. DOI: 10.5281/zenodo.17664094.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://zenodo.org/records/17664094" target="_blank" rel="noopener">Zenodo →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Zenodo</span>
+              <span>2026-01</span>
+            </div>
+            <h3>Zenodo Record — Failure Signatures</h3>
+            <p>Alignment failure modes dataset timestamp. DOI: 10.5281/zenodo.17575613.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://zenodo.org/records/17575613" target="_blank" rel="noopener">Zenodo →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>OSF</span>
+              <span>2025-11</span>
+            </div>
+            <h3>RAA & RDL: Scientific Framework</h3>
+            <p>Public project hosting the core archival version of the RAA/RDL framework.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://osf.io/8e2wx/" target="_blank" rel="noopener">OSF →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>OSF</span>
+              <span>2025-11</span>
+            </div>
+            <h3>RAA v1.1 — Figures & Supplements</h3>
+            <p>Repository for diagrams, figures, and supplementary materials associated with RAA v1.1.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://osf.io/5bzmu/" target="_blank" rel="noopener">OSF →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Academia.edu</span>
+              <span>2025-11</span>
+            </div>
+            <h3>RAA & RDL Framework</h3>
+            <p>Scientific framework for measuring moral coherence in AI systems.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://www.academia.edu/145222632" target="_blank" rel="noopener">Academia →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>GitHub</span>
+              <span>2026-01</span>
+            </div>
+            <h3>RAA Repository</h3>
+            <p>Canonical public repository for code, artifacts, and record integrity.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/" target="_blank" rel="noopener">GitHub →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Hugging Face</span>
+              <span>2026-01</span>
+            </div>
+            <h3>Hugging Face Model Card</h3>
+            <p>Model card and dataset entry point.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://huggingface.co/EnlightenedAI-Lab/RAA-Reflective-Alignment-Architecture" target="_blank" rel="noopener">Hugging Face →</a>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -833,13 +1113,48 @@
             <div class="section-label">Essays & Public Writing</div>
             <h2>The human argument.</h2>
           </div>
-          <p>Public-facing essays and forum writing on care, coevolution, alignment, and the human responsibility behind intelligent systems.</p>
+
+          <p>
+            Public-facing essays and forum writing on care, coevolution, alignment, and the human responsibility behind intelligent systems.
+          </p>
         </div>
 
         <div class="card-grid">
-          <article class="record-card"><div class="item-meta"><span>EA Forum</span><span>2026-01</span></div><h3>Reflective Alignment Architecture — Overview</h3><p>Public post summarizing the framework and positioning.</p><div class="link-row"><a class="small-link primary" href="https://forum.effectivealtruism.org/posts/mek7nYqrYdJqwgrjs/reflective-alignment-architecture-raa-a-framework-for-moral?utm_campaign=post_share&utm_source=link" target="_blank" rel="noopener">Read Post →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>Medium</span><span>2026-01</span></div><h3>Shaping AI with Care</h3><p>A Covenant for Ethical Coevolution.</p><div class="link-row"><a class="small-link primary" href="https://medium.com/@nicolas_91820/shaping-ai-with-care-a-covenant-for-ethical-coevolution-c7f7d9d73543" target="_blank" rel="noopener">Medium →</a></div></article>
-          <article class="record-card"><div class="item-meta"><span>Medium</span><span>2026-01</span></div><h3>The Living Code</h3><p>Perspectives on AI development.</p><div class="link-row"><a class="small-link primary" href="https://medium.com/@nicolas_91820/the-living-code-when-human-neurons-begin-to-compute-8973be3ffc29" target="_blank" rel="noopener">Medium →</a></div></article>
+          <article class="record-card">
+            <div class="item-meta">
+              <span>EA Forum</span>
+              <span>2026-01</span>
+            </div>
+            <h3>Reflective Alignment Architecture — Overview</h3>
+            <p>Public post summarizing the framework and positioning.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://forum.effectivealtruism.org/posts/mek7nYqrYdJqwgrjs/reflective-alignment-architecture-raa-a-framework-for-moral?utm_campaign=post_share&utm_source=link" target="_blank" rel="noopener">Read Post →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Medium</span>
+              <span>2026-01</span>
+            </div>
+            <h3>Shaping AI with Care</h3>
+            <p>A Covenant for Ethical Coevolution.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://medium.com/@nicolas_91820/shaping-ai-with-care-a-covenant-for-ethical-coevolution-c7f7d9d73543" target="_blank" rel="noopener">Medium →</a>
+            </div>
+          </article>
+
+          <article class="record-card">
+            <div class="item-meta">
+              <span>Medium</span>
+              <span>2026-01</span>
+            </div>
+            <h3>The Living Code</h3>
+            <p>Perspectives on AI development.</p>
+            <div class="link-row">
+              <a class="small-link primary" href="https://medium.com/@nicolas_91820/the-living-code-when-human-neurons-begin-to-compute-8973be3ffc29" target="_blank" rel="noopener">Medium →</a>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -849,14 +1164,29 @@
             <div class="section-label">Press & Public Mentions</div>
             <h2>External coverage.</h2>
           </div>
-          <p>Public announcements and external mentions connected to published work.</p>
+
+          <p>
+            Public announcements and external mentions connected to published work.
+          </p>
         </div>
 
         <article class="press-card">
-          <div><div class="section-label">Press</div><h3>Leonardo DiCaprio Foreword — Data at the Edge</h3></div>
           <div>
-            <p>Announcement connected to the Data at the Edge five-book series and its public release.</p>
-            <div class="actions"><a class="button" href="https://www.prnewswire.com/news-releases/leonardo-dicaprio-pens-foreword-to-data-at-the-edge-a-five-book-series-on-finding-trusted-gis-data-302544731.html" target="_blank" rel="noopener"><span>Read Release</span><span>→</span></a></div>
+            <div class="section-label">Press</div>
+            <h3>Leonardo DiCaprio Foreword — Data at the Edge</h3>
+          </div>
+
+          <div>
+            <p>
+              Announcement connected to the Data at the Edge five-book series and its public release.
+            </p>
+
+            <div class="actions">
+              <a class="button" href="https://www.prnewswire.com/news-releases/leonardo-dicaprio-pens-foreword-to-data-at-the-edge-a-five-book-series-on-finding-trusted-gis-data-302544731.html" target="_blank" rel="noopener">
+                <span>Read Release</span>
+                <span>→</span>
+              </a>
+            </div>
           </div>
         </article>
       </section>
@@ -867,7 +1197,10 @@
             <div class="section-label">Full Archive</div>
             <h2>Search the record.</h2>
           </div>
-          <p>A searchable archive of the books, research outputs, public records, essays, press, and supporting artifacts listed above.</p>
+
+          <p>
+            A searchable archive of the books, research outputs, public records, essays, press, and supporting artifacts listed above.
+          </p>
         </div>
 
         <div class="archive-toolbar">
@@ -882,46 +1215,286 @@
             <option value="artifact">Artifacts</option>
           </select>
         </div>
+
         <div id="archiveGrid" class="archive-grid"></div>
       </section>
 
       <section class="section" aria-label="Citation note">
         <div class="citation-note">
           <h2>Citation note.</h2>
-          <p>Use Zenodo DOIs where available. For other items, cite the linked public record, canonical PDF, repository, or publication page.</p>
+
+          <p>
+            Use Zenodo DOIs where available. For other items, cite the linked public record, canonical PDF, repository, or publication page.
+          </p>
         </div>
       </section>
     </main>
 
     <footer class="footer">
       <div>© 2026 Enlightened AI Research Lab</div>
-      <div class="footer-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+
+      <div class="footer-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
     </footer>
   </div>
 
   <script>
     const archiveItems = [
-      { category:"press", type:"Press", venue:"PR Newswire", date:"2025-02", title:"Leonardo DiCaprio Foreword — Data at the Edge", desc:"Announcement: Leonardo DiCaprio pens foreword to Data at the Edge series.", tags:"press dicaprio series data at the edge", links:[["Read Release","https://www.prnewswire.com/news-releases/leonardo-dicaprio-pens-foreword-to-data-at-the-edge-a-five-book-series-on-finding-trusted-gis-data-302544731.html"]] },
-      { category:"book", type:"Book", venue:"Amazon", date:"2025", title:"Data at the Edge: Master Geospatial AI", desc:"Comprehensive guide to mastering geospatial artificial intelligence and edge computing.", tags:"book data at the edge geospatial ai", links:[["Amazon","https://www.amazon.com/Data-Edge-Master-Geospatial-AI/dp/1069204706/ref=sr_1_1"]] },
-      { category:"book", type:"Book", venue:"Amazon", date:"2025", title:"Data at the Edge: Master Workbook Companion", desc:"Practical workbook and companion exercises for the Data at the Edge curriculum.", tags:"book workbook data at the edge", links:[["Amazon","https://www.amazon.com/Data-Edge-Master-Workbook-Companion-ebook/dp/B0DX3CFMPC?ref_=ast_author_dp"]] },
-      { category:"book", type:"Book", venue:"Amazon", date:"2025", title:"Data at the Edge", desc:"The core text defining the principles of edge-based data systems.", tags:"book core text data systems", links:[["Amazon","https://www.amazon.com/dp/B0DX7BYL3G?ref_=ast_author_dp"]] },
-      { category:"book", type:"Book", venue:"Amazon", date:"2025", title:"Data at the Edge: Practical ArcGIS", desc:"A practical guide to implementing edge data strategies using ArcGIS.", tags:"book arcgis geospatial", links:[["Amazon","https://www.amazon.com/DATA-AT-EDGE-PRACTICAL-ArcGIS-ebook/dp/B0DX3DB57T?ref_=ast_author_dp"]] },
-      { category:"book", type:"Book", venue:"Amazon", date:"2025", title:"Data at the Edge: Premier Sources", desc:"A curated collection of premier sources and reference materials.", tags:"book sources reference", links:[["Amazon","https://www.amazon.com/DATA-AT-EDGE-PREMIER-SOURCES-ebook/dp/B0DX3G8XH1?ref_=ast_author_dp"]] },
-      { category:"research", type:"Core Research", venue:"PDF", date:"2025-11", title:"Reflective Alignment Architecture (RAA) & Reflective Duality Layer (RDL)", desc:"Core framework paper describing reflective stability and the RDL measurement layer.", tags:"RAA RDL stability alignment framework", links:[["Read PDF","https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing"],["GitHub","https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/"]] },
-      { category:"research", type:"Public Book", venue:"PDF", date:"2025", title:"The Little Book of Alignment", desc:"Plain-language book on how AI intelligence stays stable while it grows.", tags:"overview alignment primer little book", links:[["Download PDF","https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171"]] },
-      { category:"record", type:"OSF", venue:"OSF", date:"2025-11", title:"RAA & RDL: Scientific Framework", desc:"Public project hosting the core archival version of the RAA/RDL framework.", tags:"osf framework archive", links:[["OSF","https://osf.io/8e2wx/"]] },
-      { category:"record", type:"OSF", venue:"OSF", date:"2025-11", title:"RAA v1.1 — Figures & Supplements", desc:"Repository for diagrams, figures, and supplementary materials associated with RAA v1.1.", tags:"osf figures data supplements", links:[["OSF","https://osf.io/5bzmu/"]] },
-      { category:"record", type:"Preprint", venue:"Academia.edu", date:"2025-11", title:"RAA & RDL Framework", desc:"Scientific framework for measuring moral coherence in AI systems.", tags:"academia preprint RAA RDL", links:[["Academia","https://www.academia.edu/145222632"]] },
-      { category:"record", type:"Zenodo", venue:"Zenodo", date:"2026-01", title:"Zenodo Record — RAA Core Framework", desc:"Immutable timestamp for public verification. DOI: 10.5281/zenodo.17665613.", tags:"timestamp doi verification zenodo", links:[["Zenodo","https://zenodo.org/records/17665613"]] },
-      { category:"record", type:"Zenodo", venue:"Zenodo", date:"2026-01", title:"Zenodo Record — RDL Extension", desc:"Measurement layer extension timestamp. DOI: 10.5281/zenodo.17664094.", tags:"timestamp doi rdl zenodo", links:[["Zenodo","https://zenodo.org/records/17664094"]] },
-      { category:"record", type:"Zenodo", venue:"Zenodo", date:"2026-01", title:"Zenodo Record — Failure Signatures", desc:"Alignment failure modes dataset timestamp. DOI: 10.5281/zenodo.17575613.", tags:"timestamp doi data failure signatures", links:[["Zenodo","https://zenodo.org/records/17575613"]] },
-      { category:"research", type:"Preprint", venue:"SSRN", date:"2026-01", title:"5R Framework on Education", desc:"SSRN preprint applying the 5R framework to education contexts.", tags:"5R education SSRN", links:[["SSRN","https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708262"]] },
-      { category:"research", type:"Preprint", venue:"SSRN", date:"2026-01", title:"Teaching the Machine to Care", desc:"SSRN preprint on care as stabilizing parameter for moral coherence.", tags:"care stability SSRN", links:[["SSRN","https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708265"]] },
-      { category:"artifact", type:"Repository", venue:"GitHub", date:"2026-01", title:"RAA Repository", desc:"Canonical public repository for code, artifacts, and record integrity.", tags:"repo code record github", links:[["GitHub","https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/"]] },
-      { category:"artifact", type:"Model Card", venue:"Hugging Face", date:"2026-01", title:"Hugging Face Model Card", desc:"Model card and dataset entry point.", tags:"huggingface model card dataset", links:[["Hugging Face","https://huggingface.co/EnlightenedAI-Lab/RAA-Reflective-Alignment-Architecture"]] },
-      { category:"essay", type:"Post", venue:"EA Forum", date:"2026-01", title:"EA Forum — RAA Overview", desc:"Public post summarizing the framework and positioning.", tags:"EA Forum overview RAA", links:[["Read Post","https://forum.effectivealtruism.org/posts/mek7nYqrYdJqwgrjs/reflective-alignment-architecture-raa-a-framework-for-moral?utm_campaign=post_share&utm_source=link"]] },
-      { category:"essay", type:"Essay", venue:"Medium", date:"2026-01", title:"Shaping AI with Care", desc:"A Covenant for Ethical Coevolution.", tags:"medium ethics care", links:[["Medium","https://medium.com/@nicolas_91820/shaping-ai-with-care-a-covenant-for-ethical-coevolution-c7f7d9d73543"]] },
-      { category:"essay", type:"Essay", venue:"Medium", date:"2026-01", title:"The Living Code", desc:"Perspectives on AI development.", tags:"medium reflection living code", links:[["Medium","https://medium.com/@nicolas_91820/the-living-code-when-human-neurons-begin-to-compute-8973be3ffc29"]] }
+      {
+        category: "press",
+        type: "Press",
+        venue: "PR Newswire",
+        date: "2025-02",
+        title: "Leonardo DiCaprio Foreword — Data at the Edge",
+        desc: "Announcement: Leonardo DiCaprio pens foreword to Data at the Edge series.",
+        tags: "press dicaprio series data at the edge",
+        links: [
+          ["Read Release", "https://www.prnewswire.com/news-releases/leonardo-dicaprio-pens-foreword-to-data-at-the-edge-a-five-book-series-on-finding-trusted-gis-data-302544731.html"]
+        ]
+      },
+      {
+        category: "book",
+        type: "Book",
+        venue: "Amazon",
+        date: "2025",
+        title: "Data at the Edge: Master Geospatial AI",
+        desc: "Comprehensive guide to mastering geospatial artificial intelligence and edge computing.",
+        tags: "book data at the edge geospatial ai",
+        links: [
+          ["Amazon", "https://www.amazon.com/Data-Edge-Master-Geospatial-AI/dp/1069204706/ref=sr_1_1"]
+        ]
+      },
+      {
+        category: "book",
+        type: "Book",
+        venue: "Amazon",
+        date: "2025",
+        title: "Data at the Edge: Master Workbook Companion",
+        desc: "Practical workbook and companion exercises for the Data at the Edge curriculum.",
+        tags: "book workbook data at the edge",
+        links: [
+          ["Amazon", "https://www.amazon.com/Data-Edge-Master-Workbook-Companion-ebook/dp/B0DX3CFMPC?ref_=ast_author_dp"]
+        ]
+      },
+      {
+        category: "book",
+        type: "Book",
+        venue: "Amazon",
+        date: "2025",
+        title: "Data at the Edge",
+        desc: "The core text defining the principles of edge-based data systems.",
+        tags: "book core text data systems",
+        links: [
+          ["Amazon", "https://www.amazon.com/dp/B0DX7BYL3G?ref_=ast_author_dp"]
+        ]
+      },
+      {
+        category: "book",
+        type: "Book",
+        venue: "Amazon",
+        date: "2025",
+        title: "Data at the Edge: Practical ArcGIS",
+        desc: "A practical guide to implementing edge data strategies using ArcGIS.",
+        tags: "book arcgis geospatial",
+        links: [
+          ["Amazon", "https://www.amazon.com/DATA-AT-EDGE-PRACTICAL-ArcGIS-ebook/dp/B0DX3DB57T?ref_=ast_author_dp"]
+        ]
+      },
+      {
+        category: "book",
+        type: "Book",
+        venue: "Amazon",
+        date: "2025",
+        title: "Data at the Edge: Premier Sources",
+        desc: "A curated collection of premier sources and reference materials.",
+        tags: "book sources reference",
+        links: [
+          ["Amazon", "https://www.amazon.com/DATA-AT-EDGE-PREMIER-SOURCES-ebook/dp/B0DX3G8XH1?ref_=ast_author_dp"]
+        ]
+      },
+      {
+        category: "research",
+        type: "Core Research",
+        venue: "PDF",
+        date: "2025-11",
+        title: "Reflective Alignment Architecture (RAA) & Reflective Duality Layer (RDL)",
+        desc: "Core framework paper describing reflective stability and the RDL measurement layer.",
+        tags: "RAA RDL stability alignment framework",
+        links: [
+          ["Read PDF", "https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing"],
+          ["GitHub", "https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/"]
+        ]
+      },
+      {
+        category: "research",
+        type: "Primer",
+        venue: "PDF",
+        date: "2026-01",
+        title: "The Little Book of AI Alignment",
+        desc: "Compact primer and public-facing entry point.",
+        tags: "overview alignment primer",
+        links: [
+          ["Download PDF", "https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171"]
+        ]
+      },
+      {
+        category: "record",
+        type: "OSF",
+        venue: "OSF",
+        date: "2025-11",
+        title: "RAA & RDL: Scientific Framework",
+        desc: "Public project hosting the core archival version of the RAA/RDL framework.",
+        tags: "osf framework archive",
+        links: [
+          ["OSF", "https://osf.io/8e2wx/"]
+        ]
+      },
+      {
+        category: "record",
+        type: "OSF",
+        venue: "OSF",
+        date: "2025-11",
+        title: "RAA v1.1 — Figures & Supplements",
+        desc: "Repository for diagrams, figures, and supplementary materials associated with RAA v1.1.",
+        tags: "osf figures data supplements",
+        links: [
+          ["OSF", "https://osf.io/5bzmu/"]
+        ]
+      },
+      {
+        category: "record",
+        type: "Preprint",
+        venue: "Academia.edu",
+        date: "2025-11",
+        title: "RAA & RDL Framework",
+        desc: "Scientific framework for measuring moral coherence in AI systems.",
+        tags: "academia preprint RAA RDL",
+        links: [
+          ["Academia", "https://www.academia.edu/145222632"]
+        ]
+      },
+      {
+        category: "record",
+        type: "Zenodo",
+        venue: "Zenodo",
+        date: "2026-01",
+        title: "Zenodo Record — RAA Core Framework",
+        desc: "Immutable timestamp for public verification. DOI: 10.5281/zenodo.17665613.",
+        tags: "timestamp doi verification zenodo",
+        links: [
+          ["Zenodo", "https://zenodo.org/records/17665613"]
+        ]
+      },
+      {
+        category: "record",
+        type: "Zenodo",
+        venue: "Zenodo",
+        date: "2026-01",
+        title: "Zenodo Record — RDL Extension",
+        desc: "Measurement layer extension timestamp. DOI: 10.5281/zenodo.17664094.",
+        tags: "timestamp doi rdl zenodo",
+        links: [
+          ["Zenodo", "https://zenodo.org/records/17664094"]
+        ]
+      },
+      {
+        category: "record",
+        type: "Zenodo",
+        venue: "Zenodo",
+        date: "2026-01",
+        title: "Zenodo Record — Failure Signatures",
+        desc: "Alignment failure modes dataset timestamp. DOI: 10.5281/zenodo.17575613.",
+        tags: "timestamp doi data failure signatures",
+        links: [
+          ["Zenodo", "https://zenodo.org/records/17575613"]
+        ]
+      },
+      {
+        category: "research",
+        type: "Preprint",
+        venue: "SSRN",
+        date: "2026-01",
+        title: "5R Framework on Education",
+        desc: "SSRN preprint applying the 5R framework to education contexts.",
+        tags: "5R education SSRN",
+        links: [
+          ["SSRN", "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708262"]
+        ]
+      },
+      {
+        category: "research",
+        type: "Preprint",
+        venue: "SSRN",
+        date: "2026-01",
+        title: "Teaching the Machine to Care",
+        desc: "SSRN preprint on care as stabilizing parameter for moral coherence.",
+        tags: "care stability SSRN",
+        links: [
+          ["SSRN", "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708265"]
+        ]
+      },
+      {
+        category: "artifact",
+        type: "Repository",
+        venue: "GitHub",
+        date: "2026-01",
+        title: "RAA Repository",
+        desc: "Canonical public repository for code, artifacts, and record integrity.",
+        tags: "repo code record github",
+        links: [
+          ["GitHub", "https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/"]
+        ]
+      },
+      {
+        category: "artifact",
+        type: "Model Card",
+        venue: "Hugging Face",
+        date: "2026-01",
+        title: "Hugging Face Model Card",
+        desc: "Model card and dataset entry point.",
+        tags: "huggingface model card dataset",
+        links: [
+          ["Hugging Face", "https://huggingface.co/EnlightenedAI-Lab/RAA-Reflective-Alignment-Architecture"]
+        ]
+      },
+      {
+        category: "essay",
+        type: "Post",
+        venue: "EA Forum",
+        date: "2026-01",
+        title: "EA Forum — RAA Overview",
+        desc: "Public post summarizing the framework and positioning.",
+        tags: "EA Forum overview RAA",
+        links: [
+          ["Read Post", "https://forum.effectivealtruism.org/posts/mek7nYqrYdJqwgrjs/reflective-alignment-architecture-raa-a-framework-for-moral?utm_campaign=post_share&utm_source=link"]
+        ]
+      },
+      {
+        category: "essay",
+        type: "Essay",
+        venue: "Medium",
+        date: "2026-01",
+        title: "Shaping AI with Care",
+        desc: "A Covenant for Ethical Coevolution.",
+        tags: "medium ethics care",
+        links: [
+          ["Medium", "https://medium.com/@nicolas_91820/shaping-ai-with-care-a-covenant-for-ethical-coevolution-c7f7d9d73543"]
+        ]
+      },
+      {
+        category: "essay",
+        type: "Essay",
+        venue: "Medium",
+        date: "2026-01",
+        title: "The Living Code",
+        desc: "Perspectives on AI development.",
+        tags: "medium reflection living code",
+        links: [
+          ["Medium", "https://medium.com/@nicolas_91820/the-living-code-when-human-neurons-begin-to-compute-8973be3ffc29"]
+        ]
+      }
     ];
 
     const archiveSearch = document.getElementById("archiveSearch");
@@ -936,7 +1509,10 @@
 
       return `
         <article class="archive-item">
-          <div class="item-meta"><span>${item.type}</span><span>${item.date}</span></div>
+          <div class="item-meta">
+            <span>${item.type}</span>
+            <span>${item.date}</span>
+          </div>
           <h3>${item.title}</h3>
           <p>${item.desc}</p>
           <div class="link-row">${links}</div>
@@ -947,15 +1523,32 @@
     function renderArchive() {
       const q = (archiveSearch.value || "").toLowerCase().trim();
       const filter = archiveFilter.value;
+
       const filtered = archiveItems.filter((item) => {
-        const haystack = [item.category, item.type, item.venue, item.date, item.title, item.desc, item.tags].join(" ").toLowerCase();
-        return (!q || haystack.includes(q)) && (filter === "all" || item.category === filter);
+        const haystack = [
+          item.category,
+          item.type,
+          item.venue,
+          item.date,
+          item.title,
+          item.desc,
+          item.tags
+        ].join(" ").toLowerCase();
+
+        const matchesSearch = !q || haystack.includes(q);
+        const matchesFilter = filter === "all" || item.category === filter;
+
+        return matchesSearch && matchesFilter;
       });
-      archiveGrid.innerHTML = filtered.length ? filtered.map(archiveCard).join("") : `<article class="archive-item"><p>No archive items match.</p></article>`;
+
+      archiveGrid.innerHTML = filtered.length
+        ? filtered.map(archiveCard).join("")
+        : `<article class="archive-item"><p>No archive items match.</p></article>`;
     }
 
     archiveSearch.addEventListener("input", renderArchive);
     archiveFilter.addEventListener("change", renderArchive);
+
     renderArchive();
   </script>
 </body>
