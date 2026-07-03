@@ -52,24 +52,26 @@
 
     header {
       width: 100%;
-      border-bottom: 1px solid var(--line);
+      padding: 54px 64px 0;
     }
 
     .header-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 42px 58px 32px;
+      max-width: none;
+      margin: 0;
+      padding: 0 0 34px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 48px;
+      gap: 40px;
+      border-bottom: 1px solid var(--line);
     }
 
     .brand {
       font-family: Arial, Helvetica, sans-serif;
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: 0.43em;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.34em;
+      line-height: 1.35;
       text-transform: uppercase;
       color: #05080c;
       white-space: nowrap;
@@ -81,14 +83,14 @@
       justify-content: flex-end;
       gap: 30px;
       font-family: Arial, Helvetica, sans-serif;
-      font-size: 13px;
+      font-size: 15px;
       line-height: 1;
-      color: #424242;
+      color: #111;
       white-space: nowrap;
     }
 
     nav a {
-      opacity: 0.9;
+      opacity: 0.72;
       transition: opacity 160ms ease;
     }
 
@@ -266,30 +268,34 @@
       }
     }
 
-    @media (max-width: 1080px) {
+    @media (max-width: 1160px) {
       .header-inner {
-        align-items: flex-start;
-        flex-direction: column;
-        padding-top: 44px;
+        display: block;
       }
 
       nav {
         justify-content: flex-start;
         flex-wrap: wrap;
+        white-space: normal;
+        margin-top: 28px;
         gap: 22px 28px;
       }
     }
 
     @media (max-width: 760px) {
+      header {
+        padding: 34px 28px 0;
+      }
+
       .header-inner {
-        padding: 34px 24px 28px;
+        padding-bottom: 28px;
       }
 
       .brand {
-        font-size: 13px;
-        letter-spacing: 0.32em;
+        font-size: 15px;
+        letter-spacing: 0.24em;
         white-space: normal;
-        line-height: 1.6;
+        line-height: 1.35;
       }
 
       nav {
