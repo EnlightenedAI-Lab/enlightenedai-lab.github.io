@@ -189,6 +189,27 @@
       filter: drop-shadow(0 24px 34px rgba(7, 16, 25, 0.12));
     }
 
+
+    .positioning {
+      max-width: var(--content);
+      margin: 0 auto;
+      padding: 0 58px 96px;
+    }
+
+    .positioning-inner {
+      border-top: 1px solid var(--line);
+      padding-top: 54px;
+    }
+
+    .positioning p {
+      margin: 0;
+      max-width: 980px;
+      font-size: clamp(40px, 4.2vw, 72px);
+      line-height: 1;
+      font-weight: 400;
+      letter-spacing: -0.055em;
+    }
+
     footer {
       border-top: 1px solid var(--line);
       font-family: Arial, Helvetica, sans-serif;
@@ -311,6 +332,20 @@
         border-radius: 0 28px 28px 0;
       }
 
+
+      .positioning {
+        padding: 0 24px 72px;
+      }
+
+      .positioning-inner {
+        padding-top: 38px;
+      }
+
+      .positioning p {
+        font-size: clamp(36px, 11vw, 54px);
+        line-height: 1.02;
+      }
+
       .footer-inner {
         flex-direction: column;
         align-items: flex-start;
@@ -357,6 +392,13 @@
           <img src="/assets/sea-hero.png" alt="" />
         </figure>
       </section>
+
+
+        <section class="positioning">
+          <div class="positioning-inner">
+            <p>Research and products for safer applied AI.</p>
+          </div>
+        </section>
     </main>
 
     <footer>
