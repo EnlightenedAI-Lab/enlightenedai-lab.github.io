@@ -7,7 +7,7 @@
   <title>Enlightened AI Research Lab</title>
   <meta
     name="description"
-    content="Research and products for safer applied AI."
+    content="Enlightened AI Research Lab builds tools that make AI understandable and keep humans in control."
   />
 
   <style>
@@ -46,9 +46,8 @@
       display: flex;
       flex-direction: column;
       background:
-        radial-gradient(circle at 78% 33%, rgba(214, 154, 72, 0.07), transparent 32%),
-        radial-gradient(circle at 87% 72%, rgba(178, 111, 42, 0.05), transparent 28%),
-        linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
+        radial-gradient(circle at 78% 40%, rgba(210, 156, 92, 0.08), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0));
     }
 
     header {
@@ -107,36 +106,38 @@
       min-height: 795px;
       margin: 0 auto;
       padding: 92px 58px 112px;
-      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(520px, 0.92fr) minmax(460px, 0.88fr);
+      gap: 70px;
+      align-items: center;
     }
 
     .hero-copy {
       position: relative;
-      z-index: 3;
-      width: min(760px, 48vw);
+      z-index: 2;
     }
 
     h1 {
       margin: 0;
-      max-width: 780px;
-      font-size: clamp(68px, 6.7vw, 132px);
+      max-width: 760px;
+      font-size: clamp(70px, 6.9vw, 136px);
       line-height: 0.88;
       font-weight: 400;
-      letter-spacing: -0.065em;
+      letter-spacing: -0.066em;
     }
 
     .subline {
-      margin: 42px 0 0;
+      margin: 48px 0 0;
       max-width: 720px;
-      font-size: clamp(27px, 2vw, 36px);
+      font-size: clamp(30px, 2.35vw, 46px);
       line-height: 1.18;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.045em;
     }
 
     .iqai-line {
-      margin: 34px 0 0;
+      margin: 36px 0 0;
       max-width: 760px;
-      font-size: clamp(25px, 1.85vw, 34px);
+      font-size: clamp(26px, 1.95vw, 36px);
       line-height: 1.2;
       letter-spacing: -0.035em;
     }
@@ -145,7 +146,7 @@
       display: flex;
       gap: 18px;
       flex-wrap: wrap;
-      margin-top: 48px;
+      margin-top: 52px;
     }
 
     .button {
@@ -172,24 +173,20 @@
       transform: translateY(-1px);
     }
 
-    .bee-art {
-      position: absolute;
+    .hero-image {
+      position: relative;
       z-index: 1;
-      top: 38px;
-      right: -36px;
-      width: min(61vw, 970px);
-      height: 720px;
-      pointer-events: none;
-      overflow: visible;
+      align-self: center;
+      justify-self: end;
+      width: min(100%, 720px);
     }
 
-    .bee-art img {
-      position: absolute;
-      inset: 0;
+    .hero-image img {
+      display: block;
       width: 100%;
       height: auto;
-      display: block;
-      filter: drop-shadow(0 22px 24px rgba(7, 16, 25, 0.13));
+      border-radius: 0 42px 42px 0;
+      filter: drop-shadow(0 24px 34px rgba(7, 16, 25, 0.12));
     }
 
     footer {
@@ -229,14 +226,20 @@
       opacity: 1;
     }
 
-    @media (max-width: 1280px) {
-      .hero-copy {
-        width: 54vw;
+    @media (max-width: 1220px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 54px;
       }
 
-      .bee-art {
-        right: -170px;
-        opacity: 0.76;
+      .hero-image {
+        justify-self: start;
+        width: min(100%, 760px);
+        opacity: 0.96;
+      }
+
+      .hero-image img {
+        border-radius: 0 34px 34px 0;
       }
     }
 
@@ -251,19 +254,6 @@
         justify-content: flex-start;
         flex-wrap: wrap;
         gap: 22px 28px;
-      }
-
-      .hero {
-        min-height: 760px;
-      }
-
-      .hero-copy {
-        width: min(760px, 68vw);
-      }
-
-      .bee-art {
-        right: -300px;
-        opacity: 0.48;
       }
     }
 
@@ -289,10 +279,7 @@
       .hero {
         min-height: auto;
         padding: 58px 24px 82px;
-      }
-
-      .hero-copy {
-        width: 100%;
+        gap: 40px;
       }
 
       h1 {
@@ -316,8 +303,12 @@
         min-width: 0;
       }
 
-      .bee-art {
-        display: none;
+      .hero-image {
+        width: 100%;
+      }
+
+      .hero-image img {
+        border-radius: 0 28px 28px 0;
       }
 
       .footer-inner {
@@ -350,9 +341,9 @@
     <main>
       <section class="hero">
         <div class="hero-copy">
-          <h1>Research and products for safer applied AI.</h1>
+          <h1>Intelligence in service of humanity.</h1>
 
-          <p class="subline">Built for real-world use, with humans in control.</p>
+          <p class="subline">We build tools that make AI understandable and keep humans in control.</p>
 
           <p class="iqai-line">IQAI brings the lab’s systems into use.</p>
 
@@ -362,9 +353,9 @@
           </div>
         </div>
 
-        <div class="bee-art" aria-hidden="true">
-          <img src="/assets/bees-realistic.png" alt="" />
-        </div>
+        <figure class="hero-image" aria-hidden="true">
+          <img src="/assets/sea-hero.png" alt="" />
+        </figure>
       </section>
     </main>
 
