@@ -45,6 +45,9 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      background:
+        radial-gradient(circle at 74% 34%, rgba(178, 141, 91, 0.045), transparent 30%),
+        linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0));
     }
 
     header {
@@ -55,7 +58,7 @@
     .header-inner {
       max-width: var(--max);
       margin: 0 auto;
-      padding: 76px 46px 34px;
+      padding: 42px 58px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -98,13 +101,22 @@
     }
 
     .hero {
+      position: relative;
+      overflow: hidden;
       max-width: var(--content);
+      min-height: 760px;
       margin: 0 auto;
       padding: 76px 46px 112px;
     }
 
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 840px;
+    }
+
     h1 {
-      max-width: 960px;
+      max-width: 820px;
       margin: 0;
       font-size: clamp(74px, 8vw, 154px);
       line-height: 0.86;
@@ -165,6 +177,219 @@
       transform: translateY(-1px);
     }
 
+    .swallow-stage {
+      position: absolute;
+      z-index: 1;
+      top: 88px;
+      right: -10px;
+      width: min(51vw, 860px);
+      height: 650px;
+      pointer-events: none;
+      overflow: visible;
+      opacity: 0.96;
+      filter: drop-shadow(0 10px 16px rgba(7, 16, 25, 0.08));
+    }
+
+    .hirondelle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      offset-distance: 0%;
+      offset-rotate: auto;
+      offset-anchor: 50% 50%;
+      animation-name: swallow-flight;
+      animation-timing-function: cubic-bezier(0.45, 0.02, 0.55, 0.98);
+      animation-iteration-count: infinite;
+      will-change: offset-distance;
+    }
+
+    .swallow-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      animation-name: swallow-bank;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      will-change: transform;
+    }
+
+    .hirondelle .wing {
+      fill: #101820;
+      transform-box: fill-box;
+      transform-origin: 78% 66%;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      will-change: transform;
+    }
+
+    .hirondelle .wing-left {
+      animation-name: wing-left-beat;
+    }
+
+    .hirondelle .wing-right {
+      animation-name: wing-right-beat;
+    }
+
+    .hirondelle .tail,
+    .hirondelle .body,
+    .hirondelle .head {
+      fill: #101820;
+    }
+
+    .hirondelle .back {
+      fill: #152633;
+    }
+
+    .hirondelle .belly {
+      fill: #f3efe6;
+    }
+
+    .hirondelle .throat {
+      fill: #a96546;
+    }
+
+    .hirondelle .glint {
+      fill: rgba(255, 255, 255, 0.72);
+    }
+
+    .bird-1 {
+      width: 118px;
+      opacity: 0.95;
+      offset-path: path("M 760 135 C 630 18 405 35 358 185 C 304 361 520 420 732 282 C 876 188 880 72 760 135");
+      animation-duration: 8.2s;
+      animation-delay: -3.1s;
+    }
+
+    .bird-1 .swallow-svg {
+      animation-duration: 2.05s;
+    }
+
+    .bird-1 .wing {
+      animation-duration: 0.24s;
+    }
+
+    .bird-2 {
+      width: 82px;
+      opacity: 0.82;
+      offset-path: path("M 815 72 C 692 -2 548 40 505 142 C 455 260 625 315 784 214 C 915 130 922 48 815 72");
+      animation-duration: 6.4s;
+      animation-delay: -1.6s;
+    }
+
+    .bird-2 .swallow-svg {
+      animation-duration: 1.7s;
+    }
+
+    .bird-2 .wing {
+      animation-duration: 0.2s;
+    }
+
+    .bird-3 {
+      width: 58px;
+      opacity: 0.76;
+      offset-path: path("M 700 318 C 556 240 392 262 370 392 C 347 532 582 528 744 420 C 842 355 808 285 700 318");
+      animation-duration: 5.6s;
+      animation-delay: -4.2s;
+    }
+
+    .bird-3 .swallow-svg {
+      animation-duration: 1.45s;
+    }
+
+    .bird-3 .wing {
+      animation-duration: 0.18s;
+    }
+
+    .bird-4 {
+      width: 102px;
+      opacity: 0.9;
+      offset-path: path("M 860 385 C 735 248 567 268 520 398 C 469 540 704 603 884 468 C 1018 368 982 268 860 385");
+      animation-duration: 8.9s;
+      animation-delay: -6.2s;
+    }
+
+    .bird-4 .swallow-svg {
+      animation-duration: 2.35s;
+    }
+
+    .bird-4 .wing {
+      animation-duration: 0.26s;
+    }
+
+    .bird-5 {
+      width: 48px;
+      opacity: 0.68;
+      offset-path: path("M 735 32 C 604 -7 475 22 432 104 C 373 217 540 265 704 162 C 830 83 835 26 735 32");
+      animation-duration: 4.8s;
+      animation-delay: -2.7s;
+    }
+
+    .bird-5 .swallow-svg {
+      animation-duration: 1.35s;
+    }
+
+    .bird-5 .wing {
+      animation-duration: 0.16s;
+    }
+
+    @keyframes swallow-flight {
+      0% {
+        offset-distance: 0%;
+      }
+
+      100% {
+        offset-distance: 100%;
+      }
+    }
+
+    @keyframes swallow-bank {
+      0% {
+        transform: rotate(-6deg) scale(1);
+      }
+
+      18% {
+        transform: rotate(9deg) scale(1.03);
+      }
+
+      39% {
+        transform: rotate(-14deg) scale(0.985);
+      }
+
+      63% {
+        transform: rotate(7deg) scale(1.02);
+      }
+
+      84% {
+        transform: rotate(-9deg) scale(0.995);
+      }
+
+      100% {
+        transform: rotate(-6deg) scale(1);
+      }
+    }
+
+    @keyframes wing-left-beat {
+      0% {
+        transform: rotate(-10deg) scaleY(1.03);
+      }
+
+      100% {
+        transform: rotate(17deg) scaleY(0.82);
+      }
+    }
+
+    @keyframes wing-right-beat {
+      0% {
+        transform: rotate(10deg) scaleY(1.03);
+      }
+
+      100% {
+        transform: rotate(-17deg) scaleY(0.82);
+      }
+    }
+
     footer {
       border-top: 1px solid var(--line);
       font-family: Arial, Helvetica, sans-serif;
@@ -173,7 +398,7 @@
     .footer-inner {
       max-width: var(--max);
       margin: 0 auto;
-      padding: 28px 46px;
+      padding: 28px 58px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -214,6 +439,16 @@
         flex-wrap: wrap;
         gap: 22px 28px;
       }
+
+      .hero {
+        min-height: 760px;
+      }
+
+      .swallow-stage {
+        right: -70px;
+        width: 56vw;
+        opacity: 0.58;
+      }
     }
 
     @media (max-width: 760px) {
@@ -236,6 +471,7 @@
       }
 
       .hero {
+        min-height: auto;
         padding: 60px 24px 82px;
       }
 
@@ -264,10 +500,29 @@
         min-width: 0;
       }
 
+      .swallow-stage {
+        display: none;
+      }
+
       .footer-inner {
         flex-direction: column;
         align-items: flex-start;
+        padding: 28px 24px;
       }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hirondelle,
+      .swallow-svg,
+      .hirondelle .wing {
+        animation: none;
+      }
+
+      .bird-1 { offset-distance: 18%; }
+      .bird-2 { offset-distance: 42%; }
+      .bird-3 { offset-distance: 65%; }
+      .bird-4 { offset-distance: 30%; }
+      .bird-5 { offset-distance: 78%; }
     }
   </style>
 </head>
@@ -292,23 +547,92 @@
 
     <main>
       <section class="hero">
-        <h1>Intelligence in service of humanity.</h1>
+        <div class="hero-content">
+          <h1>Intelligence in service of humanity.</h1>
 
-        <div class="hero-copy">
-          <p>We build tools that make AI understandable and keep humans in control.</p>
+          <div class="hero-copy">
+            <p>We build tools that make AI understandable and keep humans in control.</p>
 
-          <p class="iqai-line">IQAI deploys the lab’s applied systems.</p>
+            <p class="iqai-line">IQAI deploys the lab’s applied systems.</p>
 
-          <div class="actions">
-            <a class="button primary" href="/little-book.html">
-              <span>Read the Little Book</span>
-              <span>→</span>
-            </a>
+            <div class="actions">
+              <a class="button primary" href="/little-book.html">
+                <span>Read the Little Book</span>
+                <span>→</span>
+              </a>
 
-            <a class="button" href="/theory.html">
-              <span>Explore the Theory</span>
-              <span>→</span>
-            </a>
+              <a class="button" href="/theory.html">
+                <span>Explore the Theory</span>
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="swallow-stage" aria-hidden="true">
+          <div class="hirondelle bird-1">
+            <svg class="swallow-svg" viewBox="0 0 150 80">
+              <path class="wing wing-left" d="M62 36 C43 10 23 0 5 8 C28 28 45 38 65 40 Z" />
+              <path class="wing wing-right" d="M65 40 C42 53 25 70 5 72 C31 55 49 45 66 38 Z" />
+              <path class="tail" d="M98 38 L148 18 L112 42 L149 58 L99 42 Z" />
+              <path class="body back" d="M32 37 C50 25 80 26 106 38 C83 49 54 48 32 37 Z" />
+              <path class="belly" d="M43 39 C59 35 82 35 98 39 C78 46 57 45 43 39 Z" />
+              <path class="head" d="M29 36 C34 27 46 26 54 32 C46 40 37 42 29 36 Z" />
+              <path class="throat" d="M34 34 C40 31 47 31 53 34 C47 38 39 38 34 34 Z" />
+              <path class="glint" d="M48 34 C63 32 82 33 94 38 C79 37 61 37 48 34 Z" />
+            </svg>
+          </div>
+
+          <div class="hirondelle bird-2">
+            <svg class="swallow-svg" viewBox="0 0 150 80">
+              <path class="wing wing-left" d="M62 36 C43 10 23 0 5 8 C28 28 45 38 65 40 Z" />
+              <path class="wing wing-right" d="M65 40 C42 53 25 70 5 72 C31 55 49 45 66 38 Z" />
+              <path class="tail" d="M98 38 L148 18 L112 42 L149 58 L99 42 Z" />
+              <path class="body back" d="M32 37 C50 25 80 26 106 38 C83 49 54 48 32 37 Z" />
+              <path class="belly" d="M43 39 C59 35 82 35 98 39 C78 46 57 45 43 39 Z" />
+              <path class="head" d="M29 36 C34 27 46 26 54 32 C46 40 37 42 29 36 Z" />
+              <path class="throat" d="M34 34 C40 31 47 31 53 34 C47 38 39 38 34 34 Z" />
+              <path class="glint" d="M48 34 C63 32 82 33 94 38 C79 37 61 37 48 34 Z" />
+            </svg>
+          </div>
+
+          <div class="hirondelle bird-3">
+            <svg class="swallow-svg" viewBox="0 0 150 80">
+              <path class="wing wing-left" d="M62 36 C43 10 23 0 5 8 C28 28 45 38 65 40 Z" />
+              <path class="wing wing-right" d="M65 40 C42 53 25 70 5 72 C31 55 49 45 66 38 Z" />
+              <path class="tail" d="M98 38 L148 18 L112 42 L149 58 L99 42 Z" />
+              <path class="body back" d="M32 37 C50 25 80 26 106 38 C83 49 54 48 32 37 Z" />
+              <path class="belly" d="M43 39 C59 35 82 35 98 39 C78 46 57 45 43 39 Z" />
+              <path class="head" d="M29 36 C34 27 46 26 54 32 C46 40 37 42 29 36 Z" />
+              <path class="throat" d="M34 34 C40 31 47 31 53 34 C47 38 39 38 34 34 Z" />
+              <path class="glint" d="M48 34 C63 32 82 33 94 38 C79 37 61 37 48 34 Z" />
+            </svg>
+          </div>
+
+          <div class="hirondelle bird-4">
+            <svg class="swallow-svg" viewBox="0 0 150 80">
+              <path class="wing wing-left" d="M62 36 C43 10 23 0 5 8 C28 28 45 38 65 40 Z" />
+              <path class="wing wing-right" d="M65 40 C42 53 25 70 5 72 C31 55 49 45 66 38 Z" />
+              <path class="tail" d="M98 38 L148 18 L112 42 L149 58 L99 42 Z" />
+              <path class="body back" d="M32 37 C50 25 80 26 106 38 C83 49 54 48 32 37 Z" />
+              <path class="belly" d="M43 39 C59 35 82 35 98 39 C78 46 57 45 43 39 Z" />
+              <path class="head" d="M29 36 C34 27 46 26 54 32 C46 40 37 42 29 36 Z" />
+              <path class="throat" d="M34 34 C40 31 47 31 53 34 C47 38 39 38 34 34 Z" />
+              <path class="glint" d="M48 34 C63 32 82 33 94 38 C79 37 61 37 48 34 Z" />
+            </svg>
+          </div>
+
+          <div class="hirondelle bird-5">
+            <svg class="swallow-svg" viewBox="0 0 150 80">
+              <path class="wing wing-left" d="M62 36 C43 10 23 0 5 8 C28 28 45 38 65 40 Z" />
+              <path class="wing wing-right" d="M65 40 C42 53 25 70 5 72 C31 55 49 45 66 38 Z" />
+              <path class="tail" d="M98 38 L148 18 L112 42 L149 58 L99 42 Z" />
+              <path class="body back" d="M32 37 C50 25 80 26 106 38 C83 49 54 48 32 37 Z" />
+              <path class="belly" d="M43 39 C59 35 82 35 98 39 C78 46 57 45 43 39 Z" />
+              <path class="head" d="M29 36 C34 27 46 26 54 32 C46 40 37 42 29 36 Z" />
+              <path class="throat" d="M34 34 C40 31 47 31 53 34 C47 38 39 38 34 34 Z" />
+              <path class="glint" d="M48 34 C63 32 82 33 94 38 C79 37 61 37 48 34 Z" />
+            </svg>
           </div>
         </div>
       </section>
