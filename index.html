@@ -189,20 +189,7 @@
       width: 100%;
       height: auto;
       display: block;
-      pointer-events: none;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-
-    .bee-base {
-      z-index: 1;
       filter: drop-shadow(0 22px 24px rgba(7, 16, 25, 0.13));
-    }
-
-    .bee-wings {
-      z-index: 2;
-      mix-blend-mode: multiply;
-      opacity: 1;
     }
 
     footer {
@@ -339,12 +326,6 @@
         padding: 28px 24px;
       }
     }
-
-    @media (prefers-reduced-motion: reduce) {
-      .bee-wings {
-        display: none;
-      }
-    }
   </style>
 </head>
 
@@ -382,8 +363,7 @@
         </div>
 
         <div class="bee-art" aria-hidden="true">
-          <img class="bee-base" src="/assets/bees-realistic.png" alt="" />
-          <img class="bee-wings" src="/assets/bees-wings-animated.webp" alt="" />
+          <img src="/assets/bees-realistic.png" alt="" />
         </div>
       </section>
     </main>
