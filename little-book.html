@@ -105,7 +105,7 @@
     }
 
     .hero {
-      padding: 96px 0 82px;
+      padding: 158px 0 82px;
       border-bottom: 1px solid var(--line);
       display: grid;
       grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
@@ -127,20 +127,20 @@
       margin: 18px 0 0;
       max-width: 980px;
       font-family: var(--serif);
-      font-size: clamp(64px, 10vw, 150px);
+      font-size: clamp(70px, 6.9vw, 136px);
       line-height: 0.88;
       letter-spacing: -0.066em;
-      font-weight: 500;
+      font-weight: 400;
     }
 
     .subtitle {
-      margin-top: 34px;
+      margin-top: 48px;
       max-width: 760px;
       font-family: var(--serif);
-      font-size: clamp(28px, 3.2vw, 50px);
-      line-height: 1.06;
+      font-size: clamp(30px, 2.35vw, 46px);
+      line-height: 1.18;
       letter-spacing: -0.045em;
-      font-weight: 500;
+      font-weight: 400;
     }
 
     .hero-description {
@@ -732,6 +732,15 @@
     .footer-links {
       display: flex;
       gap: 28px;
+      color: #303844;
+    }
+
+    .footer-links a {
+      opacity: 0.9;
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
     }
 
     @media (max-width: 1160px) {
@@ -823,11 +832,11 @@
       }
 
       .hero {
-        padding: 68px 0 60px;
+        padding: 92px 0 60px;
       }
 
       h1 {
-        font-size: clamp(58px, 20vw, 112px);
+        font-size: clamp(58px, 17vw, 82px);
       }
 
       .book-cover {
@@ -896,11 +905,10 @@
       <nav class="site-nav" aria-label="Primary navigation">
         <a href="theory.html">Theory</a>
         <a href="lexicon.html">Lexicon</a>
-        <a href="publications.html" class="active">Publications</a>
+        <a href="little-book.html" class="active">Little Book</a>
+        <a href="publications.html">Publications</a>
         <a href="visualizations.html">Visualizations</a>
-        <a href="raise.html">RAISE</a>
         <a href="https://iqaitrust.com" target="_blank" rel="noopener">IQAI</a>
-        <a href="mailto:research@enlightenedai.ai">Contact</a>
       </nav>
     </header>
 
@@ -1153,12 +1161,11 @@
     </main>
 
     <footer class="footer">
-      <div>© 2026 Enlightened AI Research Lab</div>
+      <div>© Enlightened AI Research Lab</div>
 
       <div class="footer-links">
-        <a href="publications.html">Publications</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
+        <a href="https://www.linkedin.com/company/enlightenedai/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:contact@enlightenedai.ai">Contact</a>
       </div>
     </footer>
   </div>
