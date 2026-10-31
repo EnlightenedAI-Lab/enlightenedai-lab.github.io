@@ -431,37 +431,6 @@
             </section>
 
             <div class="content-area">
-                <div style="max-width: 800px; margin-bottom: 4rem;">
-                    <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-primary); margin-bottom: 0.5rem; letter-spacing: 0.05em; font-weight: 600;">
-                        PUBLISHED: NOV 2025 // ENLIGHTENED AI LAB
-                    </div>
-                    <h1 style="font-size: 2.2rem; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.25rem;">
-                        Reflective Alignment Architecture (RAA) & Reflective Duality Layer (RDL)
-                    </h1>
-                    <p style="font-size: 0.95rem; color: var(--text-muted); font-style: italic; border-left: 2px solid var(--accent-primary); padding-left: 1.25rem; margin-bottom: 2rem; line-height: 1.6;">
-                        "Frontier AI systems now exhibit structured reasoning... yet current alignment practices evaluate only surface outputs. This paper introduces a model-agnostic scientific framework for observing and quantifying coherence stability."
-                    </p>
-                    <a href="https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing" target="_blank" 
-                       style="background: var(--text-main); color: var(--bg-color); padding: 12px 24px; text-decoration: none; font-size: 0.75rem; font-weight: 700; border-radius: 2px; display: inline-block; letter-spacing: 0.05em;">
-                        READ FULL PAPER (PDF) →
-                    </a>
-                    
-                    <div class="zenodo-disclosure">
-                      <a href="https://zenodo.org/records/17665613" target="_blank" rel="noopener">
-                        <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.17665613.svg" alt="DOI: 10.5281/zenodo.17665613">
-                      </a>
-                    </div>
-                    <div class="logic-block">
-<span style="color:#888;">// META_DEFINITION</span>
-const RAA_SYSTEM = {
-    version: "3.0",
-    type: "Recursive_Constraint_Architecture",
-    target: "Large_Language_Models",
-    objective: "Coherence_Stability"
-};
-                    </div>
-                </div>
-
                 <div style="margin-bottom: 4rem;">
                     <h1>Theory Overview</h1>
                     <div class="doc-subtitle" style="font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-muted); margin-top: 1rem;">From behavioral compliance to internal coherence.</div>
@@ -748,3 +717,4 @@ if (psi_gradient < 0) return "CARE_EROSION";
     </script>
 </body>
 </html>
+

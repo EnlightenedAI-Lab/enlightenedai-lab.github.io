@@ -105,13 +105,9 @@
     .hero {
       position: relative;
       max-width: var(--content);
-      min-height: 795px;
       margin: 0 auto;
       padding: 92px 58px 112px;
-      display: grid;
-      grid-template-columns: minmax(520px, 0.92fr) minmax(460px, 0.88fr);
-      gap: 70px;
-      align-items: center;
+      display: block;
     }
 
     .hero-copy {
@@ -121,7 +117,7 @@
 
     h1 {
       margin: 0;
-      max-width: 760px;
+      max-width: 1200px;
       font-size: clamp(70px, 6.9vw, 136px);
       line-height: 0.88;
       font-weight: 400;
@@ -130,7 +126,7 @@
 
     .subline {
       margin: 48px 0 0;
-      max-width: 720px;
+      max-width: 1100px;
       font-size: clamp(30px, 2.35vw, 46px);
       line-height: 1.18;
       letter-spacing: -0.045em;
@@ -173,22 +169,6 @@
 
     .button:hover {
       transform: translateY(-1px);
-    }
-
-    .hero-image {
-      position: relative;
-      z-index: 1;
-      align-self: center;
-      justify-self: end;
-      width: min(100%, 720px);
-    }
-
-    .hero-image img {
-      display: block;
-      width: 100%;
-      height: auto;
-      border-radius: 0 42px 42px 0;
-      filter: drop-shadow(0 24px 34px rgba(7, 16, 25, 0.12));
     }
 
     .positioning {
@@ -251,23 +231,6 @@
       opacity: 1;
     }
 
-    @media (max-width: 1220px) {
-      .hero {
-        grid-template-columns: 1fr;
-        gap: 54px;
-      }
-
-      .hero-image {
-        justify-self: start;
-        width: min(100%, 760px);
-        opacity: 0.96;
-      }
-
-      .hero-image img {
-        border-radius: 0 34px 34px 0;
-      }
-    }
-
     @media (max-width: 1160px) {
       .header-inner {
         display: block;
@@ -308,7 +271,6 @@
       .hero {
         min-height: auto;
         padding: 58px 24px 82px;
-        gap: 40px;
       }
 
       h1 {
@@ -332,11 +294,7 @@
         min-width: 0;
       }
 
-      .hero-image {
-        display: none;
-      }
-
-      .positioning {
+        .positioning {
         padding: 0 24px 72px;
       }
 
@@ -390,9 +348,6 @@
           </div>
         </div>
 
-        <figure class="hero-image" aria-hidden="true">
-          <img src="/assets/sea-hero.png" alt="" />
-        </figure>
       </section>
 
       <section class="positioning">
@@ -414,3 +369,4 @@
   </div>
 </body>
 </html>
+

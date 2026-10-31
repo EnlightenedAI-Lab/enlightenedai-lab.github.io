@@ -489,7 +489,7 @@
 
   <script type="application/json" id="pub-manifest">
   {
-    "featured_ids": ["rai-core-raa-rdl", "little-book", "zenodo-raa-rdl", "eaforum-raa-overview"],
+    "featured_ids": ["little-book"],
     "press_ids": ["press-dicaprio"],
     "items": [
       {
@@ -514,79 +514,6 @@
         "tags": ["overview", "alignment", "primer"],
         "links": [
           { "label": "Download PDF", "url": "https://img1.wsimg.com/blobby/go/6cbe8389-6acc-4102-bb3b-d67e982d50af/downloads/db648778-7768-4535-a11c-2c69627bbac4/The%20Little%20Book%20of%20AI%20Alignment%20v1.0.pdf?ver=1765927449171", "style": "primary" }
-        ]
-      },
-      {
-        "id": "rai-core-raa-rdl",
-        "type": "paper",
-        "venue": "pdf",
-        "date": "2025-11",
-        "title": "Reflective Alignment Architecture (RAA) & Reflective Duality Layer (RDL)",
-        "desc": "Core framework paper describing reflective stability and the RDL measurement layer.",
-        "tags": ["RAA", "RDL", "stability"],
-        "links": [
-          { "label": "Read PDF", "url": "https://drive.google.com/file/d/1RgM-8PwM0ZVuoLBBmWgf4W2j2hmrPzuj/view?usp=sharing", "style": "primary" },
-          { "label": "GitHub", "url": "https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/", "style": "default" }
-        ]
-      },
-      {
-        "id": "osf-framework",
-        "type": "resource",
-        "venue": "osf",
-        "date": "2025-11",
-        "title": "RAA & RDL: Scientific Framework (OSF)",
-        "desc": "Public project hosting the core archival version of the RAA/RDL framework.",
-        "tags": ["osf", "framework", "archive"],
-        "links": [
-          { "label": "View on OSF", "url": "https://osf.io/8e2wx/", "style": "primary" }
-        ]
-      },
-      {
-        "id": "osf-supplements",
-        "type": "resource",
-        "venue": "osf",
-        "date": "2025-11",
-        "title": "RAA v1.1 — Figures & Supplements",
-        "desc": "Repository for diagrams, figures, and supplementary materials associated with RAA v1.1.",
-        "tags": ["osf", "figures", "data"],
-        "links": [
-          { "label": "View on OSF", "url": "https://osf.io/5bzmu/", "style": "primary" }
-        ]
-      },
-      {
-        "id": "academia-raa",
-        "type": "preprint",
-        "venue": "academia",
-        "date": "2025-11",
-        "title": "RAA & RDL Framework (Academia.edu)",
-        "desc": "Scientific framework for measuring moral coherence in AI systems.",
-        "tags": ["academia", "preprint"],
-        "links": [
-          { "label": "View on Academia", "url": "https://www.academia.edu/145222632", "style": "primary" }
-        ]
-      },
-      {
-        "id": "zenodo-raa-rdl",
-        "type": "timestamp",
-        "venue": "zenodo",
-        "date": "2026-01",
-        "title": "Zenodo Record — RAA Core Framework",
-        "desc": "Immutable timestamp for public verification. DOI: 10.5281/zenodo.17665613",
-        "tags": ["timestamp", "doi", "verification"],
-        "links": [
-          { "label": "Zenodo Record", "url": "https://zenodo.org/records/17665613", "style": "primary" }
-        ]
-      },
-      {
-        "id": "zenodo-rdl-extension",
-        "type": "timestamp",
-        "venue": "zenodo",
-        "date": "2026-01",
-        "title": "Zenodo Record — RDL Extension",
-        "desc": "Measurement layer extension timestamp. DOI: 10.5281/zenodo.17664094",
-        "tags": ["timestamp", "doi", "rdl"],
-        "links": [
-          { "label": "Zenodo Record", "url": "https://zenodo.org/records/17664094", "style": "primary" }
         ]
       },
       {
@@ -623,42 +550,6 @@
         "tags": ["care", "stability", "SSRN"],
         "links": [
           { "label": "Read on SSRN", "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5708265", "style": "primary" }
-        ]
-      },
-      {
-        "id": "github-raa",
-        "type": "resource",
-        "venue": "github",
-        "date": "2026-01",
-        "title": "RAA Repository (GitHub)",
-        "desc": "Canonical public repository for code, artifacts, and record integrity.",
-        "tags": ["repo", "code", "record"],
-        "links": [
-          { "label": "Open GitHub", "url": "https://enlightenedai-lab.github.io/RAA-Reflective-Alignment-Architecture/", "style": "primary" }
-        ]
-      },
-      {
-        "id": "hf-model-card",
-        "type": "resource",
-        "venue": "huggingface",
-        "date": "2026-01",
-        "title": "Hugging Face Model Card",
-        "desc": "Model card and dataset entry point.",
-        "tags": ["huggingface", "card"],
-        "links": [
-          { "label": "Open Hugging Face", "url": "https://huggingface.co/EnlightenedAI-Lab/RAA-Reflective-Alignment-Architecture", "style": "primary" }
-        ]
-      },
-      {
-        "id": "eaforum-raa-overview",
-        "type": "post",
-        "venue": "eaforum",
-        "date": "2026-01",
-        "title": "EA Forum — RAA Overview",
-        "desc": "Public post summarizing the framework and positioning.",
-        "tags": ["EA Forum", "overview"],
-        "links": [
-          { "label": "Read Post", "url": "https://forum.effectivealtruism.org/posts/mek7nYqrYdJqwgrjs/reflective-alignment-architecture-raa-a-framework-for-moral?utm_campaign=post_share&utm_source=link", "style": "primary" }
         ]
       },
       {
@@ -806,3 +697,4 @@
 
 </body>
 </html>
+
